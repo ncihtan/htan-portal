@@ -3,13 +3,13 @@ import HTANNavbar from "./htanNavbar";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
-function DataTransfer() {
+function Standards() {
   return (
       <React.Fragment>
         <HTANNavbar/>
           <Container>
               <Row className="mt-3">
-                  <h1>Data Transfer</h1>
+                  <h1>Data Standards</h1>
               </Row>
               <Row className="mt-3">
                   <p>
@@ -20,9 +20,14 @@ function DataTransfer() {
                       in culpa qui officia deserunt mollit anim id est laborum.
                   </p>
               </Row>
+              <Row className="mt-3">
+                  <h4>
+                      Browse HTAN Data Standards
+                  </h4>
+              </Row>
           </Container>
       </React.Fragment>
   )
 }
 
-export default DataTransfer
+export default Standards
