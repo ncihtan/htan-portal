@@ -1,6 +1,6 @@
-import HTANNavbar from "./htanNavbar";
+import HTANNavbar from "../components/htanNavbar";
 import React from "react";
-import Homepage from "./homepage";
+import Homepage from "../components/homepage";
 
 const Home = () => (
     <React.Fragment>
@@ -11,4 +11,3 @@ const Home = () => (
 )
 
 export default Home
-

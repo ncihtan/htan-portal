@@ -1,5 +1,5 @@
 import React from "react";
-import HTANNavbar from "../htanNavbar";
+import HTANNavbar from "../../components/htanNavbar";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";

@@ -1,5 +1,5 @@
 import React from "react";
-import HTANNavbar from "../htanNavbar";
+import HTANNavbar from "../../components/htanNavbar";
 import Base from "./prostate";
 
 function Prostate() {
