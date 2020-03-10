@@ -4,15 +4,26 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 import Link from "next/link";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 function DataRelease() {
     return (
         <React.Fragment>
-        <HTANNavbar/>
+            <HTANNavbar/>
             <Container>
+                <Row>
+                    <Breadcrumb className="mt-3">
+                        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+                        <Breadcrumb.Item active>
+                            Data Release
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </Row>
+
                 <Row className="mt-3">
                     <h1>Data Release</h1>
                 </Row>
+
                 <Row className="mt-3">
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
@@ -22,6 +33,7 @@ function DataRelease() {
                         non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
                 </Row>
+
                 <Row className="mt-3">
                     <Table>
                         <thead>
