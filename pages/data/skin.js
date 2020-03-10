@@ -2,18 +2,13 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import HTANNavbar from "../htanNavbar";
+import Base from "./skin";
 
 function Skin() {
   return (
       <React.Fragment>
         <HTANNavbar/>
-          <Container>
-              <Row className="mt-3">
-                  <h4>
-                      Skin Atlas
-                  </h4>
-              </Row>
-          </Container>
+        <Base referrer="Skin" />
       </React.Fragment>
   )
 }

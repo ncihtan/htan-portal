@@ -1,19 +1,12 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import HTANNavbar from "../htanNavbar";
+import Base from "./prostate";
 
 function Prostate() {
   return (
       <React.Fragment>
-        <HTANNavbar/>
-          <Container>
-              <Row className="mt-3">
-                  <h4>
-                      Prostate Atlas
-                  </h4>
-              </Row>
-          </Container>
+          <HTANNavbar/>
+          <Base referrer="Prostate"/>
       </React.Fragment>
   )
 }
