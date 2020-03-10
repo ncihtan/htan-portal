@@ -1,6 +1,7 @@
 import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
-import Base from "./prostate";
+import Base from "../../components/base";
+
 
 function Prostate() {
   return (

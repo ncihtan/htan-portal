@@ -1,6 +1,6 @@
 import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
-import Base from "./skin";
+import Base from "../../components/base";
 
 function Skin() {
   return (
