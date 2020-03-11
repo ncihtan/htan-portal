@@ -48,7 +48,7 @@ function Base(props) {
             </Row>
 
             <Row>
-                <Tab.Container id="left-tabs-example" defaultActiveKey="atlasOverview">
+                <Tab.Container defaultActiveKey="atlasOverview">
                     <Nav variant="tabs" fill>
                         <Nav.Item>
                             <Nav.Link eventKey="atlasOverview">Atlas Overview</Nav.Link>
@@ -76,37 +76,37 @@ function Base(props) {
                     <Tab.Content>
                         <Tab.Pane eventKey="atlasOverview">
                             <Container className="mt-3">
-                                <span dangerouslySetInnerHTML={{__html: atlasOverviewData}}/>
+                                {atlasOverviewData ? <span dangerouslySetInnerHTML={{__html: atlasOverviewData}}/> : "Loading..."}
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="dataOverview">
                             <Container className="mt-3">
-                                <span dangerouslySetInnerHTML={{__html: dataOverview}}/>
+                                {dataOverview ? <span dangerouslySetInnerHTML={{__html: dataOverview}}/> : "Loading..."}
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="publications">
                             <Container className="mt-3">
-                                <span dangerouslySetInnerHTML={{__html: publicationsData}}/>
+                                {publicationsData ? <span dangerouslySetInnerHTML={{__html: publicationsData}}/> : "Loading..."}
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="clinBiospecimen">
                             <Container className="mt-3">
-                                <span dangerouslySetInnerHTML={{__html: clinBioData}}/>
+                                {clinBioData ? <span dangerouslySetInnerHTML={{__html: clinBioData}}/> : "Loading..."}
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="derivedData">
                             <Container className="mt-3">
-                                <span dangerouslySetInnerHTML={{__html: derivedData}}/>
+                                {derivedData ? <span dangerouslySetInnerHTML={{__html: derivedData}}/> : "Loading..."}
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="imagingData">
-                            <Container className="mt-3">
-                                <span dangerouslySetInnerHTML={{__html: imagingData}}/>
+                            <   Container className="mt-3">
+                                {imagingData ? <span dangerouslySetInnerHTML={{__html: imagingData}}/> : "Loading..."}
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="primaryNGS">
                             <Container className="mt-3">
-                                <span dangerouslySetInnerHTML={{__html: primaryNGSData}}/>
+                                {primaryNGSData ? <span dangerouslySetInnerHTML={{__html: primaryNGSData}}/> : "Loading..."}
                             </Container>
                         </Tab.Pane>
                     </Tab.Content>
