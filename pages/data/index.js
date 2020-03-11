@@ -5,8 +5,29 @@ import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 import Link from "next/link";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
+import fetch from 'node-fetch'
+import _ from 'lodash'
 
-function DataRelease() {
+/**
+ * Strip HTML characters and get content from CMS
+ * @param data
+ * @param slug
+ * @returns {string|*}
+ */
+const getContent = (data, slug) => {
+    let content = _.filter(data, (o) => o.slug === slug);
+
+    if (content[0]) {
+        content = content[0].slug
+        if ((content === null) || (content === ''))
+            return "";
+        else
+            content = content.toString();
+    }
+    return content.replace(/<[^>]*>/g, '');
+};
+
+function DataRelease(data) {
     return (
         <React.Fragment>
             <HTANNavbar/>
@@ -26,11 +47,16 @@ function DataRelease() {
 
                 <Row className="mt-3">
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                        tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco
+                        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                        reprehenderit in
+                        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                        occaecat cupidatat
+                        non proident, sunt in culpa qui officia deserunt mollit anim id est
+                        laborum.
                     </p>
                 </Row>
 
@@ -45,8 +71,7 @@ function DataRelease() {
                         <tbody>
                         <tr>
                             <td>
-                                HTAPP Pilot Project: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta1-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta1">
@@ -56,8 +81,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                PCAPP Pilot Project: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta2-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta2">
@@ -67,8 +91,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                Boston University: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta3-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta3">
@@ -78,8 +101,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                CHOP: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta4-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta4">
@@ -89,8 +111,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                Lung Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta5-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta5">
@@ -100,8 +121,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                Pancreas Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta6-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta6">
@@ -111,8 +131,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                Prostate Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta7-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta7">
@@ -122,8 +141,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                Skin Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta8-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta8">
@@ -133,9 +151,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                SNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta9-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta9">
@@ -145,9 +161,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                SNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta10-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta10">
@@ -157,9 +171,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                SNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta11-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta11">
@@ -169,9 +181,7 @@ function DataRelease() {
                         </tr>
                         <tr>
                             <td>
-                                SNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                {getContent(data.data, 'hta12-short-blurb')}
                             </td>
                             <td>
                                 <Link href="/data/hta12">
@@ -185,6 +195,26 @@ function DataRelease() {
             </Container>
         </React.Fragment>
     )
+}
+
+// This function gets called at build time
+export async function getStaticProps() {
+    // Call an external API endpoint to get content
+    const url = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=hta12-short-blurb,hta11-short-blurb,hta10-short-blurb,hta9-short-blurb,hta8-short-blurb,hta7-short-blurb&_fields=content,slug,title`;
+    const url2 = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=hta6-short-blurb,hta5-short-blurb,hta4-short-blurb,hta3-short-blurb,hta2-short-blurb,hta1-short-blurb&_fields=content,slug,title`;
+    const res = await fetch(url);
+    const res2 = await fetch(url2);
+    let data = await res.json();
+    let data2 = await res2.json();
+    data = data.concat(data2)
+
+    // By returning { props: data }, the component
+    // will receive `data` as a prop at build time
+    return {
+        props: {
+            data,
+        },
+    }
 }
 
 export default DataRelease
