@@ -21,7 +21,7 @@ function Base(props) {
      * to be easily queryable
      */
     const getContent = (tab) => {
-        let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${htaID}-${tab}`;
+        let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${htaID}-${tab}&_fields=content,slug,title`;
         let {data} = useSWR(overviewURL, fetcher);
         let post = _.filter(data, (o) => o.slug === `${htaID}-${tab}`);
         return post[0] ? post[0].content.rendered : ""
