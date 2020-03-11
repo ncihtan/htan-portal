@@ -33,7 +33,7 @@ function Base(props) {
     const clinBioData = getContent("clinical-biospecimen");
     const derivedData = getContent("derived-data");
     const imagingData = getContent("imaging-data");
-    const primaryNGSData = getContent("primary-ngs-data");
+    const primaryNGSData = getContent("primary-ngs");
 
     return (
         <Container>
@@ -76,37 +76,37 @@ function Base(props) {
                     <Tab.Content>
                         <Tab.Pane eventKey="atlasOverview">
                             <Container className="mt-3">
-                                {atlasOverviewData}
+                                <span dangerouslySetInnerHTML={{__html: atlasOverviewData}}/>
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="dataOverview">
                             <Container className="mt-3">
-                                {dataOverview}
+                                <span dangerouslySetInnerHTML={{__html: dataOverview}}/>
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="publications">
                             <Container className="mt-3">
-                                {publicationsData}
+                                <span dangerouslySetInnerHTML={{__html: publicationsData}}/>
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="clinBiospecimen">
                             <Container className="mt-3">
-                                {clinBioData}
+                                <span dangerouslySetInnerHTML={{__html: clinBioData}}/>
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="derivedData">
                             <Container className="mt-3">
-                                {derivedData}
+                                <span dangerouslySetInnerHTML={{__html: derivedData}}/>
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="imagingData">
                             <Container className="mt-3">
-                                {imagingData}
+                                <span dangerouslySetInnerHTML={{__html: imagingData}}/>
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="primaryNGS">
                             <Container className="mt-3">
-                                {primaryNGSData}
+                                <span dangerouslySetInnerHTML={{__html: primaryNGSData}}/>
                             </Container>
                         </Tab.Pane>
                     </Tab.Content>
