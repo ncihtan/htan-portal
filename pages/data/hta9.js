@@ -2,13 +2,13 @@ import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
 import Base from "../../components/base";
 
-function Skin() {
+function Hta9() {
   return (
       <React.Fragment>
-        <HTANNavbar/>
-        <Base referrer="Skin" />
+          <HTANNavbar/>
+          <Base referrer="OHSU"/>
       </React.Fragment>
   )
 }
 
-export default Skin
+export default Hta9

@@ -2,13 +2,13 @@ import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
 import Base from "../../components/base";
 
-function SNS() {
+function Hta2() {
   return (
       <React.Fragment>
           <HTANNavbar/>
-          <Base referrer="SNS"/>
+          <Base referrer="PCAPP Pilot Project"/>
       </React.Fragment>
   )
 }
 
-export default SNS
+export default Hta2

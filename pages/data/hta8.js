@@ -2,13 +2,13 @@ import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
 import Base from "../../components/base";
 
-function Lung() {
+function Hta8() {
   return (
       <React.Fragment>
-          <HTANNavbar/>
-          <Base referrer="Lung"/>
+        <HTANNavbar/>
+        <Base referrer="MSKCC" />
       </React.Fragment>
   )
 }
 
-export default Lung
+export default Hta8

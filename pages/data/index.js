@@ -45,48 +45,44 @@ function DataRelease() {
                         <tbody>
                         <tr>
                             <td>
-                                Blood Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                HTAPP Pilot Project: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/blood">
+                                <Link href="/data/hta1">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                Breast Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                PCAPP Pilot Project: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/breast">
+                                <Link href="/data/hta2">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                Colon Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                Boston University: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/colon">
+                                <Link href="/data/hta3">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                CNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                CHOP: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/cns">
+                                <Link href="/data/hta4">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
@@ -94,11 +90,10 @@ function DataRelease() {
                         <tr>
                             <td>
                                 Lung Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/lung">
+                                <Link href="/data/hta5">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
@@ -106,11 +101,10 @@ function DataRelease() {
                         <tr>
                             <td>
                                 Pancreas Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/pancreas">
+                                <Link href="/data/hta6">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
@@ -118,11 +112,10 @@ function DataRelease() {
                         <tr>
                             <td>
                                 Prostate Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/prostate">
+                                <Link href="/data/hta7">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
@@ -130,11 +123,10 @@ function DataRelease() {
                         <tr>
                             <td>
                                 Skin Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor
-                                incididunt ut labore et dolore magna aliqua.
+                                tempor incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/skin">
+                                <Link href="/data/hta8">
                                     <a>Data Release</a>
                                 </Link>
                             </td>
@@ -146,7 +138,43 @@ function DataRelease() {
                                 incididunt ut labore et dolore magna aliqua.
                             </td>
                             <td>
-                                <Link href="/data/sns">
+                                <Link href="/data/hta9">
+                                    <a>Data Release</a>
+                                </Link>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                SNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor
+                                incididunt ut labore et dolore magna aliqua.
+                            </td>
+                            <td>
+                                <Link href="/data/hta10">
+                                    <a>Data Release</a>
+                                </Link>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                SNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor
+                                incididunt ut labore et dolore magna aliqua.
+                            </td>
+                            <td>
+                                <Link href="/data/hta11">
+                                    <a>Data Release</a>
+                                </Link>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                SNS Atlas: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor
+                                incididunt ut labore et dolore magna aliqua.
+                            </td>
+                            <td>
+                                <Link href="/data/hta12">
                                     <a>Data Release</a>
                                 </Link>
                             </td>

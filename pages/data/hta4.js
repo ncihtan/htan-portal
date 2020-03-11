@@ -2,13 +2,13 @@ import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
 import Base from "../../components/base";
 
-function Pancreas() {
+function Hta4() {
   return (
       <React.Fragment>
           <HTANNavbar/>
-          <Base referrer="Pancreas"/>
+          <Base referrer="CHOP"/>
       </React.Fragment>
   )
 }
 
-export default Pancreas
+export default Hta4

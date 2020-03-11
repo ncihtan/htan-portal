@@ -2,13 +2,13 @@ import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
 import Base from "../../components/base";
 
-function Blood() {
+function Hta5() {
   return (
       <React.Fragment>
           <HTANNavbar/>
-          <Base referrer="Blood"/>
+          <Base referrer="Lung"/>
       </React.Fragment>
   )
 }
 
-export default Blood
+export default Hta5

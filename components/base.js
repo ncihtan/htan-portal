@@ -6,34 +6,26 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Row from "react-bootstrap/Row";
 import useSWR from 'swr';
 import _ from 'lodash'
+import fetch from 'unfetch'
+import {useRouter} from "next/router";
 
 const fetcher = url => fetch(url).then(r => r.json());
 
 function Base(props) {
     const referrer = props.referrer;
+    const router = useRouter();
+    const htaID = router.pathname.replace('/data/', '');
 
     /**
      * Pull content from wordpress site to populate tabs. Pages are prefixed/postfixed
      * to be easily queryable
      */
-    const getContent = (prefix) => {
-        let post = _.filter(data, (o) => {
-            return o.slug === `${prefix}-${referrer.toLowerCase()}`
-        });
-
-        //parse HTML using browser and tmp div
-        let to_return = "";
-        if (post[0]) {
-            let div = document.createElement("div");
-            div.innerHTML = post[0].content.rendered;
-            to_return = div.textContent || div.innerText || "";
-        }
-
-        return to_return
+    const getContent = (tab) => {
+        const overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${htaID}-${tab}`;
+        const {data} = useSWR(overviewURL, fetcher);
+        let post = _.filter(data, (o) => o.slug === `${htaID}-${tab}`);
+        return post[0] ? post[0].content.rendered : ""
     };
-
-    const overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages?_fields=content,slug`;
-    const {data} = useSWR(overviewURL, fetcher);
 
     const atlasOverviewData = getContent("atlas-overview");
     const dataOverview = getContent("data-overview");

@@ -2,13 +2,13 @@ import React from "react";
 import HTANNavbar from "../../components/htanNavbar";
 import Base from "../../components/base";
 
-function CNS() {
+function Hta6() {
   return (
       <React.Fragment>
           <HTANNavbar/>
-          <Base referrer="CNS"/>
+          <Base referrer="Duke"/>
       </React.Fragment>
   )
 }
 
-export default CNS
+export default Hta6
