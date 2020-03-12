@@ -3,8 +3,10 @@ import Nav from "react-bootstrap/Nav";
 import React from "react";
 
 const HTANNavbar = () => (
-  <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="/">HTAN Data Portal</Navbar.Brand>
+  <Navbar bg="nav-purple" variant="dark" expand="lg">
+  <Navbar.Brand href="/">
+    <img src="/htanLogo.png" height="60" alt="HTAN Data Portal" />
+  </Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
