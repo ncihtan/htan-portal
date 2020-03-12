@@ -30,9 +30,6 @@ function Base(props) {
     const atlasOverviewData = getContent("atlas-overview");
     const dataOverview = getContent("data-overview");
     const publicationsData = getContent("publications");
-    const clinBioData = getContent("clinical-biospecimen");
-    const derivedData = getContent("derived-data");
-    const imagingData = getContent("imaging-data");
     const primaryNGSData = getContent("primary-ngs");
 
     return (
@@ -91,17 +88,17 @@ function Base(props) {
                         </Tab.Pane>
                         <Tab.Pane eventKey="clinBiospecimen">
                             <Container className="mt-3">
-                                {clinBioData ? <span dangerouslySetInnerHTML={{__html: clinBioData}}/> : "Loading..."}
+                                SYNAPSE CLINICAL BIOSPECIMEN DATA HERE
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="derivedData">
                             <Container className="mt-3">
-                                {derivedData ? <span dangerouslySetInnerHTML={{__html: derivedData}}/> : "Loading..."}
+                                SYNAPSE DERIVED DATA HERE
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="imagingData">
-                            <   Container className="mt-3">
-                                {imagingData ? <span dangerouslySetInnerHTML={{__html: imagingData}}/> : "Loading..."}
+                            <Container className="mt-3">
+                                SYNAPSE IMAGING DATA HERE
                             </Container>
                         </Tab.Pane>
                         <Tab.Pane eventKey="primaryNGS">
