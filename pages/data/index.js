@@ -197,9 +197,9 @@ function DataRelease(data) {
     )
 }
 
-// This function gets called at build time
+// getStaticProps gets called at build time
 // getServerSideProps gets called on every request
-export async function getStaticProps() {
+export async function getServerSideProps() {
     // Call an external API endpoint to get content
     const url = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=hta12-short-blurb,hta11-short-blurb,hta10-short-blurb,hta9-short-blurb,hta8-short-blurb,hta7-short-blurb&_fields=content,slug,title`;
     const url2 = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=hta6-short-blurb,hta5-short-blurb,hta4-short-blurb,hta3-short-blurb,hta2-short-blurb,hta1-short-blurb&_fields=content,slug,title`;
