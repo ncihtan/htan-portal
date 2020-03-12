@@ -17,7 +17,7 @@ function Base(props) {
     const htaID = router.pathname.replace('/data/', '');
 
     /**
-     * Pull content from wordpress site to populate tabs. Pages are prefixed/postfixed
+     * Fetch content from wordpress site to populate tabs. Pages are prefixed/postfixed
      * to be easily queryable
      */
     const getContent = (tab) => {

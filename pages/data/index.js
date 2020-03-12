@@ -18,7 +18,7 @@ const getContent = (data, slug) => {
     let content = _.filter(data, (o) => o.slug === slug);
 
     if (content[0]) {
-        content = content[0].slug
+        content = content[0].slug;
         if ((content === null) || (content === ''))
             return "";
         else
@@ -198,6 +198,7 @@ function DataRelease(data) {
 }
 
 // This function gets called at build time
+// getServerSideProps gets called on every request
 export async function getStaticProps() {
     // Call an external API endpoint to get content
     const url = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=hta12-short-blurb,hta11-short-blurb,hta10-short-blurb,hta9-short-blurb,hta8-short-blurb,hta7-short-blurb&_fields=content,slug,title`;
@@ -206,7 +207,7 @@ export async function getStaticProps() {
     const res2 = await fetch(url2);
     let data = await res.json();
     let data2 = await res2.json();
-    data = data.concat(data2)
+    data = data.concat(data2);
 
     // By returning { props: data }, the component
     // will receive `data` as a prop at build time
