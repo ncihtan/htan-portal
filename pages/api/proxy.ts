@@ -4,10 +4,10 @@ const cors = Cors({
   allowMethods: ['GET', 'HEAD', 'POST'],
 });
 
-function handler(req, res) {
-  //proxy requests to synapse
+function handler(req: any, res: any) {
+  // TODO proxy requests to synapse if needed
 
   res.json({ message: 'Hello world' })
 }
 
-export default cors(handler)
+export default cors(handler);

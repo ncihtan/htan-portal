@@ -8,7 +8,7 @@ import CardGroup from "react-bootstrap/CardGroup";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 
-const Homepage = () => (
+const HomePage = () => (
     <Container>
         <Jumbotron className="mt-5">
             <Row className="justify-content-md-center">
@@ -165,7 +165,7 @@ const Homepage = () => (
             </Col>
         </Row>
     </Container>
-)
+);
 
-export default Homepage
+export default HomePage;
 
