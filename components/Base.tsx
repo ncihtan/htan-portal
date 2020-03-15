@@ -5,32 +5,39 @@ import Container from "react-bootstrap/Container";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Row from "react-bootstrap/Row";
 import useSWR from 'swr';
-import _ from 'lodash'
-import fetch from 'unfetch'
+import _ from 'lodash';
+import fetch from 'unfetch';
 import {useRouter} from "next/router";
 
-const fetcher = url => fetch(url).then(r => r.json());
+function fetcher(url: string) {
+    return fetch(url).then(r => r.json());
+}
 
-function Base(props) {
+/**
+ * Fetch content from wordpress site to populate tabs. Pages are prefixed/postfixed
+ * to be easily queryable
+ */
+function getContent(tab: string, htaId: string) {
+    let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${htaId}-${tab}&_fields=content,slug,title`;
+    let {data} = useSWR(overviewURL, fetcher);
+    let post = _.filter(data, (o) => o.slug === `${htaId}-${tab}`);
+
+    return post[0] ? post[0].content.rendered : "";
+}
+
+export interface BaseProps {
+    referrer: string;
+}
+
+const Base = (props: BaseProps) => {
     const referrer = props.referrer;
     const router = useRouter();
     const htaID = router.pathname.replace('/data/', '');
 
-    /**
-     * Fetch content from wordpress site to populate tabs. Pages are prefixed/postfixed
-     * to be easily queryable
-     */
-    const getContent = (tab) => {
-        let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${htaID}-${tab}&_fields=content,slug,title`;
-        let {data} = useSWR(overviewURL, fetcher);
-        let post = _.filter(data, (o) => o.slug === `${htaID}-${tab}`);
-        return post[0] ? post[0].content.rendered : ""
-    };
-
-    const atlasOverviewData = getContent("atlas-overview");
-    const dataOverview = getContent("data-overview");
-    const publicationsData = getContent("publications");
-    const primaryNGSData = getContent("primary-ngs");
+    const atlasOverviewData = getContent("atlas-overview", htaID);
+    const dataOverview = getContent("data-overview", htaID);
+    const publicationsData = getContent("publications", htaID);
+    const primaryNGSData = getContent("primary-ngs", htaID);
 
     return (
         <Container>
@@ -110,7 +117,7 @@ function Base(props) {
                 </Tab.Container>
             </Row>
         </Container>
-    )
-}
+    );
+};
 
-export default Base
+export default Base;
