@@ -2,44 +2,38 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
-
 import HtanNavbar from "../components/HtanNavbar";
+import {getContent} from "../util";
 
-const Standards = () => (
-    <>
-        <HtanNavbar/>
-        <Container>
-            <Row>
-                <Breadcrumb className="mt-3">
-                    <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item active>
-                        Data Standards
-                    </Breadcrumb.Item>
-                </Breadcrumb>
-            </Row>
+const Standards = () => {
+    const content = getContent("data-standards","summary-blurb");
+    return (
+        <>
+            <HtanNavbar/>
+            <Container>
+                <Row>
+                    <Breadcrumb className="mt-3">
+                        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+                        <Breadcrumb.Item active>
+                            Data Standards
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </Row>
 
-            <Row className="mt-3">
-                <h1>Data Standards</h1>
-            </Row>
-            <Row className="mt-3">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris
-                    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                    sunt
-                    in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-            </Row>
-            <Row className="mt-3">
-                <h4>
-                    Browse HTAN Data Standards
-                </h4>
-            </Row>
-        </Container>
-    </>
-);
+                <Row className="mt-3">
+                    <h1>Data Standards</h1>
+                </Row>
+                <Row className="mt-3">
+                    <span dangerouslySetInnerHTML={{__html: content}} />
+                </Row>
+                <Row className="mt-3">
+                    <h4>
+                        Browse HTAN Data Standards
+                    </h4>
+                </Row>
+            </Container>
+        </>
+    )
+};
 
 export default Standards
