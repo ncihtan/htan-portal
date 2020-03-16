@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 import HtanNavbar from "../components/HtanNavbar";
-import {getContent} from "../util";
+import {getContent} from "../api_util";
 
 const Transfer = () => {
     const content = getContent("data-transfer","summary-blurb");

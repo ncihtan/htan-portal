@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Row from "react-bootstrap/Row";
 import {useRouter} from "next/router";
-import {getContent} from "../util";
+import {getContent} from "../api_util";
 
 export interface BaseProps {
     referrer: string;
