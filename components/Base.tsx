@@ -4,26 +4,8 @@ import Tab from "react-bootstrap/Tab";
 import Container from "react-bootstrap/Container";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Row from "react-bootstrap/Row";
-import useSWR from 'swr';
-import _ from 'lodash';
-import fetch from 'unfetch';
 import {useRouter} from "next/router";
-
-function fetcher(url: string) {
-    return fetch(url).then(r => r.json());
-}
-
-/**
- * Fetch content from wordpress site to populate tabs. Pages are prefixed/postfixed
- * to be easily queryable
- */
-function getContent(tab: string, htaId: string) {
-    let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${htaId}-${tab}&_fields=content,slug,title`;
-    let {data} = useSWR(overviewURL, fetcher);
-    let post = _.filter(data, (o) => o.slug === `${htaId}-${tab}`);
-
-    return post[0] ? post[0].content.rendered : "";
-}
+import {getContent} from "../ApiUtil";
 
 export interface BaseProps {
     referrer: string;
