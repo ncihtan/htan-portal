@@ -12,7 +12,6 @@ export interface BaseProps {
 }
 
 const Base = (props: BaseProps) => {
-    const referrer = props.referrer;
     const router = useRouter();
     const htaID = router.pathname.replace('/data/', '');
 
@@ -20,6 +19,7 @@ const Base = (props: BaseProps) => {
     const dataOverview = getContent("data-overview", htaID);
     const publicationsData = getContent("publications", htaID);
     const primaryNGSData = getContent("primary-ngs", htaID);
+    const breadcrumb = getContent("short-blurb", htaID);
 
     return (
         <Container>
@@ -29,7 +29,7 @@ const Base = (props: BaseProps) => {
                     <Breadcrumb.Item href="/data">
                         Data Release
                     </Breadcrumb.Item>
-                    <Breadcrumb.Item active>{referrer}</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{breadcrumb.replace(/<[^>]*>/g, '')}</Breadcrumb.Item>
                 </Breadcrumb>
             </Row>
 
