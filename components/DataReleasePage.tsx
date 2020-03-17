@@ -45,7 +45,8 @@ export interface DataReleaseProps {
 }
 
 const DataReleasePage = (props: DataReleaseProps) => {
-    let summaryContent = getContent("data-release", "summary-blurb")
+    let summaryContent = getContent("data-release", "summary-blurb");
+
     return (
         <>
             <HtanNavbar/>
@@ -71,7 +72,9 @@ const DataReleasePage = (props: DataReleaseProps) => {
                     <Table>
                         <thead>
                         <tr>
-                            <th>Atlas</th>
+                            <th>Atlas Name</th>
+                            <th>Atlas Type</th>
+                            <th>Lead Institution(s)</th>
                             <th>Data Release</th>
                         </tr>
                         </thead>
@@ -80,6 +83,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta1-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta1">
                                     <a>Data Release</a>
@@ -90,6 +95,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta2-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta2">
                                     <a>Data Release</a>
@@ -100,6 +107,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta3-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta3">
                                     <a>Data Release</a>
@@ -110,6 +119,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta4-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta4">
                                     <a>Data Release</a>
@@ -120,6 +131,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta5-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta5">
                                     <a>Data Release</a>
@@ -130,6 +143,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta6-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta6">
                                     <a>Data Release</a>
@@ -140,6 +155,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta7-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta7">
                                     <a>Data Release</a>
@@ -150,6 +167,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta8-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta8">
                                     <a>Data Release</a>
@@ -160,6 +179,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta9-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta9">
                                     <a>Data Release</a>
@@ -170,6 +191,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta10-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta10">
                                     <a>Data Release</a>
@@ -180,6 +203,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta11-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta11">
                                     <a>Data Release</a>
@@ -190,6 +215,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta12-short-blurb')}
                             </td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Link href="/data/hta12">
                                     <a>Data Release</a>

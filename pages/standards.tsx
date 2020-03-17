@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import HtanNavbar from "../components/HtanNavbar";
 import {getContent} from "../ApiUtil";
+import Footer from "../components/Footer";
 
 const Standards = () => {
     const content = getContent("data-standards","summary-blurb");
@@ -32,6 +33,7 @@ const Standards = () => {
                     </h4>
                 </Row>
             </Container>
+            <Footer/>
         </>
     )
 };

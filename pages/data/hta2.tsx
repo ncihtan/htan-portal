@@ -1,12 +1,14 @@
 import React from "react";
 import HtanNavbar from "../../components/HtanNavbar";
 import Base from "../../components/Base";
+import Footer from "../../components/Footer";
 
 function Hta2() {
     return (
         <>
             <HtanNavbar/>
-            <Base referrer="PCAPP Pilot Project"/>
+            <Base />
+            <Footer/>
         </>
     );
 }

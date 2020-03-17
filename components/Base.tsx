@@ -7,11 +7,7 @@ import Row from "react-bootstrap/Row";
 import {useRouter} from "next/router";
 import {getContent} from "../ApiUtil";
 
-export interface BaseProps {
-    referrer: string;
-}
-
-const Base = (props: BaseProps) => {
+const Base = () => {
     const router = useRouter();
     const htaID = router.pathname.replace('/data/', '');
 

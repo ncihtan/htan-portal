@@ -5,6 +5,7 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 import HtanNavbar from "../components/HtanNavbar";
 import {getContent} from "../ApiUtil";
+import Footer from "../components/Footer";
 
 const Transfer = () => {
     const content = getContent("data-transfer","summary-blurb");
@@ -27,6 +28,7 @@ const Transfer = () => {
                 <span dangerouslySetInnerHTML={{__html: content}} />
             </Row>
         </Container>
+        <Footer/>
     </>
     )
 };
