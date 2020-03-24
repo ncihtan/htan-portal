@@ -15,6 +15,9 @@ const HtanNavbar = () => (
                 <Nav.Link href="/transfer">Data Transfer</Nav.Link>
             </Nav>
         </Navbar.Collapse>
+        <Nav>
+            <Nav.Link href="https://humantumoratlas.org/">HTAN Main Site</Nav.Link>
+        </Nav>
     </Navbar>
 );
 

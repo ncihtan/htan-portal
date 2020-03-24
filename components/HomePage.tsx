@@ -7,8 +7,19 @@ import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import {getContent} from "../ApiUtil";
 
-const HomePage = () => (
+
+const HomePage = () => {
+    let heroBlurb = getContent("hero-blurb", "homepage");
+    let homepageCard1 = getContent("card-1", "homepage");
+    let homepageCard2 = getContent("card-2", "homepage");
+    let homepageCard3 = getContent("card-3", "homepage");
+    let homepageCard4 = getContent("card-4", "homepage");
+    let homepageCard5 = getContent("card-5", "homepage");
+    let homepageCard6 = getContent("card-6", "homepage");
+
+    return (
     <Container>
         <Jumbotron className="mt-5">
             <Row className="justify-content-md-center">
@@ -17,17 +28,15 @@ const HomePage = () => (
 
             <Row className="justify-content-md-center mt-5">
                 <Col md={{span: 4}}>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.
-                    </p>
+                    <span dangerouslySetInnerHTML={{ __html: heroBlurb}}></span>
                 </Col>
             </Row>
 
             <Row className="justify-content-md-center mt-3">
                 <ButtonToolbar>
-                    <Button href="#" variant="primary" className="mr-4">Explore the Data</Button>
+                    <Button href="/data" variant="primary" className="mr-4">
+                        Explore the Data
+                    </Button>
                     <Button variant="secondary">Learn More</Button>
                 </ButtonToolbar>
             </Row>
@@ -38,40 +47,24 @@ const HomePage = () => (
                 <CardGroup>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Card title</Card.Title>
                             <Card.Text>
-                                This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.
+                                <span className="card-custom-style" dangerouslySetInnerHTML={{ __html: homepageCard1}}></span>
                             </Card.Text>
                         </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
                     </Card>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Card title</Card.Title>
                             <Card.Text>
-                                This card has supporting text below as a natural lead-in to additional
-                                content.{' '}
+                                <span className="card-custom-style" dangerouslySetInnerHTML={{ __html: homepageCard2}}></span>
                             </Card.Text>
                         </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
                     </Card>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Card title</Card.Title>
                             <Card.Text>
-                                This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This card has even longer content than the first to
-                                show that equal height action.
+                                <span className="card-custom-style" dangerouslySetInnerHTML={{ __html: homepageCard3}}></span>
                             </Card.Text>
                         </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
                     </Card>
                 </CardGroup>
             </Col>
@@ -82,90 +75,32 @@ const HomePage = () => (
                 <CardGroup>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Card title</Card.Title>
                             <Card.Text>
-                                This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.
+                                <span className="card-custom-style" dangerouslySetInnerHTML={{ __html: homepageCard4}}></span>
                             </Card.Text>
                         </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
                     </Card>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Card title</Card.Title>
                             <Card.Text>
-                                This card has supporting text below as a natural lead-in to additional
-                                content.{' '}
+                                <span className="card-custom-style" dangerouslySetInnerHTML={{ __html: homepageCard5}}></span>
                             </Card.Text>
                         </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
                     </Card>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Card title</Card.Title>
                             <Card.Text>
-                                This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This card has even longer content than the first to
-                                show that equal height action.
+                                <span className="card-custom-style" dangerouslySetInnerHTML={{ __html: homepageCard6}}></span>
                             </Card.Text>
                         </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
-                    </Card>
-                </CardGroup>
-            </Col>
-        </Row>
-
-        <Row className="justify-content-md-center mt-5">
-            <Col md={{span: 8}}>
-                <CardGroup>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Card title</Card.Title>
-                            <Card.Text>
-                                This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.
-                            </Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
-                    </Card>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Card title</Card.Title>
-                            <Card.Text>
-                                This card has supporting text below as a natural lead-in to additional
-                                content.{' '}
-                            </Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
-                    </Card>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Card title</Card.Title>
-                            <Card.Text>
-                                This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This card has even longer content than the first to
-                                show that equal height action.
-                            </Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                            <small className="text-muted">Some more text</small>
-                        </Card.Footer>
                     </Card>
                 </CardGroup>
             </Col>
         </Row>
     </Container>
-);
+    );
+}
+
 
 export default HomePage;
 
