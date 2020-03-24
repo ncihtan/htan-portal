@@ -7,9 +7,13 @@ import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
-import Link from 'next/link';
+import {getContent} from "../ApiUtil";
 
-const HomePage = () => (
+
+const HomePage = () => {
+    let heroBlurb = getContent("hero-blurb", "homepage");
+
+    return (
     <Container>
         <Jumbotron className="mt-5">
             <Row className="justify-content-md-center">
@@ -18,11 +22,7 @@ const HomePage = () => (
 
             <Row className="justify-content-md-center mt-5">
                 <Col md={{span: 4}}>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.
-                    </p>
+                    <span dangerouslySetInnerHTML={{ __html: heroBlurb}}></span>
                 </Col>
             </Row>
 
@@ -168,7 +168,9 @@ const HomePage = () => (
             </Col>
         </Row>
     </Container>
-);
+    );
+}
+
 
 export default HomePage;
 
