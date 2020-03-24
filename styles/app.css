@@ -5,3 +5,8 @@
 .bg-nav-purple {
     background: #5f018c;
 }
+
+.card-custom-style img {
+    width: 200px !important;
+    height: 200px !important;
+}
