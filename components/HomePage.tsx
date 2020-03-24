@@ -7,6 +7,7 @@ import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import Link from 'next/link';
 
 const HomePage = () => (
     <Container>
@@ -27,7 +28,9 @@ const HomePage = () => (
 
             <Row className="justify-content-md-center mt-3">
                 <ButtonToolbar>
-                    <Button href="#" variant="primary" className="mr-4">Explore the Data</Button>
+                    <Button href="/data" variant="primary" className="mr-4">
+                        Explore the Data
+                    </Button>
                     <Button variant="secondary">Learn More</Button>
                 </ButtonToolbar>
             </Row>
