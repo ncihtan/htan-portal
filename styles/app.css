@@ -1,5 +1,6 @@
 .breadcrumb {
     background-color: transparent !important;
+    margin-left: -14px;
 }
 
 .bg-nav-purple {
@@ -10,3 +11,4 @@
     width: 200px !important;
     height: 200px !important;
 }
+
