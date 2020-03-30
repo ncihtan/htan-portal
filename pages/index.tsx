@@ -17,16 +17,7 @@ const Home = (data: any) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    let slugs = [
-        "homepage-card-1",
-        "homepage-card-2",
-        "homepage-card-3",
-        "homepage-card-4",
-        "homepage-card-5",
-        "homepage-card-6",
-        "homepage-hero-blurb"
-    ];
-
+    let slugs = ["homepage-hero-blurb"];
     let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${JSON.stringify(slugs)}&_fields=content,slug,title`;
     let res = await fetch(overviewURL);
     let data = await res.json();
