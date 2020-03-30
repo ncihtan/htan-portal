@@ -83,8 +83,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta1-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA1 ATLAS TYPE</td>
+                            <td>HTA1 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta1">
                                     <a>Data Release</a>
@@ -95,8 +95,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta2-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA2 ATLAS TYPE</td>
+                            <td>HTA2 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta2">
                                     <a>Data Release</a>
@@ -107,8 +107,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta3-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA3 ATLAS TYPE</td>
+                            <td>HTA3 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta3">
                                     <a>Data Release</a>
@@ -119,8 +119,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta4-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA4 ATLAS TYPE</td>
+                            <td>HTA4 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta4">
                                     <a>Data Release</a>
@@ -131,8 +131,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta5-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA5 ATLAS TYPE</td>
+                            <td>HTA5 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta5">
                                     <a>Data Release</a>
@@ -143,8 +143,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta6-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA6 ATLAS TYPE</td>
+                            <td>HTA6 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta6">
                                     <a>Data Release</a>
@@ -155,8 +155,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta7-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA7 ATLAS TYPE</td>
+                            <td>HTA7 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta7">
                                     <a>Data Release</a>
@@ -167,8 +167,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta8-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA8 ATLAS TYPE</td>
+                            <td>HTA8 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta8">
                                     <a>Data Release</a>
@@ -179,8 +179,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta9-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA9 ATLAS TYPE</td>
+                            <td>HTA9 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta9">
                                     <a>Data Release</a>
@@ -191,8 +191,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta10-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA10 ATLAS TYPE</td>
+                            <td>HTA10 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta10">
                                     <a>Data Release</a>
@@ -203,8 +203,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta11-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA11 ATLAS TYPE</td>
+                            <td>HTA11 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta11">
                                     <a>Data Release</a>
@@ -215,8 +215,8 @@ const DataReleasePage = (props: DataReleaseProps) => {
                             <td>
                                 {cleanContent(props.data, 'hta12-short-blurb')}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>HTA12 ATLAS TYPE</td>
+                            <td>HTA12 LEAD INSTITUTION</td>
                             <td>
                                 <Link href="/data/hta12">
                                     <a>Data Release</a>
