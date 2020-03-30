@@ -8,6 +8,7 @@ import _ from 'lodash'
 
 import HtanNavbar from "./HtanNavbar";
 import {getContent} from "../ApiUtil";
+import Footer from "./Footer";
 
 
 /**
@@ -227,6 +228,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                     </Table>
                 </Row>
             </Container>
+            <Footer/>
         </>
     );
 }
