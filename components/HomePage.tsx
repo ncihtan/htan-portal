@@ -35,7 +35,7 @@ const HomePage = (data: {data: HomeProps}) => {
             </Row>
 
             <Row className="justify-content-md-center mt-5">
-                <Col md={{span: 4}}>
+                <Col md={{span: 7}}>
                     <span dangerouslySetInnerHTML={{ __html: heroBlurb[0].content.rendered}}></span>
                 </Col>
             </Row>
@@ -45,7 +45,6 @@ const HomePage = (data: {data: HomeProps}) => {
                     <Button href="/data" variant="primary" className="mr-4">
                         Explore the Data
                     </Button>
-                    <Button variant="secondary">Learn More</Button>
                 </ButtonToolbar>
             </Row>
         </Jumbotron>
