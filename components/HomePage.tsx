@@ -8,16 +8,20 @@ import CardGroup from "react-bootstrap/CardGroup";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import {getContent} from "../ApiUtil";
+import _ from "lodash";
 
 
-const HomePage = () => {
-    let heroBlurb = getContent("hero-blurb", "homepage");
+const HomePage = (data: {data: any}) => {
+    let props = data.data.data
+
     let homepageCard1 = getContent("card-1", "homepage");
     let homepageCard2 = getContent("card-2", "homepage");
     let homepageCard3 = getContent("card-3", "homepage");
     let homepageCard4 = getContent("card-4", "homepage");
     let homepageCard5 = getContent("card-5", "homepage");
     let homepageCard6 = getContent("card-6", "homepage");
+
+    let heroBlurb = _.filter(props, (o: any) => o.slug === `homepage-hero-blurb`);
 
     return (
     <Container>
@@ -28,7 +32,7 @@ const HomePage = () => {
 
             <Row className="justify-content-md-center mt-5">
                 <Col md={{span: 4}}>
-                    <span dangerouslySetInnerHTML={{ __html: heroBlurb}}></span>
+                    <span dangerouslySetInnerHTML={{ __html: heroBlurb[0].content.rendered}}></span>
                 </Col>
             </Row>
 
