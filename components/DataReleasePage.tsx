@@ -36,8 +36,6 @@ export interface DataReleaseProps {
 }
 
 const DataReleasePage = (props: DataReleaseProps) => {
-    let summaryContent = getContent("data-release", "summary-blurb");
-
     return (
         <>
             <HtanNavbar/>
@@ -56,7 +54,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                 </Row>
 
                 <Row className="mt-3">
-                    <span dangerouslySetInnerHTML={{__html: summaryContent}} />
+                    <span dangerouslySetInnerHTML={{__html: props.data[0].content.rendered}}/>
                 </Row>
 
                 <Row className="mt-3">
@@ -72,7 +70,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         <tbody>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta1-short-blurb')}
+                                Human Tumor Atlas Pilot Project (HTAPP)
                             </td>
                             <td>HTA1 ATLAS TYPE</td>
                             <td>HTA1 LEAD INSTITUTION</td>
@@ -84,7 +82,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta2-short-blurb')}
+                                Pre-Cancer Atlas: Pilot Project (PCAPP)
                             </td>
                             <td>HTA2 ATLAS TYPE</td>
                             <td>HTA2 LEAD INSTITUTION</td>
@@ -96,7 +94,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta3-short-blurb')}
+                                Pre-Cancer Atlas: Lung Cancer
                             </td>
                             <td>HTA3 ATLAS TYPE</td>
                             <td>HTA3 LEAD INSTITUTION</td>
@@ -108,7 +106,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta4-short-blurb')}
+                                Center for Pediatric Tumor Cell Atlas
                             </td>
                             <td>HTA4 ATLAS TYPE</td>
                             <td>HTA4 LEAD INSTITUTION</td>
@@ -120,7 +118,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta5-short-blurb')}
+                                The Cellular Geography of Therapeutic Resistance in Cancer
                             </td>
                             <td>HTA5 ATLAS TYPE</td>
                             <td>HTA5 LEAD INSTITUTION</td>
@@ -132,7 +130,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta6-short-blurb')}
+                                Pre-Cancer Atlas:  Breast Cancer
                             </td>
                             <td>HTA6 ATLAS TYPE</td>
                             <td>HTA6 LEAD INSTITUTION</td>
@@ -144,7 +142,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta7-short-blurb')}
+                                Pre-Cancer Atlas:  Melanoma
                             </td>
                             <td>HTA7 ATLAS TYPE</td>
                             <td>HTA7 LEAD INSTITUTION</td>
@@ -156,7 +154,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta8-short-blurb')}
+                                Transition to Metastatic State: Lung Cancer, Pancreatic Cancer and Brain Metastasis
                             </td>
                             <td>HTA8 ATLAS TYPE</td>
                             <td>HTA8 LEAD INSTITUTION</td>
@@ -168,7 +166,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta9-short-blurb')}
+                                Omic and Multidimensional Spatial (OMS) Atlas of Metastatic Breast Cancers
                             </td>
                             <td>HTA9 ATLAS TYPE</td>
                             <td>HTA9 LEAD INSTITUTION</td>
@@ -180,7 +178,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta10-short-blurb')}
+                                Pre-Cancer Atlas:  Familial Adenomatous Polyposis (FAP)
                             </td>
                             <td>HTA10 ATLAS TYPE</td>
                             <td>HTA10 LEAD INSTITUTION</td>
@@ -192,7 +190,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta11-short-blurb')}
+                                Pre-Cancer Atlas:  Colorectal Cancer (CRC)
                             </td>
                             <td>HTA11 ATLAS TYPE</td>
                             <td>HTA11 LEAD INSTITUTION</td>
@@ -204,7 +202,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         <tr>
                             <td>
-                                {cleanContent(props.data, 'hta12-short-blurb')}
+                                Washington University Human Tumor Atlas Research Center
                             </td>
                             <td>HTA12 ATLAS TYPE</td>
                             <td>HTA12 LEAD INSTITUTION</td>
