@@ -6,8 +6,13 @@ import HtanNavbar from "../components/HtanNavbar";
 import Footer from "../components/Footer";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch"
+import {CmsData} from "../types";
 
-const Transfer = (data: any) => {
+export interface TransferProps {
+    data: CmsData[];
+}
+
+const Transfer = (data: TransferProps) => {
     return (
     <>
         <HtanNavbar/>

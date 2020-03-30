@@ -6,8 +6,13 @@ import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch"
+import {CmsData} from "../../types";
 
-function Biospecimens(data: any) {
+export interface BiospecimenProps {
+    data: CmsData[];
+}
+
+function Biospecimens(data: BiospecimenProps) {
     return (
         <>
             <HtanNavbar/>

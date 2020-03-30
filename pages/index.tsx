@@ -5,8 +5,13 @@ import HomePage from "../components/HomePage";
 import Footer from "../components/Footer";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch";
+import {CmsData} from "../types";
 
-const Home = (data: any) => {
+export interface HomeProps {
+    data: CmsData[];
+}
+
+const Home = (data: HomeProps) => {
     return (
         <>
             <HtanNavbar/>

@@ -6,8 +6,12 @@ import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch";
+import {CmsData} from "../../types";
 
-function Imaging(data: any) {
+export interface ImagingProps {
+    data: CmsData[];
+}
+function Imaging(data: ImagingProps) {
     return (
         <>
             <HtanNavbar/>

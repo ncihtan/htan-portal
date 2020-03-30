@@ -9,6 +9,7 @@ import _ from 'lodash'
 import HtanNavbar from "./HtanNavbar";
 import {getContent} from "../ApiUtil";
 import Footer from "./Footer";
+import {CmsData} from "../types";
 
 
 /**
@@ -28,17 +29,6 @@ function cleanContent(data: CmsData[], slug: string): string {
     }
 
     return content ? content.replace(/<[^>]*>/g, '') : "";
-}
-
-export interface CmsData {
-    slug: string;
-    content: {
-        rendered: string;
-        protected: boolean;
-    };
-    title: {
-        rendered: string;
-    }
 }
 
 export interface DataReleaseProps {

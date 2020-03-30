@@ -6,8 +6,13 @@ import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch";
+import {CmsData} from "../../types";
 
-function Cds(data: any) {
+export interface CdsProps {
+    data: CmsData[];
+}
+
+function Cds(data: CdsProps) {
     return (
        <>
             <HtanNavbar/>

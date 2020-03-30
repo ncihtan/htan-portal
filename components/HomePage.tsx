@@ -9,9 +9,13 @@ import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import {getContent} from "../ApiUtil";
 import _ from "lodash";
+import {CmsData} from "../types";
 
+export interface HomeProps {
+    data: CmsData[];
+}
 
-const HomePage = (data: {data: any}) => {
+const HomePage = (data: {data: HomeProps}) => {
     let props = data.data.data
 
     let homepageCard1 = getContent("card-1", "homepage");

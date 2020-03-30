@@ -7,8 +7,13 @@ import Footer from "../../components/Footer";
 import Link from "next/link";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch";
+import {CmsData} from "../../types";
 
-const Standards = (data: any) => {
+export interface StandardsProps {
+    data: CmsData[];
+}
+
+const Standards = (data: StandardsProps) => {
     return (
         <>
             <HtanNavbar/>
