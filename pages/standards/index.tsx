@@ -8,6 +8,7 @@ import Link from "next/link";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch";
 import {CmsData} from "../../types";
+import {WORDPRESS_BASE_URL} from "../../ApiUtil";
 
 export interface StandardsProps {
     data: CmsData[];
@@ -70,7 +71,7 @@ const Standards = (data: StandardsProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     let slugs = ["summary-blurb-data-standards"];
-    let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${JSON.stringify(slugs)}&_fields=content,slug,title`;
+    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);
     let data = await res.json();
     return {props: {data}}

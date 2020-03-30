@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import React from "react";
 
 import DataReleasePage, {DataReleaseProps} from "../../components/DataReleasePage";
+import {WORDPRESS_BASE_URL} from "../../ApiUtil";
 
 export async function getServerSideProps(): Promise<{props: DataReleaseProps}> {
 
@@ -22,8 +23,8 @@ export async function getServerSideProps(): Promise<{props: DataReleaseProps}> {
         "hta2-short-blurb",
         "hta1-short-blurb"
     ]
-    const url = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${JSON.stringify(slugs1)}&_fields=content,slug,title&cacheBuster=${new Date().getTime()}`;
-    const url2 = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${JSON.stringify(slugs2)}&_fields=content,slug,title&cacheBuster=${new Date().getTime()}`;
+    const url = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs1)}`;
+    const url2 = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs2)}`;
     const res = await fetch(url);
     const res2 = await fetch(url2);
     let data = await res.json();

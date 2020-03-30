@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import {GetServerSideProps} from "next";
 import fetch from "node-fetch";
 import {CmsData} from "../types";
+import {WORDPRESS_BASE_URL} from "../ApiUtil";
 
 export interface HomeProps {
     data: CmsData[];
@@ -23,7 +24,7 @@ const Home = (data: HomeProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     let slugs = ["homepage-hero-blurb"];
-    let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${JSON.stringify(slugs)}&_fields=content,slug,title`;
+    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);
     let data = await res.json();
     return {props: {data}}
