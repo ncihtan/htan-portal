@@ -2,13 +2,12 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
-
 import HtanNavbar from "../components/HtanNavbar";
-import {getContent} from "../ApiUtil";
 import Footer from "../components/Footer";
+import {GetServerSideProps} from "next";
+import fetch from "node-fetch"
 
-const Transfer = () => {
-    const content = getContent("data-transfer","summary-blurb");
+const Transfer = (data: any) => {
     return (
     <>
         <HtanNavbar/>
@@ -25,12 +24,20 @@ const Transfer = () => {
                 <h1>Data Transfer</h1>
             </Row>
             <Row className="mt-3">
-                <span dangerouslySetInnerHTML={{__html: content}} />
+                <span dangerouslySetInnerHTML={{__html: data.data[0].content.rendered}} />
             </Row>
         </Container>
         <Footer/>
     </>
     )
 };
+
+export const getServerSideProps: GetServerSideProps = async context => {
+    let slugs = ["summary-blurb-data-transfer"];
+    let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${JSON.stringify(slugs)}&_fields=content,slug,title`;
+    let res = await fetch(overviewURL);
+    let data = await res.json();
+    return {props: {data}}
+}
 
 export default Transfer

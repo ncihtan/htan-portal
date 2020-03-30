@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?slug=${JSON.stringify(slugs)}&_fields=content,slug,title`;
     let res = await fetch(overviewURL);
     let data = await res.json();
-    return {props: {data: data}}
+    return {props: {data}}
 }
 
 export default Home;
