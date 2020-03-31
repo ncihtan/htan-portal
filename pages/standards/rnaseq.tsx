@@ -4,10 +4,16 @@ import Footer from "../../components/Footer";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
-import {getContent} from "../../ApiUtil";
+import {GetServerSideProps} from "next";
+import fetch from "node-fetch";
+import {CmsData} from "../../types";
+import {WORDPRESS_BASE_URL} from "../../ApiUtil";
 
-function Rnaseq() {
-    const content = getContent("rnaseq-blurb","data-standards");
+export interface RnaseqProps {
+    data: CmsData[];
+}
+
+function Rnaseq(data: RnaseqProps) {
     return (
         <>
             <HtanNavbar/>
@@ -22,12 +28,20 @@ function Rnaseq() {
                     </Breadcrumb>
                 </Row>
                 <Row>
-                    <span dangerouslySetInnerHTML={{__html: content}}></span>
+                    <span dangerouslySetInnerHTML={{__html: data.data[0].content.rendered}}></span>
                 </Row>
             </Container>
             <Footer/>
         </>
     );
+}
+
+export const getServerSideProps: GetServerSideProps = async context => {
+    let slugs = ["data-standards-rnaseq-blurb"];
+    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
+    let res = await fetch(overviewURL);
+    let data = await res.json();
+    return {props: {data}}
 }
 
 export default Rnaseq;

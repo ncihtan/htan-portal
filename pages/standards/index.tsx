@@ -3,12 +3,18 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import HtanNavbar from "../../components/HtanNavbar";
-import {getContent} from "../../ApiUtil";
 import Footer from "../../components/Footer";
 import Link from "next/link";
+import {GetServerSideProps} from "next";
+import fetch from "node-fetch";
+import {CmsData} from "../../types";
+import {WORDPRESS_BASE_URL} from "../../ApiUtil";
 
-const Standards = () => {
-    const content = getContent("data-standards","summary-blurb");
+export interface StandardsProps {
+    data: CmsData[];
+}
+
+const Standards = (data: StandardsProps) => {
     return (
         <>
             <HtanNavbar/>
@@ -26,7 +32,7 @@ const Standards = () => {
                     <h1>Data Standards</h1>
                 </Row>
                 <Row className="mt-3">
-                    <span dangerouslySetInnerHTML={{__html: content}} />
+                    <span dangerouslySetInnerHTML={{__html: data.data[0].content.rendered}} />
                 </Row>
                 <Row className="mt-3">
                     <h4>
@@ -62,5 +68,13 @@ const Standards = () => {
         </>
     )
 };
+
+export const getServerSideProps: GetServerSideProps = async context => {
+    let slugs = ["summary-blurb-data-standards"];
+    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
+    let res = await fetch(overviewURL);
+    let data = await res.json();
+    return {props: {data}}
+}
 
 export default Standards
