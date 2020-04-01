@@ -2,7 +2,7 @@ import {useRouter} from 'next/router';
 import HtanNavbar from "../../components/HtanNavbar";
 import Footer from "../../components/Footer";
 import getData from "../../lib/getData";
-import {getAtlasContent, getContent} from "../../ApiUtil";
+import {getAtlasContent, getAtlasList, getContent, WORDPRESS_BASE_URL, WPAtlas} from "../../ApiUtil";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
@@ -11,20 +11,29 @@ import Nav from "react-bootstrap/Nav";
 import React from "react";
 
 import _ from 'lodash';
-import {Atlas, AtlasDataTable} from "../../components/AtlasDataTable";
 import {AtlasWrapper} from "../../components/Atlas";
 import Head from "next/dist/next-server/lib/head";
+import {Atlas, SynapseData} from "../../types";
+import {GetStaticProps} from "next";
+import fetch from "node-fetch";
 
 const data = getData();
 
-export default function Post() {
+interface IPostProps {
+    synapseData:SynapseData;
+    WPAtlasData:WPAtlas[];
+}
+
+const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData }) => {
 
     const router = useRouter();
-    const htaID = router.query.id;
+    const htaID = router.query.id as string;
 
-    const postData = getAtlasContent(1158);
+    const postData = WPAtlasData.find((a)=>{
+        return a.synapse_id === htaID;
+    });
 
-    const atlasData: Atlas = data.centerA as Atlas;
+    const atlasData: Atlas = synapseData[htaID] as Atlas;
 
     return (
         <>
@@ -36,7 +45,7 @@ export default function Post() {
                 <Row>
                     <Breadcrumb className="mt-3">
                         <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item href="/data">
+                        <Breadcrumb.Item href="/data_releases">
                             Data Release
                         </Breadcrumb.Item>
                         <Breadcrumb.Item active>{
@@ -46,7 +55,7 @@ export default function Post() {
                 </Row>
 
                 <Row>
-                    <Tab.Container defaultActiveKey="derivedData">
+                    <Tab.Container defaultActiveKey="atlasOverview">
                         <Nav variant="tabs" fill>
                             <Nav.Item>
                                 <Nav.Link eventKey="atlasOverview">Atlas Overview</Nav.Link>
@@ -117,12 +126,28 @@ export default function Post() {
             <Footer/>
         </>
     )
-////
+}
 
-//     return (
-//         <Layout>
-//         <h1>{router.query.id}</h1>
-//         <p>This is the blog post content.</p>
-//     </Layout>
-// );
+export default Post;
+
+export const getStaticProps: GetStaticProps = async context => {
+
+    const WPAtlasData = await getAtlasList();
+    const synapseData = getData();
+
+    return {
+        props: {
+            WPAtlasData,
+            synapseData
+        }
+    }
+}
+
+export async function getStaticPaths() {
+
+    const atlases = await getAtlasList();
+
+    const paths = atlases.map(a=>`/atlas/${a.synapse_id}`);
+
+    return { paths, fallback: false }
 }

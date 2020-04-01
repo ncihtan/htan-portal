@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import HtanNavbar from "../components/HtanNavbar";
 import Footer from "../components/Footer";
-import {GetServerSideProps} from "next";
+import {GetServerSideProps, GetStaticProps} from "next";
 import fetch from "node-fetch"
 import {CmsData} from "../types";
 import {WORDPRESS_BASE_URL} from "../ApiUtil";
@@ -38,7 +38,7 @@ const Transfer = (data: TransferProps) => {
     )
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getStaticProps: GetStaticProps = async context => {
     let slugs = ["summary-blurb-data-transfer"];
     let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);

@@ -1,6 +1,19 @@
 import useSWR from "swr";
 import _ from "lodash";
-import fetch from "unfetch";
+import fetch from "node-fetch";
+
+export interface WPAtlas {
+    id:number;
+    slug:string;
+    title: { rendered:string };
+    content: { rendered:string };
+    atlas_overview: string;
+    data_overview: string;
+    publications: string;
+    lead_institutions: string;
+    atlas_type: string;
+    synapse_id: string;
+}
 
 export function fetcher(url: string) {
     return fetch(url).then(r => r.json());
@@ -14,13 +27,16 @@ export function getContent(tab: string, htaId: string) {
     return post[0] ? post[0].content.rendered : "";
 }
 
-export function getAtlasContent(postId: number) {
-    //let overviewURL = `https://humantumoratlas.org/wp-json/wp/v2/posts/?slug=${htaId}&_fields=content,slug,title`;
+export function getAtlasContent(postId: number): WPAtlas {
     let postUrl = `https://humantumoratlas.org/wp-json/wp/v2/atlas/${postId}`;
     let {data} = useSWR(postUrl, fetcher);
-    //let post = _.filter(data, (o) => o.slug === `${htaId}-${tab}`);
-    return data;
-    //return post[0] ? post[0].content.rendered : "";
+    return (data as WPAtlas);
+}
+
+export function getAtlasList() : Promise<WPAtlas[]> {
+    let postUrl = `https://humantumoratlas.org/wp-json/wp/v2/atlas`;
+    return fetcher(postUrl);
+    //return (data as WPAtlas[]);
 }
 
 

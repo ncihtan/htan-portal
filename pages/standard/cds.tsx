@@ -4,17 +4,18 @@ import Footer from "../../components/Footer";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
-import {GetServerSideProps} from "next";
+import {GetServerSideProps, GetStaticProps} from "next";
 import fetch from "node-fetch";
 import {CmsData} from "../../types";
 import {WORDPRESS_BASE_URL} from "../../ApiUtil";
 
-export interface ImagingProps {
+export interface CdsProps {
     data: CmsData[];
 }
-function Imaging(data: ImagingProps) {
+
+function Cds(data: CdsProps) {
     return (
-        <>
+       <>
             <HtanNavbar/>
             <Container>
                 <Row>
@@ -23,7 +24,7 @@ function Imaging(data: ImagingProps) {
                         <Breadcrumb.Item href="/standards">
                             Data Standards
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item active>Imaging</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Clinical Data Standards</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
                 <Row>
@@ -35,12 +36,12 @@ function Imaging(data: ImagingProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
-    let slugs = ["data-standards-imaging-blurb"];
+export const getStaticProps: GetStaticProps = async context => {
+    let slugs = ["data-standards-cds-blurb"];
     let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);
     let data = await res.json();
     return {props: {data}}
 }
 
-export default Imaging;
+export default Cds;
