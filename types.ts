@@ -32,3 +32,9 @@ export interface Atlas {
 export interface SynapseData {
     [altasId:string]:Atlas
 }
+
+export enum WPConstants {
+
+    HOMEPAGE_HERO_BLURB = "homepage-hero-blurb"
+
+}

@@ -19,11 +19,10 @@ export function fetcher(url: string) {
     return fetch(url).then(r => r.json());
 }
 
-export function getContent(tab: string, htaId: string) {
+export async function getContent(tab: string, htaId: string) {
     let overviewURL = `${WORDPRESS_BASE_URL}${htaId}-${tab}`;
-    let {data} = useSWR(overviewURL, fetcher);
+    let data = await fetcher(overviewURL);
     let post = _.filter(data, (o) => o.slug === `${htaId}-${tab}`);
-
     return post[0] ? post[0].content.rendered : "";
 }
 
@@ -36,7 +35,6 @@ export function getAtlasContent(postId: number): WPAtlas {
 export function getAtlasList() : Promise<WPAtlas[]> {
     let postUrl = `https://humantumoratlas.org/wp-json/wp/v2/atlas`;
     return fetcher(postUrl);
-    //return (data as WPAtlas[]);
 }
 
 

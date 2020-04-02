@@ -1,33 +1,43 @@
 import React from "react";
 
 import HtanNavbar from "../components/HtanNavbar";
-import HomePage from "../components/HomePage";
+import HomePage, {IHomePropsProps} from "../components/HomePage";
 import Footer from "../components/Footer";
-import {GetServerSideProps, GetStaticProps} from "next";
+import { GetStaticProps} from "next";
 import fetch from "node-fetch";
-import {CmsData} from "../types";
-import {WORDPRESS_BASE_URL} from "../ApiUtil";
+import { WPConstants} from "../types";
+import {getContent, WORDPRESS_BASE_URL} from "../ApiUtil";
 
-export interface HomeProps {
-    data: CmsData[];
-}
-
-const Home = (data: HomeProps) => {
+const Home = (data: IHomePropsProps) => {
     return (
         <>
             <HtanNavbar/>
-            <HomePage data={data}/>
+            <HomePage {...data} />
             <Footer/>
         </>
     );
 }
 
 export const getStaticProps: GetStaticProps = async context => {
-    let slugs = ["homepage-hero-blurb"];
+
+    let slugs = [WPConstants.HOMEPAGE_HERO_BLURB];
+
     let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);
     let data = await res.json();
-    return {props: {data}}
+
+    const homepageContent = data.find((d:any)=>d.slug===WPConstants.HOMEPAGE_HERO_BLURB);
+
+    const cards = await Promise.all([
+        getContent("card-1", "homepage"),
+        getContent("card-2", "homepage"),
+        getContent("card-3", "homepage"),
+        getContent("card-4", "homepage"),
+        getContent("card-5", "homepage"),
+        getContent("card-6", "homepage"),
+    ]);
+
+    return { props: { hero_blurb:homepageContent.content.rendered, cards:cards }}
 }
 
 export default Home;

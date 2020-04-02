@@ -2,6 +2,22 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import React from "react";
 
+function togglePreview(on:any){
+    if (process.browser) {
+        if (window.localStorage.preview) {
+            fetch("/api/clearPreview").then(() => {
+                window.localStorage.removeItem("preview");
+                window.location.reload();
+            });
+        } else {
+            fetch("/api/preview").then(() => {
+                window.localStorage.preview = true;
+                window.location.reload();
+            });
+        }
+    }
+}
+
 const HtanNavbar = () => (
     <Navbar bg="nav-purple" variant="dark" expand="lg">
         <Navbar.Brand href="/">
@@ -16,6 +32,11 @@ const HtanNavbar = () => (
             </Nav>
         </Navbar.Collapse>
         <Nav>
+            <Nav.Link onClick={togglePreview}>
+                {
+                    process.browser && window.localStorage.preview ? "Preview Off" : "Preview On"
+                }
+            </Nav.Link>
             <Nav.Link href="https://humantumoratlas.org/">HTAN Main Site</Nav.Link>
         </Nav>
     </Navbar>
