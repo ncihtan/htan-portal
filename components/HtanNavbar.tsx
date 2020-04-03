@@ -19,7 +19,7 @@ function togglePreview(on:any){
 }
 
 const HtanNavbar = () => (
-    <Navbar bg="nav-purple" variant="dark" expand="lg">
+    <Navbar bg="nav-purple" variant="dark" expand="lg" className={"main-nav"}>
         <Navbar.Brand href="/">
             <img src="/htanLogo.png" height="60" alt="HTAN Data Portal" />
         </Navbar.Brand>
@@ -34,7 +34,7 @@ const HtanNavbar = () => (
         <Nav>
             <Nav.Link onClick={togglePreview}>
                 {
-                    process.browser && window.localStorage.preview ? "Preview Off" : "Preview On"
+                    process.browser && window.localStorage.preview ? "#Disable Preview#" : "#Enable Preview#"
                 }
             </Nav.Link>
             <Nav.Link href="https://humantumoratlas.org/">HTAN Main Site</Nav.Link>

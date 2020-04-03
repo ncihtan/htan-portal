@@ -15,9 +15,8 @@ export interface IHomePropsProps {
 
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({ hero_blurb, cards}) => {
 
-    return (
-    <Container>
-        <Jumbotron className="mt-5">
+    return (<>
+        <Jumbotron className={"text-center"}>
             <Row className="justify-content-md-center">
                 <h1>Human Tumor Atlas Network Data Portal</h1>
             </Row>
@@ -36,7 +35,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({ hero_blurb, cards}
                 </ButtonToolbar>
             </Row>
         </Jumbotron>
-
+    <Container>
         <Row className="justify-content-md-center mt-5">
             <Col md={{span: 8}}>
                 <CardGroup>
@@ -93,7 +92,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({ hero_blurb, cards}
             </Col>
         </Row>
     </Container>
-    );
+    </>);
 }
 
 
