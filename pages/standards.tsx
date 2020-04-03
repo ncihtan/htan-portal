@@ -2,13 +2,13 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
-import HtanNavbar from "../../components/HtanNavbar";
-import Footer from "../../components/Footer";
+import HtanNavbar from "../components/HtanNavbar";
+import Footer from "../components/Footer";
 import Link from "next/link";
-import {GetServerSideProps} from "next";
+import {GetServerSideProps, GetStaticProps} from "next";
 import fetch from "node-fetch";
-import {CmsData} from "../../types";
-import {WORDPRESS_BASE_URL} from "../../ApiUtil";
+import {CmsData} from "../types";
+import {WORDPRESS_BASE_URL} from "../ApiUtil";
 
 export interface StandardsProps {
     data: CmsData[];
@@ -42,22 +42,22 @@ const Standards = (data: StandardsProps) => {
                 <Row>
                     <ul>
                         <li>
-                            <Link href="/standards/biospecimens">
+                            <Link href="/standard/biospecimens">
                                 Biospecimens
                             </Link>
                         </li>
                         <li>
-                            <Link href="/standards/cds">
+                            <Link href="/standard/cds">
                                 Clinical Data Standards
                             </Link>
                         </li>
                         <li>
-                            <Link href="/standards/rnaseq">
+                            <Link href="/standard/rnaseq">
                                 Single Cell RNA Seq
                             </Link>
                         </li>
                         <li>
-                            <Link href="/standards/imaging">
+                            <Link href="/standard/imaging">
                                 Imaging
                             </Link>
                         </li>
@@ -69,7 +69,7 @@ const Standards = (data: StandardsProps) => {
     )
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getStaticProps: GetStaticProps = async context => {
     let slugs = ["summary-blurb-data-standards"];
     let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);

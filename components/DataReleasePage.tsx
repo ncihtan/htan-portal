@@ -1,16 +1,16 @@
 import React from "react";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import Table from "react-bootstrap/Table";
 import Link from "next/link";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import _ from 'lodash'
 
 import HtanNavbar from "./HtanNavbar";
-import {getContent} from "../ApiUtil";
+import {getAtlasList, WORDPRESS_BASE_URL, WPAtlas} from "../ApiUtil";
 import Footer from "./Footer";
-import {CmsData} from "../types";
-
+import {Atlas, CmsData} from "../types";
+import {GetServerSideProps} from "next";
+import fetch from "node-fetch";
 
 /**
  * Strip HTML characters and get content from CMS
@@ -33,9 +33,11 @@ function cleanContent(data: CmsData[], slug: string): string {
 
 export interface DataReleaseProps {
     data: CmsData[];
+    atlasData: WPAtlas[];
 }
 
-const DataReleasePage = (props: DataReleaseProps) => {
+export const DataReleasePage = (props: DataReleaseProps) => {
+
     return (
         <>
             <HtanNavbar/>
@@ -58,7 +60,7 @@ const DataReleasePage = (props: DataReleaseProps) => {
                 </Row>
 
                 <Row className="mt-3">
-                    <Table>
+                    <table className={"table table-striped"}>
                         <thead>
                         <tr>
                             <th>Atlas Name</th>
@@ -68,157 +70,29 @@ const DataReleasePage = (props: DataReleaseProps) => {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>
-                                Human Tumor Atlas Pilot Project (HTAPP)
-                            </td>
-                            <td>HTA1 ATLAS TYPE</td>
-                            <td>HTA1 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta1">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Pre-Cancer Atlas: Pilot Project (PCAPP)
-                            </td>
-                            <td>HTA2 ATLAS TYPE</td>
-                            <td>HTA2 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta2">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Pre-Cancer Atlas: Lung Cancer
-                            </td>
-                            <td>HTA3 ATLAS TYPE</td>
-                            <td>HTA3 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta3">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Center for Pediatric Tumor Cell Atlas
-                            </td>
-                            <td>HTA4 ATLAS TYPE</td>
-                            <td>HTA4 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta4">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                The Cellular Geography of Therapeutic Resistance in Cancer
-                            </td>
-                            <td>HTA5 ATLAS TYPE</td>
-                            <td>HTA5 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta5">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Pre-Cancer Atlas:  Breast Cancer
-                            </td>
-                            <td>HTA6 ATLAS TYPE</td>
-                            <td>HTA6 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta6">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Pre-Cancer Atlas:  Melanoma
-                            </td>
-                            <td>HTA7 ATLAS TYPE</td>
-                            <td>HTA7 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta7">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Transition to Metastatic State: Lung Cancer, Pancreatic Cancer and Brain Metastasis
-                            </td>
-                            <td>HTA8 ATLAS TYPE</td>
-                            <td>HTA8 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta8">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Omic and Multidimensional Spatial (OMS) Atlas of Metastatic Breast Cancers
-                            </td>
-                            <td>HTA9 ATLAS TYPE</td>
-                            <td>HTA9 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta9">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Pre-Cancer Atlas:  Familial Adenomatous Polyposis (FAP)
-                            </td>
-                            <td>HTA10 ATLAS TYPE</td>
-                            <td>HTA10 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta10">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Pre-Cancer Atlas:  Colorectal Cancer (CRC)
-                            </td>
-                            <td>HTA11 ATLAS TYPE</td>
-                            <td>HTA11 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta11">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Washington University Human Tumor Atlas Research Center
-                            </td>
-                            <td>HTA12 ATLAS TYPE</td>
-                            <td>HTA12 LEAD INSTITUTION</td>
-                            <td>
-                                <Link href="/data/hta12">
-                                    <a>Data Release</a>
-                                </Link>
-                            </td>
-                        </tr>
+
+                        {
+                            props.atlasData.map((atlas)=><tr key={`atlas-${atlas.id}`}>
+                                <td>
+                                    {
+                                        atlas.title.rendered
+                                    }
+                                </td>
+                                <td>{ atlas.atlas_type }</td>
+                                <td>{ atlas.lead_institutions }</td>
+                                <td>
+                                    <Link href={ `./atlas/${atlas.synapse_id}` }>
+                                        <a>Data Release</a>
+                                    </Link>
+                                </td>
+                            </tr>
+                            )
+                        }
                         </tbody>
-                    </Table>
+                    </table>
                 </Row>
             </Container>
             <Footer/>
         </>
     );
 }
-
-export default DataReleasePage;

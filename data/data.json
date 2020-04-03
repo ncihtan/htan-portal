@@ -1,0 +1,148 @@
+{
+  "centerA":{
+    "clinical":{
+      "category1":{
+        "dataLink":"https://www.synapse.org/#!Synapse:syn123/tables/",
+        "data":{
+          "attributes":[
+            {
+              "name":"attribute1",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"attribute2",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            }
+          ],
+          "values":[
+            ["a11", "a21"],
+            ["a12", "a22"],
+            ["a13", "a23"]
+          ]
+        }
+      }
+    },
+    "biospecimen":{
+      "category2":{
+        "dataLink":"https://www.synapse.org/#!Synapse:syn124/tables/",
+        "data":{
+          "attributes":[
+            {
+              "name":"attribute1",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"attribute2",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            }
+          ],
+          "values":[
+            ["a11", "a21"],
+            ["a12", "a22"],
+            ["a13", "a23"]
+          ]
+        }
+      }
+    },
+    "assayData":{
+      "category3":{
+        "dataLink":"https://www.synapse.org/#!Synapse:syn125/tables/",
+        "data":{
+          "attributes":[
+            {
+              "name":"attribute1",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"attribute2",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"downloadLink",
+              "description":"Get raw file from Synapse",
+              "schemaMetadata":""
+            }
+          ],
+          "values":[
+            ["a11", "a21", "https://www.synapse.org/#!Synapse:syn21261141"],
+            ["a12", "a22", "https://www.synapse.org/#!Synapse:syn21341142" ],
+            ["a13", "a23", "https://www.synapse.org/#!Synapse:syn21671143"]
+          ]
+        }
+      },
+      "category4":{
+        "dataLink":"https://www.synapse.org/#!Synapse:syn126/tables/",
+
+        "data":{
+          "attributes":[
+            {
+              "name":"attribute1",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"attribute2",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"downloadLink",
+              "description":"Get raw file from Synapse",
+              "schemaMetadata":""
+            },
+            {
+              "name":"view",
+              "description":"View file in cBioPortal",
+              "schemaMetadata":""
+            }
+          ],
+          "values":[
+            ["a11", "a21", "https://www.synapse.org/#!Synapse:syn21261141", "cBioPortal link1"],
+            ["a12", "a22", "https://www.synapse.org/#!Synapse:syn21341142", "cBioPortal link2"],
+            ["a13", "a23", "https://www.synapse.org/#!Synapse:syn21671143", "cBioPortal link3"]
+          ]
+        }
+      }
+    },
+    "imagingData":{
+      "category5":{
+        "dataLink":"https://www.synapse.org/#!Synapse:syn127/tables/",
+        "data":{
+          "attributes":[
+            {
+              "name":"attribute1",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"attribute2",
+              "description":"lorem ipsum",
+              "schemaMetadata":""
+            },
+            {
+              "name":"downloadLink",
+              "description":"Get raw file from Synapse",
+              "schemaMetadata":""
+            },
+            {
+              "name":"view",
+              "description":"View file in DSA",
+              "schemaMetadata":""
+            }
+          ],
+          "values":[
+            ["a11", "a21", "https://www.synapse.org/#!Synapse:syn21261141", "DSA link1"],
+            ["a12", "a22", "https://www.synapse.org/#!Synapse:syn21341142", "DSA link2"],
+            ["a13", "a23", "https://www.synapse.org/#!Synapse:syn21671143", "DSA link3"]
+          ]
+        }
+      }
+    }
+  }
+}
