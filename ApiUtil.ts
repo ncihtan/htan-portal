@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import _ from "lodash";
 import fetch from "node-fetch";
+import {WPAtlas} from "./types";
 
 
 export function fetcher(url: string) {

@@ -10,25 +10,6 @@ import Footer from "./Footer";
 import {CmsData, WPAtlas} from "../types";
 
 
-/**
- * Strip HTML characters and get content from CMS
- */
-function cleanContent(data: CmsData[], slug: string): string {
-    let content: string | undefined;
-
-    const filteredData = _.filter(data, d => d.slug === slug);
-
-    if (filteredData[0]) {
-        const rendered = filteredData[0].content.rendered;
-
-        if (!_.isEmpty(rendered)) {
-            content = rendered.toString();
-        }
-    }
-
-    return content ? content.replace(/<[^>]*>/g, '') : "";
-}
-
 export interface DataReleaseProps {
     data: CmsData[];
     atlasData: WPAtlas[];

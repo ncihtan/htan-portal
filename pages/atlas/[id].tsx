@@ -13,7 +13,7 @@ import React from "react";
 import _ from 'lodash';
 import {AtlasWrapper} from "../../components/Atlas";
 import Head from "next/dist/next-server/lib/head";
-import {Atlas, SynapseData, WPAtlas} from "../../types";
+import {SynapseAtlas, SynapseData, WPAtlas} from "../../types";
 import {GetStaticProps} from "next";
 import fetch from "node-fetch";
 import {AlertHeading} from "react-bootstrap/Alert";
@@ -25,7 +25,7 @@ interface IPostProps {
     WPAtlasData:WPAtlas[];
 }
 
-const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:Atlas }> = ({ wpAtlas, synapseAtlas }) => {
+const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:SynapseAtlas }> = ({ wpAtlas, synapseAtlas }) => {
 
     return (
             <Container>
@@ -132,7 +132,7 @@ const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData })
         return a.htan_id === htan_id;
     });
 
-    const synapseAtlas: Atlas | undefined = postData && synapseData[postData.synapse_id] as Atlas;
+    const synapseAtlas: SynapseAtlas | undefined = postData && synapseData[postData.synapse_id] as SynapseAtlas;
 
     const content = postData ?
          <PostContent wpAtlas={postData} synapseAtlas={synapseAtlas}/> :

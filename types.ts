@@ -22,7 +22,7 @@ export interface Category {
     [subcat:string]:SubCategory
 }
 
-export interface Atlas {
+export interface SynapseAtlas {
     clinical: Category,
     biospecimen: Category,
     assayData: Category,
@@ -30,7 +30,7 @@ export interface Atlas {
 };
 
 export interface SynapseData {
-    [altasId:string]:Atlas
+    [altasId:string]:SynapseAtlas
 }
 
 export enum WPConstants {
