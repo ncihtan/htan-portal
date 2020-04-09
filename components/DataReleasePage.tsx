@@ -59,7 +59,7 @@ export const DataReleasePage = (props: DataReleaseProps) => {
                                 </td>
                                 <td>{ atlas.atlas_type }</td>
                                 <td>{ atlas.lead_institutions }</td>
-                                <td>
+                                <td className={"atlas-link"}>
                                     <Link href={ `./atlas/${atlas.htan_id}` }>
                                         <a>Data Release</a>
                                     </Link>
