@@ -22,7 +22,7 @@ export function getAtlasContent(postId: number): WPAtlas {
 }
 
 export function getAtlasList() : Promise<WPAtlas[]> {
-    let postUrl = `https://humantumoratlas.org/wp-json/wp/v2/atlas`;
+    let postUrl = `https://humantumoratlas.org/wp-json/wp/v2/atlas?per_page=100`;
     return fetcher(postUrl);
 }
 
