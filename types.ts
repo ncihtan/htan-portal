@@ -34,7 +34,20 @@ export interface SynapseData {
 }
 
 export enum WPConstants {
-
     HOMEPAGE_HERO_BLURB = "homepage-hero-blurb"
+}
 
+export interface WPAtlas {
+    id:number;
+    slug:string;
+    title: { rendered:string };
+    content: { rendered:string };
+    atlas_overview: string;
+    data_overview: string;
+    publications: string;
+    lead_institutions: string;
+    atlas_type: string;
+    synapse_id: string;
+    htan_id: string;
+    primary_ngs:string;
 }

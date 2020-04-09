@@ -2,18 +2,6 @@ import useSWR from "swr";
 import _ from "lodash";
 import fetch from "node-fetch";
 
-export interface WPAtlas {
-    id:number;
-    slug:string;
-    title: { rendered:string };
-    content: { rendered:string };
-    atlas_overview: string;
-    data_overview: string;
-    publications: string;
-    lead_institutions: string;
-    atlas_type: string;
-    synapse_id: string;
-}
 
 export function fetcher(url: string) {
     return fetch(url).then(r => r.json());

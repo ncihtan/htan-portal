@@ -2,7 +2,7 @@ import {useRouter} from 'next/router';
 import HtanNavbar from "../../components/HtanNavbar";
 import Footer from "../../components/Footer";
 import getData from "../../lib/getData";
-import {getAtlasContent, getAtlasList, getContent, WORDPRESS_BASE_URL, WPAtlas} from "../../ApiUtil";
+import {getAtlasContent, getAtlasList, getContent, WORDPRESS_BASE_URL} from "../../ApiUtil";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
@@ -13,9 +13,10 @@ import React from "react";
 import _ from 'lodash';
 import {AtlasWrapper} from "../../components/Atlas";
 import Head from "next/dist/next-server/lib/head";
-import {Atlas, SynapseData} from "../../types";
+import {Atlas, SynapseData, WPAtlas} from "../../types";
 import {GetStaticProps} from "next";
 import fetch from "node-fetch";
+import {AlertHeading} from "react-bootstrap/Alert";
 
 const data = getData();
 
@@ -24,23 +25,9 @@ interface IPostProps {
     WPAtlasData:WPAtlas[];
 }
 
-const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData }) => {
-
-    const router = useRouter();
-    const htaID = router.query.id as string;
-
-    const postData = WPAtlasData.find((a)=>{
-        return a.synapse_id === htaID;
-    });
-
-    const atlasData: Atlas = synapseData[htaID] as Atlas;
+const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:Atlas }> = ({ wpAtlas, synapseAtlas }) => {
 
     return (
-        <>
-            <Head>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
-            </Head>
-            <HtanNavbar />
             <Container>
                 <Row>
                     <Breadcrumb className="mt-3">
@@ -49,7 +36,7 @@ const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData })
                             Data Release
                         </Breadcrumb.Item>
                         <Breadcrumb.Item active>{
-                            postData ? postData.title.rendered : ""
+                            wpAtlas ? wpAtlas.title.rendered : ""
                         }</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
@@ -83,49 +70,89 @@ const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData })
                         <Tab.Content>
                             <Tab.Pane eventKey="atlasOverview">
                                 <Container className="mt-3">
-                                    {postData ?
-                                        <span dangerouslySetInnerHTML={{__html: postData.atlas_overview}}/> : "Loading..."}
+                                    {wpAtlas ?
+                                        <span dangerouslySetInnerHTML={{__html: wpAtlas.atlas_overview}}/> : "Loading..."}
                                 </Container>
                             </Tab.Pane>
                             <Tab.Pane eventKey="dataOverview">
                                 <Container className="mt-3">
-                                    {postData ?
-                                        <span dangerouslySetInnerHTML={{__html: postData.data_overview}}/> : "Loading..."}
+                                    {wpAtlas ?
+                                        <span dangerouslySetInnerHTML={{__html: wpAtlas.data_overview}}/> : "Loading..."}
                                 </Container>
                             </Tab.Pane>
                             <Tab.Pane eventKey="publications">
                                 <Container className="mt-3">
-                                    {postData ?
-                                        <span dangerouslySetInnerHTML={{__html: postData.publications}}/> : "Loading..."}
+                                    {wpAtlas ?
+                                        <span dangerouslySetInnerHTML={{__html: wpAtlas.publications}}/> : "Loading..."}
                                 </Container>
                             </Tab.Pane>
-                            <Tab.Pane eventKey="clinBiospecimen">
-                                <Container className="mt-3">
-                                    <AtlasWrapper category={atlasData.clinical} />
-                                </Container>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="derivedData">
-                                <Container className="mt-3">
-                                    <AtlasWrapper category={atlasData.assayData} />
-                                </Container>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="imagingData">
-                                <Container className="mt-3">
-                                    <AtlasWrapper category={atlasData.imagingData} />
-                                </Container>
-                            </Tab.Pane>
+                            {
+                                synapseAtlas && (
+                                    <>
+                                        <Tab.Pane eventKey="clinBiospecimen">
+                                            <Container className="mt-3">
+                                                <AtlasWrapper category={synapseAtlas.clinical} />
+                                            </Container>
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="derivedData">
+                                            <Container className="mt-3">
+                                                <AtlasWrapper category={synapseAtlas.assayData} />
+                                            </Container>
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="imagingData">
+                                            <Container className="mt-3">
+                                                <AtlasWrapper category={synapseAtlas.imagingData} />
+                                            </Container>
+                                        </Tab.Pane>
+                                    </>
+                                )
+                            }
+
                             <Tab.Pane eventKey="primaryNGS">
                                 <Container className="mt-3">
-                                    <AtlasWrapper category={atlasData.biospecimen} />
+                                    {wpAtlas ?
+                                        <span dangerouslySetInnerHTML={{__html: wpAtlas.primary_ngs}}/> : "Loading..."}
                                 </Container>
                             </Tab.Pane>
+
                         </Tab.Content>
                     </Tab.Container>
                 </Row>
             </Container>
-            <Footer/>
-        </>
     )
+}
+
+
+const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData }) => {
+
+    const router = useRouter();
+    const htan_id = router.query.id as string;
+
+    const postData = WPAtlasData.find((a)=>{
+        return a.htan_id === htan_id;
+    });
+
+    const synapseAtlas: Atlas | undefined = postData && synapseData[postData.synapse_id] as Atlas;
+
+    const content = postData ?
+         <PostContent wpAtlas={postData} synapseAtlas={synapseAtlas}/> :
+        <div>There is Atlas corresponding to this ID</div>
+
+    return (<>
+        <Head>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+        </Head>
+        <HtanNavbar />
+        {
+            postData &&
+            synapseAtlas === undefined &&
+            <div className={"alert alert-danger"}>No synapse data corresponding to ID "{postData.synapse_id}"</div>
+        }
+        { content }
+        <Footer />
+    </>)
+
+
 }
 
 export default Post;
@@ -147,7 +174,7 @@ export async function getStaticPaths() {
 
     const atlases = await getAtlasList();
 
-    const paths = atlases.map(a=>`/atlas/${a.synapse_id}`);
+    const paths = atlases.map(a=>`/atlas/${a.htan_id}`);
 
     return { paths, fallback: false }
 }

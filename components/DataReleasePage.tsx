@@ -6,11 +6,9 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 import _ from 'lodash'
 
 import HtanNavbar from "./HtanNavbar";
-import {getAtlasList, WORDPRESS_BASE_URL, WPAtlas} from "../ApiUtil";
 import Footer from "./Footer";
-import {Atlas, CmsData} from "../types";
-import {GetServerSideProps} from "next";
-import fetch from "node-fetch";
+import {CmsData, WPAtlas} from "../types";
+
 
 /**
  * Strip HTML characters and get content from CMS
@@ -72,7 +70,7 @@ export const DataReleasePage = (props: DataReleaseProps) => {
                         <tbody>
 
                         {
-                            props.atlasData.map((atlas)=><tr key={`atlas-${atlas.id}`}>
+                            props.atlasData.map((atlas)=><tr key={`atlas-${atlas.htan_id}`}>
                                 <td>
                                     {
                                         atlas.title.rendered
@@ -81,7 +79,7 @@ export const DataReleasePage = (props: DataReleaseProps) => {
                                 <td>{ atlas.atlas_type }</td>
                                 <td>{ atlas.lead_institutions }</td>
                                 <td>
-                                    <Link href={ `./atlas/${atlas.synapse_id}` }>
+                                    <Link href={ `./atlas/${atlas.htan_id}` }>
                                         <a>Data Release</a>
                                     </Link>
                                 </td>
