@@ -13,7 +13,7 @@ import React from "react";
 import _ from 'lodash';
 import {AtlasWrapper} from "../../components/Atlas";
 import Head from "next/dist/next-server/lib/head";
-import {SynapseAtlas, SynapseData, WPAtlas} from "../../types";
+import {Category, SynapseAtlas, SynapseData, WPAtlas} from "../../types";
 import {GetStaticProps} from "next";
 import fetch from "node-fetch";
 import {AlertHeading} from "react-bootstrap/Alert";
@@ -26,6 +26,11 @@ interface IPostProps {
 }
 
 const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:SynapseAtlas }> = ({ wpAtlas, synapseAtlas }) => {
+
+    let mergedClinicalAndBiospecimenData: Category;
+    if (synapseAtlas) {
+        mergedClinicalAndBiospecimenData = Object.assign({}, synapseAtlas.clinical, synapseAtlas.biospecimen);
+    }
 
     return (
             <Container>
@@ -91,7 +96,7 @@ const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:Syna
                                     <>
                                         <Tab.Pane eventKey="clinBiospecimen">
                                             <Container className="mt-3">
-                                                <AtlasWrapper category={synapseAtlas.clinical} />
+                                                <AtlasWrapper category={mergedClinicalAndBiospecimenData!} />
                                             </Container>
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="derivedData">

@@ -9,6 +9,8 @@ export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({c
 
     const subCats = Object.keys(category);
 
+    subCats.sort();
+
     const [selectedCategory, setCategory] = useState(Object.keys(category)[0]);
 
     return <div>
