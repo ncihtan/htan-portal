@@ -3,11 +3,11 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Link from "next/link";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
-import _ from 'lodash'
 
 import HtanNavbar from "./HtanNavbar";
 import Footer from "./Footer";
 import {CmsData, WPAtlas} from "../types";
+import DataTable from "react-data-table-component";
 
 
 export interface DataReleaseProps {
@@ -16,6 +16,45 @@ export interface DataReleaseProps {
 }
 
 export const DataReleasePage = (props: DataReleaseProps) => {
+    const columns = [
+        {
+            name: 'Atlas Name',
+            selector: 'atlasName',
+            wrap: true,
+            sortable: true,
+            grow: 2,
+        },
+        {
+            name: 'Atlas Type',
+            selector: 'atlasType',
+            wrap: true,
+            sortable: true,
+        },
+        {
+            name: 'Lead Institution(s)',
+            selector: 'leadInstitutions',
+            wrap: true,
+            sortable: true,
+            grow: 2,
+        },
+        {
+            name: 'Data Release',
+            selector: 'dataRelease',
+            wrap: true,
+            sortable: true,
+            cell: (row: any) => <Link href={`./atlas/${row.dataRelease}`}><a>Data Release</a></Link>
+        },
+    ];
+
+    let data = props.atlasData.map((atlas) => {
+        return {
+            id: atlas.id,
+            atlasName: atlas.title.rendered,
+            atlasType: atlas.atlas_type,
+            leadInstitutions: atlas.lead_institutions,
+            dataRelease: atlas.htan_id
+        }
+    })
 
     return (
         <>
@@ -39,36 +78,13 @@ export const DataReleasePage = (props: DataReleaseProps) => {
                 </Row>
 
                 <Row className="mt-3">
-                    <table className={"table table-striped"}>
-                        <thead>
-                        <tr>
-                            <th>Atlas Name</th>
-                            <th>Atlas Type</th>
-                            <th>Lead Institution(s)</th>
-                            <th>Data Release</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        {
-                            props.atlasData.map((atlas)=><tr key={`atlas-${atlas.htan_id}`}>
-                                <td>
-                                    {
-                                        atlas.title.rendered
-                                    }
-                                </td>
-                                <td>{ atlas.atlas_type }</td>
-                                <td>{ atlas.lead_institutions }</td>
-                                <td className={"atlas-link"}>
-                                    <Link href={ `./atlas/${atlas.htan_id}` }>
-                                        <a>Data Release</a>
-                                    </Link>
-                                </td>
-                            </tr>
-                            )
-                        }
-                        </tbody>
-                    </table>
+                    <DataTable
+                        className="dataTables_wrapper"
+                        columns={columns}
+                        data={data}
+                        striped={true}
+                        defaultSortField={"atlasName"}
+                    />
                 </Row>
             </Container>
             <Footer/>

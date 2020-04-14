@@ -46,3 +46,19 @@ body {
     margin-top:20px;
     line-height:2em;
 }
+
+.dataTables_wrapper {
+    .rdt_TableHeader {
+        min-height: 0;
+    }
+
+    .rdt_TableCol {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .rdt_TableCell {
+        font-size: 16px;
+        padding: 20px;
+    }
+}
