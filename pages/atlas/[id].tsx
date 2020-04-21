@@ -70,6 +70,9 @@ const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:Syna
                             <Nav.Item>
                                 <Nav.Link eventKey="primaryNGS">Primary NGS</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="singleCell">Single Cell</Nav.Link>
+                            </Nav.Item>
                         </Nav>
 
                         <Tab.Content>
@@ -117,6 +120,12 @@ const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:Syna
                                 <Container className="mt-3">
                                     {wpAtlas ?
                                         <span dangerouslySetInnerHTML={{__html: wpAtlas.primary_ngs}}/> : "Loading..."}
+                                </Container>
+                            </Tab.Pane>
+
+                            <Tab.Pane eventKey="singleCell">
+                                <Container className="mt-6" style={{width:2500}}>
+                                    <iframe id="" className="" src="https://spectrum.mskcc.org/scrna/patient/SPECTRUM-OV-002" style={{"width": "100%", "position": "relative", "zIndex": 100, "height": "582px","border":"none" }} />
                                 </Container>
                             </Tab.Pane>
 
