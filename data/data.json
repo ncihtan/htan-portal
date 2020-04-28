@@ -1,148 +1,1801 @@
 {
-  "centerA":{
-    "clinical":{
-      "category1":{
-        "dataLink":"https://www.synapse.org/#!Synapse:syn123/tables/",
-        "data":{
-          "attributes":[
-            {
-              "name":"attribute1",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"attribute2",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
+   "HTAN CenterB": {
+      "biospecimen": {
+         "Biospecimen Tier 1": {
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21980681/tables/",
+            "data": {
+               "attributes": [
+                  {
+                     "name": "Component",
+                     "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN Patient ID",
+                     "description": "HTAN ID associated with a patient based on HTAN ID SOP",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Ethnicity",
+                     "description": "An individual's self-described social and cultural grouping, specifically whether an individual describes themselves as Hispanic or Latino. The provided values are based on the categories\ndefined by the U.S. Office of Management and Business and used by the U.S. Census Bureau.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Gender",
+                     "description": "Text designations that identify gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles. [Identification\nof gender is based upon self-report and may come from a form, questionnaire, interview, etc.]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Race",
+                     "description": "An arbitrary classification of a taxonomic group that is a division of a species. It usually arises as a consequence of geographical isolation withina a species and is characterized by shared heredity, physical attributes and behavior, and in the case of humans, by common history, nationality, or geographic distribution. \n                                                                                                                     ",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Vital Status",
+                     "description": "The survival state of the person registered on the protocol.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Days to Birth",
+                     "description": "Number of days between the date used for index and the date from a person's date of birth represented as a calculated negative number of days.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Age at Index",
+                     "description": "The patient's age (in years) on the reference or anchor date used during date obfuscation.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Age Is Obfuscated",
+                     "description": "The age of the patient has been modified for compliance reasons. The actual age differs from what is reported. Other date intervals for this patient may also be modified.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Year Of Birth",
+                     "description": "Numeric value to represent the calendar year in which an individual was born.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Occupation Duration Years",
+                     "description": "The number of years a patient worked in a specific occupation.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Premature At Birth",
+                     "description": "The yes/no/unknown indicator used to describe whether the patient was premature (less than 37 weeks gestation) at birth.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Weeks Gestation at Birth",
+                     "description": "Numeric value used to describe the number of weeks starting from the approximate date of the biological mother's last menstrual period and ending with the birth of the patient.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cause of Death",
+                     "description": "Cause of death",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cause of Death Source",
+                     "description": "The text term used to describe the source used to determine the patient's cause of death.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Days to Death",
+                     "description": "Number of days between the date used for index and the date from a person's date of death represented as a calculated number of days.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Year of Death",
+                     "description": "Numeric value to represent the year of the death of an individual.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "entityId",
+                     "description": "",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "downloadLink",
+                     "description": "Download file from Synapse",
+                     "schemaMetadata": ""
+                  }
+               ],
+               "values": [
+                  [
+                     "Demographics",
+                     "HTA1_11",
+                     "hispanic or latino",
+                     "male",
+                     "not reported",
+                     "Alive",
+                     0,
+                     67,
+                     "No",
+                     1968,
+                     "",
+                     "Unknown",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "syn21980679",
+                     "https://www.synapse.org/#!Synapse:syn21980679"
+                  ],
+                  [
+                     "Demographics",
+                     "HTA1_15",
+                     "not hispanic or latino",
+                     "female",
+                     "white",
+                     "Dead",
+                     0,
+                     76,
+                     "No",
+                     1949,
+                     "",
+                     "Not Reported",
+                     "",
+                     "Cancer Related",
+                     "Death Certificate",
+                     "",
+                     2018.0,
+                     "syn21980680",
+                     "https://www.synapse.org/#!Synapse:syn21980680"
+                  ]
+               ],
+               "manifest_link": "https://www.synapse.org/#!Synapse:syn21989709"
             }
-          ],
-          "values":[
-            ["a11", "a21"],
-            ["a12", "a22"],
-            ["a13", "a23"]
-          ]
-        }
-      }
-    },
-    "biospecimen":{
-      "category2":{
-        "dataLink":"https://www.synapse.org/#!Synapse:syn124/tables/",
-        "data":{
-          "attributes":[
-            {
-              "name":"attribute1",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"attribute2",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            }
-          ],
-          "values":[
-            ["a11", "a21"],
-            ["a12", "a22"],
-            ["a13", "a23"]
-          ]
-        }
-      }
-    },
-    "assayData":{
-      "category3":{
-        "dataLink":"https://www.synapse.org/#!Synapse:syn125/tables/",
-        "data":{
-          "attributes":[
-            {
-              "name":"attribute1",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"attribute2",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"downloadLink",
-              "description":"Get raw file from Synapse",
-              "schemaMetadata":""
-            }
-          ],
-          "values":[
-            ["a11", "a21", "https://www.synapse.org/#!Synapse:syn21261141"],
-            ["a12", "a22", "https://www.synapse.org/#!Synapse:syn21341142" ],
-            ["a13", "a23", "https://www.synapse.org/#!Synapse:syn21671143"]
-          ]
-        }
+         }
       },
-      "category4":{
-        "dataLink":"https://www.synapse.org/#!Synapse:syn126/tables/",
-
-        "data":{
-          "attributes":[
-            {
-              "name":"attribute1",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"attribute2",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"downloadLink",
-              "description":"Get raw file from Synapse",
-              "schemaMetadata":""
-            },
-            {
-              "name":"view",
-              "description":"View file in cBioPortal",
-              "schemaMetadata":""
+      "clinical": {
+         "Treatment": {
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21983975/tables/",
+            "data": {
+               "attributes": [
+                  {
+                     "name": "Component",
+                     "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN Patient ID",
+                     "description": "HTAN ID associated with a patient based on HTAN ID SOP",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Treatment or Therapy",
+                     "description": "A yes/no/unknown/not applicable indicator related to the administration of therapeutic agents received.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Treatment Type",
+                     "description": "Text term that describes the kind of treatment administered.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Treatment Effect",
+                     "description": "The text term used to describe the pathologic effect a treatment(s) had on the tumor.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Treatment Outcome",
+                     "description": "Text term that describes the patient's final outcome after the treatment was administered.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Days to Treatment End",
+                     "description": "Number of days between the date used for index and the date the treatment ended.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Treatment Anatomic Site",
+                     "description": "The text term used to describe the anatomic site of resection; biopsy; tissue or organ of biospecimen origin; progression or recurrent disease; treatment",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Days to Treatment Start",
+                     "description": "Number of days between the date used for index and the date the treatment started.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Initial Disease Status",
+                     "description": "The text term used to describe the status of the patient's malignancy when the treatment began.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Regimen or Line of Therapy",
+                     "description": "The text term used to describe the regimen or line of therapy.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Therapeutic Agents",
+                     "description": "Text identification of the individual agent(s) used as part of a treatment regimen.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Treatment Intent Type",
+                     "description": "Text term to identify the reason for the administration of a treatment regimen. [Manually-curated]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "entityId",
+                     "description": "",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "downloadLink",
+                     "description": "Download file from Synapse",
+                     "schemaMetadata": ""
+                  }
+               ],
+               "values": [
+                  [
+                     "Therapy",
+                     "HTA1_11",
+                     "Yes",
+                     "Radiation External Beam",
+                     "",
+                     "",
+                     2456,
+                     "Pharynx NOS",
+                     2345,
+                     "Residual Disease",
+                     "",
+                     "Adjuvant Therapy",
+                     "Adjuvant",
+                     "syn21983973",
+                     "https://www.synapse.org/#!Synapse:syn21983973"
+                  ],
+                  [
+                     "Therapy",
+                     "HTA1_15",
+                     "Yes",
+                     "Ablation Cryo",
+                     "",
+                     "",
+                     12389,
+                     "Tonsillar pillar",
+                     13425,
+                     "Initial Diagnosis",
+                     "",
+                     "",
+                     "",
+                     "syn21983974",
+                     "https://www.synapse.org/#!Synapse:syn21983974"
+                  ]
+               ],
+               "manifest_link": "https://www.synapse.org/#!Synapse:syn21989728"
             }
-          ],
-          "values":[
-            ["a11", "a21", "https://www.synapse.org/#!Synapse:syn21261141", "cBioPortal link1"],
-            ["a12", "a22", "https://www.synapse.org/#!Synapse:syn21341142", "cBioPortal link2"],
-            ["a13", "a23", "https://www.synapse.org/#!Synapse:syn21671143", "cBioPortal link3"]
-          ]
-        }
-      }
-    },
-    "imagingData":{
-      "category5":{
-        "dataLink":"https://www.synapse.org/#!Synapse:syn127/tables/",
-        "data":{
-          "attributes":[
-            {
-              "name":"attribute1",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"attribute2",
-              "description":"lorem ipsum",
-              "schemaMetadata":""
-            },
-            {
-              "name":"downloadLink",
-              "description":"Get raw file from Synapse",
-              "schemaMetadata":""
-            },
-            {
-              "name":"view",
-              "description":"View file in DSA",
-              "schemaMetadata":""
+         }
+      },
+      "assayData": {
+         "scRNA-seq Assay": {
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21989520/tables/",
+            "data": {
+               "attributes": [
+                  {
+                     "name": "Component",
+                     "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Filename",
+                     "description": "Name of a file ",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "File Format",
+                     "description": "Format of a file (e.g. txt, csv, fastq, bam, etc.)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN Parent Biospecimen ID",
+                     "description": "HTAN Biospecimen Identifier from which these files were derived [https://docs.google.com/document/d/1podtPP8L1UNvVxx9_c_szlDcU1f8n7bige6XA_GoRVM/edit?usp=sharing]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN ID",
+                     "description": "HTAN Participant Identifier",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Nucleic Acid Source",
+                     "description": "The source of the input nucleic molecule",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cryopreserved Cells in Sample",
+                     "description": "Indicate if library preparation was based on revived frozen cells.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Single Cell Isolation Method",
+                     "description": "The method by which cells are isolated into individual reaction containers at a single cell resolution (e.g. wells, micro-droplets)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Dissociation Method",
+                     "description": "The tissue dissociation method used for scRNASeq assays",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Library Construction Method",
+                     "description": "Process which results in the creation of a library from fragments of DNA using cloning vectors or oligonucleotides with the role of adaptors [OBI_0000711]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Library Layout",
+                     "description": "Sequencing read type",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "End Bias",
+                     "description": "The end of the cDNA molecule that is preferentially sequenced, e.g. 3/5 prime tag/end or the full length transcript",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Reverse Transcription Primer",
+                     "description": "An oligo to which new deoxyribonucleotides can be added by DNA polymerase [SO_0000112]. The type of primer used for reverse transcription, e.g. oligo-dT or random primer. This allows users to identify content of the cDNA library input e.g. enriched for mRNA",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Spike In",
+                     "description": "A set of known synthetic RNA molecules with known sequence that are added to the cell lysis mix",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Sequencing Platform",
+                     "description": "A platform is an object aggregate that is the set of instruments and software needed to perform a process [OBI_0000050]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Total Number of Input Cells",
+                     "description": "Number of cells loaded/placed on plates",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Input Cells and Nuclei",
+                     "description": "Number of cells and number of nuclei input; entry format: number, number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Library Preparation Date",
+                     "description": "The date that the libraries were prepared for sequencing (in number of days since sample received in lab)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Single Cell Dissociation Date",
+                     "description": "The date when the sample was dissociated and cells were isolated (date format)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Sequencing Library Construction Date",
+                     "description": "Date of sequencing library construction part of library construction (in number of days since sample received in lab)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Nucleic Acid Capture Date",
+                     "description": "Date of nucleic acid capture part of library construction (in number of days since sample received in lab)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Protocol Link",
+                     "description": "TBD",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Technical Replicate Group",
+                     "description": "A common term for all files belonging to the same cell or library. Provide a numbering of each library prep batch (can differ from encapsulation and sequencing batch)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cell Barcode Length",
+                     "description": "Length of cell barcode read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cell Barcode Offset",
+                     "description": "Offset in sequence for cell barcode read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Empty Well Barcode",
+                     "description": "Unique cell barcode assigned to empty cells used as controls in CEL-seq2 assays.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Feature Reference Id",
+                     "description": "Unique ID for this feature. Must not contain whitespace, quote or comma characters. Each ID must be unique and must not collide with a gene identifier from the transcriptome [https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Median UMIs per Cell Number",
+                     "description": "Number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Read1",
+                     "description": "Read 1 content description",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Read2",
+                     "description": "Read 2 content description",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Spike In Concentration",
+                     "description": "The final concentration or dilution (for commercial sets) of the spike in mix [PMID:21816910]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "UMI Barcode Length",
+                     "description": "Length of UMI barcode read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "UMI Barcode Offset",
+                     "description": "Start position of UMI barcode in the sequence. Values: number, 0 for start of read",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Valid Barcodes Cell Number",
+                     "description": "Number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Well Index",
+                     "description": "Indicate if protein expression (EPCAM/CD45) positive/negative data  is available for each cell in CEL-seq2 assays",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "cDNA Length",
+                     "description": "Length of cDNA read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "cDNA Offset",
+                     "description": "Offset in sequence for cDNA read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "entityId",
+                     "description": "",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "downloadLink",
+                     "description": "Download file from Synapse",
+                     "schemaMetadata": ""
+                  }
+               ],
+               "values": [
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file3.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_11",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988572",
+                     "https://www.synapse.org/#!Synapse:syn21988572"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file2.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_12",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988573",
+                     "https://www.synapse.org/#!Synapse:syn21988573"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file1.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_13",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988574",
+                     "https://www.synapse.org/#!Synapse:syn21988574"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file10.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_14",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988575",
+                     "https://www.synapse.org/#!Synapse:syn21988575"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file9.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_15",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "inDropsV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988576",
+                     "https://www.synapse.org/#!Synapse:syn21988576"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file8.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_16",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988577",
+                     "https://www.synapse.org/#!Synapse:syn21988577"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file7.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_17",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988578",
+                     "https://www.synapse.org/#!Synapse:syn21988578"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file6.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_18",
+                     "Single Cell",
+                     "Yes",
+                     "Droplets",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     100.0,
+                     "Cell Barcode and UMI",
+                     "Cell Barcode and UMI",
+                     "",
+                     100.0,
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     "",
+                     "syn21988579",
+                     "https://www.synapse.org/#!Synapse:syn21988579"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file5.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_19",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     100.0,
+                     "Cell Barcode and UMI",
+                     "Cell Barcode and UMI",
+                     "",
+                     100.0,
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     "",
+                     "syn21988580",
+                     "https://www.synapse.org/#!Synapse:syn21988580"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file4.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_20",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     100.0,
+                     "Cell Barcode and UMI",
+                     "Cell Barcode and UMI",
+                     "",
+                     100.0,
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     "",
+                     "syn21988581",
+                     "https://www.synapse.org/#!Synapse:syn21988581"
+                  ]
+               ],
+               "manifest_link": "https://www.synapse.org/#!Synapse:syn21989767"
             }
-          ],
-          "values":[
-            ["a11", "a21", "https://www.synapse.org/#!Synapse:syn21261141", "DSA link1"],
-            ["a12", "a22", "https://www.synapse.org/#!Synapse:syn21341142", "DSA link2"],
-            ["a13", "a23", "https://www.synapse.org/#!Synapse:syn21671143", "DSA link3"]
-          ]
-        }
+         }
       }
-    }
-  }
+   },
+   "HTAN CenterA": {
+      "clinical": {
+         "Exposure": {
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21980287/tables/",
+            "data": {
+               "attributes": [
+                  {
+                     "name": "Component",
+                     "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN Patient ID",
+                     "description": "HTAN ID associated with a patient based on HTAN ID SOP",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Smoking Exposure",
+                     "description": "Indicate if individual has smoking exposure",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Asbestos Exposure",
+                     "description": "The yes/no/unknown indicator used to describe whether the patient was exposed to asbestos.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Coal Dust Exposure",
+                     "description": "The yes/no/unknown indicator used to describe whether a patient was exposed to fine powder derived by the crushing of coal.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Environmental Tobacco Smoke Exposure",
+                     "description": "The yes/no/unknown indicator used to describe whether a patient was exposed to smoke that is emitted from burning tobacco, including cigarettes, pipes, and cigars. This includes tobacco smoke exhaled by smokers.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Radon Exposure",
+                     "description": "The yes/no/unknown indicator used to describe whether the patient was exposed to radon.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Respirable Crystalline Silica Exposure",
+                     "description": "The yes/no/unknown indicator used to describe whether a patient was exposured to respirable crystalline silica, a widespread, naturally occurring, crystalline metal oxide that consists of different forms including quartz, cristobalite, tridymite, tripoli, ganister, chert and novaculite.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cigarettes per Day",
+                     "description": "The average number of cigarettes smoked per day.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Pack Years Smoked",
+                     "description": "Numeric computed value to represent lifetime tobacco exposure defined as number of cigarettes smoked per day x number of years smoked divided by 20.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Smoking Frequency",
+                     "description": "The text term used to generally decribe how often the patient smokes.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Time between Waking and First Smoke",
+                     "description": "TBD",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Tobacco Smoking Onset Year",
+                     "description": "The year in which the participant began smoking.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Tobacco Smoking Quit Year",
+                     "description": "The year in which the participant quit smoking.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Tobacco Smoking Status",
+                     "description": "Category describing current smoking status and smoking history as self-reported by a patient",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Type of Tobacco Used",
+                     "description": "The text term used to describe the specific type of tobacco used by the patient.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "entityId",
+                     "description": "",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "downloadLink",
+                     "description": "Download file from Synapse",
+                     "schemaMetadata": ""
+                  }
+               ],
+               "values": [
+                  [
+                     "Exposure",
+                     "HTA1_11",
+                     "Yes - Smoking Exposure",
+                     "No",
+                     "No",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "Some days",
+                     "",
+                     "",
+                     "",
+                     "Current Smoker",
+                     "Cigarettes",
+                     "syn21980285",
+                     "https://www.synapse.org/#!Synapse:syn21980285"
+                  ],
+                  [
+                     "Exposure",
+                     "HTA1_15",
+                     "No - Smoking Exposure",
+                     "Yes",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "syn21980286",
+                     "https://www.synapse.org/#!Synapse:syn21980286"
+                  ]
+               ],
+               "manifest_link": "https://www.synapse.org/#!Synapse:syn21980288"
+            }
+         }
+      },
+      "biospecimen": {
+         "Biospecimen Tier 1": {
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21980681/tables/",
+            "data": {
+               "attributes": [
+                  {
+                     "name": "Component",
+                     "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN Patient ID",
+                     "description": "HTAN ID associated with a patient based on HTAN ID SOP",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Ethnicity",
+                     "description": "An individual's self-described social and cultural grouping, specifically whether an individual describes themselves as Hispanic or Latino. The provided values are based on the categories\ndefined by the U.S. Office of Management and Business and used by the U.S. Census Bureau.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Gender",
+                     "description": "Text designations that identify gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles. [Identification\nof gender is based upon self-report and may come from a form, questionnaire, interview, etc.]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Race",
+                     "description": "An arbitrary classification of a taxonomic group that is a division of a species. It usually arises as a consequence of geographical isolation withina a species and is characterized by shared heredity, physical attributes and behavior, and in the case of humans, by common history, nationality, or geographic distribution. \n                                                                                                                     ",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Vital Status",
+                     "description": "The survival state of the person registered on the protocol.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Days to Birth",
+                     "description": "Number of days between the date used for index and the date from a person's date of birth represented as a calculated negative number of days.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Age at Index",
+                     "description": "The patient's age (in years) on the reference or anchor date used during date obfuscation.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Age Is Obfuscated",
+                     "description": "The age of the patient has been modified for compliance reasons. The actual age differs from what is reported. Other date intervals for this patient may also be modified.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Year Of Birth",
+                     "description": "Numeric value to represent the calendar year in which an individual was born.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Occupation Duration Years",
+                     "description": "The number of years a patient worked in a specific occupation.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Premature At Birth",
+                     "description": "The yes/no/unknown indicator used to describe whether the patient was premature (less than 37 weeks gestation) at birth.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Weeks Gestation at Birth",
+                     "description": "Numeric value used to describe the number of weeks starting from the approximate date of the biological mother's last menstrual period and ending with the birth of the patient.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cause of Death",
+                     "description": "Cause of death",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cause of Death Source",
+                     "description": "The text term used to describe the source used to determine the patient's cause of death.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Days to Death",
+                     "description": "Number of days between the date used for index and the date from a person's date of death represented as a calculated number of days.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Year of Death",
+                     "description": "Numeric value to represent the year of the death of an individual.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "entityId",
+                     "description": "",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "downloadLink",
+                     "description": "Download file from Synapse",
+                     "schemaMetadata": ""
+                  }
+               ],
+               "values": [
+                  [
+                     "Demographics",
+                     "HTA1_11",
+                     "hispanic or latino",
+                     "male",
+                     "not reported",
+                     "Alive",
+                     0,
+                     67,
+                     "No",
+                     1968,
+                     "",
+                     "Unknown",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "syn21980679",
+                     "https://www.synapse.org/#!Synapse:syn21980679"
+                  ],
+                  [
+                     "Demographics",
+                     "HTA1_15",
+                     "not hispanic or latino",
+                     "female",
+                     "white",
+                     "Dead",
+                     0,
+                     76,
+                     "No",
+                     1949,
+                     "",
+                     "Not Reported",
+                     "",
+                     "Cancer Related",
+                     "Death Certificate",
+                     "",
+                     2018.0,
+                     "syn21980680",
+                     "https://www.synapse.org/#!Synapse:syn21980680"
+                  ]
+               ],
+               "manifest_link": "https://www.synapse.org/#!Synapse:syn21980682"
+            }
+         }
+      },
+      "assayData": {
+         "scRNA-seq Assay": {
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21989520/tables/",
+            "data": {
+               "attributes": [
+                  {
+                     "name": "Component",
+                     "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Filename",
+                     "description": "Name of a file ",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "File Format",
+                     "description": "Format of a file (e.g. txt, csv, fastq, bam, etc.)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN Parent Biospecimen ID",
+                     "description": "HTAN Biospecimen Identifier from which these files were derived [https://docs.google.com/document/d/1podtPP8L1UNvVxx9_c_szlDcU1f8n7bige6XA_GoRVM/edit?usp=sharing]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "HTAN ID",
+                     "description": "HTAN Participant Identifier",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Nucleic Acid Source",
+                     "description": "The source of the input nucleic molecule",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cryopreserved Cells in Sample",
+                     "description": "Indicate if library preparation was based on revived frozen cells.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Single Cell Isolation Method",
+                     "description": "The method by which cells are isolated into individual reaction containers at a single cell resolution (e.g. wells, micro-droplets)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Dissociation Method",
+                     "description": "The tissue dissociation method used for scRNASeq assays",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Library Construction Method",
+                     "description": "Process which results in the creation of a library from fragments of DNA using cloning vectors or oligonucleotides with the role of adaptors [OBI_0000711]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Library Layout",
+                     "description": "Sequencing read type",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "End Bias",
+                     "description": "The end of the cDNA molecule that is preferentially sequenced, e.g. 3/5 prime tag/end or the full length transcript",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Reverse Transcription Primer",
+                     "description": "An oligo to which new deoxyribonucleotides can be added by DNA polymerase [SO_0000112]. The type of primer used for reverse transcription, e.g. oligo-dT or random primer. This allows users to identify content of the cDNA library input e.g. enriched for mRNA",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Spike In",
+                     "description": "A set of known synthetic RNA molecules with known sequence that are added to the cell lysis mix",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Sequencing Platform",
+                     "description": "A platform is an object aggregate that is the set of instruments and software needed to perform a process [OBI_0000050]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Total Number of Input Cells",
+                     "description": "Number of cells loaded/placed on plates",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Input Cells and Nuclei",
+                     "description": "Number of cells and number of nuclei input; entry format: number, number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Library Preparation Date",
+                     "description": "The date that the libraries were prepared for sequencing (in number of days since sample received in lab)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Single Cell Dissociation Date",
+                     "description": "The date when the sample was dissociated and cells were isolated (date format)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Sequencing Library Construction Date",
+                     "description": "Date of sequencing library construction part of library construction (in number of days since sample received in lab)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Nucleic Acid Capture Date",
+                     "description": "Date of nucleic acid capture part of library construction (in number of days since sample received in lab)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Protocol Link",
+                     "description": "TBD",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Technical Replicate Group",
+                     "description": "A common term for all files belonging to the same cell or library. Provide a numbering of each library prep batch (can differ from encapsulation and sequencing batch)",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cell Barcode Length",
+                     "description": "Length of cell barcode read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Cell Barcode Offset",
+                     "description": "Offset in sequence for cell barcode read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Empty Well Barcode",
+                     "description": "Unique cell barcode assigned to empty cells used as controls in CEL-seq2 assays.",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Feature Reference Id",
+                     "description": "Unique ID for this feature. Must not contain whitespace, quote or comma characters. Each ID must be unique and must not collide with a gene identifier from the transcriptome [https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Median UMIs per Cell Number",
+                     "description": "Number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Read1",
+                     "description": "Read 1 content description",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Read2",
+                     "description": "Read 2 content description",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Spike In Concentration",
+                     "description": "The final concentration or dilution (for commercial sets) of the spike in mix [PMID:21816910]",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "UMI Barcode Length",
+                     "description": "Length of UMI barcode read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "UMI Barcode Offset",
+                     "description": "Start position of UMI barcode in the sequence. Values: number, 0 for start of read",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Valid Barcodes Cell Number",
+                     "description": "Number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "Well Index",
+                     "description": "Indicate if protein expression (EPCAM/CD45) positive/negative data  is available for each cell in CEL-seq2 assays",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "cDNA Length",
+                     "description": "Length of cDNA read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "cDNA Offset",
+                     "description": "Offset in sequence for cDNA read (in bp): number",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "entityId",
+                     "description": "",
+                     "schemaMetadata": ""
+                  },
+                  {
+                     "name": "downloadLink",
+                     "description": "Download file from Synapse",
+                     "schemaMetadata": ""
+                  }
+               ],
+               "values": [
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file3.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_11",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988572",
+                     "https://www.synapse.org/#!Synapse:syn21988572"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file2.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_12",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988573",
+                     "https://www.synapse.org/#!Synapse:syn21988573"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file1.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_13",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988574",
+                     "https://www.synapse.org/#!Synapse:syn21988574"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file10.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_14",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988575",
+                     "https://www.synapse.org/#!Synapse:syn21988575"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file9.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_15",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "inDropsV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988576",
+                     "https://www.synapse.org/#!Synapse:syn21988576"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file8.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_16",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988577",
+                     "https://www.synapse.org/#!Synapse:syn21988577"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file7.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_17",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "cDNA",
+                     "cDNA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     100.0,
+                     20.0,
+                     "syn21988578",
+                     "https://www.synapse.org/#!Synapse:syn21988578"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file6.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_18",
+                     "Single Cell",
+                     "Yes",
+                     "Droplets",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     100.0,
+                     "Cell Barcode and UMI",
+                     "Cell Barcode and UMI",
+                     "",
+                     100.0,
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     "",
+                     "syn21988579",
+                     "https://www.synapse.org/#!Synapse:syn21988579"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file5.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_19",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     100.0,
+                     "Cell Barcode and UMI",
+                     "Cell Barcode and UMI",
+                     "",
+                     100.0,
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     "",
+                     "syn21988580",
+                     "https://www.synapse.org/#!Synapse:syn21988580"
+                  ],
+                  [
+                     "ScRNA-seqAssay",
+                     "eg_project_file4.txt",
+                     "txt",
+                     "CenterA_1_1",
+                     "CenterA_1_20",
+                     "Single Cell",
+                     "Yes",
+                     "Microfluidics Chip",
+                     "gentleMACS",
+                     "10xV3",
+                     "Paired End",
+                     "5 Prime",
+                     "Oligo-dT",
+                     "No Spike In",
+                     "Illumina Next Seq 2500",
+                     100,
+                     100,
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "a",
+                     "",
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     100.0,
+                     "Cell Barcode and UMI",
+                     "Cell Barcode and UMI",
+                     "",
+                     100.0,
+                     100.0,
+                     100.0,
+                     "",
+                     "",
+                     "",
+                     "syn21988581",
+                     "https://www.synapse.org/#!Synapse:syn21988581"
+                  ]
+               ],
+               "manifest_link": "https://www.synapse.org/#!Synapse:syn21988649"
+            }
+         }
+      }
+   }
 }
