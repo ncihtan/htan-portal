@@ -29,6 +29,7 @@ const HtanNavbar = () => (
                 <Nav.Link href="/data_releases">Data Release</Nav.Link>
                 <Nav.Link href="/standards">Data Standards</Nav.Link>
                 <Nav.Link href="/transfer">Data Transfer</Nav.Link>
+                <Nav.Link href="/single_cell">Single Cell</Nav.Link>
             </Nav>
         </Navbar.Collapse>
         <Nav>

@@ -62,3 +62,16 @@ body {
         padding: 20px;
     }
 }
+
+.single_cell-iframe-wrapper{
+    position:absolute;
+    bottom:5px;
+    left:5px;
+    right:5px;
+    top:88px;
+    iframe {
+        border:none;
+        height:100%;
+        width:100%;
+    }
+}
