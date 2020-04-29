@@ -5,7 +5,10 @@ import {AtlasDataTable} from "./AtlasDataTable";
 import Container from "react-bootstrap/Container";
 import {Category} from "../types";
 
-export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({category}) => {
+export const AtlasWrapper: React.FunctionComponent<{ category?: Category }> = ({category}) => {
+
+    if (category) {
+
 
     const subCats = Object.keys(category);
 
@@ -29,5 +32,9 @@ export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({c
         </div>
         <AtlasDataTable subcategoryData={category[selectedCategory]}/>
     </div>
+
+    } else {
+        return <div>No data corresponding to category.</div>
+    }
 
 }
