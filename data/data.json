@@ -1,5 +1,134 @@
 {
    "HTAN CenterB": {
+      "imagingData":{
+        "imagingHE": {
+          "dataLink": "https://www.synapse.org/#!Synapse:syn21999342/tables/",
+          "data": {
+            "attributes": [
+              {
+                "name": "HTAN_Parent_ID",
+                "description": "HTAN entity from which this file was derived",
+                "schemaMetadata": "TCGA Exemplar for Development"
+              },
+              {
+                "name": "Method",
+                "description": "method / technology used",
+                "schemaMetadata": ""
+              },
+              {
+                "name": "Magnification",
+                "description": "Microscope type (manufacturer, model, etc) used for this experiment",
+                "schemaMetadata": ""
+              },
+      
+              {
+                "name": "Image Size",
+                "description": "X, Y, Z (X and Y in pixels, # of Z planes)",
+                "schemaMetadata": ""
+              },
+              {
+                "name": "downloadLink",
+                "description": "Get raw file from Synapse",
+                "schemaMetadata": "href"
+              },
+              {
+                "name": "view",
+                "description": "View file in DSA",
+                "schemaMetadata": ""
+              },
+              {
+                "name": "DSA Thumbnail",
+                "description": "",
+                "schemaMetadata": { "bonusMetadata": "Yes", "renderType": "dsaThumb" }
+              }
+            ],
+            "values": [
+              [
+                "TCGA-02-0001-01Z-00-DX1",
+                "H&E",
+                "40X",
+                "48002x35558x1",
+                "synapseUrl",
+                "http://imaging.humantumoratlas.org/girder/#item/5e29fa5c15eff3450e20df92",
+                "http://imaging.humantumoratlas.org/girder/api/v1/item/5e29fa5c15eff3450e20df92/tiles/thumbnail"
+              ],
+              [
+                "TCGA-CS-4938-01B-01-BS1",
+                "H&E",
+                "20X",
+                "15936x17789x1",
+                "synapseUrl",
+                "http://imaging.humantumoratlas.org/girder/#item/5e29fbb615eff3450e20e029",          
+                "http://imaging.humantumoratlas.org/girder/api/v1/item/5e29fbb615eff3450e20e029/tiles/thumbnail"
+              ]
+            ]
+          }
+        },
+        "imagingTcyCIF": {
+          "dataLink": "https://www.synapse.org/#!Synapse:syn127/tables/",
+          "data": {
+            "attributes": [
+              {
+                "name": "HTAN_Parent_ID",
+                "description": "",
+                "schemaMetadata": "TCGA Exemplar for Development"
+              },
+              {
+                "name": "Method",
+                "description": "method / technology used",
+                "schemaMetadata": ""
+              },
+              {
+                "name": "Number of targets",
+                "description": "for multi-target methods, the # of targets"
+              },
+              {
+                "name": "Magnification",
+                "description": "Microscope type (manufacturer, model, etc) used for this experiment",
+                "schemaMetadata": ""
+              },
+              {
+                "name": "Target Names",
+                "description": "Comma separated list from img[Target name]",
+                "metadata": { "bonusMetadata": "Yes" }
+              },
+              {
+                "name": "Image Size",
+                "description": "X, Y, Z (X and Y in pixels, # of Z planes)",
+                "schemaMetadata": ""
+              },
+              {
+                "name": "downloadLink",
+                "description": "Get raw file from Synapse",
+                "schemaMetadata": "href"
+              },
+              {
+                "name": "view",
+                "description": "View file in DSA",
+                "schemaMetadata": ""
+              },
+              {
+                "name": "DSA Thumbnail",
+                "description": "",
+                "metadata": { "bonusMetadata": "Yes", "renderType": "dsaThumb" }
+              }
+            ],
+            "values": [
+              [
+                "TONSIL-1_40X",
+                "t-CyCIF",
+                44,
+                "40X",
+                "DNA 1,A488 background,A555 background,A647 background,DNA 2,A488 background,A555 background,A647 background,DNA 3,A488 background,LAG3,ARL13B,DNA 4,KI67,KERATIN,PD1,DNA 5,CD45RB,CD3D,PDL1,DNA 6,CD4,CD45,CD8A,DNA 7,CD163,CD68,CD14,DNA 8,CD11B,FOXP3,CD21,DNA 9,IBA1,ASMA,CD20,DNA 10,CD19,GFAP,GTUBULIN,DNA 11,LAMINAC,BANF1,LAMINB",
+                "16843x16125x44x1",
+                "synapseUrl",
+                "http://imaging.humantumoratlas.org/girder/#item/5cc255e1e6291400a24f9e48",
+                "http://imaging.humantumoratlas.org/girder/api/v1/item/5cc255e1e6291400a24f9e48/tiles/thumbnail"
+              ]
+            ]
+          }
+        }
+      },
       "biospecimen": {
          "Biospecimen Tier 1": {
             "dataLink": "https://www.synapse.org/#!Synapse:syn21980681/tables/",
@@ -94,11 +223,6 @@
                      "name": "entityId",
                      "description": "",
                      "schemaMetadata": ""
-                  },
-                  {
-                     "name": "downloadLink",
-                     "description": "Download file from Synapse",
-                     "schemaMetadata": ""
                   }
                ],
                "values": [
@@ -120,8 +244,7 @@
                      "",
                      "",
                      "",
-                     "syn21980679",
-                     "https://www.synapse.org/#!Synapse:syn21980679"
+                     "syn21980679"
                   ],
                   [
                      "Demographics",
@@ -141,8 +264,7 @@
                      "Death Certificate",
                      "",
                      2018.0,
-                     "syn21980680",
-                     "https://www.synapse.org/#!Synapse:syn21980680"
+                     "syn21980680"
                   ]
                ],
                "manifest_link": "https://www.synapse.org/#!Synapse:syn21989709"
@@ -223,11 +345,6 @@
                      "name": "entityId",
                      "description": "",
                      "schemaMetadata": ""
-                  },
-                  {
-                     "name": "downloadLink",
-                     "description": "Download file from Synapse",
-                     "schemaMetadata": ""
                   }
                ],
                "values": [
@@ -245,8 +362,7 @@
                      "",
                      "Adjuvant Therapy",
                      "Adjuvant",
-                     "syn21983973",
-                     "https://www.synapse.org/#!Synapse:syn21983973"
+                     "syn21983973"
                   ],
                   [
                      "Therapy",
@@ -262,8 +378,7 @@
                      "",
                      "",
                      "",
-                     "syn21983974",
-                     "https://www.synapse.org/#!Synapse:syn21983974"
+                     "syn21983974"
                   ]
                ],
                "manifest_link": "https://www.synapse.org/#!Synapse:syn21989728"
@@ -978,11 +1093,6 @@
                      "name": "entityId",
                      "description": "",
                      "schemaMetadata": ""
-                  },
-                  {
-                     "name": "downloadLink",
-                     "description": "Download file from Synapse",
-                     "schemaMetadata": ""
                   }
                ],
                "values": [
@@ -1003,8 +1113,7 @@
                      "",
                      "Current Smoker",
                      "Cigarettes",
-                     "syn21980285",
-                     "https://www.synapse.org/#!Synapse:syn21980285"
+                     "syn21980285"
                   ],
                   [
                      "Exposure",
@@ -1023,8 +1132,7 @@
                      "",
                      "",
                      "",
-                     "syn21980286",
-                     "https://www.synapse.org/#!Synapse:syn21980286"
+                     "syn21980286"
                   ]
                ],
                "manifest_link": "https://www.synapse.org/#!Synapse:syn21980288"
@@ -1125,11 +1233,6 @@
                      "name": "entityId",
                      "description": "",
                      "schemaMetadata": ""
-                  },
-                  {
-                     "name": "downloadLink",
-                     "description": "Download file from Synapse",
-                     "schemaMetadata": ""
                   }
                ],
                "values": [
@@ -1151,8 +1254,7 @@
                      "",
                      "",
                      "",
-                     "syn21980679",
-                     "https://www.synapse.org/#!Synapse:syn21980679"
+                     "syn21980679"
                   ],
                   [
                      "Demographics",
@@ -1172,8 +1274,7 @@
                      "Death Certificate",
                      "",
                      2018.0,
-                     "syn21980680",
-                     "https://www.synapse.org/#!Synapse:syn21980680"
+                     "syn21980680"
                   ]
                ],
                "manifest_link": "https://www.synapse.org/#!Synapse:syn21980682"
