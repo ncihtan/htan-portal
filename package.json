@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@types/micro-cors": "^0.1.0",
+    "@types/rc-tooltip": "^3.7.2",
     "bootstrap": "^4.4.1",
     "global": "^4.4.0",
     "lodash": "^4.17.15",
@@ -17,6 +18,7 @@
     "node-fetch": "^2.6.0",
     "node-sass": "^4.13.1",
     "now": "^17.0.4",
+    "rc-tooltip": "^4.0.3",
     "react": "16.13.0",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-data-table-component": "^6.9.0",

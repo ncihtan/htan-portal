@@ -44,7 +44,10 @@ body {
 
 .tab-pane {
     margin-top:20px;
-    line-height:2em;
+
+    p {
+        line-height:2em;
+    }
 }
 
 .dataTables_wrapper {
@@ -62,6 +65,13 @@ body {
         padding: 20px;
     }
 }
+
+table {
+    th, td {
+        line-height:1em;
+    }
+}
+
 
 .single_cell-iframe-wrapper{
     position:absolute;
