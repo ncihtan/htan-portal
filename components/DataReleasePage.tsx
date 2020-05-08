@@ -43,21 +43,19 @@ export const DataReleasePage = (props: DataReleaseProps) => {
             selector: 'dataRelease',
             wrap: true,
             sortable: true,
-            cell: (row: any) => <Link href={`./atlas/${row.dataRelease}`}><a>Data Release</a></Link>
+            cell: (row: any) => (row.synapseId ? <Link href={`./atlas/${row.dataRelease}`}><a>Data Release</a></Link> : null)
         },
     ];
 
     let data = props.atlasData.reduce((agg:any[], atlas) => {
-        if (atlas.synapse_id && atlas.synapse_id.length) {
-            agg.push({
-                id: atlas.id,
-                atlasName: atlas.title.rendered,
-                atlasType: atlas.atlas_type,
-                leadInstitutions: atlas.lead_institutions,
-                dataRelease: atlas.htan_id,
-                synapseId: atlas.synapse_id
-            });
-        }
+        agg.push({
+            id: atlas.id,
+            atlasName: atlas.title.rendered,
+            atlasType: atlas.atlas_type,
+            leadInstitutions: atlas.lead_institutions,
+            dataRelease: atlas.htan_id,
+            synapseId: atlas.synapse_id
+        });
         return agg;
     },[]);
 
