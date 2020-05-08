@@ -17,7 +17,11 @@ export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ s
             <thead>
             <tr>
             {
-                atts.map((att)=><th key={att.name}><Tooltip overlay={att.description}><span>{att.name}</span></Tooltip></th>)
+                atts.map(att=><th className={`col_${att.name.replace(' ', '_').toLowerCase()}`} key={att.name}>
+                    <Tooltip overlay={att.description}>
+                        <span>{att.name}</span>
+                    </Tooltip>
+                </th>)
             }
             </tr>
             </thead>
@@ -26,13 +30,17 @@ export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ s
                 subcategoryData.data.values.map((vals,i)=>{
                     const att = atts[i];
                     const meta = JSON.stringify(att.schemaMetadata || {});
-                    const name =  att.name;
 
                     return <tr key={i}>
                         {
-                            vals.map((val:any,i:number)=><td key={`cell${i}`}>
-                                    <Tooltip visible={false} overlay={meta}><span>{val}</span></Tooltip>
-                            </td>
+                            vals.map((val:any, i:number)=> {
+                                const thead = subcategoryData.data.attributes[i].name.replace(' ', '_').toLowerCase();
+                                return <td key={`${i}`} className={`col_${thead}`}>
+                                            <Tooltip visible={false} overlay={meta}>
+                                                <span>{val}</span>
+                                            </Tooltip>
+                                        </td>
+                            }
                             )
                         }
                     </tr>
