@@ -11,12 +11,17 @@ export interface CmsData {
 
 export interface SubCategory {
     data: {
-        attributes:any[];
+        attributes:Attribute[];
         values:any[];
     };
     dataLink:string;
 };
 
+export interface Attribute {
+    name: string,
+    description: string,
+    schemaMetadata: { renderType?: string }
+}
 
 export interface Category {
     [subcat:string]:SubCategory

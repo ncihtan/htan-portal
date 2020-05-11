@@ -1,11 +1,28 @@
 import React from "react";
 import {Table} from "react-bootstrap";
 import _ from 'lodash';
-import {SubCategory} from "../types";
+import {SubCategory, Attribute} from "../types";
 import Tooltip from "rc-tooltip";
+import { isArray } from "util";
+
 
 type AtlasDataTableProps = {
     subcategoryData:SubCategory
+}
+
+function renderTableCellValue(att:Attribute, val:any): JSX.Element {
+    let el = <span>{val}</span>
+
+    if (att && typeof(att.schemaMetadata) === 'object' &&
+            att.schemaMetadata.renderType) {
+        if (att.schemaMetadata.renderType === 'href') {
+            el = <a href={val}>{val}</a>
+        } else if (att.schemaMetadata.renderType === "scBrowser") {
+            el = <a href={`${val}`.replace("https://humantumoratlas.org/","/")} className={`btn btn-primary`}>View</a>
+        }
+    }
+
+    return el;
 }
 
 export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ subcategoryData }) => {
@@ -27,25 +44,23 @@ export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ s
             </thead>
             <tbody>
             {
-                subcategoryData.data.values.map((vals, i)=>{
-                    const att = atts[i];
-                    const meta = {}
-                    if (att && att.schemaMetadata) {
-                        const meta = JSON.stringify(att.schemaMetadata);
-                    }
+                subcategoryData.data.values.map((vals,i)=>{
                     if (vals && _.isArray(vals)) {
-                        return <tr key={i}>
-                            {
-                                vals.map((val: any, i: number) => {
-                                        return <td key={`${i}`}>
+                        return (<tr key={i}>
+                                {vals.map((val:any,j:number) => {
+                                    const att = atts[j];
+                                    const meta = (att && att.schemaMetadata)? JSON.stringify(att.schemaMetadata) : JSON.stringify({});
+
+                                    return (
+                                        <td key={`cell${j}`}>
                                             <Tooltip visible={false} overlay={meta}>
-                                                <span>{val}</span>
+                                                {renderTableCellValue(att, val)}
                                             </Tooltip>
                                         </td>
-                                    }
-                                )
-                            }
-                        </tr>
+                                    );
+                                })}
+                            </tr>
+                        );
                     } else {
                         console.log(vals);
                         return null;

@@ -26,7 +26,6 @@ interface IPostProps {
 }
 
 const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:SynapseAtlas }> = ({ wpAtlas, synapseAtlas }) => {
-
     let mergedClinicalAndBiospecimenData: Category;
     if (synapseAtlas) {
         mergedClinicalAndBiospecimenData = Object.assign({}, synapseAtlas.clinical, synapseAtlas.biospecimen);
