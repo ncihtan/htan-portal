@@ -1,5 +1,5 @@
 {
-   "HTAN CenterB": {
+   "HTA2": {
       "imagingData":{
         "imagingHE": {
           "dataLink": "https://www.synapse.org/#!Synapse:syn21999342/tables/",
@@ -8,38 +8,38 @@
               {
                 "name": "HTAN_Parent_ID",
                 "description": "HTAN entity from which this file was derived",
-                "schemaMetadata": "TCGA Exemplar for Development"
+                "schemaMetadata": {}
               },
               {
                 "name": "Method",
                 "description": "method / technology used",
-                "schemaMetadata": ""
+                "schemaMetadata": {}
               },
               {
                 "name": "Magnification",
                 "description": "Microscope type (manufacturer, model, etc) used for this experiment",
-                "schemaMetadata": ""
+                "schemaMetadata": {}
               },
       
               {
                 "name": "Image Size",
                 "description": "X, Y, Z (X and Y in pixels, # of Z planes)",
-                "schemaMetadata": ""
+                "schemaMetadata": {}
               },
               {
                 "name": "downloadLink",
                 "description": "Get raw file from Synapse",
-                "schemaMetadata": "href"
+                "schemaMetadata": {"renderType": "href" }
               },
               {
                 "name": "view",
                 "description": "View file in DSA",
-                "schemaMetadata": ""
+                "schemaMetadata": {"renderType": "dsaImage"}
               },
               {
                 "name": "DSA Thumbnail",
                 "description": "",
-                "schemaMetadata": { "bonusMetadata": "Yes", "renderType": "dsaThumb" }
+                "schemaMetadata": {"renderType": "dsaThumbnail"}
               }
             ],
             "values": [
@@ -71,46 +71,47 @@
               {
                 "name": "HTAN_Parent_ID",
                 "description": "",
-                "schemaMetadata": "TCGA Exemplar for Development"
+                "schemaMetadata": {}
               },
               {
                 "name": "Method",
                 "description": "method / technology used",
-                "schemaMetadata": ""
+                "schemaMetadata": {}
               },
               {
                 "name": "Number of targets",
-                "description": "for multi-target methods, the # of targets"
+                "description": "for multi-target methods, the # of targets",
+                "schemaMetadata": {}
               },
               {
                 "name": "Magnification",
                 "description": "Microscope type (manufacturer, model, etc) used for this experiment",
-                "schemaMetadata": ""
+                "schemaMetadata": {}
               },
               {
                 "name": "Target Names",
                 "description": "Comma separated list from img[Target name]",
-                "metadata": { "bonusMetadata": "Yes" }
+                "schemaMetadata": {}
               },
               {
                 "name": "Image Size",
                 "description": "X, Y, Z (X and Y in pixels, # of Z planes)",
-                "schemaMetadata": ""
+                "schemaMetadata": {}
               },
               {
                 "name": "downloadLink",
                 "description": "Get raw file from Synapse",
-                "schemaMetadata": "href"
+                "schemaMetadata": {"renderType": "href" }
               },
               {
                 "name": "view",
                 "description": "View file in DSA",
-                "schemaMetadata": ""
+                "schemaMetadata": {"renderType": "dsaImage"}
               },
               {
                 "name": "DSA Thumbnail",
                 "description": "",
-                "metadata": { "bonusMetadata": "Yes", "renderType": "dsaThumb" }
+                "schemaMetadata": {"renderType": "dsaThumbnail"}
               }
             ],
             "values": [
@@ -137,98 +138,98 @@
                   {
                      "name": "Component",
                      "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "HTAN Patient ID",
                      "description": "HTAN ID associated with a patient based on HTAN ID SOP",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Ethnicity",
                      "description": "An individual's self-described social and cultural grouping, specifically whether an individual describes themselves as Hispanic or Latino. The provided values are based on the categories\ndefined by the U.S. Office of Management and Business and used by the U.S. Census Bureau.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Gender",
                      "description": "Text designations that identify gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles. [Identification\nof gender is based upon self-report and may come from a form, questionnaire, interview, etc.]",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Race",
                      "description": "An arbitrary classification of a taxonomic group that is a division of a species. It usually arises as a consequence of geographical isolation withina a species and is characterized by shared heredity, physical attributes and behavior, and in the case of humans, by common history, nationality, or geographic distribution. \n                                                                                                                     ",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Vital Status",
                      "description": "The survival state of the person registered on the protocol.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Days to Birth",
                      "description": "Number of days between the date used for index and the date from a person's date of birth represented as a calculated negative number of days.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Age at Index",
                      "description": "The patient's age (in years) on the reference or anchor date used during date obfuscation.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Age Is Obfuscated",
                      "description": "The age of the patient has been modified for compliance reasons. The actual age differs from what is reported. Other date intervals for this patient may also be modified.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Year Of Birth",
                      "description": "Numeric value to represent the calendar year in which an individual was born.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Occupation Duration Years",
                      "description": "The number of years a patient worked in a specific occupation.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Premature At Birth",
                      "description": "The yes/no/unknown indicator used to describe whether the patient was premature (less than 37 weeks gestation) at birth.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Weeks Gestation at Birth",
                      "description": "Numeric value used to describe the number of weeks starting from the approximate date of the biological mother's last menstrual period and ending with the birth of the patient.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Cause of Death",
                      "description": "Cause of death",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Cause of Death Source",
                      "description": "The text term used to describe the source used to determine the patient's cause of death.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Days to Death",
                      "description": "Number of days between the date used for index and the date from a person's date of death represented as a calculated number of days.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Year of Death",
                      "description": "Numeric value to represent the year of the death of an individual.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "entityId",
                      "description": "",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   }
                ],
                "values": [
                   [
                      "Demographics",
-                     "HTA1_11",
+                     "HTA2_11",
                      "hispanic or latino",
                      "male",
                      "not reported",
@@ -248,7 +249,7 @@
                   ],
                   [
                      "Demographics",
-                     "HTA1_15",
+                     "HTA2_15",
                      "not hispanic or latino",
                      "female",
                      "white",
@@ -279,78 +280,78 @@
                   {
                      "name": "Component",
                      "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "HTAN Patient ID",
                      "description": "HTAN ID associated with a patient based on HTAN ID SOP",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Treatment or Therapy",
                      "description": "A yes/no/unknown/not applicable indicator related to the administration of therapeutic agents received.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Treatment Type",
                      "description": "Text term that describes the kind of treatment administered.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Treatment Effect",
                      "description": "The text term used to describe the pathologic effect a treatment(s) had on the tumor.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Treatment Outcome",
                      "description": "Text term that describes the patient's final outcome after the treatment was administered.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Days to Treatment End",
                      "description": "Number of days between the date used for index and the date the treatment ended.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Treatment Anatomic Site",
                      "description": "The text term used to describe the anatomic site of resection; biopsy; tissue or organ of biospecimen origin; progression or recurrent disease; treatment",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Days to Treatment Start",
                      "description": "Number of days between the date used for index and the date the treatment started.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Initial Disease Status",
                      "description": "The text term used to describe the status of the patient's malignancy when the treatment began.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Regimen or Line of Therapy",
                      "description": "The text term used to describe the regimen or line of therapy.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Therapeutic Agents",
                      "description": "Text identification of the individual agent(s) used as part of a treatment regimen.",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "Treatment Intent Type",
                      "description": "Text term to identify the reason for the administration of a treatment regimen. [Manually-curated]",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   },
                   {
                      "name": "entityId",
                      "description": "",
-                     "schemaMetadata": ""
+                     "schemaMetadata": {}
                   }
                ],
                "values": [
                   [
                      "Therapy",
-                     "HTA1_11",
+                     "HTA2_11",
                      "Yes",
                      "Radiation External Beam",
                      "",
@@ -366,7 +367,7 @@
                   ],
                   [
                      "Therapy",
-                     "HTA1_15",
+                     "HTA2_15",
                      "Yes",
                      "Ablation Cryo",
                      "",
@@ -386,8 +387,8 @@
          }
       },
       "assayData": {
-         "scRNA-seq Assay": {
-            "dataLink": "https://www.synapse.org/#!Synapse:syn21989520/tables/",
+         "scRNA-seq level 4 - cell type assignment":{
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21999342/tables/",
             "data": {
                "attributes": [
                   {
@@ -401,189 +402,222 @@
                      "schemaMetadata": ""
                   },
                   {
+                     "name": "UCSC Single Cell Browser",
+                     "description": "View file in UCSC Single Cell Browser",
+                     "schemaMetadata": { "renderType": "scBrowser" }
+                  },
+                  {
                      "name": "File Format",
                      "description": "Format of a file (e.g. txt, csv, fastq, bam, etc.)",
                      "schemaMetadata": ""
+                  }
+               ],
+               "values": [
+                    "ScRNA-seqLevel4",
+                     "eg_project_file3.txt",
+                     "https://humantumoratlas.org/single_cell?ds=nsclc_vdj",
+                     "txt"
+               ]
+            }
+         },
+         "scRNA-seq Assay": {
+            "dataLink": "https://www.synapse.org/#!Synapse:syn21989520/tables/",
+            "data": {
+               "attributes": [
+                  {
+                     "name": "Component",
+                     "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
+                     "schemaMetadata":{}
+                  },
+                  {
+                     "name": "Filename",
+                     "description": "Name of a file ",
+                     "schemaMetadata":{}
+                  },
+                  {
+                     "name": "File Format",
+                     "description": "Format of a file (e.g. txt, csv, fastq, bam, etc.)",
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "HTAN Parent Biospecimen ID",
-                     "description": "HTAN Biospecimen Identifier from which these files were derived [https://docs.google.com/document/d/1podtPP8L1UNvVxx9_c_szlDcU1f8n7bige6XA_GoRVM/edit?usp=sharing]",
-                     "schemaMetadata": ""
+                     "description": "HTAN Biospecimen Identifier from which these files were derived",
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "HTAN ID",
                      "description": "HTAN Participant Identifier",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Nucleic Acid Source",
                      "description": "The source of the input nucleic molecule",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cryopreserved Cells in Sample",
                      "description": "Indicate if library preparation was based on revived frozen cells.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Single Cell Isolation Method",
                      "description": "The method by which cells are isolated into individual reaction containers at a single cell resolution (e.g. wells, micro-droplets)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Dissociation Method",
                      "description": "The tissue dissociation method used for scRNASeq assays",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Library Construction Method",
                      "description": "Process which results in the creation of a library from fragments of DNA using cloning vectors or oligonucleotides with the role of adaptors [OBI_0000711]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Library Layout",
                      "description": "Sequencing read type",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "End Bias",
                      "description": "The end of the cDNA molecule that is preferentially sequenced, e.g. 3/5 prime tag/end or the full length transcript",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Reverse Transcription Primer",
                      "description": "An oligo to which new deoxyribonucleotides can be added by DNA polymerase [SO_0000112]. The type of primer used for reverse transcription, e.g. oligo-dT or random primer. This allows users to identify content of the cDNA library input e.g. enriched for mRNA",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Spike In",
                      "description": "A set of known synthetic RNA molecules with known sequence that are added to the cell lysis mix",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Sequencing Platform",
                      "description": "A platform is an object aggregate that is the set of instruments and software needed to perform a process [OBI_0000050]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Total Number of Input Cells",
                      "description": "Number of cells loaded/placed on plates",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Input Cells and Nuclei",
                      "description": "Number of cells and number of nuclei input; entry format: number, number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Library Preparation Date",
                      "description": "The date that the libraries were prepared for sequencing (in number of days since sample received in lab)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Single Cell Dissociation Date",
                      "description": "The date when the sample was dissociated and cells were isolated (date format)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Sequencing Library Construction Date",
                      "description": "Date of sequencing library construction part of library construction (in number of days since sample received in lab)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Nucleic Acid Capture Date",
                      "description": "Date of nucleic acid capture part of library construction (in number of days since sample received in lab)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Protocol Link",
                      "description": "TBD",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Technical Replicate Group",
                      "description": "A common term for all files belonging to the same cell or library. Provide a numbering of each library prep batch (can differ from encapsulation and sequencing batch)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cell Barcode Length",
                      "description": "Length of cell barcode read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cell Barcode Offset",
                      "description": "Offset in sequence for cell barcode read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Empty Well Barcode",
                      "description": "Unique cell barcode assigned to empty cells used as controls in CEL-seq2 assays.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Feature Reference Id",
                      "description": "Unique ID for this feature. Must not contain whitespace, quote or comma characters. Each ID must be unique and must not collide with a gene identifier from the transcriptome [https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Median UMIs per Cell Number",
                      "description": "Number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Read1",
                      "description": "Read 1 content description",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Read2",
                      "description": "Read 2 content description",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Spike In Concentration",
                      "description": "The final concentration or dilution (for commercial sets) of the spike in mix [PMID:21816910]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "UMI Barcode Length",
                      "description": "Length of UMI barcode read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "UMI Barcode Offset",
                      "description": "Start position of UMI barcode in the sequence. Values: number, 0 for start of read",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Valid Barcodes Cell Number",
                      "description": "Number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Well Index",
                      "description": "Indicate if protein expression (EPCAM/CD45) positive/negative data  is available for each cell in CEL-seq2 assays",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "cDNA Length",
                      "description": "Length of cDNA read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "cDNA Offset",
                      "description": "Offset in sequence for cDNA read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "entityId",
                      "description": "",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "downloadLink",
                      "description": "Download file from Synapse",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{"renderType":"href"}
                   }
                ],
                "values": [
@@ -591,8 +625,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file3.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_11",
+                     "HTA2_1_1",
+                     "HTA2_1_11",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -632,8 +666,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file2.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_12",
+                     "HTA2_1_1",
+                     "HTA2_1_12",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -673,8 +707,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file1.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_13",
+                     "HTA2_1_1",
+                     "HTA2_1_13",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -714,8 +748,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file10.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_14",
+                     "HTA2_1_1",
+                     "HTA2_1_14",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -755,8 +789,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file9.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_15",
+                     "HTA2_1_1",
+                     "HTA2_1_15",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -796,8 +830,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file8.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_16",
+                     "HTA2_1_1",
+                     "HTA2_1_16",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -837,8 +871,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file7.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_17",
+                     "HTA2_1_1",
+                     "HTA2_1_17",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -878,8 +912,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file6.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_18",
+                     "HTA2_1_1",
+                     "HTA2_1_18",
                      "Single Cell",
                      "Yes",
                      "Droplets",
@@ -919,8 +953,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file5.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_19",
+                     "HTA2_1_1",
+                     "HTA2_1_19",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -960,8 +994,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file4.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_20",
+                     "HTA2_1_1",
+                     "HTA2_1_20",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1003,7 +1037,7 @@
          }
       }
    },
-   "HTAN CenterA": {
+   "HTA1": {
       "clinical": {
          "Exposure": {
             "dataLink": "https://www.synapse.org/#!Synapse:syn21980287/tables/",
@@ -1012,87 +1046,87 @@
                   {
                      "name": "Component",
                      "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "HTAN Patient ID",
                      "description": "HTAN ID associated with a patient based on HTAN ID SOP",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Smoking Exposure",
                      "description": "Indicate if individual has smoking exposure",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Asbestos Exposure",
                      "description": "The yes/no/unknown indicator used to describe whether the patient was exposed to asbestos.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Coal Dust Exposure",
                      "description": "The yes/no/unknown indicator used to describe whether a patient was exposed to fine powder derived by the crushing of coal.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Environmental Tobacco Smoke Exposure",
                      "description": "The yes/no/unknown indicator used to describe whether a patient was exposed to smoke that is emitted from burning tobacco, including cigarettes, pipes, and cigars. This includes tobacco smoke exhaled by smokers.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Radon Exposure",
                      "description": "The yes/no/unknown indicator used to describe whether the patient was exposed to radon.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Respirable Crystalline Silica Exposure",
                      "description": "The yes/no/unknown indicator used to describe whether a patient was exposured to respirable crystalline silica, a widespread, naturally occurring, crystalline metal oxide that consists of different forms including quartz, cristobalite, tridymite, tripoli, ganister, chert and novaculite.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cigarettes per Day",
                      "description": "The average number of cigarettes smoked per day.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Pack Years Smoked",
                      "description": "Numeric computed value to represent lifetime tobacco exposure defined as number of cigarettes smoked per day x number of years smoked divided by 20.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Smoking Frequency",
                      "description": "The text term used to generally decribe how often the patient smokes.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Time between Waking and First Smoke",
                      "description": "TBD",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Tobacco Smoking Onset Year",
                      "description": "The year in which the participant began smoking.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Tobacco Smoking Quit Year",
                      "description": "The year in which the participant quit smoking.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Tobacco Smoking Status",
                      "description": "Category describing current smoking status and smoking history as self-reported by a patient",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Type of Tobacco Used",
                      "description": "The text term used to describe the specific type of tobacco used by the patient.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "entityId",
                      "description": "",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   }
                ],
                "values": [
@@ -1147,92 +1181,92 @@
                   {
                      "name": "Component",
                      "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "HTAN Patient ID",
                      "description": "HTAN ID associated with a patient based on HTAN ID SOP",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Ethnicity",
                      "description": "An individual's self-described social and cultural grouping, specifically whether an individual describes themselves as Hispanic or Latino. The provided values are based on the categories\ndefined by the U.S. Office of Management and Business and used by the U.S. Census Bureau.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Gender",
                      "description": "Text designations that identify gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles. [Identification\nof gender is based upon self-report and may come from a form, questionnaire, interview, etc.]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Race",
                      "description": "An arbitrary classification of a taxonomic group that is a division of a species. It usually arises as a consequence of geographical isolation withina a species and is characterized by shared heredity, physical attributes and behavior, and in the case of humans, by common history, nationality, or geographic distribution. \n                                                                                                                     ",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Vital Status",
                      "description": "The survival state of the person registered on the protocol.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Days to Birth",
                      "description": "Number of days between the date used for index and the date from a person's date of birth represented as a calculated negative number of days.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Age at Index",
                      "description": "The patient's age (in years) on the reference or anchor date used during date obfuscation.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Age Is Obfuscated",
                      "description": "The age of the patient has been modified for compliance reasons. The actual age differs from what is reported. Other date intervals for this patient may also be modified.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Year Of Birth",
                      "description": "Numeric value to represent the calendar year in which an individual was born.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Occupation Duration Years",
                      "description": "The number of years a patient worked in a specific occupation.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Premature At Birth",
                      "description": "The yes/no/unknown indicator used to describe whether the patient was premature (less than 37 weeks gestation) at birth.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Weeks Gestation at Birth",
                      "description": "Numeric value used to describe the number of weeks starting from the approximate date of the biological mother's last menstrual period and ending with the birth of the patient.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cause of Death",
                      "description": "Cause of death",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cause of Death Source",
                      "description": "The text term used to describe the source used to determine the patient's cause of death.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Days to Death",
                      "description": "Number of days between the date used for index and the date from a person's date of death represented as a calculated number of days.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Year of Death",
                      "description": "Numeric value to represent the year of the death of an individual.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "entityId",
                      "description": "",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   }
                ],
                "values": [
@@ -1289,197 +1323,197 @@
                   {
                      "name": "Component",
                      "description": "Category of metadata (e.g. Diagnosis, Biospecimen, scRNA-seq Assay, etc.); provide the same one for all items/rows.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Filename",
                      "description": "Name of a file ",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "File Format",
                      "description": "Format of a file (e.g. txt, csv, fastq, bam, etc.)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "HTAN Parent Biospecimen ID",
                      "description": "HTAN Biospecimen Identifier from which these files were derived [https://docs.google.com/document/d/1podtPP8L1UNvVxx9_c_szlDcU1f8n7bige6XA_GoRVM/edit?usp=sharing]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "HTAN ID",
                      "description": "HTAN Participant Identifier",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Nucleic Acid Source",
                      "description": "The source of the input nucleic molecule",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cryopreserved Cells in Sample",
                      "description": "Indicate if library preparation was based on revived frozen cells.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Single Cell Isolation Method",
                      "description": "The method by which cells are isolated into individual reaction containers at a single cell resolution (e.g. wells, micro-droplets)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Dissociation Method",
                      "description": "The tissue dissociation method used for scRNASeq assays",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Library Construction Method",
                      "description": "Process which results in the creation of a library from fragments of DNA using cloning vectors or oligonucleotides with the role of adaptors [OBI_0000711]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Library Layout",
                      "description": "Sequencing read type",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "End Bias",
                      "description": "The end of the cDNA molecule that is preferentially sequenced, e.g. 3/5 prime tag/end or the full length transcript",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Reverse Transcription Primer",
                      "description": "An oligo to which new deoxyribonucleotides can be added by DNA polymerase [SO_0000112]. The type of primer used for reverse transcription, e.g. oligo-dT or random primer. This allows users to identify content of the cDNA library input e.g. enriched for mRNA",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Spike In",
                      "description": "A set of known synthetic RNA molecules with known sequence that are added to the cell lysis mix",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Sequencing Platform",
                      "description": "A platform is an object aggregate that is the set of instruments and software needed to perform a process [OBI_0000050]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Total Number of Input Cells",
                      "description": "Number of cells loaded/placed on plates",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Input Cells and Nuclei",
                      "description": "Number of cells and number of nuclei input; entry format: number, number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Library Preparation Date",
                      "description": "The date that the libraries were prepared for sequencing (in number of days since sample received in lab)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Single Cell Dissociation Date",
                      "description": "The date when the sample was dissociated and cells were isolated (date format)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Sequencing Library Construction Date",
                      "description": "Date of sequencing library construction part of library construction (in number of days since sample received in lab)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Nucleic Acid Capture Date",
                      "description": "Date of nucleic acid capture part of library construction (in number of days since sample received in lab)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Protocol Link",
                      "description": "TBD",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Technical Replicate Group",
                      "description": "A common term for all files belonging to the same cell or library. Provide a numbering of each library prep batch (can differ from encapsulation and sequencing batch)",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cell Barcode Length",
                      "description": "Length of cell barcode read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Cell Barcode Offset",
                      "description": "Offset in sequence for cell barcode read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Empty Well Barcode",
                      "description": "Unique cell barcode assigned to empty cells used as controls in CEL-seq2 assays.",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Feature Reference Id",
                      "description": "Unique ID for this feature. Must not contain whitespace, quote or comma characters. Each ID must be unique and must not collide with a gene identifier from the transcriptome [https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Median UMIs per Cell Number",
                      "description": "Number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Read1",
                      "description": "Read 1 content description",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Read2",
                      "description": "Read 2 content description",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Spike In Concentration",
                      "description": "The final concentration or dilution (for commercial sets) of the spike in mix [PMID:21816910]",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "UMI Barcode Length",
                      "description": "Length of UMI barcode read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "UMI Barcode Offset",
                      "description": "Start position of UMI barcode in the sequence. Values: number, 0 for start of read",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Valid Barcodes Cell Number",
                      "description": "Number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "Well Index",
                      "description": "Indicate if protein expression (EPCAM/CD45) positive/negative data  is available for each cell in CEL-seq2 assays",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "cDNA Length",
                      "description": "Length of cDNA read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "cDNA Offset",
                      "description": "Offset in sequence for cDNA read (in bp): number",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "entityId",
                      "description": "",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{}
                   },
                   {
                      "name": "downloadLink",
                      "description": "Download file from Synapse",
-                     "schemaMetadata": ""
+                     "schemaMetadata":{"renderType":"href"}
                   }
                ],
                "values": [
@@ -1487,8 +1521,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file3.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_11",
+                     "HTA1_1_1",
+                     "HTA1_1_11",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1528,8 +1562,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file2.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_12",
+                     "HTA1_1_1",
+                     "HTA1_1_12",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1569,8 +1603,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file1.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_13",
+                     "HTA1_1_1",
+                     "HTA1_1_13",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1610,8 +1644,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file10.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_14",
+                     "HTA1_1_1",
+                     "HTA1_1_14",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1651,8 +1685,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file9.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_15",
+                     "HTA1_1_1",
+                     "HTA1_1_15",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1692,8 +1726,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file8.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_16",
+                     "HTA1_1_1",
+                     "HTA1_1_16",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1733,8 +1767,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file7.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_17",
+                     "HTA1_1_1",
+                     "HTA1_1_17",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1774,8 +1808,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file6.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_18",
+                     "HTA1_1_1",
+                     "HTA1_1_18",
                      "Single Cell",
                      "Yes",
                      "Droplets",
@@ -1815,8 +1849,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file5.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_19",
+                     "HTA1_1_1",
+                     "HTA1_1_19",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
@@ -1856,8 +1890,8 @@
                      "ScRNA-seqAssay",
                      "eg_project_file4.txt",
                      "txt",
-                     "CenterA_1_1",
-                     "CenterA_1_20",
+                     "HTA1_1_1",
+                     "HTA1_1_20",
                      "Single Cell",
                      "Yes",
                      "Microfluidics Chip",
