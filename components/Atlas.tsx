@@ -5,6 +5,7 @@ import {Category} from "../types";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
 
 export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({category}) => {
     const [showCol, setShowCol] = useState(false);
@@ -78,51 +79,61 @@ export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({c
 
     if (category) {
         return <>
-            <div style={{display: "flex", marginBottom: 20}}>
-                <select defaultValue={selectedCategory}
-                        onChange={(e) => handleTableToggle(e)}
-                        style={{ minWidth: '650px' }}
-                        className={"form-control"}>
+            <Row style={{marginBottom: 20}}>
+                <Form>
+                    <Form.Group controlId="atlas.categorySelect">
+                        <Form.Control as="select"
+                                      custom={true}
+                                      defaultValue={selectedCategory}
+                                      onChange={(e) => handleTableToggle(e)}>
+                            {
+                                _.map(subCats, ((k, i) => {
+                                    return <option key={i}>{k}</option>
+                                }))
+                            }
+                        </Form.Control>
+                    </Form.Group>
+                </Form>
+
+                &nbsp;&nbsp;
+                <span>
+                    <a href={category[selectedCategory].dataLink} className={`btn btn-primary`}>
+                        Download
+                    </a>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                    <Button id={`${selectedCategory}`}
+                            onClick={() => setShowCol(!showCol)}
+                            className={`btn btn-primary button-dropdown`}>
+                        Columns ▾
+                    </Button>
+
                     {
-                        _.map(subCats, ((k, i) => {
-                            return <option key={i}>{k}</option>
-                        }))
+                        showCol &&
+                        <div className={'col-select-card-wrapper'}>
+                            <Card className={'col-select-card'}>
+                                <Card.Body>
+                                    <Form>
+                                        <Form.Group>
+                                            {
+                                                _.map(displayCols, ((k, i) => {
+                                                    return <Form.Check
+                                                        onChange={(e: any) => handleColToggle(e, k.name)}
+                                                        type="checkbox"
+                                                        defaultChecked={k.enabled}
+                                                        key={i}
+                                                        label={k.name}/>
+                                                }))
+                                            }
+                                        </Form.Group>
+                                    </Form>
+                                </Card.Body>
+                            </Card>
+                        </div>
                     }
-                </select>
-                &nbsp;&nbsp;
-                <a href={category[selectedCategory].dataLink} className={`btn btn-primary`}>
-                    Download
-                </a>
-                &nbsp;&nbsp;
-                <Button id={`${selectedCategory}`}
-                        onClick={() => setShowCol(!showCol)}
-                        className={`btn btn-primary button-dropdown`}>
-                    Columns ▾
-                </Button>
-            </div>
-            {
-                showCol &&
-                <div className={'col-select-card-wrapper'}>
-                    <Card className={'col-select-card'}>
-                        <Card.Body>
-                            <Form>
-                                <Form.Group>
-                                    {
-                                        _.map(displayCols, ((k, i) => {
-                                            return <Form.Check
-                                                onChange={(e: any) => handleColToggle(e, k.name)}
-                                                type="checkbox"
-                                                defaultChecked={k.enabled}
-                                                key={i}
-                                                label={k.name}/>
-                                        }))
-                                    }
-                                </Form.Group>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                </div>
-            }
+                </span>
+            </Row>
             <AtlasDataTable subcategoryData={atlasData} />
         </>
 
