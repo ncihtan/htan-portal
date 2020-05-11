@@ -33,19 +33,23 @@ export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ s
                     if (att && att.schemaMetadata) {
                         const meta = JSON.stringify(att.schemaMetadata);
                     }
-
-                    return <tr key={i}>
-                        {
-                            vals.map((val:any, i:number)=> {
-                                return <td key={`${i}`}>
+                    if (vals && _.isArray(vals)) {
+                        return <tr key={i}>
+                            {
+                                vals.map((val: any, i: number) => {
+                                        return <td key={`${i}`}>
                                             <Tooltip visible={false} overlay={meta}>
                                                 <span>{val}</span>
                                             </Tooltip>
                                         </td>
+                                    }
+                                )
                             }
-                            )
-                        }
-                    </tr>
+                        </tr>
+                    } else {
+                        console.log(vals);
+                        return null;
+                    }
                 })
             }
             </tbody>

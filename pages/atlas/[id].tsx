@@ -104,11 +104,13 @@ const PostContent: React.FunctionComponent<{ wpAtlas:WPAtlas, synapseAtlas?:Syna
                                                 <AtlasWrapper category={synapseAtlas.assayData} />
                                             </Container>
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="imagingData">
-                                            <Container className="mt-3">
-                                                <AtlasWrapper category={synapseAtlas.imagingData} />
-                                            </Container>
-                                        </Tab.Pane>
+                                        {
+                                            (synapseAtlas.imagingData) && (<Tab.Pane eventKey="imagingData">
+                                                <Container className="mt-3">
+                                                    <AtlasWrapper category={synapseAtlas.imagingData} />
+                                                </Container>
+                                            </Tab.Pane>)
+                                        }
                                     </>
                                 )
                             }
@@ -137,7 +139,10 @@ const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData })
         return a.htan_id === htan_id;
     });
 
-    const synapseAtlas: SynapseAtlas | undefined = postData && synapseData[postData.synapse_id] as SynapseAtlas;
+    //console.log(htan_id);
+
+
+    const synapseAtlas: SynapseAtlas | undefined = postData && synapseData[htan_id.toUpperCase()] as SynapseAtlas;
 
     const content = postData ?
          <PostContent wpAtlas={postData} synapseAtlas={synapseAtlas}/> :
