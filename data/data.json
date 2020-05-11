@@ -413,10 +413,12 @@
                   }
                ],
                "values": [
+                   [
                     "ScRNA-seqLevel4",
                      "eg_project_file3.txt",
                      "https://humantumoratlas.org/single_cell?ds=nsclc_vdj",
                      "txt"
+                   ]
                ]
             }
          },
