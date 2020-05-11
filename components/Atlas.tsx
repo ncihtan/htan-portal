@@ -105,21 +105,20 @@ export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({c
                 <div className={'col-select-card-wrapper'}>
                     <Card className={'col-select-card'}>
                         <Card.Body>
-                            <Card.Title>Columns</Card.Title>
-                                <Form>
-                                    <Form.Group>
-                                        {
-                                            _.map(displayCols, ((k, i) => {
-                                                return <Form.Check
-                                                    onChange={(e: any) => handleColToggle(e, k.name)}
-                                                    type="checkbox"
-                                                    defaultChecked={k.enabled}
-                                                    key={i}
-                                                    label={k.name}/>
-                                            }))
-                                        }
-                                    </Form.Group>
-                                </Form>
+                            <Form>
+                                <Form.Group>
+                                    {
+                                        _.map(displayCols, ((k, i) => {
+                                            return <Form.Check
+                                                onChange={(e: any) => handleColToggle(e, k.name)}
+                                                type="checkbox"
+                                                defaultChecked={k.enabled}
+                                                key={i}
+                                                label={k.name}/>
+                                        }))
+                                    }
+                                </Form.Group>
+                            </Form>
                         </Card.Body>
                     </Card>
                 </div>
