@@ -11,28 +11,38 @@ type AtlasDataTableProps = {
 export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ subcategoryData }) => {
 
     const atts = subcategoryData.data.attributes;
-
-    return <div>
+    if (atts.length > 0) {
+        return <div style={{'overflowX': 'auto'}} >
         <table className={"table table-striped"}>
             <thead>
             <tr>
             {
-                atts.map((att)=><th key={att.name}><Tooltip overlay={att.description}><span>{att.name}</span></Tooltip></th>)
+                atts.map(att=><th className={`col_${att.name.replace(' ', '_').toLowerCase()}`} key={att.name}>
+                    <Tooltip overlay={att.description}>
+                        <span>{att.name}</span>
+                    </Tooltip>
+                </th>)
             }
             </tr>
             </thead>
             <tbody>
             {
-                subcategoryData.data.values.map((vals,i)=>{
+                subcategoryData.data.values.map((vals, i)=>{
                     const att = atts[i];
-                    const meta = JSON.stringify(att.schemaMetadata || {});
-                    const name =  att.name;
+                    const meta = {}
+                    if (att && att.schemaMetadata) {
+                        const meta = JSON.stringify(att.schemaMetadata);
+                    }
 
                     return <tr key={i}>
                         {
-                            vals.map((val:any,i:number)=><td key={`cell${i}`}>
-                                    <Tooltip visible={false} overlay={meta}><span>{val}</span></Tooltip>
-                            </td>
+                            vals.map((val:any, i:number)=> {
+                                return <td key={`${i}`}>
+                                            <Tooltip visible={false} overlay={meta}>
+                                                <span>{val}</span>
+                                            </Tooltip>
+                                        </td>
+                            }
                             )
                         }
                     </tr>
@@ -41,4 +51,8 @@ export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ s
             </tbody>
         </table>
     </div>;
+    } else {
+        return <div style={{textAlign: 'center'}}>No columns selected. Please selected a column</div>
+    }
+
 }

@@ -90,3 +90,18 @@ table {
     max-width:250px;
     opacity:1 !important;
 }
+
+.button-dropdown {
+    min-width: 105px;
+}
+
+.col-select-card {
+    position: absolute;
+    width: 18rem;
+    margin-top: -10px;
+}
+
+.col-select-card-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
