@@ -134,7 +134,9 @@ export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({c
                     }
                 </span>
             </Row>
-            <AtlasDataTable subcategoryData={atlasData} />
+            <Row>
+                <AtlasDataTable subcategoryData={atlasData} />
+            </Row>
         </>
 
     } else {

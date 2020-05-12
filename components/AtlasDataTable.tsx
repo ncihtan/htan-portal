@@ -11,18 +11,28 @@ type AtlasDataTableProps = {
 }
 
 function renderTableCellValue(att:Attribute, val:any): JSX.Element {
-    let el = <span>{val}</span>
 
-    if (att && typeof(att.schemaMetadata) === 'object' &&
-            att.schemaMetadata.renderType) {
-        if (att.schemaMetadata.renderType === 'href') {
-            el = <a href={val}>{val}</a>
-        } else if (att.schemaMetadata.renderType === "scBrowser") {
-            el = <a href={`${val}`.replace("https://humantumoratlas.org/","/")} className={`btn btn-primary`}>View</a>
-        }
+    let renderType = null;
+
+    if (att && typeof(att.schemaMetadata) === 'object' && att.schemaMetadata.renderType) {
+        renderType = att.schemaMetadata.renderType;
     }
 
-    return el;
+    switch(renderType) {
+
+        case "href":
+            return <a target={"_blank"} href={val}>{val}</a>;
+        case "scBrowser":
+            return  <a href={`${val}`.replace("https://humantumoratlas.org/","/")}>View</a>;
+        case "dsaImage":
+            return <a href={`/image_viewer?u=${encodeURIComponent(val)}`.replace("https://humantumoratlas.org/","/")}>View</a>
+        case "dsaThumbnail":
+            return <img className={"dsa-thumb"} src={val} />
+
+        default:
+            return <span>{val}</span>;
+    }
+
 }
 
 export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ subcategoryData }) => {
