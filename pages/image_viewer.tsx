@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 
 function ImageViewer({query}:any) {
 
-    const url = decodeURIComponent(query.u);
+    const url = decodeURIComponent(query.u).replace(/^http:/, "https:");
 
     return <>
         <HtanNavbar/>
