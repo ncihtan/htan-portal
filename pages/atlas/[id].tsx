@@ -15,8 +15,6 @@ import {AtlasWrapper} from "../../components/Atlas";
 import Head from "next/dist/next-server/lib/head";
 import {Category, SynapseAtlas, SynapseData, WPAtlas} from "../../types";
 import {GetStaticProps} from "next";
-import fetch from "node-fetch";
-import {AlertHeading} from "react-bootstrap/Alert";
 
 const data = getData();
 
@@ -152,6 +150,8 @@ const Post: React.FunctionComponent<IPostProps> = ({ synapseData, WPAtlasData })
             <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
         </Head>
         <HtanNavbar />
+        <div id={"iframe-wrapper"}>
+        </div>
         {
             postData &&
             synapseAtlas === undefined &&

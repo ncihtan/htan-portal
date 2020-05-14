@@ -83,7 +83,6 @@ export const AtlasWrapper: React.FunctionComponent<{ category: Category }> = ({c
                 <Form>
                     <Form.Group controlId="atlas.categorySelect">
                         <Form.Control as="select"
-                                      custom={true}
                                       defaultValue={selectedCategory}
                                       onChange={(e) => handleTableToggle(e)}>
                             {

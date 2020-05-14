@@ -1,16 +1,16 @@
-import React from "react";
-import {Table} from "react-bootstrap";
+import React, {useState} from "react";
 import _ from 'lodash';
 import {SubCategory, Attribute} from "../types";
 import Tooltip from "rc-tooltip";
-import { isArray } from "util";
+import {Portal} from "react-portal";
+import {Spinner} from "react-bootstrap";
 
 
 type AtlasDataTableProps = {
     subcategoryData:SubCategory
 }
 
-function renderTableCellValue(att:Attribute, val:any): JSX.Element {
+function renderTableCellValue(att:Attribute, val:any, iframeCallback: (href:string)=>void ): JSX.Element {
 
     let renderType = null;
 
@@ -23,7 +23,13 @@ function renderTableCellValue(att:Attribute, val:any): JSX.Element {
         case "href":
             return <a target={"_blank"} href={val}>{val}</a>;
         case "scBrowser":
-            return  <a href={`${val}`.replace("https://humantumoratlas.org/","/")}>View</a>;
+            return  <a
+                onClick={(e)=>{
+                    e.preventDefault();
+                    iframeCallback(val);
+                }}
+                href={`${val}`.replace("https://humantumoratlas.org/","/")}
+            >View</a>;
         case "dsaImage":
             return <a href={`/image_viewer?u=${encodeURIComponent(val)}`.replace("https://humantumoratlas.org/","/")}>View</a>
         case "dsaThumbnail":
@@ -36,6 +42,24 @@ function renderTableCellValue(att:Attribute, val:any): JSX.Element {
 }
 
 export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ subcategoryData }) => {
+
+    const [iframeURL, setIFrameUrl] = useState<string|null>(null);
+
+    function iframeCallback(href:string){
+        setIFrameUrl("https://nsclc-vdj-ucsc-cellbrowser.surge.sh/?ds=nsclc_vdj");
+    }
+
+    if (iframeURL) {
+        return <Portal node={document && document.getElementById("iframe-wrapper")}>
+            <div className={"text-center"}>
+            <a href={"#"} style={{ marginBottom:5, display:"inline-block"}} onClick={()=>{
+                setIFrameUrl(null);
+            }}><i className="fas fa-arrow-circle-left"></i> Back to list</a>
+                <div className={"loading-animation"}><Spinner animation="border" /></div>
+            </div>
+            <iframe src={iframeURL} />
+        </Portal>
+    }
 
     const atts = subcategoryData.data.attributes;
     if (atts.length > 0) {
@@ -64,7 +88,7 @@ export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({ s
                                     return (
                                         <td key={`cell${j}`}>
                                             <Tooltip visible={false} overlay={meta}>
-                                                {renderTableCellValue(att, val)}
+                                                {renderTableCellValue(att, val, iframeCallback)}
                                             </Tooltip>
                                         </td>
                                     );
