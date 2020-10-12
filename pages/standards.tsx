@@ -53,7 +53,7 @@ const Standards = (data: StandardsProps) => {
                         </li>
                         <li>
                             <Link href="/standard/rnaseq">
-                                Single Cell RNA Seq
+                                Single Cell and Single Nucleus RNA Seq
                             </Link>
                         </li>
                         <li>
