@@ -24,7 +24,7 @@ function Biospecimens(data: BiospecimenProps) {
                         <Breadcrumb.Item href="/standards">
                             Data Standards
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item active>Biospecimens</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Biospecimen</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
                 <Row>
