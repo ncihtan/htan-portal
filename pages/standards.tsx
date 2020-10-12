@@ -43,12 +43,12 @@ const Standards = (data: StandardsProps) => {
                     <ul>
                         <li>
                             <Link href="/standard/biospecimens">
-                                Biospecimens
+                                Biospecimen
                             </Link>
                         </li>
                         <li>
                             <Link href="/standard/cds">
-                                Clinical Data Standards
+                                Clinical Data
                             </Link>
                         </li>
                         <li>
