@@ -24,7 +24,7 @@ function Cds(data: CdsProps) {
                         <Breadcrumb.Item href="/standards">
                             Data Standards
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item active>Clinical Data Standards</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Clinical Data</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
                 <Row>
