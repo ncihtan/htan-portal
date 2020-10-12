@@ -42,23 +42,38 @@ const Standards = (data: StandardsProps) => {
                 <Row>
                     <ul>
                         <li>
-                            <Link href="/standard/cds">
+                            <Link href="/standard/clinical">
                                 Clinical Data
                             </Link>
                         </li>
                         <li>
-                            <Link href="/standard/biospecimens">
+                            <Link href="/standard/biospecimen">
                                 Biospecimen
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/standard/rnaseq">
-                                Single Cell and Single Nucleus RNA Seq
                             </Link>
                         </li>
                         <li>
                             <Link href="/standard/imaging">
                                 Imaging
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/standard/rnaseq">
+                                Single Cell and Single Nucleus RNA Seq (sc/snRNASeq)
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/standard/scatacseq">
+                                Single Cell ATAC Seq
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/standard/bulkrnaseq">
+                                Bulk RNA Seq
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/standard/bulkwes">
+                                Bulk Whole Exome Seq (WES)
                             </Link>
                         </li>
                     </ul>
