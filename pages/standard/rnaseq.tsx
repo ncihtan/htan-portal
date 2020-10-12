@@ -24,7 +24,7 @@ function Rnaseq(data: RnaseqProps) {
                         <Breadcrumb.Item href="/standards">
                             Data Standards
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item active>Single Cell RNA Seq</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Single Cell and Single Nucleus RNA Seq</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
                 <Row>
