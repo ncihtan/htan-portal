@@ -42,13 +42,13 @@ const Standards = (data: StandardsProps) => {
                 <Row>
                     <ul>
                         <li>
-                            <Link href="/standard/biospecimens">
-                                Biospecimen
+                            <Link href="/standard/cds">
+                                Clinical Data
                             </Link>
                         </li>
                         <li>
-                            <Link href="/standard/cds">
-                                Clinical Data
+                            <Link href="/standard/biospecimens">
+                                Biospecimen
                             </Link>
                         </li>
                         <li>
