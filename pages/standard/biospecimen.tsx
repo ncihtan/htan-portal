@@ -13,7 +13,7 @@ export interface BiospecimenProps {
     data: CmsData[];
 }
 
-function Biospecimens(data: BiospecimenProps) {
+function Biospecimen(data: BiospecimenProps) {
     return (
         <>
             <HtanNavbar/>
@@ -44,4 +44,4 @@ export const getStaticProps: GetStaticProps = async context => {
     return {props: {data}}
 }
 
-export default Biospecimens;
+export default Biospecimen;
