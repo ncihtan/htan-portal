@@ -9,11 +9,11 @@ import fetch from "node-fetch";
 import {CmsData} from "../../types";
 import {WORDPRESS_BASE_URL} from "../../ApiUtil";
 
-export interface RnaseqProps {
+export interface BulkRNASeqProps {
     data: CmsData[];
 }
 
-function Rnaseq(data: RnaseqProps) {
+function BulkRNASeq(data: BulkRNASeqProps) {
     return (
         <>
             <HtanNavbar/>
@@ -44,4 +44,4 @@ export const getStaticProps: GetStaticProps = async context => {
     return {props: {data}}
 }
 
-export default Rnaseq;
+export default BulkRNASeq;

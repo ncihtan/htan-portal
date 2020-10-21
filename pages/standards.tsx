@@ -72,8 +72,8 @@ const Standards = (data: StandardsProps) => {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/standard/bulkwes">
-                                Bulk Whole Exome Seq (WES)
+                            <Link href="/standard/bulkdnaseq">
+                                Bulk DNA Seq
                             </Link>
                         </li>
                     </ul>

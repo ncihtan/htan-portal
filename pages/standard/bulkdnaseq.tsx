@@ -10,11 +10,11 @@ import fetch from "node-fetch";
 import {CmsData} from "../../types";
 import {WORDPRESS_BASE_URL} from "../../ApiUtil";
 
-export interface BulkwesProps {
+export interface BulkDNASeqProps {
     data: CmsData[];
 }
 
-function Bulkwes(data: BulkwesProps) {
+function BulkDNASeq(data: BulkDNASeqProps) {
     return (
         <>
             <HtanNavbar/>
@@ -25,7 +25,7 @@ function Bulkwes(data: BulkwesProps) {
                         <Breadcrumb.Item href="/standards">
                             Data Standards
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item active>Bulk Whole Exome Seq (WES)</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Bulk DNA Seq</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
                 <Row>
@@ -38,11 +38,11 @@ function Bulkwes(data: BulkwesProps) {
 }
 
 export const getStaticProps: GetStaticProps = async context => {
-    let slugs = ["data-standards-bulk-wes-blurb"];
+    let slugs = ["data-standards-bulk-dnaseq-blurb"];
     let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);
     let data = await res.json();
     return {props: {data}}
 }
 
-export default Bulkwes;
+export default BulkDNASeq;
