@@ -36,11 +36,16 @@ const Standards = (data: StandardsProps) => {
                 </Row>
                 <Row className="mt-3">
                     <h4>
-                        Browse HTAN Data Standards
+                        Browse Standards
                     </h4>
                 </Row>
                 <Row>
                     <ul>
+                        <li>
+                            <Link href="/standard/design">
+                                Design Principles
+                            </Link>
+                        </li>
                         <li>
                             <Link href="/standard/clinical">
                                 Clinical Data
