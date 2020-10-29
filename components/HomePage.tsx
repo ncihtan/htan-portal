@@ -39,23 +39,23 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({ hero_blurb, cards}
     ];
 
     return (<>
-        <Jumbotron className={"text-center"} style={{marginBottom:"0px"}}>
-            <Row className="justify-content-md-center">
-                <h1>Human Tumor Atlas Network Data Portal</h1>
-            </Row>
-
+        <Jumbotron className={"text-center"} style={{borderRadius:"0px",marginBottom:"0px",backgroundColor:"#161920"/*"#191919"*/}}>
             <Row className="justify-content-md-center mt-5">
-                <Col md={{span: 7}}>
-                    <span dangerouslySetInnerHTML={{ __html: hero_blurb }}></span>
+                <Col style={{backgroundColor:"#161920", padding:20, borderRadius:10,opacity:0.9}} md={{span: 5}}>
+                    <h1 style={{color:"#efeae7",opacity:1.0}}>Human Tumor Atlas Network Data Portal</h1>
+                    <br />
+                    <span style={{color:"#8e8e8e",opacity:1.0}} dangerouslySetInnerHTML={{ __html: hero_blurb }}></span>
+                    <div style={{display:"flex",justifyContent:"center"}}>
+                        <ButtonToolbar>
+                            <Button href="/data_releases" variant="primary" className="mr-4">
+                                Explore the Data
+                            </Button>
+                        </ButtonToolbar>
+                    </div>
                 </Col>
             </Row>
 
             <Row className="justify-content-md-center mt-3">
-                <ButtonToolbar>
-                    <Button href="/data_releases" variant="primary" className="mr-4">
-                        Explore the Data
-                    </Button>
-                </ButtonToolbar>
             </Row>
         </Jumbotron>
     <Container fluid style={{backgroundColor:"#6B618B",paddingTop:"60px",paddingBottom:"60px"}}>

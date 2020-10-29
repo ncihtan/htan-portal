@@ -1,4 +1,4 @@
-$primary-background:#5f018c;
+$primary-background:#5F008C;
 
 .breadcrumb {
     background-color: transparent !important;
@@ -11,6 +11,14 @@ body {
 
 .bg-nav-purple {
     background: $primary-background;
+}
+
+.jumbotron {
+    background-image: url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
+    background-blend-mode: color-dodge;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-attachment: fixed;
 }
 
 .card-custom-style img {
