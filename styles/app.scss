@@ -1,4 +1,4 @@
-$primary-background:#5f018c;
+$primary-background:#5F008C;
 
 .breadcrumb {
     background-color: transparent !important;
@@ -10,7 +10,7 @@ body {
 }
 
 .bg-nav-purple {
-    background: #161920;
+    background: $primary-background;
 }
 
 .jumbotron {
