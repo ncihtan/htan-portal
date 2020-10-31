@@ -7,15 +7,19 @@ $primary-background:#5F008C;
 
 body {
     font-family:"Montserrat",sans-serif !important;
+    font-size:.9rem;
 }
 
 .bg-nav-purple {
-    background: $primary-background;
+    //background: $primary-background;
 }
 
 .jumbotron {
-    background-image: url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
-    background-blend-mode: color-dodge;
+    //background-image: url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1),
+                       rgba(0, 0, 0, 1)), url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
+    //background-blend-mode: color-dodge;
     background-repeat: no-repeat;
     background-size: 100%;
     background-attachment: fixed;
@@ -39,12 +43,16 @@ body {
 
 .main-nav {
 
+    border-bottom:1px solid #999;
+    border-top:4px solid #999;
+    padding:5px 20px;
+
     .nav-link {
-        color:#fff !important;
+        color:#333 !important;
         padding:0 1.5em !important;
         font-weight:bold;
         text-transform: uppercase;
-        text-shadow:0 0 4px #000;
+        //text-shadow:0 0 4px #000;
         font-size:13px;
     }
 
@@ -148,4 +156,39 @@ table {
 .dsa-thumb {
     height:50%;
     border:1px solid #999;
+}
+
+.filterControls
+{
+    display:flex;
+    > div {
+        margin-right:30px;
+
+        select {
+            display:inline-block;
+            margin-left:5px;
+        }
+
+    }
+}
+
+.summary {
+    display:flex;
+
+    > div {
+        padding: 0 10px;
+        border-right:1px dashed #eee;
+
+        &:first-child {
+            padding-left:0px;
+            border-right:none;
+        }
+
+    }
+
+    margin-bottom:20px;
+}
+
+.subnav {
+    margin-bottom:20px;
 }
