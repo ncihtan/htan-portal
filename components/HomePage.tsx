@@ -58,11 +58,17 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({ hero_blurb, cards}
             <Row className="justify-content-md-center mt-3">
             </Row>
         </Jumbotron>
-    <Container fluid style={{backgroundColor:"#6B618B",paddingTop:"60px",paddingBottom:"60px"}}>
+    <Container fluid style={{backgroundColor:"#6B618B",paddingTop:"30px",paddingBottom:"30px"}}>
         <Row className="justify-content-md-center" >
             {dashboardData.map((icon) => dashboardIcon(icon.text, icon.description))}
         </Row>
     </Container>
+    <Container>
+        <Row className="justify-content-md-center mt-5">
+            <img src="/htanDatasetsWithTitle.svg" />
+        </Row>
+    </Container>
+    {/* Hide cards for now
     <Container>
         <Row className="justify-content-md-center mt-5">
             <Col md={{span: 8}}>
@@ -119,7 +125,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({ hero_blurb, cards}
                 </CardGroup>
             </Col>
         </Row>
-    </Container>
+    </Container> */}
     </>);
 }
 
