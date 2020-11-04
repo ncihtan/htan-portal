@@ -141,3 +141,21 @@ table {
     height:50%;
     border:1px solid #999;
 }
+
+.filterControls
+{
+    display:flex;
+}
+
+.summary {
+    display:flex;
+
+    > div {
+        background:#5f018c;
+        color:white;
+        padding:40px;
+        border-radius:10px;
+        margin-right:20px;
+    }
+    margin-bottom:20px;
+}
