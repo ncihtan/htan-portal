@@ -1,14 +1,8 @@
 import React from "react";
-
 import HtanNavbar from "../components/HtanNavbar";
-import HomePage, {IHomePropsProps} from "../components/HomePage";
 import Footer from "../components/Footer";
-import { GetStaticProps} from "next";
-import fetch from "node-fetch";
-import { WPConstants} from "../types";
-import {getContent, WORDPRESS_BASE_URL} from "../ApiUtil";
 import _ from 'lodash';
-import {doIt, entity} from "./lib/helpers";
+import {doIt, entity} from "../lib/helpers";
 
 enum PropNames {
     TissueorOrganofOrigin = "TissueorOrganofOrigin",
