@@ -145,6 +145,15 @@ table {
 .filterControls
 {
     display:flex;
+    > div {
+        margin-right:30px;
+
+        select {
+            display:inline-block;
+            margin-left:5px;
+        }
+
+    }
 }
 
 .summary {
@@ -153,9 +162,9 @@ table {
     > div {
         background:#5f018c;
         color:white;
-        padding:40px;
+        padding:30px;
         border-radius:10px;
-        margin-right:20px;
+        margin-right:10px;
     }
     margin-bottom:20px;
 }

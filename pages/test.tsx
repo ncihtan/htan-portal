@@ -7,7 +7,8 @@ import {doIt, entity} from "../lib/helpers";
 enum PropNames {
     TissueorOrganofOrigin = "TissueorOrganofOrigin",
     PrimaryDiagnosis = "PrimaryDiagnosis",
-    Component = "Component"
+    Component = "Component",
+    Biospecimen = "Biospecimen"
 }
 
 const propMap = {
@@ -19,6 +20,9 @@ const propMap = {
     }, 
     [PropNames.Component]: {
         prop: "Component"
+    },   
+    [PropNames.Biospecimen]: {
+        prop: "Biospecimen"
     }   
 }
 
@@ -65,11 +69,6 @@ class Moo extends React.Component<{},{files:entity[], selectedDiagnsis:string|un
     }
 
     get filteredFiles(){
-        // if (this.state.selectedOrgan) {
-        //     return this.state.files.filter((f)=>f.diagnosis.TissueorOrganofOrigin === this.state.selectedOrgan);
-        // } else {
-        //     return this.state.files;
-        // }
         if (_.size(this.state.filters)) {
             return this.state.files.filter((f)=>{
                 return _.every(this.state.filters,(filter, name)=>{
@@ -86,8 +85,12 @@ class Moo extends React.Component<{},{files:entity[], selectedDiagnsis:string|un
 
         var self = this;
 
-        console.log("filter", this.state.filters);
+        console.log("filter", this.state.files);
 
+        const patients = _(this.state.files).filter((f)=>f.biospecimen && f.biospecimen.HTANParentID)
+        .map(f=>f.biospecimen?.HTANParentID)
+        .uniq()
+        .value().length;
 
         if (this.filteredFiles) {
 
@@ -100,11 +103,19 @@ class Moo extends React.Component<{},{files:entity[], selectedDiagnsis:string|un
                     </div>
 
                     <div>
-                        {_.keys(this.getGroupsByProperty[PropNames.TissueorOrganofOrigin]).length} Organs
+                        {_.keys(this.getGroupsByProperty[PropNames.PrimaryDiagnosis]).length} Cancer Types
+                    </div>
+                    
+                    <div>
+                        { patients } Participants
                     </div>
 
                     <div>
-                        {_.keys(this.getGroupsByProperty[PropNames.PrimaryDiagnosis]).length} Cancer Types
+                        { _(this.state.files).map(f=>f.HTANParentBiospecimenID).uniq().value().length } Biospecimen
+                    </div>
+               
+                    <div>
+                        {_.keys(this.getGroupsByProperty[PropNames.TissueorOrganofOrigin]).length} Organs
                     </div>
 
                     <div>
@@ -115,7 +126,9 @@ class Moo extends React.Component<{},{files:entity[], selectedDiagnsis:string|un
 
 
                 <div className="filterControls">
-                    
+                    <div>
+                    <label>
+                        Organ: 
                     <select className="form-control" placeholder="helo"  style={{marginBottom:20, maxWidth:200}} onChange={function(e) {
                         self.setFilter(PropNames.TissueorOrganofOrigin, e.target.value)
                     }.bind(this)}>
@@ -125,7 +138,12 @@ class Moo extends React.Component<{},{files:entity[], selectedDiagnsis:string|un
                             })
                         }
                     </select>
+                    </label>
+                    </div>
 
+                    <div>
+                        <label>
+                            Diagnosis: 
                     <select className="form-control"  style={{marginBottom:20, maxWidth:200}} onChange={function(e) {
                         self.setFilter(PropNames.PrimaryDiagnosis, e.target.value);
                         //this.setState({selectedDiagnosis: e.target.value})
@@ -136,7 +154,12 @@ class Moo extends React.Component<{},{files:entity[], selectedDiagnsis:string|un
                             })
                         }
                     </select>
+                    </label>
+                    </div>
 
+                        <div>
+                            <label>
+                                Assay: 
                     <select className="form-control"  style={{marginBottom:20, maxWidth:200}} onChange={function(e) {
                         self.setFilter(PropNames.Component, e.target.value);
                         //this.setState({selectedDiagnosis: e.target.value})
@@ -146,7 +169,9 @@ class Moo extends React.Component<{},{files:entity[], selectedDiagnsis:string|un
                             return <option value={key}>{key.replace(/^bts:/,"")} ({val.length})</option>
                             })
                         }
-                    </select>        
+                    </select>  
+                    </label>
+                    </div>      
 
                 </div>
 
