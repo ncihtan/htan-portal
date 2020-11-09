@@ -157,9 +157,11 @@ table {
 
 .filterControls {
   display: flex;
+  margin-bottom:20px;
   > div {
     margin-right: 30px;
-
+    display: flex;
+    align-items: center;
     select {
       display: inline-block;
       margin-left: 5px;

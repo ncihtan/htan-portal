@@ -5,6 +5,8 @@ import _ from "lodash";
 import { loadData, Entity, Atlas } from "../lib/helpers";
 import AtlasTable from "../components/filter/AtlasTable";
 import FileTable from "../components/filter/FileTable";
+import FilterSelection from "../components/filter/FilterSelection";
+import Select from "react-select";
 
 enum PropNames {
   TissueorOrganofOrigin = "TissueorOrganofOrigin",
@@ -30,7 +32,7 @@ const propMap = {
 
 interface IFilterProps {
   files: Entity[];
-  filters: { [key: string]: string };
+  filters: { [key: string]: string[] };
   atlases: Atlas[];
 }
 
@@ -84,12 +86,14 @@ class Search extends React.Component<{}, IFilterProps> {
   }
 
   get filteredFiles() {
+    console.log(this.state.filters);
     if (_.size(this.state.filters)) {
       return this.state.files.filter((f) => {
         return _.every(this.state.filters, (filter, name) => {
           //@ts-ignore
           const val = _.at(f, propMap[name].prop);
-          return val ? val[0] === filter : false;
+          //@ts-ignore
+          return val ? filter.includes(val[0]) : false;
         });
       });
     } else {
@@ -126,17 +130,53 @@ class Search extends React.Component<{}, IFilterProps> {
 
           <div className="fileTab">
             <div className="filterControls">
+              {/* <FilterSelection options={
+                    _.map(
+                        this.getGroupsByProperty[PropNames.TissueorOrganofOrigin],
+                        (val, key) => {
+                            return key
+                        }
+                    )
+                } /> */}
+
               <div>
-                <label>
-                  Organ:
-                  <select
+                Organ:&nbsp;
+                <div style={{ width: 300 }}>
+                  <Select
+                    isClearable
+                    isSearchable
+                    name="color"
+                    isMulti={true}
+                    options={_.map(
+                      this.getGroupsByProperty[PropNames.TissueorOrganofOrigin],
+                      (val, key) => {
+                        return { value: key, label: `${key} (${val.length})` };
+                      }
+                    )}
+                    hideSelectedOptions={false}
+                    closeMenuOnSelect={false}
+                    onChange={
+                      //@ts-ignore
+                      (e: any) => {
+                        //@ts-ignore
+                        this.setFilter(
+                          PropNames.TissueorOrganofOrigin,
+                          e ? e.map((option: any) => option.value) : []
+                        );
+                      }
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* <select
                     className="form-control"
                     placeholder="helo"
                     style={{ marginBottom: 20, maxWidth: 200 }}
                     onChange={function (e: any) {
                       self.setFilter(
                         PropNames.TissueorOrganofOrigin,
-                        e.target.value
+                        [e.target.value]
                       );
                     }.bind(this)}
                   >
@@ -150,20 +190,45 @@ class Search extends React.Component<{}, IFilterProps> {
                         );
                       }
                     )}
-                  </select>
-                </label>
-              </div>
+                  </select> */}
 
               <div>
-                <label>
-                  Diagnosis:
-                  <select
+                Diagnosis:&nbsp;
+                <div style={{ width: 300 }}>
+                  <Select
+                    isClearable
+                    isSearchable
+                    name="color"
+                    isMulti={true}
+                    options={_.map(
+                      this.getGroupsByProperty[PropNames.PrimaryDiagnosis],
+                      (val, key) => {
+                        return { value: key, label: `${key} (${val.length})` };
+                      }
+                    )}
+                    hideSelectedOptions={false}
+                    closeMenuOnSelect={false}
+                    onChange={
+                      //@ts-ignore
+                      (e: any) => {
+                        //@ts-ignore
+                        this.setFilter(
+                          PropNames.PrimaryDiagnosis,
+                          e ? e.map((option: any) => option.value) : []
+                        );
+                      }
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* <select
                     className="form-control"
                     style={{ marginBottom: 20, maxWidth: 200 }}
                     onChange={function (e) {
                       self.setFilter(
                         PropNames.PrimaryDiagnosis,
-                        e.target.value
+                        [e.target.value]
                       );
                       //this.setState({selectedDiagnosis: e.target.value})
                     }}
@@ -178,33 +243,36 @@ class Search extends React.Component<{}, IFilterProps> {
                         );
                       }
                     )}
-                  </select>
-                </label>
-              </div>
+                  </select> */}
 
               <div>
-                <label>
-                  Assay:
-                  <select
-                    className="form-control"
-                    style={{ marginBottom: 20, maxWidth: 200 }}
-                    onChange={function (e: any) {
-                      self.setFilter(PropNames.Component, e.target.value);
-                      //this.setState({selectedDiagnosis: e.target.value})
-                    }}
-                  >
-                    {_.map(
+                Assay:&nbsp;
+                <div style={{ width: 300 }}>
+                  <Select
+                    isClearable
+                    isSearchable
+                    name="color"
+                    isMulti={true}
+                    options={_.map(
                       this.getGroupsByProperty[PropNames.Component],
                       (val, key) => {
-                        return (
-                          <option value={key}>
-                            {key.replace(/^bts:/, "")} ({val.length})
-                          </option>
-                        );
+                        return { value: key, label: `${key} (${val.length})` };
                       }
                     )}
-                  </select>
-                </label>
+                    hideSelectedOptions={false}
+                    closeMenuOnSelect={false}
+                    onChange={
+                      //@ts-ignore
+                      (e: any) => {
+                        //@ts-ignore
+                        this.setFilter(
+                          PropNames.Component,
+                          e ? e.map((option: any) => option.value) : []
+                        );
+                      }
+                    }
+                  />
+                </div>
               </div>
             </div>
 
