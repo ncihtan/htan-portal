@@ -135,7 +135,6 @@ export const AtlasDataTable: React.FunctionComponent<AtlasDataTableProps> = ({
                   </tr>
                 );
               } else {
-                console.log(vals);
                 return null;
               }
             })}

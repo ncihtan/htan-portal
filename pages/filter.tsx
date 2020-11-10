@@ -7,6 +7,35 @@ import AtlasTable from "../components/filter/AtlasTable";
 import FileTable from "../components/filter/FileTable";
 import FilterSelection from "../components/filter/FilterSelection";
 import Select from "react-select";
+import getData from "../lib/getData";
+import fetch from "node-fetch";
+import {
+    DataReleasePage,
+    DataReleaseProps,
+  } from "../components/DataReleasePage";
+  import { getAtlasList, WORDPRESS_BASE_URL } from "../ApiUtil";
+  import { GetStaticProps } from "next";
+import { WPAtlas } from "../types";
+import { WPAtlasTable } from "../components/filter/WPAtlasTable";
+
+
+export const getStaticProps: GetStaticProps = async (context) => {
+    let slugs = ["summary-blurb-data-release"];
+    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
+    let res = await fetch(overviewURL);
+    let data = await res.json();
+  
+    const atlases = await getAtlasList();
+  
+    return {
+      props: {
+        atlasData: atlases,
+        data,
+      },
+    };
+  };
+
+const synapseData = getData();
 
 enum PropNames {
   TissueorOrganofOrigin = "TissueorOrganofOrigin",
@@ -34,12 +63,13 @@ interface IFilterProps {
   files: Entity[];
   filters: { [key: string]: string[] };
   atlases: Atlas[];
+  activeTab:string;
 }
 
-class Search extends React.Component<{}, IFilterProps> {
+class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
   constructor(props: any) {
     super(props);
-    this.state = { files: [], filters: {}, atlases: [] };
+    this.state = { files: [], filters: {}, atlases: [], activeTab:"file" };
   }
 
   get getGroupsByProperty() {
@@ -57,7 +87,6 @@ class Search extends React.Component<{}, IFilterProps> {
   get getGroupsByPropertyFiltered() {
     const m: any = {};
     _.forEach(propMap, (o, k) => {
-      console.log(o.prop);
       m[k] = _.groupBy(this.filteredFiles, (f) => {
         //@ts-ignore
         const val = _.at(f, [o.prop]);
@@ -85,8 +114,11 @@ class Search extends React.Component<{}, IFilterProps> {
     });
   }
 
+  setTab(activeTab:string){
+    this.setState({ activeTab });
+  }
+
   get filteredFiles() {
-    console.log(this.state.filters);
     if (_.size(this.state.filters)) {
       return this.state.files.filter((f) => {
         return _.every(this.state.filters, (filter, name) => {
@@ -115,20 +147,20 @@ class Search extends React.Component<{}, IFilterProps> {
         <div style={{ padding: 20 }}>
           <div className="subnav">
             <ul className="nav nav-tabs">
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Atlas View
+            <li className="nav-item">
+                <a onClick={()=>this.setTab("file")} className={`nav-link ${this.state.activeTab === "file" ? "active" : ""}`}>
+                  File View
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link active" href="#">
-                  File View
+                <a onClick={()=>this.setTab("atlas")} className={`nav-link ${this.state.activeTab === "atlas" ? "active" : ""}`}>
+                  Atlas View
                 </a>
               </li>
             </ul>
           </div>
 
-          <div className="fileTab">
+          <div className={`tab-content fileTab ${this.state.activeTab !== "file" ? "d-none" : ""}`}>
             <div className="filterControls">
               {/* <FilterSelection options={
                     _.map(
@@ -326,8 +358,8 @@ class Search extends React.Component<{}, IFilterProps> {
             <FileTable entities={this.filteredFiles}></FileTable>
           </div>
 
-          <div className="atlasTab">
-            <AtlasTable atlases={this.state.atlases} />
+          <div className={`tab-content atlasTab ${this.state.activeTab !== "atlas" ? "d-none" : ""}`}>
+            <WPAtlasTable atlasData={this.props.wpData} />
           </div>
         </div>
       );
@@ -335,14 +367,23 @@ class Search extends React.Component<{}, IFilterProps> {
   }
 }
 
-const FilterPage = () => {
+interface IFilterPageProps {
+    atlasData:any
+}
+
+const FilterPage = (props:IFilterPageProps) => {
   return (
     <>
       <HtanNavbar />
-      <Search />
+      
+      <Search wpData={props.atlasData} />
+
       <Footer />
     </>
   );
 };
 
 export default FilterPage;
+
+
+

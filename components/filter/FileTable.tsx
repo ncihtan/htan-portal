@@ -18,7 +18,7 @@ export default class FileTable extends React.Component<
         <table className={"table table-striped"}>
           <thead>
             <tr>
-              <th>
+              <th style={{width:30}}>
                 <input type="checkbox"></input>
               </th>
               <th>Filename</th>
