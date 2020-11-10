@@ -7,6 +7,7 @@ export default class FileTable extends React.Component<
 > {
   constructor(props: any) {
     super(props);
+
     //this.state = { filteredEntitites:[] };
   }
 
@@ -36,7 +37,7 @@ export default class FileTable extends React.Component<
                     <input type="checkbox"></input>
                   </td>
                   <td>{file.filename}</td>
-                  <td>{file.atlasid}</td>
+                  <td>{file.WPAtlas.title.rendered}</td>
                   <td>{file.Component.replace(/^bts:/, "")}</td>
                   <td>
                     {file.diagnosis && file.diagnosis.TissueorOrganofOrigin}

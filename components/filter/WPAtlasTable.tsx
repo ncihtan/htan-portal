@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { WPAtlas } from '../../types';
 
@@ -16,15 +17,23 @@ export const WPAtlasTable = (props:IWPAtlasTable) => {
                 <th>
                     Lead Institution
                 </th>
+                <th>
+                    
+                </th>
             </tr>
         </thead> 
         <tbody>
              {
                 props.atlasData.map((atlas)=>{
-                    console.log(atlas);
                     return <tr>
                         <td>{atlas.title.rendered}</td>
                         <td>{atlas.lead_institutions}</td>
+                        <td>
+                        <Link href={`./atlas/${atlas.htan_id.toLowerCase()}`}>
+                     <a>Data Release</a>
+                   </Link>
+
+                        </td>
                     </tr>
                 })
             }

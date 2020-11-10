@@ -42,6 +42,7 @@ enum PropNames {
   PrimaryDiagnosis = "PrimaryDiagnosis",
   Component = "Component",
   Biospecimen = "Biospecimen",
+  AtlasName = "AtlasName",
 }
 
 const propMap = {
@@ -57,6 +58,9 @@ const propMap = {
   [PropNames.Biospecimen]: {
     prop: "Biospecimen",
   },
+  [PropNames.AtlasName]: {
+    prop: "WPAtlas.title.rendered",
+  }
 };
 
 interface IFilterProps {
@@ -107,9 +111,8 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
   }
 
   componentDidMount(): void {
-    const data = loadData().then(({ files, atlases }) => {
+    const data = loadData(this.props.wpData).then(({ files, atlases }) => {
       const filteredFiles = files.filter((f) => !!f.diagnosis);
-
       this.setState({ files: filteredFiles, atlases: atlases });
     });
   }
@@ -134,6 +137,9 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
   }
 
   render() {
+
+
+
     var self = this;
     //@ts-ignore
     const patients = _(this.filteredFiles)
@@ -157,6 +163,16 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                   Atlas View
                 </a>
               </li>
+              <li className="nav-item">
+                <a className="nav-link disabled">
+                  Biospecimen View
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link disabled">
+                  Assay View
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -170,6 +186,37 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                         }
                     )
                 } /> */}
+
+                <div>
+                Atlas:&nbsp;
+                <div style={{ width: 300 }}>
+                  <Select
+                    isClearable
+                    isSearchable
+                    name="color"
+                    isMulti={true}
+                    options={_.map(
+                      this.getGroupsByProperty[PropNames.AtlasName],
+                      (val, key) => {
+                        return { value: key, label: `${key} (${val.length})` };
+                      }
+                    )}
+                    hideSelectedOptions={false}
+                    closeMenuOnSelect={false}
+                    onChange={
+                      //@ts-ignore
+                      (e: any) => {
+                        //@ts-ignore
+                        this.setFilter(
+                          PropNames.AtlasName,
+                          e ? e.map((option: any) => option.value) : []
+                        );
+                      }
+                    }
+                  />
+                </div>
+              </div>
+    
 
               <div>
                 Organ:&nbsp;
