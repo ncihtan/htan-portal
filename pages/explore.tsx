@@ -13,8 +13,8 @@ import {
     DataReleasePage,
     DataReleaseProps,
   } from "../components/DataReleasePage";
-  import { getAtlasList, WORDPRESS_BASE_URL } from "../ApiUtil";
-  import { GetStaticProps } from "next";
+import { getAtlasList, WORDPRESS_BASE_URL } from "../ApiUtil";
+import { GetStaticProps } from "next";
 import { WPAtlas } from "../types";
 import { WPAtlasTable } from "../components/filter/WPAtlasTable";
 
@@ -73,7 +73,7 @@ interface IFilterProps {
 class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
   constructor(props: any) {
     super(props);
-    this.state = { files: [], filters: {}, atlases: [], activeTab:"file" };
+    this.state = { files: [], filters: {}, atlases: [], activeTab:"atlas" };
   }
 
   get getGroupsByProperty() {
@@ -153,24 +153,24 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
         <div style={{ padding: 20 }}>
           <div className="subnav">
             <ul className="nav nav-tabs">
-            <li className="nav-item">
-                <a onClick={()=>this.setTab("file")} className={`nav-link ${this.state.activeTab === "file" ? "active" : ""}`}>
-                  File View
-                </a>
-              </li>
               <li className="nav-item">
                 <a onClick={()=>this.setTab("atlas")} className={`nav-link ${this.state.activeTab === "atlas" ? "active" : ""}`}>
-                  Atlas View
+                  Atlases
                 </a>
               </li>
               <li className="nav-item">
                 <a className="nav-link disabled">
-                  Biospecimen View
+                  Participants
                 </a>
               </li>
               <li className="nav-item">
                 <a className="nav-link disabled">
-                  Assay View
+                  Biospecimens
+                </a>
+              </li>
+              <li className="nav-item">
+                <a onClick={()=>this.setTab("file")} className={`nav-link ${this.state.activeTab === "file" ? "active" : ""}`}>
+                  Files
                 </a>
               </li>
             </ul>

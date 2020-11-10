@@ -46,7 +46,7 @@ const PostContent: React.FunctionComponent<{
       <Row>
         <Breadcrumb className="mt-3">
           <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="/data_releases">Data Release</Breadcrumb.Item>
+          <Breadcrumb.Item href="/explore">Explore</Breadcrumb.Item>
           <Breadcrumb.Item active>
             {wpAtlas ? wpAtlas.title.rendered : ""}
           </Breadcrumb.Item>

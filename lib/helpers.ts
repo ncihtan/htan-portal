@@ -63,7 +63,7 @@ export interface Entity {
   fileFormat: string;
   filename: string;
   HTANParentID: string;
-  WPAtlas:WPAtlas;
+  WPAtlas: WPAtlas;
   biospecimen: Entity | undefined;
   diagnosis: Entity | undefined;
 }
@@ -73,7 +73,7 @@ export interface Atlas {
   htan_name: string;
 }
 
-export async function loadData(WPAtlasData:WPAtlas[]) {
+export async function loadData(WPAtlasData: WPAtlas[]) {
   const data = await fetch("/sim.json").then((r) => r.json());
 
   const flatData: Entity[] = massageData(data);
@@ -90,11 +90,11 @@ export async function loadData(WPAtlasData:WPAtlas[]) {
     return obj.Component === "bts:Diagnosis";
   });
 
-  const altasMap = _.keyBy(WPAtlasData, (a)=>a.htan_id);
+  const altasMap = _.keyBy(WPAtlasData, (a) => a.htan_id);
 
   _.forEach(files, (file) => {
-    
-    file.WPAtlas = altasMap[`hta${ Number(file.atlasid.match(/.$/)![0]) + 1 }`];
+
+    file.WPAtlas = altasMap[`hta${Number(file.atlasid.match(/.$/)![0]) + 1}`];
 
     const specimen = _.find(biospecimen, {
       HTANBiospecimenID: file.HTANParentBiospecimenID,

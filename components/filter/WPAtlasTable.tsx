@@ -17,23 +17,18 @@ export const WPAtlasTable = (props:IWPAtlasTable) => {
                 <th>
                     Lead Institution
                 </th>
-                <th>
-                    
-                </th>
             </tr>
         </thead> 
         <tbody>
              {
                 props.atlasData.map((atlas)=>{
                     return <tr>
-                        <td>{atlas.title.rendered}</td>
-                        <td>{atlas.lead_institutions}</td>
                         <td>
-                        <Link href={`./atlas/${atlas.htan_id.toLowerCase()}`}>
-                     <a>Data Release</a>
-                   </Link>
-
+                            <Link href={`./atlas/${atlas.htan_id.toLowerCase()}`}>
+                                <a>{atlas.title.rendered}</a>
+                            </Link>
                         </td>
+                        <td>{atlas.lead_institutions}</td>
                     </tr>
                 })
             }

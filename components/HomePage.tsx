@@ -49,7 +49,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             <div style={{ display: "flex", justifyContent: "center" }}>
               <ButtonToolbar>
                 <Button
-                  href="/data_releases"
+                  href="/explore"
                   variant="primary"
                   className="mr-4"
                 >
