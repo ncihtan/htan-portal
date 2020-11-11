@@ -227,7 +227,7 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                     name="color"
                     isMulti={true}
                     options={_.map(
-                      this.getGroupsByProperty[PropNames.TissueorOrganofOrigin],
+                      this.getGroupsByPropertyFiltered[PropNames.TissueorOrganofOrigin],
                       (val, key) => {
                         return { value: key, label: `${key} (${val.length})` };
                       }
@@ -280,7 +280,7 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                     name="color"
                     isMulti={true}
                     options={_.map(
-                      this.getGroupsByProperty[PropNames.PrimaryDiagnosis],
+                      this.getGroupsByPropertyFiltered[PropNames.PrimaryDiagnosis],
                       (val, key) => {
                         return { value: key, label: `${key} (${val.length})` };
                       }
@@ -333,7 +333,7 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                     name="color"
                     isMulti={true}
                     options={_.map(
-                      this.getGroupsByProperty[PropNames.Component],
+                      this.getGroupsByPropertyFiltered[PropNames.Component],
                       (val, key) => {
                         return { value: key, label: `${key} (${val.length})` };
                       }

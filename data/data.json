@@ -49,8 +49,8 @@
               "40X",
               "48002x35558x1",
               "synapseUrl",
-              "http://imaging.humantumoratlas.org/girder/#item/5e29fa5c15eff3450e20df92",
-              "http://imaging.humantumoratlas.org/girder/api/v1/item/5e29fa5c15eff3450e20df92/tiles/thumbnail"
+              "https://imaging.htan.dev/girder/#item/5f6389581720fd517a5bcd19",
+              "https://imaging.htan.dev/girder/api/v1/item/5f6389581720fd517a5bcd19/tiles/thumbnail?token=null"
             ],
             [
               "TCGA-CS-4938-01B-01-BS1",
@@ -58,8 +58,8 @@
               "20X",
               "15936x17789x1",
               "synapseUrl",
-              "http://imaging.humantumoratlas.org/girder/#item/5e29fbb615eff3450e20e029",
-              "http://imaging.humantumoratlas.org/girder/api/v1/item/5e29fbb615eff3450e20e029/tiles/thumbnail"
+              "https://imaging.htan.dev/girder/#item/5f638acc1720fd517a5bcd1f",
+              "https://imaging.htan.dev/girder/api/v1/item/5f638acc1720fd517a5bcd1f/tiles/thumbnail?token=null"
             ]
           ]
         }
@@ -123,8 +123,8 @@
               "DNA 1,A488 background,A555 background,A647 background,DNA 2,A488 background,A555 background,A647 background,DNA 3,A488 background,LAG3,ARL13B,DNA 4,KI67,KERATIN,PD1,DNA 5,CD45RB,CD3D,PDL1,DNA 6,CD4,CD45,CD8A,DNA 7,CD163,CD68,CD14,DNA 8,CD11B,FOXP3,CD21,DNA 9,IBA1,ASMA,CD20,DNA 10,CD19,GFAP,GTUBULIN,DNA 11,LAMINAC,BANF1,LAMINB",
               "16843x16125x44x1",
               "synapseUrl",
-              "http://imaging.humantumoratlas.org/girder/#item/5cc255e1e6291400a24f9e48",
-              "http://imaging.humantumoratlas.org/girder/api/v1/item/5cc255e1e6291400a24f9e48/tiles/thumbnail"
+              "https://imaging.htan.dev/girder/#item/5f6389f71720fd517a5bcd1c",
+              "https://imaging.htan.dev/girder/api/v1/item/5f6389f71720fd517a5bcd1c/tiles/thumbnail"
             ]
           ]
         }
