@@ -102,7 +102,7 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
 
   setFilter(name: string, val: any) {
     const filters = Object.assign({}, this.state.filters);
-    if (val) {
+    if (val && val.length > 0) {
       filters[name] = val;
     } else {
       delete filters[name];
@@ -196,7 +196,7 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                     name="color"
                     isMulti={true}
                     options={_.map(
-                      this.getGroupsByProperty[PropNames.AtlasName],
+                      this.getGroupsByPropertyFiltered[PropNames.AtlasName],
                       (val, key) => {
                         return { value: key, label: `${key} (${val.length})` };
                       }
