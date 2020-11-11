@@ -10,30 +10,29 @@ import Select from "react-select";
 import getData from "../lib/getData";
 import fetch from "node-fetch";
 import {
-    DataReleasePage,
-    DataReleaseProps,
-  } from "../components/DataReleasePage";
+  DataReleasePage,
+  DataReleaseProps,
+} from "../components/DataReleasePage";
 import { getAtlasList, WORDPRESS_BASE_URL } from "../ApiUtil";
 import { GetStaticProps } from "next";
 import { WPAtlas } from "../types";
 import { WPAtlasTable } from "../components/filter/WPAtlasTable";
 
-
 export const getStaticProps: GetStaticProps = async (context) => {
-    let slugs = ["summary-blurb-data-release"];
-    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    let res = await fetch(overviewURL);
-    let data = await res.json();
-  
-    const atlases = await getAtlasList();
-  
-    return {
-      props: {
-        atlasData: atlases,
-        data,
-      },
-    };
+  let slugs = ["summary-blurb-data-release"];
+  let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
+  let res = await fetch(overviewURL);
+  let data = await res.json();
+
+  const atlases = await getAtlasList();
+
+  return {
+    props: {
+      atlasData: atlases,
+      data,
+    },
   };
+};
 
 const synapseData = getData();
 
@@ -60,20 +59,20 @@ const propMap = {
   },
   [PropNames.AtlasName]: {
     prop: "WPAtlas.title.rendered",
-  }
+  },
 };
 
 interface IFilterProps {
   files: Entity[];
   filters: { [key: string]: string[] };
   atlases: Atlas[];
-  activeTab:string;
+  activeTab: string;
 }
 
-class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
+class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
   constructor(props: any) {
     super(props);
-    this.state = { files: [], filters: {}, atlases: [], activeTab:"atlas" };
+    this.state = { files: [], filters: {}, atlases: [], activeTab: "atlas" };
   }
 
   get getGroupsByProperty() {
@@ -117,7 +116,7 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
     });
   }
 
-  setTab(activeTab:string){
+  setTab(activeTab: string) {
     this.setState({ activeTab });
   }
 
@@ -137,9 +136,6 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
   }
 
   render() {
-
-
-
     var self = this;
     //@ts-ignore
     const patients = _(this.filteredFiles)
@@ -154,29 +150,39 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
           <div className="subnav">
             <ul className="nav nav-tabs">
               <li className="nav-item">
-                <a onClick={()=>this.setTab("atlas")} className={`nav-link ${this.state.activeTab === "atlas" ? "active" : ""}`}>
+                <a
+                  onClick={() => this.setTab("atlas")}
+                  className={`nav-link ${
+                    this.state.activeTab === "atlas" ? "active" : ""
+                  }`}
+                >
                   Atlases
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link disabled">
-                  Participants
-                </a>
+                <a className="nav-link disabled">Participants</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link disabled">
-                  Biospecimens
-                </a>
+                <a className="nav-link disabled">Biospecimens</a>
               </li>
               <li className="nav-item">
-                <a onClick={()=>this.setTab("file")} className={`nav-link ${this.state.activeTab === "file" ? "active" : ""}`}>
+                <a
+                  onClick={() => this.setTab("file")}
+                  className={`nav-link ${
+                    this.state.activeTab === "file" ? "active" : ""
+                  }`}
+                >
                   Files
                 </a>
               </li>
             </ul>
           </div>
 
-          <div className={`tab-content fileTab ${this.state.activeTab !== "file" ? "d-none" : ""}`}>
+          <div
+            className={`tab-content fileTab ${
+              this.state.activeTab !== "file" ? "d-none" : ""
+            }`}
+          >
             <div className="filterControls">
               {/* <FilterSelection options={
                     _.map(
@@ -187,7 +193,7 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                     )
                 } /> */}
 
-                <div>
+              <div>
                 Atlas:&nbsp;
                 <div style={{ width: 300 }}>
                   <Select
@@ -216,7 +222,6 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                   />
                 </div>
               </div>
-    
 
               <div>
                 Organ:&nbsp;
@@ -227,7 +232,9 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                     name="color"
                     isMulti={true}
                     options={_.map(
-                      this.getGroupsByPropertyFiltered[PropNames.TissueorOrganofOrigin],
+                      this.getGroupsByPropertyFiltered[
+                        PropNames.TissueorOrganofOrigin
+                      ],
                       (val, key) => {
                         return { value: key, label: `${key} (${val.length})` };
                       }
@@ -280,7 +287,9 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
                     name="color"
                     isMulti={true}
                     options={_.map(
-                      this.getGroupsByPropertyFiltered[PropNames.PrimaryDiagnosis],
+                      this.getGroupsByPropertyFiltered[
+                        PropNames.PrimaryDiagnosis
+                      ],
                       (val, key) => {
                         return { value: key, label: `${key} (${val.length})` };
                       }
@@ -364,6 +373,14 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
 
               <div>
                 {
+                  _.keys(this.getGroupsByPropertyFiltered[PropNames.AtlasName])
+                    .length
+                }{" "}
+                Atlases
+              </div>
+
+              <div>
+                {
                   _.keys(
                     this.getGroupsByPropertyFiltered[PropNames.PrimaryDiagnosis]
                   ).length
@@ -405,7 +422,11 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
             <FileTable entities={this.filteredFiles}></FileTable>
           </div>
 
-          <div className={`tab-content atlasTab ${this.state.activeTab !== "atlas" ? "d-none" : ""}`}>
+          <div
+            className={`tab-content atlasTab ${
+              this.state.activeTab !== "atlas" ? "d-none" : ""
+            }`}
+          >
             <WPAtlasTable atlasData={this.props.wpData} />
           </div>
         </div>
@@ -415,14 +436,14 @@ class Search extends React.Component<{ wpData:WPAtlas[], }, IFilterProps> {
 }
 
 interface IFilterPageProps {
-    atlasData:any
+  atlasData: any;
 }
 
-const FilterPage = (props:IFilterPageProps) => {
+const FilterPage = (props: IFilterPageProps) => {
   return (
     <>
       <HtanNavbar />
-      
+
       <Search wpData={props.atlasData} />
 
       <Footer />
@@ -431,6 +452,3 @@ const FilterPage = (props:IFilterPageProps) => {
 };
 
 export default FilterPage;
-
-
-
