@@ -21,7 +21,7 @@ function togglePreview(on: any) {
 const HtanNavbar = () => (
   <Navbar bg="nav-purple" variant="dark" expand="lg" className={"main-nav"}>
     <Navbar.Brand href="/">
-      <img src="/logo.png" width="130" alt="HTAN Data Portal" />
+      <img src="/Updated-HTAN-Text-Logo.png" className={"htanlogo"} alt="HTAN Data Portal" />
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">

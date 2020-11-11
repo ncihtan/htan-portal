@@ -5,6 +5,13 @@ $primary-background: #5f008c;
   margin-left: -14px;
 }
 
+.navbar-brand {
+  img {
+    filter:invert(100%);
+    width:100px !important;
+  }
+}
+
 body {
   font-family: "Montserrat", sans-serif !important;
   font-size: 0.9rem;
