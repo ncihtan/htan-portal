@@ -76,21 +76,17 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
   }
 
   get getGroupsByProperty() {
-    const m: { [k: string]: any } = {};
-    _.forEach(propMap, (o, k) => {
-      m[k] = _.groupBy(this.state.files, (f) => {
-        //@ts-ignore
-        const val: string[] = _.at(f, [o.prop]);
-        return val ? val[0] : "other";
-      });
-    });
-    return m;
+    return this.groupsByProperty(this.state.files);
   }
 
   get getGroupsByPropertyFiltered() {
+    return this.groupsByProperty(this.filteredFiles);
+  }
+
+  groupsByProperty(files: Entity[]) {
     const m: any = {};
     _.forEach(propMap, (o, k) => {
-      m[k] = _.groupBy(this.filteredFiles, (f) => {
+      m[k] = _.groupBy(files, (f) => {
         //@ts-ignore
         const val = _.at(f, [o.prop]);
         return val ? val[0] : "other";
@@ -120,10 +116,10 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     this.setState({ activeTab });
   }
 
-  get filteredFiles() {
-    if (_.size(this.state.filters)) {
-      return this.state.files.filter((f) => {
-        return _.every(this.state.filters, (filter, name) => {
+  filterFiles(filters: { [key: string]: string[] }, files: Entity[]) {
+    if (_.size(filters)) {
+      return files.filter((f) => {
+        return _.every(filters, (filter, name) => {
           //@ts-ignore
           const val = _.at(f, propMap[name].prop);
           //@ts-ignore
@@ -131,8 +127,21 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
         });
       });
     } else {
-      return this.state.files;
+      return files;
     }
+  }
+
+  makeOptions(propName: string) {
+    const filteredFilesMinusOption = this.groupsByProperty(
+      this.filterFiles(_.omit(this.state.filters, [propName]), this.state.files)
+    )[propName];
+    return _.map(filteredFilesMinusOption, (val, key) => {
+      return { value: key, label: `${key} (${val.length})` };
+    });
+  }
+
+  get filteredFiles() {
+    return this.filterFiles(this.state.filters, this.state.files);
   }
 
   render() {
@@ -201,12 +210,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     isSearchable
                     name="color"
                     isMulti={true}
-                    options={_.map(
-                      this.getGroupsByPropertyFiltered[PropNames.AtlasName],
-                      (val, key) => {
-                        return { value: key, label: `${key} (${val.length})` };
-                      }
-                    )}
+                    options={this.makeOptions(PropNames.AtlasName)}
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
@@ -231,14 +235,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     isSearchable
                     name="color"
                     isMulti={true}
-                    options={_.map(
-                      this.getGroupsByPropertyFiltered[
-                        PropNames.TissueorOrganofOrigin
-                      ],
-                      (val, key) => {
-                        return { value: key, label: `${key} (${val.length})` };
-                      }
-                    )}
+                    options={this.makeOptions(PropNames.TissueorOrganofOrigin)}
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
@@ -286,14 +283,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     isSearchable
                     name="color"
                     isMulti={true}
-                    options={_.map(
-                      this.getGroupsByPropertyFiltered[
-                        PropNames.PrimaryDiagnosis
-                      ],
-                      (val, key) => {
-                        return { value: key, label: `${key} (${val.length})` };
-                      }
-                    )}
+                    options={this.makeOptions(PropNames.PrimaryDiagnosis)}
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
@@ -341,12 +331,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     isSearchable
                     name="color"
                     isMulti={true}
-                    options={_.map(
-                      this.getGroupsByPropertyFiltered[PropNames.Component],
-                      (val, key) => {
-                        return { value: key, label: `${key} (${val.length})` };
-                      }
-                    )}
+                    options={this.makeOptions(PropNames.Component)}
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={

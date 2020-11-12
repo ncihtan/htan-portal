@@ -93,8 +93,8 @@ export async function loadData(WPAtlasData: WPAtlas[]) {
   const atlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id);
 
   _.forEach(files, (file) => {
-
-    file.WPAtlas = atlasMap[`hta${Number(file.atlasid.split("_")[0].substring(3)) + 1}`];
+    file.WPAtlas =
+      atlasMap[`hta${Number(file.atlasid.split("_")[0].substring(3)) + 1}`];
 
     const specimen = _.find(biospecimen, {
       HTANBiospecimenID: file.HTANParentBiospecimenID,
