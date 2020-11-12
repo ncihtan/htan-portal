@@ -170,7 +170,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link disabled">Participants</a>
+                <a className="nav-link disabled">Cases</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link disabled">Biospecimens</a>
@@ -385,7 +385,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                 Cancer Types
               </div>
 
-              <div>{patients} Participants</div>
+              <div>{patients} Cases</div>
 
               <div>
                 {
@@ -406,13 +406,9 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
               </div>
             </div>
             <FileTable entities={this.filteredFiles}></FileTable>
-              <Button
-                href="/explore"
-                variant="primary"
-                className="mr-4"
-              >
-                Download
-              </Button>
+            <Button href="/explore" variant="primary" className="mr-4">
+              Download
+            </Button>
           </div>
 
           <div

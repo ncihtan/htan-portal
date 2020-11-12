@@ -31,7 +31,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
   const dashboardData = [
     { text: "12", description: "Atlases" },
     { text: "11", description: "Organs" },
-    { text: ">1K", description: "Participants" },
+    { text: ">1K", description: "Cases" },
     { text: ">10K", description: "Biospecimens" },
   ];
 
