@@ -37,7 +37,7 @@
               "schemaMetadata": { "renderType": "dsaImage" }
             },
             {
-              "name": "DSA Thumbnail",
+              "name": "Thumbnail",
               "description": "",
               "schemaMetadata": { "renderType": "dsaThumbnail" }
             }
@@ -109,7 +109,7 @@
               "schemaMetadata": { "renderType": "dsaImage" }
             },
             {
-              "name": "DSA Thumbnail",
+              "name": "Thumbnail",
               "description": "",
               "schemaMetadata": { "renderType": "dsaThumbnail" }
             }
