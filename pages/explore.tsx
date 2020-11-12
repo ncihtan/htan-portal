@@ -17,6 +17,7 @@ import { getAtlasList, WORDPRESS_BASE_URL } from "../ApiUtil";
 import { GetStaticProps } from "next";
 import { WPAtlas } from "../types";
 import { WPAtlasTable } from "../components/filter/WPAtlasTable";
+import { Button } from "react-bootstrap";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   let slugs = ["summary-blurb-data-release"];
@@ -367,6 +368,17 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
               <div>
                 {
                   _.keys(
+                    this.getGroupsByPropertyFiltered[
+                      PropNames.TissueorOrganofOrigin
+                    ]
+                  ).length
+                }{" "}
+                Organs
+              </div>
+
+              <div>
+                {
+                  _.keys(
                     this.getGroupsByPropertyFiltered[PropNames.PrimaryDiagnosis]
                   ).length
                 }{" "}
@@ -382,18 +394,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     .uniq()
                     .value().length
                 }{" "}
-                Biospecimen
-              </div>
-
-              <div>
-                {
-                  _.keys(
-                    this.getGroupsByPropertyFiltered[
-                      PropNames.TissueorOrganofOrigin
-                    ]
-                  ).length
-                }{" "}
-                Organs
+                Biospecimens
               </div>
 
               <div>
@@ -405,6 +406,13 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
               </div>
             </div>
             <FileTable entities={this.filteredFiles}></FileTable>
+              <Button
+                href="/explore"
+                variant="primary"
+                className="mr-4"
+              >
+                Download
+              </Button>
           </div>
 
           <div

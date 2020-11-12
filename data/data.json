@@ -123,8 +123,8 @@
               "DNA 1,A488 background,A555 background,A647 background,DNA 2,A488 background,A555 background,A647 background,DNA 3,A488 background,LAG3,ARL13B,DNA 4,KI67,KERATIN,PD1,DNA 5,CD45RB,CD3D,PDL1,DNA 6,CD4,CD45,CD8A,DNA 7,CD163,CD68,CD14,DNA 8,CD11B,FOXP3,CD21,DNA 9,IBA1,ASMA,CD20,DNA 10,CD19,GFAP,GTUBULIN,DNA 11,LAMINAC,BANF1,LAMINB",
               "16843x16125x44x1",
               "synapseUrl",
-              "https://imaging.htan.dev/girder/#item/5f6389f71720fd517a5bcd1c",
-              "https://imaging.htan.dev/girder/api/v1/item/5f6389f71720fd517a5bcd1c/tiles/thumbnail"
+              "https://www.cycif.org/data/tnp-2020/osd-crc-case-1-ffpe-cycif-pilot#s=0#w=0#g=0#m=-1#a=-100_-100#v=0.5_0.5_0.5#o=-100_-100_1_1#p=Q",
+              "https://user-images.githubusercontent.com/1334004/98955667-299d4380-24cd-11eb-802a-32d9e31e3b90.png"
             ]
           ]
         }
