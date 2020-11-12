@@ -90,11 +90,11 @@ export async function loadData(WPAtlasData: WPAtlas[]) {
     return obj.Component === "bts:Diagnosis";
   });
 
-  const altasMap = _.keyBy(WPAtlasData, (a) => a.htan_id);
+  const atlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id);
 
   _.forEach(files, (file) => {
 
-    file.WPAtlas = altasMap[`hta${Number(file.atlasid.match(/.$/)![0]) + 1}`];
+    file.WPAtlas = atlasMap[`hta${Number(file.atlasid.split("_")[0].substring(3)) + 1}`];
 
     const specimen = _.find(biospecimen, {
       HTANBiospecimenID: file.HTANParentBiospecimenID,
