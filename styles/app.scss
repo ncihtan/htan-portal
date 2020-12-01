@@ -203,3 +203,39 @@ table {
 .container {
   margin-left:20px !important;
 }
+
+.filter {
+  padding-bottom: 10px;
+
+  .attributeGroup {
+    color: #666;
+    padding-right: 10px;
+
+    .attributeGroupName {
+      &:hover {
+        text-decoration: line-through;
+        cursor: pointer;
+      }
+    }
+
+    .logicalOr {
+      font-style: italic;
+    }
+
+    .logicalParentheses {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .attributeValue {
+      color: #212529;
+      padding-left: 10px;
+      padding-right: 10px;
+
+      &:hover {
+        text-decoration: line-through;
+        cursor: pointer;
+      }
+    }
+  }
+}

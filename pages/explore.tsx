@@ -48,18 +48,23 @@ enum PropNames {
 const propMap = {
   [PropNames.TissueorOrganofOrigin]: {
     prop: "diagnosis.TissueorOrganofOrigin",
+    displayName: "Organ"
   },
   [PropNames.PrimaryDiagnosis]: {
     prop: "diagnosis.PrimaryDiagnosis",
+    displayName: "Diagnosis"
   },
   [PropNames.Component]: {
     prop: "Component",
+    displayName: "Assay"
   },
   [PropNames.Biospecimen]: {
     prop: "Biospecimen",
+    displayName: "Biospecimen"
   },
   [PropNames.AtlasName]: {
     prop: "WPAtlas.title.rendered",
+    displayName: "Atlas"
   },
 };
 
@@ -74,6 +79,8 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
   constructor(props: any) {
     super(props);
     this.state = { files: [], filters: {}, atlases: [], activeTab: "atlas" };
+
+    this.isOptionSelected = this.isOptionSelected.bind(this);
   }
 
   get getGroupsByProperty() {
@@ -96,13 +103,22 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     return m;
   }
 
-  setFilter(name: string, val: any) {
+  setFilter(groupNames: string[], options: any) {
     const filters = Object.assign({}, this.state.filters);
-    if (val && val.length > 0) {
-      filters[name] = val;
+
+    if (options && options.length > 0) {
+      const optionsByGroup = _.groupBy(options, 'group');
+      if (optionsByGroup) {
+        Object.keys(optionsByGroup).forEach(group => {
+          filters[group] = optionsByGroup[group].map(option => option.value);
+        });
+      }
     } else {
-      delete filters[name];
+      groupNames.forEach(group => {
+        delete filters[group];
+      });
     }
+    console.log(filters);
     this.setState({ filters: filters });
   }
 
@@ -137,8 +153,12 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
       this.filterFiles(_.omit(this.state.filters, [propName]), this.state.files)
     )[propName];
     return _.map(filteredFilesMinusOption, (val, key) => {
-      return { value: key, label: `${key} (${val.length})` };
+      return { value: key, label: `${key} (${val.length})`, group: propName };
     });
+  }
+
+  isOptionSelected(option: {value:string, label:string, group:string}) {
+    return this.state && Object.keys(this.state.filters).length > 0 && option.group.length > 0 && this.state.filters[option.group] && this.state.filters[option.group].includes(option.value);
   }
 
   get filteredFiles() {
@@ -204,10 +224,43 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                 } /> */}
 
               <div>
-                Atlas:&nbsp;
                 <div style={{ width: 300 }}>
                   <Select
-                    isClearable
+                    isSearchable
+                    isClearable={false}
+                    name="searchAll"
+                    placeholder="Search all filters"
+                    controlShouldRenderValue={false}
+                    isMulti={true}
+                    options={ [PropNames.AtlasName,
+                    PropNames.TissueorOrganofOrigin,
+                    PropNames.PrimaryDiagnosis,
+                    PropNames.Component].map(propName => { return {label:
+                    propMap[propName].displayName, options: this.makeOptions(propName).map((option) => Object.assign(option, {"group":propName}))}
+                    } ) }
+                    hideSelectedOptions={false}
+                    closeMenuOnSelect={false}
+                    onChange={
+                      //@ts-ignore
+                      (e: any) => {
+                        //@ts-ignore
+                        this.setFilter(
+                          [PropNames.AtlasName, PropNames.TissueorOrganofOrigin, PropNames.PrimaryDiagnosis, PropNames.Component],
+                          e ? e : []
+                        );
+                      }
+                    }
+                    isOptionSelected={this.isOptionSelected}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div style={{ width: 300 }}>
+                  <Select
+                    placeholder="Atlas"
+                    controlShouldRenderValue={false}
+                    isClearable={false}
                     isSearchable
                     name="color"
                     isMulti={true}
@@ -219,20 +272,22 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                       (e: any) => {
                         //@ts-ignore
                         this.setFilter(
-                          PropNames.AtlasName,
-                          e ? e.map((option: any) => option.value) : []
+                          [PropNames.AtlasName],
+                          e ? e : []
                         );
                       }
                     }
+                    isOptionSelected={this.isOptionSelected}
                   />
                 </div>
               </div>
 
               <div>
-                Organ:&nbsp;
                 <div style={{ width: 300 }}>
                   <Select
-                    isClearable
+                    placeholder="Organ"
+                    controlShouldRenderValue={false}
+                    isClearable={false}
                     isSearchable
                     name="color"
                     isMulti={true}
@@ -244,11 +299,12 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                       (e: any) => {
                         //@ts-ignore
                         this.setFilter(
-                          PropNames.TissueorOrganofOrigin,
-                          e ? e.map((option: any) => option.value) : []
+                          [PropNames.TissueorOrganofOrigin],
+                          e ? e : []
                         );
                       }
                     }
+                    isOptionSelected={this.isOptionSelected}
                   />
                 </div>
               </div>
@@ -277,10 +333,11 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                   </select> */}
 
               <div>
-                Diagnosis:&nbsp;
                 <div style={{ width: 300 }}>
                   <Select
-                    isClearable
+                    placeholder="Diagnosis"
+                    controlShouldRenderValue={false}
+                    isClearable={false}
                     isSearchable
                     name="color"
                     isMulti={true}
@@ -292,11 +349,12 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                       (e: any) => {
                         //@ts-ignore
                         this.setFilter(
-                          PropNames.PrimaryDiagnosis,
-                          e ? e.map((option: any) => option.value) : []
+                          [PropNames.PrimaryDiagnosis],
+                          e ? e : []
                         );
                       }
                     }
+                    isOptionSelected={this.isOptionSelected}
                   />
                 </div>
               </div>
@@ -325,10 +383,11 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                   </select> */}
 
               <div>
-                Assay:&nbsp;
                 <div style={{ width: 300 }}>
                   <Select
-                    isClearable
+                    placeholder="Assay"
+                    controlShouldRenderValue={false}
+                    isClearable={false}
                     isSearchable
                     name="color"
                     isMulti={true}
@@ -340,14 +399,40 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                       (e: any) => {
                         //@ts-ignore
                         this.setFilter(
-                          PropNames.Component,
-                          e ? e.map((option: any) => option.value) : []
+                          [PropNames.Component],
+                          e ? e : []
                         );
                       }
                     }
+                    isOptionSelected={this.isOptionSelected}
                   />
                 </div>
               </div>
+            </div>
+
+            <div className={"filter"}>
+              {Object.keys(this.state.filters).map(filter => {
+                return (
+                  <span className="attributeGroup">
+                    <span className="attributeGroupName">{propMap[PropNames[filter as keyof typeof PropNames]].displayName}</span>
+
+                    {this.state.filters[filter].map((value, i, values) => { 
+                      const numberOfValues = values.length;
+                      const openParenthesis = numberOfValues > 1 && i == 0? <span className="logicalParentheses">(</span> : null;
+                      const addOr = numberOfValues > 1 && i < numberOfValues - 1? <span className="logicalOr">OR</span> : null;
+                      const closeParenthesis = numberOfValues > 1 && i == numberOfValues - 1? <span className="logicalParentheses">)</span> : null;
+
+                      return (
+                        <span className="attributeValues">
+                          {openParenthesis}
+                          <span className="attributeValue">{value}</span>
+                          {addOr}
+                          {closeParenthesis}
+                        </span>
+                      )})}
+                  </span>
+                );
+              })}
             </div>
 
             <div className={"summary"}>
