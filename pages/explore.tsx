@@ -132,7 +132,6 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
         delete filters[group];
       });
     }
-    console.log(filters);
     this.setState({ filters: filters });
   }
 
