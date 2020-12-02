@@ -6,7 +6,7 @@ import { loadData, Entity, Atlas } from "../lib/helpers";
 import AtlasTable from "../components/filter/AtlasTable";
 import FileTable from "../components/filter/FileTable";
 import FilterSelection from "../components/filter/FilterSelection";
-import Select from "react-select";
+import Select, { ActionMeta, ValueType } from "react-select";
 import getData from "../lib/getData";
 import fetch from "node-fetch";
 import {
@@ -36,6 +36,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 const synapseData = getData();
+
+type ExploreOptionType = {
+  value: string;
+  label: string;
+  group: string;
+}
 
 enum PropNames {
   TissueorOrganofOrigin = "TissueorOrganofOrigin",
@@ -103,17 +109,25 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     return m;
   }
 
-  setFilter(groupNames: string[], options: any) {
+  setFilter(groupNames: string[], actionMeta: ActionMeta<ExploreOptionType>) {
     const filters = Object.assign({}, this.state.filters);
 
-    if (options && options.length > 0) {
-      const optionsByGroup = _.groupBy(options, 'group');
-      if (optionsByGroup) {
-        Object.keys(optionsByGroup).forEach(group => {
-          filters[group] = optionsByGroup[group].map(option => option.value);
-        });
+    if (actionMeta.option) {
+      if (actionMeta.action === "deselect-option") {
+        const option = actionMeta.option;
+        filters[option.group] = filters[option.group].filter(value => value != option.value);
+        if (filters[option.group].length === 0) {
+          delete filters[option.group];
+        }
+      } else if (actionMeta.action === "select-option") {
+        const option = actionMeta.option;
+        if (filters[option.group]) {
+          filters[option.group].push(option.value);
+        } else {
+          filters[option.group] = [option.value];
+        }
       }
-    } else {
+    } else if (actionMeta.action === "clear") {
       groupNames.forEach(group => {
         delete filters[group];
       });
@@ -148,7 +162,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     }
   }
 
-  makeOptions(propName: string) {
+  makeOptions(propName: string): ExploreOptionType[] {
     const filteredFilesMinusOption = this.groupsByProperty(
       this.filterFiles(_.omit(this.state.filters, [propName]), this.state.files)
     )[propName];
@@ -158,7 +172,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
   }
 
   isOptionSelected(option: {value:string, label:string, group:string}) {
-    return this.state && Object.keys(this.state.filters).length > 0 && option.group.length > 0 && this.state.filters[option.group] && this.state.filters[option.group].includes(option.value);
+    return Object.keys(this.state.filters).length > 0 && option.group.length > 0 && this.state.filters[option.group] && this.state.filters[option.group].includes(option.value);
   }
 
   get filteredFiles() {
@@ -241,12 +255,10 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
+                      (value: any, actionMeta: ActionMeta<ExploreOptionType>) => {
                         this.setFilter(
                           [PropNames.AtlasName, PropNames.TissueorOrganofOrigin, PropNames.PrimaryDiagnosis, PropNames.Component],
-                          e ? e : []
+                          actionMeta
                         );
                       }
                     }
@@ -268,12 +280,10 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
+                      (value: any, actionMeta: ActionMeta<ExploreOptionType>) => {
                         this.setFilter(
                           [PropNames.AtlasName],
-                          e ? e : []
+                          actionMeta
                         );
                       }
                     }
@@ -295,12 +305,10 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
+                      (value: any, actionMeta: ActionMeta<ExploreOptionType>) => {
                         this.setFilter(
                           [PropNames.TissueorOrganofOrigin],
-                          e ? e : []
+                          actionMeta
                         );
                       }
                     }
@@ -345,12 +353,10 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
+                      (value: any, actionMeta: ActionMeta<ExploreOptionType>) => {
                         this.setFilter(
                           [PropNames.PrimaryDiagnosis],
-                          e ? e : []
+                          actionMeta
                         );
                       }
                     }
@@ -395,12 +401,10 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     hideSelectedOptions={false}
                     closeMenuOnSelect={false}
                     onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
+                      (value: any, actionMeta: ActionMeta<ExploreOptionType>) => {
                         this.setFilter(
                           [PropNames.Component],
-                          e ? e : []
+                          actionMeta
                         );
                       }
                     }
@@ -411,10 +415,13 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
             </div>
 
             <div className={"filter"}>
-              {Object.keys(this.state.filters).map(filter => {
+              {Object.keys(this.state.filters).map((filter, i, filters) => {
+                const numberOfAttributes = filters.length;
+                  const addAnd = numberOfAttributes > 1 && i < numberOfAttributes - 1? <span className="logicalAnd">AND</span> : null;
+
                 return (
                   <span className="attributeGroup">
-                    <span className="attributeGroupName">{propMap[PropNames[filter as keyof typeof PropNames]].displayName}</span>
+                    <span className="attributeGroupName" onClick={() => { this.setFilter([filter], {action:"clear"}) }}>{propMap[PropNames[filter as keyof typeof PropNames]].displayName}</span>
 
                     {this.state.filters[filter].map((value, i, values) => { 
                       const numberOfValues = values.length;
@@ -425,11 +432,12 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                       return (
                         <span className="attributeValues">
                           {openParenthesis}
-                          <span className="attributeValue">{value}</span>
+                          <span className="attributeValue" onClick={() => { this.setFilter([filter], {action:"deselect-option", option: {"label": "", value, group:filter}}) }}>{value}</span>
                           {addOr}
                           {closeParenthesis}
                         </span>
                       )})}
+                      {addAnd}
                   </span>
                 );
               })}
