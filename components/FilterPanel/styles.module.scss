@@ -1,0 +1,16 @@
+.filterPanel {
+    position: relative;
+    border: 1px solid #ddd;
+}
+
+.panel {
+    position: absolute;
+    background: white;
+    left: 20px;
+    right: 20px;
+    padding: 20px;
+    top: 0;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1), 0 4px 11px hsla(0, 0%, 0%, 0.1);
+    border-radius: 4px;
+}
