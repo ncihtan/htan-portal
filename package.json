@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-decorators": "^7.12.1",
     "@types/jmespath": "^0.15.0",
     "@types/micro-cors": "^0.1.0",
     "@types/rc-tooltip": "^3.7.2",
@@ -20,7 +22,7 @@
     "jmespath": "^0.15.0",
     "lodash": "^4.17.15",
     "micro-cors": "^0.1.1",
-    "mobx": "^6.0.1",
+    "mobx": "^6.0.4",
     "mobx-react": "^7.0.0",
     "next": "9.3.0",
     "node-fetch": "^2.6.0",

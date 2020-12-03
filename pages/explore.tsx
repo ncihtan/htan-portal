@@ -9,6 +9,9 @@ import FilterSelection from "../components/filter/FilterSelection";
 import Select, { ActionMeta, ValueType } from "react-select";
 import getData from "../lib/getData";
 import fetch from "node-fetch";
+
+import {makeObservable, observable} from "mobx";
+
 import {
   DataReleasePage,
   DataReleaseProps,
@@ -18,6 +21,7 @@ import { GetStaticProps } from "next";
 import { WPAtlas } from "../types";
 import { WPAtlasTable } from "../components/filter/WPAtlasTable";
 import { Button } from "react-bootstrap";
+import {observer} from "mobx-react";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   let slugs = ["summary-blurb-data-release"];
@@ -81,12 +85,18 @@ interface IFilterProps {
   activeTab: string;
 }
 
-class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
+@observer
+ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
   constructor(props: any) {
     super(props);
-    this.state = { files: [], filters: {}, atlases: [], activeTab: "atlas" };
+    this.state = { files: [], filters: {}, atlases: [], activeTab: "file" };
 
     this.isOptionSelected = this.isOptionSelected.bind(this);
+
+    //@ts-ignore
+    if (typeof window !== 'undefined') (window as any).me = this;
+
+    makeObservable(this);
   }
 
   get getGroupsByProperty() {
@@ -180,6 +190,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
 
   render() {
     var self = this;
+
     //@ts-ignore
     const patients = _(this.filteredFiles)
       .filter((f) => f.biospecimen && f.biospecimen.HTANParentID)
@@ -514,7 +525,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
       );
     }
   }
-}
+};
 
 interface IFilterPageProps {
   atlasData: any;
