@@ -3,19 +3,14 @@ import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
 import _ from 'lodash';
 import { loadData, Entity, Atlas } from '../lib/helpers';
-import AtlasTable from '../components/filter/AtlasTable';
 import FileTable from '../components/filter/FileTable';
-import FilterSelection from '../components/filter/FilterSelection';
 import Select, { ActionMeta, ValueType } from 'react-select';
 import getData from '../lib/getData';
 import fetch from 'node-fetch';
 
 import { action, computed, makeObservable, observable, toJS } from 'mobx';
 
-import {
-    DataReleasePage,
-    DataReleaseProps,
-} from '../components/DataReleasePage';
+
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
 import { GetStaticProps } from 'next';
 import { WPAtlas } from '../types';
@@ -25,7 +20,7 @@ import { observer } from 'mobx-react';
 import FilterPanel from '../components/FilterPanel/FilterPanel';
 import {
     ExploreOptionType,
-    IFilterProps,
+    IFilterProps, IFiltersByGroupName,
     PropMap,
     PropNames,
 } from '../lib/types';
@@ -81,9 +76,9 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
         return m;
     }
 
-    @observable someValue: any[] = [];
+    @observable.ref someValue: ExploreOptionType[] = [];
 
-    @computed get selectedFiltersByGroupName() {
+    @computed get selectedFiltersByGroupName() : IFiltersByGroupName {
         return _.groupBy(this.someValue, (item) => {
             return item.group;
         });
@@ -91,31 +86,25 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
 
     @action.bound
     setFilter(groupNames: string[], actionMeta: ActionMeta<ExploreOptionType>) {
-        const filters = Object.assign({}, this.state.filters);
+        //const filters = Object.assign({}, this.state.filters);
 
-        if (actionMeta.option) {
+        if (actionMeta && actionMeta.option) {
+            // first remove the item
+            this.someValue = this.someValue.filter((o)=>{
+                return o.group !== actionMeta!.option!.group! || o.value !== actionMeta!.option!.value!;
+            });
+
             if (actionMeta.action === 'deselect-option') {
                 const option = actionMeta.option;
-                filters[option.group] = filters[option.group].filter(
-                    (value) => value != option.value
-                );
-                if (filters[option.group].length === 0) {
-                    delete filters[option.group];
-                }
             } else if (actionMeta.action === 'select-option') {
                 const option = actionMeta.option;
-                if (filters[option.group]) {
-                    filters[option.group].push(option.value);
-                } else {
-                    filters[option.group] = [option.value];
-                }
+                this.someValue = this.someValue.concat([option]);
             }
         } else if (actionMeta.action === 'clear') {
-            groupNames.forEach((group) => {
-                delete filters[group];
+            this.someValue = this.someValue.filter((o)=>{
+                return o.group !== actionMeta!.option!.group
             });
         }
-        this.setState({ filters: filters });
     }
 
     componentDidMount(): void {
@@ -129,14 +118,18 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
         this.setState({ activeTab });
     }
 
-    filterFiles(filters: { [key: string]: string[] }, files: Entity[]) {
+    filterFiles(filters: { [key: string]: ExploreOptionType[] }, files: Entity[]) {
         if (_.size(filters)) {
+
+
+
+            // find the files where the passed filters match
             return files.filter((f) => {
                 return _.every(filters, (filter, name) => {
                     //@ts-ignore
                     const val = _.at(f, PropMap[name].prop);
                     //@ts-ignore
-                    return val ? filter.includes(val[0]) : false;
+                    return val ? filter.map((f)=>f.value).includes(val[0]) : false;
                 });
             });
         } else {
@@ -147,34 +140,32 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     makeOptions(propName: string): ExploreOptionType[] {
         const filteredFilesMinusOption = this.groupsByProperty(
             this.filterFiles(
-                _.omit(this.state.filters, [propName]),
+                _.omit(this.selectedFiltersByGroupName, [propName]),
                 this.state.files
             )
         )[propName];
-        return _.map(filteredFilesMinusOption, (val, key) => {
+
+        return _.map(this.getGroupsByProperty[propName], (val, key) => {
+            const count = key in filteredFilesMinusOption ? filteredFilesMinusOption[key].length : 0;
             return {
                 value: key,
-                label: `${key} (${val.length})`,
+                label: `${key} (${count})`,
                 group: propName,
+                count
             };
         });
     }
 
-    isOptionSelected = (option: {
-        value: string;
-        label: string;
-        group: string;
-    }) => {
+    isOptionSelected = (option:ExploreOptionType) => {
         return (
-            option.group in this.selectedFiltersByGroupName &&
-            this.selectedFiltersByGroupName[option.group].find(
-                (o: any) => o.value === option.value
-            )
+            _.find(this.someValue,
+                (o:ExploreOptionType) => o.value === option.value && option.group === o.group
+            ) !== undefined
         );
     };
 
     get filteredFiles() {
-        return this.filterFiles(this.state.filters, this.state.files);
+        return this.filterFiles(this.selectedFiltersByGroupName, this.state.files);
     }
 
     @action.bound handleChange(
@@ -182,7 +173,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
         actionMeta: ActionMeta<ExploreOptionType>
     ) {
         value.forEach((valueType: string) => {
-            this.someValue.push(actionMeta.option);
+            this.someValue = this.someValue.concat([actionMeta.option!]);
         });
     }
 
@@ -242,14 +233,6 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                         }`}
                     >
                         <div className="filterControls">
-                            {/* <FilterSelection options={
-                    _.map(
-                        this.getGroupsByProperty[PropNames.TissueorOrganofOrigin],
-                        (val, key) => {
-                            return key
-                        }
-                    )
-                } /> */}
 
                             <div>
                                 <div style={{ width: 300 }}>
@@ -265,6 +248,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                             PropNames.TissueorOrganofOrigin,
                                             PropNames.PrimaryDiagnosis,
                                             PropNames.Component,
+                                            PropNames.Stage
                                         ].map((propName) => {
                                             return {
                                                 label:
@@ -307,6 +291,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                                         setFilter={
                                                             this.setFilter
                                                         }
+                                                        filters={this.selectedFiltersByGroupName}
                                                         options={this.makeOptions(
                                                             PropNames.PrimaryDiagnosis
                                                         )}
@@ -320,6 +305,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                                         setFilter={
                                                             this.setFilter
                                                         }
+                                                        filters={this.selectedFiltersByGroupName}
                                                         options={this.makeOptions(
                                                             PropNames.Stage
                                                         )}
@@ -379,81 +365,6 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                 </div>
                             </div>
 
-                            {/* <select
-                    className="form-control"
-                    placeholder="helo"
-                    style={{ marginBottom: 20, maxWidth: 200 }}
-                    onChange={function (e: any) {
-                      self.setFilter(
-                        PropNames.TissueorOrganofOrigin,
-                        [e.target.value]
-                      );
-                    }.bind(this)}
-                  >
-                    {_.map(
-                      this.getGroupsByProperty[PropNames.TissueorOrganofOrigin],
-                      (val, key) => {
-                        return (
-                          <option value={key}>
-                            {key} ({val.length})
-                          </option>
-                        );
-                      }
-                    )}
-                  </select> */}
-
-                            {/*<div>*/}
-                            {/*    <div style={{ width: 300 }}>*/}
-                            {/*        <Select*/}
-                            {/*            placeholder="Diagnosis"*/}
-                            {/*            controlShouldRenderValue={false}*/}
-                            {/*            isClearable={false}*/}
-                            {/*            isSearchable*/}
-                            {/*            name="color"*/}
-                            {/*            isMulti={true}*/}
-                            {/*            options={this.makeOptions(*/}
-                            {/*                PropNames.PrimaryDiagnosis*/}
-                            {/*            )}*/}
-                            {/*            hideSelectedOptions={false}*/}
-                            {/*            closeMenuOnSelect={false}*/}
-                            {/*            onChange={(*/}
-                            {/*                value: any,*/}
-                            {/*                actionMeta: ActionMeta<*/}
-                            {/*                    ExploreOptionType*/}
-                            {/*                >*/}
-                            {/*            ) => {*/}
-                            {/*                this.setFilter(*/}
-                            {/*                    [PropNames.PrimaryDiagnosis],*/}
-                            {/*                    actionMeta*/}
-                            {/*                );*/}
-                            {/*            }}*/}
-                            {/*            isOptionSelected={this.isOptionSelected}*/}
-                            {/*        />*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-
-                            {/* <select
-                    className="form-control"
-                    style={{ marginBottom: 20, maxWidth: 200 }}
-                    onChange={function (e) {
-                      self.setFilter(
-                        PropNames.PrimaryDiagnosis,
-                        [e.target.value]
-                      );
-                      //this.setState({selectedDiagnosis: e.target.value})
-                    }}
-                  >
-                    {_.map(
-                      this.getGroupsByProperty[PropNames.PrimaryDiagnosis],
-                      (val, key) => {
-                        return (
-                          <option value={key}>
-                            {key} ({val.length})
-                          </option>
-                        );
-                      }
-                    )}
-                  </select> */}
 
                             <div>
                                 <div style={{ width: 300 }}>
@@ -487,7 +398,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                         </div>
 
                         <div className={'filter'}>
-                            {Object.keys(this.state.filters).map(
+                            {Object.keys(this.selectedFiltersByGroupName).map(
                                 (filter, i, filters) => {
                                     const numberOfAttributes = filters.length;
                                     const addAnd =
@@ -517,7 +428,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                                 }
                                             </span>
 
-                                            {this.state.filters[filter].map(
+                                            {this.selectedFiltersByGroupName[filter].map(
                                                 (value, i, values) => {
                                                     const numberOfValues =
                                                         values.length;
@@ -563,14 +474,14 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                                                             option: {
                                                                                 label:
                                                                                     '',
-                                                                                value,
+                                                                                value:value.value,
                                                                                 group: filter,
                                                                             },
                                                                         }
                                                                     );
                                                                 }}
                                                             >
-                                                                {value}
+                                                                {value.value}
                                                             </span>
                                                             {addOr}
                                                             {closeParenthesis}
@@ -649,7 +560,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                             </div>
                         </div>
                         <FileTable
-                            entities={this.filteredFiles.slice(0, 10)}
+                            entities={this.filteredFiles}
                         ></FileTable>
                         <Button
                             href="/explore"

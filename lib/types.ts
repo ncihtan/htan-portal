@@ -4,6 +4,7 @@ export type ExploreOptionType = {
     value: string;
     label: string;
     group: string;
+    count?: number;
 };
 
 export enum PropNames {
@@ -48,4 +49,8 @@ export interface IFilterProps {
     atlases: Atlas[];
     activeTab: string;
     atlasData?: any;
+}
+
+export interface IFiltersByGroupName {
+    [groupName: string]: ExploreOptionType[];
 }
