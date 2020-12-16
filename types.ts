@@ -1,58 +1,58 @@
 export interface CmsData {
-  slug: string;
-  content: {
-    rendered: string;
-    protected: boolean;
-  };
-  title: {
-    rendered: string;
-  };
+    slug: string;
+    content: {
+        rendered: string;
+        protected: boolean;
+    };
+    title: {
+        rendered: string;
+    };
 }
 
 export interface SubCategory {
-  data: {
-    attributes: Attribute[];
-    values: any[];
-  };
-  dataLink: string;
+    data: {
+        attributes: Attribute[];
+        values: any[];
+    };
+    dataLink: string;
 }
 
 export interface Attribute {
-  name: string;
-  description: string;
-  schemaMetadata: { renderType?: string };
+    name: string;
+    description: string;
+    schemaMetadata: { renderType?: string };
 }
 
 export interface Category {
-  [subcat: string]: SubCategory;
+    [subcat: string]: SubCategory;
 }
 
 export interface SynapseAtlas {
-  clinical: Category;
-  biospecimen: Category;
-  assayData: Category;
-  imagingData: Category;
+    clinical: Category;
+    biospecimen: Category;
+    assayData: Category;
+    imagingData: Category;
 }
 
 export interface SynapseData {
-  [altasId: string]: SynapseAtlas;
+    [altasId: string]: SynapseAtlas;
 }
 
 export enum WPConstants {
-  HOMEPAGE_HERO_BLURB = "homepage-hero-blurb",
+    HOMEPAGE_HERO_BLURB = 'homepage-hero-blurb',
 }
 
 export interface WPAtlas {
-  id: number;
-  slug: string;
-  title: { rendered: string };
-  content: { rendered: string };
-  atlas_overview: string;
-  data_overview: string;
-  publications: string;
-  lead_institutions: string;
-  atlas_type: string;
-  synapse_id: string;
-  htan_id: string;
-  primary_ngs: string;
+    id: number;
+    slug: string;
+    title: { rendered: string };
+    content: { rendered: string };
+    atlas_overview: string;
+    data_overview: string;
+    publications: string;
+    lead_institutions: string;
+    atlas_type: string;
+    synapse_id: string;
+    htan_id: string;
+    primary_ngs: string;
 }

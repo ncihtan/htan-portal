@@ -1,5 +1,5 @@
-import data from "../data/data.json";
+import data from '../data/data.json';
 
 export default function getData() {
-  return data;
+    return data;
 }

@@ -1,200 +1,248 @@
-import React from "react";
-import HtanNavbar from "../components/HtanNavbar";
-import Footer from "../components/Footer";
-import _ from "lodash";
-import { loadData, Entity, Atlas } from "../lib/helpers";
-import AtlasTable from "../components/filter/AtlasTable";
-import FileTable from "../components/filter/FileTable";
-import FilterSelection from "../components/filter/FilterSelection";
-import Select from "react-select";
-import getData from "../lib/getData";
-import fetch from "node-fetch";
+import React from 'react';
+import HtanNavbar from '../components/HtanNavbar';
+import Footer from '../components/Footer';
+import _ from 'lodash';
+import { loadData, Entity, Atlas } from '../lib/helpers';
+import AtlasTable from '../components/filter/AtlasTable';
+import FileTable from '../components/filter/FileTable';
+import FilterSelection from '../components/filter/FilterSelection';
+import Select, { ActionMeta, ValueType } from 'react-select';
+import getData from '../lib/getData';
+import fetch from 'node-fetch';
+
+import { action, computed, makeObservable, observable, toJS } from 'mobx';
+
 import {
-  DataReleasePage,
-  DataReleaseProps,
-} from "../components/DataReleasePage";
-import { getAtlasList, WORDPRESS_BASE_URL } from "../ApiUtil";
-import { GetStaticProps } from "next";
-import { WPAtlas } from "../types";
-import { WPAtlasTable } from "../components/filter/WPAtlasTable";
-import { Button } from "react-bootstrap";
+    DataReleasePage,
+    DataReleaseProps,
+} from '../components/DataReleasePage';
+import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
+import { GetStaticProps } from 'next';
+import { WPAtlas } from '../types';
+import { WPAtlasTable } from '../components/filter/WPAtlasTable';
+import { Button } from 'react-bootstrap';
+import { observer } from 'mobx-react';
+import FilterPanel from '../components/FilterPanel/FilterPanel';
+import {
+    ExploreOptionType,
+    IFilterProps,
+    PropMap,
+    PropNames,
+} from '../lib/types';
+import FilterCheckList from '../components/FilterPanel/FilterCheckList';
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  let slugs = ["summary-blurb-data-release"];
-  let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-  let res = await fetch(overviewURL);
-  let data = await res.json();
+    let slugs = ['summary-blurb-data-release'];
+    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
+    let res = await fetch(overviewURL);
+    //let data = await res.json();
 
-  const atlases = await getAtlasList();
+    const atlases = await getAtlasList();
 
-  return {
-    props: {
-      atlasData: atlases,
-      data,
-    },
-  };
+    return {
+        props: {
+            atlasData: atlases,
+            //data,
+        },
+    };
 };
 
 const synapseData = getData();
 
-enum PropNames {
-  TissueorOrganofOrigin = "TissueorOrganofOrigin",
-  PrimaryDiagnosis = "PrimaryDiagnosis",
-  Component = "Component",
-  Biospecimen = "Biospecimen",
-  AtlasName = "AtlasName",
-}
-
-const propMap = {
-  [PropNames.TissueorOrganofOrigin]: {
-    prop: "diagnosis.TissueorOrganofOrigin",
-  },
-  [PropNames.PrimaryDiagnosis]: {
-    prop: "diagnosis.PrimaryDiagnosis",
-  },
-  [PropNames.Component]: {
-    prop: "Component",
-  },
-  [PropNames.Biospecimen]: {
-    prop: "Biospecimen",
-  },
-  [PropNames.AtlasName]: {
-    prop: "WPAtlas.title.rendered",
-  },
-};
-
-interface IFilterProps {
-  files: Entity[];
-  filters: { [key: string]: string[] };
-  atlases: Atlas[];
-  activeTab: string;
-}
-
+@observer
 class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
-  constructor(props: any) {
-    super(props);
-    this.state = { files: [], filters: {}, atlases: [], activeTab: "atlas" };
-  }
+    constructor(props: any) {
+        super(props);
+        this.state = { files: [], filters: {}, atlases: [], activeTab: 'file' };
 
-  get getGroupsByProperty() {
-    return this.groupsByProperty(this.state.files);
-  }
-
-  get getGroupsByPropertyFiltered() {
-    return this.groupsByProperty(this.filteredFiles);
-  }
-
-  groupsByProperty(files: Entity[]) {
-    const m: any = {};
-    _.forEach(propMap, (o, k) => {
-      m[k] = _.groupBy(files, (f) => {
         //@ts-ignore
-        const val = _.at(f, [o.prop]);
-        return val ? val[0] : "other";
-      });
-    });
-    return m;
-  }
+        if (typeof window !== 'undefined') (window as any).me = this;
 
-  setFilter(name: string, val: any) {
-    const filters = Object.assign({}, this.state.filters);
-    if (val && val.length > 0) {
-      filters[name] = val;
-    } else {
-      delete filters[name];
+        makeObservable(this);
     }
-    this.setState({ filters: filters });
-  }
 
-  componentDidMount(): void {
-    const data = loadData(this.props.wpData).then(({ files, atlases }) => {
-      const filteredFiles = files.filter((f) => !!f.diagnosis);
-      this.setState({ files: filteredFiles, atlases: atlases });
-    });
-  }
+    get getGroupsByProperty() {
+        return this.groupsByProperty(this.state.files);
+    }
 
-  setTab(activeTab: string) {
-    this.setState({ activeTab });
-  }
+    get getGroupsByPropertyFiltered() {
+        return this.groupsByProperty(this.filteredFiles);
+    }
 
-  filterFiles(filters: { [key: string]: string[] }, files: Entity[]) {
-    if (_.size(filters)) {
-      return files.filter((f) => {
-        return _.every(filters, (filter, name) => {
-          //@ts-ignore
-          const val = _.at(f, propMap[name].prop);
-          //@ts-ignore
-          return val ? filter.includes(val[0]) : false;
+    groupsByProperty(files: Entity[]) {
+        const m: any = {};
+        _.forEach(PropMap, (o, k) => {
+            m[k] = _.groupBy(files, (f) => {
+                //@ts-ignore
+                const val = _.at(f, [o.prop]);
+                return val ? val[0] : 'other';
+            });
         });
-      });
-    } else {
-      return files;
+        return m;
     }
-  }
 
-  makeOptions(propName: string) {
-    const filteredFilesMinusOption = this.groupsByProperty(
-      this.filterFiles(_.omit(this.state.filters, [propName]), this.state.files)
-    )[propName];
-    return _.map(filteredFilesMinusOption, (val, key) => {
-      return { value: key, label: `${key} (${val.length})` };
-    });
-  }
+    @observable someValue: any[] = [];
 
-  get filteredFiles() {
-    return this.filterFiles(this.state.filters, this.state.files);
-  }
+    @computed get selectedFiltersByGroupName() {
+        return _.groupBy(this.someValue, (item) => {
+            return item.group;
+        });
+    }
 
-  render() {
-    var self = this;
-    //@ts-ignore
-    const patients = _(this.filteredFiles)
-      .filter((f) => f.biospecimen && f.biospecimen.HTANParentID)
-      .map((f: any) => f.biospecimen?.HTANParentID)
-      .uniq()
-      .value().length;
+    @action.bound
+    setFilter(groupNames: string[], actionMeta: ActionMeta<ExploreOptionType>) {
+        const filters = Object.assign({}, this.state.filters);
 
-    if (this.filteredFiles) {
-      return (
-        <div style={{ padding: 20 }}>
-          <div className="subnav">
-            <ul className="nav nav-tabs">
-              <li className="nav-item">
-                <a
-                  onClick={() => this.setTab("atlas")}
-                  className={`nav-link ${
-                    this.state.activeTab === "atlas" ? "active" : ""
-                  }`}
-                >
-                  Atlases
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link disabled">Cases</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link disabled">Biospecimens</a>
-              </li>
-              <li className="nav-item">
-                <a
-                  onClick={() => this.setTab("file")}
-                  className={`nav-link ${
-                    this.state.activeTab === "file" ? "active" : ""
-                  }`}
-                >
-                  Files
-                </a>
-              </li>
-            </ul>
-          </div>
+        if (actionMeta.option) {
+            if (actionMeta.action === 'deselect-option') {
+                const option = actionMeta.option;
+                filters[option.group] = filters[option.group].filter(
+                    (value) => value != option.value
+                );
+                if (filters[option.group].length === 0) {
+                    delete filters[option.group];
+                }
+            } else if (actionMeta.action === 'select-option') {
+                const option = actionMeta.option;
+                if (filters[option.group]) {
+                    filters[option.group].push(option.value);
+                } else {
+                    filters[option.group] = [option.value];
+                }
+            }
+        } else if (actionMeta.action === 'clear') {
+            groupNames.forEach((group) => {
+                delete filters[group];
+            });
+        }
+        this.setState({ filters: filters });
+    }
 
-          <div
-            className={`tab-content fileTab ${
-              this.state.activeTab !== "file" ? "d-none" : ""
-            }`}
-          >
-            <div className="filterControls">
-              {/* <FilterSelection options={
+    componentDidMount(): void {
+        const data = loadData(this.props.wpData).then(({ files, atlases }) => {
+            const filteredFiles = files.filter((f) => !!f.diagnosis);
+            this.setState({ files: filteredFiles, atlases: atlases });
+        });
+    }
+
+    setTab(activeTab: string) {
+        this.setState({ activeTab });
+    }
+
+    filterFiles(filters: { [key: string]: string[] }, files: Entity[]) {
+        if (_.size(filters)) {
+            return files.filter((f) => {
+                return _.every(filters, (filter, name) => {
+                    //@ts-ignore
+                    const val = _.at(f, PropMap[name].prop);
+                    //@ts-ignore
+                    return val ? filter.includes(val[0]) : false;
+                });
+            });
+        } else {
+            return files;
+        }
+    }
+
+    makeOptions(propName: string): ExploreOptionType[] {
+        const filteredFilesMinusOption = this.groupsByProperty(
+            this.filterFiles(
+                _.omit(this.state.filters, [propName]),
+                this.state.files
+            )
+        )[propName];
+        return _.map(filteredFilesMinusOption, (val, key) => {
+            return {
+                value: key,
+                label: `${key} (${val.length})`,
+                group: propName,
+            };
+        });
+    }
+
+    isOptionSelected = (option: {
+        value: string;
+        label: string;
+        group: string;
+    }) => {
+        return (
+            option.group in this.selectedFiltersByGroupName &&
+            this.selectedFiltersByGroupName[option.group].find(
+                (o: any) => o.value === option.value
+            )
+        );
+    };
+
+    get filteredFiles() {
+        return this.filterFiles(this.state.filters, this.state.files);
+    }
+
+    @action.bound handleChange(
+        value: any,
+        actionMeta: ActionMeta<ExploreOptionType>
+    ) {
+        value.forEach((valueType: string) => {
+            this.someValue.push(actionMeta.option);
+        });
+    }
+
+    render() {
+        var self = this;
+
+        //@ts-ignore
+        const patients = _(this.filteredFiles)
+            .filter((f) => f.biospecimen && f.biospecimen.HTANParentID)
+            .map((f: any) => f.biospecimen?.HTANParentID)
+            .uniq()
+            .value().length;
+
+        if (this.filteredFiles) {
+            return (
+                <div style={{ padding: 20 }}>
+                    <div className="subnav">
+                        <ul className="nav nav-tabs">
+                            <li className="nav-item">
+                                <a
+                                    onClick={() => this.setTab('atlas')}
+                                    className={`nav-link ${
+                                        this.state.activeTab === 'atlas'
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Atlases
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link disabled">Cases</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link disabled">
+                                    Biospecimens
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    onClick={() => this.setTab('file')}
+                                    className={`nav-link ${
+                                        this.state.activeTab === 'file'
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Files
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div
+                        className={`tab-content fileTab ${
+                            this.state.activeTab !== 'file' ? 'd-none' : ''
+                        }`}
+                    >
+                        <div className="filterControls">
+                            {/* <FilterSelection options={
                     _.map(
                         this.getGroupsByProperty[PropNames.TissueorOrganofOrigin],
                         (val, key) => {
@@ -203,57 +251,135 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     )
                 } /> */}
 
-              <div>
-                Atlas:&nbsp;
-                <div style={{ width: 300 }}>
-                  <Select
-                    isClearable
-                    isSearchable
-                    name="color"
-                    isMulti={true}
-                    options={this.makeOptions(PropNames.AtlasName)}
-                    hideSelectedOptions={false}
-                    closeMenuOnSelect={false}
-                    onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
-                        this.setFilter(
-                          PropNames.AtlasName,
-                          e ? e.map((option: any) => option.value) : []
-                        );
-                      }
-                    }
-                  />
-                </div>
-              </div>
+                            <div>
+                                <div style={{ width: 300 }}>
+                                    <Select
+                                        isSearchable
+                                        isClearable={false}
+                                        name="searchAll"
+                                        placeholder="Search all filters"
+                                        controlShouldRenderValue={false}
+                                        isMulti={true}
+                                        options={[
+                                            PropNames.AtlasName,
+                                            PropNames.TissueorOrganofOrigin,
+                                            PropNames.PrimaryDiagnosis,
+                                            PropNames.Component,
+                                        ].map((propName) => {
+                                            return {
+                                                label:
+                                                    PropMap[propName]
+                                                        .displayName,
+                                                options: this.makeOptions(
+                                                    propName
+                                                ).map((option) =>
+                                                    Object.assign(option, {
+                                                        group: propName,
+                                                    })
+                                                ),
+                                            };
+                                        })}
+                                        hideSelectedOptions={false}
+                                        closeMenuOnSelect={false}
+                                        onChange={this.handleChange}
+                                        isOptionSelected={this.isOptionSelected}
+                                        value={
+                                            this.selectedFiltersByGroupName[
+                                                PropNames.AtlasName
+                                            ]
+                                        }
+                                    />
+                                </div>
+                            </div>
 
-              <div>
-                Organ:&nbsp;
-                <div style={{ width: 300 }}>
-                  <Select
-                    isClearable
-                    isSearchable
-                    name="color"
-                    isMulti={true}
-                    options={this.makeOptions(PropNames.TissueorOrganofOrigin)}
-                    hideSelectedOptions={false}
-                    closeMenuOnSelect={false}
-                    onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
-                        this.setFilter(
-                          PropNames.TissueorOrganofOrigin,
-                          e ? e.map((option: any) => option.value) : []
-                        );
-                      }
-                    }
-                  />
-                </div>
-              </div>
+                            <div>
+                                <div style={{ width: 300 }}>
+                                    <FilterPanel>
+                                        <div
+                                            className={
+                                                'filter-checkbox-list-container'
+                                            }
+                                        >
+                                            <div>
+                                                <h4>Cancer Type:</h4>
+                                                {
+                                                    <FilterCheckList
+                                                        setFilter={
+                                                            this.setFilter
+                                                        }
+                                                        options={this.makeOptions(
+                                                            PropNames.PrimaryDiagnosis
+                                                        )}
+                                                    ></FilterCheckList>
+                                                }
+                                            </div>
+                                            <div>
+                                                <h4>Stage:</h4>
+                                                {
+                                                    <FilterCheckList
+                                                        setFilter={
+                                                            this.setFilter
+                                                        }
+                                                        options={this.makeOptions(
+                                                            PropNames.Stage
+                                                        )}
+                                                    ></FilterCheckList>
+                                                }
+                                            </div>
+                                        </div>
+                                    </FilterPanel>
+                                </div>
+                            </div>
 
-              {/* <select
+                            <div>
+                                <div style={{ width: 300 }}>
+                                    <Select
+                                        placeholder="Atlas"
+                                        controlShouldRenderValue={false}
+                                        isClearable={false}
+                                        isSearchable
+                                        name="color"
+                                        isMulti={true}
+                                        options={this.makeOptions(
+                                            PropNames.AtlasName
+                                        )}
+                                        hideSelectedOptions={false}
+                                        closeMenuOnSelect={false}
+                                        onChange={this.handleChange}
+                                        value={
+                                            this.selectedFiltersByGroupName[
+                                                PropNames.AtlasName
+                                            ]
+                                        }
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div style={{ width: 300 }}>
+                                    <Select
+                                        placeholder="Organ"
+                                        controlShouldRenderValue={false}
+                                        isClearable={false}
+                                        isSearchable
+                                        name="color"
+                                        isMulti={true}
+                                        options={this.makeOptions(
+                                            PropNames.TissueorOrganofOrigin
+                                        )}
+                                        hideSelectedOptions={false}
+                                        closeMenuOnSelect={false}
+                                        onChange={this.handleChange}
+                                        value={
+                                            this.selectedFiltersByGroupName[
+                                                PropNames.TissueorOrganofOrigin
+                                            ]
+                                        }
+                                    />
+                                </div>
+                            </div>
+
+                            {/* <select
                     className="form-control"
                     placeholder="helo"
                     style={{ marginBottom: 20, maxWidth: 200 }}
@@ -276,32 +402,37 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     )}
                   </select> */}
 
-              <div>
-                Diagnosis:&nbsp;
-                <div style={{ width: 300 }}>
-                  <Select
-                    isClearable
-                    isSearchable
-                    name="color"
-                    isMulti={true}
-                    options={this.makeOptions(PropNames.PrimaryDiagnosis)}
-                    hideSelectedOptions={false}
-                    closeMenuOnSelect={false}
-                    onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
-                        this.setFilter(
-                          PropNames.PrimaryDiagnosis,
-                          e ? e.map((option: any) => option.value) : []
-                        );
-                      }
-                    }
-                  />
-                </div>
-              </div>
+                            {/*<div>*/}
+                            {/*    <div style={{ width: 300 }}>*/}
+                            {/*        <Select*/}
+                            {/*            placeholder="Diagnosis"*/}
+                            {/*            controlShouldRenderValue={false}*/}
+                            {/*            isClearable={false}*/}
+                            {/*            isSearchable*/}
+                            {/*            name="color"*/}
+                            {/*            isMulti={true}*/}
+                            {/*            options={this.makeOptions(*/}
+                            {/*                PropNames.PrimaryDiagnosis*/}
+                            {/*            )}*/}
+                            {/*            hideSelectedOptions={false}*/}
+                            {/*            closeMenuOnSelect={false}*/}
+                            {/*            onChange={(*/}
+                            {/*                value: any,*/}
+                            {/*                actionMeta: ActionMeta<*/}
+                            {/*                    ExploreOptionType*/}
+                            {/*                >*/}
+                            {/*            ) => {*/}
+                            {/*                this.setFilter(*/}
+                            {/*                    [PropNames.PrimaryDiagnosis],*/}
+                            {/*                    actionMeta*/}
+                            {/*                );*/}
+                            {/*            }}*/}
+                            {/*            isOptionSelected={this.isOptionSelected}*/}
+                            {/*        />*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
-              {/* <select
+                            {/* <select
                     className="form-control"
                     style={{ marginBottom: 20, maxWidth: 200 }}
                     onChange={function (e) {
@@ -324,120 +455,238 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                     )}
                   </select> */}
 
-              <div>
-                Assay:&nbsp;
-                <div style={{ width: 300 }}>
-                  <Select
-                    isClearable
-                    isSearchable
-                    name="color"
-                    isMulti={true}
-                    options={this.makeOptions(PropNames.Component)}
-                    hideSelectedOptions={false}
-                    closeMenuOnSelect={false}
-                    onChange={
-                      //@ts-ignore
-                      (e: any) => {
-                        //@ts-ignore
-                        this.setFilter(
-                          PropNames.Component,
-                          e ? e.map((option: any) => option.value) : []
-                        );
-                      }
-                    }
-                  />
+                            <div>
+                                <div style={{ width: 300 }}>
+                                    <Select
+                                        placeholder="Assay"
+                                        controlShouldRenderValue={false}
+                                        isClearable={false}
+                                        isSearchable
+                                        name="color"
+                                        isMulti={true}
+                                        options={this.makeOptions(
+                                            PropNames.Component
+                                        )}
+                                        hideSelectedOptions={false}
+                                        closeMenuOnSelect={false}
+                                        onChange={(
+                                            value: any,
+                                            actionMeta: ActionMeta<
+                                                ExploreOptionType
+                                            >
+                                        ) => {
+                                            this.setFilter(
+                                                [PropNames.Component],
+                                                actionMeta
+                                            );
+                                        }}
+                                        isOptionSelected={this.isOptionSelected}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={'filter'}>
+                            {Object.keys(this.state.filters).map(
+                                (filter, i, filters) => {
+                                    const numberOfAttributes = filters.length;
+                                    const addAnd =
+                                        numberOfAttributes > 1 &&
+                                        i < numberOfAttributes - 1 ? (
+                                            <span className="logicalAnd">
+                                                AND
+                                            </span>
+                                        ) : null;
+
+                                    return (
+                                        <span className="attributeGroup">
+                                            <span
+                                                className="attributeGroupName"
+                                                onClick={() => {
+                                                    this.setFilter([filter], {
+                                                        action: 'clear',
+                                                    });
+                                                }}
+                                            >
+                                                {
+                                                    PropMap[
+                                                        PropNames[
+                                                            filter as keyof typeof PropNames
+                                                        ]
+                                                    ].displayName
+                                                }
+                                            </span>
+
+                                            {this.state.filters[filter].map(
+                                                (value, i, values) => {
+                                                    const numberOfValues =
+                                                        values.length;
+                                                    const openParenthesis =
+                                                        numberOfValues > 1 &&
+                                                        i == 0 ? (
+                                                            <span className="logicalParentheses">
+                                                                (
+                                                            </span>
+                                                        ) : null;
+                                                    const addOr =
+                                                        numberOfValues > 1 &&
+                                                        i <
+                                                            numberOfValues -
+                                                                1 ? (
+                                                            <span className="logicalOr">
+                                                                OR
+                                                            </span>
+                                                        ) : null;
+                                                    const closeParenthesis =
+                                                        numberOfValues > 1 &&
+                                                        i ==
+                                                            numberOfValues -
+                                                                1 ? (
+                                                            <span className="logicalParentheses">
+                                                                )
+                                                            </span>
+                                                        ) : null;
+
+                                                    return (
+                                                        <span className="attributeValues">
+                                                            {openParenthesis}
+                                                            <span
+                                                                className="attributeValue"
+                                                                onClick={() => {
+                                                                    this.setFilter(
+                                                                        [
+                                                                            filter,
+                                                                        ],
+                                                                        {
+                                                                            action:
+                                                                                'deselect-option',
+                                                                            option: {
+                                                                                label:
+                                                                                    '',
+                                                                                value,
+                                                                                group: filter,
+                                                                            },
+                                                                        }
+                                                                    );
+                                                                }}
+                                                            >
+                                                                {value}
+                                                            </span>
+                                                            {addOr}
+                                                            {closeParenthesis}
+                                                        </span>
+                                                    );
+                                                }
+                                            )}
+                                            {addAnd}
+                                        </span>
+                                    );
+                                }
+                            )}
+                        </div>
+
+                        <div className={'summary'}>
+                            <div>
+                                <strong>Summary:</strong>
+                            </div>
+
+                            <div>{this.filteredFiles.length} Files</div>
+
+                            <div>
+                                {
+                                    _.keys(
+                                        this.getGroupsByPropertyFiltered[
+                                            PropNames.AtlasName
+                                        ]
+                                    ).length
+                                }{' '}
+                                Atlases
+                            </div>
+
+                            <div>
+                                {
+                                    _.keys(
+                                        this.getGroupsByPropertyFiltered[
+                                            PropNames.TissueorOrganofOrigin
+                                        ]
+                                    ).length
+                                }{' '}
+                                Organs
+                            </div>
+
+                            <div>
+                                {
+                                    _.keys(
+                                        this.getGroupsByPropertyFiltered[
+                                            PropNames.PrimaryDiagnosis
+                                        ]
+                                    ).length
+                                }{' '}
+                                Cancer Types
+                            </div>
+
+                            <div>{patients} Cases</div>
+
+                            <div>
+                                {
+                                    _(this.filteredFiles)
+                                        .map((f) => f.HTANParentBiospecimenID)
+                                        .uniq()
+                                        .value().length
+                                }{' '}
+                                Biospecimens
+                            </div>
+
+                            <div>
+                                {
+                                    _.keys(
+                                        this.getGroupsByPropertyFiltered[
+                                            PropNames.Component
+                                        ]
+                                    ).length
+                                }{' '}
+                                Assays
+                            </div>
+                        </div>
+                        <FileTable
+                            entities={this.filteredFiles.slice(0, 10)}
+                        ></FileTable>
+                        <Button
+                            href="/explore"
+                            variant="primary"
+                            className="mr-4"
+                        >
+                            Download
+                        </Button>
+                    </div>
+
+                    <div
+                        className={`tab-content atlasTab ${
+                            this.state.activeTab !== 'atlas' ? 'd-none' : ''
+                        }`}
+                    >
+                        <WPAtlasTable atlasData={this.props.wpData} />
+                    </div>
                 </div>
-              </div>
-            </div>
-
-            <div className={"summary"}>
-              <div>
-                <strong>Summary:</strong>
-              </div>
-
-              <div>{this.filteredFiles.length} Files</div>
-
-              <div>
-                {
-                  _.keys(this.getGroupsByPropertyFiltered[PropNames.AtlasName])
-                    .length
-                }{" "}
-                Atlases
-              </div>
-
-              <div>
-                {
-                  _.keys(
-                    this.getGroupsByPropertyFiltered[
-                      PropNames.TissueorOrganofOrigin
-                    ]
-                  ).length
-                }{" "}
-                Organs
-              </div>
-
-              <div>
-                {
-                  _.keys(
-                    this.getGroupsByPropertyFiltered[PropNames.PrimaryDiagnosis]
-                  ).length
-                }{" "}
-                Cancer Types
-              </div>
-
-              <div>{patients} Cases</div>
-
-              <div>
-                {
-                  _(this.filteredFiles)
-                    .map((f) => f.HTANParentBiospecimenID)
-                    .uniq()
-                    .value().length
-                }{" "}
-                Biospecimens
-              </div>
-
-              <div>
-                {
-                  _.keys(this.getGroupsByPropertyFiltered[PropNames.Component])
-                    .length
-                }{" "}
-                Assays
-              </div>
-            </div>
-            <FileTable entities={this.filteredFiles}></FileTable>
-            <Button href="/explore" variant="primary" className="mr-4">
-              Download
-            </Button>
-          </div>
-
-          <div
-            className={`tab-content atlasTab ${
-              this.state.activeTab !== "atlas" ? "d-none" : ""
-            }`}
-          >
-            <WPAtlasTable atlasData={this.props.wpData} />
-          </div>
-        </div>
-      );
+            );
+        }
     }
-  }
 }
 
 interface IFilterPageProps {
-  atlasData: any;
+    atlasData: any;
 }
 
-const FilterPage = (props: IFilterPageProps) => {
-  return (
-    <>
-      <HtanNavbar />
+const FilterPage = (props: IFilterProps) => {
+    return (
+        <>
+            <HtanNavbar />
 
-      <Search wpData={props.atlasData} />
+            <Search wpData={props.atlasData} />
 
-      <Footer />
-    </>
-  );
+            <Footer />
+        </>
+    );
 };
 
 export default FilterPage;

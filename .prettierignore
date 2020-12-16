@@ -1,5 +1,5 @@
 # dependencies
-/node_modules
+**/node_modules
 /.pnp
 .pnp.js
 
@@ -26,3 +26,11 @@ yarn-error.log*
 *.iml
 
 .now
+
+.idea
+.next
+styles
+data
+
+# json
+*.json
