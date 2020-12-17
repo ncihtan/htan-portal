@@ -37,7 +37,7 @@ const FilterPanelMenu: FunctionComponent<{
     );
 };
 
-const FilterPanel: FunctionComponent = observer(function ({ children }) {
+const FilterPanel: FunctionComponent<{ placeholder?:string }> = observer(function ({ placeholder, children }) {
     const buttonRef = useRef<HTMLDivElement>(null);
 
     const localStore = useLocalStore(() => ({ showPanel: false }));
@@ -71,7 +71,7 @@ const FilterPanel: FunctionComponent = observer(function ({ children }) {
             >
                 <Select
                     isSearchable={false}
-                    placeholder={'Make a selection'}
+                    placeholder={placeholder || 'Make a selection'}
                     menuIsOpen={false}
                 />
                 {localStore.showPanel && panel}

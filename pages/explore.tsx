@@ -2,11 +2,12 @@ import React from 'react';
 import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
 import _ from 'lodash';
-import { loadData, Entity, Atlas } from '../lib/helpers';
+import {loadData, Entity, Atlas, sortStageOptions} from '../lib/helpers';
 import FileTable from '../components/filter/FileTable';
 import Select, { ActionMeta, ValueType } from 'react-select';
 import getData from '../lib/getData';
 import fetch from 'node-fetch';
+import { toArabic } from 'roman-numerals';
 
 import { action, computed, makeObservable, observable, toJS } from 'mobx';
 
@@ -120,9 +121,6 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
 
     filterFiles(filters: { [key: string]: ExploreOptionType[] }, files: Entity[]) {
         if (_.size(filters)) {
-
-
-
             // find the files where the passed filters match
             return files.filter((f) => {
                 return _.every(filters, (filter, name) => {
@@ -138,6 +136,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     }
 
     makeOptions(propName: string): ExploreOptionType[] {
+
         const filteredFilesMinusOption = this.groupsByProperty(
             this.filterFiles(
                 _.omit(this.selectedFiltersByGroupName, [propName]),
@@ -179,6 +178,8 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
 
     render() {
         var self = this;
+
+        console.log(this.state.files);
 
         //@ts-ignore
         const patients = _(this.filteredFiles)
@@ -235,7 +236,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                         <div className="filterControls">
 
                             <div>
-                                <div style={{ width: 300 }}>
+                                <div style={{ width: 220 }}>
                                     <Select
                                         isSearchable
                                         isClearable={false}
@@ -277,8 +278,8 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                             </div>
 
                             <div>
-                                <div style={{ width: 300 }}>
-                                    <FilterPanel>
+                                <div style={{ width: 220 }}>
+                                    <FilterPanel placeholder={"Cancer Type"}>
                                         <div
                                             className={
                                                 'filter-checkbox-list-container'
@@ -306,45 +307,47 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                                             this.setFilter
                                                         }
                                                         filters={this.selectedFiltersByGroupName}
-                                                        options={this.makeOptions(
+                                                        options={sortStageOptions(this.makeOptions(
                                                             PropNames.Stage
-                                                        )}
+                                                        ))}
                                                     ></FilterCheckList>
                                                 }
                                             </div>
+
                                         </div>
                                     </FilterPanel>
                                 </div>
                             </div>
 
-                            <div>
-                                <div style={{ width: 300 }}>
-                                    <Select
-                                        placeholder="Atlas"
-                                        controlShouldRenderValue={false}
-                                        isClearable={false}
-                                        isSearchable
-                                        name="color"
-                                        isMulti={true}
-                                        options={this.makeOptions(
-                                            PropNames.AtlasName
-                                        )}
-                                        hideSelectedOptions={false}
-                                        closeMenuOnSelect={false}
-                                        onChange={this.handleChange}
-                                        value={
-                                            this.selectedFiltersByGroupName[
-                                                PropNames.AtlasName
-                                            ]
-                                        }
-                                    />
-                                </div>
-                            </div>
+                            {/*<div>*/}
+                            {/*    <div style={{ width: 300 }}>*/}
+                            {/*        <Select*/}
+                            {/*            placeholder="Atlas"*/}
+                            {/*            controlShouldRenderValue={false}*/}
+                            {/*            isClearable={false}*/}
+                            {/*            isSearchable*/}
+                            {/*            name="color"*/}
+                            {/*            isMulti={true}*/}
+                            {/*            options={this.makeOptions(*/}
+                            {/*                PropNames.AtlasName*/}
+                            {/*            )}*/}
+                            {/*            hideSelectedOptions={false}*/}
+                            {/*            closeMenuOnSelect={false}*/}
+                            {/*            onChange={this.handleChange}*/}
+                            {/*            value={*/}
+                            {/*                this.selectedFiltersByGroupName[*/}
+                            {/*                    PropNames.AtlasName*/}
+                            {/*                ]*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+
 
                             <div>
-                                <div style={{ width: 300 }}>
+                                <div style={{ width: 220 }}>
                                     <Select
-                                        placeholder="Organ"
+                                        placeholder="Tissue Type"
                                         controlShouldRenderValue={false}
                                         isClearable={false}
                                         isSearchable
@@ -367,9 +370,9 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
 
 
                             <div>
-                                <div style={{ width: 300 }}>
+                                <div style={{ width: 220 }}>
                                     <Select
-                                        placeholder="Assay"
+                                        placeholder="Assay Type"
                                         controlShouldRenderValue={false}
                                         isClearable={false}
                                         isSearchable
@@ -395,6 +398,53 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                     />
                                 </div>
                             </div>
+
+
+                            <div>
+                                <div style={{ width: 220 }}>
+                                    <FilterPanel placeholder={"File Type"}>
+                                        <div
+                                            className={
+                                                'filter-checkbox-list-container'
+                                            }
+                                        >
+                                            <div>
+                                                <h4>Level:</h4>
+                                                {
+                                                    <FilterCheckList
+                                                        setFilter={
+                                                            this.setFilter
+                                                        }
+                                                        filters={this.selectedFiltersByGroupName}
+                                                        options={this.makeOptions(
+                                                            PropNames.Level
+                                                        )}
+                                                    ></FilterCheckList>
+                                                }
+                                            </div>
+
+                                            {/*<div>*/}
+                                            {/*    <h4>Level:</h4>*/}
+                                            {/*    {*/}
+                                            {/*        <FilterCheckList*/}
+                                            {/*            setFilter={*/}
+                                            {/*                this.setFilter*/}
+                                            {/*            }*/}
+                                            {/*            filters={this.selectedFiltersByGroupName}*/}
+                                            {/*            options={this.makeOptions(*/}
+                                            {/*                PropNames.Level*/}
+                                            {/*            )}*/}
+                                            {/*        ></FilterCheckList>*/}
+                                            {/*    }*/}
+                                            {/*</div>*/}
+
+                                        </div>
+                                    </FilterPanel>
+                                </div>
+                            </div>
+
+
+
                         </div>
 
                         <div className={'filter'}>

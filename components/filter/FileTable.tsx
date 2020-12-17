@@ -7,8 +7,6 @@ export default class FileTable extends React.Component<
 > {
     constructor(props: any) {
         super(props);
-
-        //this.state = { filteredEntitites:[] };
     }
 
     componentDidMount(): void {}
@@ -25,6 +23,7 @@ export default class FileTable extends React.Component<
                             <th>Filename</th>
                             <th>Atlas</th>
                             <th>Assay</th>
+                            <th>Level</th>
                             <th>Organ</th>
                             <th>Diagnosis</th>
                         </tr>
@@ -39,7 +38,10 @@ export default class FileTable extends React.Component<
                                     <td>{file.filename}</td>
                                     <td>{file.WPAtlas.title.rendered}</td>
                                     <td>
-                                        {file.Component.replace(/^bts:/, '')}
+                                        {file.Component.replace(/^bts:/, '').replace("-","").replace(/Level[\d]+/i,"")}
+                                    </td>
+                                    <td>
+                                        {file.level}
                                     </td>
                                     <td>
                                         {file.diagnosis &&

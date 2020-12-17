@@ -14,6 +14,7 @@ export enum PropNames {
     Biospecimen = 'Biospecimen',
     AtlasName = 'AtlasName',
     Stage = 'Stage',
+    Level = 'Level',
 }
 
 export const PropMap = {
@@ -40,6 +41,10 @@ export const PropMap = {
     [PropNames.Stage]: {
         prop: 'diagnosis.AJCCPathologicStage',
         displayName: 'Stage',
+    },
+    [PropNames.Level]: {
+        prop: 'level',
+        displayName: 'Level',
     },
 };
 

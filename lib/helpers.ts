@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import fetch from 'node-fetch';
 import { WPAtlas } from '../types';
+import {ExploreOptionType} from "./types";
+import {toArabic} from "roman-numerals";
 
 export function getRecords(obj: any): any {
     if (_.isObject(obj) || _.isArray(obj)) {
@@ -63,6 +65,7 @@ export interface Entity {
     fileFormat: string;
     filename: string;
     HTANParentID: string;
+    level: string;
     WPAtlas: WPAtlas;
     biospecimen: Entity | undefined;
     diagnosis: Entity | undefined;
@@ -93,6 +96,19 @@ export async function loadData(WPAtlasData: WPAtlas[]) {
     const atlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id);
 
     _.forEach(files, (file) => {
+
+        // make a new level property by parsing component
+        if (file.Component) {
+            const level = file.Component.match(/Level(\d+)/i);
+            if (level && level.length > 1) {
+                file.level = `Level ${level[1]}`;
+            } else {
+                file.level = "Unknown";
+            }
+        } else {
+            file.level = "Unknown";
+        }
+
         file.WPAtlas =
             atlasMap[
                 `hta${Number(file.atlasid.split('_')[0].substring(3)) + 1}`
@@ -116,4 +132,31 @@ export async function loadData(WPAtlasData: WPAtlas[]) {
     });
 
     return { files, atlases: data.atlases };
+}
+
+
+
+export function sortStageOptions(options:ExploreOptionType[]){
+
+    const sortedOptions = _.sortBy(options,(option)=>{
+        const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
+        console.log(numeral);
+        let val = undefined;
+        if (!!numeral && numeral.length > 1) {
+            try {
+                const number = toArabic(numeral[1]);
+                //val = option.value.replace(new RegExp(numeral[1]))
+            } catch (ex) {
+                val = numeral[1];
+            }
+        }
+        return option.label;
+    });
+
+    const withStage = sortedOptions.filter((option)=>/stage/i.test(option.label));
+    const withoutStage = sortedOptions.filter((option)=>!/stage/i.test(option.label));
+
+    return withStage.concat(withoutStage);
+
+    //return options;
 }
