@@ -1,4 +1,5 @@
 import React from 'react';
+import { SynapseClient, Login } from 'synapse-react-client';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
@@ -80,6 +81,12 @@ const Standards = (data: StandardsProps) => {
                         </li>
                     </ul>
                 </Row>
+                <Row>
+                    <Login sessionCallback={()=>{location.reload()}} />
+                </Row>
+                {/*<Row className="mt-3">
+                    <DataSchema title={'Data Schema'} url={''} />
+                    </Row>*/}
             </Container>
             <Footer />
         </>
