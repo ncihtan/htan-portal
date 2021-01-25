@@ -76,7 +76,12 @@ export interface Atlas {
     htan_name: string;
 }
 
-export async function loadData(WPAtlasData: WPAtlas[]) {
+export interface LoadDataResult {
+    files: Entity[];
+    atlases: Atlas[];
+}
+
+export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
     const data = await fetch('/sim.json').then((r) => r.json());
 
     const flatData: Entity[] = massageData(data);

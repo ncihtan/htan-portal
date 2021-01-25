@@ -2,7 +2,7 @@ import React from 'react';
 import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
 import _ from 'lodash';
-import {loadData, Entity, Atlas, sortStageOptions} from '../lib/helpers';
+import {loadData, Entity, Atlas, sortStageOptions, LoadDataResult} from '../lib/helpers';
 import FileTable from '../components/filter/FileTable';
 import Select, { ActionMeta, ValueType } from 'react-select';
 import getData from '../lib/getData';
@@ -10,6 +10,7 @@ import fetch from 'node-fetch';
 import { toArabic } from 'roman-numerals';
 
 import { action, computed, makeObservable, observable, toJS } from 'mobx';
+import { fromPromise } from 'mobx-utils';
 
 
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
@@ -26,6 +27,7 @@ import {
     PropNames,
 } from '../lib/types';
 import FilterCheckList from '../components/FilterPanel/FilterCheckList';
+import {IPromiseBasedObservable} from "mobx-utils/lib/from-promise";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -47,6 +49,8 @@ const synapseData = getData();
 
 @observer
 class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
+    @observable.ref private dataLoadingPromise:IPromiseBasedObservable<LoadDataResult>|undefined;
+
     constructor(props: any) {
         super(props);
         this.state = { files: [], filters: {}, atlases: [], activeTab: 'file' };
@@ -109,7 +113,8 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     }
 
     componentDidMount(): void {
-        const data = loadData(this.props.wpData).then(({ files, atlases }) => {
+        this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
+        this.dataLoadingPromise.then(({ files, atlases }) => {
             const filteredFiles = files.filter((f) => !!f.diagnosis);
             this.setState({ files: filteredFiles, atlases: atlases });
         });
@@ -188,6 +193,10 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
             .uniq()
             .value().length;
 
+        if (!this.dataLoadingPromise || this.dataLoadingPromise.state === "pending") {
+            // TODO: Pretty this up
+            return <span>Loading</span>;
+        }
         if (this.filteredFiles) {
             return (
                 <div style={{ padding: 20 }}>
