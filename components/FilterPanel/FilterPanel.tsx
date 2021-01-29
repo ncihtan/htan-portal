@@ -65,7 +65,6 @@ const FilterPanel: FunctionComponent<{ placeholder?:string }> = observer(functio
             <div
                 ref={buttonRef}
                 onClick={(e) => {
-                    e.stopPropagation();
                     localStore.showPanel = !localStore.showPanel;
                 }}
             >
