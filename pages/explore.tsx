@@ -27,7 +27,7 @@ import {
     PropNames,
 } from '../lib/types';
 import FilterCheckList from '../components/FilterPanel/FilterCheckList';
-import {IPromiseBasedObservable} from "mobx-utils/lib/from-promise";
+import {IPromiseBasedObservable} from "mobx-utils";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -352,62 +352,59 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                             {/*    </div>*/}
                             {/*</div>*/}
 
-
                             <div>
                                 <div style={{ width: 220 }}>
-                                    <Select
-                                        placeholder="Tissue Type"
-                                        controlShouldRenderValue={false}
-                                        isClearable={false}
-                                        isSearchable
-                                        name="color"
-                                        isMulti={true}
-                                        options={this.makeOptions(
-                                            PropNames.TissueorOrganofOrigin
-                                        )}
-                                        hideSelectedOptions={false}
-                                        closeMenuOnSelect={false}
-                                        onChange={this.handleChange}
-                                        value={
-                                            this.selectedFiltersByGroupName[
-                                                PropNames.TissueorOrganofOrigin
-                                            ]
-                                        }
-                                    />
+                                    <FilterPanel placeholder={"Tissue Type"}>
+                                        <div
+                                            className={
+                                                'filter-checkbox-list-container'
+                                            }
+                                        >
+                                            <div>
+                                                <h4>Tissue Type:</h4>
+                                                {
+                                                    <FilterCheckList
+                                                        setFilter={
+                                                            this.setFilter
+                                                        }
+                                                        filters={this.selectedFiltersByGroupName}
+                                                        options={this.makeOptions(
+                                                            PropNames.TissueorOrganofOrigin
+                                                        )}
+                                                    />
+                                                }
+                                            </div>
+                                        </div>
+                                    </FilterPanel>
                                 </div>
                             </div>
 
-
                             <div>
                                 <div style={{ width: 220 }}>
-                                    <Select
-                                        placeholder="Assay Type"
-                                        controlShouldRenderValue={false}
-                                        isClearable={false}
-                                        isSearchable
-                                        name="color"
-                                        isMulti={true}
-                                        options={this.makeOptions(
-                                            PropNames.Component
-                                        )}
-                                        hideSelectedOptions={false}
-                                        closeMenuOnSelect={false}
-                                        onChange={(
-                                            value: any,
-                                            actionMeta: ActionMeta<
-                                                ExploreOptionType
-                                            >
-                                        ) => {
-                                            this.setFilter(
-                                                [PropNames.Component],
-                                                actionMeta
-                                            );
-                                        }}
-                                        isOptionSelected={this.isOptionSelected}
-                                    />
+                                    <FilterPanel placeholder={"Assay Type"}>
+                                        <div
+                                            className={
+                                                'filter-checkbox-list-container'
+                                            }
+                                        >
+                                            <div>
+                                                <h4>Assay Type:</h4>
+                                                {
+                                                    <FilterCheckList
+                                                        setFilter={
+                                                            this.setFilter
+                                                        }
+                                                        filters={this.selectedFiltersByGroupName}
+                                                        options={this.makeOptions(
+                                                            PropNames.Component
+                                                        )}
+                                                    />
+                                                }
+                                            </div>
+                                        </div>
+                                    </FilterPanel>
                                 </div>
                             </div>
-
 
                             <div>
                                 <div style={{ width: 220 }}>

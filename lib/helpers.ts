@@ -165,3 +165,7 @@ export function sortStageOptions(options:ExploreOptionType[]){
 
     //return options;
 }
+
+export function clamp(x:number, lower:number, upper:number) {
+    return Math.max(lower, Math.min(x, upper));
+}
