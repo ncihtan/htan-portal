@@ -102,11 +102,12 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
 
     _.forEach(files, (file) => {
 
-        // make a new level property by parsing component
+        // parse component to make a new level property and adjust component property
         if (file.Component) {
-            const level = file.Component.match(/Level(\d+)/i);
-            if (level && level.length > 1) {
-                file.level = `Level ${level[1]}`;
+            const parsed = parseRawAssayType(file.Component);
+            file.Component = parsed.name;
+            if (parsed.level && parsed.level.length > 1) {
+                file.level = parsed.level;
             } else {
                 file.level = "Unknown";
             }
@@ -168,4 +169,31 @@ export function sortStageOptions(options:ExploreOptionType[]){
 
 export function clamp(x:number, lower:number, upper:number) {
     return Math.max(lower, Math.min(x, upper));
+}
+
+export function parseRawAssayType(t:string) {
+    // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
+    // We want to take that and spit out { name: "Camel Case-Name", level: "Level X" }
+    //  (with the exception that the prefixes Sc and Sn are always treated as lower case)
+
+    // See if there's a Level in it
+    const splitByLevel = t.split("Level");
+    const level = splitByLevel.length > 1 ? `Level ${splitByLevel[1]}` : null;
+    const extractedName = splitByLevel[0].match(/bts:(.+)/);
+    if (extractedName && extractedName[1]) {
+        // Convert camel case to space case
+        // Source: https://stackoverflow.com/a/15370765
+        let name = extractedName[1].replace( /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g, '$1$4 $2$3$5' );
+
+        // special case: sc as prefix
+        name = name.replace(/\bSc /g, "sc");
+
+        // special case: sn as prefix
+        name = name.replace(/\bSn /g, "sn");
+
+        return { name, level };
+    }
+
+    // Couldn't parse
+    return { name: t, level: null };
 }
