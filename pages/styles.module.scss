@@ -1,0 +1,9 @@
+.loadingIndicator {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 10000;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  animation: fadein 1s;
+}
