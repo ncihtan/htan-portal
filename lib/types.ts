@@ -20,6 +20,7 @@ export enum PropNames {
     AtlasName = 'AtlasName',
     Stage = 'Stage',
     Level = 'Level',
+    FileFormat = 'FileFormat'
 }
 
 export const PropMap = {
@@ -51,6 +52,10 @@ export const PropMap = {
         prop: 'level',
         displayName: 'Level',
     },
+    [PropNames.FileFormat]: {
+        prop: 'fileFormat',
+        displayName: 'File Format'
+    }
 };
 
 export interface IFilterProps {
