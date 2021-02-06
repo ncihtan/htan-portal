@@ -52,7 +52,6 @@ export interface IFilterProps {
     files: Entity[];
     filters: { [key: string]: string[] };
     atlases: Atlas[];
-    activeTab: string;
     atlasData?: any;
 }
 

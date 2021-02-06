@@ -9,7 +9,7 @@ import getData from '../lib/getData';
 import fetch from 'node-fetch';
 import { toArabic } from 'roman-numerals';
 
-import { action, computed, makeObservable, observable, toJS } from 'mobx';
+import {action, computed, makeObservable, observable, runInAction} from 'mobx';
 import { fromPromise } from 'mobx-utils';
 
 
@@ -29,6 +29,7 @@ import {
 import FilterCheckList from '../components/FilterPanel/FilterCheckList';
 import {IPromiseBasedObservable} from "mobx-utils";
 import {ScaleLoader} from "react-spinners";
+import {withRouter, NextRouter} from "next/router";
 import styles from "./styles.module.scss";
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -49,18 +50,27 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 const synapseData = getData();
 
+enum ExploreTab {
+    FILE = 'file',
+    ATLAS = 'atlas'
+}
+
 @observer
-class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
+class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, IFilterProps> {
     @observable.ref private dataLoadingPromise:IPromiseBasedObservable<LoadDataResult>|undefined;
 
     constructor(props: any) {
         super(props);
-        this.state = { files: [], filters: {}, atlases: [], activeTab: 'file' };
+        this.state = { files: [], filters: {}, atlases: [] };
 
         //@ts-ignore
         if (typeof window !== 'undefined') (window as any).me = this;
 
         makeObservable(this);
+    }
+
+    get activeTab() {
+        return this.props.router.query.tab || ExploreTab.FILE;
     }
 
     get getGroupsByProperty() {
@@ -115,15 +125,20 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
     }
 
     componentDidMount(): void {
-        this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
-        this.dataLoadingPromise.then(({ files, atlases }) => {
-            const filteredFiles = files.filter((f) => !!f.diagnosis);
-            this.setState({ files: filteredFiles, atlases: atlases });
+        runInAction(()=> {
+            this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
+            this.dataLoadingPromise.then(({files, atlases}) => {
+                const filteredFiles = files.filter((f) => !!f.diagnosis);
+                this.setState({files: filteredFiles, atlases: atlases});
+            });
         });
     }
 
-    setTab(activeTab: string) {
-        this.setState({ activeTab });
+    setTab(tab: string) {
+        this.props.router.push({
+            pathname: this.props.router.pathname,
+            query: { tab }
+        }, undefined, { shallow: true });
     }
 
     filterFiles(filters: { [key: string]: ExploreOptionType[] }, files: Entity[]) {
@@ -212,9 +227,9 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                         <ul className="nav nav-tabs">
                             <li className="nav-item">
                                 <a
-                                    onClick={() => this.setTab('atlas')}
+                                    onClick={() => this.setTab(ExploreTab.ATLAS)}
                                     className={`nav-link ${
-                                        this.state.activeTab === 'atlas'
+                                        this.activeTab === ExploreTab.ATLAS
                                             ? 'active'
                                             : ''
                                     }`}
@@ -232,9 +247,9 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                             </li>
                             <li className="nav-item">
                                 <a
-                                    onClick={() => this.setTab('file')}
+                                    onClick={() => this.setTab(ExploreTab.FILE)}
                                     className={`nav-link ${
-                                        this.state.activeTab === 'file'
+                                        this.activeTab === ExploreTab.FILE
                                             ? 'active'
                                             : ''
                                     }`}
@@ -247,7 +262,7 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
 
                     <div
                         className={`tab-content fileTab ${
-                            this.state.activeTab !== 'file' ? 'd-none' : ''
+                            this.activeTab !== 'file' ? 'd-none' : ''
                         }`}
                     >
                         <div className="filterControls">
@@ -559,85 +574,16 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
                                 }
                             )}
                         </div>
-
-                        <div className={'summary'}>
-                            <div>
-                                <strong>Summary:</strong>
-                            </div>
-
-                            <div>{this.filteredFiles.length} Files</div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.AtlasName
-                                        ]
-                                    ).length
-                                }{' '}
-                                Atlases
-                            </div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.TissueorOrganofOrigin
-                                        ]
-                                    ).length
-                                }{' '}
-                                Organs
-                            </div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.PrimaryDiagnosis
-                                        ]
-                                    ).length
-                                }{' '}
-                                Cancer Types
-                            </div>
-
-                            <div>{patients} Cases</div>
-
-                            <div>
-                                {
-                                    _(this.filteredFiles)
-                                        .map((f) => f.HTANParentBiospecimenID)
-                                        .uniq()
-                                        .value().length
-                                }{' '}
-                                Biospecimens
-                            </div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.Component
-                                        ]
-                                    ).length
-                                }{' '}
-                                Assays
-                            </div>
-                        </div>
                         <FileTable
                             entities={this.filteredFiles}
-                        ></FileTable>
-                        <Button
-                            href="/explore"
-                            variant="primary"
-                            className="mr-4"
-                        >
-                            Download
-                        </Button>
+                            getGroupsByPropertyFiltered={this.getGroupsByPropertyFiltered}
+                            patientCount={patients}
+                        />
                     </div>
 
                     <div
                         className={`tab-content atlasTab ${
-                            this.state.activeTab !== 'atlas' ? 'd-none' : ''
+                            this.activeTab !== 'atlas' ? 'd-none' : ''
                         }`}
                     >
                         <WPAtlasTable atlasData={this.props.wpData} />
@@ -650,18 +596,19 @@ class Search extends React.Component<{ wpData: WPAtlas[] }, IFilterProps> {
 
 interface IFilterPageProps {
     atlasData: any;
+    router: NextRouter;
 }
 
-const FilterPage = (props: IFilterProps) => {
+const FilterPage = (props: IFilterPageProps) => {
     return (
         <>
             <HtanNavbar />
 
-            <Search wpData={props.atlasData} />
+            <Search router={props.router} wpData={props.atlasData} />
 
             <Footer />
         </>
     );
 };
 
-export default FilterPage;
+export default withRouter(FilterPage);
