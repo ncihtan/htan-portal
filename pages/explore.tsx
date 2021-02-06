@@ -566,80 +566,11 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                 }
                             )}
                         </div>
-
-                        <div className={'summary'}>
-                            <div>
-                                <strong>Summary:</strong>
-                            </div>
-
-                            <div>{this.filteredFiles.length} Files</div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.AtlasName
-                                        ]
-                                    ).length
-                                }{' '}
-                                Atlases
-                            </div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.TissueorOrganofOrigin
-                                        ]
-                                    ).length
-                                }{' '}
-                                Organs
-                            </div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.PrimaryDiagnosis
-                                        ]
-                                    ).length
-                                }{' '}
-                                Cancer Types
-                            </div>
-
-                            <div>{patients} Cases</div>
-
-                            <div>
-                                {
-                                    _(this.filteredFiles)
-                                        .map((f) => f.HTANParentBiospecimenID)
-                                        .uniq()
-                                        .value().length
-                                }{' '}
-                                Biospecimens
-                            </div>
-
-                            <div>
-                                {
-                                    _.keys(
-                                        this.getGroupsByPropertyFiltered[
-                                            PropNames.Component
-                                        ]
-                                    ).length
-                                }{' '}
-                                Assays
-                            </div>
-                        </div>
                         <FileTable
                             entities={this.filteredFiles}
-                        ></FileTable>
-                        <Button
-                            href="/explore"
-                            variant="primary"
-                            className="mr-4"
-                        >
-                            Download
-                        </Button>
+                            getGroupsByPropertyFiltered={this.getGroupsByPropertyFiltered}
+                            patientCount={patients}
+                        />
                     </div>
 
                     <div
