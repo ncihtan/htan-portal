@@ -28,7 +28,9 @@ import {
 } from '../lib/types';
 import FilterCheckList from '../components/FilterPanel/FilterCheckList';
 import {IPromiseBasedObservable} from "mobx-utils";
+import {ScaleLoader} from "react-spinners";
 import {withRouter, NextRouter} from "next/router";
+import styles from "./styles.module.scss";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -210,7 +212,13 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
         if (!this.dataLoadingPromise || this.dataLoadingPromise.state === "pending") {
             // TODO: Pretty this up
-            return <span>Loading</span>;
+            return (
+                <div
+                    className={styles.loadingIndicator}
+                >
+                    <ScaleLoader/>
+                </div>
+            );
         }
         if (this.filteredFiles) {
             return (
