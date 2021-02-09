@@ -146,12 +146,10 @@ export function sortStageOptions(options:ExploreOptionType[]){
 
     const sortedOptions = _.sortBy(options,(option)=>{
         const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
-        console.log(numeral);
         let val = undefined;
         if (!!numeral && numeral.length > 1) {
             try {
                 const number = toArabic(numeral[1]);
-                //val = option.value.replace(new RegExp(numeral[1]))
             } catch (ex) {
                 val = numeral[1];
             }
