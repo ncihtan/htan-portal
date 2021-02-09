@@ -194,9 +194,12 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         value: any,
         actionMeta: ActionMeta<ExploreOptionType>
     ) {
-        value.forEach((valueType: string) => {
-            this.someValue = this.someValue.concat([actionMeta.option!]);
+
+        this.someValue = this.someValue.filter((o)=>{
+            return o.group !== actionMeta!.option!.group! || o.value !== actionMeta!.option!.value!;
         });
+
+        this.someValue = this.someValue.concat([actionMeta.option!]);
     }
 
     render() {
