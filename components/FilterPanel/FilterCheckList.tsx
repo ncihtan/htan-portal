@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FunctionComponent, useCallback } from 'react';
+import classNames from 'classnames';
 import { ActionMeta } from 'react-select';
 import {
     ExploreOptionType,
@@ -7,6 +8,7 @@ import {
 } from '../../lib/types';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
+import styles from './styles.module.scss';
 
 interface IFilterCheckList {
     setFilter: (
@@ -32,9 +34,9 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                         (o) => o.value === option.value
                     );
                 return (
-                    <div className="form-check" key={id}>
+                    <div className={classNames("form-check", styles.formCheck)} key={id}>
                         <input
-                            className="form-check-input"
+                            className={ classNames("form-check-input", styles.checkboxLabel)}
                             onChange={(e) => {
                                 props.setFilter([PropNames.PrimaryDiagnosis], {
                                     option,
@@ -48,9 +50,10 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                             type="checkbox"
                             id={id}
                         />
-                        <label className="form-check-label" htmlFor={id}>
+                        <label className={classNames("form-check-label", styles.checkboxLabel)} htmlFor={id}>
                             {option.label}
                         </label>
+                        <div className={styles.fileCount}>{option.count}</div>
                     </div>
                 );
             })}

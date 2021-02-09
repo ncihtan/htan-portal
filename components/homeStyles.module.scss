@@ -1,0 +1,44 @@
+$imageHeight:200px;
+
+.atlasCardContainer {
+  width:75%;
+  display:flex;
+  flex-wrap:wrap;
+  margin:50px auto 0 auto;
+  justify-content: center;
+}
+
+.atlasCard {
+  position:relative;
+  width:200px;
+  margin:50px;
+  h4 {
+    font-size:18px;
+    height:40px;
+    margin-bottom:10px;
+  }
+
+  .imageHolder {
+    display:flex;
+    height:$imageHeight;
+    width:$imageHeight;
+    align-items: center;
+    justify-content: center;
+
+    a {
+      position:relative;
+      z-index: 100;
+    }
+
+    img {
+      position:absolute;
+      height:$imageHeight;
+      width:$imageHeight;
+      border-radius:8px;
+    }
+
+  }
+
+
+
+}

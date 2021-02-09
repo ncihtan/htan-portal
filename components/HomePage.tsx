@@ -7,10 +7,13 @@ import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
+import {WPAtlas} from "../types";
+import styles from "./homeStyles.module.scss";
 
 export interface IHomePropsProps {
     hero_blurb: string;
     cards: any[];
+    atlases: WPAtlas[]
 }
 
 function dashboardIcon(text: string, description: string) {
@@ -29,6 +32,7 @@ function dashboardIcon(text: string, description: string) {
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     hero_blurb,
     cards,
+    atlases
 }) => {
     const dashboardData = [
         { text: '12', description: 'Atlases' },
@@ -85,93 +89,30 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     )}
                 </Row>
             </Container>
-            <Container>
-                <Row className="justify-content-md-center mt-5">
-                    <Col md={{ span: 8 }}>
-                        <CardGroup>
-                            <Card>
-                                <Card.Body>
-                                    <div className={'card-text'}>
-                                        <span
-                                            className="card-custom-style"
-                                            dangerouslySetInnerHTML={{
-                                                __html: cards[0],
-                                            }}
-                                        ></span>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Body>
-                                    <div className={'card-text'}>
-                                        <span
-                                            className="card-custom-style"
-                                            dangerouslySetInnerHTML={{
-                                                __html: cards[1],
-                                            }}
-                                        ></span>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Body>
-                                    <div className={'card-text'}>
-                                        <span
-                                            className="card-custom-style"
-                                            dangerouslySetInnerHTML={{
-                                                __html: cards[2],
-                                            }}
-                                        ></span>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </CardGroup>
-                    </Col>
-                </Row>
 
-                <Row className="justify-content-md-center mt-5">
-                    <Col md={{ span: 8 }}>
-                        <CardGroup>
-                            <Card>
-                                <Card.Body>
-                                    <div className={'card-text'}>
-                                        <span
-                                            className="card-custom-style"
-                                            dangerouslySetInnerHTML={{
-                                                __html: cards[3],
-                                            }}
-                                        ></span>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Body>
-                                    <div className={'card-text'}>
-                                        <span
-                                            className="card-custom-style"
-                                            dangerouslySetInnerHTML={{
-                                                __html: cards[4],
-                                            }}
-                                        ></span>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Body>
-                                    <div className={'card-text'}>
-                                        <span
-                                            className="card-custom-style"
-                                            dangerouslySetInnerHTML={{
-                                                __html: cards[5],
-                                            }}
-                                        ></span>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </CardGroup>
-                    </Col>
-                </Row>
-            </Container>
+            <div className={styles.atlasCardContainer}>
+                {
+                    atlases.map((atlas)=>{
+
+                        let title = atlas.title.rendered.substr(0,30);
+                        if (title.length < atlas.title.rendered.length) {
+                            title += "..."
+                        }
+
+                        return <div className={styles.atlasCard}>
+                            <a href={`/atlas/${atlas.htan_id}`}><h4>{
+                               title
+                            }
+                            </h4></a>
+                            <div className={styles.imageHolder}>
+                                <img src={atlas.home_image.guid || "https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg" } />
+                                <a className={"btn btn-primary"} href={`/atlas/${atlas.htan_id}`}>Explore</a>
+                            </div>
+                        </div>
+                    })
+                }
+            </div>
+
         </>
     );
 };

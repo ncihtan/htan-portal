@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import { GetStaticProps } from 'next';
 import fetch from 'node-fetch';
 import { WPConstants } from '../types';
-import { getContent, WORDPRESS_BASE_URL } from '../ApiUtil';
+import {getAtlasList, getContent, WORDPRESS_BASE_URL} from '../ApiUtil';
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -17,6 +17,9 @@ const Home = (data: IHomePropsProps) => {
         </>
     );
 };
+
+
+
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = [WPConstants.HOMEPAGE_HERO_BLURB];
@@ -29,6 +32,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
         (d: any) => d.slug === WPConstants.HOMEPAGE_HERO_BLURB
     );
 
+    const atlases = await getAtlasList();
+
     const cards = await Promise.all([
         getContent('card-1', 'homepage'),
         getContent('card-2', 'homepage'),
@@ -39,7 +44,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     ]);
 
     return {
-        props: { hero_blurb: homepageContent.content.rendered, cards: cards },
+        props: { hero_blurb: homepageContent.content.rendered, cards: cards, atlases },
     };
 };
 

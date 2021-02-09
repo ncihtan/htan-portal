@@ -31,6 +31,7 @@ import {IPromiseBasedObservable} from "mobx-utils";
 import {ScaleLoader} from "react-spinners";
 import {withRouter, NextRouter} from "next/router";
 import styles from "./styles.module.scss";
+import FilterPropertyColumnShell from "../components/FilterPanel/FilterPropertyColumn";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -170,7 +171,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
             const count = key in filteredFilesMinusOption ? filteredFilesMinusOption[key].length : 0;
             return {
                 value: key,
-                label: `${key} (${count})`,
+                label: key,
                 group: propName,
                 count
             };
@@ -200,8 +201,6 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
     render() {
         var self = this;
-
-        console.log(this.state.files);
 
         //@ts-ignore
         const patients = _(this.filteredFiles)
@@ -317,9 +316,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                                 'filter-checkbox-list-container'
                                             }
                                         >
-                                            <div>
-                                                <h4>Cancer Type:</h4>
-                                                {
+                                           <FilterPropertyColumnShell title={"Cancer Type"}>
                                                     <FilterCheckList
                                                         setFilter={
                                                             this.setFilter
@@ -329,11 +326,8 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                                             PropNames.PrimaryDiagnosis
                                                         )}
                                                     ></FilterCheckList>
-                                                }
-                                            </div>
-                                            <div>
-                                                <h4>Stage:</h4>
-                                                {
+                                           </FilterPropertyColumnShell>
+                                            <FilterPropertyColumnShell title={"Stage"}>
                                                     <FilterCheckList
                                                         setFilter={
                                                             this.setFilter
@@ -344,7 +338,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                                         ))}
                                                     ></FilterCheckList>
                                                 }
-                                            </div>
+                                            </FilterPropertyColumnShell>
 
                                         </div>
                                     </FilterPanel>
@@ -378,26 +372,17 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             <div>
                                 <div style={{ width: 220 }}>
                                     <FilterPanel placeholder={"Tissue Type"}>
-                                        <div
-                                            className={
-                                                'filter-checkbox-list-container'
-                                            }
-                                        >
-                                            <div>
-                                                <h4>Tissue Type:</h4>
-                                                {
-                                                    <FilterCheckList
-                                                        setFilter={
-                                                            this.setFilter
-                                                        }
-                                                        filters={this.selectedFiltersByGroupName}
-                                                        options={this.makeOptions(
-                                                            PropNames.TissueorOrganofOrigin
-                                                        )}
-                                                    />
+                                        <FilterPropertyColumnShell title={"Tissue Type"}>
+                                            <FilterCheckList
+                                                setFilter={
+                                                    this.setFilter
                                                 }
-                                            </div>
-                                        </div>
+                                                filters={this.selectedFiltersByGroupName}
+                                                options={this.makeOptions(
+                                                    PropNames.TissueorOrganofOrigin
+                                                )}
+                                            />
+                                        </FilterPropertyColumnShell>
                                     </FilterPanel>
                                 </div>
                             </div>
@@ -405,14 +390,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             <div>
                                 <div style={{ width: 220 }}>
                                     <FilterPanel placeholder={"Assay Type"}>
-                                        <div
-                                            className={
-                                                'filter-checkbox-list-container'
-                                            }
-                                        >
-                                            <div>
-                                                <h4>Assay Type:</h4>
-                                                {
+                                        <FilterPropertyColumnShell title={"Assay Type"}>
                                                     <FilterCheckList
                                                         setFilter={
                                                             this.setFilter
@@ -422,9 +400,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                                             PropNames.Component
                                                         )}
                                                     />
-                                                }
-                                            </div>
-                                        </div>
+                                        </FilterPropertyColumnShell>
                                     </FilterPanel>
                                 </div>
                             </div>
@@ -432,14 +408,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             <div>
                                 <div style={{ width: 220 }}>
                                     <FilterPanel placeholder={"File Type"}>
-                                        <div
-                                            className={
-                                                'filter-checkbox-list-container'
-                                            }
-                                        >
-                                            <div>
-                                                <h4>Level:</h4>
-                                                {
+                                            <FilterPropertyColumnShell title={"File Type"}>
                                                     <FilterCheckList
                                                         setFilter={
                                                             this.setFilter
@@ -449,25 +418,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                                             PropNames.Level
                                                         )}
                                                     ></FilterCheckList>
-                                                }
-                                            </div>
-
-                                            {/*<div>*/}
-                                            {/*    <h4>Level:</h4>*/}
-                                            {/*    {*/}
-                                            {/*        <FilterCheckList*/}
-                                            {/*            setFilter={*/}
-                                            {/*                this.setFilter*/}
-                                            {/*            }*/}
-                                            {/*            filters={this.selectedFiltersByGroupName}*/}
-                                            {/*            options={this.makeOptions(*/}
-                                            {/*                PropNames.Level*/}
-                                            {/*            )}*/}
-                                            {/*        ></FilterCheckList>*/}
-                                            {/*    }*/}
-                                            {/*</div>*/}
-
-                                        </div>
+                                            </FilterPropertyColumnShell>
                                     </FilterPanel>
                                 </div>
                             </div>

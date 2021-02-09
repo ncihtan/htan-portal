@@ -241,15 +241,12 @@ table {
 }
 
 .filter-checkbox-list-container {
+
   display:flex;
 
-  h4 {
-    font-size:17px;
-    border-bottom:1px dashed #dedede;
-    padding-bottom:10px;
+  > div {
+    margin-right:20px;
+    min-width:300px;
   }
 
-  > div {
-    margin-right:20px
-  }
 }
