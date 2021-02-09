@@ -100,14 +100,17 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         }
 
                         return <div className={styles.atlasCard}>
-                            <a href={`/atlas/${atlas.htan_id}`}><h4>{
-                               title
-                            }
-                            </h4></a>
-                            <div className={styles.imageHolder}>
-                                <img src={atlas.home_image.guid || "https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg" } />
-                                <a className={"btn btn-primary"} href={`/atlas/${atlas.htan_id}`}>Explore</a>
-                            </div>
+                                <h4><a href={`/atlas/${atlas.htan_id}`}>{
+                                    title
+                                }
+                                </a></h4>
+
+                                <div className={styles.imageHolder}>
+                                    <img src={atlas.home_image.guid || "https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg" } />
+                                    <a className={"btn btn-primary"} href={`/atlas/${atlas.htan_id}`}>Explore</a>
+                                </div>
+
+                                <p className={styles.altasText}>{atlas.short_description || "This is a short description of the Atlas. It shouldn't be more than a hundred words."}</p>
                         </div>
                     })
                 }

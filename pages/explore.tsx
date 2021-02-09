@@ -53,7 +53,9 @@ const synapseData = getData();
 
 enum ExploreTab {
     FILE = 'file',
-    ATLAS = 'atlas'
+    ATLAS = 'atlas',
+    BIOSPECIMEN = 'biospecimen',
+    CASES = 'cases'
 }
 
 @observer
@@ -202,8 +204,19 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         this.someValue = this.someValue.concat([actionMeta.option!]);
     }
 
+    @computed
+    get samples(){
+        return _(this.filteredFiles)
+            .filter((f) => f.biospecimen && f.biospecimen.HTANParentID)
+            .map((f: any) => f.biospecimen)
+            .uniq()
+            .value();
+    }
+
     render() {
         var self = this;
+
+        console.log(this.samples);
 
         //@ts-ignore
         const patients = _(this.filteredFiles)
@@ -240,11 +253,27 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link disabled">Cases</a>
+                                <a
+                                    onClick={() => this.setTab(ExploreTab.CASES)}
+                                    className={`nav-link ${
+                                        this.activeTab === ExploreTab.CASES
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Cases
+                                </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link disabled">
-                                    Biospecimens
+                                <a
+                                    onClick={() => this.setTab(ExploreTab.BIOSPECIMEN)}
+                                    className={`nav-link ${
+                                        this.activeTab === ExploreTab.BIOSPECIMEN
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Biospecimen
                                 </a>
                             </li>
                             <li className="nav-item">
@@ -534,6 +563,46 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             patientCount={patients}
                         />
                     </div>
+
+                    <div
+                        className={`tab-content biospecimen ${
+                            this.activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
+                        }`}
+                    >
+                        <table className={"table"}>
+                            <thead>
+                                <tr>
+                                    <th>HTANBiospecimenID</th>
+                                    <th>atlasid</th>
+                                    <th>BiospecimenType</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                this.samples.map((specimen)=>{
+                                   return  <tr>
+                                       <td>{specimen.HTANBiospecimenID}</td>
+                                       <td>{specimen.atlasid}</td>
+                                       <td>{specimen.BiospecimenType}</td>
+                                       <td>
+                                           <button className={"btn btn-primary btn-sm"}>Download</button>
+                                       </td>
+                                   </tr>
+                                })
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div
+                        className={`tab-content cases ${
+                            this.activeTab !== ExploreTab.CASES ? 'd-none' : ''
+                        }`}
+                    >
+                        Cases
+                    </div>
+
 
                     <div
                         className={`tab-content atlasTab ${

@@ -11,7 +11,7 @@ $imageHeight:200px;
 .atlasCard {
   position:relative;
   width:200px;
-  margin:50px;
+  margin:25px 50px;
   h4 {
     font-size:18px;
     height:40px;
@@ -37,6 +37,10 @@ $imageHeight:200px;
       border-radius:8px;
     }
 
+  }
+
+  .altasText {
+    margin-top:10px;
   }
 
 
