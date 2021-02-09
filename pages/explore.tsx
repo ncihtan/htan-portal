@@ -225,11 +225,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         var self = this;
 
         //@ts-ignore
-        const patients = _(this.filteredFiles)
-            .filter((f) => f.biospecimen && f.biospecimen.HTANParentID)
-            .map((f: any) => f.biospecimen?.HTANParentID)
-            .uniq()
-            .value().length;
+        const patients = this.cases.length;
 
         if (!this.dataLoadingPromise || this.dataLoadingPromise.state === "pending") {
             // TODO: Pretty this up
@@ -244,6 +240,246 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         if (this.filteredFiles) {
             return (
                 <div style={{ padding: 20 }}>
+
+                    <div className="filterControls">
+
+                        <div>
+                            <div style={{ width: 220 }}>
+                                <Select
+                                    isSearchable
+                                    isClearable={false}
+                                    name="searchAll"
+                                    placeholder="Search all filters"
+                                    controlShouldRenderValue={false}
+                                    isMulti={true}
+                                    options={[
+                                        PropNames.AtlasName,
+                                        PropNames.TissueorOrganofOrigin,
+                                        PropNames.PrimaryDiagnosis,
+                                        PropNames.Component,
+                                        PropNames.Stage
+                                    ].map((propName) => {
+                                        return {
+                                            label:
+                                            PropMap[propName]
+                                                .displayName,
+                                            options: this.makeOptions(
+                                                propName
+                                            ).map((option) =>
+                                                Object.assign(option, {
+                                                    group: propName,
+                                                })
+                                            ),
+                                        };
+                                    })}
+                                    hideSelectedOptions={false}
+                                    closeMenuOnSelect={false}
+                                    onChange={this.handleChange}
+                                    isOptionSelected={this.isOptionSelected}
+                                    value={
+                                        this.selectedFiltersByGroupName[
+                                            PropNames.AtlasName
+                                            ]
+                                    }
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style={{ width: 220 }}>
+                                <FilterPanel placeholder={"Cancer Type"}>
+                                    <div
+                                        className={
+                                            'filter-checkbox-list-container'
+                                        }
+                                    >
+                                        <FilterPropertyColumnShell title={"Cancer Type"}>
+                                            <FilterCheckList
+                                                setFilter={
+                                                    this.setFilter
+                                                }
+                                                filters={this.selectedFiltersByGroupName}
+                                                options={this.makeOptions(
+                                                    PropNames.PrimaryDiagnosis
+                                                )}
+                                            ></FilterCheckList>
+                                        </FilterPropertyColumnShell>
+                                        <FilterPropertyColumnShell title={"Stage"}>
+                                            <FilterCheckList
+                                                setFilter={
+                                                    this.setFilter
+                                                }
+                                                filters={this.selectedFiltersByGroupName}
+                                                options={sortStageOptions(this.makeOptions(
+                                                    PropNames.Stage
+                                                ))}
+                                            ></FilterCheckList>
+                                            }
+                                        </FilterPropertyColumnShell>
+
+                                    </div>
+                                </FilterPanel>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style={{ width: 220 }}>
+                                <FilterPanel placeholder={"Tissue Type"}>
+                                    <FilterPropertyColumnShell title={"Tissue Type"}>
+                                        <FilterCheckList
+                                            setFilter={
+                                                this.setFilter
+                                            }
+                                            filters={this.selectedFiltersByGroupName}
+                                            options={this.makeOptions(
+                                                PropNames.TissueorOrganofOrigin
+                                            )}
+                                        />
+                                    </FilterPropertyColumnShell>
+                                </FilterPanel>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style={{ width: 220 }}>
+                                <FilterPanel placeholder={"Assay Type"}>
+                                    <FilterPropertyColumnShell title={"Assay Type"}>
+                                        <FilterCheckList
+                                            setFilter={
+                                                this.setFilter
+                                            }
+                                            filters={this.selectedFiltersByGroupName}
+                                            options={this.makeOptions(
+                                                PropNames.Component
+                                            )}
+                                        />
+                                    </FilterPropertyColumnShell>
+                                </FilterPanel>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style={{ width: 220 }}>
+                                <FilterPanel placeholder={"File Type"}>
+                                    <FilterPropertyColumnShell title={"File Type"}>
+                                        <FilterCheckList
+                                            setFilter={
+                                                this.setFilter
+                                            }
+                                            filters={this.selectedFiltersByGroupName}
+                                            options={this.makeOptions(
+                                                PropNames.Level
+                                            )}
+                                        ></FilterCheckList>
+                                    </FilterPropertyColumnShell>
+                                </FilterPanel>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div className={'filter'}>
+                        {Object.keys(this.selectedFiltersByGroupName).map(
+                            (filter, i, filters) => {
+                                const numberOfAttributes = filters.length;
+                                const addAnd =
+                                    numberOfAttributes > 1 &&
+                                    i < numberOfAttributes - 1 ? (
+                                        <span className="logicalAnd">
+                                                AND
+                                            </span>
+                                    ) : null;
+
+                                return (
+                                    <span className="attributeGroup">
+                                            <span
+                                                className="attributeGroupName"
+                                                onClick={() => {
+                                                    this.setFilter([filter], {
+                                                        action: 'clear',
+                                                    });
+                                                }}
+                                            >
+                                                {
+                                                    PropMap[
+                                                        PropNames[
+                                                            filter as keyof typeof PropNames
+                                                            ]
+                                                        ].displayName
+                                                }
+                                            </span>
+
+                                        {this.selectedFiltersByGroupName[filter].map(
+                                            (value, i, values) => {
+                                                const numberOfValues =
+                                                    values.length;
+                                                const openParenthesis =
+                                                    numberOfValues > 1 &&
+                                                    i == 0 ? (
+                                                        <span className="logicalParentheses">
+                                                                (
+                                                            </span>
+                                                    ) : null;
+                                                const addOr =
+                                                    numberOfValues > 1 &&
+                                                    i <
+                                                    numberOfValues -
+                                                    1 ? (
+                                                        <span className="logicalOr">
+                                                                OR
+                                                            </span>
+                                                    ) : null;
+                                                const closeParenthesis =
+                                                    numberOfValues > 1 &&
+                                                    i ==
+                                                    numberOfValues -
+                                                    1 ? (
+                                                        <span className="logicalParentheses">
+                                                                )
+                                                            </span>
+                                                    ) : null;
+
+                                                return (
+                                                    <span className="attributeValues">
+                                                            {openParenthesis}
+                                                        <span
+                                                            className="attributeValue"
+                                                            onClick={() => {
+                                                                this.setFilter(
+                                                                    [
+                                                                        filter,
+                                                                    ],
+                                                                    {
+                                                                        action:
+                                                                            'deselect-option',
+                                                                        option: {
+                                                                            label:
+                                                                                '',
+                                                                            value:value.value,
+                                                                            group: filter,
+                                                                        },
+                                                                    }
+                                                                );
+                                                            }}
+                                                        >
+                                                                {value.value}
+                                                            </span>
+                                                        {addOr}
+                                                        {closeParenthesis}
+                                                        </span>
+                                                );
+                                            }
+                                        )}
+                                        {addAnd}
+                                        </span>
+                                );
+                            }
+                        )}
+                    </div>
+
+
                     <div className="subnav">
                         <ul className="nav nav-tabs">
                             <li className="nav-item">
@@ -302,243 +538,6 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             this.activeTab !== 'file' ? 'd-none' : ''
                         }`}
                     >
-                        <div className="filterControls">
-
-                            <div>
-                                <div style={{ width: 220 }}>
-                                    <Select
-                                        isSearchable
-                                        isClearable={false}
-                                        name="searchAll"
-                                        placeholder="Search all filters"
-                                        controlShouldRenderValue={false}
-                                        isMulti={true}
-                                        options={[
-                                            PropNames.AtlasName,
-                                            PropNames.TissueorOrganofOrigin,
-                                            PropNames.PrimaryDiagnosis,
-                                            PropNames.Component,
-                                            PropNames.Stage
-                                        ].map((propName) => {
-                                            return {
-                                                label:
-                                                    PropMap[propName]
-                                                        .displayName,
-                                                options: this.makeOptions(
-                                                    propName
-                                                ).map((option) =>
-                                                    Object.assign(option, {
-                                                        group: propName,
-                                                    })
-                                                ),
-                                            };
-                                        })}
-                                        hideSelectedOptions={false}
-                                        closeMenuOnSelect={false}
-                                        onChange={this.handleChange}
-                                        isOptionSelected={this.isOptionSelected}
-                                        value={
-                                            this.selectedFiltersByGroupName[
-                                                PropNames.AtlasName
-                                            ]
-                                        }
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <div style={{ width: 220 }}>
-                                    <FilterPanel placeholder={"Cancer Type"}>
-                                        <div
-                                            className={
-                                                'filter-checkbox-list-container'
-                                            }
-                                        >
-                                           <FilterPropertyColumnShell title={"Cancer Type"}>
-                                                    <FilterCheckList
-                                                        setFilter={
-                                                            this.setFilter
-                                                        }
-                                                        filters={this.selectedFiltersByGroupName}
-                                                        options={this.makeOptions(
-                                                            PropNames.PrimaryDiagnosis
-                                                        )}
-                                                    ></FilterCheckList>
-                                           </FilterPropertyColumnShell>
-                                            <FilterPropertyColumnShell title={"Stage"}>
-                                                    <FilterCheckList
-                                                        setFilter={
-                                                            this.setFilter
-                                                        }
-                                                        filters={this.selectedFiltersByGroupName}
-                                                        options={sortStageOptions(this.makeOptions(
-                                                            PropNames.Stage
-                                                        ))}
-                                                    ></FilterCheckList>
-                                                }
-                                            </FilterPropertyColumnShell>
-
-                                        </div>
-                                    </FilterPanel>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div style={{ width: 220 }}>
-                                    <FilterPanel placeholder={"Tissue Type"}>
-                                        <FilterPropertyColumnShell title={"Tissue Type"}>
-                                            <FilterCheckList
-                                                setFilter={
-                                                    this.setFilter
-                                                }
-                                                filters={this.selectedFiltersByGroupName}
-                                                options={this.makeOptions(
-                                                    PropNames.TissueorOrganofOrigin
-                                                )}
-                                            />
-                                        </FilterPropertyColumnShell>
-                                    </FilterPanel>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div style={{ width: 220 }}>
-                                    <FilterPanel placeholder={"Assay Type"}>
-                                        <FilterPropertyColumnShell title={"Assay Type"}>
-                                                    <FilterCheckList
-                                                        setFilter={
-                                                            this.setFilter
-                                                        }
-                                                        filters={this.selectedFiltersByGroupName}
-                                                        options={this.makeOptions(
-                                                            PropNames.Component
-                                                        )}
-                                                    />
-                                        </FilterPropertyColumnShell>
-                                    </FilterPanel>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div style={{ width: 220 }}>
-                                    <FilterPanel placeholder={"File Type"}>
-                                            <FilterPropertyColumnShell title={"File Type"}>
-                                                    <FilterCheckList
-                                                        setFilter={
-                                                            this.setFilter
-                                                        }
-                                                        filters={this.selectedFiltersByGroupName}
-                                                        options={this.makeOptions(
-                                                            PropNames.Level
-                                                        )}
-                                                    ></FilterCheckList>
-                                            </FilterPropertyColumnShell>
-                                    </FilterPanel>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-
-                        <div className={'filter'}>
-                            {Object.keys(this.selectedFiltersByGroupName).map(
-                                (filter, i, filters) => {
-                                    const numberOfAttributes = filters.length;
-                                    const addAnd =
-                                        numberOfAttributes > 1 &&
-                                        i < numberOfAttributes - 1 ? (
-                                            <span className="logicalAnd">
-                                                AND
-                                            </span>
-                                        ) : null;
-
-                                    return (
-                                        <span className="attributeGroup">
-                                            <span
-                                                className="attributeGroupName"
-                                                onClick={() => {
-                                                    this.setFilter([filter], {
-                                                        action: 'clear',
-                                                    });
-                                                }}
-                                            >
-                                                {
-                                                    PropMap[
-                                                        PropNames[
-                                                            filter as keyof typeof PropNames
-                                                        ]
-                                                    ].displayName
-                                                }
-                                            </span>
-
-                                            {this.selectedFiltersByGroupName[filter].map(
-                                                (value, i, values) => {
-                                                    const numberOfValues =
-                                                        values.length;
-                                                    const openParenthesis =
-                                                        numberOfValues > 1 &&
-                                                        i == 0 ? (
-                                                            <span className="logicalParentheses">
-                                                                (
-                                                            </span>
-                                                        ) : null;
-                                                    const addOr =
-                                                        numberOfValues > 1 &&
-                                                        i <
-                                                            numberOfValues -
-                                                                1 ? (
-                                                            <span className="logicalOr">
-                                                                OR
-                                                            </span>
-                                                        ) : null;
-                                                    const closeParenthesis =
-                                                        numberOfValues > 1 &&
-                                                        i ==
-                                                            numberOfValues -
-                                                                1 ? (
-                                                            <span className="logicalParentheses">
-                                                                )
-                                                            </span>
-                                                        ) : null;
-
-                                                    return (
-                                                        <span className="attributeValues">
-                                                            {openParenthesis}
-                                                            <span
-                                                                className="attributeValue"
-                                                                onClick={() => {
-                                                                    this.setFilter(
-                                                                        [
-                                                                            filter,
-                                                                        ],
-                                                                        {
-                                                                            action:
-                                                                                'deselect-option',
-                                                                            option: {
-                                                                                label:
-                                                                                    '',
-                                                                                value:value.value,
-                                                                                group: filter,
-                                                                            },
-                                                                        }
-                                                                    );
-                                                                }}
-                                                            >
-                                                                {value.value}
-                                                            </span>
-                                                            {addOr}
-                                                            {closeParenthesis}
-                                                        </span>
-                                                    );
-                                                }
-                                            )}
-                                            {addAnd}
-                                        </span>
-                                    );
-                                }
-                            )}
-                        </div>
                         <FileTable
                             entities={this.filteredFiles}
                             getGroupsByPropertyFiltered={this.getGroupsByPropertyFiltered}
@@ -601,7 +600,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                         <td>{specimen.PrimaryDiagnosis}</td>
                                         <td>{specimen.AgeatDiagnosis}</td>
                                         <td>
-                                            <button className={"btn btn-primary btn-sm"}>Download</button>
+                                            <a href={"#"}>Download</a>
                                         </td>
                                     </tr>
                                 })
