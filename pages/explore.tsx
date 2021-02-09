@@ -206,8 +206,8 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
     @computed
     get samples(){
-        return _(this.filteredFiles)
-            .filter((f) => f.biospecimen && f.biospecimen.HTANParentID)
+        return _.chain(this.filteredFiles)
+            .filter((f) => !!f.biospecimen && !!f.biospecimen.HTANParentID)
             .map((f: any) => f.biospecimen)
             .uniqBy((f) => f.HTANBiospecimenID)
             .value();
@@ -215,7 +215,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
     @computed
     get cases(){
-        return _(this.filteredFiles)
+        return _.chain(this.filteredFiles)
             .map((f: any) => f.diagnosis)
             .uniqBy((f)=>f.HTANParticipantID)
             .value();
@@ -314,7 +314,6 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                                     PropNames.Stage
                                                 ))}
                                             ></FilterCheckList>
-                                            }
                                         </FilterPropertyColumnShell>
 
                                     </div>

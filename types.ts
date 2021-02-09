@@ -55,4 +55,7 @@ export interface WPAtlas {
     synapse_id: string;
     htan_id: string;
     primary_ngs: string;
+    short_description: string;
+    home_image: { guid:string };
+
 }
