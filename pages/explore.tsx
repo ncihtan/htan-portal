@@ -209,14 +209,20 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         return _(this.filteredFiles)
             .filter((f) => f.biospecimen && f.biospecimen.HTANParentID)
             .map((f: any) => f.biospecimen)
-            .uniq()
+            .uniqBy((f) => f.HTANBiospecimenID)
+            .value();
+    }
+
+    @computed
+    get cases(){
+        return _(this.filteredFiles)
+            .map((f: any) => f.diagnosis)
+            .uniqBy((f)=>f.HTANParticipantID)
             .value();
     }
 
     render() {
         var self = this;
-
-        console.log(this.samples);
 
         //@ts-ignore
         const patients = _(this.filteredFiles)
@@ -376,30 +382,6 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                     </FilterPanel>
                                 </div>
                             </div>
-
-                            {/*<div>*/}
-                            {/*    <div style={{ width: 300 }}>*/}
-                            {/*        <Select*/}
-                            {/*            placeholder="Atlas"*/}
-                            {/*            controlShouldRenderValue={false}*/}
-                            {/*            isClearable={false}*/}
-                            {/*            isSearchable*/}
-                            {/*            name="color"*/}
-                            {/*            isMulti={true}*/}
-                            {/*            options={this.makeOptions(*/}
-                            {/*                PropNames.AtlasName*/}
-                            {/*            )}*/}
-                            {/*            hideSelectedOptions={false}*/}
-                            {/*            closeMenuOnSelect={false}*/}
-                            {/*            onChange={this.handleChange}*/}
-                            {/*            value={*/}
-                            {/*                this.selectedFiltersByGroupName[*/}
-                            {/*                    PropNames.AtlasName*/}
-                            {/*                ]*/}
-                            {/*            }*/}
-                            {/*        />*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
 
                             <div>
                                 <div style={{ width: 220 }}>
@@ -569,7 +551,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             this.activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
                         }`}
                     >
-                        <table className={"table"}>
+                        <table className={"table table-striped"}>
                             <thead>
                                 <tr>
                                     <th>HTANBiospecimenID</th>
@@ -600,7 +582,32 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             this.activeTab !== ExploreTab.CASES ? 'd-none' : ''
                         }`}
                     >
-                        Cases
+                        <table className={"table table-striped"}>
+                            <thead>
+                            <tr>
+                                <th>HTANParticipantID</th>
+                                <th>Atlas</th>
+                                <th>PrimaryDiagnosis</th>
+                                <th>Age at diagnosis</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                this.cases.map((specimen)=>{
+                                    return  <tr>
+                                        <td>{specimen.HTANParticipantID}</td>
+                                        <td>{specimen.atlasid}</td>
+                                        <td>{specimen.PrimaryDiagnosis}</td>
+                                        <td>{specimen.AgeatDiagnosis}</td>
+                                        <td>
+                                            <button className={"btn btn-primary btn-sm"}>Download</button>
+                                        </td>
+                                    </tr>
+                                })
+                            }
+                            </tbody>
+                        </table>
                     </div>
 
 

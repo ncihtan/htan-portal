@@ -94,6 +94,12 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
         return obj.Component === 'bts:Biospecimen';
     });
 
+    const cases = flatData.filter((obj) => {
+        return obj.Component === 'bts:Demographics';
+    });
+
+    const casesByIdMap = _.keyBy(cases,(c)=>c.HTANParentID);
+
     const diagnoses = flatData.filter((obj) => {
         return obj.Component === 'bts:Diagnosis';
     });
@@ -114,6 +120,8 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
         } else {
             file.level = "Unknown";
         }
+
+        //file.case = casesByIdMap[file.HTANParentID];
 
         file.WPAtlas =
             atlasMap[
