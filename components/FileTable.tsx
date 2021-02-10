@@ -5,8 +5,9 @@ import React from 'react';
 import {Button, Modal} from "react-bootstrap";
 import DataTable from "react-data-table-component";
 
-import { Atlas, Entity } from '../../lib/helpers';
-import {PropNames} from "../../lib/types";
+import { Atlas, Entity } from '../lib/helpers';
+import { PropNames } from "../lib/types";
+import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
 
 interface IFileTableHeaderProps {
     filteredFiles: Entity[];
@@ -253,14 +254,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             onDownload={this.onDownload}
                         />
                     }
-                    customStyles={{
-                        headCells: {
-                            style: {
-                                fontSize: 16,
-                                fontWeight: "bold",
-                            },
-                        },
-                    }}
+                    customStyles={getDefaultDataTableStyle()}
                 />
             </>
         ) : null;
