@@ -7,6 +7,11 @@ export type ExploreOptionType = {
     count?: number;
 };
 
+export type ExploreSelectedFilter = {
+    group: string;
+    value: string;
+}
+
 export enum PropNames {
     TissueorOrganofOrigin = 'TissueorOrganofOrigin',
     PrimaryDiagnosis = 'PrimaryDiagnosis',
@@ -56,5 +61,5 @@ export interface IFilterProps {
 }
 
 export interface IFiltersByGroupName {
-    [groupName: string]: ExploreOptionType[];
+    [groupName: string]: ExploreSelectedFilter[];
 }

@@ -2,7 +2,15 @@ import React from 'react';
 import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
 import _ from 'lodash';
-import {loadData, Entity, Atlas, sortStageOptions, LoadDataResult} from '../lib/helpers';
+import {
+    loadData,
+    Entity,
+    Atlas,
+    sortStageOptions,
+    LoadDataResult,
+    parseSelectedFilters,
+    encodeSelectedFilters
+} from '../lib/helpers';
 import FileTable from '../components/filter/FileTable';
 import Select, { ActionMeta, ValueType } from 'react-select';
 import getData from '../lib/getData';
@@ -22,6 +30,7 @@ import { observer } from 'mobx-react';
 import FilterPanel from '../components/FilterPanel/FilterPanel';
 import {
     ExploreOptionType,
+    ExploreSelectedFilter,
     IFilterProps, IFiltersByGroupName,
     PropMap,
     PropNames,
@@ -72,6 +81,10 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         makeObservable(this);
     }
 
+    get selectedFilters():ExploreSelectedFilter[] {
+        return parseSelectedFilters(this.props.router.query.selectedFilters as string|undefined) || [];
+    }
+
     get activeTab() {
         return this.props.router.query.tab || ExploreTab.FILE;
     }
@@ -96,35 +109,33 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         return m;
     }
 
-    @observable.ref someValue: ExploreOptionType[] = [];
-
     @computed get selectedFiltersByGroupName() : IFiltersByGroupName {
-        return _.groupBy(this.someValue, (item) => {
+        return _.groupBy(this.selectedFilters, (item) => {
             return item.group;
         });
     }
 
     @action.bound
-    setFilter(groupNames: string[], actionMeta: ActionMeta<ExploreOptionType>) {
+    setFilter(groupNames: string[], actionMeta: ActionMeta<ExploreSelectedFilter>) {
         //const filters = Object.assign({}, this.state.filters);
 
+        let newFilters:ExploreSelectedFilter[] = this.selectedFilters;
         if (actionMeta && actionMeta.option) {
             // first remove the item
-            this.someValue = this.someValue.filter((o)=>{
+            newFilters = this.selectedFilters.filter((o)=>{
                 return o.group !== actionMeta!.option!.group! || o.value !== actionMeta!.option!.value!;
             });
 
-            if (actionMeta.action === 'deselect-option') {
+            if (actionMeta.action === 'select-option') {
                 const option = actionMeta.option;
-            } else if (actionMeta.action === 'select-option') {
-                const option = actionMeta.option;
-                this.someValue = this.someValue.concat([option]);
+                newFilters = newFilters.concat([option]);
             }
         } else if (actionMeta.action === 'clear') {
-            this.someValue = this.someValue.filter((o)=>{
+            newFilters = this.selectedFilters.filter((o)=>{
                 return o.group !== actionMeta!.option!.group
             });
         }
+        this.updateSelectedFiltersInURL(newFilters);
     }
 
     componentDidMount(): void {
@@ -137,6 +148,13 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         });
     }
 
+    updateSelectedFiltersInURL(filters:ExploreSelectedFilter[]) {
+        this.props.router.push({
+            pathname: this.props.router.pathname,
+            query: { selectedFilters: encodeSelectedFilters(filters) },
+        }, undefined, {shallow: true});
+    }
+
     setTab(tab: string) {
         this.props.router.push({
             pathname: this.props.router.pathname,
@@ -144,7 +162,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         }, undefined, { shallow: true });
     }
 
-    filterFiles(filters: { [key: string]: ExploreOptionType[] }, files: Entity[]) {
+    filterFiles(filters: { [key: string]: ExploreSelectedFilter[] }, files: Entity[]) {
         if (_.size(filters)) {
             // find the files where the passed filters match
             return files.filter((f) => {
@@ -180,10 +198,10 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         });
     }
 
-    isOptionSelected = (option:ExploreOptionType) => {
+    isOptionSelected = (option:ExploreSelectedFilter) => {
         return (
-            _.find(this.someValue,
-                (o:ExploreOptionType) => o.value === option.value && option.group === o.group
+            _.find(this.selectedFilters,
+                (o:ExploreSelectedFilter) => o.value === option.value && option.group === o.group
             ) !== undefined
         );
     };
@@ -194,14 +212,16 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
     @action.bound handleChange(
         value: any,
-        actionMeta: ActionMeta<ExploreOptionType>
+        actionMeta: ActionMeta<ExploreSelectedFilter>
     ) {
 
-        this.someValue = this.someValue.filter((o)=>{
+        let newFilters = this.selectedFilters.filter((o)=>{
             return o.group !== actionMeta!.option!.group! || o.value !== actionMeta!.option!.value!;
         });
 
-        this.someValue = this.someValue.concat([actionMeta.option!]);
+        newFilters = newFilters.concat([actionMeta.option!]);
+
+        this.updateSelectedFiltersInURL(newFilters);
     }
 
     @computed
@@ -454,8 +474,6 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                                                                         action:
                                                                             'deselect-option',
                                                                         option: {
-                                                                            label:
-                                                                                '',
                                                                             value:value.value,
                                                                             group: filter,
                                                                         },

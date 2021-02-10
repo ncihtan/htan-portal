@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import fetch from 'node-fetch';
 import { WPAtlas } from '../types';
-import {ExploreOptionType} from "./types";
+import {ExploreOptionType, ExploreSelectedFilter} from "./types";
 import {toArabic} from "roman-numerals";
 
 export function getRecords(obj: any): any {
@@ -202,4 +202,14 @@ export function parseRawAssayType(t:string) {
 
     // Couldn't parse
     return { name: t, level: null };
+}
+
+export function encodeSelectedFilters(selectedFilters:ExploreSelectedFilter[]) {
+    return JSON.stringify(selectedFilters);
+}
+export function parseSelectedFilters(selectedFiltersURLQueryParam:string|undefined):ExploreSelectedFilter[] | null {
+    if (selectedFiltersURLQueryParam) {
+        return JSON.parse(selectedFiltersURLQueryParam);
+    }
+    return null;
 }
