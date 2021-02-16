@@ -11,11 +11,10 @@ import {
     parseSelectedFilters,
     encodeSelectedFilters
 } from '../lib/helpers';
-import FileTable from '../components/filter/FileTable';
+import FileTable from '../components/FileTable';
 import Select, { ActionMeta, ValueType } from 'react-select';
 import getData from '../lib/getData';
 import fetch from 'node-fetch';
-import { toArabic } from 'roman-numerals';
 
 import {action, computed, makeObservable, observable, runInAction} from 'mobx';
 import { fromPromise } from 'mobx-utils';
@@ -24,8 +23,7 @@ import { fromPromise } from 'mobx-utils';
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
 import { GetStaticProps } from 'next';
 import { WPAtlas } from '../types';
-import { WPAtlasTable } from '../components/filter/WPAtlasTable';
-import { Button } from 'react-bootstrap';
+import { WPAtlasTable } from '../components/WPAtlasTable';
 import { observer } from 'mobx-react';
 import FilterPanel from '../components/FilterPanel/FilterPanel';
 import {
@@ -41,6 +39,8 @@ import {ScaleLoader} from "react-spinners";
 import {withRouter, NextRouter} from "next/router";
 import styles from "./styles.module.scss";
 import FilterPropertyColumnShell from "../components/FilterPanel/FilterPropertyColumn";
+import BiospecimenTable from "../components/BiospecimenTable";
+import CaseTable from "../components/CaseTable";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -567,30 +567,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             this.activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
                         }`}
                     >
-                        <table className={"table table-striped"}>
-                            <thead>
-                                <tr>
-                                    <th>HTANBiospecimenID</th>
-                                    <th>atlasid</th>
-                                    <th>BiospecimenType</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.samples.map((specimen)=>{
-                                   return  <tr>
-                                       <td>{specimen.HTANBiospecimenID}</td>
-                                       <td>{specimen.atlasid}</td>
-                                       <td>{specimen.BiospecimenType}</td>
-                                       <td>
-                                           <button className={"btn btn-primary btn-sm"}>Download</button>
-                                       </td>
-                                   </tr>
-                                })
-                            }
-                            </tbody>
-                        </table>
+                        <BiospecimenTable samples={this.samples} />
                     </div>
 
                     <div
@@ -598,32 +575,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                             this.activeTab !== ExploreTab.CASES ? 'd-none' : ''
                         }`}
                     >
-                        <table className={"table table-striped"}>
-                            <thead>
-                            <tr>
-                                <th>HTANParticipantID</th>
-                                <th>Atlas</th>
-                                <th>PrimaryDiagnosis</th>
-                                <th>Age at diagnosis</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.cases.map((specimen)=>{
-                                    return  <tr>
-                                        <td>{specimen.HTANParticipantID}</td>
-                                        <td>{specimen.atlasid}</td>
-                                        <td>{specimen.PrimaryDiagnosis}</td>
-                                        <td>{specimen.AgeatDiagnosis}</td>
-                                        <td>
-                                            <a href={"#"}>Download</a>
-                                        </td>
-                                    </tr>
-                                })
-                            }
-                            </tbody>
-                        </table>
+                        <CaseTable cases={this.cases} />
                     </div>
 
 
