@@ -5,9 +5,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { GetServerSideProps, GetStaticProps } from 'next';
-import fetch from 'node-fetch';
 import { CmsData } from '../../types';
-import { WORDPRESS_BASE_URL } from '../../ApiUtil';
+import { getStaticContent } from '../../ApiUtil';
 
 export interface BiospecimenProps {
     data: CmsData[];
@@ -43,10 +42,7 @@ function Scatacseq(data: BiospecimenProps) {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let slugs = ['data-standards-scatacseq-blurb'];
-    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    let res = await fetch(overviewURL);
-    let data = await res.json();
+    const data = await getStaticContent(['data-standards-scatacseq-blurb']);
     return { props: { data } };
 };
 

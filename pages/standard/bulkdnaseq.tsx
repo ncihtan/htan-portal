@@ -5,9 +5,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { GetServerSideProps, GetStaticProps } from 'next';
-import fetch from 'node-fetch';
 import { CmsData } from '../../types';
-import { WORDPRESS_BASE_URL } from '../../ApiUtil';
+import { getStaticContent } from '../../ApiUtil';
 
 export interface BulkDNASeqProps {
     data: CmsData[];
@@ -41,10 +40,7 @@ function BulkDNASeq(data: BulkDNASeqProps) {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let slugs = ['data-standards-bulk-dnaseq-blurb'];
-    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    let res = await fetch(overviewURL);
-    let data = await res.json();
+    const data = await getStaticContent(['data-standards-bulk-dnaseq-blurb']);
     return { props: { data } };
 };
 

@@ -1,19 +1,21 @@
 import React from 'react';
+import DataSchema from "../../components/DataSchema";
 import HtanNavbar from '../../components/HtanNavbar';
 import Footer from '../../components/Footer';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { GetServerSideProps, GetStaticProps } from 'next';
-import fetch from 'node-fetch';
 import { CmsData } from '../../types';
-import { WORDPRESS_BASE_URL } from '../../ApiUtil';
+import { getStaticContent } from '../../ApiUtil';
+import { ExtendedDataSchema, getDataSchema } from "../../lib/dataSchemaHelpers";
 
 export interface RnaseqProps {
     data: CmsData[];
+    schemaData: ExtendedDataSchema[];
 }
 
-function Rnaseq(data: RnaseqProps) {
+const Rnaseq: React.FunctionComponent<RnaseqProps> = props => {
     return (
         <>
             <HtanNavbar />
@@ -32,9 +34,12 @@ function Rnaseq(data: RnaseqProps) {
                 <Row>
                     <span
                         dangerouslySetInnerHTML={{
-                            __html: data.data[0].content.rendered,
+                            __html: props.data[0].content.rendered,
                         }}
                     ></span>
+                </Row>
+                <Row>
+                    <DataSchema schemaData={props.schemaData} />
                 </Row>
             </Container>
             <Footer />
@@ -43,11 +48,12 @@ function Rnaseq(data: RnaseqProps) {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let slugs = ['data-standards-rnaseq-blurb'];
-    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    let res = await fetch(overviewURL);
-    let data = await res.json();
-    return { props: { data } };
+    const data = await getStaticContent(['data-standards-rnaseq-blurb']);
+    const schemaData = await getDataSchema(
+        ["bts:ScRNA-seqLevel1", "bts:ScRNA-seqLevel2", "bts:ScRNA-seqLevel3", "bts:ScRNA-seqLevel4"]
+    );
+
+    return { props: { data, schemaData } };
 };
 
 export default Rnaseq;

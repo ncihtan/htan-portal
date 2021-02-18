@@ -25,4 +25,12 @@ export function getAtlasList(): Promise<WPAtlas[]> {
     return fetcher(postUrl);
 }
 
+export async function getStaticContent(slugs: string[])
+{
+    const overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
+    const res = await fetch(overviewURL);
+
+    return res.json();
+}
+
 export const WORDPRESS_BASE_URL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?_fields=content,slug,title&cacheBuster=${new Date().getTime()}&slug=`;
