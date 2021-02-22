@@ -111,8 +111,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         runInAction(()=> {
             this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
             this.dataLoadingPromise.then(({files, atlases}) => {
-                const filteredFiles = files.filter((f) => !!f.diagnosis);
-                this.setState({files: filteredFiles, atlases: atlases});
+                this.setState({files, atlases});
             });
         });
     }

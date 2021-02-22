@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import CardGroup from 'react-bootstrap/CardGroup';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import {WPAtlas} from "../types";
 import styles from "./homeStyles.module.scss";
+import {computeDashboardData, loadData} from "../lib/helpers";
+import {BeatLoader} from "react-spinners";
 
 export interface IHomePropsProps {
     hero_blurb: string;
@@ -34,12 +34,13 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     cards,
     atlases
 }) => {
-    const dashboardData = [
-        { text: '12', description: 'Atlases' },
-        { text: '11', description: 'Organs' },
-        { text: '>1K', description: 'Cases' },
-        { text: '>10K', description: 'Biospecimens' },
-    ];
+    const [dashboardData, setDashboardData] = useState<{text: string, description:string}[]>();
+
+    useEffect(()=>{
+        loadData(atlases).then(({files, atlases})=> {
+            setDashboardData(computeDashboardData(files));
+        });
+    });
 
     return (
         <>
@@ -84,7 +85,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 }}
             >
                 <Row className="justify-content-md-center">
-                    {dashboardData.map((icon) =>
+                    {!dashboardData && <BeatLoader/>}
+                    {dashboardData && dashboardData.map((icon) =>
                         dashboardIcon(icon.text, icon.description)
                     )}
                 </Row>

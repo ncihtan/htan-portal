@@ -68,6 +68,7 @@ export interface Entity {
     fileFormat: string;
     filename: string;
     HTANParentID: string;
+    HTANParticipantID:string;
     level: string;
     WPAtlas: WPAtlas;
     biospecimen: Entity | undefined;
@@ -148,7 +149,8 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
         //file.participant =
     });
 
-    return { files, atlases: data.atlases };
+    // filter out files without a diagnosis
+    return { files: files.filter(f=>!!f.diagnosis), atlases: data.atlases };
 }
 
 
@@ -235,4 +237,23 @@ export function setTab(
         pathname: router.pathname,
         query: { tab }
     }, undefined, { shallow: true });
+}
+
+export function computeDashboardData(files:Entity[]) {
+    const uniqueAtlases = new Set();
+    const uniqueOrgans = new Set();
+    const uniqueBiospecs = new Set();
+    const uniqueCases = new Set();
+    for (const file of files) {
+        uniqueAtlases.add(file.atlasid);
+        uniqueOrgans.add(file.TissueorOrganofOrigin);
+        uniqueBiospecs.add(file.biospecimen);
+        uniqueCases.add(file.diagnosis!.HTANParticipantID);
+    }
+    return [
+        { description: 'Atlases', text: uniqueAtlases.size.toString() },
+        { description: 'Organs', text: uniqueOrgans.size.toString() },
+        { description: 'Cases', text: uniqueCases.size.toString() },
+        { description: 'Biospecimens', text: uniqueBiospecs.size.toString() }
+    ];
 }
