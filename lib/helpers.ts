@@ -1,8 +1,11 @@
 import _ from 'lodash';
+import {NextRouter} from "next/router";
 import fetch from 'node-fetch';
+import {toArabic} from "roman-numerals";
+
 import { WPAtlas } from '../types';
 import {ExploreOptionType, ExploreSelectedFilter} from "./types";
-import {toArabic} from "roman-numerals";
+
 
 export function getRecords(obj: any): any {
     if (_.isObject(obj) || _.isArray(obj)) {
@@ -212,4 +215,24 @@ export function parseSelectedFilters(selectedFiltersURLQueryParam:string|undefin
         return JSON.parse(selectedFiltersURLQueryParam);
     }
     return null;
+}
+
+export function updateSelectedFiltersInURL(
+    filters: ExploreSelectedFilter[],
+    router: NextRouter
+) {
+    router.push({
+        pathname: router.pathname,
+        query: { selectedFilters: encodeSelectedFilters(filters) },
+    }, undefined, {shallow: true});
+}
+
+export function setTab(
+    tab: string,
+    router: NextRouter
+) {
+    router.push({
+        pathname: router.pathname,
+        query: { tab }
+    }, undefined, { shallow: true });
 }
