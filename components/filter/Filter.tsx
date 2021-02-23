@@ -5,7 +5,7 @@ import {ActionMeta} from "react-select";
 import {ExploreSelectedFilter, IFiltersByGroupName, PropMap, PropNames} from "../../lib/types";
 
 interface IFilterProps {
-    setFilter: (groupNames: string[], actionMeta: ActionMeta<ExploreSelectedFilter>) => void;
+    setFilter: (actionMeta: ActionMeta<ExploreSelectedFilter>) => void;
     selectedFiltersByGroupName: IFiltersByGroupName;
 }
 
@@ -28,8 +28,12 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                             <span
                                 className="attributeGroupName"
                                 onClick={() => {
-                                    props.setFilter([filter], {
+                                    props.setFilter({
                                         action: 'clear',
+                                        option: {
+                                            group: filter,
+                                            value: ''
+                                        }
                                     });
                                 }}
                             >
@@ -79,9 +83,6 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                                                 className="attributeValue"
                                                 onClick={() => {
                                                     props.setFilter(
-                                                        [
-                                                            filter,
-                                                        ],
                                                         {
                                                             action:
                                                                 'deselect-option',

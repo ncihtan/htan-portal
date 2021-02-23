@@ -19,7 +19,7 @@ import {
     updateSelectedFiltersInURL
 } from '../lib/helpers';
 import {
-    ExploreSelectedFilter,
+    ExploreSelectedFilter, FilterAction,
     IFilterProps,
     IFiltersByGroupName,
 } from '../lib/types';
@@ -84,24 +84,31 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
     }
 
     @action.bound
-    setFilter(groupNames: string[], actionMeta: ActionMeta<ExploreSelectedFilter>) {
+    setFilter(actionMeta: ActionMeta<ExploreSelectedFilter>) {
         //const filters = Object.assign({}, this.state.filters);
 
         let newFilters:ExploreSelectedFilter[] = this.selectedFilters;
         if (actionMeta && actionMeta.option) {
-            // first remove the item
-            newFilters = this.selectedFilters.filter((o)=>{
-                return o.group !== actionMeta!.option!.group! || o.value !== actionMeta!.option!.value!;
-            });
-
-            if (actionMeta.action === 'select-option') {
-                const option = actionMeta.option;
-                newFilters = newFilters.concat([option]);
+            switch (actionMeta.action) {
+                case FilterAction.CLEAR:
+                    // Deselect all options for the given group
+                    newFilters = this.selectedFilters.filter((o) => {
+                        return o.group !== actionMeta!.option!.group
+                    });
+                    break;
+                case FilterAction.SELECT:
+                case FilterAction.DESELECT:
+                    // first remove the item
+                    newFilters = this.selectedFilters.filter((o) => {
+                        return o.group !== actionMeta!.option!.group! || o.value !== actionMeta!.option!.value!;
+                    });
+                    if (actionMeta.action === 'select-option') {
+                        // Add it back if selecting
+                        const option = actionMeta.option;
+                        newFilters = newFilters.concat([option]);
+                    }
+                    break;
             }
-        } else if (actionMeta.action === 'clear') {
-            newFilters = this.selectedFilters.filter((o)=>{
-                return o.group !== actionMeta!.option!.group
-            });
         }
 
         updateSelectedFiltersInURL(newFilters, this.props.router);
@@ -154,7 +161,6 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                 <div style={{ padding: 20 }}>
 
                     <FilterControls
-                        router={this.props.router}
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={this.selectedFiltersByGroupName}
                         selectedFilters={this.selectedFilters}

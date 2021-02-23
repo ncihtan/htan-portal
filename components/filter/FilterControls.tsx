@@ -1,5 +1,4 @@
 import _ from "lodash";
-import {NextRouter} from "next/router";
 import {action} from "mobx";
 import {observer} from "mobx-react";
 import React from "react";
@@ -14,8 +13,7 @@ import FilterPropertyColumnShell from "../FilterPanel/FilterPropertyColumn";
 
 
 interface IFilterControlsProps {
-    router: NextRouter;
-    setFilter: (groupNames: string[], actionMeta: ActionMeta<ExploreSelectedFilter>) => void;
+    setFilter: (actionMeta: ActionMeta<ExploreSelectedFilter>) => void;
     selectedFiltersByGroupName: IFiltersByGroupName;
     selectedFilters: ExploreSelectedFilter[];
     files: Entity[];
@@ -24,13 +22,20 @@ interface IFilterControlsProps {
 
 const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(props => {
     const options = (propName: string): ExploreOptionType[] => {
-        return makeOptions(propName, props.selectedFiltersByGroupName, props.files, props.getGroupsByProperty);
+        const ret = makeOptions(propName, props.selectedFiltersByGroupName, props.files, props.getGroupsByProperty);
+        ret.forEach(opt=>{
+            opt.group = propName;
+            opt.isSelected = isOptionSelected(opt); // this call has to happen after setting `group`
+        });
+        return ret;
     }
 
     const isOptionSelected = (option:ExploreSelectedFilter) => {
         return (
             _.find(props.selectedFilters,
-                (o:ExploreSelectedFilter) => o.value === option.value && option.group === o.group
+                (o:ExploreSelectedFilter) => {
+                    return o.value === option.value && option.group === o.group;
+                }
             ) !== undefined
         );
     };
@@ -39,13 +44,24 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(p
             value: any,
             actionMeta: ActionMeta<ExploreSelectedFilter>
     ) => {
-        let newFilters = props.selectedFilters.filter((o)=>{
-            return o.group !== actionMeta!.option!.group! || o.value !== actionMeta!.option!.value!;
-        });
+        props.setFilter(actionMeta);
+    });
 
-        newFilters = newFilters.concat([actionMeta.option!]);
-
-        updateSelectedFiltersInURL(newFilters, props.router);
+    const selectOptions = [
+        PropNames.AtlasName,
+        PropNames.TissueorOrganofOrigin,
+        PropNames.PrimaryDiagnosis,
+        PropNames.Component,
+        PropNames.Stage
+    ].map((propName) => {
+        return {
+            label:
+            PropMap[propName]
+                .displayName,
+            options: options(
+                propName
+            ),
+        };
     });
 
     return (
@@ -60,35 +76,11 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(p
                         placeholder="Search all filters"
                         controlShouldRenderValue={false}
                         isMulti={true}
-                        options={[
-                            PropNames.AtlasName,
-                            PropNames.TissueorOrganofOrigin,
-                            PropNames.PrimaryDiagnosis,
-                            PropNames.Component,
-                            PropNames.Stage
-                        ].map((propName) => {
-                            return {
-                                label:
-                                PropMap[propName]
-                                    .displayName,
-                                options: options(
-                                    propName
-                                ).map((option) =>
-                                    Object.assign(option, {
-                                        group: propName,
-                                    })
-                                ),
-                            };
-                        })}
+                        options={selectOptions}
                         hideSelectedOptions={false}
                         closeMenuOnSelect={false}
                         onChange={handleChange}
-                        isOptionSelected={isOptionSelected}
-                        value={
-                            props.selectedFiltersByGroupName[
-                                PropNames.AtlasName
-                                ]
-                        }
+                        value={_.flatMap(selectOptions, obj=>obj.options).filter(o=>o.isSelected)}
                     />
                 </div>
             </div>

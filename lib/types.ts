@@ -5,6 +5,7 @@ export type ExploreOptionType = {
     label: string;
     group: string;
     count?: number;
+    isSelected?:boolean;
 };
 
 export type ExploreSelectedFilter = {
@@ -62,4 +63,11 @@ export interface IFilterProps {
 
 export interface IFiltersByGroupName {
     [groupName: string]: ExploreSelectedFilter[];
+}
+
+export enum FilterAction {
+    // these strings are hard-coded in react-select
+    CLEAR = 'clear',
+    SELECT = 'select-option',
+    DESELECT = 'deselect-option'
 }
