@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import DataTable from "react-data-table-component";
 
@@ -13,7 +14,12 @@ const ExpandableComponent: React.FunctionComponent<{data?: ExtendedDataSchema}> 
         <div className="m-3">
             {props.data?.dependencies &&
                 <DataSchemaTable
-                    schemaData={props.data.dependencies.map(d => ({dataSchema: d}))}
+                    schemaData={
+                        props.data.dependencies.map(d => ({
+                            dataSchema: d,
+                            validValuesMap: props.data?.validValuesMap
+                        }))
+                    }
                     title="Dependencies:"
                     expandableRows={false}
                 />
@@ -21,7 +27,12 @@ const ExpandableComponent: React.FunctionComponent<{data?: ExtendedDataSchema}> 
 
             {props.data?.parents &&
                 <DataSchemaTable
-                    schemaData={props.data.parents.map(p => ({dataSchema: p}))}
+                    schemaData={
+                        props.data.parents.map(p => ({
+                            dataSchema: p,
+                            validValuesMap: props.data?.validValuesMap
+                        }))
+                    }
                     title="Parents:"
                     expandableRows={false}
                 />
@@ -62,15 +73,15 @@ const DataSchemaTable: React.FunctionComponent<{
             sortable: true,
         },
         {
-            name: "Type",
-            selector: 'dataSchema.type',
-            wrap: true,
-            sortable: true,
-        },
-        {
             name: "Valid Values",
             selector: 'dataSchema.validValues',
-            format: (schemaData: ExtendedDataSchema) => schemaData.dataSchema?.validValues.join(", "),
+            format: (schemaData: ExtendedDataSchema) => _.compact(
+                // dataSchema.validValues is a list of reference ids,
+                // we need to get the human readable values from the corresponding DataSchema object
+                schemaData.dataSchema?.validValues.map(
+                    v => schemaData.validValuesMap ? schemaData.validValuesMap[v]?.label || v : v
+                )
+            ).join(", "),
             wrap: true,
             sortable: true,
         },

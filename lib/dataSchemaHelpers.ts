@@ -30,6 +30,7 @@ export interface ExtendedDataSchema {
     dataSchema?: DataSchemaData;
     parents?: DataSchemaData[];
     dependencies?: DataSchemaData[];
+    validValuesMap?: {[id: string]: DataSchemaData};
 }
 
 export interface DataSchemaData {
@@ -89,17 +90,22 @@ export const DEFAULT_SCHEMA_URL = "https://raw.githubusercontent.com/ncihtan/sch
 export function getDataSchemaDependencies(
     schema: DataSchemaData,
     schemaData: DataSchemaData[]
-): DataSchemaData[]
-{
+): DataSchemaData[] {
     return _.compact(schema.requiredDependencies.map(id => schemaData.find(s => s.id === id)));
 }
 
 export function getDataSchemaParents(
     schema: DataSchemaData,
     schemaData: DataSchemaData[]
-): DataSchemaData[]
-{
+): DataSchemaData[] {
     return _.compact(schema.parentIds.map(id => schemaData.find(s => s.id === id)));
+}
+
+export function getDataSchemaValidValues(
+    schema: DataSchemaData,
+    schemaData: DataSchemaData[]
+): DataSchemaData[] {
+    return _.compact(schema.validValues.map(value => schemaData.find(s => s.id === value)));
 }
 
 export async function getDataSchema(
@@ -113,9 +119,13 @@ export async function getDataSchema(
     return dataSchemaData.map(d => {
         const parents = getDataSchemaParents(d, schemaData);
         const dependencies = getDataSchemaDependencies(d, schemaData);
+        const validValuesMap = _.keyBy(
+            _.flatten(parents.concat(dependencies).map(p => getDataSchemaValidValues(p, schemaData))),
+            v => v.id
+        );
 
         return {
-            dataSchema: d, parents, dependencies
+            dataSchema: d, parents, dependencies, validValuesMap
         };
     });
 }
