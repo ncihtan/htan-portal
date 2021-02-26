@@ -8,11 +8,12 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { GetServerSideProps, GetStaticProps } from 'next';
 import { CmsData } from '../../types';
 import { getStaticContent } from '../../ApiUtil';
-import { ExtendedDataSchema, getDataSchema } from "../../lib/dataSchemaHelpers";
+import { DataSchemaData, getDataSchema } from "../../lib/dataSchemaHelpers";
 
 export interface RnaseqProps {
     data: CmsData[];
-    schemaData: ExtendedDataSchema[];
+    dataSchemaData: DataSchemaData[];
+    schemaDataMap: {[id: string]: DataSchemaData}
 }
 
 const Rnaseq: React.FunctionComponent<RnaseqProps> = props => {
@@ -39,7 +40,10 @@ const Rnaseq: React.FunctionComponent<RnaseqProps> = props => {
                     ></span>
                 </Row>
                 <Row>
-                    <DataSchema schemaData={props.schemaData} />
+                    <DataSchema
+                        schemaData={props.dataSchemaData}
+                        dataSchemaMap={props.schemaDataMap}
+                    />
                 </Row>
             </Container>
             <Footer />
@@ -49,11 +53,11 @@ const Rnaseq: React.FunctionComponent<RnaseqProps> = props => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const data = await getStaticContent(['data-standards-rnaseq-blurb']);
-    const schemaData = await getDataSchema(
+    const { dataSchemaData, schemaDataMap } = await getDataSchema(
         ["bts:ScRNA-seqLevel1", "bts:ScRNA-seqLevel2", "bts:ScRNA-seqLevel3", "bts:ScRNA-seqLevel4"]
     );
 
-    return { props: { data, schemaData } };
+    return {props: { data, dataSchemaData, schemaDataMap } };
 };
 
 export default Rnaseq;

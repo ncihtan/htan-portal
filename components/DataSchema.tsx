@@ -1,38 +1,39 @@
-import _ from 'lodash';
 import React from 'react';
-import DataTable from "react-data-table-component";
+import DataTable, { IDataTableColumn } from "react-data-table-component";
 
-import { ExtendedDataSchema } from "../lib/dataSchemaHelpers";
+import {
+    DataSchemaData,
+    getDataSchemaDependencies,
+    getDataSchemaParents,
+    getDataSchemaValidValues,
+    hasNonEmptyValidValues
+} from "../lib/dataSchemaHelpers";
 import { getDefaultDataTableStyle } from "../lib/dataTableHelpers";
 
 export interface IDataSchemaProps {
-    schemaData: ExtendedDataSchema[];
+    schemaData: DataSchemaData[];
+    dataSchemaMap: {[id: string]: DataSchemaData};
 }
 
-const ExpandableComponent: React.FunctionComponent<{data?: ExtendedDataSchema}> = props => {
+const ExpandableComponent: React.FunctionComponent<{
+    data?: DataSchemaData;
+    dataSchemaMap?: {[id: string]: DataSchemaData};
+}> = props => {
     return (
         <div className="m-3">
-            {props.data?.dependencies &&
+            {props.data?.requiredDependencies &&
                 <DataSchemaTable
-                    schemaData={
-                        props.data.dependencies.map(d => ({
-                            dataSchema: d,
-                            validValuesMap: props.data?.validValuesMap
-                        }))
-                    }
+                    schemaData={getDataSchemaDependencies(props.data, props.dataSchemaMap)}
+                    dataSchemaMap={props.dataSchemaMap}
                     title="Dependencies:"
                     expandableRows={false}
                 />
             }
 
-            {props.data?.parents &&
+            {props.data?.parentIds &&
                 <DataSchemaTable
-                    schemaData={
-                        props.data.parents.map(p => ({
-                            dataSchema: p,
-                            validValuesMap: props.data?.validValuesMap
-                        }))
-                    }
+                    schemaData={getDataSchemaParents(props.data, props.dataSchemaMap)}
+                    dataSchemaMap={props.dataSchemaMap}
                     title="Parents:"
                     expandableRows={false}
                 />
@@ -42,50 +43,50 @@ const ExpandableComponent: React.FunctionComponent<{data?: ExtendedDataSchema}> 
 }
 
 const DataSchemaTable: React.FunctionComponent<{
-    schemaData: ExtendedDataSchema[];
+    schemaData: DataSchemaData[];
+    dataSchemaMap?: {[id: string]: DataSchemaData};
     title?: string;
     expandableRows?: boolean;
 }> = props => {
-    const columns = [
+    const columns: IDataTableColumn[] = [
         {
             name: "ID",
-            selector: 'dataSchema.id',
+            selector: 'id',
             wrap: true,
             sortable: true,
         },
         {
             name: "Attribute",
-            selector: 'dataSchema.attribute',
+            selector: 'attribute',
             wrap: true,
             sortable: true,
         },
         {
             name: "Label",
-            selector: 'dataSchema.label',
+            selector: 'label',
             wrap: true,
             sortable: true,
         },
         {
             name: "Description",
-            selector: 'dataSchema.description',
+            selector: 'description',
             grow: 2,
             wrap: true,
             sortable: true,
         },
-        {
+    ];
+
+    // conditionally show valid values column
+    if (hasNonEmptyValidValues(props.schemaData)) {
+        columns.push({
             name: "Valid Values",
-            selector: 'dataSchema.validValues',
-            format: (schemaData: ExtendedDataSchema) => _.compact(
-                // dataSchema.validValues is a list of reference ids,
-                // we need to get the human readable values from the corresponding DataSchema object
-                schemaData.dataSchema?.validValues.map(
-                    v => schemaData.validValuesMap ? schemaData.validValuesMap[v]?.label || v : v
-                )
-            ).join(", "),
+            selector: 'validValues',
+            format: (schemaData: DataSchemaData) =>
+                getDataSchemaValidValues(schemaData, props.dataSchemaMap).map(s => s.label).join(", "),
             wrap: true,
             sortable: true,
-        },
-    ];
+        });
+    }
 
     return (
         <DataTable
@@ -105,7 +106,11 @@ const DataSchemaTable: React.FunctionComponent<{
                 },
             }}
             expandableRows={props.expandableRows}
-            expandableRowsComponent={<ExpandableComponent />}
+            expandableRowsComponent={
+                <ExpandableComponent
+                    dataSchemaMap={props.dataSchemaMap}
+                />
+            }
         />
     );
 }
@@ -114,6 +119,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = props => {
     return (
         <DataSchemaTable
             schemaData={props.schemaData}
+            dataSchemaMap={props.dataSchemaMap}
             title="Data Schema:"
             expandableRows={true}
         />

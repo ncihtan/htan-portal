@@ -26,13 +26,6 @@ export interface SchemaData extends BaseEntity {
     'sms:requiresComponent'?: BaseEntity | BaseEntity[];
 }
 
-export interface ExtendedDataSchema {
-    dataSchema?: DataSchemaData;
-    parents?: DataSchemaData[];
-    dependencies?: DataSchemaData[];
-    validValuesMap?: {[id: string]: DataSchemaData};
-}
-
 export interface DataSchemaData {
     //@id
     id: string;
@@ -89,45 +82,41 @@ export const DEFAULT_SCHEMA_URL = "https://raw.githubusercontent.com/ncihtan/sch
 
 export function getDataSchemaDependencies(
     schema: DataSchemaData,
-    schemaData: DataSchemaData[]
+    schemaDataMap: {[id: string]: DataSchemaData} = {}
 ): DataSchemaData[] {
-    return _.compact(schema.requiredDependencies.map(id => schemaData.find(s => s.id === id)));
+    return _.compact(schema.requiredDependencies.map(id => schemaDataMap[id]));
 }
 
 export function getDataSchemaParents(
     schema: DataSchemaData,
-    schemaData: DataSchemaData[]
+    schemaDataMap: {[id: string]: DataSchemaData} = {}
 ): DataSchemaData[] {
-    return _.compact(schema.parentIds.map(id => schemaData.find(s => s.id === id)));
+    return _.compact(schema.parentIds.map(id => schemaDataMap[id]));
 }
 
 export function getDataSchemaValidValues(
     schema: DataSchemaData,
-    schemaData: DataSchemaData[]
+    schemaDataMap: {[id: string]: DataSchemaData} = {}
 ): DataSchemaData[] {
-    return _.compact(schema.validValues.map(value => schemaData.find(s => s.id === value)));
+    return _.compact(schema.validValues.map(id => schemaDataMap[id]));
+}
+
+export function hasNonEmptyValidValues(schemaData: DataSchemaData[]): boolean {
+    return !_.isEmpty(_.flatten(schemaData.map(s => s.validValues)));
 }
 
 export async function getDataSchema(
     ids: string[],
     dataUri: string = DEFAULT_SCHEMA_URL
-): Promise<ExtendedDataSchema[]> {
+): Promise<{
+    dataSchemaData: DataSchemaData[],
+    schemaDataMap: {[id: string]: DataSchemaData}
+}> {
     const schemaData = getDataSchemaData(await getSchemaData(dataUri));
+    const schemaDataMap = _.keyBy(schemaData, d => d.id);
+    const dataSchemaData = _.compact(ids.map(id => schemaDataMap[id]));
 
-    const dataSchemaData = schemaData.filter(s => ids.includes(s.id));
-
-    return dataSchemaData.map(d => {
-        const parents = getDataSchemaParents(d, schemaData);
-        const dependencies = getDataSchemaDependencies(d, schemaData);
-        const validValuesMap = _.keyBy(
-            _.flatten(parents.concat(dependencies).map(p => getDataSchemaValidValues(p, schemaData))),
-            v => v.id
-        );
-
-        return {
-            dataSchema: d, parents, dependencies, validValuesMap
-        };
-    });
+    return {dataSchemaData, schemaDataMap};
 }
 
 export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
