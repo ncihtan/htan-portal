@@ -209,8 +209,10 @@ export default class FileTable extends React.Component<IFileTableProps> {
         makeObservable(this);
     }
 
-    @action onDownload = () => {
+    @action onDownload = (evt:any) => {
         this.isDownloadModalOpen = true;
+        // Defocus "Download" button
+        evt.target.blur();
     }
 
     @action onModalClose = () => {
