@@ -6,14 +6,21 @@ import Select, {ActionMeta} from "react-select";
 
 import {makeOptions} from "../../lib/filterHelpers";
 import {Entity, sortStageOptions, updateSelectedFiltersInURL} from "../../lib/helpers";
-import {ExploreOptionType, ExploreSelectedFilter, IFiltersByGroupName, PropMap, PropNames} from "../../lib/types";
+import {
+    ExploreActionMeta,
+    ExploreOptionType,
+    ExploreSelectedFilter,
+    IFiltersByGroupName,
+    PropMap,
+    PropNames
+} from "../../lib/types";
 import FilterCheckList from "../FilterPanel/FilterCheckList";
 import FilterPanel from "../FilterPanel/FilterPanel";
 import FilterPropertyColumnShell from "../FilterPanel/FilterPropertyColumn";
 
 
 interface IFilterControlsProps {
-    setFilter: (actionMeta: ActionMeta<ExploreSelectedFilter>) => void;
+    setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
     selectedFiltersByGroupName: IFiltersByGroupName;
     selectedFilters: ExploreSelectedFilter[];
     files: Entity[];
