@@ -29,6 +29,12 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = props =
             wrap: true,
             sortable: true,
         },
+        {
+            name: "Atlas ID",
+            selector: "id",
+            wrap: true,
+            sortable: true
+        }
     ];
 
     return (

@@ -26,7 +26,7 @@ enum ExploreTab {
 }
 
 const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(props => {
-    const activeTab = props.router.query.tab || ExploreTab.FILE;
+    const activeTab = props.router.query.tab || ExploreTab.ATLAS;
 
     return (
         <>
