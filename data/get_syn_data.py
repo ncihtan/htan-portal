@@ -35,7 +35,7 @@ if __name__ == '__main__':
     }
  
     # load schematic config
-    schematic.CONFIG.load_config('../../HTAN-data-pipeline/config-htan.yml')
+    schematic.CONFIG.load_config('./config-htan.yml')
     
     # instantiate synapse client
     syn = synapseclient.Synapse()
@@ -161,5 +161,5 @@ if __name__ == '__main__':
 
 
     # dump data portal JSON
-    with open("./metadata.json", "w") as m_f:
+    with open("./syn_data.json", "w") as m_f:
         json.dump(portal_data, m_f, indent = 4)
