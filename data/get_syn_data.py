@@ -5,7 +5,7 @@ import logging
 
 import synapseclient
 
-import schematic 
+import schematic # for now install from here: https://github.com/Sage-Bionetworks/schematic/tree/develop
 from schematic import CONFIG
 from schematic.store.synapse import SynapseStorage
 from schematic.schemas.explorer import SchemaExplorer
