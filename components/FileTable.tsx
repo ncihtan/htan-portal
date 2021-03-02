@@ -1,103 +1,12 @@
-import _ from "lodash";
 import {action, makeObservable, observable} from 'mobx';
-import { observer } from 'mobx-react';
+import {observer} from 'mobx-react';
 import React from 'react';
 import {Button, Modal} from "react-bootstrap";
 import DataTable from "react-data-table-component";
 
-import { Atlas, Entity } from '../lib/helpers';
-import { PropNames } from "../lib/types";
+import {Atlas, Entity} from '../lib/helpers';
 import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
-
-interface IFileTableHeaderProps {
-    filteredFiles: Entity[];
-    getGroupsByPropertyFiltered: any;
-    patientCount: number;
-    onDownload: () => void;
-}
-
-const FileTableHeader: React.FunctionComponent<IFileTableHeaderProps> = props => {
-    return (
-        <>
-            <div className={'summary'}>
-                <div>
-                    <strong>Summary:</strong>
-                </div>
-
-                <div>{props.filteredFiles.length} Files</div>
-
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                PropNames.AtlasName
-                                ]
-                        ).length
-                    }{' '}
-                    Atlases
-                </div>
-
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                PropNames.TissueorOrganofOrigin
-                                ]
-                        ).length
-                    }{' '}
-                    Organs
-                </div>
-
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                PropNames.PrimaryDiagnosis
-                                ]
-                        ).length
-                    }{' '}
-                    Cancer Types
-                </div>
-
-                <div>{props.patientCount} Cases</div>
-
-                <div>
-                    {
-                        _(props.filteredFiles)
-                            .map((f) => f.HTANParentBiospecimenID)
-                            .uniq()
-                            .value().length
-                    }{' '}
-                    Biospecimens
-                </div>
-
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                PropNames.Component
-                                ]
-                        ).length
-                    }{' '}
-                    Assays
-                </div>
-
-            </div>
-
-            <div className="controls ml-auto">
-
-                <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={props.onDownload}
-                >
-                    Download
-                </Button>
-
-            </div>
-        </>
-    );
-}
+import {ExploreSummary} from "./ExploreSummary";
 
 interface IFileDownloadModalProps {
     filenames: string[];
@@ -245,14 +154,17 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
                     noHeader={true}
                     subHeader={true}
-                    subHeaderAlign="left"
+                    subHeaderAlign="right"
                     subHeaderComponent={
-                        <FileTableHeader
-                            filteredFiles={this.props.entities}
-                            getGroupsByPropertyFiltered={this.props.getGroupsByPropertyFiltered}
-                            patientCount={this.props.patientCount}
-                            onDownload={this.onDownload}
-                        />
+                        <div className="controls ml-auto">
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={this.onDownload}
+                            >
+                                Download
+                            </Button>
+                        </div>
                     }
                     customStyles={getDefaultDataTableStyle()}
                 />

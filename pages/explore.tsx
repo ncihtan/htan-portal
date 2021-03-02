@@ -32,6 +32,7 @@ import Filter from "../components/filter/Filter";
 import ExploreTabs from "../components/ExploreTabs";
 
 import styles from "./styles.module.scss";
+import {ExploreSummary} from "../components/ExploreSummary";
 
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -176,6 +177,12 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                     <Filter
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={this.selectedFiltersByGroupName}
+                    />
+
+                    <ExploreSummary
+                        filteredFiles={this.filteredFiles}
+                        getGroupsByPropertyFiltered={this.getGroupsByPropertyFiltered}
+                        patientCount={this.cases.length}
                     />
 
                     <ExploreTabs
