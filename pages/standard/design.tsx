@@ -6,7 +6,7 @@ import { getStaticContent } from '../../ApiUtil';
 
 const Design: React.FunctionComponent<DataStandardProps> = props => {
     return (
-        <DataStandard {...props} title="Clinical Data" />
+        <DataStandard {...props} title="Design Principles" />
     );
 }
 
