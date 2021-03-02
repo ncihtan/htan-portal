@@ -12,7 +12,6 @@ import styles from './styles.module.scss';
 
 interface IFilterCheckList {
     setFilter: (
-        groupNames: string[],
         actionMeta: ActionMeta<ExploreOptionType>
     ) => void;
     filters: IFiltersByGroupName;
@@ -38,7 +37,7 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                         <input
                             className={ classNames("form-check-input", styles.checkboxLabel)}
                             onChange={(e) => {
-                                props.setFilter([PropNames.PrimaryDiagnosis], {
+                                props.setFilter({
                                     option,
                                     action: e.currentTarget.checked
                                         ? 'select-option'

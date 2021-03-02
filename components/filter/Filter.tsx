@@ -1,11 +1,18 @@
 import {observer} from "mobx-react";
 import React from "react";
-import {ActionMeta} from "react-select";
+import _ from "lodash";
 
-import {ExploreSelectedFilter, IFiltersByGroupName, PropMap, PropNames} from "../../lib/types";
+import {
+    ExploreActionMeta,
+    ExploreSelectedFilter,
+    FilterAction,
+    IFiltersByGroupName,
+    PropMap,
+    PropNames
+} from "../../lib/types";
 
 interface IFilterProps {
-    setFilter: (groupNames: string[], actionMeta: ActionMeta<ExploreSelectedFilter>) => void;
+    setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
     selectedFiltersByGroupName: IFiltersByGroupName;
 }
 
@@ -28,8 +35,12 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                             <span
                                 className="attributeGroupName"
                                 onClick={() => {
-                                    props.setFilter([filter], {
-                                        action: 'clear',
+                                    props.setFilter({
+                                        action: FilterAction.CLEAR,
+                                        option: {
+                                            group: filter,
+                                            value: ''
+                                        }
                                     });
                                 }}
                             >
@@ -79,12 +90,9 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                                                 className="attributeValue"
                                                 onClick={() => {
                                                     props.setFilter(
-                                                        [
-                                                            filter,
-                                                        ],
                                                         {
                                                             action:
-                                                                'deselect-option',
+                                                                FilterAction.DESELECT,
                                                             option: {
                                                                 value:value.value,
                                                                 group: filter,
@@ -105,6 +113,18 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                         </span>
                     );
                 }
+            )}
+            {!_.isEmpty(props.selectedFiltersByGroupName) && (
+                <div
+                    className={"btn btn-sm btn-secondary"}
+                    onClick={() => {
+                        props.setFilter({
+                            action: FilterAction.CLEAR_ALL,
+                        });
+                    }}
+                >
+                    Clear all filters
+                </div>
             )}
         </div>
     );
