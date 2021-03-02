@@ -167,17 +167,32 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(p
             <div>
                 <div style={{ width: 220 }}>
                     <FilterPanel placeholder={"File Type"}>
-                        <FilterPropertyColumnShell title={"File Type"}>
-                            <FilterCheckList
-                                setFilter={
-                                    props.setFilter
-                                }
-                                filters={props.selectedFiltersByGroupName}
-                                options={options(
-                                    PropNames.Level
-                                )}
-                            />
-                        </FilterPropertyColumnShell>
+                        <div className={
+                            'filter-checkbox-list-container'
+                        }>
+                            <FilterPropertyColumnShell title={"Level"}>
+                                <FilterCheckList
+                                    setFilter={
+                                        props.setFilter
+                                    }
+                                    filters={props.selectedFiltersByGroupName}
+                                    options={options(
+                                        PropNames.Level
+                                    )}
+                                ></FilterCheckList>
+                            </FilterPropertyColumnShell>
+                            <FilterPropertyColumnShell title={"File Format"}>
+                                <FilterCheckList
+                                    setFilter={
+                                        props.setFilter
+                                    }
+                                    filters={props.selectedFiltersByGroupName}
+                                    options={options(
+                                        PropNames.FileFormat
+                                    )}
+                                ></FilterCheckList>
+                            </FilterPropertyColumnShell>
+                        </div>
                     </FilterPanel>
                 </div>
             </div>
