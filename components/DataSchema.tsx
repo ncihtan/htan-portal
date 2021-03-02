@@ -4,7 +4,6 @@ import DataTable, { IDataTableColumn } from "react-data-table-component";
 import {
     DataSchemaData,
     getDataSchemaDependencies,
-    getDataSchemaParents,
     getDataSchemaValidValues,
     hasNonEmptyValidValues
 } from "../lib/dataSchemaHelpers";
@@ -19,27 +18,16 @@ const ExpandableComponent: React.FunctionComponent<{
     data?: DataSchemaData;
     dataSchemaMap?: {[id: string]: DataSchemaData};
 }> = props => {
-    return (
+    return props.data?.requiredDependencies ? (
         <div className="m-3">
-            {props.data?.requiredDependencies &&
-                <DataSchemaTable
-                    schemaData={getDataSchemaDependencies(props.data, props.dataSchemaMap)}
-                    dataSchemaMap={props.dataSchemaMap}
-                    title="Dependencies:"
-                    expandableRows={false}
-                />
-            }
-
-            {props.data?.parentIds &&
-                <DataSchemaTable
-                    schemaData={getDataSchemaParents(props.data, props.dataSchemaMap)}
-                    dataSchemaMap={props.dataSchemaMap}
-                    title="Parents:"
-                    expandableRows={false}
-                />
-            }
+            <DataSchemaTable
+                schemaData={getDataSchemaDependencies(props.data, props.dataSchemaMap)}
+                dataSchemaMap={props.dataSchemaMap}
+                title="Dependencies:"
+                expandableRows={false}
+            />
         </div>
-    );
+    ): null;
 }
 
 const DataSchemaTable: React.FunctionComponent<{
@@ -49,12 +37,6 @@ const DataSchemaTable: React.FunctionComponent<{
     expandableRows?: boolean;
 }> = props => {
     const columns: IDataTableColumn[] = [
-        {
-            name: "ID",
-            selector: 'id',
-            wrap: true,
-            sortable: true,
-        },
         {
             name: "Attribute",
             selector: 'attribute',

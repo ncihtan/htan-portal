@@ -1,53 +1,13 @@
 import React from 'react';
-import DataSchema from "../../components/DataSchema";
-import HtanNavbar from '../../components/HtanNavbar';
-import Footer from '../../components/Footer';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import { GetServerSideProps, GetStaticProps } from 'next';
-import { CmsData } from '../../types';
+import { GetStaticProps } from 'next';
+
+import DataStandard, { DataStandardProps } from "../../components/DataStandard";
 import { getStaticContent } from '../../ApiUtil';
-import { DataSchemaData, getDataSchema } from "../../lib/dataSchemaHelpers";
+import { getDataSchema } from "../../lib/dataSchemaHelpers";
 
-export interface RnaseqProps {
-    data: CmsData[];
-    dataSchemaData: DataSchemaData[];
-    schemaDataMap: {[id: string]: DataSchemaData}
-}
-
-const Rnaseq: React.FunctionComponent<RnaseqProps> = props => {
+const RnaSeq: React.FunctionComponent<DataStandardProps> = props => {
     return (
-        <>
-            <HtanNavbar />
-            <Container>
-                <Row>
-                    <Breadcrumb className="mt-3">
-                        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item href="/standards">
-                            Data Standards
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item active>
-                            Single Cell and Single Nucleus RNA Seq
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                </Row>
-                <Row>
-                    <span
-                        dangerouslySetInnerHTML={{
-                            __html: props.data[0].content.rendered,
-                        }}
-                    ></span>
-                </Row>
-                <Row>
-                    <DataSchema
-                        schemaData={props.dataSchemaData}
-                        dataSchemaMap={props.schemaDataMap}
-                    />
-                </Row>
-            </Container>
-            <Footer />
-        </>
+        <DataStandard {...props} title="Single Cell and Single Nucleus RNA Seq" />
     );
 }
 
@@ -60,4 +20,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return {props: { data, dataSchemaData, schemaDataMap } };
 };
 
-export default Rnaseq;
+export default RnaSeq;

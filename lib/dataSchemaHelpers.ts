@@ -80,6 +80,8 @@ export const DEFAULT_SCHEMA: SchemaJson = {
 
 export const DEFAULT_SCHEMA_URL = "https://raw.githubusercontent.com/ncihtan/schematic/main/data/schema_org_schemas/HTAN.jsonld";
 
+const schemaDataCache: {[uri: string]: SchemaJson} = {};
+
 export function getDataSchemaDependencies(
     schema: DataSchemaData,
     schemaDataMap: {[id: string]: DataSchemaData} = {}
@@ -130,6 +132,11 @@ export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
         return DEFAULT_SCHEMA;
     }
 
+    // do not fetch again if fetched before
+    if (schemaDataCache[dataUri]) {
+        return schemaDataCache[dataUri];
+    }
+
     try {
         // https://raw.githubusercontent.com/Sage-Bionetworks/schematic/main/data/schema_org_schemas/example.jsonld
         // https://github.com/ncihtan/hsim/blob/master/schema/HTAN.jsonld
@@ -137,8 +144,12 @@ export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
 
         // const json = await res.json();
         const text = await res.text();
+        const json = JSON.parse(text);
 
-        return JSON.parse(text);
+        // cache the schema data
+        schemaDataCache[dataUri] = json;
+
+        return json;
     } catch {
         // console.error(`Invalid Url: ${dataUri}`);
         return DEFAULT_SCHEMA;
