@@ -71,26 +71,6 @@ const PostContent: React.FunctionComponent<{
                                 Publications
                             </Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="clinBiospecimen">
-                                Clinical Biospecimen
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="derivedData">
-                                Derived Data
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="imagingData">
-                                Imaging Data
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="primaryNGS">
-                                Primary NGS
-                            </Nav.Link>
-                        </Nav.Item>
                     </Nav>
 
                     <Tab.Content>
@@ -126,51 +106,6 @@ const PostContent: React.FunctionComponent<{
                                     <span
                                         dangerouslySetInnerHTML={{
                                             __html: wpAtlas.publications,
-                                        }}
-                                    />
-                                ) : (
-                                    'Loading...'
-                                )}
-                            </Container>
-                        </Tab.Pane>
-                        {synapseAtlas && (
-                            <>
-                                <Tab.Pane eventKey="clinBiospecimen">
-                                    <Container className="mt-3">
-                                        <AtlasWrapper
-                                            category={
-                                                mergedClinicalAndBiospecimenData!
-                                            }
-                                        />
-                                    </Container>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="derivedData">
-                                    <Container className="mt-3">
-                                        <AtlasWrapper
-                                            category={synapseAtlas.assayData}
-                                        />
-                                    </Container>
-                                </Tab.Pane>
-                                {synapseAtlas.imagingData && (
-                                    <Tab.Pane eventKey="imagingData">
-                                        <Container className="mt-3">
-                                            <AtlasWrapper
-                                                category={
-                                                    synapseAtlas.imagingData
-                                                }
-                                            />
-                                        </Container>
-                                    </Tab.Pane>
-                                )}
-                            </>
-                        )}
-
-                        <Tab.Pane eventKey="primaryNGS">
-                            <Container className="mt-3">
-                                {wpAtlas ? (
-                                    <span
-                                        dangerouslySetInnerHTML={{
-                                            __html: wpAtlas.primary_ngs,
                                         }}
                                     />
                                 ) : (
