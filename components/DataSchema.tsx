@@ -8,6 +8,7 @@ import {
     hasNonEmptyValidValues
 } from "../lib/dataSchemaHelpers";
 import { getDefaultDataTableStyle } from "../lib/dataTableHelpers";
+import ExpandableText from "./ExpandableText";
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -63,8 +64,13 @@ const DataSchemaTable: React.FunctionComponent<{
         columns.push({
             name: "Valid Values",
             selector: 'validValues',
-            format: (schemaData: DataSchemaData) =>
-                getDataSchemaValidValues(schemaData, props.dataSchemaMap).map(s => s.label).join(", "),
+            cell: (schemaData: DataSchemaData) => {
+                const text = getDataSchemaValidValues(schemaData, props.dataSchemaMap)
+                    .map(s => s.label)
+                    .join(", ");
+
+                return <ExpandableText fullText={text} />;
+            },
             wrap: true,
             sortable: true,
         });
