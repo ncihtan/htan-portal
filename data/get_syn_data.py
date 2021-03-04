@@ -100,13 +100,15 @@ if __name__ == '__main__':
             try:
                 component = manifest_data[0][0]
             except IndexError:
+                logging.error("Manifest data unexpected: " + manifest_path + " " + str(manifest_data))
                 continue
 
             # skip components that are NA
             if pd.isna(component):
+                logging.error("Component is N/A: " + manifest_path + " " + str(manifest_data))
                 continue
 
-            logging.info("Data type: " + str(component))
+            logging.info("Data type: " + component)
 
             # get data type schema info
             schema_info = se.explore_class(component)
