@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { Atlas, Entity } from '../../lib/helpers';
+import {Atlas, Entity, getAtlasPageURL} from '../../lib/helpers';
 
 export default class AtlasTable extends React.Component<
     { atlases: Atlas[] },
@@ -28,7 +28,7 @@ export default class AtlasTable extends React.Component<
                                     <td>{atlas.htan_name}</td>
                                     <td>
                                         <Link
-                                            href={`./atlas/${atlas.htan_id.toLowerCase()}`}
+                                            href={getAtlasPageURL(atlas.htan_id.toLowerCase())}
                                         >
                                             <a>Data Release</a>
                                         </Link>

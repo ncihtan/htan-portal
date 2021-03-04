@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import {Entity} from "./helpers";
-import {ExploreOptionType, ExploreSelectedFilter, IFiltersByGroupName, PropMap} from "./types";
+import {ExploreOptionType, ExploreSelectedFilter, IFiltersByGroupName, PropMap, PropNames} from "./types";
 
 export function groupsByProperty(files: Entity[]) {
     const m: any = {};
@@ -37,7 +37,7 @@ export function filterFiles(
 }
 
 export function makeOptions(
-    propName: string,
+    propName: PropNames,
     selectedFiltersByGroupName: IFiltersByGroupName,
     files: Entity[],
     getGroupsByProperty: any

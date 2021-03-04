@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import {WPAtlas} from "../types";
 import styles from "./homeStyles.module.scss";
-import {computeDashboardData, loadData} from "../lib/helpers";
+import {computeDashboardData, getAtlasPageURL, loadData} from "../lib/helpers";
 import {BeatLoader} from "react-spinners";
 
 export interface IHomePropsProps {
@@ -102,14 +102,14 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         }
 
                         return <div className={styles.atlasCard}>
-                                <h4><a href={`/atlas/${atlas.htan_id}`}>{
+                                <h4><a href={getAtlasPageURL(atlas.htan_id)}>{
                                     title
                                 }
                                 </a></h4>
 
                                 <div className={styles.imageHolder}>
                                     <img src={atlas.home_image.guid || "https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg" } />
-                                    <a className={"btn btn-primary"} href={`/atlas/${atlas.htan_id}`}>Explore</a>
+                                    <a className={"btn btn-primary"} href={getAtlasPageURL(atlas.htan_id)}>Explore</a>
                                 </div>
 
                                 <p className={styles.altasText}>{atlas.short_description || "This is a short description of the Atlas. It shouldn't be more than a hundred words."}</p>

@@ -1,37 +1,38 @@
-import { useRouter } from 'next/router';
+import {NextRouter, useRouter} from 'next/router';
 import HtanNavbar from '../../components/HtanNavbar';
 import Footer from '../../components/Footer';
 import getData from '../../lib/getData';
-import {
-    getAtlasContent,
-    getAtlasList,
-    getContent,
-    WORDPRESS_BASE_URL,
-} from '../../ApiUtil';
+import {getAtlasList,} from '../../ApiUtil';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import React from 'react';
-
-import _ from 'lodash';
-import { AtlasWrapper } from '../../components/Atlas';
 import Head from 'next/dist/next-server/lib/head';
-import { Category, SynapseAtlas, SynapseData, WPAtlas } from '../../types';
-import { GetStaticProps } from 'next';
+import {Category, SynapseAtlas, SynapseData, WPAtlas} from '../../types';
+import {GetStaticProps} from 'next';
+import {Button} from "react-bootstrap";
+import {getExplorePageURL} from "../../lib/helpers";
+import {PropNames} from "../../lib/types";
 
 const data = getData();
+
+export type AtlasURLQuery = {
+    fromApp: string | undefined;
+}
 
 interface IPostProps {
     synapseData: SynapseData;
     WPAtlasData: WPAtlas[];
+    router: NextRouter
 }
 
 const PostContent: React.FunctionComponent<{
     wpAtlas: WPAtlas;
+    router: NextRouter;
     synapseAtlas?: SynapseAtlas;
-}> = ({ wpAtlas, synapseAtlas }) => {
+}> = ({ wpAtlas, router, synapseAtlas }) => {
     let mergedClinicalAndBiospecimenData: Category;
     if (synapseAtlas) {
         mergedClinicalAndBiospecimenData = Object.assign(
@@ -44,13 +45,37 @@ const PostContent: React.FunctionComponent<{
     return (
         <Container>
             <Row>
-                <Breadcrumb className="mt-3">
+                <Breadcrumb className="mt-3" listProps={{style:{marginBottom:0, paddingBottom:4}}}>
                     <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item href="/explore">Explore</Breadcrumb.Item>
                     <Breadcrumb.Item active>
                         {wpAtlas ? wpAtlas.title.rendered : ''}
                     </Breadcrumb.Item>
                 </Breadcrumb>
+            </Row>
+
+            <Row style={{marginBottom:20}}>
+                {router.query.fromApp === "true" && (
+                    <Button
+                        variant={"link"}
+                        size={"sm"}
+                        style={{fontSize:12}}
+                        onClick={()=> router.back()}
+                    >
+                        {"< Back"}
+                    </Button>
+                )}
+                <Button
+                    variant={"link"}
+                    size={"sm"}
+                    style={{fontSize:12}}
+                    onClick={()=>router.push(getExplorePageURL([{
+                        value: wpAtlas.title.rendered,
+                        group: PropNames.AtlasName
+                    }]))}
+                >
+                    View Files
+                </Button>
             </Row>
 
             <Row>
@@ -137,7 +162,7 @@ const Post: React.FunctionComponent<IPostProps> = ({
         postData && (synapseData[htan_id.toUpperCase()] as SynapseAtlas);
 
     const content = postData ? (
-        <PostContent wpAtlas={postData} synapseAtlas={synapseAtlas} />
+        <PostContent wpAtlas={postData} router={router} synapseAtlas={synapseAtlas} />
     ) : (
         <div>There is Atlas corresponding to this ID</div>
     );

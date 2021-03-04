@@ -5,7 +5,8 @@ import {toArabic} from "roman-numerals";
 
 import { WPAtlas } from '../types';
 import {ExploreOptionType, ExploreSelectedFilter} from "./types";
-
+import {ExploreURLQuery} from "../pages/explore";
+import {AtlasURLQuery} from "../pages/atlas/[id]";
 
 export function getRecords(obj: any): any {
     if (_.isObject(obj) || _.isArray(obj)) {
@@ -209,14 +210,52 @@ export function parseRawAssayType(t:string) {
     return { name: t, level: null };
 }
 
-export function encodeSelectedFilters(selectedFilters:ExploreSelectedFilter[]) {
+export function urlEncodeSelectedFilters(selectedFilters:ExploreSelectedFilter[]) {
     return JSON.stringify(selectedFilters);
 }
-export function parseSelectedFilters(selectedFiltersURLQueryParam:string|undefined):ExploreSelectedFilter[] | null {
+export function parseSelectedFiltersFromUrl(selectedFiltersURLQueryParam:string|undefined):ExploreSelectedFilter[] | null {
     if (selectedFiltersURLQueryParam) {
         return JSON.parse(selectedFiltersURLQueryParam);
     }
     return null;
+}
+
+function addQueryStringToURL(url:string, queryParams: { [key:string]:string|undefined }) {
+    const urlEncoded = _.map(queryParams, (val, key)=>{
+        if (val) {
+            return `${key}=${val}`;
+        } else {
+            return '';
+        }
+    }).filter(x=>!!x); // take out empty params
+
+    if (urlEncoded.length > 0) {
+        return `${url}?${urlEncoded.join("&")}`;
+    } else {
+        return url;
+    }
+}
+
+export function getExplorePageURL(
+    filters: ExploreSelectedFilter[]
+) {
+    let url = '/explore';
+    if (filters.length > 0) {
+        const query:ExploreURLQuery = {
+            selectedFilters: urlEncodeSelectedFilters(filters)
+        }; // using this intermediate container to use typescript to enforce URL correctness
+        url = addQueryStringToURL(url, query);
+    }
+    return url;
+}
+
+export function getAtlasPageURL(
+    id:string
+) {
+    const query:AtlasURLQuery = {
+        fromApp: "true"
+    }; // using this intermediate container to use typescript to enforce URL correctness
+    return addQueryStringToURL(`/atlas/${id}`, query);
 }
 
 export function updateSelectedFiltersInURL(
@@ -225,7 +264,7 @@ export function updateSelectedFiltersInURL(
 ) {
     router.push({
         pathname: router.pathname,
-        query: Object.assign({}, router.query, { selectedFilters: encodeSelectedFilters(filters) }),
+        query: Object.assign({}, router.query, { selectedFilters: urlEncodeSelectedFilters(filters) }),
     }, undefined, {shallow: true});
 }
 
