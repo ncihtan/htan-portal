@@ -15,7 +15,7 @@ from schematic.schemas.explorer import SchemaExplorer
 if __name__ == '__main__':
 
     logging.disable(logging.DEBUG)
-     
+
     # map: HTAN center names to HTAN IDs
     htan_centers = {
                     "HTAN HTAPP": "hta1",
@@ -33,10 +33,10 @@ if __name__ == '__main__':
                     "HTAN TNP SARDANA": "hta13",
                     "HTAN TNP - TMA": "hta14"
     }
- 
+
     # load schematic config
     schematic.CONFIG.load_config('./config-htan.yml')
-    
+
     # instantiate synapse client
     syn = synapseclient.Synapse()
 
@@ -52,22 +52,22 @@ if __name__ == '__main__':
 
     # get a list of all files in asset store
     all_files = syn_store.storageFileviewTable
-    
+
     # download latest schema
     schema_filename = "HTAN.jsonld"
     url = "https://raw.githubusercontent.com/ncihtan/schematic/main/data/schema_org_schemas/HTAN.jsonld"
     #schema_file = wget.download(url, out = schema_filename)
 
     se = SchemaExplorer()
-    se.load_schema(url) 
+    se.load_schema(url)
 
     # get all manifests grouped by project (i.e. research center/atlas)
     metadata_manifests = all_files[all_files["name"].str.contains("synapse_storage_manifest")][["id", "parentId", "projectId"]].groupby(["projectId"])
 
     # portal data schema skeleton
     portal_data = {
-                    "atlases":[], 
-                    "schemas":[] 
+                    "atlases":[],
+                    "schemas":[]
     }
 
 
@@ -93,25 +93,32 @@ if __name__ == '__main__':
             manifest_location = "./tmp/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
             syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
-            
+
             manifest_data = pd.read_csv(manifest_path).to_numpy()
 
             # data type/schema component
-            component = manifest_data[0][0]
-        
-            logging.info("Data type: " + component)
-           
-            # get data type schema info 
+            try:
+                component = manifest_data[0][0]
+            except IndexError:
+                continue
+
+            # skip components that are NA
+            if pd.isna(component):
+                continue
+
+            logging.info("Data type: " + str(component))
+
+            # get data type schema info
             schema_info = se.explore_class(component)
-             
+
             # data type schema label (TODO: use context from uri)
             data_schema = "bts:" + component
 
-            # get records in this dataset 
+            # get records in this dataset
             record_list = []
-            
+
             for values in manifest_data:
-               
+
                 record = {"values":list(values)}
                 record_list.append(record)
 
@@ -124,7 +131,7 @@ if __name__ == '__main__':
             # add data schema to JSON if not already there
             if not data_schema in data_schemas:
                 data_schemas.append(data_schema)
-                
+
                 schema = {
                             "data_schema":data_schema,
                             "attributes":[]
@@ -137,26 +144,26 @@ if __name__ == '__main__':
                 for attribute in data_attributes:
                     attr_info = se.explore_class(attribute)
                     attr_id = "bts:" + attribute
-                    attr_name = attr_info["displayName"] 
+                    attr_name = attr_info["displayName"]
                     attr_desc = attr_info["description"]
 
                     schema["attributes"].append({
                                             "id":attr_id,
                                             "display_name":attr_name,
-                                            "description":attr_desc 
+                                            "description":attr_desc
                                             })
 
-                
-                # adding synapse ID to schema attributes     
+
+                # adding synapse ID to schema attributes
                 schema["attributes"].append({
                                         "id":"synapseId",
                                         "display_name": "Synapse Id",
-                                        "description": "Synapse ID for file" 
+                                        "description": "Synapse ID for file"
                                         })
 
                 portal_data["schemas"].append(schema)
-        
-        # add atlas to portal JSON 
+
+        # add atlas to portal JSON
         portal_data["atlases"].append(atlas)
 
 
