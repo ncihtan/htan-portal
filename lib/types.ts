@@ -1,5 +1,5 @@
 import { Atlas, Entity } from './helpers';
-import {ActionMeta, OptionTypeBase} from "react-select";
+import {ActionMeta, ActionTypes, OptionTypeBase} from "react-select";
 
 export type ExploreOptionType = {
     value: string;
@@ -80,5 +80,5 @@ export enum FilterAction {
 }
 
 export interface ExploreActionMeta<OptionType extends OptionTypeBase> extends Omit<ActionMeta<OptionType>, "action"> {
-    action: FilterAction;
+    action: ActionTypes | FilterAction;
 }

@@ -49,7 +49,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(p
 
     const handleChange = action((
             value: any,
-            actionMeta: ActionMeta<ExploreSelectedFilter>
+            actionMeta: ExploreActionMeta<ExploreSelectedFilter>
     ) => {
         props.setFilter(actionMeta);
     });
