@@ -78,6 +78,7 @@ export interface Entity {
     biospecimen: Entity | undefined;
     diagnosis: Entity | undefined;
     primaryParent?: Entity;
+    primaryParents?: Entity[];
 }
 
 export interface Atlas {
@@ -103,6 +104,28 @@ function seekPrimaryParent(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity {
     }
 }
 
+function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[] {
+
+    let parents: Entity[] = [];
+
+    if (!f.HTANParentDataFileID) {
+        // leave it empty
+        parents.push(f);
+    } else {
+        const parentIds = f.HTANParentDataFileID.split(",");
+        const parentFiles = parentIds.map(id=>byIdMap[id]);
+
+        const sought = _(parentFiles).map(f=>seekPrimaryParents(f,byIdMap)).flatten().uniq().value()
+
+        parents = _.uniq(parents.concat(
+            sought
+        ));
+
+    }
+
+    return parents;
+}
+
 function handleLineage(files:Entity[]){
     // first get rid of level >=4
     // they have multiple parents
@@ -117,7 +140,16 @@ function handleLineage(files:Entity[]){
        if (f !== primaryParent) {
            f.primaryParent = primaryParent;
        }
+
+       const primaryParents = seekPrimaryParents(f, byIdMap);
+
+       if (primaryParents[0] !== f) {
+           f.primaryParents = primaryParents;
+       }
+
     });
+
+    console.log(cleanFiles);
 
 }
 
@@ -141,8 +173,6 @@ function getSampleAndPatientData(file:Entity, biospecimen:Entity[], diagnoses:En
 
 }
 
-
-
 export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
     const url = '/syn_data.json';  // '/sim.json';
 
@@ -154,23 +184,7 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
         return !!obj.filename;
     });
 
-    // const levelFiles = files.filter((f)=>{
-    //     return /Level[2]/.test(f.Component)
-    // });
-
-    const handleLineage1 = handleLineage(files);
-
-    console.log(files);
-
-    const fileByIdMap = _.keyBy(files,f=>f.HTANDataFileID);
-
-    // levelFiles.forEach((f)=>{
-    //     const id = f.HTANParentDataFileID.split(",")[0];
-    //     const moo = fileByIdMap[id];
-    //     if (!moo) {
-    //         debugger;
-    //     }
-    // });
+    handleLineage(files);
 
     const biospecimen = flatData.filter((obj) => {
         return obj.Component === 'Biospecimen';
@@ -179,8 +193,6 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
     const cases = flatData.filter((obj) => {
         return obj.Component === 'Demographics';
     });
-
-    const casesByIdMap = _.keyBy(cases,(c)=>c.HTANParticipantID);
 
     const diagnoses = flatData.filter((obj) => {
         return obj.Component === 'Diagnosis';
@@ -216,8 +228,6 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
     });
 
     const returnFiles = files.filter(f=>!!f.diagnosis);
-
-
 
     // filter out files without a diagnosis
     return { files: returnFiles, atlases: data.atlases };
