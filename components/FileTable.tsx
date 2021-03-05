@@ -83,6 +83,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
+                name: "Biospecimen",
+                selector: (entity:Entity)=>entity.HTANParentBiospecimenID,
+                wrap: true,
+                sortable: true
+            },
+            {
                 name: "Assay",
                 selector: 'Component',
                 format: (entity: Entity) => entity.Component
