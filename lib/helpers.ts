@@ -28,9 +28,10 @@ export function massageData(data: any): Entity[] {
             const schemaName = t.data_schema;
             if (schemaName) {
                 const schema = data.schemas.find(
-                    (s: any) => s.data_schema === schemaName.split(':')[1]
+                    (s: any) => s.data_schema === schemaName
                 );
                 //console.log("here", schema.attributes);
+
                 t.fields = schema.attributes;
 
                 //console.log(t.fields);
@@ -39,7 +40,7 @@ export function massageData(data: any): Entity[] {
                     const obj: any = {};
 
                     t.fields.forEach((f: any, i: number) => {
-                        obj[f.id.replace(/^bts:/, '')] = record[i];
+                        obj[f.id.replace(/^bts:/, '')] = record.values[i];
                     });
 
                     obj['atlasid'] = atlas.htan_id;
@@ -59,21 +60,24 @@ export function massageData(data: any): Entity[] {
 }
 
 export interface Entity {
+    HTANBiospecimenID: any;
     atlasid: string;
     AssayType: string;
     Component: string;
+    HTANParentID: string;
     HTANDataFileID: string;
     HTANParentBiospecimenID: string;
+    HTANParentDataFileID: string;
     TissueorOrganofOrigin: string;
     PrimaryDiagnosis: string;
     fileFormat: string;
     filename: string;
-    HTANParentID: string;
-    HTANParticipantID:string;
+    HTANParticipantID: string;
     level: string;
     WPAtlas: WPAtlas;
     biospecimen: Entity | undefined;
     diagnosis: Entity | undefined;
+    primaryParent?: Entity;
 }
 
 export interface Atlas {
@@ -86,37 +90,109 @@ export interface LoadDataResult {
     atlases: Atlas[];
 }
 
+function seekPrimaryParent(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity {
+    if (!f.HTANParentDataFileID) {
+        return f;
+    } else {
+        const parent = byIdMap[f.HTANParentDataFileID.split(",")[0]];
+        if (!parent) {
+            throw "Invalid HTANParentDataFileID";
+        } else {
+            return seekPrimaryParent(parent, byIdMap)
+        }
+    }
+}
+
+function handleLineage(files:Entity[]){
+    // first get rid of level >=4
+    // they have multiple parents
+    let cleanFiles = files.filter((f)=>{
+        return !/Level[456]/.test(f.Component)
+    });
+
+    const byIdMap = _.keyBy(cleanFiles,f=>f.HTANDataFileID);
+
+    cleanFiles.forEach((f)=>{
+       const primaryParent = seekPrimaryParent(f, byIdMap);
+       if (f !== primaryParent) {
+           f.primaryParent = primaryParent;
+       }
+    });
+
+}
+
+function getSampleAndPatientData(file:Entity, biospecimen:Entity[], diagnoses:Entity[]){
+
+    const topLevelFile = file.primaryParent || file;
+
+    let diagnosis, specimen;
+
+    specimen = _.find(biospecimen, {
+        HTANBiospecimenID: topLevelFile.HTANParentBiospecimenID,
+    }) as Entity | undefined;
+
+    if (specimen) {
+        diagnosis = _.find(diagnoses, {
+            HTANParticipantID: specimen.HTANParentID,
+        }) as Entity | undefined;
+    }
+
+    return { specimen, diagnosis };
+
+}
+
+
+
 export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
-    const data = await fetch('/sim.json').then((r) => r.json());
+    const url = '/syn_data.json';  // '/sim.json';
+
+    const data = await fetch(url).then((r) => r.json());
 
     const flatData: Entity[] = massageData(data);
 
-    const files = flatData.filter((obj) => {
+    let files = flatData.filter((obj) => {
         return !!obj.filename;
     });
 
+    // const levelFiles = files.filter((f)=>{
+    //     return /Level[2]/.test(f.Component)
+    // });
+
+    const handleLineage1 = handleLineage(files);
+
+    console.log(files);
+
+    const fileByIdMap = _.keyBy(files,f=>f.HTANDataFileID);
+
+    // levelFiles.forEach((f)=>{
+    //     const id = f.HTANParentDataFileID.split(",")[0];
+    //     const moo = fileByIdMap[id];
+    //     if (!moo) {
+    //         debugger;
+    //     }
+    // });
+
     const biospecimen = flatData.filter((obj) => {
-        return obj.Component === 'bts:Biospecimen';
+        return obj.Component === 'Biospecimen';
     });
 
     const cases = flatData.filter((obj) => {
-        return obj.Component === 'bts:Demographics';
+        return obj.Component === 'Demographics';
     });
 
-    const casesByIdMap = _.keyBy(cases,(c)=>c.HTANParentID);
+    const casesByIdMap = _.keyBy(cases,(c)=>c.HTANParticipantID);
 
     const diagnoses = flatData.filter((obj) => {
-        return obj.Component === 'bts:Diagnosis';
+        return obj.Component === 'Diagnosis';
     });
 
     const atlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id);
 
     _.forEach(files, (file) => {
-
         // parse component to make a new level property and adjust component property
         if (file.Component) {
             const parsed = parseRawAssayType(file.Component);
-            file.Component = parsed.name;
+            //file.Component = parsed.name;
             if (parsed.level && parsed.level.length > 1) {
                 file.level = parsed.level;
             } else {
@@ -126,32 +202,25 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
             file.level = "Unknown";
         }
 
-        //file.case = casesByIdMap[file.HTANParentID];
-
         file.WPAtlas =
             atlasMap[
                 `hta${Number(file.atlasid.split('_')[0].substring(3)) + 1}`
             ];
 
-        const specimen = _.find(biospecimen, {
-            HTANBiospecimenID: file.HTANParentBiospecimenID,
-        }) as Entity | undefined;
+        const parentData = getSampleAndPatientData(file, biospecimen, diagnoses)
 
-        if (specimen) {
-            //console.log(specimen);
+        file.biospecimen = parentData.specimen;
 
-            const diagnosis = _.find(diagnoses, {
-                HTANParticipantID: specimen.HTANParentID,
-            }) as Entity | undefined;
-            file.diagnosis = diagnosis;
-        }
+        file.diagnosis = parentData.diagnosis;
 
-        file.biospecimen = specimen;
-        //file.participant =
     });
 
+    const returnFiles = files.filter(f=>!!f.diagnosis);
+
+
+
     // filter out files without a diagnosis
-    return { files: files.filter(f=>!!f.diagnosis), atlases: data.atlases };
+    return { files: returnFiles, atlases: data.atlases };
 }
 
 
@@ -191,11 +260,11 @@ export function parseRawAssayType(t:string) {
     // See if there's a Level in it
     const splitByLevel = t.split("Level");
     const level = splitByLevel.length > 1 ? `Level ${splitByLevel[1]}` : null;
-    const extractedName = splitByLevel[0].match(/bts:(.+)/);
-    if (extractedName && extractedName[1]) {
+    const extractedName = splitByLevel[0];
+    if (extractedName) {
         // Convert camel case to space case
         // Source: https://stackoverflow.com/a/15370765
-        let name = extractedName[1].replace( /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g, '$1$4 $2$3$5' );
+        let name = extractedName.replace( /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g, '$1$4 $2$3$5' );
 
         // special case: sc as prefix
         name = name.replace(/\bSc /g, "sc");

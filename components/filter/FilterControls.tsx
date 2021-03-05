@@ -20,7 +20,7 @@ import FilterPropertyColumnShell from "../FilterPanel/FilterPropertyColumn";
 
 
 interface IFilterControlsProps {
-    setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
+    setFilter: (actionMeta: any) => void;
     selectedFiltersByGroupName: IFiltersByGroupName;
     selectedFilters: ExploreSelectedFilter[];
     files: Entity[];
