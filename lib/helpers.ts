@@ -225,7 +225,7 @@ export function updateSelectedFiltersInURL(
 ) {
     router.push({
         pathname: router.pathname,
-        query: { selectedFilters: encodeSelectedFilters(filters) },
+        query: Object.assign({}, router.query, { selectedFilters: encodeSelectedFilters(filters) }),
     }, undefined, {shallow: true});
 }
 
@@ -235,7 +235,7 @@ export function setTab(
 ) {
     router.push({
         pathname: router.pathname,
-        query: { tab }
+        query: Object.assign({}, router.query, { tab })
     }, undefined, { shallow: true });
 }
 
