@@ -1,12 +1,11 @@
-import {action, makeObservable, observable} from 'mobx';
+import {action, computed, makeObservable, observable} from 'mobx';
 import {observer} from 'mobx-react';
-import React from 'react';
-import {Button, Modal} from "react-bootstrap";
+import React, {SyntheticEvent} from 'react';
+import {Button, Modal, Form} from "react-bootstrap";
 import DataTable from "react-data-table-component";
 
 import {Atlas, Entity} from '../lib/helpers';
 import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
-import {ExploreSummary} from "./ExploreSummary";
 
 interface IFileDownloadModalProps {
     filenames: string[];
@@ -62,6 +61,7 @@ interface IFileTableProps {
 export default class FileTable extends React.Component<IFileTableProps> {
     selected: Entity[] = [];
     @observable isDownloadModalOpen = false;
+    @observable caseFilterText = '';
 
     get selectedFilenames () {
         return this.selected.map(e => e.filename);
@@ -81,6 +81,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 grow: 2,
                 wrap: true,
                 sortable: true,
+            },
+            {
+                name: "Biospecimen",
+                selector: (entity:Entity)=>entity.HTANParentBiospecimenID,
+                wrap: true,
+                sortable: true
             },
             {
                 name: "Assay",
@@ -130,6 +136,21 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.selected = state.selectedRows;
     }
 
+    @computed get caseFilteredFiles() {
+        if (this.caseFilterText.length > 0) {
+            return this.props.entities.filter(file => {
+                return file.diagnosis?.HTANParticipantID.includes(this.caseFilterText);
+            });
+        } else {
+            return this.props.entities;
+        }
+    }
+
+    @action.bound
+    private onChangeCaseFilterText(evt:SyntheticEvent<any>) {
+        this.caseFilterText = (evt.target as any).value;
+    }
+
     render() {
         return this.props.entities ? (
             <>
@@ -144,7 +165,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         persistSelectedOnSort: false,
                     }}
                     columns={this.columns}
-                    data={this.props.entities}
+                    data={this.caseFilteredFiles}
                     striped={true}
                     dense={true}
                     selectableRows={true}
@@ -156,7 +177,18 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     subHeader={true}
                     subHeaderAlign="right"
                     subHeaderComponent={
-                        <div className="controls ml-auto">
+                        <div
+                            className="ml-auto"
+                            style={{
+                                display:"flex",
+                            }}
+                        >
+                            <Form.Control
+                                placeholder={"Search Patient ID"}
+                                value={this.caseFilterText}
+                                onChange={this.onChangeCaseFilterText}
+                                style={{marginRight:5}}
+                            />
                             <Button
                                 variant="primary"
                                 size="sm"
