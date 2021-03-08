@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
             for values in manifest_data:
 
-                record = {"values":list(values)}
+                record = {"values":[v if not pd.isna(v) else None for v in list(values)]}
                 record_list.append(record)
 
             # add records to atlas
