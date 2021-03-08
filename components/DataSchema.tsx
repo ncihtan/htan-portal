@@ -24,8 +24,7 @@ const ExpandableComponent: React.FunctionComponent<{
             <DataSchemaTable
                 schemaData={getDataSchemaDependencies(props.data, props.dataSchemaMap)}
                 dataSchemaMap={props.dataSchemaMap}
-                title="Dependencies:"
-                expandableRows={false}
+                root={false}
             />
         </div>
     ): null;
@@ -35,7 +34,7 @@ const DataSchemaTable: React.FunctionComponent<{
     schemaData: DataSchemaData[];
     dataSchemaMap?: {[id: string]: DataSchemaData};
     title?: string;
-    expandableRows?: boolean;
+    root?: boolean;
 }> = props => {
     const columns: IDataTableColumn[] = [
         {
@@ -57,14 +56,18 @@ const DataSchemaTable: React.FunctionComponent<{
             wrap: true,
             sortable: true,
         },
-        {
+    ];
+
+    // add required column only if this is not a root table
+    if (!props.root) {
+        columns.push({
             name: "Required",
             selector: 'required',
             wrap: true,
             sortable: true,
             format: (schemaData: DataSchemaData) => schemaData.required ? "Yes": "No",
-        },
-    ];
+        })
+    }
 
     // conditionally show valid values column
     if (hasNonEmptyValidValues(props.schemaData)) {
@@ -100,7 +103,7 @@ const DataSchemaTable: React.FunctionComponent<{
                     },
                 },
             }}
-            expandableRows={props.expandableRows}
+            expandableRows={props.root}
             expandableRowsComponent={
                 <ExpandableComponent
                     dataSchemaMap={props.dataSchemaMap}
@@ -116,7 +119,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = props => {
             schemaData={props.schemaData}
             dataSchemaMap={props.dataSchemaMap}
             title="Data Schema:"
-            expandableRows={true}
+            root={true}
         />
     );
 }
