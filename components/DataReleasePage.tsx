@@ -9,6 +9,7 @@ import HtanNavbar from './HtanNavbar';
 import Footer from './Footer';
 import { CmsData, WPAtlas } from '../types';
 import getData from '../lib/getData';
+import {getAtlasPageURL} from "../lib/helpers";
 
 const synapseData = getData();
 
@@ -46,7 +47,7 @@ export const DataReleasePage = (props: DataReleaseProps) => {
             sortable: true,
             cell: (row: any) => {
                 return row.dataRelease.toUpperCase() in synapseData ? (
-                    <Link href={`./atlas/${row.dataRelease}`}>
+                    <Link href={getAtlasPageURL(row.dataRelease)}>
                         <a>Data Release</a>
                     </Link>
                 ) : null;

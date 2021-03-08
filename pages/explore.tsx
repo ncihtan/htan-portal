@@ -15,7 +15,7 @@ import getData from '../lib/getData';
 import {
     loadData,
     LoadDataResult,
-    parseSelectedFilters,
+    parseSelectedFiltersFromUrl,
     updateSelectedFiltersInURL
 } from '../lib/helpers';
 import {
@@ -53,6 +53,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 const synapseData = getData();
 
+export type ExploreURLQuery = {
+    selectedFilters: string|undefined;
+}
+
 @observer
 class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, IFilterProps> {
     @observable.ref private dataLoadingPromise:IPromiseBasedObservable<LoadDataResult>|undefined;
@@ -68,7 +72,9 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
     }
 
     get selectedFilters(): ExploreSelectedFilter[] {
-        return parseSelectedFilters(this.props.router.query.selectedFilters as string|undefined) || [];
+        return parseSelectedFiltersFromUrl(
+            (this.props.router.query as ExploreURLQuery).selectedFilters // use casting as ExploreURLQuery to use typescript to ensure URL correctness
+        ) || [];
     }
 
     get getGroupsByProperty() {

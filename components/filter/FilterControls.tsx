@@ -28,7 +28,7 @@ interface IFilterControlsProps {
 }
 
 const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(props => {
-    const options = (propName: string): ExploreOptionType[] => {
+    const options = (propName: PropNames): ExploreOptionType[] => {
         const ret = makeOptions(propName, props.selectedFiltersByGroupName, props.files, props.getGroupsByProperty);
         ret.forEach(opt=>{
             opt.group = propName;

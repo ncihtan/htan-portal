@@ -3,6 +3,7 @@ import React from 'react';
 import { WPAtlas } from "../types";
 import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
 import DataTable from "react-data-table-component";
+import {getAtlasPageURL} from "../lib/helpers";
 
 interface IWPAtlasTableProps {
     atlasData: WPAtlas[];
@@ -15,7 +16,7 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = props =
             selector: 'title.rendered',
             cell: (atlas: WPAtlas) => (
                 <Link
-                    href={`./atlas/${atlas.htan_id.toLowerCase()}`}
+                    href={getAtlasPageURL(atlas.htan_id.toLowerCase())}
                 >
                     <a>{atlas.title.rendered}</a>
                 </Link>
