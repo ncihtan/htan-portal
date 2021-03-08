@@ -57,6 +57,13 @@ const DataSchemaTable: React.FunctionComponent<{
             wrap: true,
             sortable: true,
         },
+        {
+            name: "Required",
+            selector: 'required',
+            wrap: true,
+            sortable: true,
+            format: (schemaData: DataSchemaData) => schemaData.required ? "Yes": "No",
+        },
     ];
 
     // conditionally show valid values column
