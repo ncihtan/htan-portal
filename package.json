@@ -45,6 +45,7 @@
     "react-select": "^3.1.0",
     "react-spinkit": "^3.0.0",
     "react-spinners": "^0.10.4",
+    "react-truncate-markup": "^5.1.0",
     "roman-numerals": "^0.3.2",
     "styled-components": "^5.1.0",
     "swr": "^0.1.18",

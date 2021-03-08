@@ -4,9 +4,8 @@ import HtanNavbar from '../components/HtanNavbar';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import Footer from '../components/Footer';
 import { GetStaticProps } from 'next';
-import fetch from 'node-fetch';
 import { WPConstants } from '../types';
-import {getAtlasList, getContent, WORDPRESS_BASE_URL} from '../ApiUtil';
+import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -22,11 +21,7 @@ const Home = (data: IHomePropsProps) => {
 
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let slugs = [WPConstants.HOMEPAGE_HERO_BLURB];
-
-    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    let res = await fetch(overviewURL);
-    let data = await res.json();
+    const data = await getStaticContent([WPConstants.HOMEPAGE_HERO_BLURB]);
 
     const homepageContent = data.find(
         (d: any) => d.slug === WPConstants.HOMEPAGE_HERO_BLURB

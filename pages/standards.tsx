@@ -6,9 +6,8 @@ import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
 import Link from 'next/link';
 import { GetServerSideProps, GetStaticProps } from 'next';
-import fetch from 'node-fetch';
 import { CmsData } from '../types';
-import { WORDPRESS_BASE_URL } from '../ApiUtil';
+import { getStaticContent } from '../ApiUtil';
 
 export interface StandardsProps {
     data: CmsData[];
@@ -87,10 +86,7 @@ const Standards = (data: StandardsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let slugs = ['summary-blurb-data-standards'];
-    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    let res = await fetch(overviewURL);
-    let data = await res.json();
+    const data = await getStaticContent(['summary-blurb-data-standards']);
     return { props: { data } };
 };
 

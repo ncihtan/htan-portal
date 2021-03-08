@@ -8,8 +8,8 @@ export function getDefaultDataTableStyle() {
         },
         cells: {
             style: {
-                fontSize: 14
-            }
-        }
+                fontSize: 14,
+            },
+        },
     };
 }
