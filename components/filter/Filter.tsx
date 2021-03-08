@@ -31,7 +31,7 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                         ) : null;
 
                     return (
-                        <span className="attributeGroup">
+                        <><span className="attributeGroup">
                             <span
                                 className="attributeGroupName"
                                 onClick={() => {
@@ -109,14 +109,17 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                                     );
                                 }
                             )}
-                            {addAnd}
+
                         </span>
+                            {addAnd}
+                        </>
                     );
                 }
             )}
             {!_.isEmpty(props.selectedFiltersByGroupName) && (
-                <div
-                    className={"btn btn-sm btn-secondary"}
+                <span className={"clearFilterButton"}>
+                <span
+
                     onClick={() => {
                         props.setFilter({
                             action: FilterAction.CLEAR_ALL,
@@ -124,7 +127,8 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                     }}
                 >
                     Clear all filters
-                </div>
+                </span>
+                </span>
             )}
         </div>
     );

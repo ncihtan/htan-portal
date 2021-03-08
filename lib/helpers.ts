@@ -8,6 +8,15 @@ import {ExploreOptionType, ExploreSelectedFilter} from "./types";
 import {ExploreURLQuery} from "../pages/explore";
 import {AtlasURLQuery} from "../pages/atlas/[id]";
 
+// @ts-ignore
+let win;
+
+if (typeof window !== "undefined") {
+    win = window as any;
+} else {
+    win = {} as any;
+}
+
 export function getRecords(obj: any): any {
     if (_.isObject(obj) || _.isArray(obj)) {
         return _.map(obj, (n: any) => {
@@ -104,7 +113,7 @@ function seekPrimaryParent(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity {
     }
 }
 
-window.missing = [];
+win.missing = [];
 
 function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[] {
 
@@ -120,7 +129,8 @@ function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[
             if (file) {
                 aggr.push(file);
             } else {
-                window.missing.push(id);
+                // @ts-ignore
+                (win as any).missing.push(id);
             }
             return aggr;
         }, []);

@@ -170,7 +170,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
         if (this.filteredFiles) {
             return (
-                <div style={{ padding: 20 }}>
+                <div className={"explorePageWrapper"}>
 
                     <FilterControls
                         setFilter={this.setFilter}
