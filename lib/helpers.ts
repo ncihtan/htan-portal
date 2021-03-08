@@ -104,6 +104,8 @@ function seekPrimaryParent(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity {
     }
 }
 
+window.missing = [];
+
 function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[] {
 
     let parents: Entity[] = [];
@@ -112,8 +114,16 @@ function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[
         // leave it empty
         parents.push(f);
     } else {
-        const parentIds = f.HTANParentDataFileID.split(",");
-        const parentFiles = parentIds.map(id=>byIdMap[id]);
+        const parentIds = f.HTANParentDataFileID.split(/[,;]/);
+        const parentFiles = parentIds.reduce((aggr:Entity[], id: string)=>{
+            const file = byIdMap[id];
+            if (file) {
+                aggr.push(file);
+            } else {
+                window.missing.push(id);
+            }
+            return aggr;
+        }, []);
 
         const sought = _(parentFiles).map(f=>seekPrimaryParents(f,byIdMap)).flatten().uniq().value()
 
@@ -136,10 +146,13 @@ function handleLineage(files:Entity[]){
     const byIdMap = _.keyBy(cleanFiles,f=>f.HTANDataFileID);
 
     cleanFiles.forEach((f)=>{
-       const primaryParent = seekPrimaryParent(f, byIdMap);
-       if (f !== primaryParent) {
-           f.primaryParent = primaryParent;
-       }
+
+       // const primaryParent = seekPrimaryParent(f, byIdMap);
+       // if (f !== primaryParent) {
+       //     f.primaryParent = primaryParent;
+       // }
+
+
 
        const primaryParents = seekPrimaryParents(f, byIdMap);
 

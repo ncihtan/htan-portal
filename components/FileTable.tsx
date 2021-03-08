@@ -188,7 +188,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         disabled={!this.hasFilesSelected}
                         onMouseDown={this.onDownload}
                     >
-                        { this.hasFilesSelected ? "Download selected files" : "Select files for download below" }
+                        { this.hasFilesSelected ?
+                            `Download ${this.selectedFilenames.length} selected file${this.selectedFilenames.length > 1 ? "s" : ""}`
+                            : "Select files for download below" }
                     </Button>
 
                     <div className="input-group" style={{width:300}}>
