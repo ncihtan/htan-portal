@@ -3,6 +3,7 @@ import {observer} from 'mobx-react';
 import React, {SyntheticEvent} from 'react';
 import {Button, Modal, Form} from "react-bootstrap";
 import DataTable from "react-data-table-component";
+import _ from 'lodash';
 
 import {Atlas, Entity} from '../lib/helpers';
 import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
@@ -59,7 +60,9 @@ interface IFileTableProps {
 
 @observer
 export default class FileTable extends React.Component<IFileTableProps> {
-    selected: Entity[] = [];
+
+    @observable.ref selected: Entity[] = [];
+
     @observable isDownloadModalOpen = false;
     @observable caseFilterText = '';
 
@@ -84,7 +87,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: "Biospecimen",
-                selector: (entity:Entity)=>entity.HTANParentBiospecimenID,
+                selector: (file:Entity)=>{
+                    return file.primaryParents ?
+                        _.uniq(file.primaryParents.map(_file=>_file.biospecimen!.HTANBiospecimenID)) :
+                        file.biospecimen!.HTANBiospecimenID
+                    return "hello"
+                },
                 wrap: true,
                 sortable: true
             },
@@ -124,7 +132,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
         makeObservable(this);
     }
 
-    @action onDownload = () => {
+    @action onDownload = (e:any) => {
+        e.preventDefault();
         this.isDownloadModalOpen = true;
     }
 
@@ -151,7 +160,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.caseFilterText = (evt.target as any).value;
     }
 
+    @computed get hasFilesSelected(){
+        return this.selectedFilenames.length > 0;
+    }
+
     render() {
+
         return this.props.entities ? (
             <>
                 <FileDownloadModal
@@ -159,6 +173,48 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     onClose={this.onModalClose}
                     isOpen={this.isDownloadModalOpen}
                 />
+
+                <div
+                    style={{
+                        marginBottom:10,
+                    }}
+                    className={"d-flex justify-content-between"}
+                >
+
+                    <Button
+                        variant={"primary"}
+                        size="sm"
+                        className={!this.hasFilesSelected ? "btn-disabled" : "" }
+                        disabled={!this.hasFilesSelected}
+                        onMouseDown={this.onDownload}
+                    >
+                        { this.hasFilesSelected ? "Download selected files" : "Select files for download below" }
+                    </Button>
+
+                    <div className="input-group" style={{width:300}}>
+                        <input className="form-control form-control-sm py-2 border-right-0 border"
+                               value={this.caseFilterText}
+                               placeholder={"Search Patient ID"}
+                               onChange={this.onChangeCaseFilterText}
+                               type="search"
+                               id="example-search-input" />
+                            <span className="input-group-append">
+                                    <button className="btn btn-outline-secondary border-left-0 border" type="button">
+                                        <i className="fa fa-search"></i>
+                                    </button>
+                          </span>
+                    </div>
+
+                    {/*<Form.Control*/}
+                    {/*    placeholder={"Search Patient ID"}*/}
+                    {/*    value={this.caseFilterText}*/}
+                    {/*    onChange={this.onChangeCaseFilterText}*/}
+                    {/*    style={{marginRight:5}}*/}
+                    {/*    size={"sm"}*/}
+                    {/*/>*/}
+                </div>
+
+
                 <DataTable
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
@@ -167,14 +223,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     columns={this.columns}
                     data={this.caseFilteredFiles}
                     striped={true}
-                    dense={true}
+                    dense={false}
                     selectableRows={true}
                     onSelectedRowsChange={this.onSelect}
                     pagination={true}
                     paginationPerPage={50}
                     paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
                     noHeader={true}
-                    subHeader={true}
+                    subHeader={false}
                     subHeaderAlign="right"
                     subHeaderComponent={
                         <div
@@ -188,6 +244,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                 value={this.caseFilterText}
                                 onChange={this.onChangeCaseFilterText}
                                 style={{marginRight:5}}
+                                size={"sm"}
                             />
                             <Button
                                 variant="primary"
@@ -200,6 +257,18 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     }
                     customStyles={getDefaultDataTableStyle()}
                 />
+
+                <Button
+                    style={{marginTop:-70}}
+                    variant={"primary"}
+                    size="sm"
+                    className={!this.hasFilesSelected ? "btn-disabled" : "" }
+                    disabled={!this.hasFilesSelected}
+                    onMouseDown={this.onDownload}
+                >
+                    { this.hasFilesSelected ? "Download selected files" : "Select files for download below" }
+                </Button>
+
             </>
         ) : null;
     }

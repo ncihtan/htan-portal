@@ -250,3 +250,9 @@ table {
   }
 
 }
+
+
+.btn-disabled {
+  opacity:0.2 !important;
+  cursor:not-allowed;
+}
