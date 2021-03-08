@@ -1,11 +1,11 @@
-import {action, computed, makeObservable, observable} from 'mobx';
-import {observer} from 'mobx-react';
-import React, {SyntheticEvent} from 'react';
-import {Button, Modal, Form} from "react-bootstrap";
-import DataTable from "react-data-table-component";
+import { action, computed, makeObservable, observable } from 'mobx';
+import { observer } from 'mobx-react';
+import React, { SyntheticEvent } from 'react';
+import { Button, Modal, Form } from 'react-bootstrap';
+import DataTable from 'react-data-table-component';
 
-import {Atlas, Entity} from '../lib/helpers';
-import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
+import { Atlas, Entity } from '../lib/helpers';
+import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 
 interface IFileDownloadModalProps {
     filenames: string[];
@@ -13,8 +13,10 @@ interface IFileDownloadModalProps {
     isOpen: boolean;
 }
 
-const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = props => {
-    const script = props.filenames.map(f => `synapse get ${f}`).join("\n");
+const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
+    props
+) => {
+    const script = props.filenames.map((f) => `synapse get ${f}`).join('\n');
 
     return (
         <Modal show={props.isOpen} onHide={props.onClose}>
@@ -23,13 +25,15 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = prop
             </Modal.Header>
 
             <Modal.Body>
-                <p>You can use the synapse command line client to download the selected files:</p>
+                <p>
+                    You can use the synapse command line client to download the
+                    selected files:
+                </p>
                 <pre className="pre-scrollable">
-                    <code>
-                        {script}
-                    </code>
+                    <code>{script}</code>
                 </pre>
-                <p>For more information see the{' '}
+                <p>
+                    For more information see the{' '}
                     <a
                         href="https://docs.synapse.org/articles/downloading_data.html"
                         target="_blank"
@@ -40,16 +44,13 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = prop
             </Modal.Body>
 
             <Modal.Footer>
-                <Button
-                    variant="secondary"
-                    onClick={props.onClose}
-                >
+                <Button variant="secondary" onClick={props.onClose}>
                     Close
                 </Button>
             </Modal.Footer>
         </Modal>
     );
-}
+};
 
 interface IFileTableProps {
     entities: Entity[];
@@ -63,61 +64,61 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable isDownloadModalOpen = false;
     @observable caseFilterText = '';
 
-    get selectedFilenames () {
-        return this.selected.map(e => e.filename);
+    get selectedFilenames() {
+        return this.selected.map((e) => e.filename);
     }
 
     get columns() {
         return [
             {
-                name: "Filename",
+                name: 'Filename',
                 selector: 'filename',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: "Atlas",
+                name: 'Atlas',
                 selector: 'WPAtlas.title.rendered',
                 grow: 2,
                 wrap: true,
                 sortable: true,
             },
             {
-                name: "Biospecimen",
-                selector: (entity:Entity)=>entity.HTANParentBiospecimenID,
-                wrap: true,
-                sortable: true
-            },
-            {
-                name: "Assay",
-                selector: 'Component',
-                format: (entity: Entity) => entity.Component
-                    .replace(/^bts:/, '')
-                    .replace("-","")
-                    .replace(/Level[\d]+/i,""),
+                name: 'Biospecimen',
+                selector: (entity: Entity) => entity.HTANParentBiospecimenID,
                 wrap: true,
                 sortable: true,
             },
             {
-                name: "Level",
+                name: 'Assay',
+                selector: 'Component',
+                format: (entity: Entity) =>
+                    entity.Component.replace(/^bts:/, '')
+                        .replace('-', '')
+                        .replace(/Level[\d]+/i, ''),
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Level',
                 selector: 'level',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: "Organ",
+                name: 'Organ',
                 selector: 'diagnosis.TissueorOrganofOrigin',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: "Diagnosis",
+                name: 'Diagnosis',
                 selector: 'diagnosis.PrimaryDiagnosis',
                 wrap: true,
                 sortable: true,
             },
         ];
-    };
+    }
 
     constructor(props: IFileTableProps) {
         super(props);
@@ -126,20 +127,26 @@ export default class FileTable extends React.Component<IFileTableProps> {
 
     @action onDownload = () => {
         this.isDownloadModalOpen = true;
-    }
+    };
 
     @action onModalClose = () => {
         this.isDownloadModalOpen = false;
     };
 
-    onSelect = (state: { allSelected: boolean, selectedCount: number, selectedRows: Entity[] }) => {
+    onSelect = (state: {
+        allSelected: boolean;
+        selectedCount: number;
+        selectedRows: Entity[];
+    }) => {
         this.selected = state.selectedRows;
-    }
+    };
 
     @computed get caseFilteredFiles() {
         if (this.caseFilterText.length > 0) {
-            return this.props.entities.filter(file => {
-                return file.diagnosis?.HTANParticipantID.includes(this.caseFilterText);
+            return this.props.entities.filter((file) => {
+                return file.diagnosis?.HTANParticipantID.includes(
+                    this.caseFilterText
+                );
             });
         } else {
             return this.props.entities;
@@ -147,7 +154,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
     }
 
     @action.bound
-    private onChangeCaseFilterText(evt:SyntheticEvent<any>) {
+    private onChangeCaseFilterText(evt: SyntheticEvent<any>) {
         this.caseFilterText = (evt.target as any).value;
     }
 
@@ -180,14 +187,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         <div
                             className="ml-auto"
                             style={{
-                                display:"flex",
+                                display: 'flex',
                             }}
                         >
                             <Form.Control
-                                placeholder={"Search Patient ID"}
+                                placeholder={'Search Patient ID'}
                                 value={this.caseFilterText}
                                 onChange={this.onChangeCaseFilterText}
-                                style={{marginRight:5}}
+                                style={{ marginRight: 5 }}
                             />
                             <Button
                                 variant="primary"

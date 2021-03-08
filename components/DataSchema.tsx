@@ -1,56 +1,59 @@
 import React from 'react';
-import DataTable, { IDataTableColumn } from "react-data-table-component";
+import DataTable, { IDataTableColumn } from 'react-data-table-component';
 
 import {
     DataSchemaData,
     getDataSchemaDependencies,
     getDataSchemaValidValues,
-    hasNonEmptyValidValues
-} from "../lib/dataSchemaHelpers";
-import { getDefaultDataTableStyle } from "../lib/dataTableHelpers";
-import ExpandableText from "./ExpandableText";
+    hasNonEmptyValidValues,
+} from '../lib/dataSchemaHelpers';
+import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import ExpandableText from './ExpandableText';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
-    dataSchemaMap: {[id: string]: DataSchemaData};
+    dataSchemaMap: { [id: string]: DataSchemaData };
 }
 
 const ExpandableComponent: React.FunctionComponent<{
     data?: DataSchemaData;
-    dataSchemaMap?: {[id: string]: DataSchemaData};
-}> = props => {
+    dataSchemaMap?: { [id: string]: DataSchemaData };
+}> = (props) => {
     return props.data?.requiredDependencies ? (
         <div className="m-3">
             <DataSchemaTable
-                schemaData={getDataSchemaDependencies(props.data, props.dataSchemaMap)}
+                schemaData={getDataSchemaDependencies(
+                    props.data,
+                    props.dataSchemaMap
+                )}
                 dataSchemaMap={props.dataSchemaMap}
                 root={false}
             />
         </div>
-    ): null;
-}
+    ) : null;
+};
 
 const DataSchemaTable: React.FunctionComponent<{
     schemaData: DataSchemaData[];
-    dataSchemaMap?: {[id: string]: DataSchemaData};
+    dataSchemaMap?: { [id: string]: DataSchemaData };
     title?: string;
     root?: boolean;
-}> = props => {
+}> = (props) => {
     const columns: IDataTableColumn[] = [
         {
-            name: "Attribute",
+            name: 'Attribute',
             selector: 'attribute',
             wrap: true,
             sortable: true,
         },
         {
-            name: "Label",
+            name: 'Label',
             selector: 'label',
             wrap: true,
             sortable: true,
         },
         {
-            name: "Description",
+            name: 'Description',
             selector: 'description',
             grow: 2,
             wrap: true,
@@ -61,23 +64,27 @@ const DataSchemaTable: React.FunctionComponent<{
     // add required column only if this is not a root table
     if (!props.root) {
         columns.push({
-            name: "Required",
+            name: 'Required',
             selector: 'required',
             wrap: true,
             sortable: true,
-            format: (schemaData: DataSchemaData) => schemaData.required ? "Yes": "No",
-        })
+            format: (schemaData: DataSchemaData) =>
+                schemaData.required ? 'Yes' : 'No',
+        });
     }
 
     // conditionally show valid values column
     if (hasNonEmptyValidValues(props.schemaData)) {
         columns.push({
-            name: "Valid Values",
+            name: 'Valid Values',
             selector: 'validValues',
             cell: (schemaData: DataSchemaData) => {
-                const text = getDataSchemaValidValues(schemaData, props.dataSchemaMap)
-                    .map(s => s.label)
-                    .join(", ");
+                const text = getDataSchemaValidValues(
+                    schemaData,
+                    props.dataSchemaMap
+                )
+                    .map((s) => s.label)
+                    .join(', ');
 
                 return <ExpandableText fullText={text} />;
             },
@@ -105,15 +112,13 @@ const DataSchemaTable: React.FunctionComponent<{
             }}
             expandableRows={props.root}
             expandableRowsComponent={
-                <ExpandableComponent
-                    dataSchemaMap={props.dataSchemaMap}
-                />
+                <ExpandableComponent dataSchemaMap={props.dataSchemaMap} />
             }
         />
     );
-}
+};
 
-const DataSchema: React.FunctionComponent<IDataSchemaProps> = props => {
+const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
     return (
         <DataSchemaTable
             schemaData={props.schemaData}
@@ -122,6 +127,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = props => {
             root={true}
         />
     );
-}
+};
 
 export default DataSchema;

@@ -1,6 +1,6 @@
-import {observer} from "mobx-react";
-import React from "react";
-import _ from "lodash";
+import { observer } from 'mobx-react';
+import React from 'react';
+import _ from 'lodash';
 
 import {
     ExploreActionMeta,
@@ -8,26 +8,23 @@ import {
     FilterAction,
     IFiltersByGroupName,
     PropMap,
-    PropNames
-} from "../../lib/types";
+    PropNames,
+} from '../../lib/types';
 
 interface IFilterProps {
     setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
     selectedFiltersByGroupName: IFiltersByGroupName;
 }
 
-const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
+const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {
     return (
         <div className={'filter'}>
             {Object.keys(props.selectedFiltersByGroupName).map(
                 (filter, i, filters) => {
                     const numberOfAttributes = filters.length;
                     const addAnd =
-                        numberOfAttributes > 1 &&
-                        i < numberOfAttributes - 1 ? (
-                            <span className="logicalAnd">
-                                AND
-                            </span>
+                        numberOfAttributes > 1 && i < numberOfAttributes - 1 ? (
+                            <span className="logicalAnd">AND</span>
                         ) : null;
 
                     return (
@@ -39,8 +36,8 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                                         action: FilterAction.CLEAR,
                                         option: {
                                             group: filter,
-                                            value: ''
-                                        }
+                                            value: '',
+                                        },
                                     });
                                 }}
                             >
@@ -48,36 +45,30 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                                     PropMap[
                                         PropNames[
                                             filter as keyof typeof PropNames
-                                            ]
-                                        ].displayName
+                                        ]
+                                    ].displayName
                                 }
                             </span>
 
                             {props.selectedFiltersByGroupName[filter].map(
                                 (value, i, values) => {
-                                    const numberOfValues =
-                                        values.length;
+                                    const numberOfValues = values.length;
                                     const openParenthesis =
-                                        numberOfValues > 1 &&
-                                        i == 0 ? (
+                                        numberOfValues > 1 && i == 0 ? (
                                             <span className="logicalParentheses">
                                                 (
                                             </span>
                                         ) : null;
                                     const addOr =
                                         numberOfValues > 1 &&
-                                        i <
-                                        numberOfValues -
-                                        1 ? (
+                                        i < numberOfValues - 1 ? (
                                             <span className="logicalOr">
                                                 OR
                                             </span>
                                         ) : null;
                                     const closeParenthesis =
                                         numberOfValues > 1 &&
-                                        i ==
-                                        numberOfValues -
-                                        1 ? (
+                                        i == numberOfValues - 1 ? (
                                             <span className="logicalParentheses">
                                                 )
                                             </span>
@@ -89,16 +80,14 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                                             <span
                                                 className="attributeValue"
                                                 onClick={() => {
-                                                    props.setFilter(
-                                                        {
-                                                            action:
-                                                                FilterAction.DESELECT,
-                                                            option: {
-                                                                value:value.value,
-                                                                group: filter,
-                                                            },
-                                                        }
-                                                    );
+                                                    props.setFilter({
+                                                        action:
+                                                            FilterAction.DESELECT,
+                                                        option: {
+                                                            value: value.value,
+                                                            group: filter,
+                                                        },
+                                                    });
                                                 }}
                                             >
                                                 {value.value}
@@ -116,7 +105,7 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
             )}
             {!_.isEmpty(props.selectedFiltersByGroupName) && (
                 <div
-                    className={"btn btn-sm btn-secondary"}
+                    className={'btn btn-sm btn-secondary'}
                     onClick={() => {
                         props.setFilter({
                             action: FilterAction.CLEAR_ALL,

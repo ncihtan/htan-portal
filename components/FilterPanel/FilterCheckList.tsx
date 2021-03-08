@@ -11,9 +11,7 @@ import _ from 'lodash';
 import styles from './styles.module.scss';
 
 interface IFilterCheckList {
-    setFilter: (
-        actionMeta: ActionMeta<ExploreOptionType>
-    ) => void;
+    setFilter: (actionMeta: ActionMeta<ExploreOptionType>) => void;
     filters: IFiltersByGroupName;
     options: ExploreOptionType[];
 }
@@ -33,9 +31,15 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                         (o) => o.value === option.value
                     );
                 return (
-                    <div className={classNames("form-check", styles.formCheck)} key={id}>
+                    <div
+                        className={classNames('form-check', styles.formCheck)}
+                        key={id}
+                    >
                         <input
-                            className={ classNames("form-check-input", styles.checkboxLabel)}
+                            className={classNames(
+                                'form-check-input',
+                                styles.checkboxLabel
+                            )}
                             onChange={(e) => {
                                 props.setFilter({
                                     option,
@@ -49,7 +53,13 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                             type="checkbox"
                             id={id}
                         />
-                        <label className={classNames("form-check-label", styles.checkboxLabel)} htmlFor={id}>
+                        <label
+                            className={classNames(
+                                'form-check-label',
+                                styles.checkboxLabel
+                            )}
+                            htmlFor={id}
+                        >
                             {option.label}
                         </label>
                         <div className={styles.fileCount}>{option.count}</div>
