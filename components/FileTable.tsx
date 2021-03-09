@@ -4,9 +4,12 @@ import React, {SyntheticEvent} from 'react';
 import {Button, Modal, Form} from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import _ from 'lodash';
+import classNames from 'classnames';
 
 import {Atlas, Entity} from '../lib/helpers';
 import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
+import {faDownload, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface IFileDownloadModalProps {
     filenames: string[];
@@ -180,40 +183,24 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     }}
                     className={"d-flex justify-content-between"}
                 >
-
-                    <Button
-                        variant={"primary"}
-                        size="sm"
-                        className={!this.hasFilesSelected ? "btn-disabled" : "" }
+                    <button
+                        className={classNames("btn btn-primary", !this.hasFilesSelected ? "btn-disabled" : "")}
                         disabled={!this.hasFilesSelected}
                         onMouseDown={this.onDownload}
                     >
-                        { this.hasFilesSelected ?
-                            `Download ${this.selectedFilenames.length} selected file${this.selectedFilenames.length > 1 ? "s" : ""}`
-                            : "Select files for download below" }
-                    </Button>
+                        <FontAwesomeIcon icon={faDownload} /> { this.hasFilesSelected ? "Download selected files" : "Select files for download below" }
+                    </button>
 
                     <div className="input-group" style={{width:300}}>
-                        <input className="form-control form-control-sm py-2 border-right-0 border"
+                        <input className="form-control py-2 border-right-0 border" type="search"
+                               onInput={this.onChangeCaseFilterText}
                                value={this.caseFilterText}
                                placeholder={"Search Patient ID"}
-                               onChange={this.onChangeCaseFilterText}
-                               type="search"
                                id="example-search-input" />
-                            <span className="input-group-append">
-                                    <button className="btn btn-outline-secondary border-left-0 border" type="button">
-                                        <i className="fa fa-search"></i>
-                                    </button>
-                          </span>
+                        <span className="input-group-append">
+                            <div className="input-group-text bg-transparent"> <FontAwesomeIcon icon={faSearch} /></div>
+                        </span>
                     </div>
-
-                    {/*<Form.Control*/}
-                    {/*    placeholder={"Search Patient ID"}*/}
-                    {/*    value={this.caseFilterText}*/}
-                    {/*    onChange={this.onChangeCaseFilterText}*/}
-                    {/*    style={{marginRight:5}}*/}
-                    {/*    size={"sm"}*/}
-                    {/*/>*/}
                 </div>
 
 
@@ -260,16 +247,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     customStyles={getDefaultDataTableStyle()}
                 />
 
-                <Button
+                <button
                     style={{marginTop:-70}}
-                    variant={"primary"}
-                    size="sm"
-                    className={!this.hasFilesSelected ? "btn-disabled" : "" }
+                    className={classNames("btn btn-primary", !this.hasFilesSelected ? "btn-disabled" : "")}
                     disabled={!this.hasFilesSelected}
                     onMouseDown={this.onDownload}
                 >
-                    { this.hasFilesSelected ? "Download selected files" : "Select files for download below" }
-                </Button>
+                  <FontAwesomeIcon icon={faDownload} /> { this.hasFilesSelected ? "Download selected files" : "Select files for download below" }
+                </button>
 
             </>
         ) : null;

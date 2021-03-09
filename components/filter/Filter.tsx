@@ -1,6 +1,9 @@
 import {observer} from "mobx-react";
 import React from "react";
 import _ from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+
 
 import {
     ExploreActionMeta,
@@ -126,7 +129,7 @@ const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
                         });
                     }}
                 >
-                    Clear all filters
+                    <FontAwesomeIcon icon={faTimesCircle} /> Clear all filters
                 </span>
                 </span>
             )}
