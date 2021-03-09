@@ -76,49 +76,52 @@ export const DEFAULT_SCHEMA: SchemaJson = {
     '@context': {},
     '@graph': [],
     '@id': '',
-}
+};
 
-export const DEFAULT_SCHEMA_URL = "https://raw.githubusercontent.com/ncihtan/schematic/main/data/schema_org_schemas/HTAN.jsonld";
+export const DEFAULT_SCHEMA_URL =
+    'https://raw.githubusercontent.com/ncihtan/schematic/main/data/schema_org_schemas/HTAN.jsonld';
 
-const schemaDataCache: {[uri: string]: SchemaJson} = {};
+const schemaDataCache: { [uri: string]: SchemaJson } = {};
 
 export function getDataSchemaDependencies(
     schema: DataSchemaData,
-    schemaDataMap: {[id: string]: DataSchemaData} = {}
+    schemaDataMap: { [id: string]: DataSchemaData } = {}
 ): DataSchemaData[] {
-    return _.compact(schema.requiredDependencies.map(id => schemaDataMap[id]));
+    return _.compact(
+        schema.requiredDependencies.map((id) => schemaDataMap[id])
+    );
 }
 
 export function getDataSchemaParents(
     schema: DataSchemaData,
-    schemaDataMap: {[id: string]: DataSchemaData} = {}
+    schemaDataMap: { [id: string]: DataSchemaData } = {}
 ): DataSchemaData[] {
-    return _.compact(schema.parentIds.map(id => schemaDataMap[id]));
+    return _.compact(schema.parentIds.map((id) => schemaDataMap[id]));
 }
 
 export function getDataSchemaValidValues(
     schema: DataSchemaData,
-    schemaDataMap: {[id: string]: DataSchemaData} = {}
+    schemaDataMap: { [id: string]: DataSchemaData } = {}
 ): DataSchemaData[] {
-    return _.compact(schema.validValues.map(id => schemaDataMap[id]));
+    return _.compact(schema.validValues.map((id) => schemaDataMap[id]));
 }
 
 export function hasNonEmptyValidValues(schemaData: DataSchemaData[]): boolean {
-    return !_.isEmpty(_.flatten(schemaData.map(s => s.validValues)));
+    return !_.isEmpty(_.flatten(schemaData.map((s) => s.validValues)));
 }
 
 export async function getDataSchema(
     ids: string[],
     dataUri: string = DEFAULT_SCHEMA_URL
 ): Promise<{
-    dataSchemaData: DataSchemaData[],
-    schemaDataMap: {[id: string]: DataSchemaData}
+    dataSchemaData: DataSchemaData[];
+    schemaDataMap: { [id: string]: DataSchemaData };
 }> {
     const schemaData = getDataSchemaData(await getSchemaData(dataUri));
-    const schemaDataMap = _.keyBy(schemaData, d => d.id);
-    const dataSchemaData = _.compact(ids.map(id => schemaDataMap[id]));
+    const schemaDataMap = _.keyBy(schemaData, (d) => d.id);
+    const dataSchemaData = _.compact(ids.map((id) => schemaDataMap[id]));
 
-    return {dataSchemaData, schemaDataMap};
+    return { dataSchemaData, schemaDataMap };
 }
 
 export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
@@ -157,7 +160,7 @@ export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
 }
 
 export function getDataSchemaData(schemaJson?: SchemaJson): DataSchemaData[] {
-    const schema: SchemaData[] = schemaJson ? schemaJson['@graph'] || [] : []
+    const schema: SchemaData[] = schemaJson ? schemaJson['@graph'] || [] : [];
     const context: SchemaContext = schemaJson
         ? schemaJson['@context'] || {}
         : {};
@@ -169,33 +172,35 @@ export function getDataSchemaData(schemaJson?: SchemaJson): DataSchemaData[] {
     return [] as DataSchemaData[];
 }
 
-export function mapSchemaDataToDataSchemaData(context: SchemaContext): (nd: SchemaData) => DataSchemaData {
+export function mapSchemaDataToDataSchemaData(
+    context: SchemaContext
+): (nd: SchemaData) => DataSchemaData {
     return function (nd: SchemaData): DataSchemaData {
         const parentIds: string[] = (normalizeEntity(
-            nd['rdfs:subClassOf'],
+            nd['rdfs:subClassOf']
         ) as BaseEntity[]).map((rd: BaseEntity): string => rd['@id']);
 
         const pieces: string[] = nd['@id'].split(`:`);
         const source: string = `${context[pieces[0]]}${pieces[1]}`;
 
         const type: string[] = (normalizeEntity(nd['@type']) as string[]).map(
-            (rd: string): string => rd,
+            (rd: string): string => rd
         );
 
         const requiredDependencies: string[] = (normalizeEntity(
-            nd['sms:requiresDependency'],
+            nd['sms:requiresDependency']
         ) as BaseEntity[]).map((rd: BaseEntity): string => rd['@id']);
 
         const validValues: string[] = (normalizeEntity(
-            nd['schema:rangeIncludes'],
+            nd['schema:rangeIncludes']
         ) as BaseEntity[]).map((rd: BaseEntity): string => rd['@id']);
 
         const requiresComponent: string[] = (normalizeEntity(
-            nd['sms:requiresComponent'],
+            nd['sms:requiresComponent']
         ) as BaseEntity[]).map((rd: BaseEntity): string => rd['@id']);
 
         const domainIncludes: string[] = (normalizeEntity(
-            nd['schema:domainIncludes'],
+            nd['schema:domainIncludes']
         ) as BaseEntity[]).map((rd: BaseEntity): string => rd['@id']);
 
         return {
@@ -213,11 +218,11 @@ export function mapSchemaDataToDataSchemaData(context: SchemaContext): (nd: Sche
             requiresComponent,
             source,
         } as DataSchemaData;
-    }
+    };
 }
 
 function normalizeEntity(
-    entity: string | string[] | BaseEntity | BaseEntity[] | undefined,
+    entity: string | string[] | BaseEntity | BaseEntity[] | undefined
 ): (string | BaseEntity)[] {
     return !entity ? [] : !Array.isArray(entity) ? Array(entity) : entity;
 }
