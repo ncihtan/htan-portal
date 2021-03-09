@@ -13,9 +13,7 @@ module.exports = {
 
         // Do not run type checking twice:
         if (dev && isServer) {
-            config.plugins.push(
-                new ForkTsCheckerWebpackPlugin()
-            );
+            config.plugins.push(new ForkTsCheckerWebpackPlugin());
         }
 
         return config;

@@ -3,7 +3,7 @@ export function getDefaultDataTableStyle() {
         headCells: {
             style: {
                 fontSize: 16,
-                fontWeight: "bold",
+                fontWeight: 'bold',
             },
         },
         cells: {

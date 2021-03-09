@@ -1,17 +1,17 @@
 import _ from 'lodash';
-import {NextRouter} from "next/router";
+import { NextRouter } from 'next/router';
 import fetch from 'node-fetch';
-import {toArabic} from "roman-numerals";
+import { toArabic } from 'roman-numerals';
 
 import { WPAtlas } from '../types';
-import {ExploreOptionType, ExploreSelectedFilter} from "./types";
-import {ExploreURLQuery} from "../pages/explore";
-import {AtlasURLQuery} from "../pages/atlas/[id]";
+import { ExploreOptionType, ExploreSelectedFilter } from './types';
+import { ExploreURLQuery } from '../pages/explore';
+import { AtlasURLQuery } from '../pages/atlas/[id]';
 
 // @ts-ignore
 let win;
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
     win = window as any;
 } else {
     win = {} as any;
@@ -100,23 +100,28 @@ export interface LoadDataResult {
     atlases: Atlas[];
 }
 
-function seekPrimaryParent(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity {
+function seekPrimaryParent(
+    f: Entity,
+    byIdMap: { [k: string]: Entity }
+): Entity {
     if (!f.HTANParentDataFileID) {
         return f;
     } else {
-        const parent = byIdMap[f.HTANParentDataFileID.split(",")[0]];
+        const parent = byIdMap[f.HTANParentDataFileID.split(',')[0]];
         if (!parent) {
-            throw "Invalid HTANParentDataFileID";
+            throw 'Invalid HTANParentDataFileID';
         } else {
-            return seekPrimaryParent(parent, byIdMap)
+            return seekPrimaryParent(parent, byIdMap);
         }
     }
 }
 
 win.missing = [];
 
-function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[] {
-
+function seekPrimaryParents(
+    f: Entity,
+    byIdMap: { [k: string]: Entity }
+): Entity[] {
     let parents: Entity[] = [];
 
     if (!f.HTANParentDataFileID) {
@@ -124,7 +129,7 @@ function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[
         parents.push(f);
     } else {
         const parentIds = f.HTANParentDataFileID.split(/[,;]/);
-        const parentFiles = parentIds.reduce((aggr:Entity[], id: string)=>{
+        const parentFiles = parentIds.reduce((aggr: Entity[], id: string) => {
             const file = byIdMap[id];
             if (file) {
                 aggr.push(file);
@@ -135,49 +140,48 @@ function seekPrimaryParents(f:Entity, byIdMap:{ [k:string] : Entity }) : Entity[
             return aggr;
         }, []);
 
-        const sought = _(parentFiles).map(f=>seekPrimaryParents(f,byIdMap)).flatten().uniq().value()
+        const sought = _(parentFiles)
+            .map((f) => seekPrimaryParents(f, byIdMap))
+            .flatten()
+            .uniq()
+            .value();
 
-        parents = _.uniq(parents.concat(
-            sought
-        ));
-
+        parents = _.uniq(parents.concat(sought));
     }
 
     return parents;
 }
 
-function handleLineage(files:Entity[]){
+function handleLineage(files: Entity[]) {
     // first get rid of level >=4
     // they have multiple parents
-    let cleanFiles = files.filter((f)=>{
-        return !/Level[456]/.test(f.Component)
+    let cleanFiles = files.filter((f) => {
+        return !/Level[456]/.test(f.Component);
     });
 
-    const byIdMap = _.keyBy(cleanFiles,f=>f.HTANDataFileID);
+    const byIdMap = _.keyBy(cleanFiles, (f) => f.HTANDataFileID);
 
-    cleanFiles.forEach((f)=>{
+    cleanFiles.forEach((f) => {
+        // const primaryParent = seekPrimaryParent(f, byIdMap);
+        // if (f !== primaryParent) {
+        //     f.primaryParent = primaryParent;
+        // }
 
-       // const primaryParent = seekPrimaryParent(f, byIdMap);
-       // if (f !== primaryParent) {
-       //     f.primaryParent = primaryParent;
-       // }
+        const primaryParents = seekPrimaryParents(f, byIdMap);
 
-
-
-       const primaryParents = seekPrimaryParents(f, byIdMap);
-
-       if (primaryParents[0] !== f) {
-           f.primaryParents = primaryParents;
-       }
-
+        if (primaryParents[0] !== f) {
+            f.primaryParents = primaryParents;
+        }
     });
 
     console.log(cleanFiles);
-
 }
 
-function getSampleAndPatientData(file:Entity, biospecimen:Entity[], diagnoses:Entity[]){
-
+function getSampleAndPatientData(
+    file: Entity,
+    biospecimen: Entity[],
+    diagnoses: Entity[]
+) {
     const topLevelFile = file.primaryParent || file;
 
     let diagnosis, specimen;
@@ -193,11 +197,12 @@ function getSampleAndPatientData(file:Entity, biospecimen:Entity[], diagnoses:En
     }
 
     return { specimen, diagnosis };
-
 }
 
-export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
-    const url = '/syn_data.json';  // '/sim.json';
+export async function loadData(
+    WPAtlasData: WPAtlas[]
+): Promise<LoadDataResult> {
+    const url = '/syn_data.json'; // '/sim.json';
 
     const data = await fetch(url).then((r) => r.json());
 
@@ -231,10 +236,10 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
             if (parsed.level && parsed.level.length > 1) {
                 file.level = parsed.level;
             } else {
-                file.level = "Unknown";
+                file.level = 'Unknown';
             }
         } else {
-            file.level = "Unknown";
+            file.level = 'Unknown';
         }
 
         file.WPAtlas =
@@ -242,25 +247,25 @@ export async function loadData(WPAtlasData: WPAtlas[]):Promise<LoadDataResult> {
                 `hta${Number(file.atlasid.split('_')[0].substring(3)) + 1}`
             ];
 
-        const parentData = getSampleAndPatientData(file, biospecimen, diagnoses)
+        const parentData = getSampleAndPatientData(
+            file,
+            biospecimen,
+            diagnoses
+        );
 
         file.biospecimen = parentData.specimen;
 
         file.diagnosis = parentData.diagnosis;
-
     });
 
-    const returnFiles = files.filter(f=>!!f.diagnosis);
+    const returnFiles = files.filter((f) => !!f.diagnosis);
 
     // filter out files without a diagnosis
     return { files: returnFiles, atlases: data.atlases };
 }
 
-
-
-export function sortStageOptions(options:ExploreOptionType[]){
-
-    const sortedOptions = _.sortBy(options,(option)=>{
+export function sortStageOptions(options: ExploreOptionType[]) {
+    const sortedOptions = _.sortBy(options, (option) => {
         const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
         let val = undefined;
         if (!!numeral && numeral.length > 1) {
@@ -273,37 +278,44 @@ export function sortStageOptions(options:ExploreOptionType[]){
         return option.label;
     });
 
-    const withStage = sortedOptions.filter((option)=>/stage/i.test(option.label));
-    const withoutStage = sortedOptions.filter((option)=>!/stage/i.test(option.label));
+    const withStage = sortedOptions.filter((option) =>
+        /stage/i.test(option.label)
+    );
+    const withoutStage = sortedOptions.filter(
+        (option) => !/stage/i.test(option.label)
+    );
 
     return withStage.concat(withoutStage);
 
     //return options;
 }
 
-export function clamp(x:number, lower:number, upper:number) {
+export function clamp(x: number, lower: number, upper: number) {
     return Math.max(lower, Math.min(x, upper));
 }
 
-export function parseRawAssayType(t:string) {
+export function parseRawAssayType(t: string) {
     // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
     // We want to take that and spit out { name: "Camel Case-Name", level: "Level X" }
     //  (with the exception that the prefixes Sc and Sn are always treated as lower case)
 
     // See if there's a Level in it
-    const splitByLevel = t.split("Level");
+    const splitByLevel = t.split('Level');
     const level = splitByLevel.length > 1 ? `Level ${splitByLevel[1]}` : null;
     const extractedName = splitByLevel[0];
     if (extractedName) {
         // Convert camel case to space case
         // Source: https://stackoverflow.com/a/15370765
-        let name = extractedName.replace( /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g, '$1$4 $2$3$5' );
+        let name = extractedName.replace(
+            /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g,
+            '$1$4 $2$3$5'
+        );
 
         // special case: sc as prefix
-        name = name.replace(/\bSc /g, "sc");
+        name = name.replace(/\bSc /g, 'sc');
 
         // special case: sn as prefix
-        name = name.replace(/\bSn /g, "sn");
+        name = name.replace(/\bSn /g, 'sn');
 
         return { name, level };
     }
@@ -312,50 +324,53 @@ export function parseRawAssayType(t:string) {
     return { name: t, level: null };
 }
 
-export function urlEncodeSelectedFilters(selectedFilters:ExploreSelectedFilter[]) {
+export function urlEncodeSelectedFilters(
+    selectedFilters: ExploreSelectedFilter[]
+) {
     return JSON.stringify(selectedFilters);
 }
-export function parseSelectedFiltersFromUrl(selectedFiltersURLQueryParam:string|undefined):ExploreSelectedFilter[] | null {
+export function parseSelectedFiltersFromUrl(
+    selectedFiltersURLQueryParam: string | undefined
+): ExploreSelectedFilter[] | null {
     if (selectedFiltersURLQueryParam) {
         return JSON.parse(selectedFiltersURLQueryParam);
     }
     return null;
 }
 
-function addQueryStringToURL(url:string, queryParams: { [key:string]:string|undefined }) {
-    const urlEncoded = _.map(queryParams, (val, key)=>{
+function addQueryStringToURL(
+    url: string,
+    queryParams: { [key: string]: string | undefined }
+) {
+    const urlEncoded = _.map(queryParams, (val, key) => {
         if (val) {
             return `${key}=${val}`;
         } else {
             return '';
         }
-    }).filter(x=>!!x); // take out empty params
+    }).filter((x) => !!x); // take out empty params
 
     if (urlEncoded.length > 0) {
-        return `${url}?${urlEncoded.join("&")}`;
+        return `${url}?${urlEncoded.join('&')}`;
     } else {
         return url;
     }
 }
 
-export function getExplorePageURL(
-    filters: ExploreSelectedFilter[]
-) {
+export function getExplorePageURL(filters: ExploreSelectedFilter[]) {
     let url = '/explore';
     if (filters.length > 0) {
-        const query:ExploreURLQuery = {
-            selectedFilters: urlEncodeSelectedFilters(filters)
+        const query: ExploreURLQuery = {
+            selectedFilters: urlEncodeSelectedFilters(filters),
         }; // using this intermediate container to use typescript to enforce URL correctness
         url = addQueryStringToURL(url, query);
     }
     return url;
 }
 
-export function getAtlasPageURL(
-    id:string
-) {
-    const query:AtlasURLQuery = {
-        fromApp: "true"
+export function getAtlasPageURL(id: string) {
+    const query: AtlasURLQuery = {
+        fromApp: 'true',
     }; // using this intermediate container to use typescript to enforce URL correctness
     return addQueryStringToURL(`/atlas/${id}`, query);
 }
@@ -364,23 +379,30 @@ export function updateSelectedFiltersInURL(
     filters: ExploreSelectedFilter[],
     router: NextRouter
 ) {
-    router.push({
-        pathname: router.pathname,
-        query: Object.assign({}, router.query, { selectedFilters: urlEncodeSelectedFilters(filters) }),
-    }, undefined, {shallow: true});
+    router.push(
+        {
+            pathname: router.pathname,
+            query: Object.assign({}, router.query, {
+                selectedFilters: urlEncodeSelectedFilters(filters),
+            }),
+        },
+        undefined,
+        { shallow: true }
+    );
 }
 
-export function setTab(
-    tab: string,
-    router: NextRouter
-) {
-    router.push({
-        pathname: router.pathname,
-        query: Object.assign({}, router.query, { tab })
-    }, undefined, { shallow: true });
+export function setTab(tab: string, router: NextRouter) {
+    router.push(
+        {
+            pathname: router.pathname,
+            query: Object.assign({}, router.query, { tab }),
+        },
+        undefined,
+        { shallow: true }
+    );
 }
 
-export function computeDashboardData(files:Entity[]) {
+export function computeDashboardData(files: Entity[]) {
     const uniqueAtlases = new Set();
     const uniqueOrgans = new Set();
     const uniqueBiospecs = new Set();
@@ -395,6 +417,6 @@ export function computeDashboardData(files:Entity[]) {
         { description: 'Atlases', text: uniqueAtlases.size.toString() },
         { description: 'Organs', text: uniqueOrgans.size.toString() },
         { description: 'Cases', text: uniqueCases.size.toString() },
-        { description: 'Biospecimens', text: uniqueBiospecs.size.toString() }
+        { description: 'Biospecimens', text: uniqueBiospecs.size.toString() },
     ];
 }
