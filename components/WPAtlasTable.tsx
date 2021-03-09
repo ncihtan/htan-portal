@@ -1,23 +1,23 @@
 import Link from 'next/link';
 import React from 'react';
-import { WPAtlas } from "../types";
-import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
-import DataTable from "react-data-table-component";
-import {getAtlasPageURL} from "../lib/helpers";
+import { WPAtlas } from '../types';
+import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import DataTable from 'react-data-table-component';
+import { getAtlasPageURL } from '../lib/helpers';
 
 interface IWPAtlasTableProps {
     atlasData: WPAtlas[];
 }
 
-export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = props => {
+export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
+    props
+) => {
     const columns = [
         {
-            name: "Atlas",
+            name: 'Atlas',
             selector: 'title.rendered',
             cell: (atlas: WPAtlas) => (
-                <Link
-                    href={getAtlasPageURL(atlas.htan_id.toLowerCase())}
-                >
+                <Link href={getAtlasPageURL(atlas.htan_id.toLowerCase())}>
                     <a>{atlas.title.rendered}</a>
                 </Link>
             ),
@@ -25,17 +25,17 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = props =
             sortable: true,
         },
         {
-            name: "Lead Institution",
+            name: 'Lead Institution',
             selector: 'lead_institutions',
             wrap: true,
             sortable: true,
         },
         {
-            name: "Atlas ID",
+            name: 'Atlas ID',
             selector: (atlas: WPAtlas)=>atlas.htan_id.toUpperCase(),
             wrap: true,
-            sortable: true
-        }
+            sortable: true,
+        },
     ];
 
     return (

@@ -1,40 +1,42 @@
-import React from "react";
-import {Button} from "react-bootstrap";
-import DataTable from "react-data-table-component";
-import {getDefaultDataTableStyle} from "../lib/dataTableHelpers";
-import {Entity} from "../lib/helpers";
+import React from 'react';
+import { Button } from 'react-bootstrap';
+import DataTable from 'react-data-table-component';
+import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import { Entity } from '../lib/helpers';
 
 interface IBiospecimenTableProps {
     samples: Entity[];
 }
 
-export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = props => {
+export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
+    props
+) => {
     const columns = [
         {
-            name: "HTAN Biospecimen ID",
+            name: 'HTAN Biospecimen ID',
             selector: 'HTANBiospecimenID',
             wrap: true,
             sortable: true,
         },
         {
-            name: "Atlas ID",
+            name: 'Atlas ID',
             selector: 'atlasid',
             wrap: true,
             sortable: true,
         },
         {
-            name: "Biospecimen Type",
+            name: 'Biospecimen Type',
             selector: 'BiospecimenType',
             wrap: true,
             sortable: true,
         },
         {
-            name: "",
-            selector: "",
+            name: '',
+            selector: '',
             cell: (sample: Entity) => {
                 const onDownload = () => {
                     // TODO init download
-                }
+                };
 
                 return (
                     <Button
@@ -46,7 +48,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
                         Download
                     </Button>
                 );
-            }
+            },
         },
     ];
 

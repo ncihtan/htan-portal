@@ -1,8 +1,8 @@
-import React from "react";
-import _ from "lodash";
-import {PropNames} from "../lib/types";
-import {Button} from "react-bootstrap";
-import {Entity} from "../lib/helpers";
+import React from 'react';
+import _ from 'lodash';
+import { PropNames } from '../lib/types';
+import { Button } from 'react-bootstrap';
+import { Entity } from '../lib/helpers';
 
 interface IExploreSummaryProps {
     filteredFiles: Entity[];
@@ -10,7 +10,9 @@ interface IExploreSummaryProps {
     patientCount: number;
 }
 
-export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = props => {
+export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
+    props
+) => {
     return (
         <>
             <div className={'summary'}>
@@ -25,7 +27,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = pro
                         _.keys(
                             props.getGroupsByPropertyFiltered[
                                 PropNames.AtlasName
-                                ]
+                            ]
                         ).length
                     }{' '}
                     Atlases
@@ -36,7 +38,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = pro
                         _.keys(
                             props.getGroupsByPropertyFiltered[
                                 PropNames.TissueorOrganofOrigin
-                                ]
+                            ]
                         ).length
                     }{' '}
                     Organs
@@ -47,7 +49,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = pro
                         _.keys(
                             props.getGroupsByPropertyFiltered[
                                 PropNames.PrimaryDiagnosis
-                                ]
+                            ]
                         ).length
                     }{' '}
                     Cancer Types
@@ -70,13 +72,12 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = pro
                         _.keys(
                             props.getGroupsByPropertyFiltered[
                                 PropNames.Component
-                                ]
+                            ]
                         ).length
                     }{' '}
                     Assays
                 </div>
-
             </div>
         </>
     );
-}
+};

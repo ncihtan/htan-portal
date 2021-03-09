@@ -1,7 +1,13 @@
-import _ from "lodash";
+import _ from 'lodash';
 
-import {Entity} from "./helpers";
-import {ExploreOptionType, ExploreSelectedFilter, IFiltersByGroupName, PropMap, PropNames} from "./types";
+import { Entity } from './helpers';
+import {
+    ExploreOptionType,
+    ExploreSelectedFilter,
+    IFiltersByGroupName,
+    PropMap,
+    PropNames,
+} from './types';
 
 export function groupsByProperty(files: Entity[]) {
     const m: any = {};
@@ -28,7 +34,9 @@ export function filterFiles(
                 //@ts-ignore
                 const val = _.at(f, PropMap[name].prop);
                 //@ts-ignore
-                return val ? filter.map((f)=>f.value).includes(val[0]) : false;
+                return val
+                    ? filter.map((f) => f.value).includes(val[0])
+                    : false;
             });
         });
     } else {
@@ -43,19 +51,19 @@ export function makeOptions(
     getGroupsByProperty: any
 ): ExploreOptionType[] {
     const filteredFilesMinusOption = groupsByProperty(
-        filterFiles(
-            _.omit(selectedFiltersByGroupName, [propName]),
-            files
-        )
+        filterFiles(_.omit(selectedFiltersByGroupName, [propName]), files)
     )[propName];
 
     return _.map(getGroupsByProperty[propName], (val, key) => {
-        const count = key in filteredFilesMinusOption ? filteredFilesMinusOption[key].length : 0;
+        const count =
+            key in filteredFilesMinusOption
+                ? filteredFilesMinusOption[key].length
+                : 0;
         return {
             value: key,
             label: key,
             group: propName,
-            count
+            count,
         };
     });
 }

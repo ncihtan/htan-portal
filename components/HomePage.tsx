@@ -1,19 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import {WPAtlas} from "../types";
-import styles from "./homeStyles.module.scss";
-import {computeDashboardData, getAtlasPageURL, loadData} from "../lib/helpers";
-import {BeatLoader} from "react-spinners";
+import { WPAtlas } from '../types';
+import styles from './homeStyles.module.scss';
+import {
+    computeDashboardData,
+    getAtlasPageURL,
+    loadData,
+} from '../lib/helpers';
+import { BeatLoader } from 'react-spinners';
 
 export interface IHomePropsProps {
     hero_blurb: string;
     cards: any[];
-    atlases: WPAtlas[]
+    atlases: WPAtlas[];
 }
 
 function dashboardIcon(text: string, description: string) {
@@ -32,12 +36,14 @@ function dashboardIcon(text: string, description: string) {
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     hero_blurb,
     cards,
-    atlases
+    atlases,
 }) => {
-    const [dashboardData, setDashboardData] = useState<{text: string, description:string}[]>();
+    const [dashboardData, setDashboardData] = useState<
+        { text: string; description: string }[]
+    >();
 
-    useEffect(()=>{
-        loadData(atlases).then(({files, atlases})=> {
+    useEffect(() => {
+        loadData(atlases).then(({ files, atlases }) => {
             setDashboardData(computeDashboardData(files));
         });
     });
@@ -85,39 +91,52 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 }}
             >
                 <Row className="justify-content-md-center">
-                    {!dashboardData && <BeatLoader/>}
-                    {dashboardData && dashboardData.map((icon) =>
-                        dashboardIcon(icon.text, icon.description)
-                    )}
+                    {!dashboardData && <BeatLoader />}
+                    {dashboardData &&
+                        dashboardData.map((icon) =>
+                            dashboardIcon(icon.text, icon.description)
+                        )}
                 </Row>
             </Container>
 
             <div className={styles.atlasCardContainer}>
-                {
-                    atlases.map((atlas)=>{
+                {atlases.map((atlas) => {
+                    let title = atlas.title.rendered.substr(0, 30);
+                    if (title.length < atlas.title.rendered.length) {
+                        title += '...';
+                    }
 
-                        let title = atlas.title.rendered.substr(0,30);
-                        if (title.length < atlas.title.rendered.length) {
-                            title += "..."
-                        }
+                    return (
+                        <div className={styles.atlasCard}>
+                            <h4>
+                                <a href={getAtlasPageURL(atlas.htan_id)}>
+                                    {title}
+                                </a>
+                            </h4>
 
-                        return <div className={styles.atlasCard}>
-                                <h4><a href={getAtlasPageURL(atlas.htan_id)}>{
-                                    title
-                                }
-                                </a></h4>
+                            <div className={styles.imageHolder}>
+                                <img
+                                    src={
+                                        atlas.home_image.guid ||
+                                        'https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg'
+                                    }
+                                />
+                                <a
+                                    className={'btn btn-primary'}
+                                    href={getAtlasPageURL(atlas.htan_id)}
+                                >
+                                    Explore
+                                </a>
+                            </div>
 
-                                <div className={styles.imageHolder}>
-                                    <img src={atlas.home_image.guid || "https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg" } />
-                                    <a className={"btn btn-primary"} href={getAtlasPageURL(atlas.htan_id)}>Explore</a>
-                                </div>
-
-                                <p className={styles.altasText}>{atlas.short_description || "This is a short description of the Atlas. It shouldn't be more than a hundred words."}</p>
+                            <p className={styles.altasText}>
+                                {atlas.short_description ||
+                                    "This is a short description of the Atlas. It shouldn't be more than a hundred words."}
+                            </p>
                         </div>
-                    })
-                }
+                    );
+                })}
             </div>
-
         </>
     );
 };
