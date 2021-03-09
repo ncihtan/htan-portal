@@ -4,8 +4,8 @@ import { Portal } from 'react-portal';
 import { observer, useLocalStore } from 'mobx-react';
 import Select from 'react-select';
 import $ from 'jquery';
-import {clamp} from "../../lib/helpers";
-import {action} from "mobx";
+import { clamp } from '../../lib/helpers';
+import { action } from 'mobx';
 
 const FilterPanelMenu: FunctionComponent<{
     panelStyle: any;
@@ -14,28 +14,31 @@ const FilterPanelMenu: FunctionComponent<{
     const panelRef = useRef<HTMLDivElement>(null);
     const localStore = useLocalStore(() => ({ adjustedLeft: panelStyle.left }));
 
-    useEffect(action(() => {
-        const clickHandler = function () {
-            closeMenu();
-        };
+    useEffect(
+        action(() => {
+            const clickHandler = function () {
+                closeMenu();
+            };
 
-        $(window).on('click', clickHandler);
+            $(window).on('click', clickHandler);
 
-        if (panelRef && panelRef.current) {
-            const rect = panelRef!.current.getBoundingClientRect();
-            // make it so panel doesnt go offscreen
-            localStore.adjustedLeft = clamp(
-                panelStyle.left,
-                window.scrollX,
-                document.body.clientWidth + window.scrollX - rect.width - 15
-            );
-        }
+            if (panelRef && panelRef.current) {
+                const rect = panelRef!.current.getBoundingClientRect();
+                // make it so panel doesnt go offscreen
+                localStore.adjustedLeft = clamp(
+                    panelStyle.left,
+                    window.scrollX,
+                    document.body.clientWidth + window.scrollX - rect.width - 15
+                );
+            }
 
-        return () => {
-            console.log('removing');
-            $(window).off('click', clickHandler);
-        };
-    }), []);
+            return () => {
+                console.log('removing');
+                $(window).off('click', clickHandler);
+            };
+        }),
+        []
+    );
 
     return (
         <Portal>
@@ -44,7 +47,7 @@ const FilterPanelMenu: FunctionComponent<{
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
-                style={{...panelStyle, left: localStore.adjustedLeft}}
+                style={{ ...panelStyle, left: localStore.adjustedLeft }}
                 className={styles.panel}
             >
                 {children}
@@ -53,47 +56,49 @@ const FilterPanelMenu: FunctionComponent<{
     );
 });
 
-const FilterPanel: FunctionComponent<{ placeholder?:string }> = observer(function ({ placeholder, children }) {
-    const buttonRef = useRef<HTMLDivElement>(null);
+const FilterPanel: FunctionComponent<{ placeholder?: string }> = observer(
+    function ({ placeholder, children }) {
+        const buttonRef = useRef<HTMLDivElement>(null);
 
-    const localStore = useLocalStore(() => ({ showPanel: false }));
+        const localStore = useLocalStore(() => ({ showPanel: false }));
 
-    const MENU_VERTICAL_OFFSET = 5;
+        const MENU_VERTICAL_OFFSET = 5;
 
-    const panelStyle: any = {};
-    if (buttonRef && buttonRef.current) {
-        const pos = buttonRef!.current.getBoundingClientRect();
-        panelStyle.top =
-            pos.y + pos.height + window.scrollY + MENU_VERTICAL_OFFSET;
-        panelStyle.left = pos.x + window.scrollX;
-    }
+        const panelStyle: any = {};
+        if (buttonRef && buttonRef.current) {
+            const pos = buttonRef!.current.getBoundingClientRect();
+            panelStyle.top =
+                pos.y + pos.height + window.scrollY + MENU_VERTICAL_OFFSET;
+            panelStyle.left = pos.x + window.scrollX;
+        }
 
-    const panel = buttonRef.current && (
-        <FilterPanelMenu
-            panelStyle={panelStyle}
-            closeMenu={action(() => (localStore.showPanel = false))}
-        >
-            {children}
-        </FilterPanelMenu>
-    );
-
-    return (
-        <>
-            <div
-                ref={buttonRef}
-                onClick={action(() => {
-                    localStore.showPanel = !localStore.showPanel;
-                })}
+        const panel = buttonRef.current && (
+            <FilterPanelMenu
+                panelStyle={panelStyle}
+                closeMenu={action(() => (localStore.showPanel = false))}
             >
-                <Select
-                    isSearchable={false}
-                    placeholder={placeholder || 'Make a selection'}
-                    menuIsOpen={false}
-                />
-                {localStore.showPanel && panel}
-            </div>
-        </>
-    );
-});
+                {children}
+            </FilterPanelMenu>
+        );
+
+        return (
+            <>
+                <div
+                    ref={buttonRef}
+                    onClick={action(() => {
+                        localStore.showPanel = !localStore.showPanel;
+                    })}
+                >
+                    <Select
+                        isSearchable={false}
+                        placeholder={placeholder || 'Make a selection'}
+                        menuIsOpen={false}
+                    />
+                    {localStore.showPanel && panel}
+                </div>
+            </>
+        );
+    }
+);
 
 export default FilterPanel;

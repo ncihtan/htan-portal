@@ -1,39 +1,45 @@
 import _ from 'lodash';
-import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import {
+    action,
+    computed,
+    makeObservable,
+    observable,
+    runInAction,
+} from 'mobx';
 import { observer } from 'mobx-react';
-import { fromPromise, IPromiseBasedObservable } from "mobx-utils";
+import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import { GetStaticProps } from 'next';
-import { withRouter, NextRouter } from "next/router";
+import { withRouter, NextRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React from 'react';
 import { ActionMeta } from 'react-select';
-import { ScaleLoader } from "react-spinners";
+import { ScaleLoader } from 'react-spinners';
 
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
-import { filterFiles, groupsByProperty } from "../lib/filterHelpers";
+import { filterFiles, groupsByProperty } from '../lib/filterHelpers';
 import getData from '../lib/getData';
 import {
     loadData,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
-    updateSelectedFiltersInURL
+    updateSelectedFiltersInURL,
 } from '../lib/helpers';
 import {
     ExploreActionMeta,
-    ExploreSelectedFilter, FilterAction,
+    ExploreSelectedFilter,
+    FilterAction,
     IFilterProps,
     IFiltersByGroupName,
 } from '../lib/types';
 import { WPAtlas } from '../types';
 import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
-import FilterControls from "../components/filter/FilterControls";
-import Filter from "../components/filter/Filter";
-import ExploreTabs from "../components/ExploreTabs";
+import FilterControls from '../components/filter/FilterControls';
+import Filter from '../components/filter/Filter';
+import ExploreTabs from '../components/ExploreTabs';
 
-import styles from "./styles.module.scss";
-import {ExploreSummary} from "../components/ExploreSummary";
-
+import styles from './styles.module.scss';
+import { ExploreSummary } from '../components/ExploreSummary';
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -54,12 +60,17 @@ export const getStaticProps: GetStaticProps = async (context) => {
 const synapseData = getData();
 
 export type ExploreURLQuery = {
-    selectedFilters: string|undefined;
-}
+    selectedFilters: string | undefined;
+};
 
 @observer
-class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, IFilterProps> {
-    @observable.ref private dataLoadingPromise:IPromiseBasedObservable<LoadDataResult>|undefined;
+class Search extends React.Component<
+    { router: NextRouter; wpData: WPAtlas[] },
+    IFilterProps
+> {
+    @observable.ref private dataLoadingPromise:
+        | IPromiseBasedObservable<LoadDataResult>
+        | undefined;
 
     constructor(props: any) {
         super(props);
@@ -72,9 +83,11 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
     }
 
     get selectedFilters(): ExploreSelectedFilter[] {
-        return parseSelectedFiltersFromUrl(
-            (this.props.router.query as ExploreURLQuery).selectedFilters // use casting as ExploreURLQuery to use typescript to ensure URL correctness
-        ) || [];
+        return (
+            parseSelectedFiltersFromUrl(
+                (this.props.router.query as ExploreURLQuery).selectedFilters // use casting as ExploreURLQuery to use typescript to ensure URL correctness
+            ) || []
+        );
     }
 
     get getGroupsByProperty() {
@@ -85,7 +98,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
         return groupsByProperty(this.filteredFiles);
     }
 
-    @computed get selectedFiltersByGroupName() : IFiltersByGroupName {
+    @computed get selectedFiltersByGroupName(): IFiltersByGroupName {
         return _.groupBy(this.selectedFilters, (item) => {
             return item.group;
         });
@@ -93,7 +106,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
     @action.bound
     setFilter(actionMeta: ExploreActionMeta<ExploreSelectedFilter>) {
-        let newFilters:ExploreSelectedFilter[] = this.selectedFilters;
+        let newFilters: ExploreSelectedFilter[] = this.selectedFilters;
         switch (actionMeta.action) {
             case FilterAction.CLEAR_ALL:
                 // Deselect all filters
@@ -103,7 +116,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                 if (actionMeta.option) {
                     // Deselect all options for the given group
                     newFilters = this.selectedFilters.filter((o) => {
-                        return o.group !== actionMeta.option!.group
+                        return o.group !== actionMeta.option!.group;
                     });
                 }
                 break;
@@ -112,7 +125,10 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                 if (actionMeta.option) {
                     // first remove the item
                     newFilters = this.selectedFilters.filter((o) => {
-                        return o.group !== actionMeta.option!.group! || o.value !== actionMeta.option!.value!;
+                        return (
+                            o.group !== actionMeta.option!.group! ||
+                            o.value !== actionMeta.option!.value!
+                        );
                     });
                     if (actionMeta.action === 'select-option') {
                         // Add it back if selecting
@@ -127,10 +143,10 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
     }
 
     componentDidMount(): void {
-        runInAction(()=> {
+        runInAction(() => {
             this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
-            this.dataLoadingPromise.then(({files, atlases}) => {
-                this.setState({files, atlases});
+            this.dataLoadingPromise.then(({ files, atlases }) => {
+                this.setState({ files, atlases });
             });
         });
     }
@@ -140,7 +156,7 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
     }
 
     @computed
-    get samples(){
+    get samples() {
         return _.chain(this.filteredFiles)
             .filter((f) => !!f.biospecimen && !!f.biospecimen.HTANParentID)
             .map((f: any) => f.biospecimen)
@@ -149,32 +165,34 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
     }
 
     @computed
-    get cases(){
+    get cases() {
         return _.chain(this.filteredFiles)
             .map((f: any) => f.diagnosis)
-            .uniqBy((f)=>f.HTANParticipantID)
+            .uniqBy((f) => f.HTANParticipantID)
             .value();
     }
 
     render() {
-        if (!this.dataLoadingPromise || this.dataLoadingPromise.state === "pending") {
+        if (
+            !this.dataLoadingPromise ||
+            this.dataLoadingPromise.state === 'pending'
+        ) {
             // TODO: Pretty this up
             return (
-                <div
-                    className={styles.loadingIndicator}
-                >
-                    <ScaleLoader/>
+                <div className={styles.loadingIndicator}>
+                    <ScaleLoader />
                 </div>
             );
         }
 
         if (this.filteredFiles) {
             return (
-                <div style={{ padding: 20 }}>
-
+                <div className={'explorePageWrapper'}>
                     <FilterControls
                         setFilter={this.setFilter}
-                        selectedFiltersByGroupName={this.selectedFiltersByGroupName}
+                        selectedFiltersByGroupName={
+                            this.selectedFiltersByGroupName
+                        }
                         selectedFilters={this.selectedFilters}
                         files={this.state.files}
                         getGroupsByProperty={this.getGroupsByProperty}
@@ -182,12 +200,16 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
 
                     <Filter
                         setFilter={this.setFilter}
-                        selectedFiltersByGroupName={this.selectedFiltersByGroupName}
+                        selectedFiltersByGroupName={
+                            this.selectedFiltersByGroupName
+                        }
                     />
 
                     <ExploreSummary
                         filteredFiles={this.filteredFiles}
-                        getGroupsByPropertyFiltered={this.getGroupsByPropertyFiltered}
+                        getGroupsByPropertyFiltered={
+                            this.getGroupsByPropertyFiltered
+                        }
                         patientCount={this.cases.length}
                     />
 
@@ -197,9 +219,10 @@ class Search extends React.Component<{ router: NextRouter, wpData: WPAtlas[] }, 
                         samples={this.samples}
                         cases={this.cases}
                         wpData={this.props.wpData}
-                        getGroupsByPropertyFiltered={this.getGroupsByPropertyFiltered}
+                        getGroupsByPropertyFiltered={
+                            this.getGroupsByPropertyFiltered
+                        }
                     />
-
                 </div>
             );
         }

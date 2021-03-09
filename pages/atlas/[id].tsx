@@ -1,8 +1,8 @@
-import {NextRouter, useRouter} from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import HtanNavbar from '../../components/HtanNavbar';
 import Footer from '../../components/Footer';
 import getData from '../../lib/getData';
-import {getAtlasList,} from '../../ApiUtil';
+import { getAtlasList } from '../../ApiUtil';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
@@ -10,22 +10,22 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import React from 'react';
 import Head from 'next/dist/next-server/lib/head';
-import {Category, SynapseAtlas, SynapseData, WPAtlas} from '../../types';
-import {GetStaticProps} from 'next';
-import {Button} from "react-bootstrap";
-import {getExplorePageURL} from "../../lib/helpers";
-import {PropNames} from "../../lib/types";
+import { Category, SynapseAtlas, SynapseData, WPAtlas } from '../../types';
+import { GetStaticProps } from 'next';
+import { Button } from 'react-bootstrap';
+import { getExplorePageURL } from '../../lib/helpers';
+import { PropNames } from '../../lib/types';
 
 const data = getData();
 
 export type AtlasURLQuery = {
     fromApp: string | undefined;
-}
+};
 
 interface IPostProps {
     synapseData: SynapseData;
     WPAtlasData: WPAtlas[];
-    router: NextRouter
+    router: NextRouter;
 }
 
 const PostContent: React.FunctionComponent<{
@@ -45,7 +45,10 @@ const PostContent: React.FunctionComponent<{
     return (
         <Container>
             <Row>
-                <Breadcrumb className="mt-3" listProps={{style:{marginBottom:0, paddingBottom:4}}}>
+                <Breadcrumb
+                    className="mt-3"
+                    listProps={{ style: { marginBottom: 0, paddingBottom: 4 } }}
+                >
                     <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item href="/explore">Explore</Breadcrumb.Item>
                     <Breadcrumb.Item active>
@@ -54,25 +57,31 @@ const PostContent: React.FunctionComponent<{
                 </Breadcrumb>
             </Row>
 
-            <Row style={{marginBottom:20}}>
-                {router.query.fromApp === "true" && (
+            <Row style={{ marginBottom: 20 }}>
+                {router.query.fromApp === 'true' && (
                     <Button
-                        variant={"link"}
-                        size={"sm"}
-                        style={{fontSize:12}}
-                        onClick={()=> router.back()}
+                        variant={'link'}
+                        size={'sm'}
+                        style={{ fontSize: 12 }}
+                        onClick={() => router.back()}
                     >
-                        {"< Back"}
+                        {'< Back'}
                     </Button>
                 )}
                 <Button
-                    variant={"link"}
-                    size={"sm"}
-                    style={{fontSize:12}}
-                    onClick={()=>router.push(getExplorePageURL([{
-                        value: wpAtlas.title.rendered,
-                        group: PropNames.AtlasName
-                    }]))}
+                    variant={'link'}
+                    size={'sm'}
+                    style={{ fontSize: 12 }}
+                    onClick={() =>
+                        router.push(
+                            getExplorePageURL([
+                                {
+                                    value: wpAtlas.title.rendered,
+                                    group: PropNames.AtlasName,
+                                },
+                            ])
+                        )
+                    }
                 >
                     View Files
                 </Button>
@@ -162,7 +171,11 @@ const Post: React.FunctionComponent<IPostProps> = ({
         postData && (synapseData[htan_id.toUpperCase()] as SynapseAtlas);
 
     const content = postData ? (
-        <PostContent wpAtlas={postData} router={router} synapseAtlas={synapseAtlas} />
+        <PostContent
+            wpAtlas={postData}
+            router={router}
+            synapseAtlas={synapseAtlas}
+        />
     ) : (
         <div>There is Atlas corresponding to this ID</div>
     );

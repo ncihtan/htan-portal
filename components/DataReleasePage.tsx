@@ -9,7 +9,7 @@ import HtanNavbar from './HtanNavbar';
 import Footer from './Footer';
 import { CmsData, WPAtlas } from '../types';
 import getData from '../lib/getData';
-import {getAtlasPageURL} from "../lib/helpers";
+import { getAtlasPageURL } from '../lib/helpers';
 
 const synapseData = getData();
 

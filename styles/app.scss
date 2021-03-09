@@ -1,252 +1,283 @@
 $primary-background: #5f008c;
 
 .breadcrumb {
-  background-color: transparent !important;
-  margin-left: -14px;
+    background-color: transparent !important;
+    margin-left: -14px;
 }
 
 .navbar-brand {
-  img {
-    filter:invert(100%);
-    width:100px !important;
-  }
+    img {
+        filter: invert(100%);
+        width: 100px !important;
+    }
 }
 
 body {
-  font-family: "Montserrat", sans-serif !important;
-  font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 0.9rem;
 }
 
 .bg-nav-purple {
-  //background: $primary-background;
+    //background: $primary-background;
 }
 
 .jumbotron {
-  //background-image: url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
+    //background-image: url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
 
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)),
-    url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
-  //background-blend-mode: color-dodge;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-attachment: fixed;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)),
+        url('https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg');
+    //background-blend-mode: color-dodge;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-attachment: fixed;
 }
 
 .card-custom-style img {
-  width: 200px !important;
-  height: 200px !important;
+    width: 200px !important;
+    height: 200px !important;
 }
 
 .atlas-link {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 // bootstrap overrides
 .btn-primary {
-  background-color: $primary-background;
-  border-color: $primary-background;
+    background-color: $primary-background;
+    border-color: $primary-background;
 }
 
 .main-nav {
-  border-bottom: 1px solid #999;
-  border-top: 4px solid #999;
-  padding: 5px 20px;
+    border-bottom: 1px solid #999;
+    border-top: 4px solid #999;
+    padding: 5px 20px;
 
-  .nav-link {
-    color: #333 !important;
-    padding: 0 1.5em !important;
-    font-weight: bold;
-    text-transform: uppercase;
-    //text-shadow:0 0 4px #000;
-    font-size: 13px;
-  }
+    .nav-link {
+        color: #333 !important;
+        padding: 0 1.5em !important;
+        font-weight: bold;
+        text-transform: uppercase;
+        //text-shadow:0 0 4px #000;
+        font-size: 13px;
+    }
 }
 
 .tab-pane {
-  margin-top: 20px;
+    margin-top: 20px;
 
-  p {
-    line-height: 2em;
-  }
+    p {
+        line-height: 2em;
+    }
 }
 
 .dataTables_wrapper {
-  .rdt_TableHeader {
-    min-height: 0;
-  }
+    .rdt_TableHeader {
+        min-height: 0;
+    }
 
-  .rdt_TableCol {
-    font-size: 16px;
-    font-weight: bold;
-  }
+    .rdt_TableCol {
+        font-size: 16px;
+        font-weight: bold;
+    }
 
-  .rdt_TableCell {
-    font-size: 16px;
-    padding: 20px;
-  }
+    .rdt_TableCell {
+        font-size: 16px;
+        padding: 20px;
+    }
 }
 
 table {
-  th,
-  td {
-    line-height: 1em;
-  }
+    th,
+    td {
+        line-height: 1em;
+    }
 }
 
 .single_cell-iframe-wrapper {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  right: 5px;
-  top: 88px;
-  iframe {
-    border: none;
-    height: 100%;
-    width: 100%;
-  }
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    top: 88px;
+    iframe {
+        border: none;
+        height: 100%;
+        width: 100%;
+    }
 }
 
 #iframe-wrapper {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  right: 5px;
-  top: 88px;
-
-  .loading-animation {
     position: absolute;
-    top: 100px;
-    left: 50%;
-    z-index: 0;
-  }
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    top: 88px;
 
-  iframe {
-    border: none;
-    height: 100%;
-    width: 100%;
-    position: relative;
-    z-index: 10;
-  }
-  &:empty {
-    display: none;
-  }
-  background: #fff;
+    .loading-animation {
+        position: absolute;
+        top: 100px;
+        left: 50%;
+        z-index: 0;
+    }
+
+    iframe {
+        border: none;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        z-index: 10;
+    }
+    &:empty {
+        display: none;
+    }
+    background: #fff;
 }
 
 .rc-tooltip {
-  max-width: 250px;
-  opacity: 1 !important;
+    max-width: 250px;
+    opacity: 1 !important;
 }
 
 .button-dropdown {
-  min-width: 105px;
+    min-width: 105px;
 }
 
 .col-select-card {
-  position: absolute;
-  width: 18rem;
-  margin-top: 10px;
+    position: absolute;
+    width: 18rem;
+    margin-top: 10px;
 }
 
 .col-select-card-wrapper {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .tab-pane table {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 .dsa-thumb {
-  height: 100px;
-  border: 1px solid #999;
+    height: 100px;
+    border: 1px solid #999;
 }
 
 .filterControls {
-  display: flex;
-  margin-bottom:20px;
-  > div {
-    margin-right: 30px;
     display: flex;
-    align-items: center;
-    select {
-      display: inline-block;
-      margin-left: 5px;
+    margin-bottom: 20px;
+    > div {
+        margin-right: 30px;
+        display: flex;
+        align-items: center;
+        select {
+            display: inline-block;
+            margin-left: 5px;
+        }
     }
-  }
 }
 
-.summary {
-  display: flex;
+.explorePageWrapper {
+    position: relative;
+    padding: 20px;
 
-  > div {
-    padding: 0 10px;
-    border-right: 1px dashed #eee;
+    .summary {
+        display: flex;
+        z-index: -1;
+        margin-bottom: 10px;
+        justify-content: flex-end;
+        margin-bottom: -17px;
+        position: relative;
+        font-size: 12px;
+        top: 12px;
 
-    &:first-child {
-      padding-left: 0px;
-      border-right: none;
+        > div {
+            padding: 0 10px;
+            border-right: 1px dashed #eee;
+
+            &:first-child {
+                padding-left: 0px;
+                border-right: none;
+            }
+        }
     }
-  }
 
-  margin-bottom: 20px;
+    .filter {
+        padding-bottom: 15px;
+
+        > * {
+            margin-right: 6px;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+
+        > .logicalOr,
+        > .logicalAnd {
+            background: green;
+            color: #fff;
+            color: lightsalmon;
+        }
+
+        .attributeGroup {
+            color: #fff;
+            background: darkcyan;
+
+            .attributeGroupName {
+                font-weight: bold;
+                &:hover {
+                    text-decoration: line-through;
+                    cursor: pointer;
+                }
+            }
+
+            .logicalOr,
+            .logicalAnd {
+                font-weight: bold;
+                color: lightsalmon;
+            }
+
+            .logicalParentheses {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+
+            .attributeValue {
+                padding-left: 4px;
+                padding-right: 4px;
+
+                &:hover {
+                    text-decoration: line-through;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .clearFilterButton {
+        background: #eee;
+    }
 }
 
 .subnav {
-  margin-bottom: 20px;
-  .nav-item {
-    cursor: pointer;
-  }
+    margin-bottom: 20px;
+    .nav-item {
+        cursor: pointer;
+    }
 }
-
 
 .container {
-  margin-left:20px !important;
-}
-
-.filter {
-  padding-bottom: 10px;
-
-  .attributeGroup {
-    color: #666;
-    padding-right: 10px;
-
-    .attributeGroupName {
-      &:hover {
-        text-decoration: line-through;
-        cursor: pointer;
-      }
-    }
-
-    .logicalOr, .logicalAnd {
-      font-style: italic;
-    }
-
-    .logicalParentheses {
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-
-    .attributeValue {
-      color: #212529;
-      padding-left: 10px;
-      padding-right: 10px;
-
-      &:hover {
-        text-decoration: line-through;
-        cursor: pointer;
-      }
-    }
-  }
+    margin-left: 20px !important;
 }
 
 .filter-checkbox-list-container {
+    display: flex;
 
-  display:flex;
+    > div {
+        margin-right: 20px;
+        min-width: 300px;
+    }
+}
 
-  > div {
-    margin-right:20px;
-    min-width:300px;
-  }
-
+.btn-disabled {
+    opacity: 0.2 !important;
+    cursor: not-allowed;
 }

@@ -1,36 +1,28 @@
-# dependencies
-**/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+*.r
+*png
+*eps
+*pdf
+*ai
+*svg
+*map
+*min.js
+*min.css
+*sh
+*yml
+*json
+*md
+*bak
+*txt
+*gif
+*pegjs
+*.template
+*.ejs
+*module.scss.d.ts
+yarn.lock
+.prettierignore
 .DS_Store
-.env*
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-.idea/*
-*.iml
-
-.now
-
-.idea
-.next
-styles
-data
-
-# json
-*.json
+.gitignore
+.kodiak.toml
+*properties
+*.seg
+*.screenshottest
