@@ -17,9 +17,6 @@ const Home = (data: IHomePropsProps) => {
     );
 };
 
-
-
-
 export const getStaticProps: GetStaticProps = async (context) => {
     const data = await getStaticContent([WPConstants.HOMEPAGE_HERO_BLURB]);
 
@@ -39,7 +36,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     ]);
 
     return {
-        props: { hero_blurb: homepageContent.content.rendered, cards: cards, atlases },
+        props: {
+            hero_blurb: homepageContent.content.rendered,
+            cards: cards,
+            atlases,
+        },
     };
 };
 

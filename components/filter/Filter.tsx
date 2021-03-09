@@ -1,9 +1,8 @@
-import {observer} from "mobx-react";
-import React from "react";
-import _ from "lodash";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-
+import { observer } from 'mobx-react';
+import React from 'react';
+import _ from 'lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import {
     ExploreActionMeta,
@@ -11,126 +10,116 @@ import {
     FilterAction,
     IFiltersByGroupName,
     PropMap,
-    PropNames
-} from "../../lib/types";
+    PropNames,
+} from '../../lib/types';
 
 interface IFilterProps {
     setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
     selectedFiltersByGroupName: IFiltersByGroupName;
 }
 
-const Filter: React.FunctionComponent<IFilterProps> = observer(props => {
+const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {
     return (
         <div className={'filter'}>
             {Object.keys(props.selectedFiltersByGroupName).map(
                 (filter, i, filters) => {
                     const numberOfAttributes = filters.length;
                     const addAnd =
-                        numberOfAttributes > 1 &&
-                        i < numberOfAttributes - 1 ? (
-                            <span className="logicalAnd">
-                                AND
-                            </span>
+                        numberOfAttributes > 1 && i < numberOfAttributes - 1 ? (
+                            <span className="logicalAnd">AND</span>
                         ) : null;
 
                     return (
-                        <><span className="attributeGroup">
-                            <span
-                                className="attributeGroupName"
-                                onClick={() => {
-                                    props.setFilter({
-                                        action: FilterAction.CLEAR,
-                                        option: {
-                                            group: filter,
-                                            value: ''
-                                        }
-                                    });
-                                }}
-                            >
-                                {
-                                    PropMap[
-                                        PropNames[
-                                            filter as keyof typeof PropNames
+                        <>
+                            <span className="attributeGroup">
+                                <span
+                                    className="attributeGroupName"
+                                    onClick={() => {
+                                        props.setFilter({
+                                            action: FilterAction.CLEAR,
+                                            option: {
+                                                group: filter,
+                                                value: '',
+                                            },
+                                        });
+                                    }}
+                                >
+                                    {
+                                        PropMap[
+                                            PropNames[
+                                                filter as keyof typeof PropNames
                                             ]
                                         ].displayName
-                                }
-                            </span>
+                                    }
+                                </span>
 
-                            {props.selectedFiltersByGroupName[filter].map(
-                                (value, i, values) => {
-                                    const numberOfValues =
-                                        values.length;
-                                    const openParenthesis =
-                                        numberOfValues > 1 &&
-                                        i == 0 ? (
-                                            <span className="logicalParentheses">
-                                                (
-                                            </span>
-                                        ) : null;
-                                    const addOr =
-                                        numberOfValues > 1 &&
-                                        i <
-                                        numberOfValues -
-                                        1 ? (
-                                            <span className="logicalOr">
-                                                OR
-                                            </span>
-                                        ) : null;
-                                    const closeParenthesis =
-                                        numberOfValues > 1 &&
-                                        i ==
-                                        numberOfValues -
-                                        1 ? (
-                                            <span className="logicalParentheses">
-                                                )
-                                            </span>
-                                        ) : null;
+                                {props.selectedFiltersByGroupName[filter].map(
+                                    (value, i, values) => {
+                                        const numberOfValues = values.length;
+                                        const openParenthesis =
+                                            numberOfValues > 1 && i == 0 ? (
+                                                <span className="logicalParentheses">
+                                                    (
+                                                </span>
+                                            ) : null;
+                                        const addOr =
+                                            numberOfValues > 1 &&
+                                            i < numberOfValues - 1 ? (
+                                                <span className="logicalOr">
+                                                    OR
+                                                </span>
+                                            ) : null;
+                                        const closeParenthesis =
+                                            numberOfValues > 1 &&
+                                            i == numberOfValues - 1 ? (
+                                                <span className="logicalParentheses">
+                                                    )
+                                                </span>
+                                            ) : null;
 
-                                    return (
-                                        <span className="attributeValues">
-                                            {openParenthesis}
-                                            <span
-                                                className="attributeValue"
-                                                onClick={() => {
-                                                    props.setFilter(
-                                                        {
+                                        return (
+                                            <span className="attributeValues">
+                                                {openParenthesis}
+                                                <span
+                                                    className="attributeValue"
+                                                    onClick={() => {
+                                                        props.setFilter({
                                                             action:
                                                                 FilterAction.DESELECT,
                                                             option: {
-                                                                value:value.value,
+                                                                value:
+                                                                    value.value,
                                                                 group: filter,
                                                             },
-                                                        }
-                                                    );
-                                                }}
-                                            >
-                                                {value.value}
+                                                        });
+                                                    }}
+                                                >
+                                                    {value.value}
+                                                </span>
+                                                {addOr}
+                                                {closeParenthesis}
                                             </span>
-                                            {addOr}
-                                            {closeParenthesis}
-                                        </span>
-                                    );
-                                }
-                            )}
-
-                        </span>
+                                        );
+                                    }
+                                )}
+                            </span>
                             {addAnd}
                         </>
                     );
                 }
             )}
             {!_.isEmpty(props.selectedFiltersByGroupName) && (
-                <span className={"clearFilterButton"}>
-                <span
-
-                    onClick={() => {
-                        props.setFilter({
-                            action: FilterAction.CLEAR_ALL,
-                        });
-                    }}
-                >
-                    <FontAwesomeIcon icon={faTimesCircle} /> Clear all filters
-                </span>
+                <span className={'clearFilterButton'}>
+                    <span
+                        onClick={() => {
+                            props.setFilter({
+                                action: FilterAction.CLEAR_ALL,
+                            });
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faTimesCircle} /> Clear all
+                        filters
+                    </span>
                 </span>
             )}
         </div>

@@ -1,18 +1,18 @@
 import { Atlas, Entity } from './helpers';
-import {ActionMeta, ActionTypes, OptionTypeBase} from "react-select";
+import { ActionMeta, ActionTypes, OptionTypeBase } from 'react-select';
 
 export type ExploreOptionType = {
     value: string;
     label: string;
     group: string;
     count?: number;
-    isSelected?:boolean;
+    isSelected?: boolean;
 };
 
 export type ExploreSelectedFilter = {
     group: string;
     value: string;
-}
+};
 
 export enum PropNames {
     TissueorOrganofOrigin = 'TissueorOrganofOrigin',
@@ -22,7 +22,7 @@ export enum PropNames {
     AtlasName = 'AtlasName',
     Stage = 'Stage',
     Level = 'Level',
-    FileFormat = 'FileFormat'
+    FileFormat = 'FileFormat',
 }
 
 export const PropMap = {
@@ -56,8 +56,8 @@ export const PropMap = {
     },
     [PropNames.FileFormat]: {
         prop: 'fileFormat',
-        displayName: 'File Format'
-    }
+        displayName: 'File Format',
+    },
 };
 
 export interface IFilterProps {
@@ -76,9 +76,10 @@ export enum FilterAction {
     // these strings are hard-coded in react-select
     CLEAR = 'clear',
     SELECT = 'select-option',
-    DESELECT = 'deselect-option'
+    DESELECT = 'deselect-option',
 }
 
-export interface ExploreActionMeta<OptionType extends OptionTypeBase> extends Omit<ActionMeta<OptionType>, "action"> {
+export interface ExploreActionMeta<OptionType extends OptionTypeBase>
+    extends Omit<ActionMeta<OptionType>, 'action'> {
     action: ActionTypes | FilterAction;
 }
