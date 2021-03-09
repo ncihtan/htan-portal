@@ -12,7 +12,7 @@ import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface IFileDownloadModalProps {
-    filenames: string[];
+    files: Entity[];
     onClose: () => void;
     isOpen: boolean;
 }
@@ -20,7 +20,9 @@ interface IFileDownloadModalProps {
 const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     props
 ) => {
-    const script = props.filenames.map((f) => `synapse get ${f}`).join('\n');
+    const script = props.files
+        .map((f) => `synapse get ${f.HTANDataFileID}`)
+        .join('\n');
 
     return (
         <Modal show={props.isOpen} onHide={props.onClose}>
@@ -69,10 +71,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable isDownloadModalOpen = false;
     @observable caseFilterText = '';
 
-    get selectedFilenames() {
-        return this.selected.map((e) => e.filename);
-    }
-
     get columns() {
         return [
             {
@@ -99,7 +97,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                               )
                           )
                         : file.biospecimen!.HTANBiospecimenID;
-                    return 'hello';
                 },
                 wrap: true,
                 sortable: true,
@@ -175,14 +172,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
     }
 
     @computed get hasFilesSelected() {
-        return this.selectedFilenames.length > 0;
+        return this.selected.length > 0;
     }
 
     render() {
         return this.props.entities ? (
             <>
                 <FileDownloadModal
-                    filenames={this.selectedFilenames}
+                    files={this.selected}
                     onClose={this.onModalClose}
                     isOpen={this.isDownloadModalOpen}
                 />
