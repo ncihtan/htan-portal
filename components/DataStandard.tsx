@@ -1,23 +1,22 @@
-import React from "react";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import React from 'react';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 
-import { DataSchemaData } from "../lib/dataSchemaHelpers";
-import { CmsData } from "../types";
-import DataSchema from "./DataSchema";
-import Footer from "./Footer";
-import HtanNavbar from "./HtanNavbar";
-
+import { DataSchemaData } from '../lib/dataSchemaHelpers';
+import { CmsData } from '../types';
+import DataSchema from './DataSchema';
+import Footer from './Footer';
+import HtanNavbar from './HtanNavbar';
 
 export interface DataStandardProps {
     title: string;
     data: CmsData[];
     dataSchemaData?: DataSchemaData[];
-    schemaDataMap?: {[id: string]: DataSchemaData};
+    schemaDataMap?: { [id: string]: DataSchemaData };
 }
 
-const DataStandard: React.FunctionComponent<DataStandardProps> = props => {
+const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
         <>
             <HtanNavbar />
@@ -28,9 +27,7 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = props => {
                         <Breadcrumb.Item href="/standards">
                             Data Standards
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item active>
-                            {props.title}
-                        </Breadcrumb.Item>
+                        <Breadcrumb.Item active>{props.title}</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
                 <Row>
@@ -40,18 +37,18 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = props => {
                         }}
                     />
                 </Row>
-                {props.schemaDataMap && props.dataSchemaData &&
+                {props.schemaDataMap && props.dataSchemaData && (
                     <Row>
                         <DataSchema
                             schemaData={props.dataSchemaData}
                             dataSchemaMap={props.schemaDataMap}
                         />
                     </Row>
-                }
+                )}
             </Container>
             <Footer />
         </>
     );
-}
+};
 
 export default DataStandard;

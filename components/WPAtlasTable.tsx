@@ -32,7 +32,7 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
         },
         {
             name: 'Atlas ID',
-            selector: (atlas: WPAtlas)=>atlas.htan_id.toUpperCase(),
+            selector: (atlas: WPAtlas) => atlas.htan_id.toUpperCase(),
             wrap: true,
             sortable: true,
         },
