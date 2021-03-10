@@ -21,6 +21,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
         {
             name: 'Atlas ID',
             selector: 'atlasid',
+            format: (sample: Entity) => sample.atlasid.toUpperCase(),
             wrap: true,
             sortable: true,
         },

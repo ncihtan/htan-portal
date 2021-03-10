@@ -19,6 +19,7 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         {
             name: 'Atlas ID',
             selector: 'atlasid',
+            format: (sample: Entity) => sample.atlasid.toUpperCase(),
             wrap: true,
             sortable: true,
         },
