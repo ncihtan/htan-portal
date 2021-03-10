@@ -82,8 +82,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
-                name: 'Atlas',
-                selector: 'WPAtlas.title.rendered',
+                name: 'Atlas ID',
+                selector: "atlasid",
+                format: (file: Entity) => file.atlasid?.toUpperCase(),
                 grow: 2,
                 wrap: true,
                 sortable: true,
