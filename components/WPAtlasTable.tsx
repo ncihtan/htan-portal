@@ -14,6 +14,12 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
 ) => {
     const columns = [
         {
+            name: 'Lead Institution',
+            selector: 'lead_institutions',
+            wrap: true,
+            sortable: true,
+        },
+        {
             name: 'Atlas',
             selector: 'title.rendered',
             cell: (atlas: WPAtlas) => (
@@ -21,12 +27,6 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
                     <a>{atlas.title.rendered}</a>
                 </Link>
             ),
-            wrap: true,
-            sortable: true,
-        },
-        {
-            name: 'Lead Institution',
-            selector: 'lead_institutions',
             wrap: true,
             sortable: true,
         },
