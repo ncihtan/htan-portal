@@ -21,7 +21,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     props
 ) => {
     const script = props.files
-        .map((f) => `synapse get ${f.HTANDataFileID}`)
+        .map((f) => `synapse get ${f.synapseId}`)
         .join('\n');
 
     return (
