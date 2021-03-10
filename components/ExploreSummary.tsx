@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
 import { PropNames } from '../lib/types';
-import { Button } from 'react-bootstrap';
 import { Entity } from '../lib/helpers';
 
 interface IExploreSummaryProps {
@@ -19,8 +18,6 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                 <div>
                     <strong>Summary:</strong>
                 </div>
-
-                <div>{props.filteredFiles.length} Files</div>
 
                 <div>
                     {
@@ -77,6 +74,8 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                     }{' '}
                     Assays
                 </div>
+
+                <div>{props.filteredFiles.length} Files</div>
             </div>
         </>
     );
