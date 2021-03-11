@@ -72,7 +72,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         : ''
                                 }`}
                             >
-                                Biospecimen
+                                Biospecimens
                             </a>
                         </li>
                         <li className="nav-item">
