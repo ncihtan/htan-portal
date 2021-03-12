@@ -242,10 +242,7 @@ export async function loadData(
             file.level = 'Unknown';
         }
 
-        file.WPAtlas =
-            atlasMap[
-                `hta${Number(file.atlasid.split('_')[0].substring(3)) + 1}`
-            ];
+        file.WPAtlas = atlasMap[file.atlasid.split('_')[0]];
 
         const parentData = getSampleAndPatientData(
             file,
