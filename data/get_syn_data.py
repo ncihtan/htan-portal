@@ -170,5 +170,5 @@ if __name__ == '__main__':
 
 
     # dump data portal JSON
-    with open("./syn_data.json", "w") as m_f:
+    with open("./../public/syn_data.json", "w") as m_f:
         json.dump(portal_data, m_f, indent = 4)
