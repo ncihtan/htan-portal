@@ -82,7 +82,7 @@ if __name__ == '__main__':
             continue
         center_id = htan_centers[center]
 
-        atlas["htan_id"] = center_id
+        atlas["htan_id"] = center_id.upper()
         atlas["htan_name"] = center
 
         logging.info("ATLAS: " + center)
