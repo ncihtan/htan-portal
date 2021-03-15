@@ -88,6 +88,7 @@ export interface Entity {
     diagnosis: Entity | undefined;
     primaryParent?: Entity;
     primaryParents?: Entity[];
+    synapseId?: string;
 }
 
 export interface Atlas {
