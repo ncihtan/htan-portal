@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { NextRouter } from 'next/router';
 import fetch from 'node-fetch';
+import * as Path from 'path';
 import { toArabic } from 'roman-numerals';
 
 import { WPAtlas } from '../types';
@@ -417,4 +418,30 @@ export function computeDashboardData(files: Entity[]) {
         { description: 'Cases', text: uniqueCases.size.toString() },
         { description: 'Biospecimens', text: uniqueBiospecs.size.toString() },
     ];
+}
+
+export function getFileBase(filename: string) {
+    return Path.basename(filename);
+}
+
+export function truncateFilename(filename: string, threshold: number = 15) {
+    const base = getFileBase(filename);
+    const indexOfFirstDot = base.indexOf('.');
+    let name = base;
+    let ext = '';
+
+    if (indexOfFirstDot > 0) {
+        name = base.slice(0, indexOfFirstDot);
+        ext = base.slice(indexOfFirstDot + 1);
+    }
+
+    let displayValue = name;
+
+    if (name.length > threshold) {
+        displayValue = `${name.slice(0, threshold)}...${ext}`;
+    } else if (ext.length > 0) {
+        displayValue = `${name}.${ext}`;
+    }
+
+    return displayValue;
 }

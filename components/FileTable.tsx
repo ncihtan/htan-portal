@@ -3,10 +3,11 @@ import { observer } from 'mobx-react';
 import React, { SyntheticEvent } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
+import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
 
-import { Atlas, Entity } from '../lib/helpers';
+import { Atlas, Entity, getFileBase, truncateFilename } from '../lib/helpers';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -78,10 +79,22 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: 'filename',
                 wrap: true,
                 sortable: true,
+                cell: (file: Entity) => {
+                    return (
+                        <Tooltip overlay={getFileBase(file.filename)}>
+                            <a
+                                target="_blank"
+                                href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
+                            >
+                                {truncateFilename(file.filename)}
+                            </a>
+                        </Tooltip>
+                    );
+                },
             },
             {
                 name: 'Atlas ID',
-                selector: "atlasid",
+                selector: 'atlasid',
                 format: (file: Entity) => file.atlasid?.toUpperCase(),
                 grow: 2,
                 wrap: true,
