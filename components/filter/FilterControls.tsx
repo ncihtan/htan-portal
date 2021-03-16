@@ -14,9 +14,9 @@ import {
     ExploreActionMeta,
     ExploreOptionType,
     ExploreSelectedFilter,
-    IFiltersByGroupName,
-    PropMap,
-    PropNames,
+    AttributeMap,
+    AttributeNames,
+    IFilterValuesSetByGroupName,
 } from '../../lib/types';
 import FilterCheckList from '../FilterPanel/FilterCheckList';
 import FilterPanel from '../FilterPanel/FilterPanel';
@@ -24,7 +24,7 @@ import FilterPropertyColumnShell from '../FilterPanel/FilterPropertyColumn';
 
 interface IFilterControlsProps {
     setFilter: (actionMeta: any) => void;
-    selectedFiltersByGroupName: IFiltersByGroupName;
+    selectedFiltersByGroupName: IFilterValuesSetByGroupName;
     selectedFilters: ExploreSelectedFilter[];
     files: Entity[];
     getGroupsByProperty: any;
@@ -32,15 +32,15 @@ interface IFilterControlsProps {
 
 const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
     (props) => {
-        const options = (propName: PropNames): ExploreOptionType[] => {
+        const options = (attrName: AttributeNames): ExploreOptionType[] => {
             const ret = makeOptions(
-                propName,
+                attrName,
                 props.selectedFiltersByGroupName,
                 props.files,
                 props.getGroupsByProperty
             );
             ret.forEach((opt) => {
-                opt.group = propName;
+                opt.group = attrName;
                 opt.isSelected = isOptionSelected(opt); // this call has to happen after setting `group`
             });
             return ret;
@@ -64,15 +64,15 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
         );
 
         const selectOptions = [
-            PropNames.AtlasName,
-            PropNames.TissueorOrganofOrigin,
-            PropNames.PrimaryDiagnosis,
-            PropNames.Component,
-            PropNames.Stage,
-        ].map((propName) => {
+            AttributeNames.AtlasName,
+            AttributeNames.TissueorOrganofOrigin,
+            AttributeNames.PrimaryDiagnosis,
+            AttributeNames.Component,
+            AttributeNames.Stage,
+        ].map((attrName) => {
             return {
-                label: PropMap[propName].displayName,
-                options: options(propName),
+                label: AttributeMap[attrName].displayName,
+                options: options(attrName),
             };
         });
 
@@ -112,7 +112,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                             props.selectedFiltersByGroupName
                                         }
                                         options={options(
-                                            PropNames.PrimaryDiagnosis
+                                            AttributeNames.PrimaryDiagnosis
                                         )}
                                     />
                                 </FilterPropertyColumnShell>
@@ -123,7 +123,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                             props.selectedFiltersByGroupName
                                         }
                                         options={sortStageOptions(
-                                            options(PropNames.Stage)
+                                            options(AttributeNames.Stage)
                                         )}
                                     />
                                 </FilterPropertyColumnShell>
@@ -140,7 +140,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                     setFilter={props.setFilter}
                                     filters={props.selectedFiltersByGroupName}
                                     options={options(
-                                        PropNames.TissueorOrganofOrigin
+                                        AttributeNames.TissueorOrganofOrigin
                                     )}
                                 />
                             </FilterPropertyColumnShell>
@@ -155,7 +155,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                 <FilterCheckList
                                     setFilter={props.setFilter}
                                     filters={props.selectedFiltersByGroupName}
-                                    options={options(PropNames.Component)}
+                                    options={options(AttributeNames.Component)}
                                 />
                             </FilterPropertyColumnShell>
                         </FilterPanel>
@@ -172,7 +172,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         filters={
                                             props.selectedFiltersByGroupName
                                         }
-                                        options={options(PropNames.Level)}
+                                        options={options(AttributeNames.Level)}
                                     ></FilterCheckList>
                                 </FilterPropertyColumnShell>
                                 <FilterPropertyColumnShell
@@ -183,7 +183,9 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         filters={
                                             props.selectedFiltersByGroupName
                                         }
-                                        options={options(PropNames.FileFormat)}
+                                        options={options(
+                                            AttributeNames.FileFormat
+                                        )}
                                     ></FilterCheckList>
                                 </FilterPropertyColumnShell>
                             </div>

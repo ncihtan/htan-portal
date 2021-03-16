@@ -16,7 +16,7 @@ import { ActionMeta } from 'react-select';
 import { ScaleLoader } from 'react-spinners';
 
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
-import { filterFiles, groupsByProperty } from '../lib/filterHelpers';
+import { filterFiles, groupsByAttrValue } from '../lib/filterHelpers';
 import {
     loadData,
     LoadDataResult,
@@ -28,7 +28,7 @@ import {
     ExploreSelectedFilter,
     FilterAction,
     IFilterProps,
-    IFiltersByGroupName,
+    IFilterValuesSetByGroupName,
 } from '../lib/types';
 import { WPAtlas } from '../types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
@@ -89,17 +89,21 @@ class Search extends React.Component<
     }
 
     get getGroupsByProperty() {
-        return groupsByProperty(this.state.files);
+        return groupsByAttrValue(this.state.files);
     }
 
     get getGroupsByPropertyFiltered() {
-        return groupsByProperty(this.filteredFiles);
+        return groupsByAttrValue(this.filteredFiles);
     }
 
-    @computed get selectedFiltersByGroupName(): IFiltersByGroupName {
-        return _.groupBy(this.selectedFilters, (item) => {
-            return item.group;
-        });
+    @computed
+    get selectedFilterValuesSetByGroupName(): IFilterValuesSetByGroupName {
+        return _.chain(this.selectedFilters)
+            .groupBy((item) => item.group)
+            .mapValues((filters: ExploreSelectedFilter[]) => {
+                return new Set(filters.map((f) => f.value));
+            })
+            .value();
     }
 
     @action.bound
@@ -150,14 +154,16 @@ class Search extends React.Component<
     }
 
     get filteredFiles() {
-        return filterFiles(this.selectedFiltersByGroupName, this.state.files);
+        return filterFiles(
+            this.selectedFilterValuesSetByGroupName,
+            this.state.files
+        );
     }
 
     @computed
     get samples() {
         return _.chain(this.filteredFiles)
-            .filter((f) => !!f.biospecimen && !!f.biospecimen.HTANParentID)
-            .map((f: any) => f.biospecimen)
+            .flatMapDeep((file) => file.biospecimen)
             .uniqBy((f) => f.HTANBiospecimenID)
             .value();
     }
@@ -189,7 +195,7 @@ class Search extends React.Component<
                     <FilterControls
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={
-                            this.selectedFiltersByGroupName
+                            this.selectedFilterValuesSetByGroupName
                         }
                         selectedFilters={this.selectedFilters}
                         files={this.state.files}
@@ -199,7 +205,7 @@ class Search extends React.Component<
                     <Filter
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={
-                            this.selectedFiltersByGroupName
+                            this.selectedFilterValuesSetByGroupName
                         }
                     />
 
