@@ -228,7 +228,7 @@ export async function loadData(
         return obj.Component === 'Diagnosis';
     });
 
-    const atlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id);
+    const atlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
 
     _.forEach(files, (file) => {
         // parse component to make a new level property and adjust component property
