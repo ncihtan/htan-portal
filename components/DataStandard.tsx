@@ -22,7 +22,7 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
             <HtanNavbar />
             <Container>
                 <Row>
-                    <Breadcrumb className="mt-3">
+                    <Breadcrumb>
                         <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                         <Breadcrumb.Item href="/standards">
                             Data Standards

@@ -19,24 +19,25 @@ const Standards = (data: StandardsProps) => {
             <HtanNavbar />
             <Container>
                 <Row>
-                    <Breadcrumb className="mt-3">
+                    <Breadcrumb>
                         <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                         <Breadcrumb.Item active>Data Standards</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
 
-                <Row className="mt-3">
+                <Row>
                     <h1>Data Standards</h1>
                 </Row>
-                <Row className="mt-3">
+                <Row>
                     <span
                         dangerouslySetInnerHTML={{
                             __html: data.data[0].content.rendered,
                         }}
                     />
                 </Row>
-                <Row className="mt-3">
-                    <h4>Browse Standards</h4>
+
+                <Row>
+                    <h2>Browse Standards</h2>
                 </Row>
                 <Row>
                     <ul>

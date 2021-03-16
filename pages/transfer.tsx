@@ -18,12 +18,12 @@ const Transfer = (data: TransferProps) => {
             <HtanNavbar />
             <Container>
                 <Row>
-                    <Breadcrumb className="mt-3">
+                    <Breadcrumb>
                         <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                         <Breadcrumb.Item active>Data Transfer</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
-                <Row className="mt-3">
+                <Row>
                     <h1>Data Transfer</h1>
                 </Row>
                 <Row className="mt-3">
