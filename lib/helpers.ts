@@ -5,9 +5,16 @@ import * as Path from 'path';
 import { toArabic } from 'roman-numerals';
 
 import { WPAtlas } from '../types';
-import { ExploreOptionType, ExploreSelectedFilter } from './types';
+import {
+    ExploreOptionType,
+    ExploreSelectedFilter,
+    SynapseAtlas,
+    SynapseData,
+} from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { AtlasURLQuery } from '../pages/atlas/[id]';
+import ExpandableText from '../components/ExpandableText';
+import React from 'react';
 
 // @ts-ignore
 let win;
@@ -18,63 +25,46 @@ if (typeof window !== 'undefined') {
     win = {} as any;
 }
 
-export function getRecords(obj: any): any {
-    if (_.isObject(obj) || _.isArray(obj)) {
-        return _.map(obj, (n: any) => {
-            if (n.record_list) {
-                return n.record_list;
-            } else {
-                return getRecords(n);
+export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
+    const entities: Entity[] = [];
+    _.forEach(data.atlases, (atlas: SynapseAtlas) => {
+        _.forEach(atlas, (synapseRecords, key) => {
+            if (key === 'htan_id' || key === 'htan_name') {
+                // skip these
+                return;
             }
-        });
-    } else {
-        return undefined;
-    }
-}
-
-export function massageData(data: any): Entity[] {
-    _.forEach(data.atlases, (atlas) => {
-        _.forEach(atlas, (t) => {
-            const schemaName = t.data_schema;
+            const schemaName = synapseRecords.data_schema;
             if (schemaName) {
                 const schema = data.schemas.find(
-                    (s: any) => s.data_schema === schemaName
-                );
-                //console.log("here", schema.attributes);
+                    (s) => s.data_schema === schemaName
+                )!;
 
-                t.fields = schema.attributes;
+                synapseRecords.record_list.forEach((record) => {
+                    const entity: Partial<Entity> = {};
 
-                //console.log(t.fields);
-
-                t.record_list = t.record_list.map((record: any) => {
-                    const obj: any = {};
-
-                    t.fields.forEach((f: any, i: number) => {
-                        obj[f.id.replace(/^bts:/, '')] = record.values[i];
+                    schema.attributes.forEach((f: any, i: number) => {
+                        entity[f.id.replace(/^bts:/, '') as keyof Entity] =
+                            record.values[i];
                     });
 
-                    obj['atlasid'] = atlas.htan_id;
+                    entity.atlasid = atlas.htan_id;
 
-                    return obj;
+                    entities.push(entity as Entity);
                 });
             }
         });
     });
 
-    const objs = _.chain(getRecords(data))
-        .flatMapDeep()
-        .filter((n) => !!n)
-        .value();
-
-    return objs;
+    return entities;
 }
 
 export interface Entity {
-    HTANBiospecimenID: any;
-    atlasid: string;
-    AssayType: string;
+    // Synapse attribute values
+    AJCCPathologicStage: string;
+    Biospecimen: string;
     Component: string;
     HTANParentID: string;
+    HTANBiospecimenID: any;
     HTANDataFileID: string;
     HTANParentBiospecimenID: string;
     HTANParentDataFileID: string;
@@ -83,11 +73,13 @@ export interface Entity {
     fileFormat: string;
     filename: string;
     HTANParticipantID: string;
+
+    // Derived or attached
+    atlasid: string;
     level: string;
     WPAtlas: WPAtlas;
-    biospecimen: Entity | undefined;
-    diagnosis: Entity | undefined;
-    primaryParent?: Entity;
+    biospecimen: Entity[];
+    diagnosis: Entity[];
     primaryParents?: Entity[];
     synapseId?: string;
 }
@@ -102,37 +94,21 @@ export interface LoadDataResult {
     atlases: Atlas[];
 }
 
-function seekPrimaryParent(
-    f: Entity,
-    byIdMap: { [k: string]: Entity }
-): Entity {
-    if (!f.HTANParentDataFileID) {
-        return f;
-    } else {
-        const parent = byIdMap[f.HTANParentDataFileID.split(',')[0]];
-        if (!parent) {
-            throw 'Invalid HTANParentDataFileID';
-        } else {
-            return seekPrimaryParent(parent, byIdMap);
-        }
-    }
-}
-
 win.missing = [];
 
-function seekPrimaryParents(
+function findPrimaryParents(
     f: Entity,
-    byIdMap: { [k: string]: Entity }
+    filesByFileId: { [HTANDataFileID: string]: Entity }
 ): Entity[] {
-    let parents: Entity[] = [];
+    let primaryParents: Entity[] = [];
 
     if (!f.HTANParentDataFileID) {
         // leave it empty
-        parents.push(f);
+        primaryParents.push(f);
     } else {
         const parentIds = f.HTANParentDataFileID.split(/[,;]/);
         const parentFiles = parentIds.reduce((aggr: Entity[], id: string) => {
-            const file = byIdMap[id];
+            const file = filesByFileId[id];
             if (file) {
                 aggr.push(file);
             } else {
@@ -142,63 +118,67 @@ function seekPrimaryParents(
             return aggr;
         }, []);
 
-        const sought = _(parentFiles)
-            .map((f) => seekPrimaryParents(f, byIdMap))
+        primaryParents = _(parentFiles)
+            .map((f) => findPrimaryParents(f, filesByFileId))
             .flatten()
-            .uniq()
+            .uniqBy((f) => f.HTANDataFileID)
             .value();
-
-        parents = _.uniq(parents.concat(sought));
     }
 
-    return parents;
+    return primaryParents;
 }
 
-function handleLineage(files: Entity[]) {
-    // first get rid of level >=4
-    // they have multiple parents
-    let cleanFiles = files.filter((f) => {
-        return !/Level[456]/.test(f.Component);
+function doesFileHaveMultipleParents(file: Entity) {
+    return /Level[456]/.test(file.Component);
+}
+
+function addPrimaryParents(files: Entity[]) {
+    const cleanFiles = files.filter((f) => {
+        return !(doesFileHaveMultipleParents(f) && f.atlasid === 'HTA3'); // hard coded for now - level 4 HTA3 files have messed up data
     });
 
-    const byIdMap = _.keyBy(cleanFiles, (f) => f.HTANDataFileID);
+    const fileIdToFile = _.keyBy(cleanFiles, (f) => f.HTANDataFileID);
 
     cleanFiles.forEach((f) => {
-        // const primaryParent = seekPrimaryParent(f, byIdMap);
-        // if (f !== primaryParent) {
-        //     f.primaryParent = primaryParent;
-        // }
-
-        const primaryParents = seekPrimaryParents(f, byIdMap);
+        const primaryParents = findPrimaryParents(f, fileIdToFile);
 
         if (primaryParents[0] !== f) {
             f.primaryParents = primaryParents;
         }
     });
-
-    console.log(cleanFiles);
 }
 
 function getSampleAndPatientData(
     file: Entity,
-    biospecimen: Entity[],
-    diagnoses: Entity[]
+    _biospecimen: Entity[],
+    _diagnosis: Entity[]
 ) {
-    const topLevelFile = file.primaryParent || file;
+    const primaryParents =
+        file.primaryParents && file.primaryParents.length
+            ? file.primaryParents
+            : [file];
 
-    let diagnosis, specimen;
+    let diagnosis, biospecimen;
 
-    specimen = _.find(biospecimen, {
-        HTANBiospecimenID: topLevelFile.HTANParentBiospecimenID,
-    }) as Entity | undefined;
+    biospecimen = primaryParents
+        .map(
+            (p) =>
+                _.find(_biospecimen, {
+                    HTANBiospecimenID: p.HTANParentBiospecimenID,
+                }) as Entity | undefined
+        )
+        .filter((f) => !!f) as Entity[];
 
-    if (specimen) {
-        diagnosis = _.find(diagnoses, {
-            HTANParticipantID: specimen.HTANParentID,
-        }) as Entity | undefined;
-    }
+    diagnosis = biospecimen
+        .map(
+            (s) =>
+                _.find(_diagnosis, {
+                    HTANParticipantID: s.HTANParentID,
+                }) as Entity | undefined
+        )
+        .filter((f) => !!f) as Entity[];
 
-    return { specimen, diagnosis };
+    return { biospecimen, diagnosis };
 }
 
 export async function loadData(
@@ -206,22 +186,18 @@ export async function loadData(
 ): Promise<LoadDataResult> {
     const url = '/syn_data.json'; // '/sim.json';
 
-    const data = await fetch(url).then((r) => r.json());
+    const data: SynapseData = await fetch(url).then((r) => r.json());
 
-    const flatData: Entity[] = massageData(data);
+    const flatData: Entity[] = extractEntitiesFromSynapseData(data);
 
-    let files = flatData.filter((obj) => {
+    const files = flatData.filter((obj) => {
         return !!obj.filename;
     });
 
-    handleLineage(files);
+    addPrimaryParents(files);
 
     const biospecimen = flatData.filter((obj) => {
         return obj.Component === 'Biospecimen';
-    });
-
-    const cases = flatData.filter((obj) => {
-        return obj.Component === 'Demographics';
     });
 
     const diagnoses = flatData.filter((obj) => {
@@ -252,7 +228,7 @@ export async function loadData(
             diagnoses
         );
 
-        file.biospecimen = parentData.specimen;
+        file.biospecimen = parentData.biospecimen;
 
         file.diagnosis = parentData.diagnosis;
     });
@@ -407,10 +383,18 @@ export function computeDashboardData(files: Entity[]) {
     const uniqueBiospecs = new Set();
     const uniqueCases = new Set();
     for (const file of files) {
-        uniqueAtlases.add(file.atlasid);
-        uniqueOrgans.add(file.TissueorOrganofOrigin);
-        uniqueBiospecs.add(file.biospecimen);
-        uniqueCases.add(file.diagnosis!.HTANParticipantID);
+        if (file.atlasid) {
+            uniqueAtlases.add(file.atlasid);
+        }
+        if (file.TissueorOrganofOrigin) {
+            uniqueOrgans.add(file.TissueorOrganofOrigin);
+        }
+        for (const biospec of file.biospecimen) {
+            uniqueBiospecs.add(biospec.HTANBiospecimenID);
+        }
+        for (const diag of file.diagnosis) {
+            uniqueCases.add(diag.HTANParticipantID);
+        }
     }
     return [
         { description: 'Atlases', text: uniqueAtlases.size.toString() },

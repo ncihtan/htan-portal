@@ -1,5 +1,6 @@
 import { Atlas, Entity } from './helpers';
 import { ActionMeta, ActionTypes, OptionTypeBase } from 'react-select';
+import _ from 'lodash';
 
 export type ExploreOptionType = {
     value: string;
@@ -14,7 +15,7 @@ export type ExploreSelectedFilter = {
     value: string;
 };
 
-export enum PropNames {
+export enum AttributeNames {
     TissueorOrganofOrigin = 'TissueorOrganofOrigin',
     PrimaryDiagnosis = 'PrimaryDiagnosis',
     Component = 'Component',
@@ -25,37 +26,46 @@ export enum PropNames {
     FileFormat = 'FileFormat',
 }
 
-export const PropMap = {
-    [PropNames.TissueorOrganofOrigin]: {
-        prop: 'diagnosis.TissueorOrganofOrigin',
+export interface IAttributeInfo {
+    path?: string;
+    getValues?: (e: Entity) => string[];
+    displayName: string;
+}
+
+export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
+    [AttributeNames.TissueorOrganofOrigin]: {
+        getValues: (e: Entity) =>
+            _.uniq(e.diagnosis.map((d) => d.TissueorOrganofOrigin)),
         displayName: 'Organ',
     },
-    [PropNames.PrimaryDiagnosis]: {
-        prop: 'diagnosis.PrimaryDiagnosis',
+    [AttributeNames.PrimaryDiagnosis]: {
+        getValues: (e: Entity) =>
+            _.uniq(e.diagnosis.map((d) => d.PrimaryDiagnosis)),
         displayName: 'Diagnosis',
     },
-    [PropNames.Component]: {
-        prop: 'Component',
+    [AttributeNames.Component]: {
+        path: 'Component',
         displayName: 'Assay',
     },
-    [PropNames.Biospecimen]: {
-        prop: 'Biospecimen',
+    [AttributeNames.Biospecimen]: {
+        path: 'Biospecimen',
         displayName: 'Biospecimen',
     },
-    [PropNames.AtlasName]: {
-        prop: 'WPAtlas.title.rendered',
+    [AttributeNames.AtlasName]: {
+        path: 'WPAtlas.title.rendered',
         displayName: 'Atlas',
     },
-    [PropNames.Stage]: {
-        prop: 'diagnosis.AJCCPathologicStage',
+    [AttributeNames.Stage]: {
+        getValues: (e: Entity) =>
+            _.uniq(e.diagnosis.map((d) => d.AJCCPathologicStage)),
         displayName: 'Stage',
     },
-    [PropNames.Level]: {
-        prop: 'level',
+    [AttributeNames.Level]: {
+        path: 'level',
         displayName: 'Level',
     },
-    [PropNames.FileFormat]: {
-        prop: 'fileFormat',
+    [AttributeNames.FileFormat]: {
+        path: 'fileFormat',
         displayName: 'File Format',
     },
 };
@@ -67,8 +77,8 @@ export interface IFilterProps {
     atlasData?: any;
 }
 
-export interface IFiltersByGroupName {
-    [groupName: string]: ExploreSelectedFilter[];
+export interface IFilterValuesSetByGroupName {
+    [groupName: string]: Set<string>;
 }
 
 export enum FilterAction {
@@ -83,3 +93,29 @@ export interface ExploreActionMeta<OptionType extends OptionTypeBase>
     extends Omit<ActionMeta<OptionType>, 'action'> {
     action: ActionTypes | FilterAction;
 }
+
+export type SynapseData = {
+    atlases: SynapseAtlas[];
+    schemas: SynapseSchema[];
+};
+
+export type SynapseAtlas = {
+    htan_id: string;
+    htan_name: string;
+} & {
+    [data_schema: string]: SynapseRecords;
+};
+
+export type SynapseRecords = {
+    data_schema: string;
+    record_list: { values: any[] }[];
+};
+
+export type SynapseSchema = {
+    data_schema: string;
+    attributes: {
+        id: string;
+        display_name: string;
+        description: string;
+    }[];
+};

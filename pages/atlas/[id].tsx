@@ -10,11 +10,11 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import React from 'react';
 import Head from 'next/dist/next-server/lib/head';
-import { Category, SynapseAtlas, SynapseData, WPAtlas } from '../../types';
+import { WPAtlas } from '../../types';
 import { GetStaticProps } from 'next';
 import { Button } from 'react-bootstrap';
 import { getExplorePageURL } from '../../lib/helpers';
-import { PropNames } from '../../lib/types';
+import { AttributeNames } from '../../lib/types';
 
 export type AtlasURLQuery = {
     fromApp: string | undefined;
@@ -65,7 +65,7 @@ const PostContent: React.FunctionComponent<{
                             getExplorePageURL([
                                 {
                                     value: wpAtlas.title.rendered,
-                                    group: PropNames.AtlasName,
+                                    group: AttributeNames.AtlasName,
                                 },
                             ])
                         )

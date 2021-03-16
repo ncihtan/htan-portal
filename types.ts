@@ -27,17 +27,6 @@ export interface Category {
     [subcat: string]: SubCategory;
 }
 
-export interface SynapseAtlas {
-    clinical: Category;
-    biospecimen: Category;
-    assayData: Category;
-    imagingData: Category;
-}
-
-export interface SynapseData {
-    [altasId: string]: SynapseAtlas;
-}
-
 export enum WPConstants {
     HOMEPAGE_HERO_BLURB = 'homepage-hero-blurb',
 }
