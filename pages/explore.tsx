@@ -17,7 +17,6 @@ import { ScaleLoader } from 'react-spinners';
 
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
 import { filterFiles, groupsByProperty } from '../lib/filterHelpers';
-import getData from '../lib/getData';
 import {
     loadData,
     LoadDataResult,
@@ -57,8 +56,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         },
     };
 };
-
-const synapseData = getData();
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;
