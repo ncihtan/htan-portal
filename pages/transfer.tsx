@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import HtanNavbar from '../components/HtanNavbar';
+import PreReleaseBanner from '../components/PreReleaseBanner';
 import Footer from '../components/Footer';
 import { GetServerSideProps, GetStaticProps } from 'next';
 import { CmsData } from '../types';
@@ -15,6 +16,7 @@ export interface TransferProps {
 const Transfer = (data: TransferProps) => {
     return (
         <>
+            <PreReleaseBanner />
             <HtanNavbar />
             <Container>
                 <Row>

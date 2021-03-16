@@ -32,6 +32,7 @@ import {
     IFiltersByGroupName,
 } from '../lib/types';
 import { WPAtlas } from '../types';
+import PreReleaseBanner from '../components/PreReleaseBanner';
 import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
 import FilterControls from '../components/filter/FilterControls';
@@ -237,6 +238,8 @@ interface IFilterPageProps {
 const FilterPage = (props: IFilterPageProps) => {
     return (
         <>
+            <PreReleaseBanner />
+
             <HtanNavbar />
 
             <Search router={props.router} wpData={props.atlasData} />

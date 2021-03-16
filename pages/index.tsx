@@ -1,6 +1,7 @@
 import React from 'react';
 
 import HtanNavbar from '../components/HtanNavbar';
+import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import Footer from '../components/Footer';
 import { GetStaticProps } from 'next';
@@ -10,6 +11,7 @@ import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
 const Home = (data: IHomePropsProps) => {
     return (
         <>
+            <PreReleaseBanner />
             <HtanNavbar />
             <HomePage {...data} />
             <Footer />

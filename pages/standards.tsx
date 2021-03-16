@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import HtanNavbar from '../components/HtanNavbar';
+import PreReleaseBanner from '../components/PreReleaseBanner';
 import Footer from '../components/Footer';
 import Link from 'next/link';
 import { GetServerSideProps, GetStaticProps } from 'next';
@@ -16,6 +17,7 @@ export interface StandardsProps {
 const Standards = (data: StandardsProps) => {
     return (
         <>
+            <PreReleaseBanner />
             <HtanNavbar />
             <Container>
                 <Row>
