@@ -8,10 +8,8 @@ import DataTable from 'react-data-table-component';
 import HtanNavbar from './HtanNavbar';
 import Footer from './Footer';
 import { CmsData, WPAtlas } from '../types';
-import getData from '../lib/getData';
 import { getAtlasPageURL } from '../lib/helpers';
-
-const synapseData = getData();
+import _ from 'lodash';
 
 export interface DataReleaseProps {
     data: CmsData[];
@@ -19,6 +17,9 @@ export interface DataReleaseProps {
 }
 
 export const DataReleasePage = (props: DataReleaseProps) => {
+    const atlases = _.keyBy(props.atlasData, (atl) =>
+        atl.htan_id.toUpperCase()
+    );
     const columns = [
         {
             name: 'Atlas Name',
@@ -46,7 +47,7 @@ export const DataReleasePage = (props: DataReleaseProps) => {
             wrap: true,
             sortable: true,
             cell: (row: any) => {
-                return row.dataRelease.toUpperCase() in synapseData ? (
+                return row.dataRelease.toUpperCase() in atlases ? (
                     <Link href={getAtlasPageURL(row.dataRelease)}>
                         <a>Data Release</a>
                     </Link>

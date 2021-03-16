@@ -16,14 +16,12 @@ import { Button } from 'react-bootstrap';
 import { getExplorePageURL } from '../../lib/helpers';
 import { PropNames } from '../../lib/types';
 
-const data = getData();
-
 export type AtlasURLQuery = {
     fromApp: string | undefined;
 };
 
 interface IPostProps {
-    synapseData: SynapseData;
+    synapseAtlasData: any[];
     WPAtlasData: WPAtlas[];
     router: NextRouter;
 }
@@ -31,17 +29,7 @@ interface IPostProps {
 const PostContent: React.FunctionComponent<{
     wpAtlas: WPAtlas;
     router: NextRouter;
-    synapseAtlas?: SynapseAtlas;
-}> = ({ wpAtlas, router, synapseAtlas }) => {
-    let mergedClinicalAndBiospecimenData: Category;
-    if (synapseAtlas) {
-        mergedClinicalAndBiospecimenData = Object.assign(
-            {},
-            synapseAtlas.clinical,
-            synapseAtlas.biospecimen
-        );
-    }
-
+}> = ({ wpAtlas, router }) => {
     return (
         <Container>
             <Row>
@@ -155,8 +143,8 @@ const PostContent: React.FunctionComponent<{
 };
 
 const Post: React.FunctionComponent<IPostProps> = ({
-    synapseData,
     WPAtlasData,
+    synapseAtlasData,
 }) => {
     const router = useRouter();
     const htan_id = router.query.id as string;
@@ -165,17 +153,12 @@ const Post: React.FunctionComponent<IPostProps> = ({
         return a.htan_id === htan_id;
     });
 
-    //console.log(htan_id);
-
-    const synapseAtlas: SynapseAtlas | undefined =
-        postData && (synapseData[htan_id.toUpperCase()] as SynapseAtlas);
+    const synapseAtlas = synapseAtlasData.find((a: any) => {
+        return a.htan_id === htan_id;
+    });
 
     const content = postData ? (
-        <PostContent
-            wpAtlas={postData}
-            router={router}
-            synapseAtlas={synapseAtlas}
-        />
+        <PostContent wpAtlas={postData} router={router} />
     ) : (
         <div>There is Atlas corresponding to this ID</div>
     );
@@ -202,12 +185,12 @@ export default Post;
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const WPAtlasData = await getAtlasList();
-    const synapseData = getData();
+    const synapseAtlasData = (getData() as any).atlases;
 
     return {
         props: {
             WPAtlasData,
-            synapseData,
+            synapseAtlasData,
         },
     };
 };
