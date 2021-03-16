@@ -18,12 +18,12 @@ const Tools = (data: ToolsProps) => {
             <HtanNavbar />
             <Container>
                 <Row>
-                    <Breadcrumb className="mt-3">
+                    <Breadcrumb>
                         <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                         <Breadcrumb.Item active>Analysis Tools</Breadcrumb.Item>
                     </Breadcrumb>
                 </Row>
-                <Row className="mt-3">
+                <Row>
                     <h1>Analysis Tools</h1>
                 </Row>
                 <Row className="mt-3">

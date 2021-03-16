@@ -72,7 +72,7 @@ export const DataReleasePage = (props: DataReleaseProps) => {
             <HtanNavbar />
             <Container>
                 <Row>
-                    <Breadcrumb className="mt-3">
+                    <Breadcrumb>
                         <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                         <Breadcrumb.Item active>Data Release</Breadcrumb.Item>
                     </Breadcrumb>

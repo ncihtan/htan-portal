@@ -1,4 +1,5 @@
 $primary-background: #5f008c;
+$darkgreen: #24cad5;
 
 .breadcrumb {
     background-color: transparent !important;
@@ -15,6 +16,33 @@ $primary-background: #5f008c;
 body {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 0.9rem;
+}
+
+a {
+    color: #00008b;
+}
+
+h1 {
+    font-size: 2rem;
+    color: $darkgreen;
+}
+
+h2,
+h3,
+h4 {
+    font-size: 1.5rem;
+    color: $darkgreen;
+    border-top: 1px dashed #eee;
+    padding-top: 20px;
+    width: 100%;
+
+    &:first-of-type {
+        padding-top: 0;
+        border-top: none;
+        margin-top: 10px;
+    }
+
+    margin-top: 40px;
 }
 
 .bg-nav-purple {
@@ -48,8 +76,8 @@ body {
 }
 
 .main-nav {
-    border-bottom: 1px solid #999;
-    border-top: 4px solid #999;
+    border-bottom: 1px solid #eee;
+    border-top: 4px solid $darkgreen;
     padding: 5px 20px;
 
     .nav-link {
