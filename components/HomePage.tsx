@@ -46,7 +46,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
         loadData(atlases).then(({ files, atlases }) => {
             setDashboardData(computeDashboardData(files));
         });
-    });
+    }, []);
 
     return (
         <>
