@@ -1,4 +1,4 @@
-import data from '../data/data.json';
+import data from '../public/syn_data.json';
 
 export default function getData() {
     return data;
