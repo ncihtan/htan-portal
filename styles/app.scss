@@ -16,6 +16,20 @@ $darkgreen: #24cad5;
 body {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 0.9rem;
+
+    > div {
+        min-height: 100vh;
+        padding-bottom: 40px;
+        position: relative;
+
+        > footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+        }
+    }
 }
 
 a {
