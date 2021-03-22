@@ -36,7 +36,7 @@ import HtanNavbar from '../components/HtanNavbar';
 import Footer from '../components/Footer';
 import FilterControls from '../components/filter/FilterControls';
 import Filter from '../components/filter/Filter';
-import ExploreTabs from '../components/ExploreTabs';
+import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
 import { ExploreSummary } from '../components/ExploreSummary';
@@ -59,6 +59,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;
+    tab: ExploreTab;
 };
 
 @observer
