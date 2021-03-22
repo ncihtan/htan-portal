@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { PropNames } from '../lib/types';
+import { AttributeNames } from '../lib/types';
 import { Entity } from '../lib/helpers';
 
 interface IExploreSummaryProps {
@@ -23,7 +23,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                     {
                         _.keys(
                             props.getGroupsByPropertyFiltered[
-                                PropNames.AtlasName
+                                AttributeNames.AtlasName
                             ]
                         ).length
                     }{' '}
@@ -34,7 +34,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                     {
                         _.keys(
                             props.getGroupsByPropertyFiltered[
-                                PropNames.TissueorOrganofOrigin
+                                AttributeNames.TissueorOrganofOrigin
                             ]
                         ).length
                     }{' '}
@@ -45,7 +45,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                     {
                         _.keys(
                             props.getGroupsByPropertyFiltered[
-                                PropNames.PrimaryDiagnosis
+                                AttributeNames.PrimaryDiagnosis
                             ]
                         ).length
                     }{' '}
@@ -68,7 +68,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                     {
                         _.keys(
                             props.getGroupsByPropertyFiltered[
-                                PropNames.Component
+                                AttributeNames.Component
                             ]
                         ).length
                     }{' '}

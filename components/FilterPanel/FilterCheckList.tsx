@@ -1,18 +1,16 @@
-import React, { ChangeEvent, FunctionComponent, useCallback } from 'react';
+import React, { FunctionComponent } from 'react';
 import classNames from 'classnames';
 import { ActionMeta } from 'react-select';
 import {
     ExploreOptionType,
-    IFiltersByGroupName,
-    PropNames,
+    IFilterValuesSetByGroupName,
 } from '../../lib/types';
 import { observer } from 'mobx-react';
-import _ from 'lodash';
 import styles from './styles.module.scss';
 
 interface IFilterCheckList {
     setFilter: (actionMeta: ActionMeta<ExploreOptionType>) => void;
-    filters: IFiltersByGroupName;
+    filters: IFilterValuesSetByGroupName;
     options: ExploreOptionType[];
 }
 
@@ -26,10 +24,7 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                 const disabled = option.count === 0;
                 const checked =
                     option.group in props.filters &&
-                    _.some(
-                        props.filters[option.group],
-                        (o) => o.value === option.value
-                    );
+                    props.filters[option.group].has(option.value);
                 return (
                     <div
                         className={classNames('form-check', styles.formCheck)}
