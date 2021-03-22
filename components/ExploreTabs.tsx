@@ -18,7 +18,7 @@ interface IExploreTabsProps {
     getGroupsByPropertyFiltered: any;
 }
 
-enum ExploreTab {
+export enum ExploreTab {
     FILE = 'file',
     ATLAS = 'atlas',
     BIOSPECIMEN = 'biospecimen',

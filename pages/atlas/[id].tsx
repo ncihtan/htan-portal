@@ -15,10 +15,7 @@ import { GetStaticProps } from 'next';
 import { Button } from 'react-bootstrap';
 import { getExplorePageURL } from '../../lib/helpers';
 import { AttributeNames } from '../../lib/types';
-
-export type AtlasURLQuery = {
-    fromApp: string | undefined;
-};
+import { ExploreTab } from '../../components/ExploreTabs';
 
 interface IPostProps {
     synapseAtlasData: any[];
@@ -46,23 +43,13 @@ const PostContent: React.FunctionComponent<{
             </Row>
 
             <Row style={{ marginBottom: 20 }}>
-                {router.query.fromApp === 'true' && (
-                    <Button
-                        variant={'link'}
-                        size={'sm'}
-                        style={{ fontSize: 12 }}
-                        onClick={() => router.back()}
-                    >
-                        {'< Back'}
-                    </Button>
-                )}
                 <Button
                     variant={'link'}
                     size={'sm'}
                     style={{ fontSize: 12 }}
                     onClick={() =>
                         router.push(
-                            getExplorePageURL([
+                            getExplorePageURL(ExploreTab.FILE, [
                                 {
                                     value: wpAtlas.title.rendered,
                                     group: AttributeNames.AtlasName,
