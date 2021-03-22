@@ -12,9 +12,9 @@ import {
     SynapseData,
 } from './types';
 import { ExploreURLQuery } from '../pages/explore';
-import { AtlasURLQuery } from '../pages/atlas/[id]';
 import ExpandableText from '../components/ExpandableText';
 import React from 'react';
+import { ExploreTab } from '../components/ExploreTabs';
 
 // @ts-ignore
 let win;
@@ -332,11 +332,15 @@ function addQueryStringToURL(
     }
 }
 
-export function getExplorePageURL(filters: ExploreSelectedFilter[]) {
+export function getExplorePageURL(
+    tab: ExploreTab,
+    filters: ExploreSelectedFilter[]
+) {
     let url = '/explore';
     if (filters.length > 0) {
         const query: ExploreURLQuery = {
             selectedFilters: urlEncodeSelectedFilters(filters),
+            tab,
         }; // using this intermediate container to use typescript to enforce URL correctness
         url = addQueryStringToURL(url, query);
     }
@@ -344,10 +348,7 @@ export function getExplorePageURL(filters: ExploreSelectedFilter[]) {
 }
 
 export function getAtlasPageURL(id: string) {
-    const query: AtlasURLQuery = {
-        fromApp: 'true',
-    }; // using this intermediate container to use typescript to enforce URL correctness
-    return addQueryStringToURL(`/atlas/${id}`, query);
+    return `/atlas/${id}`;
 }
 
 export function updateSelectedFiltersInURL(
