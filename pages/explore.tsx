@@ -18,6 +18,7 @@ import { ScaleLoader } from 'react-spinners';
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
 import { filterFiles, groupsByAttrValue } from '../lib/filterHelpers';
 import {
+    Entity,
     loadData,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
@@ -172,7 +173,7 @@ class Search extends React.Component<
     @computed
     get cases() {
         return _.chain(this.filteredFiles)
-            .map((f: any) => f.diagnosis)
+            .flatMapDeep((f: Entity) => f.diagnosis)
             .uniqBy((f) => f.HTANParticipantID)
             .value();
     }
