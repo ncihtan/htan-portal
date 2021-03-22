@@ -26,6 +26,7 @@ if (typeof window !== 'undefined') {
 }
 
 export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
+    const schemasByName = _.keyBy(data.schemas, (s) => s.data_schema);
     const entities: Entity[] = [];
     _.forEach(data.atlases, (atlas: SynapseAtlas) => {
         _.forEach(atlas, (synapseRecords, key) => {
@@ -35,9 +36,7 @@ export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
             }
             const schemaName = synapseRecords.data_schema;
             if (schemaName) {
-                const schema = data.schemas.find(
-                    (s) => s.data_schema === schemaName
-                )!;
+                const schema = schemasByName[schemaName];
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<Entity> = {};
