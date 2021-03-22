@@ -387,14 +387,12 @@ export function computeDashboardData(files: Entity[]) {
         if (file.atlasid) {
             uniqueAtlases.add(file.atlasid);
         }
-        if (file.TissueorOrganofOrigin) {
-            uniqueOrgans.add(file.TissueorOrganofOrigin);
-        }
         for (const biospec of file.biospecimen) {
             uniqueBiospecs.add(biospec.HTANBiospecimenID);
         }
         for (const diag of file.diagnosis) {
             uniqueCases.add(diag.HTANParticipantID);
+            uniqueOrgans.add(diag.TissueorOrganofOrigin);
         }
     }
     return [
