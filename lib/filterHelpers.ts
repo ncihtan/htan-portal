@@ -2,42 +2,81 @@ import _ from 'lodash';
 
 import { Entity } from './helpers';
 import {
+    AttributeMap,
+    AttributeNames,
     ExploreOptionType,
-    ExploreSelectedFilter,
-    IFiltersByGroupName,
-    PropMap,
-    PropNames,
+    IAttributeInfo,
+    IFilterValuesSetByGroupName,
 } from './types';
 
-export function groupsByProperty(files: Entity[]) {
-    const m: any = {};
+function getAttrValueFromFile(file: Entity, attrInfo: IAttributeInfo) {
+    let attrValue: string | string[] | undefined;
 
-    _.forEach(PropMap, (o, k) => {
-        m[k] = _.groupBy(files, (f) => {
-            //@ts-ignore
-            const val = _.at(f, [o.prop]);
-            return val ? val[0] : 'other';
-        });
+    if (attrInfo.path) {
+        attrValue = _.at<any>(file, attrInfo.path)[0];
+    } else if (attrInfo.getValues) {
+        attrValue = attrInfo.getValues(file).filter((x) => !!x);
+    }
+
+    if (_.isArray(attrValue) && attrValue.length === 0) {
+        // no values => undefined
+        attrValue = undefined;
+    }
+
+    return attrValue;
+}
+
+export function groupsByAttrValue(files: Entity[]) {
+    const ret: {
+        [attrName: string]: {
+            [attrValue: string]: Entity[];
+        };
+    } = {};
+
+    _.forEach(AttributeMap, (attrInfo, attrName) => {
+        ret[attrName] = _.omit(
+            _.groupBy(files, (file: Entity) => {
+                return getAttrValueFromFile(file, attrInfo);
+            }),
+            'undefined'
+        );
     });
 
-    return m;
+    return ret;
 }
 
 export function filterFiles(
-    filters: { [key: string]: ExploreSelectedFilter[] },
+    filterValuesByGroupName: IFilterValuesSetByGroupName,
     files: Entity[]
 ) {
-    if (_.size(filters)) {
-        // find the files where the passed filters match
+    // If there are any filters...
+    if (_.size(filterValuesByGroupName)) {
+        //...find the files where the passed filters match
         return files.filter((f) => {
-            return _.every(filters, (filter, name) => {
-                //@ts-ignore
-                const val = _.at(f, PropMap[name].prop);
-                //@ts-ignore
-                return val
-                    ? filter.map((f) => f.value).includes(val[0])
-                    : false;
-            });
+            return _.every(
+                filterValuesByGroupName,
+                (filterValueSet, groupName) => {
+                    const attrValue = getAttrValueFromFile(
+                        f,
+                        AttributeMap[groupName as AttributeNames]
+                    );
+                    // If the file has a value relating to this filter group...
+                    if (attrValue) {
+                        // ...check if the file's value is one of the filter selections
+
+                        if (_.isArray(attrValue)) {
+                            // If the file has multiple values, check each of them
+                            return _.some(attrValue, (v) =>
+                                filterValueSet.has(v)
+                            );
+                        } else {
+                            return filterValueSet.has(attrValue);
+                        }
+                    }
+                    //...otherwise, return false
+                    return false;
+                }
+            );
         });
     } else {
         return files;
@@ -45,16 +84,16 @@ export function filterFiles(
 }
 
 export function makeOptions(
-    propName: PropNames,
-    selectedFiltersByGroupName: IFiltersByGroupName,
+    attrName: AttributeNames,
+    filterValuesByGroupName: IFilterValuesSetByGroupName,
     files: Entity[],
     getGroupsByProperty: any
 ): ExploreOptionType[] {
-    const filteredFilesMinusOption = groupsByProperty(
-        filterFiles(_.omit(selectedFiltersByGroupName, [propName]), files)
-    )[propName];
+    const filteredFilesMinusOption = groupsByAttrValue(
+        filterFiles(_.omit(filterValuesByGroupName, [attrName]), files)
+    )[attrName];
 
-    return _.map(getGroupsByProperty[propName], (val, key) => {
+    return _.map(getGroupsByProperty[attrName], (val, key) => {
         const count =
             key in filteredFilesMinusOption
                 ? filteredFilesMinusOption[key].length
@@ -62,7 +101,7 @@ export function makeOptions(
         return {
             value: key,
             label: key,
-            group: propName,
+            group: attrName,
             count,
         };
     });

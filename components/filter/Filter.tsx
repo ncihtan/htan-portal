@@ -8,14 +8,14 @@ import {
     ExploreActionMeta,
     ExploreSelectedFilter,
     FilterAction,
-    IFiltersByGroupName,
-    PropMap,
-    PropNames,
+    AttributeMap,
+    AttributeNames,
+    IFilterValuesSetByGroupName,
 } from '../../lib/types';
 
 interface IFilterProps {
     setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
-    selectedFiltersByGroupName: IFiltersByGroupName;
+    selectedFiltersByGroupName: IFilterValuesSetByGroupName;
 }
 
 const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {
@@ -45,63 +45,64 @@ const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {
                                     }}
                                 >
                                     {
-                                        PropMap[
-                                            PropNames[
-                                                filter as keyof typeof PropNames
+                                        AttributeMap[
+                                            AttributeNames[
+                                                filter as keyof typeof AttributeNames
                                             ]
                                         ].displayName
                                     }
                                 </span>
 
-                                {props.selectedFiltersByGroupName[filter].map(
-                                    (value, i, values) => {
-                                        const numberOfValues = values.length;
-                                        const openParenthesis =
-                                            numberOfValues > 1 && i == 0 ? (
-                                                <span className="logicalParentheses">
-                                                    (
-                                                </span>
-                                            ) : null;
-                                        const addOr =
-                                            numberOfValues > 1 &&
-                                            i < numberOfValues - 1 ? (
-                                                <span className="logicalOr">
-                                                    OR
-                                                </span>
-                                            ) : null;
-                                        const closeParenthesis =
-                                            numberOfValues > 1 &&
-                                            i == numberOfValues - 1 ? (
-                                                <span className="logicalParentheses">
-                                                    )
-                                                </span>
-                                            ) : null;
-
-                                        return (
-                                            <span className="attributeValues">
-                                                {openParenthesis}
-                                                <span
-                                                    className="attributeValue"
-                                                    onClick={() => {
-                                                        props.setFilter({
-                                                            action:
-                                                                FilterAction.DESELECT,
-                                                            option: {
-                                                                value:
-                                                                    value.value,
-                                                                group: filter,
-                                                            },
-                                                        });
-                                                    }}
-                                                >
-                                                    {value.value}
-                                                </span>
-                                                {addOr}
-                                                {closeParenthesis}
+                                {[
+                                    ...props.selectedFiltersByGroupName[
+                                        filter
+                                    ].values(),
+                                ].map((value, i, values) => {
+                                    const numberOfValues = values.length;
+                                    const openParenthesis =
+                                        numberOfValues > 1 && i == 0 ? (
+                                            <span className="logicalParentheses">
+                                                (
                                             </span>
-                                        );
-                                    }
-                                )}
+                                        ) : null;
+                                    const addOr =
+                                        numberOfValues > 1 &&
+                                        i < numberOfValues - 1 ? (
+                                            <span className="logicalOr">
+                                                OR
+                                            </span>
+                                        ) : null;
+                                    const closeParenthesis =
+                                        numberOfValues > 1 &&
+                                        i == numberOfValues - 1 ? (
+                                            <span className="logicalParentheses">
+                                                )
+                                            </span>
+                                        ) : null;
+
+                                    return (
+                                        <span className="attributeValues">
+                                            {openParenthesis}
+                                            <span
+                                                className="attributeValue"
+                                                onClick={() => {
+                                                    props.setFilter({
+                                                        action:
+                                                            FilterAction.DESELECT,
+                                                        option: {
+                                                            value,
+                                                            group: filter,
+                                                        },
+                                                    });
+                                                }}
+                                            >
+                                                {value}
+                                            </span>
+                                            {addOr}
+                                            {closeParenthesis}
+                                        </span>
+                                    );
+                                })}
                             </span>
                             {addAnd}
                         </>

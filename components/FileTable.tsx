@@ -8,9 +8,13 @@ import _ from 'lodash';
 import classNames from 'classnames';
 
 import { Atlas, Entity, getFileBase, truncateFilename } from '../lib/helpers';
-import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import {
+    getDefaultDataTableStyle,
+    truncatedTableCell,
+} from '../lib/dataTableHelpers';
 import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ExpandableText from './ExpandableText';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -103,15 +107,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'Biospecimen',
                 selector: (file: Entity) => {
-                    return file.primaryParents
-                        ? _.uniq(
-                              file.primaryParents.map(
-                                  (_file) =>
-                                      _file.biospecimen!.HTANBiospecimenID
-                              )
+                    const biospecimens = file.primaryParents
+                        ? _.flatMapDeep(file.primaryParents, (f) =>
+                              f.biospecimen.map((b) => b.HTANBiospecimenID)
                           )
-                        : file.biospecimen!.HTANBiospecimenID;
+                        : file.biospecimen.map((b) => b.HTANBiospecimenID);
+                    return _.uniq(biospecimens).join(', ');
                 },
+                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
@@ -133,13 +136,23 @@ export default class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: 'Organ',
-                selector: 'diagnosis.TissueorOrganofOrigin',
+                selector: (file: Entity) => {
+                    return _.uniq(
+                        file.diagnosis.map((d) => d.TissueorOrganofOrigin)
+                    ).join(', ');
+                },
+                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
             {
                 name: 'Diagnosis',
-                selector: 'diagnosis.PrimaryDiagnosis',
+                selector: (file: Entity) => {
+                    return _.uniq(
+                        file.diagnosis.map((d) => d.TissueorOrganofOrigin)
+                    ).join(', ');
+                },
+                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
@@ -171,8 +184,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @computed get caseFilteredFiles() {
         if (this.caseFilterText.length > 0) {
             return this.props.entities.filter((file) => {
-                return file.diagnosis?.HTANParticipantID.includes(
-                    this.caseFilterText
+                return _.some(file.diagnosis, (d) =>
+                    d.HTANParticipantID.includes(this.caseFilterText)
                 );
             });
         } else {
