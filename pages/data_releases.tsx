@@ -6,6 +6,7 @@ import {
 } from '../components/DataReleasePage';
 import { getAtlasList, getStaticContent } from '../ApiUtil';
 import { GetStaticProps } from 'next';
+import PageWrapper from '../components/PageWrapper';
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const data = await getStaticContent(['summary-blurb-data-release']);
@@ -20,7 +21,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 function DataRelease(props: DataReleaseProps) {
-    return <DataReleasePage {...props} />;
+    return (
+        <PageWrapper>
+            <DataReleasePage {...props} />
+        </PageWrapper>
+    );
 }
 
 export default DataRelease;

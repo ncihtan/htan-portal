@@ -7,14 +7,15 @@ import Footer from '../components/Footer';
 import { GetStaticProps } from 'next';
 import { WPConstants } from '../types';
 import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
+import PageWrapper from '../components/PageWrapper';
 
 const Home = (data: IHomePropsProps) => {
     return (
         <>
             <PreReleaseBanner />
-            <HtanNavbar />
-            <HomePage {...data} />
-            <Footer />
+            <PageWrapper>
+                <HomePage {...data} />
+            </PageWrapper>
         </>
     );
 };

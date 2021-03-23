@@ -17,12 +17,12 @@ body {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 0.9rem;
 
-    > div {
+    #pageWrapper {
         min-height: 100vh;
         padding-bottom: 40px;
         position: relative;
 
-        > footer {
+        footer.pageFooter {
             position: absolute;
             bottom: 0;
             width: 100%;
