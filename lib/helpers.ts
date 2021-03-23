@@ -187,7 +187,11 @@ export async function loadData(
 
     const data: SynapseData = await fetch(url).then((r) => r.json());
 
-    const flatData: Entity[] = extractEntitiesFromSynapseData(data);
+    return processSynapseJSON(data, WPAtlasData);
+}
+
+export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
+    const flatData: Entity[] = extractEntitiesFromSynapseData(synapseJson);
 
     const files = flatData.filter((obj) => {
         return !!obj.filename;
@@ -235,7 +239,7 @@ export async function loadData(
     const returnFiles = files.filter((f) => !!f.diagnosis);
 
     // filter out files without a diagnosis
-    return { files: returnFiles, atlases: data.atlases };
+    return { files: returnFiles, atlases: synapseJson.atlases };
 }
 
 export function sortStageOptions(options: ExploreOptionType[]) {
@@ -377,7 +381,12 @@ export function setTab(tab: string, router: NextRouter) {
     );
 }
 
-export function computeDashboardData(files: Entity[]) {
+export type EntityReport = {
+    description:string;
+    text:string;
+}
+
+export function computeDashboardData(files: Entity[]) : EntityReport[] {
     const uniqueAtlases = new Set();
     const uniqueOrgans = new Set();
     const uniqueBiospecs = new Set();

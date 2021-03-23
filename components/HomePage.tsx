@@ -8,16 +8,15 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import { WPAtlas } from '../types';
 import styles from './homeStyles.module.scss';
 import {
-    computeDashboardData,
+    EntityReport,
     getAtlasPageURL,
-    loadData,
 } from '../lib/helpers';
-import { BeatLoader } from 'react-spinners';
 
 export interface IHomePropsProps {
     hero_blurb: string;
     cards: any[];
     atlases: WPAtlas[];
+    synapseCounts: EntityReport[];
 }
 
 function dashboardIcon(text: string, description: string) {
@@ -36,18 +35,9 @@ function dashboardIcon(text: string, description: string) {
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     hero_blurb,
     cards,
+    synapseCounts,
     atlases,
 }) => {
-    const [dashboardData, setDashboardData] = useState<
-        { text: string; description: string }[]
-    >();
-
-    useEffect(() => {
-        loadData(atlases).then(({ files, atlases }) => {
-            setDashboardData(computeDashboardData(files));
-        });
-    }, []);
-
     return (
         <>
             <Jumbotron
@@ -91,10 +81,9 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 }}
             >
                 <Row className="justify-content-md-center">
-                    {!dashboardData && <BeatLoader />}
-                    {dashboardData &&
-                        dashboardData.map((icon) =>
-                            dashboardIcon(icon.text, icon.description)
+                    {synapseCounts &&
+                        synapseCounts.map((report: EntityReport) =>
+                            dashboardIcon(report.text, report.description)
                         )}
                 </Row>
             </Container>
