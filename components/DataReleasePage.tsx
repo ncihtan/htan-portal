@@ -70,7 +70,6 @@ export const DataReleasePage = (props: DataReleaseProps) => {
 
     return (
         <>
-            <HtanNavbar />
             <Container>
                 <Row>
                     <Breadcrumb>
@@ -105,7 +104,6 @@ export const DataReleasePage = (props: DataReleaseProps) => {
                     />
                 </Row>
             </Container>
-            <Footer />
         </>
     );
 };
