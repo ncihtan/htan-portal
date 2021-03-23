@@ -52,7 +52,7 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
         displayName: 'Biospecimen',
     },
     [AttributeNames.AtlasName]: {
-        path: 'WPAtlas.title.rendered',
+        path: 'atlas.htan_name',
         displayName: 'Atlas',
     },
     [AttributeNames.Stage]: {
