@@ -77,7 +77,7 @@ export interface IFilterProps {
     atlasData?: any;
 }
 
-export interface IFilterValuesSetByGroupName {
+export interface ISelectedFiltersByAttrName {
     [groupName: string]: Set<string>;
 }
 
