@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import { GetServerSideProps, GetStaticProps } from 'next';
 import { CmsData } from '../types';
 import { getStaticContent } from '../ApiUtil';
+import PageWrapper from '../components/PageWrapper';
 
 export interface ToolsProps {
     data: CmsData[];
@@ -17,26 +18,28 @@ const Tools = (data: ToolsProps) => {
     return (
         <>
             <PreReleaseBanner />
-            <HtanNavbar />
-            <Container>
-                <Row>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Analysis Tools</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Row>
-                <Row>
-                    <h1>Analysis Tools</h1>
-                </Row>
-                <Row className="mt-3">
-                    <span
-                        dangerouslySetInnerHTML={{
-                            __html: data.data[0].content.rendered,
-                        }}
-                    />
-                </Row>
-            </Container>
-            <Footer />
+            <PageWrapper>
+                <Container>
+                    <Row>
+                        <Breadcrumb>
+                            <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+                            <Breadcrumb.Item active>
+                                Analysis Tools
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+                    </Row>
+                    <Row>
+                        <h1>Analysis Tools</h1>
+                    </Row>
+                    <Row className="mt-3">
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: data.data[0].content.rendered,
+                            }}
+                        />
+                    </Row>
+                </Container>
+            </PageWrapper>
         </>
     );
 };

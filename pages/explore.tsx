@@ -41,6 +41,7 @@ import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
 import { ExploreSummary } from '../components/ExploreSummary';
+import PageWrapper from '../components/PageWrapper';
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -245,11 +246,9 @@ const FilterPage = (props: IFilterPageProps) => {
         <>
             <PreReleaseBanner />
 
-            <HtanNavbar />
-
-            <Search router={props.router} wpData={props.atlasData} />
-
-            <Footer />
+            <PageWrapper>
+                <Search router={props.router} wpData={props.atlasData} />
+            </PageWrapper>
         </>
     );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 
 const Footer = () => (
-    <footer>
+    <footer className={'pageFooter'}>
         Human Tumor Atlas Network (HTAN) @ National Cancer Institute{' '}
         {new Date().getFullYear()}
     </footer>
