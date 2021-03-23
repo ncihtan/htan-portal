@@ -1,13 +1,13 @@
 import React from 'react';
+import synapseData from '../public/syn_data.json';
 
-import HtanNavbar from '../components/HtanNavbar';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
-import Footer from '../components/Footer';
 import { GetStaticProps } from 'next';
 import { WPConstants } from '../types';
 import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
+import {computeDashboardData, processSynapseJSON } from "../lib/helpers";
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -43,6 +43,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
             hero_blurb: homepageContent.content.rendered,
             cards: cards,
             atlases,
+            synapseCounts: computeDashboardData(
+                processSynapseJSON(synapseData, atlases).files
+            ),
         },
     };
 };
