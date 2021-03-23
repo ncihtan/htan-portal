@@ -10,6 +10,7 @@ import {
     ExploreSelectedFilter,
     SynapseAtlas,
     SynapseData,
+    SynapseSchema,
 } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import ExpandableText from '../components/ExpandableText';
@@ -41,10 +42,12 @@ export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<Entity> = {};
 
-                    schema.attributes.forEach((f: any, i: number) => {
-                        entity[f.id.replace(/^bts:/, '') as keyof Entity] =
-                            record.values[i];
-                    });
+                    schema.attributes.forEach(
+                        (f: SynapseSchema['attributes'][0], i: number) => {
+                            entity[f.id.replace(/^bts:/, '') as keyof Entity] =
+                                record.values[i];
+                        }
+                    );
 
                     entity.atlasid = atlas.htan_id;
 
@@ -63,7 +66,7 @@ export interface Entity {
     Biospecimen: string;
     Component: string;
     HTANParentID: string;
-    HTANBiospecimenID: any;
+    HTANBiospecimenID: string;
     HTANDataFileID: string;
     HTANParentBiospecimenID: string;
     HTANParentDataFileID: string;

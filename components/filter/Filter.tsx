@@ -10,12 +10,12 @@ import {
     FilterAction,
     AttributeMap,
     AttributeNames,
-    IFilterValuesSetByGroupName,
+    ISelectedFiltersByAttrName,
 } from '../../lib/types';
 
 interface IFilterProps {
     setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
-    selectedFiltersByGroupName: IFilterValuesSetByGroupName;
+    selectedFiltersByGroupName: ISelectedFiltersByAttrName;
 }
 
 const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {

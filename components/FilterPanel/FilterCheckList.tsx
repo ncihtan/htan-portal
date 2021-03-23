@@ -1,16 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import classNames from 'classnames';
 import { ActionMeta } from 'react-select';
-import {
-    ExploreOptionType,
-    IFilterValuesSetByGroupName,
-} from '../../lib/types';
+import { ExploreOptionType, ISelectedFiltersByAttrName } from '../../lib/types';
 import { observer } from 'mobx-react';
 import styles from './styles.module.scss';
 
 interface IFilterCheckList {
     setFilter: (actionMeta: ActionMeta<ExploreOptionType>) => void;
-    filters: IFilterValuesSetByGroupName;
+    filters: ISelectedFiltersByAttrName;
     options: ExploreOptionType[];
 }
 
