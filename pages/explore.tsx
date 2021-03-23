@@ -16,7 +16,10 @@ import { ActionMeta } from 'react-select';
 import { ScaleLoader } from 'react-spinners';
 
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
-import { filterFiles, groupsByAttrValue } from '../lib/filterHelpers';
+import {
+    filterFiles,
+    groupFilesByAttrNameAndValue,
+} from '../lib/filterHelpers';
 import {
     Entity,
     loadData,
@@ -29,7 +32,7 @@ import {
     ExploreSelectedFilter,
     FilterAction,
     IFilterProps,
-    IFilterValuesSetByGroupName,
+    ISelectedFiltersByAttrName,
 } from '../lib/types';
 import { WPAtlas } from '../types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
@@ -92,15 +95,15 @@ class Search extends React.Component<
     }
 
     get getGroupsByProperty() {
-        return groupsByAttrValue(this.state.files);
+        return groupFilesByAttrNameAndValue(this.state.files);
     }
 
     get getGroupsByPropertyFiltered() {
-        return groupsByAttrValue(this.filteredFiles);
+        return groupFilesByAttrNameAndValue(this.filteredFiles);
     }
 
     @computed
-    get selectedFilterValuesSetByGroupName(): IFilterValuesSetByGroupName {
+    get selectedFiltersByAttrName(): ISelectedFiltersByAttrName {
         return _.chain(this.selectedFilters)
             .groupBy((item) => item.group)
             .mapValues((filters: ExploreSelectedFilter[]) => {
@@ -157,10 +160,7 @@ class Search extends React.Component<
     }
 
     get filteredFiles() {
-        return filterFiles(
-            this.selectedFilterValuesSetByGroupName,
-            this.state.files
-        );
+        return filterFiles(this.selectedFiltersByAttrName, this.state.files);
     }
 
     @computed
@@ -198,7 +198,7 @@ class Search extends React.Component<
                     <FilterControls
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={
-                            this.selectedFilterValuesSetByGroupName
+                            this.selectedFiltersByAttrName
                         }
                         selectedFilters={this.selectedFilters}
                         files={this.state.files}
@@ -208,7 +208,7 @@ class Search extends React.Component<
                     <Filter
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={
-                            this.selectedFilterValuesSetByGroupName
+                            this.selectedFiltersByAttrName
                         }
                     />
 
@@ -237,7 +237,7 @@ class Search extends React.Component<
 }
 
 interface IFilterPageProps {
-    atlasData: any;
+    atlasData: WPAtlas[];
     router: NextRouter;
 }
 

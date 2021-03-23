@@ -16,7 +16,7 @@ import {
     ExploreSelectedFilter,
     AttributeMap,
     AttributeNames,
-    IFilterValuesSetByGroupName,
+    ISelectedFiltersByAttrName,
 } from '../../lib/types';
 import FilterCheckList from '../FilterPanel/FilterCheckList';
 import FilterPanel from '../FilterPanel/FilterPanel';
@@ -24,7 +24,7 @@ import FilterPropertyColumnShell from '../FilterPanel/FilterPropertyColumn';
 
 interface IFilterControlsProps {
     setFilter: (actionMeta: any) => void;
-    selectedFiltersByGroupName: IFilterValuesSetByGroupName;
+    selectedFiltersByGroupName: ISelectedFiltersByAttrName;
     selectedFilters: ExploreSelectedFilter[];
     files: Entity[];
     getGroupsByProperty: any;

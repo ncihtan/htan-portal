@@ -14,11 +14,11 @@ import { WPAtlas } from '../../types';
 import { GetStaticProps } from 'next';
 import { Button } from 'react-bootstrap';
 import { getExplorePageURL } from '../../lib/helpers';
-import { AttributeNames } from '../../lib/types';
+import { AttributeNames, SynapseAtlas } from '../../lib/types';
 import { ExploreTab } from '../../components/ExploreTabs';
 
 interface IPostProps {
-    synapseAtlasData: any[];
+    synapseAtlasData: SynapseAtlas[];
     WPAtlasData: WPAtlas[];
     router: NextRouter;
 }
@@ -140,7 +140,7 @@ const Post: React.FunctionComponent<IPostProps> = ({
         return a.htan_id === htan_id;
     });
 
-    const synapseAtlas = synapseAtlasData.find((a: any) => {
+    const synapseAtlas = synapseAtlasData.find((a) => {
         return a.htan_id === htan_id;
     });
 
