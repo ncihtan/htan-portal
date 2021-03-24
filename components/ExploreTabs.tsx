@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import React from 'react';
 
-import { Entity, setTab } from '../lib/helpers';
+import { Atlas, Entity, setTab } from '../lib/helpers';
 import { WPAtlas } from '../types';
 import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
@@ -16,6 +16,7 @@ interface IExploreTabsProps {
     cases: Entity[];
     wpData: WPAtlas[];
     getGroupsByPropertyFiltered: any;
+    synapseAtlases: Atlas[];
 }
 
 export enum ExploreTab {
@@ -111,7 +112,10 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
                     }`}
                 >
-                    <BiospecimenTable samples={props.samples} />
+                    <BiospecimenTable
+                        synapseAtlases={props.synapseAtlases}
+                        samples={props.samples}
+                    />
                 </div>
 
                 <div
@@ -119,7 +123,10 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         activeTab !== ExploreTab.CASES ? 'd-none' : ''
                     }`}
                 >
-                    <CaseTable cases={props.cases} />
+                    <CaseTable
+                        synapseAtlases={props.synapseAtlases}
+                        cases={props.cases}
+                    />
                 </div>
 
                 <div
@@ -127,7 +134,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         activeTab !== 'atlas' ? 'd-none' : ''
                     }`}
                 >
-                    <WPAtlasTable atlasData={props.wpData} />
+                    <WPAtlasTable synapseAtlasData={props.synapseAtlases} />
                 </div>
             </>
         );
