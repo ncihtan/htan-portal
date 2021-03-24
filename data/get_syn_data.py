@@ -34,9 +34,10 @@ if __name__ == '__main__':
                     "HTAN TNP - TMA": "hta14"
     }
 
+ 
     # load schematic config
     schematic.CONFIG.load_config('./config-htan.yml')
-
+    
     # instantiate synapse client
     syn = synapseclient.Synapse()
 
@@ -59,6 +60,7 @@ if __name__ == '__main__':
     #schema_file = wget.download(url, out = schema_filename)
 
     se = SchemaExplorer()
+
     se.load_schema(url)
 
     # get all manifests grouped by project (i.e. research center/atlas)
@@ -66,8 +68,8 @@ if __name__ == '__main__':
 
     # portal data schema skeleton
     portal_data = {
-                    "atlases":[],
-                    "schemas":[]
+                    "atlases":[], 
+                    "schemas":[] 
     }
 
 
@@ -83,6 +85,7 @@ if __name__ == '__main__':
         center_id = htan_centers[center]
 
         atlas["htan_id"] = center_id.upper()
+
         atlas["htan_name"] = center
 
         logging.info("ATLAS: " + center)
@@ -122,6 +125,7 @@ if __name__ == '__main__':
             for values in manifest_data:
 
                 record = {"values":[v if not pd.isna(v) else None for v in list(values)]}
+
                 record_list.append(record)
 
             # add records to atlas
@@ -146,7 +150,7 @@ if __name__ == '__main__':
                 for attribute in data_attributes:
                     attr_info = se.explore_class(attribute)
                     attr_id = "bts:" + attribute
-                    attr_name = attr_info["displayName"]
+                    attr_name = attr_info["displayName"] 
                     attr_desc = attr_info["description"]
 
                     schema["attributes"].append({
