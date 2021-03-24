@@ -77,6 +77,7 @@ export interface Entity {
     HTANParticipantID: string;
 
     // Derived or attached
+    atlas: Atlas;
     atlasid: string;
     level: string;
     WPAtlas: WPAtlas;
@@ -210,7 +211,9 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
         return obj.Component === 'Diagnosis';
     });
 
-    const atlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
+    const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
+
+    const synapseAtlasMap = _.keyBy(synapseJson.atlases, (a) => a.htan_id);
 
     _.forEach(files, (file) => {
         // parse component to make a new level property and adjust component property
@@ -226,7 +229,9 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
             file.level = 'Unknown';
         }
 
-        file.WPAtlas = atlasMap[file.atlasid.split('_')[0]];
+        file.WPAtlas = WPAtlasMap[file.atlasid.split('_')[0]];
+
+        file.atlas = synapseAtlasMap[file.atlasid];
 
         const parentData = getSampleAndPatientData(
             file,
@@ -385,11 +390,11 @@ export function setTab(tab: string, router: NextRouter) {
 }
 
 export type EntityReport = {
-    description:string;
-    text:string;
-}
+    description: string;
+    text: string;
+};
 
-export function computeDashboardData(files: Entity[]) : EntityReport[] {
+export function computeDashboardData(files: Entity[]): EntityReport[] {
     const uniqueAtlases = new Set();
     const uniqueOrgans = new Set();
     const uniqueBiospecs = new Set();
