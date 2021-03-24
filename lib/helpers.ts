@@ -100,16 +100,25 @@ export interface LoadDataResult {
 
 win.missing = [];
 
-function findPrimaryParents(
+function doesFileHaveMultipleParents(file: Entity) {
+    return /Level[456]/.test(file.Component);
+}
+
+function findAndAddPrimaryParents(
     f: Entity,
     filesByFileId: { [HTANDataFileID: string]: Entity }
 ): Entity[] {
+    if (f.primaryParents) {
+        // recursive optimization:
+        //  if we've already calculated f.primaryParents, just return it
+        return f.primaryParents;
+    }
+
+    // otherwise, compute parents
     let primaryParents: Entity[] = [];
 
-    if (!f.HTANParentDataFileID) {
-        // leave it empty
-        primaryParents.push(f);
-    } else {
+    if (f.HTANParentDataFileID) {
+        // if there's a parent, traverse "upwards" to find primary parent
         const parentIds = f.HTANParentDataFileID.split(/[,;]/);
         const parentFiles = parentIds.reduce((aggr: Entity[], id: string) => {
             const file = filesByFileId[id];
@@ -123,17 +132,23 @@ function findPrimaryParents(
         }, []);
 
         primaryParents = _(parentFiles)
-            .map((f) => findPrimaryParents(f, filesByFileId))
+            .map((f) => findAndAddPrimaryParents(f, filesByFileId))
             .flatten()
             .uniqBy((f) => f.HTANDataFileID)
             .value();
+
+        // add primaryParents member to child file
+        f.primaryParents = primaryParents;
+    }
+    {
+        // else
+        // recursive base case: parent (has no parent itself)
+        primaryParents = [f];
+
+        // we don't add primaryParents member to the parent file
     }
 
     return primaryParents;
-}
-
-function doesFileHaveMultipleParents(file: Entity) {
-    return /Level[456]/.test(file.Component);
 }
 
 function addPrimaryParents(files: Entity[]) {
@@ -144,11 +159,7 @@ function addPrimaryParents(files: Entity[]) {
     const fileIdToFile = _.keyBy(cleanFiles, (f) => f.HTANDataFileID);
 
     cleanFiles.forEach((f) => {
-        const primaryParents = findPrimaryParents(f, fileIdToFile);
-
-        if (primaryParents[0] !== f) {
-            f.primaryParents = primaryParents;
-        }
+        findAndAddPrimaryParents(f, fileIdToFile);
     });
 }
 
