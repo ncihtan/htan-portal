@@ -116,17 +116,17 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         )}
                                     />
                                 </FilterPropertyColumnShell>
-                                <FilterPropertyColumnShell title={'Stage'}>
-                                    <FilterCheckList
-                                        setFilter={props.setFilter}
-                                        filters={
-                                            props.selectedFiltersByGroupName
-                                        }
-                                        options={sortStageOptions(
-                                            options(AttributeNames.Stage)
-                                        )}
-                                    />
-                                </FilterPropertyColumnShell>
+                                {/*<FilterPropertyColumnShell title={'Stage'}>*/}
+                                {/*    <FilterCheckList*/}
+                                {/*        setFilter={props.setFilter}*/}
+                                {/*        filters={*/}
+                                {/*            props.selectedFiltersByGroupName*/}
+                                {/*        }*/}
+                                {/*        options={sortStageOptions(*/}
+                                {/*            options(AttributeNames.Stage)*/}
+                                {/*        )}*/}
+                                {/*    />*/}
+                                {/*</FilterPropertyColumnShell>*/}
                             </div>
                         </FilterPanel>
                     </div>
