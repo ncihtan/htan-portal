@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
+import _ from 'lodash';
 
 interface ICaseTableProps {
     cases: Entity[];
@@ -22,7 +23,7 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         {
             name: 'Atlas Name',
 
-            cell: (sample) => {
+            cell: (sample: Entity) => {
                 return atlasMap[sample.atlasid].htan_name;
             },
             wrap: true,
