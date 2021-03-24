@@ -97,9 +97,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 },
             },
             {
-                name: 'Atlas ID',
-                selector: 'atlasid',
-                format: (file: Entity) => file.atlasid?.toUpperCase(),
+                name: 'Atlas Name',
+                selector: 'atlas.htan_name',
+                format: (file: Entity) => file.atlas.htan_name?.toUpperCase(),
                 grow: 2,
                 wrap: true,
                 sortable: true,
