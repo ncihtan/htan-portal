@@ -154,31 +154,29 @@ function addPrimaryParents(files: Entity[]) {
 
 function getSampleAndPatientData(
     file: Entity,
-    _biospecimen: Entity[],
-    _diagnosis: Entity[]
+    biospecimenByHTANBiospecimenID: { [htanBiospecimenID: string]: Entity },
+    diagnosisByHTANParticipantID: { [htanParticipantID: string]: Entity }
 ) {
     const primaryParents =
         file.primaryParents && file.primaryParents.length
             ? file.primaryParents
             : [file];
 
-    let diagnosis, biospecimen;
-
-    biospecimen = primaryParents
+    const biospecimen = primaryParents
         .map(
             (p) =>
-                _.find(_biospecimen, {
-                    HTANBiospecimenID: p.HTANParentBiospecimenID,
-                }) as Entity | undefined
+                biospecimenByHTANBiospecimenID[p.HTANParentBiospecimenID] as
+                    | Entity
+                    | undefined
         )
         .filter((f) => !!f) as Entity[];
 
-    diagnosis = biospecimen
+    const diagnosis = biospecimen
         .map(
             (s) =>
-                _.find(_diagnosis, {
-                    HTANParticipantID: s.HTANParentID,
-                }) as Entity | undefined
+                diagnosisByHTANParticipantID[s.HTANParentID] as
+                    | Entity
+                    | undefined
         )
         .filter((f) => !!f) as Entity[];
 
@@ -195,6 +193,26 @@ export async function loadData(
     return processSynapseJSON(data, WPAtlasData);
 }
 
+function extractBiospecimensAndDiagnosis(data: Entity[]) {
+    const biospecimenByHTANBiospecimenID: {
+        [htanBiospecimenID: string]: Entity;
+    } = {};
+    const diagnosisByHTANParticipantID: {
+        [htanParticipantID: string]: Entity;
+    } = {};
+
+    data.forEach((entity) => {
+        if (entity.Component === 'Biospecimen') {
+            biospecimenByHTANBiospecimenID[entity.HTANBiospecimenID] = entity;
+        }
+        if (entity.Component === 'Diagnosis') {
+            diagnosisByHTANParticipantID[entity.HTANParticipantID] = entity;
+        }
+    });
+
+    return { biospecimenByHTANBiospecimenID, diagnosisByHTANParticipantID };
+}
+
 export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
     const flatData: Entity[] = extractEntitiesFromSynapseData(synapseJson);
 
@@ -203,14 +221,10 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
     });
 
     addPrimaryParents(files);
-
-    const biospecimen = flatData.filter((obj) => {
-        return obj.Component === 'Biospecimen';
-    });
-
-    const diagnoses = flatData.filter((obj) => {
-        return obj.Component === 'Diagnosis';
-    });
+    const {
+        biospecimenByHTANBiospecimenID,
+        diagnosisByHTANParticipantID,
+    } = extractBiospecimensAndDiagnosis(flatData);
 
     const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
 
@@ -243,8 +257,8 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
 
         const parentData = getSampleAndPatientData(
             file,
-            biospecimen,
-            diagnoses
+            biospecimenByHTANBiospecimenID,
+            diagnosisByHTANParticipantID
         );
 
         file.biospecimen = parentData.biospecimen;
