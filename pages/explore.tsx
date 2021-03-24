@@ -50,7 +50,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
     let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     let res = await fetch(overviewURL);
-    //let data = await res.json();
 
     const atlases = await getAtlasList();
 
@@ -223,6 +222,7 @@ class Search extends React.Component<
                     <ExploreTabs
                         router={this.props.router}
                         filteredFiles={this.filteredFiles}
+                        synapseAtlases={this.state.atlases}
                         samples={this.samples}
                         cases={this.cases}
                         wpData={this.props.wpData}

@@ -3,10 +3,10 @@ import React from 'react';
 import { WPAtlas } from '../types';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import DataTable from 'react-data-table-component';
-import { getAtlasPageURL } from '../lib/helpers';
+import { Atlas, getAtlasPageURL } from '../lib/helpers';
 
 interface IWPAtlasTableProps {
-    atlasData: WPAtlas[];
+    synapseAtlasData: Atlas[];
 }
 
 export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
@@ -15,33 +15,46 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
     const columns = [
         {
             name: 'Lead Institution',
-            selector: 'lead_institutions',
+            selector: (atlas: Atlas) => atlas.WPAtlas.lead_institutions,
             wrap: true,
             sortable: true,
         },
         {
-            name: 'Atlas',
+            name: 'Atlas Name',
             selector: 'title.rendered',
-            cell: (atlas: WPAtlas) => (
-                <Link href={getAtlasPageURL(atlas.htan_id.toLowerCase())}>
-                    <a>{atlas.title.rendered}</a>
+            cell: (atlas: Atlas) => (
+                <Link href={getAtlasPageURL(atlas.htan_name.toLowerCase())}>
+                    <a>{atlas.htan_name}</a>
                 </Link>
             ),
             wrap: true,
             sortable: true,
         },
         {
-            name: 'Atlas ID',
-            selector: (atlas: WPAtlas) => atlas.htan_id.toUpperCase(),
+            name: 'Atlas Description',
+            selector: 'title.rendered',
+            cell: (atlas: Atlas) => (
+                <Link href={getAtlasPageURL(atlas.htan_id.toLowerCase())}>
+                    <a>
+                        {atlas.WPAtlas ? atlas.WPAtlas.title.rendered : 'N/A'}
+                    </a>
+                </Link>
+            ),
             wrap: true,
             sortable: true,
         },
+        // {
+        //     name: 'Atlas ID',
+        //     selector: (atlas: Atlas) => atlas.htan_id.toUpperCase(),
+        //     wrap: true,
+        //     sortable: true,
+        // },
     ];
 
     return (
         <DataTable
             columns={columns}
-            data={props.atlasData}
+            data={props.synapseAtlasData}
             striped={true}
             noHeader={true}
             customStyles={getDefaultDataTableStyle()}

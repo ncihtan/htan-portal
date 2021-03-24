@@ -2,15 +2,18 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import { Entity } from '../lib/helpers';
+import { Atlas, Entity } from '../lib/helpers';
 
 interface IBiospecimenTableProps {
     samples: Entity[];
+    synapseAtlases: Atlas[];
 }
 
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
     props
 ) => {
+    const atlasMap = _.keyBy(props.synapseAtlases, (a) => a.htan_id);
+
     const columns = [
         {
             name: 'HTAN Biospecimen ID',
@@ -19,8 +22,11 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
             sortable: true,
         },
         {
-            name: 'Atlas ID',
-            selector: 'atlasid',
+            name: 'Atlas Name',
+
+            cell: (sample) => {
+                return atlasMap[sample.atlasid].htan_name;
+            },
             wrap: true,
             sortable: true,
         },

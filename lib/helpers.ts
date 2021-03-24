@@ -90,6 +90,7 @@ export interface Entity {
 export interface Atlas {
     htan_id: string;
     htan_name: string;
+    WPAtlas: WPAtlas;
 }
 
 export interface LoadDataResult {
@@ -215,6 +216,13 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
 
     const synapseAtlasMap = _.keyBy(synapseJson.atlases, (a) => a.htan_id);
 
+    // tag synapse atlas with WP atlas
+    _.forEach(synapseAtlasMap, (a: Atlas) => {
+        if (WPAtlasMap[a.htan_id]) {
+            a.WPAtlas = WPAtlasMap[a.htan_id] || undefined;
+        }
+    });
+
     _.forEach(files, (file) => {
         // parse component to make a new level property and adjust component property
         if (file.Component) {
@@ -244,10 +252,14 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
         file.diagnosis = parentData.diagnosis;
     });
 
+    // files must have a diagnosis
     const returnFiles = files.filter((f) => !!f.diagnosis);
 
+    // atlases MUST have an entry in WPAtlas
+    const returnAtlases = synapseJson.atlases.filter((a: Atlas) => a.WPAtlas);
+
     // filter out files without a diagnosis
-    return { files: returnFiles, atlases: synapseJson.atlases };
+    return { files: returnFiles, atlases: returnAtlases };
 }
 
 export function sortStageOptions(options: ExploreOptionType[]) {
