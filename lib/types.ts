@@ -16,6 +16,7 @@ export type ExploreSelectedFilter = {
 };
 
 export enum AttributeNames {
+    // Synapse attribute names
     TissueorOrganofOrigin = 'TissueorOrganofOrigin',
     PrimaryDiagnosis = 'PrimaryDiagnosis',
     Component = 'Component',
@@ -24,6 +25,9 @@ export enum AttributeNames {
     Stage = 'Stage',
     Level = 'Level',
     FileFormat = 'FileFormat',
+
+    // Derived or attached in frontend
+    assayName = 'assayName',
 }
 
 export interface IAttributeInfo {
@@ -67,6 +71,10 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     [AttributeNames.FileFormat]: {
         path: 'fileFormat',
         displayName: 'File Format',
+    },
+    [AttributeNames.assayName]: {
+        path: 'assayName',
+        displayName: 'Assay',
     },
 };
 
