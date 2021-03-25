@@ -61,7 +61,7 @@ export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
 }
 
 export interface Entity {
-    // Synapse attribute values
+    // Synapse attribute names
     AJCCPathologicStage: string;
     Biospecimen: string;
     Component: string;
@@ -76,10 +76,11 @@ export interface Entity {
     filename: string;
     HTANParticipantID: string;
 
-    // Derived or attached
+    // Derived or attached in frontend
     atlas: Atlas;
     atlasid: string;
     level: string;
+    assayName?: string;
     WPAtlas: WPAtlas;
     biospecimen: Entity[];
     diagnosis: Entity[];
@@ -251,13 +252,14 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
     _.forEach(files, (file) => {
         // parse component to make a new level property and adjust component property
         if (file.Component) {
-            const parsed = parseRawAssayType(file.Component);
+            const parsedAssay = parseRawAssayType(file.Component);
             //file.Component = parsed.name;
-            if (parsed.level && parsed.level.length > 1) {
-                file.level = parsed.level;
+            if (parsedAssay.level && parsedAssay.level.length > 1) {
+                file.level = parsedAssay.level;
             } else {
                 file.level = 'Unknown';
             }
+            file.assayName = parsedAssay.name;
         } else {
             file.level = 'Unknown';
         }
