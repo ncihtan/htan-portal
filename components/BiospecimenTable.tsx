@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import DataTable from 'react-data-table-component';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
 import _ from 'lodash';
+import EnhancedDataTable from "./EnhancedDataTable";
 
 interface IBiospecimenTableProps {
     samples: Entity[];
@@ -60,7 +60,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
     ];
 
     return (
-        <DataTable
+        <EnhancedDataTable
             columns={columns}
             data={props.samples}
             striped={true}
