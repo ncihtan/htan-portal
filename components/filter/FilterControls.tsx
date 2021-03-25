@@ -67,7 +67,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
             AttributeNames.AtlasName,
             AttributeNames.TissueorOrganofOrigin,
             AttributeNames.PrimaryDiagnosis,
-            AttributeNames.Component,
+            AttributeNames.assayName,
             AttributeNames.Stage,
         ].map((attrName) => {
             return {
@@ -155,7 +155,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                 <FilterCheckList
                                     setFilter={props.setFilter}
                                     filters={props.selectedFiltersByGroupName}
-                                    options={options(AttributeNames.Component)}
+                                    options={options(AttributeNames.assayName)}
                                 />
                             </FilterPropertyColumnShell>
                         </FilterPanel>

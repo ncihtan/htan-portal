@@ -15,6 +15,7 @@ import {
 import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandableText from './ExpandableText';
+import { AttributeMap, AttributeNames } from '../lib/types';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -120,11 +121,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: 'Assay',
-                selector: 'Component',
-                format: (entity: Entity) =>
-                    entity.Component.replace(/^bts:/, '')
-                        .replace('-', '')
-                        .replace(/Level[\d]+/i, ''),
+                selector: AttributeMap[AttributeNames.assayName].path,
                 wrap: true,
                 sortable: true,
             },
