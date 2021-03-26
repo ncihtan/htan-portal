@@ -16,6 +16,7 @@ import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandableText from './ExpandableText';
 import { AttributeMap, AttributeNames } from '../lib/types';
+import SearchableTable from './SearchableTable';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -178,18 +179,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.selected = state.selectedRows;
     };
 
-    @computed get caseFilteredFiles() {
-        if (this.caseFilterText.length > 0) {
-            return this.props.entities.filter((file) => {
-                return _.some(file.diagnosis, (d) =>
-                    d.HTANParticipantID.includes(this.caseFilterText)
-                );
-            });
-        } else {
-            return this.props.entities;
-        }
-    }
-
     @action.bound
     private onChangeCaseFilterText(evt: SyntheticEvent<any>) {
         this.caseFilterText = (evt.target as any).value;
@@ -246,13 +235,19 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     </div>
                 </div>
 
-                <DataTable
+                <SearchableTable
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
                     }}
+                    searchText={this.caseFilterText}
+                    additionalSearchFunction={(e: Entity, t: string) => {
+                        return _.some(e.diagnosis, (d) =>
+                            d.HTANParticipantID.includes(t)
+                        );
+                    }}
                     columns={this.columns}
-                    data={this.caseFilteredFiles}
+                    data={this.props.entities}
                     striped={true}
                     dense={false}
                     selectableRows={true}
