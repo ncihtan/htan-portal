@@ -226,7 +226,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                     type="search"
                                     onInput={this.onChangeCaseFilterText}
                                     value={this.caseFilterText.realTimeValue}
-                                    placeholder={'Search Patient ID'}
+                                    placeholder={'Search'}
                                     id="example-search-input"
                                 />
                                 <span className="input-group-append">
