@@ -16,7 +16,7 @@ import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandableText from './ExpandableText';
 import { AttributeMap, AttributeNames } from '../lib/types';
-import SearchableTable from './SearchableTable';
+import SearchableDataTable from './SearchableDataTable';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -235,7 +235,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     </div>
                 </div>
 
-                <SearchableTable
+                <SearchableDataTable
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
