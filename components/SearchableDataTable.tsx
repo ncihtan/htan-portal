@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IDataTableColumn, IDataTableProps } from 'react-data-table-component';
 import { computed, makeObservable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, Observer } from 'mobx-react';
 import DataTable from 'react-data-table-component';
 import _ from 'lodash';
 
@@ -44,15 +44,20 @@ function makeDefaultSearchFunction<T>(col: ISearchableDataTableColumn<T>) {
     };
 }
 
+class _DataTable extends React.Component<IDataTableProps> {
+    // wraps it so that it only rerenders if data changes (shallow)
+    shouldComponentUpdate(nextProps: Readonly<IDataTableProps>) {
+        return nextProps.data !== this.props.data;
+    }
+    render() {
+        return <DataTable {...this.props} />;
+    }
+}
+
 @observer
 export default class SearchableDataTable<T> extends React.Component<
     ISearchableDataTableProps<T>
 > {
-    constructor(props: any) {
-        super(props);
-        makeObservable(this);
-    }
-
     @computed get data() {
         const searchText = this.props.searchText;
         const searchTextUpperCase = this.props.searchText.toUpperCase();
@@ -90,7 +95,12 @@ export default class SearchableDataTable<T> extends React.Component<
     }
 
     render() {
-        const { data, ...rest } = this.props;
-        return <DataTable data={this.data} {...rest} />;
+        const {
+            data,
+            searchText,
+            additionalSearchFunction,
+            ...rest
+        } = this.props;
+        return <_DataTable data={this.data} {...rest} />;
     }
 }
