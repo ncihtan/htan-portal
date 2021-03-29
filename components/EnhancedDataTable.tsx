@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { action, computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React  from 'react';
@@ -10,19 +11,60 @@ import {
     resolveColumnVisibility,
     resolveColumnVisibilityByColumnDefinition,
 } from '../lib/dataTableHelpers';
+import DebouncedObservable from "../lib/DebouncedObservable";
 import { ColumnVisibilityDef } from './ColumnSelect';
 import DataTableControls from './DataTableControls';
 
 interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
-    toggleable?: boolean;
+    toggleable?: boolean; // defaults to true if not specified (see isColumnToggleable)
+    searchable?: boolean; // defaults to true if not specified (see isColumnSearchable)
 }
 
 interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
     columns: IEnhancedDataTableColumn<T>[];
     columnVisibility?: { [columnId: string]: boolean };
     onChangeFilterText?: (filterText: string) => void;
+    searchText?: string;
     searchBoxPlaceHolder?: string;
     customControls?: JSX.Element;
+}
+
+function isColumnSearchable(col: IEnhancedDataTableColumn<any>) {
+    return col.searchable !== false;
+}
+
+function isColumnToggleable(col: IEnhancedDataTableColumn<any>) {
+    return col.toggleable !== false;
+}
+
+function getSearchValue(value: any) {
+    // calling toString() only if the value is a string or a number.
+    // the cell is unsearchable if every possible accessor (cell, format, and selector)
+    // generates a value other than a string or a number.
+    return typeof(value) === 'string' || typeof(value) === 'number' ?
+        value.toString(): '';
+}
+
+function defaultSearchFunction<T = any>(d: T, c: IEnhancedDataTableColumn<T>, index: number = 0) {
+    let searchValue: string = '';
+
+    if (c.cell) {
+        searchValue = getSearchValue(c.cell(d, index, c, 0));
+    }
+
+    if (!searchValue && c.format) {
+        searchValue = getSearchValue(c.format(d, index));
+    }
+
+    if (!searchValue && c.selector) {
+        if (typeof (c.selector) === 'string') {
+            searchValue = getSearchValue(_.get(d, c.selector, ''));
+        } else {
+            searchValue = getSearchValue(c.selector(d, index));
+        }
+    }
+
+    return searchValue.toUpperCase();
 }
 
 function getColumnVisibilityDef<T>(
@@ -38,19 +80,28 @@ function getColumnVisibilityDef<T>(
                 id: column.name!.toString(),
                 name: column.name!.toString(),
                 visible: columnVisibility[column.name!.toString()],
-                toggleable:
-                    column.toggleable !== undefined ? column.toggleable : true,
+                toggleable: isColumnToggleable(column),
             })
         );
 
     return colVisProp;
 }
 
+class _DataTable extends React.Component<IDataTableProps> {
+    // wraps it so that it only rerenders if data changes (shallow)
+    shouldComponentUpdate(nextProps: Readonly<IDataTableProps>) {
+        return nextProps.data !== this.props.data || nextProps.columns !== this.props.columns;
+    }
+    render() {
+        return <DataTable {...this.props} />;
+    }
+}
+
 @observer
 export default class EnhancedDataTable<T = any> extends React.Component<
     IEnhancedDataTableProps<T>
 > {
-    @observable filterText = '';
+    @observable filterText = DebouncedObservable('', 300);
 
     // this keeps the state of the latest action (latest user selection)
     @observable _columnVisibilityOverride:
@@ -72,6 +123,29 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                     visible: !c.omit,
                 }))
         );
+    }
+
+    @computed
+    get data() {
+        const searchText = this.props.searchText || this.filterText.debouncedValue;
+        const searchTextUpperCase = searchText.toUpperCase();
+
+        // no search text -> return unfiltered data
+        if (searchTextUpperCase.length === 0) {
+            return this.props.data;
+        }
+
+        // no searchable column -> return unfiltered data
+        if (!_.some(this.props.columns, isColumnSearchable)) {
+            return this.props.data;
+        }
+
+        return this.props.data.filter(d => {
+            const searchValues = this.props.columns
+                .filter(isColumnSearchable)
+                .map((c, index) => defaultSearchFunction(d, c, index));
+            return _.some(searchValues, v => v.includes(searchTextUpperCase));
+        });
     }
 
     @computed
@@ -101,7 +175,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
 
     @action
     onChangeFilterText = (filterText: string) => {
-        this.filterText = filterText;
+        this.filterText.set(filterText);
 
         if (this.props.onChangeFilterText) {
             this.props.onChangeFilterText(filterText);
@@ -159,7 +233,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                     />
                 </div>
 
-                <DataTable {...this.props} columns={this.columns} />
+                <_DataTable {...this.props} data={this.data} columns={this.columns} />
             </>
         );
     }

@@ -22,7 +22,6 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         },
         {
             name: 'Atlas Name',
-
             cell: (sample: Entity) => {
                 return atlasMap[sample.atlasid].htan_name;
             },
