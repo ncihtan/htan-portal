@@ -15,7 +15,6 @@ import {
 } from '../lib/dataTableHelpers';
 import EnhancedDataTable from "./EnhancedDataTable";
 import { AttributeMap, AttributeNames } from '../lib/types';
-import DebouncedObservable from '../lib/DebouncedObservable';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -73,9 +72,7 @@ interface IFileTableProps {
 @observer
 export default class FileTable extends React.Component<IFileTableProps> {
     @observable.ref selected: Entity[] = [];
-
     @observable isDownloadModalOpen = false;
-    private caseFilterText = DebouncedObservable('', 300);
 
     get columns() {
         return [
@@ -178,11 +175,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.selected = state.selectedRows;
     };
 
-    @action.bound
-    private onChangeCaseFilterText(filterText: string) {
-        this.caseFilterText.set(filterText);
-    }
-
     @computed get hasFilesSelected() {
         return this.selected.length > 0;
     }
@@ -212,8 +204,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                 : 'Select files for download below'}
                         </button>
                     )}
-                    searchBoxPlaceHolder={`Search Patient ID`}
-                    onChangeFilterText={this.onChangeCaseFilterText}
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
