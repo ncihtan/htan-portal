@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, Observer } from 'mobx-react';
 import React, { SyntheticEvent } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
@@ -16,6 +16,8 @@ import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandableText from './ExpandableText';
 import { AttributeMap, AttributeNames } from '../lib/types';
+import SearchableDataTable from './SearchableDataTable';
+import DebouncedObservable from '../lib/DebouncedObservable';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -75,7 +77,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable.ref selected: Entity[] = [];
 
     @observable isDownloadModalOpen = false;
-    @observable caseFilterText = '';
+    private caseFilterText = DebouncedObservable('', 300);
 
     get columns() {
         return [
@@ -178,21 +180,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.selected = state.selectedRows;
     };
 
-    @computed get caseFilteredFiles() {
-        if (this.caseFilterText.length > 0) {
-            return this.props.entities.filter((file) => {
-                return _.some(file.diagnosis, (d) =>
-                    d.HTANParticipantID.includes(this.caseFilterText)
-                );
-            });
-        } else {
-            return this.props.entities;
-        }
-    }
-
     @action.bound
     private onChangeCaseFilterText(evt: SyntheticEvent<any>) {
-        this.caseFilterText = (evt.target as any).value;
+        this.caseFilterText.set((evt.target as any).value);
     }
 
     @computed get hasFilesSelected() {
@@ -228,31 +218,41 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             : 'Select files for download below'}
                     </button>
 
-                    <div className="input-group" style={{ width: 300 }}>
-                        <input
-                            className="form-control py-2 border-right-0 border"
-                            type="search"
-                            onInput={this.onChangeCaseFilterText}
-                            value={this.caseFilterText}
-                            placeholder={'Search Patient ID'}
-                            id="example-search-input"
-                        />
-                        <span className="input-group-append">
-                            <div className="input-group-text bg-transparent">
-                                {' '}
-                                <FontAwesomeIcon icon={faSearch} />
+                    <Observer>
+                        {() => (
+                            <div className="input-group" style={{ width: 300 }}>
+                                <input
+                                    className="form-control py-2 border-right-0 border"
+                                    type="search"
+                                    onInput={this.onChangeCaseFilterText}
+                                    value={this.caseFilterText.realTimeValue}
+                                    placeholder={'Search'}
+                                    id="example-search-input"
+                                />
+                                <span className="input-group-append">
+                                    <div className="input-group-text bg-transparent">
+                                        {' '}
+                                        <FontAwesomeIcon icon={faSearch} />
+                                    </div>
+                                </span>
                             </div>
-                        </span>
-                    </div>
+                        )}
+                    </Observer>
                 </div>
 
-                <DataTable
+                <SearchableDataTable
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
                     }}
+                    searchText={this.caseFilterText.debouncedValue}
+                    additionalSearchFunction={(e: Entity, t: string) => {
+                        return _.some(e.diagnosis, (d) =>
+                            d.HTANParticipantID.includes(t)
+                        );
+                    }}
                     columns={this.columns}
-                    data={this.caseFilteredFiles}
+                    data={this.props.entities}
                     striped={true}
                     dense={false}
                     selectableRows={true}
@@ -262,30 +262,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
                     noHeader={true}
                     subHeader={false}
-                    subHeaderAlign="right"
-                    subHeaderComponent={
-                        <div
-                            className="ml-auto"
-                            style={{
-                                display: 'flex',
-                            }}
-                        >
-                            <Form.Control
-                                placeholder={'Search Patient ID'}
-                                value={this.caseFilterText}
-                                onChange={this.onChangeCaseFilterText}
-                                style={{ marginRight: 5 }}
-                                size={'sm'}
-                            />
-                            <Button
-                                variant="primary"
-                                size="sm"
-                                onClick={this.onDownload}
-                            >
-                                Download
-                            </Button>
-                        </div>
-                    }
                     customStyles={getDefaultDataTableStyle()}
                 />
 
