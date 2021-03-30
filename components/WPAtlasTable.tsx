@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { Atlas, getAtlasPageURL } from '../lib/helpers';
-import EnhancedDataTable from "./EnhancedDataTable";
+import EnhancedDataTable from './EnhancedDataTable';
 
 interface IWPAtlasTableProps {
     synapseAtlasData: Atlas[];
@@ -31,7 +31,7 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
         },
         {
             name: 'Atlas Description',
-            selector: 'title.rendered',
+            selector: 'WPAtlas.title.rendered',
             cell: (atlas: Atlas) => (
                 <Link href={getAtlasPageURL(atlas.htan_id.toLowerCase())}>
                     <a>
