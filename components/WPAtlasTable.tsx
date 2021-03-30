@@ -31,7 +31,7 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
         },
         {
             name: 'Atlas Description',
-            selector: 'title.rendered',
+            selector: 'WPAtlas.title.rendered',
             cell: (atlas: Atlas) => (
                 <Link href={getAtlasPageURL(atlas.htan_id.toLowerCase())}>
                     <a>
@@ -39,9 +39,6 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
                     </a>
                 </Link>
             ),
-            getSearchValue: (atlas: Atlas) => {
-                return atlas.WPAtlas?.title.rendered;
-            },
             wrap: true,
             sortable: true,
         },
