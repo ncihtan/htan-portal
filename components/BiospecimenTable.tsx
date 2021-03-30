@@ -1,9 +1,8 @@
+import _ from 'lodash';
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
-import _ from 'lodash';
-import EnhancedDataTable from "./EnhancedDataTable";
+import EnhancedDataTable from './EnhancedDataTable';
 
 interface IBiospecimenTableProps {
     samples: Entity[];
@@ -36,26 +35,6 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
             selector: 'BiospecimenType',
             wrap: true,
             sortable: true,
-        },
-        {
-            name: '',
-            selector: '',
-            cell: (sample: Entity) => {
-                const onDownload = () => {
-                    // TODO init download
-                };
-
-                return (
-                    <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={onDownload}
-                        className="m-1"
-                    >
-                        Download
-                    </Button>
-                );
-            },
         },
     ];
 
