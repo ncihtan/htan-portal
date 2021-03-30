@@ -3,6 +3,8 @@ import { IDataTableColumn } from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+import styles from './dataTable.module.scss';
+
 import ColumnSelect, {
     ColumnVisibilityDef,
     IColumnSelectProps,
@@ -29,28 +31,30 @@ export default class DataTableControls extends React.Component<IDataTableControl
 
     render() {
         return (
-            <div className="input-group ml-auto" style={{ width: 400 }}>
-                <span className="mr-1">
-                    <ColumnSelect
-                        columnVisibility={this.props.columnVisibility}
-                        onColumnToggled={this.props.onVisibilityToggle}
-                        {...this.props.columnSelectProps}
-                    />
-                </span>
-                <input
-                    className="form-control py-2 border-right-0 border"
-                    type="search"
-                    onInput={this.onChangeFilterText}
-                    value={this.props.filterText}
-                    placeholder={this.props.searchBoxPlaceHolder || 'Search'}
-                    id="datatable-filter-text-input"
+            <div className={styles.dataTableControls}>
+                <ColumnSelect
+                    columnVisibility={this.props.columnVisibility}
+                    onColumnToggled={this.props.onVisibilityToggle}
+                    {...this.props.columnSelectProps}
                 />
-                <span className="input-group-append">
-                    <div className="input-group-text bg-transparent">
-                        {' '}
-                        <FontAwesomeIcon icon={faSearch} />
+                <div className="input-group" style={{ width: 400 }}>
+                    <input
+                        className="form-control py-2 border-right-0 border"
+                        type="search"
+                        onInput={this.onChangeFilterText}
+                        value={this.props.filterText}
+                        placeholder={
+                            this.props.searchBoxPlaceHolder || 'Search'
+                        }
+                        id="datatable-filter-text-input"
+                    />
+                    <div className="input-group-append">
+                        <div className="input-group-text bg-transparent">
+                            {' '}
+                            <FontAwesomeIcon icon={faSearch} />
+                        </div>
                     </div>
-                </span>
+                </div>
             </div>
         );
     }
