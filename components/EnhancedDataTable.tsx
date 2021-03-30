@@ -18,6 +18,7 @@ import DataTableControls from './DataTableControls';
 interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
     toggleable?: boolean; // defaults to true if not specified (see isColumnToggleable)
     searchable?: boolean; // defaults to true if not specified (see isColumnSearchable)
+    getSearchValue?: (row: T) => string;
 }
 
 interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
@@ -58,7 +59,11 @@ function defaultSearchFunction<T = any>(
 ) {
     let searchValue: string = '';
 
-    if (c.cell) {
+    if (c.getSearchValue) {
+        searchValue = c.getSearchValue(d);
+    }
+
+    if (!searchValue && c.cell) {
         searchValue = getSearchValue(c.cell(d, index, c, 0));
     }
 
