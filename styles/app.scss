@@ -21,6 +21,7 @@ body {
         min-height: 100vh;
         padding-bottom: 40px;
         position: relative;
+        background: #eeeeee;
 
         footer.pageFooter {
             position: absolute;
@@ -93,6 +94,7 @@ h4 {
     border-bottom: 1px solid #eee;
     border-top: 4px solid $darkgreen;
     padding: 5px 20px;
+    background: #fff;
 
     .nav-link {
         color: #333 !important;
