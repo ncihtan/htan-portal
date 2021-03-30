@@ -12,7 +12,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Entity, getFileBase, truncateFilename } from '../lib/helpers';
+import {
+    doesFileIncludeLevel1OrLevel2SequencingData,
+    Entity,
+    getFileBase,
+    truncateFilename,
+} from '../lib/helpers';
 import {
     getDefaultDataTableStyle,
     truncatedTableCell,
@@ -27,12 +32,72 @@ interface IFileDownloadModalProps {
     isOpen: boolean;
 }
 
-const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
+const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
+    props
+) => {
+    return (
+        <>
+            <p>
+                Your selection includes Level 1 and/or Level 2 sequencing data:
+            </p>
+            <pre className="pre-scrollable">
+                <code>
+                    {props.files.map((f) => getFileBase(f.filename)).join('\n')}
+                </code>
+            </pre>
+            <p>
+                These should be obtained through{' '}
+                <a
+                    href="https://datacommons.cancer.gov/repository/cancer-data-service"
+                    target="_blank"
+                >
+                    CDS/dbGaP
+                </a>
+                . Please refer to the documentation there on how to download the
+                data.
+            </p>
+        </>
+    );
+};
+
+const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
     const script = props.files
         .map((f) => `synapse get ${f.synapseId}`)
         .join('\n');
+
+    return (
+        <>
+            <p>
+                You can use the synapse command line client to download the
+                selected files:
+            </p>
+            <pre className="pre-scrollable">
+                <code>{script}</code>
+            </pre>
+            <p>
+                For more information see the{' '}
+                <a
+                    href="https://docs.synapse.org/articles/downloading_data.html"
+                    target="_blank"
+                >
+                    synapse documentation
+                </a>
+            </p>
+        </>
+    );
+};
+
+const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
+    props
+) => {
+    const cdsFiles = props.files.filter(
+        doesFileIncludeLevel1OrLevel2SequencingData
+    );
+    const synapseFiles = props.files.filter(
+        (f) => !doesFileIncludeLevel1OrLevel2SequencingData(f)
+    );
 
     return (
         <Modal show={props.isOpen} onHide={props.onClose}>
@@ -41,22 +106,10 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
-                <p>
-                    You can use the synapse command line client to download the
-                    selected files:
-                </p>
-                <pre className="pre-scrollable">
-                    <code>{script}</code>
-                </pre>
-                <p>
-                    For more information see the{' '}
-                    <a
-                        href="https://docs.synapse.org/articles/downloading_data.html"
-                        target="_blank"
-                    >
-                        synapse documentation
-                    </a>
-                </p>
+                {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                {synapseFiles.length > 0 && (
+                    <SynapseInstructions files={synapseFiles} />
+                )}
             </Modal.Body>
 
             <Modal.Footer>
