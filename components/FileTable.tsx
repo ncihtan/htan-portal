@@ -1,13 +1,14 @@
 import { action, computed, makeObservable, observable } from 'mobx';
-import { observer, Observer } from 'mobx-react';
-import React, { SyntheticEvent } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
-import DataTable from 'react-data-table-component';
+import { observer } from 'mobx-react';
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Atlas, Entity, getFileBase, truncateFilename } from '../lib/helpers';
+import { Entity, getFileBase, truncateFilename } from '../lib/helpers';
 import {
     getDefaultDataTableStyle,
     truncatedTableCell,
@@ -15,10 +16,8 @@ import {
 import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import ExpandableText from './ExpandableText';
+import EnhancedDataTable from "./EnhancedDataTable";
 import { AttributeMap, AttributeNames } from '../lib/types';
-import SearchableDataTable from './SearchableDataTable';
-import DebouncedObservable from '../lib/DebouncedObservable';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 
@@ -78,9 +77,7 @@ interface IFileTableProps {
 @observer
 export default class FileTable extends React.Component<IFileTableProps> {
     @observable.ref selected: Entity[] = [];
-
     @observable isDownloadModalOpen = false;
-    private caseFilterText = DebouncedObservable('', 300);
 
     get columns() {
         return [
@@ -203,11 +200,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.selected = state.selectedRows;
     };
 
-    @action.bound
-    private onChangeCaseFilterText(evt: SyntheticEvent<any>) {
-        this.caseFilterText.set((evt.target as any).value);
-    }
-
     @computed get hasFilesSelected() {
         return this.selected.length > 0;
     }
@@ -221,58 +213,25 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     isOpen={this.isDownloadModalOpen}
                 />
 
-                <div
-                    style={{
-                        marginBottom: 10,
-                    }}
-                    className={'d-flex justify-content-between'}
-                >
-                    <button
-                        className={classNames(
-                            'btn btn-primary',
-                            !this.hasFilesSelected ? 'btn-disabled' : ''
-                        )}
-                        disabled={!this.hasFilesSelected}
-                        onMouseDown={this.onDownload}
-                    >
-                        <FontAwesomeIcon icon={faDownload} />{' '}
-                        {this.hasFilesSelected
-                            ? 'Download selected files'
-                            : 'Select files for download below'}
-                    </button>
-
-                    <Observer>
-                        {() => (
-                            <div className="input-group" style={{ width: 300 }}>
-                                <input
-                                    className="form-control py-2 border-right-0 border"
-                                    type="search"
-                                    onInput={this.onChangeCaseFilterText}
-                                    value={this.caseFilterText.realTimeValue}
-                                    placeholder={'Search'}
-                                    id="example-search-input"
-                                />
-                                <span className="input-group-append">
-                                    <div className="input-group-text bg-transparent">
-                                        {' '}
-                                        <FontAwesomeIcon icon={faSearch} />
-                                    </div>
-                                </span>
-                            </div>
-                        )}
-                    </Observer>
-                </div>
-
-                <SearchableDataTable
+                <EnhancedDataTable
+                    customControls={(
+                        <button
+                            className={classNames(
+                                'btn btn-primary',
+                                !this.hasFilesSelected ? 'btn-disabled' : ''
+                            )}
+                            disabled={!this.hasFilesSelected}
+                            onMouseDown={this.onDownload}
+                        >
+                            <FontAwesomeIcon icon={faDownload} />{' '}
+                            {this.hasFilesSelected
+                                ? 'Download selected files'
+                                : 'Select files for download below'}
+                        </button>
+                    )}
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
-                    }}
-                    searchText={this.caseFilterText.debouncedValue}
-                    additionalSearchFunction={(e: Entity, t: string) => {
-                        return _.some(e.diagnosis, (d) =>
-                            d.HTANParticipantID.includes(t)
-                        );
                     }}
                     columns={this.columns}
                     data={this.props.entities}
