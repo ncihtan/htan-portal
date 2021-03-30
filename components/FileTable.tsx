@@ -5,7 +5,7 @@ import { Button, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faSearch, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Entity, getFileBase, truncateFilename } from '../lib/helpers';
@@ -13,12 +13,9 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+
 import EnhancedDataTable from "./EnhancedDataTable";
 import { AttributeMap, AttributeNames } from '../lib/types';
-
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 
 interface IFileDownloadModalProps {
