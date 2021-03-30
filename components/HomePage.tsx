@@ -8,6 +8,7 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import { WPAtlas } from '../types';
 import styles from './homeStyles.module.scss';
 import { EntityReport, getAtlasPageURL } from '../lib/helpers';
+import { Helmet } from 'react-helmet';
 
 export interface IHomePropsProps {
     hero_blurb: string;
@@ -37,6 +38,13 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
 }) => {
     return (
         <>
+            <Helmet>
+                <style>
+                    {`#pageWrapper {
+                   background: #eeeeee;
+               } `}
+                </style>
+            </Helmet>
             <Jumbotron
                 className={'text-center'}
                 style={{ borderRadius: '0px', marginBottom: '0px' }}
