@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import wget
 import json
 import logging
@@ -97,18 +98,18 @@ if __name__ == '__main__':
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
             syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
 
-            manifest_data = pd.read_csv(manifest_path).to_numpy()
+            manifest_df = pd.read_csv(manifest_path)
 
             # data type/schema component
             try:
-                component = manifest_data[0][0]
+                component = manifest_df.values[0][0]
             except IndexError:
-                logging.error("Manifest data unexpected: " + manifest_path + " " + str(manifest_data))
+                logging.error("Manifest data unexpected: " + manifest_path + " " + str(manifest_df.values[0]))
                 continue
 
             # skip components that are NA
             if pd.isna(component):
-                logging.error("Component is N/A: " + manifest_path + " " + str(manifest_data))
+                logging.error("Component is N/A: " + manifest_path + " " + str(manifest_df.values[0]))
                 continue
 
             logging.info("Data type: " + component)
@@ -116,15 +117,28 @@ if __name__ == '__main__':
             # get data type schema info
             schema_info = se.explore_class(component)
 
+            # manifest might not have all columns from the schema, so add
+            # missing columns
+            schema_columns = [se.explore_class(c)['displayName'] for c in schema_info['dependencies']]
+            for c in schema_columns:
+                if c not in manifest_df.columns:
+                    manifest_df[c] = len(manifest_df.values) * [np.nan]
+
+            # use schema's column order and add synapse id to required columns
+            # if it exists
+            column_order = schema_columns
+            if 'entityId' not in schema_columns and 'entityId' in manifest_df.columns:
+                column_order += ['entityId']
+            manifest_df = manifest_df[column_order]
+
             # data type schema label (TODO: use context from uri)
             data_schema = "bts:" + component
 
             # get records in this dataset
             record_list = []
 
-            for values in manifest_data:
-
-                record = {"values":[v if not pd.isna(v) else None for v in list(values)]}
+            for i, row in manifest_df.iterrows():
+                record = {"values":[v if not pd.isna(v) else None for v in list(row.values)]}
 
                 record_list.append(record)
 
