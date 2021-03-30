@@ -5,7 +5,7 @@ import { Button, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faSearch, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Entity, getFileBase, truncateFilename } from '../lib/helpers';
@@ -13,8 +13,10 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
+
 import EnhancedDataTable from "./EnhancedDataTable";
 import { AttributeMap, AttributeNames } from '../lib/types';
+const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -107,8 +109,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: (file: Entity) => {
                     const biospecimens = file.primaryParents
                         ? _.flatMapDeep(file.primaryParents, (f) =>
-                              f.biospecimen.map((b) => b.HTANBiospecimenID)
-                          )
+                            f.biospecimen.map((b) => b.HTANBiospecimenID)
+                        )
                         : file.biospecimen.map((b) => b.HTANBiospecimenID);
                     return _.uniq(biospecimens).join(', ');
                 },
@@ -145,6 +147,26 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     return _.uniq(
                         file.diagnosis.map((d) => d.TissueorOrganofOrigin)
                     ).join(', ');
+                },
+                cell: truncatedTableCell,
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'View',
+                selector: (file: Entity) => {
+                    const cellXGeneLink =
+                        cellXGeneMappings[getFileBase(file.filename)];
+                    if (cellXGeneLink) {
+                        return (
+                            <a href={cellXGeneLink} target="_blank">
+                                CellxGene{' '}
+                                <FontAwesomeIcon icon={faExternalLinkAlt} />
+                            </a>
+                        );
+                    } else {
+                        return '';
+                    }
                 },
                 cell: truncatedTableCell,
                 wrap: true,
