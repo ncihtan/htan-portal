@@ -13,8 +13,7 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-
-import EnhancedDataTable from "./EnhancedDataTable";
+import EnhancedDataTable from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 
@@ -211,7 +210,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 />
 
                 <EnhancedDataTable
-                    customControls={(
+                    customControls={
                         <button
                             className={classNames(
                                 'btn btn-primary',
@@ -225,12 +224,23 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                 ? 'Download selected files'
                                 : 'Select files for download below'}
                         </button>
-                    )}
+                    }
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
                     }}
                     columns={this.columns}
+                    additionalSearchFilter={(
+                        e: Entity,
+                        t: string,
+                        tUpperCase: string
+                    ) => {
+                        return _.some(e.diagnosis, (d) =>
+                            d.HTANParticipantID.toUpperCase().includes(
+                                tUpperCase
+                            )
+                        );
+                    }}
                     data={this.props.entities}
                     striped={true}
                     dense={false}
