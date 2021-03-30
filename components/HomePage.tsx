@@ -7,10 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import { WPAtlas } from '../types';
 import styles from './homeStyles.module.scss';
-import {
-    EntityReport,
-    getAtlasPageURL,
-} from '../lib/helpers';
+import { EntityReport, getAtlasPageURL } from '../lib/helpers';
 
 export interface IHomePropsProps {
     hero_blurb: string;
@@ -88,44 +85,44 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 </Row>
             </Container>
 
-            <div className={styles.atlasCardContainer}>
-                {atlases.map((atlas) => {
-                    let title = atlas.title.rendered.substr(0, 30);
-                    if (title.length < atlas.title.rendered.length) {
-                        title += '...';
-                    }
+            {/*<div className={styles.atlasCardContainer}>*/}
+            {/*    {atlases.map((atlas) => {*/}
+            {/*        let title = atlas.title.rendered.substr(0, 30);*/}
+            {/*        if (title.length < atlas.title.rendered.length) {*/}
+            {/*            title += '...';*/}
+            {/*        }*/}
 
-                    return (
-                        <div className={styles.atlasCard}>
-                            <h4>
-                                <a href={getAtlasPageURL(atlas.htan_id)}>
-                                    {title}
-                                </a>
-                            </h4>
+            {/*        return (*/}
+            {/*            <div className={styles.atlasCard}>*/}
+            {/*                <h4>*/}
+            {/*                    <a href={getAtlasPageURL(atlas.htan_id)}>*/}
+            {/*                        {title}*/}
+            {/*                    </a>*/}
+            {/*                </h4>*/}
 
-                            <div className={styles.imageHolder}>
-                                <img
-                                    src={
-                                        atlas.home_image.guid ||
-                                        'https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg'
-                                    }
-                                />
-                                <a
-                                    className={'btn btn-primary'}
-                                    href={getAtlasPageURL(atlas.htan_id)}
-                                >
-                                    Explore
-                                </a>
-                            </div>
+            {/*                <div className={styles.imageHolder}>*/}
+            {/*                    <img*/}
+            {/*                        src={*/}
+            {/*                            atlas.home_image.guid ||*/}
+            {/*                            'https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg'*/}
+            {/*                        }*/}
+            {/*                    />*/}
+            {/*                    <a*/}
+            {/*                        className={'btn btn-primary'}*/}
+            {/*                        href={getAtlasPageURL(atlas.htan_id)}*/}
+            {/*                    >*/}
+            {/*                        Explore*/}
+            {/*                    </a>*/}
+            {/*                </div>*/}
 
-                            <p className={styles.altasText}>
-                                {atlas.short_description ||
-                                    "This is a short description of the Atlas. It shouldn't be more than a hundred words."}
-                            </p>
-                        </div>
-                    );
-                })}
-            </div>
+            {/*                <p className={styles.altasText}>*/}
+            {/*                    {atlas.short_description ||*/}
+            {/*                        "This is a short description of the Atlas. It shouldn't be more than a hundred words."}*/}
+            {/*                </p>*/}
+            {/*            </div>*/}
+            {/*        );*/}
+            {/*    })}*/}
+            {/*</div>*/}
         </>
     );
 };
