@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
-import { WPAtlas } from '../types';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import DataTable from 'react-data-table-component';
 import { Atlas, getAtlasPageURL } from '../lib/helpers';
+import EnhancedDataTable from "./EnhancedDataTable";
 
 interface IWPAtlasTableProps {
     synapseAtlasData: Atlas[];
@@ -52,7 +51,7 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
     ];
 
     return (
-        <DataTable
+        <EnhancedDataTable
             columns={columns}
             data={props.synapseAtlasData}
             striped={true}
