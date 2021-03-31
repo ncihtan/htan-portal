@@ -139,6 +139,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     }`}
                 >
                     <WPAtlasTable
+                        router={props.router}
                         synapseAtlasData={props.allSynapseAtlases}
                         selectedAtlases={props.selectedSynapseAtlases}
                         filteredAtlases={
