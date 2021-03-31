@@ -19,6 +19,10 @@ interface IFilterProps {
 }
 
 const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {
+    if (_.size(props.selectedFiltersByGroupName) === 0) {
+        return <></>;
+    }
+
     return (
         <div className={'filter'}>
             {Object.keys(props.selectedFiltersByGroupName).map(
