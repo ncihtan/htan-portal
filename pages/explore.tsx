@@ -163,7 +163,7 @@ class Search extends React.Component<
     }
 
     @computed
-    get samples() {
+    get filteredSamples() {
         return _.chain(this.filteredFiles)
             .flatMapDeep((file) => file.biospecimen)
             .uniqBy((f) => f.HTANBiospecimenID)
@@ -171,10 +171,19 @@ class Search extends React.Component<
     }
 
     @computed
-    get cases() {
+    get filteredCases() {
         return _.chain(this.filteredFiles)
             .flatMapDeep((f: Entity) => f.diagnosis)
             .uniqBy((f) => f.HTANParticipantID)
+            .value();
+    }
+
+    @computed
+    get filteredAtlases() {
+        // get only atlases associated with filtered files
+        return _.chain(this.filteredFiles)
+            .map((f) => f.atlas)
+            .uniq()
             .value();
     }
 
@@ -216,15 +225,15 @@ class Search extends React.Component<
                         getGroupsByPropertyFiltered={
                             this.getGroupsByPropertyFiltered
                         }
-                        patientCount={this.cases.length}
+                        patientCount={this.filteredCases.length}
                     />
 
                     <ExploreTabs
                         router={this.props.router}
                         filteredFiles={this.filteredFiles}
-                        synapseAtlases={this.state.atlases}
-                        samples={this.samples}
-                        cases={this.cases}
+                        synapseAtlases={this.filteredAtlases}
+                        samples={this.filteredSamples}
+                        cases={this.filteredCases}
                         wpData={this.props.wpData}
                         getGroupsByPropertyFiltered={
                             this.getGroupsByPropertyFiltered
