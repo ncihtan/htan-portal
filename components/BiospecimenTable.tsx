@@ -9,6 +9,21 @@ interface IBiospecimenTableProps {
     synapseAtlases: Atlas[];
 }
 
+const sortFunction = (rows: any[], field: string, direction: any) => {
+    if (field === 'HTANBiospecimenID') {
+        return _.sortBy(rows, [
+            (row) =>
+                Number(
+                    row['HTANBiospecimenID'].split('_')[0].replace('HTA', '')
+                ),
+            (row) => Number(row['HTANBiospecimenID'].split('_')[1]),
+            (row) => Number(row['HTANBiospecimenID'].split('_')[2]),
+        ]);
+    } else {
+        return rows.slice(0);
+    }
+};
+
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
     props
 ) => {
@@ -40,6 +55,8 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
 
     return (
         <EnhancedDataTable
+            defaultSortField={'HTANBiospecimenID'}
+            sortFunction={sortFunction}
             columns={columns}
             data={props.samples}
             striped={true}
