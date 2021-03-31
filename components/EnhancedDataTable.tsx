@@ -254,7 +254,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                     }}
                     className={'d-flex justify-content-between'}
                 >
-                    {this.props.customControls}
+                    {this.props.customControls || <div></div>}
                     <DataTableControls
                         columns={this.props.columns}
                         columnVisibility={this.columnVisibilityDef}

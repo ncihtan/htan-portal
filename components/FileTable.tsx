@@ -5,7 +5,11 @@ import { Button, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
-import { faDownload, faSearch, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+    faDownload,
+    faSearch,
+    faExternalLinkAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Entity, getFileBase, truncateFilename } from '../lib/helpers';
@@ -108,8 +112,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: (file: Entity) => {
                     const biospecimens = file.primaryParents
                         ? _.flatMapDeep(file.primaryParents, (f) =>
-                            f.biospecimen.map((b) => b.HTANBiospecimenID)
-                        )
+                              f.biospecimen.map((b) => b.HTANBiospecimenID)
+                          )
                         : file.biospecimen.map((b) => b.HTANBiospecimenID);
                     return _.uniq(biospecimens).join(', ');
                 },
@@ -214,15 +218,15 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         <button
                             className={classNames(
                                 'btn btn-primary',
-                                !this.hasFilesSelected ? 'btn-disabled' : ''
+                                !this.hasFilesSelected ? 'invisible' : ''
                             )}
                             disabled={!this.hasFilesSelected}
                             onMouseDown={this.onDownload}
                         >
                             <FontAwesomeIcon icon={faDownload} />{' '}
-                            {this.hasFilesSelected
-                                ? 'Download selected files'
-                                : 'Select files for download below'}
+                            {`Download ${this.selected.length} selected ${
+                                this.selected.length === 1 ? 'file' : 'files'
+                            }`}
                         </button>
                     }
                     paginationServerOptions={{
@@ -258,7 +262,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     style={{ marginTop: -70 }}
                     className={classNames(
                         'btn btn-primary',
-                        !this.hasFilesSelected ? 'btn-disabled' : ''
+                        !this.hasFilesSelected ? 'invisible' : ''
                     )}
                     disabled={!this.hasFilesSelected}
                     onMouseDown={this.onDownload}
