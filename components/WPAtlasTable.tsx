@@ -1,12 +1,18 @@
 import _ from 'lodash';
+import { NextRouter } from 'next/router';
 import React from 'react';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import { Atlas } from '../lib/helpers';
+import { Atlas, setTab } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
 import { observer } from 'mobx-react';
 import { action, computed, makeObservable } from 'mobx';
+import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { ExploreTab } from './ExploreTabs';
 
 interface IWPAtlasTableProps {
+    router: NextRouter;
     synapseAtlasData: Atlas[];
     selectedAtlases?: Atlas[];
     filteredAtlases?: Atlas[];
@@ -18,6 +24,10 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
     @computed
     get selectedAtlases() {
         return _.keyBy(this.props.selectedAtlases || [], (a) => a.htan_id);
+    }
+
+    @computed get hasAtlasesSelected() {
+        return (this.props.selectedAtlases || []).length > 0;
     }
 
     constructor(props: IWPAtlasTableProps) {
@@ -84,9 +94,33 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
         }
     };
 
+    @action onViewFiles = (e: any) => {
+        e.preventDefault();
+        setTab(ExploreTab.FILE, this.props.router);
+    };
+
     render() {
         return (
             <EnhancedDataTable
+                customControls={
+                    <button
+                        className={classNames(
+                            'btn btn-primary',
+                            !this.hasAtlasesSelected ? 'invisible' : ''
+                        )}
+                        disabled={!this.hasAtlasesSelected}
+                        onMouseDown={this.onViewFiles}
+                    >
+                        <FontAwesomeIcon icon={faDownload} />{' '}
+                        {`View files for ${
+                            this.props.selectedAtlases?.length
+                        } selected ${
+                            this.props.selectedAtlases?.length === 1
+                                ? 'atlas'
+                                : 'atlases'
+                        }`}
+                    </button>
+                }
                 columns={this.columns}
                 defaultSortField={'WPAtlas.lead_institutions'}
                 data={this.data}
