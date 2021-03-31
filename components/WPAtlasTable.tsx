@@ -20,7 +20,6 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
         },
         {
             name: 'Atlas Name',
-            selector: 'title.rendered',
             cell: (atlas: Atlas) => (
                 <Link href={getAtlasPageURL(atlas.htan_name.toLowerCase())}>
                     <a>{atlas.htan_name}</a>
@@ -53,6 +52,7 @@ export const WPAtlasTable: React.FunctionComponent<IWPAtlasTableProps> = (
     return (
         <EnhancedDataTable
             columns={columns}
+            defaultSortField={'WPAtlas.lead_institutions'}
             data={props.synapseAtlasData}
             striped={true}
             noHeader={true}
