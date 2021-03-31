@@ -105,6 +105,13 @@ function doesFileHaveMultipleParents(file: Entity) {
     return /Level[456]/.test(file.Component);
 }
 
+export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
+    return (
+        file.assayName !== 'Imaging' &&
+        (file.level === 'Level 1' || file.level === 'Level 2')
+    );
+}
+
 function findAndAddPrimaryParents(
     f: Entity,
     filesByFileId: { [HTANDataFileID: string]: Entity }
