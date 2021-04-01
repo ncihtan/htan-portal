@@ -82,6 +82,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                     <div style={{ width: 220 }}>
                         <Select
                             isSearchable
+                            classNamePrefix={'react-select'}
                             isClearable={false}
                             name="searchAll"
                             placeholder="Search all filters"

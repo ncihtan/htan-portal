@@ -1,5 +1,22 @@
 $primary-background: #5f008c;
 $darkgreen: #24cad5;
+$border-color: #e2e2e2;
+$input-border: $border-color;
+$input-group-addon-border-color: $border-color;
+$nav-tabs-border-color: $border-color;
+$nav-tabs-link-active-border-color: $border-color $border-color #fff;
+
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+
+// customizes
+
+.rdt_TableHeadRow {
+    border-bottom-color: $border-color !important;
+}
+
+.rdt_TableRow {
+    border-bottom-width: 0 !important;
+}
 
 .breadcrumb {
     background-color: transparent !important;
@@ -11,6 +28,10 @@ $darkgreen: #24cad5;
         filter: invert(100%);
         width: 100px !important;
     }
+}
+
+.react-select__control {
+    border-color: $border-color !important;
 }
 
 body {
@@ -46,7 +67,7 @@ h3,
 h4 {
     font-size: 1.5rem;
     color: $darkgreen;
-    border-top: 1px dashed #eee;
+    border-top: 1px dashed $border-color;
     padding-top: 20px;
     width: 100%;
 
@@ -57,10 +78,6 @@ h4 {
     }
 
     margin-top: 40px;
-}
-
-.bg-nav-purple {
-    //background: $primary-background;
 }
 
 .jumbotron {
@@ -90,7 +107,7 @@ h4 {
 }
 
 .main-nav {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $border-color;
     border-top: 4px solid $darkgreen;
     padding: 5px 20px;
     background: #fff;
@@ -164,7 +181,6 @@ table {
     }
 
     iframe {
-        border: none;
         height: 100%;
         width: 100%;
         position: relative;

@@ -58,6 +58,7 @@ export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
         return (
             <div style={{ width: this.props.width }}>
                 <Select
+                    classNamePrefix={'react-select'}
                     isSearchable={false}
                     isClearable={false}
                     name={this.props.name}

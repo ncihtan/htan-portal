@@ -90,6 +90,7 @@ const FilterPanel: FunctionComponent<{ placeholder?: string }> = observer(
                     })}
                 >
                     <Select
+                        classNamePrefix={'react-select'}
                         isSearchable={false}
                         placeholder={placeholder || 'Make a selection'}
                         menuIsOpen={false}
