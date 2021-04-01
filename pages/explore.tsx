@@ -12,7 +12,6 @@ import { GetStaticProps } from 'next';
 import { withRouter, NextRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React from 'react';
-import { ActionMeta } from 'react-select';
 import { ScaleLoader } from 'react-spinners';
 
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
@@ -21,6 +20,7 @@ import {
     groupFilesByAttrNameAndValue,
 } from '../lib/filterHelpers';
 import {
+    Atlas,
     Entity,
     loadData,
     LoadDataResult,
@@ -28,6 +28,7 @@ import {
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
 import {
+    AttributeNames,
     ExploreActionMeta,
     ExploreSelectedFilter,
     FilterAction,
@@ -36,8 +37,6 @@ import {
 } from '../lib/types';
 import { WPAtlas } from '../types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import HtanNavbar from '../components/HtanNavbar';
-import Footer from '../components/Footer';
 import FilterControls from '../components/filter/FilterControls';
 import Filter from '../components/filter/Filter';
 import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
@@ -149,6 +148,22 @@ class Search extends React.Component<
         updateSelectedFiltersInURL(newFilters, this.props.router);
     }
 
+    @action.bound
+    onSelectAtlas(selected: Atlas[]) {
+        const group = AttributeNames.AtlasName;
+
+        // remove all previous atlas filters
+        const newFilters: ExploreSelectedFilter[] =
+            this.selectedFilters.filter((f) => f.group !== group) || [];
+
+        // add the new ones
+        newFilters.push(
+            ...selected.map((a) => ({ group, value: a.htan_name }))
+        );
+
+        updateSelectedFiltersInURL(newFilters, this.props.router);
+    }
+
     componentDidMount(): void {
         runInAction(() => {
             this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
@@ -182,6 +197,48 @@ class Search extends React.Component<
     get filteredAtlases() {
         // get only atlases associated with filtered files
         return _.chain(this.filteredFiles)
+            .map((f) => f.atlas)
+            .uniq()
+            .value();
+    }
+
+    @computed
+    get selectedAtlases() {
+        const atlasFilters = this.selectedFiltersByAttrName[
+            AttributeNames.AtlasName
+        ];
+
+        if (_.size(atlasFilters)) {
+            return _.chain(
+                filterFiles(
+                    { [AttributeNames.AtlasName]: atlasFilters },
+                    this.state.files
+                )
+            )
+                .map((f) => f.atlas)
+                .uniq()
+                .value();
+        } else {
+            return [];
+        }
+    }
+
+    @computed
+    get filteredAtlasesByNonAtlasFilters() {
+        const filtersExpectAtlasFilters = _.omit(
+            this.selectedFiltersByAttrName,
+            [AttributeNames.AtlasName]
+        );
+
+        return _.chain(filterFiles(filtersExpectAtlasFilters, this.state.files))
+            .map((f) => f.atlas)
+            .uniq()
+            .value();
+    }
+
+    @computed
+    get allAtlases() {
+        return _.chain(this.state.files)
             .map((f) => f.atlas)
             .uniq()
             .value();
@@ -231,7 +288,13 @@ class Search extends React.Component<
                     <ExploreTabs
                         router={this.props.router}
                         filteredFiles={this.filteredFiles}
-                        synapseAtlases={this.filteredAtlases}
+                        filteredSynapseAtlases={this.filteredAtlases}
+                        filteredSynapseAtlasesByNonAtlasFilters={
+                            this.filteredAtlasesByNonAtlasFilters
+                        }
+                        selectedSynapseAtlases={this.selectedAtlases}
+                        allSynapseAtlases={this.allAtlases}
+                        onSelectAtlas={this.onSelectAtlas}
                         samples={this.filteredSamples}
                         cases={this.filteredCases}
                         wpData={this.props.wpData}
