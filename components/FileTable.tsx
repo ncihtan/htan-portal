@@ -25,6 +25,7 @@ import {
 import EnhancedDataTable from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
+const minervaMappings = require('../data/minerva-story-mappings.json');
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -213,10 +214,20 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: (file: Entity) => {
                     const cellXGeneLink =
                         cellXGeneMappings[getFileBase(file.filename)];
+                    const minervaLink =
+                        minervaMappings[getFileBase(file.filename)];
+
                     if (cellXGeneLink) {
                         return (
                             <a href={cellXGeneLink} target="_blank">
                                 CellxGene{' '}
+                                <FontAwesomeIcon icon={faExternalLinkAlt} />
+                            </a>
+                        );
+                    } else if (minervaLink) {
+                        return (
+                            <a href={minervaLink} target="_blank">
+                                Minerva Story{' '}
                                 <FontAwesomeIcon icon={faExternalLinkAlt} />
                             </a>
                         );
