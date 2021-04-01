@@ -98,7 +98,7 @@ const DataSchemaTable: React.FunctionComponent<{
             columns={columns}
             data={props.schemaData}
             striped={true}
-            dense={true}
+            dense={false}
             pagination={false}
             noHeader={!props.title}
             title={props.title ? <strong>{props.title}</strong> : undefined}

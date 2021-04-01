@@ -63,7 +63,7 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
             sortFunction={sortFunction}
             data={props.cases}
             striped={true}
-            dense={true}
+            dense={false}
             noHeader={true}
             pagination={true}
             paginationPerPage={50}
