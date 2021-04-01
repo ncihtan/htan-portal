@@ -9,6 +9,21 @@ interface ICaseTableProps {
     synapseAtlases: Atlas[];
 }
 
+// we need sort by participant id which takes the form HTA[integer]_[integer]
+const sortFunction = (rows: any[], field: string, direction: any) => {
+    if (field === 'HTANParticipantID') {
+        return _.sortBy(rows, [
+            (row) =>
+                Number(
+                    row['HTANParticipantID'].split('_')[0].replace('HTA', '')
+                ),
+            (row) => Number(row['HTANParticipantID'].split('_')[1]),
+        ]);
+    } else {
+        return rows.slice(0);
+    }
+};
+
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     const atlasMap = _.keyBy(props.synapseAtlases, (a) => a.htan_id);
 
@@ -44,6 +59,8 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     return (
         <EnhancedDataTable
             columns={columns}
+            defaultSortField={'HTANParticipantID'}
+            sortFunction={sortFunction}
             data={props.cases}
             striped={true}
             dense={true}
