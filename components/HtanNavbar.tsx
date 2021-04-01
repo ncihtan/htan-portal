@@ -37,11 +37,11 @@ const HtanNavbar = () => (
             </Nav>
         </Navbar.Collapse>
         <Nav>
-            <Nav.Link onClick={togglePreview}>
-                {process.browser && window.localStorage.preview
-                    ? '#Disable Preview#'
-                    : '#Enable Preview#'}
-            </Nav.Link>
+            {/*<Nav.Link onClick={togglePreview}>*/}
+            {/*    {process.browser && window.localStorage.preview*/}
+            {/*        ? '#Disable Preview#'*/}
+            {/*        : '#Enable Preview#'}*/}
+            {/*</Nav.Link>*/}
             <Nav.Link href="https://humantumoratlas.org/">
                 HTAN Main Site
             </Nav.Link>
