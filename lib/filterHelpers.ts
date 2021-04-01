@@ -122,6 +122,10 @@ export function countFilteredFilesByAttrValue(
     }
 
     files.forEach((file) => {
+        if (!doesFilePassFilter(file, filterSelectionsByAttrName)) {
+            // skip if file doesnt pass filter
+            return;
+        }
         const attrVal = getAttrValueFromFile(file, attrName as AttributeNames);
         if (!attrVal) {
             // skip if no value
