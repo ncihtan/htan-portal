@@ -7,7 +7,7 @@ import { WPAtlas } from '../types';
 import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
-import { WPAtlasTable } from './WPAtlasTable';
+import WPAtlasTable from './WPAtlasTable';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -16,7 +16,11 @@ interface IExploreTabsProps {
     cases: Entity[];
     wpData: WPAtlas[];
     getGroupsByPropertyFiltered: any;
-    synapseAtlases: Atlas[];
+    filteredSynapseAtlases: Atlas[];
+    filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
+    selectedSynapseAtlases: Atlas[];
+    allSynapseAtlases: Atlas[];
+    onSelectAtlas?: (selected: Atlas[]) => void;
 }
 
 export enum ExploreTab {
@@ -113,7 +117,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     }`}
                 >
                     <BiospecimenTable
-                        synapseAtlases={props.synapseAtlases}
+                        synapseAtlases={props.filteredSynapseAtlases}
                         samples={props.samples}
                     />
                 </div>
@@ -124,7 +128,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     }`}
                 >
                     <CaseTable
-                        synapseAtlases={props.synapseAtlases}
+                        synapseAtlases={props.filteredSynapseAtlases}
                         cases={props.cases}
                     />
                 </div>
@@ -134,7 +138,15 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         activeTab !== 'atlas' ? 'd-none' : ''
                     }`}
                 >
-                    <WPAtlasTable synapseAtlasData={props.synapseAtlases} />
+                    <WPAtlasTable
+                        router={props.router}
+                        synapseAtlasData={props.allSynapseAtlases}
+                        selectedAtlases={props.selectedSynapseAtlases}
+                        filteredAtlases={
+                            props.filteredSynapseAtlasesByNonAtlasFilters
+                        }
+                        onSelectAtlas={props.onSelectAtlas}
+                    />
                 </div>
             </>
         );
