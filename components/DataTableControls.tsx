@@ -6,14 +6,14 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import styles from './dataTable.module.scss';
 
 import ColumnSelect, {
-    ColumnVisibilityDef,
+    ColumnVisibility,
     IColumnSelectProps,
 } from './ColumnSelect';
 
 interface IDataTableControlsProps {
-    columnVisibility?: ColumnVisibilityDef[];
+    columnVisibility?: ColumnVisibility[];
     columns: IDataTableColumn[];
-    onVisibilityToggle?: (selectedColumnIds: string[]) => void;
+    onVisibilityToggle?: (selectedColumnKeys: string[]) => void;
     columnSelectProps?: IColumnSelectProps;
     onChangeFilterText?: (filterText: string) => void;
     searchBoxPlaceHolder?: string;

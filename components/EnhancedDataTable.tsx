@@ -9,13 +9,13 @@ import DataTable, {
 
 import {
     resolveColumnVisibility,
-    resolveColumnVisibilityByColumnDefinition,
+    getColumnVisibilityMap,
 } from '../lib/dataTableHelpers';
 import DebouncedObservable from '../lib/DebouncedObservable';
-import { ColumnVisibilityDef } from './ColumnSelect';
+import { ColumnVisibility } from './ColumnSelect';
 import DataTableControls from './DataTableControls';
 
-interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
+export interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
     toggleable?: boolean; // defaults to true if not specified (see isColumnToggleable)
     searchable?: boolean; // defaults to true if not specified (see isColumnSearchable)
     getSearchValue?: (row: T) => string;
@@ -23,7 +23,7 @@ interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
 
 interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
     columns: IEnhancedDataTableColumn<T>[];
-    columnVisibility?: { [columnId: string]: boolean };
+    columnVisibility?: { [columnKey: string]: boolean };
     onChangeSearchText?: (searchText: string) => void;
     additionalSearchFilter?: (
         row: T,
@@ -82,11 +82,11 @@ function defaultSearchFunction<T = any>(
     return searchValue.toUpperCase();
 }
 
-function getColumnVisibilityDef<T>(
+function getColumnVisibility<T>(
     columns: IEnhancedDataTableColumn<T>[],
-    columnVisibility: { [columnId: string]: boolean }
-): ColumnVisibilityDef[] {
-    const colVisProp: ColumnVisibilityDef[] = [];
+    columnVisibility: { [columnKey: string]: boolean }
+): ColumnVisibility[] {
+    const colVisProp: ColumnVisibility[] = [];
 
     (columns || [])
         .filter((column) => column.name)
@@ -122,8 +122,8 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     @observable filterText = DebouncedObservable('', 300);
 
     // this keeps the state of the latest action (latest user selection)
-    @observable _columnVisibilityOverride:
-        | { [columnId: string]: boolean }
+    @observable userSelectedColumnVisibility:
+        | { [columnKey: string]: boolean }
         | undefined;
 
     constructor(props: IEnhancedDataTableProps<T>) {
@@ -132,12 +132,11 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     }
 
     get columnVisibilityByColumnDefinition() {
-        return resolveColumnVisibilityByColumnDefinition(
+        return getColumnVisibilityMap(
             (this.props.columns || [])
                 .filter((c) => c.name)
                 .map((c) => ({
                     name: c.name!.toString(),
-                    id: c.name!.toString(),
                     visible: !c.omit,
                 }))
         );
@@ -188,20 +187,17 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     }
 
     @computed
-    get columnVisibility(): { [columnId: string]: boolean } {
+    get columnVisibility(): { [columnKey: string]: boolean } {
         return resolveColumnVisibility(
             this.columnVisibilityByColumnDefinition,
             this.props.columnVisibility,
-            this._columnVisibilityOverride
+            this.userSelectedColumnVisibility
         );
     }
 
     @computed
-    get columnVisibilityDef(): ColumnVisibilityDef[] {
-        return getColumnVisibilityDef(
-            this.props.columns,
-            this.columnVisibility
-        );
+    get columnVisibilitySpec(): ColumnVisibility[] {
+        return getColumnVisibility(this.props.columns, this.columnVisibility);
     }
 
     @action
@@ -214,23 +210,23 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     };
 
     @action
-    onVisibilityToggle = (selectedColumnIds: string[]) => {
+    onVisibilityToggle = (selectedColumnKeys: string[]) => {
         // reset all column visibility
-        Object.keys(this.columnVisibility).forEach((columnId) =>
-            this.updateColumnVisibility(columnId, false)
+        Object.keys(this.columnVisibility).forEach((columnKey) =>
+            this.updateColumnVisibility(columnKey, false)
         );
 
         // make selected columns visible
-        selectedColumnIds.forEach((columnId) =>
-            this.updateColumnVisibility(columnId, true)
+        selectedColumnKeys.forEach((columnKey) =>
+            this.updateColumnVisibility(columnKey, true)
         );
     };
 
     @action
     updateColumnVisibility = (id: string, visible: boolean) => {
         // no previous action, need to init
-        if (this._columnVisibilityOverride === undefined) {
-            this._columnVisibilityOverride = resolveColumnVisibility(
+        if (this.userSelectedColumnVisibility === undefined) {
+            this.userSelectedColumnVisibility = resolveColumnVisibility(
                 this.columnVisibilityByColumnDefinition,
                 this.props.columnVisibility
             );
@@ -238,10 +234,10 @@ export default class EnhancedDataTable<T = any> extends React.Component<
 
         // update visibility
         if (
-            this._columnVisibilityOverride &&
-            this._columnVisibilityOverride[id] !== undefined
+            this.userSelectedColumnVisibility &&
+            this.userSelectedColumnVisibility[id] !== undefined
         ) {
-            this._columnVisibilityOverride[id] = visible;
+            this.userSelectedColumnVisibility[id] = visible;
         }
     };
 
@@ -254,10 +250,10 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                     }}
                     className={'d-flex justify-content-between'}
                 >
-                    {this.props.customControls || <div></div>}
+                    {this.props.customControls || <div />}
                     <DataTableControls
                         columns={this.props.columns}
-                        columnVisibility={this.columnVisibilityDef}
+                        columnVisibility={this.columnVisibilitySpec}
                         onVisibilityToggle={this.onVisibilityToggle}
                         onChangeFilterText={this.onChangeFilterText}
                         searchBoxPlaceHolder={this.props.searchBoxPlaceHolder}

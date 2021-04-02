@@ -9,7 +9,7 @@ type Option = {
     disabled?: boolean;
 };
 
-export type ColumnVisibilityDef = {
+export type ColumnVisibility = {
     id: string;
     name: string;
     visible: boolean;
@@ -20,8 +20,8 @@ export interface IColumnSelectProps {
     name?: string;
     placeholder?: string;
     width?: number;
-    columnVisibility?: ColumnVisibilityDef[];
-    onColumnToggled?: (selectedColumnIds: string[]) => void;
+    columnVisibility?: ColumnVisibility[];
+    onColumnToggled?: (selectedColumnKeys: string[]) => void;
 }
 
 @observer
