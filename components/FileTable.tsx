@@ -7,7 +7,6 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import {
     faDownload,
-    faSearch,
     faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -157,7 +156,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 name: 'Atlas Name',
                 selector: 'atlas.htan_name',
                 format: (file: Entity) => file.atlas.htan_name,
-                grow: 2,
                 wrap: true,
                 sortable: true,
             },
