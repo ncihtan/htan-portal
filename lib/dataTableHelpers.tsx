@@ -1,6 +1,7 @@
+import * as React from 'react';
+
 import ExpandableText from '../components/ExpandableText';
 import { Entity } from './helpers';
-import * as React from 'react';
 
 export function getDefaultDataTableStyle() {
     return {
@@ -93,4 +94,45 @@ export function toggleColumnVisibility(
     colVis[columnId] = !colVis[columnId];
 
     return colVis;
+}
+
+function defaultNumericalComparison(
+    rowA: Entity,
+    rowB: Entity,
+    iteratees: ((row: Entity) => number)[]
+) {
+    let comparison = 0;
+
+    for (let iteratee of iteratees) {
+        comparison = iteratee(rowA) - iteratee(rowB);
+
+        if (comparison !== 0) {
+            break;
+        }
+    }
+
+    return comparison;
+}
+
+export function sortByHtanParticipantId(rowA: Entity, rowB: Entity) {
+    // we need sort by participant id which takes the form HTA[integer]_[integer]
+    const iteratees = [
+        (row: Entity) =>
+            Number(row.HTANParticipantID.split('_')[0].replace('HTA', '')),
+        (row: Entity) => Number(row.HTANParticipantID.split('_')[1]),
+    ];
+
+    return defaultNumericalComparison(rowA, rowB, iteratees);
+}
+
+export function sortByBiospecimenId(rowA: Entity, rowB: Entity) {
+    // we need sort by biospecimen id which takes the form HTA[integer]_[integer]_[integer]
+    const iteratees = [
+        (row: Entity) =>
+            Number(row.HTANBiospecimenID.split('_')[0].replace('HTA', '')),
+        (row: Entity) => Number(row.HTANBiospecimenID.split('_')[1]),
+        (row: Entity) => Number(row.HTANBiospecimenID.split('_')[2]),
+    ];
+
+    return defaultNumericalComparison(rowA, rowB, iteratees);
 }

@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
-import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import {
+    getDefaultDataTableStyle,
+    sortByBiospecimenId,
+} from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
 
@@ -8,21 +11,6 @@ interface IBiospecimenTableProps {
     samples: Entity[];
     synapseAtlases: Atlas[];
 }
-
-const sortFunction = (rows: any[], field: string, direction: any) => {
-    if (field === 'HTANBiospecimenID') {
-        return _.sortBy(rows, [
-            (row) =>
-                Number(
-                    row['HTANBiospecimenID'].split('_')[0].replace('HTA', '')
-                ),
-            (row) => Number(row['HTANBiospecimenID'].split('_')[1]),
-            (row) => Number(row['HTANBiospecimenID'].split('_')[2]),
-        ]);
-    } else {
-        return rows.slice(0);
-    }
-};
 
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
     props
@@ -35,11 +23,11 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
             selector: 'HTANBiospecimenID',
             wrap: true,
             sortable: true,
+            sortFunction: sortByBiospecimenId,
         },
         {
             name: 'Atlas Name',
-
-            cell: (sample: Entity) => {
+            selector: (sample: Entity) => {
                 return atlasMap[sample.atlasid].htan_name;
             },
             wrap: true,
@@ -56,7 +44,6 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
     return (
         <EnhancedDataTable
             defaultSortField={'HTANBiospecimenID'}
-            sortFunction={sortFunction}
             columns={columns}
             data={props.samples}
             striped={true}
