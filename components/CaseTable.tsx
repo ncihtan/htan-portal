@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
-import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import {
+    getDefaultDataTableStyle,
+    sortByHtanParticipantId,
+} from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
 
@@ -8,21 +11,6 @@ interface ICaseTableProps {
     cases: Entity[];
     synapseAtlases: Atlas[];
 }
-
-// we need sort by participant id which takes the form HTA[integer]_[integer]
-const sortFunction = (rows: any[], field: string, direction: any) => {
-    if (field === 'HTANParticipantID') {
-        return _.sortBy(rows, [
-            (row) =>
-                Number(
-                    row['HTANParticipantID'].split('_')[0].replace('HTA', '')
-                ),
-            (row) => Number(row['HTANParticipantID'].split('_')[1]),
-        ]);
-    } else {
-        return rows.slice(0);
-    }
-};
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     const atlasMap = _.keyBy(props.synapseAtlases, (a) => a.htan_id);
@@ -33,10 +21,11 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
             selector: 'HTANParticipantID',
             wrap: true,
             sortable: true,
+            sortFunction: sortByHtanParticipantId,
         },
         {
             name: 'Atlas Name',
-            cell: (sample: Entity) => {
+            selector: (sample: Entity) => {
                 return atlasMap[sample.atlasid].htan_name;
             },
             wrap: true,
@@ -60,7 +49,6 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         <EnhancedDataTable
             columns={columns}
             defaultSortField={'HTANParticipantID'}
-            sortFunction={sortFunction}
             data={props.cases}
             striped={true}
             dense={false}
