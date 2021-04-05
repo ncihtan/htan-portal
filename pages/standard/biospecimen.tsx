@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
 import { getStaticContent } from '../../ApiUtil';
-import { getDataSchema } from '../../lib/dataSchemaHelpers';
+import { getDataSchema, SchemaDataId } from '../../lib/dataSchemaHelpers';
 
 const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
     return <DataStandard {...props} title="Biospecimen" />;
@@ -11,11 +11,11 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const data = await getStaticContent(['data-standards-biospecimen-blurb']);
-    const { dataSchemaData, schemaDataMap } = await getDataSchema([
-        'bts:Biospecimen',
+    const { dataSchemaData, schemaDataById } = await getDataSchema([
+        SchemaDataId.Biospecimen,
     ]);
 
-    return { props: { data, dataSchemaData, schemaDataMap } };
+    return { props: { data, dataSchemaData, schemaDataById } };
 };
 
 export default Biospecimen;

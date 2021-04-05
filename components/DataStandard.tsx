@@ -13,7 +13,7 @@ export interface DataStandardProps {
     title: string;
     data: CmsData[];
     dataSchemaData?: DataSchemaData[];
-    schemaDataMap?: { [id: string]: DataSchemaData };
+    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
 }
 
 const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
@@ -37,11 +37,11 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
                         }}
                     />
                 </Row>
-                {props.schemaDataMap && props.dataSchemaData && (
+                {props.schemaDataById && props.dataSchemaData && (
                     <Row>
                         <DataSchema
                             schemaData={props.dataSchemaData}
-                            dataSchemaMap={props.schemaDataMap}
+                            dataSchemaMap={props.schemaDataById}
                         />
                     </Row>
                 )}

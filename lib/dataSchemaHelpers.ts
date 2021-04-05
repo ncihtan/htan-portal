@@ -72,6 +72,31 @@ export interface SchemaJson extends BaseEntity {
     '@graph': SchemaData[];
 }
 
+export enum SchemaDataId {
+    Biospecimen = 'bts:Biospecimen',
+    BulkRNASeqLevel1 = 'bts:BulkRNA-seqLevel1',
+    BulkRNASeqLevel2 = 'bts:BulkRNA-seqLevel2',
+    BulkRNASeqLevel3 = 'bts:BulkRNA-seqLevel3',
+    BulkWESLevel1 = 'bts:BulkWESLevel1',
+    BulkWESLevel2 = 'bts:BulkWESLevel1',
+    BulkWESLevel3 = 'bts:BulkWESLevel1',
+    ClinicalDataTier2 = 'bts:ClinicalDataTier2',
+    Demographics = 'bts:Demographics',
+    Diagnosis = 'bts:Diagnosis',
+    Exposure = 'bts:Exposure',
+    FamilyHistory = 'bts:FamilyHistory',
+    FollowUp = 'bts:FollowUp',
+    Imaging = 'bts:Imaging',
+    ImagingLevel2 = 'bts:ImagingLevel2',
+    MolecularTest = 'bts:MolecularTest',
+    scATACSeqLevel1 = 'bts:ScATAC-seqLevel1',
+    scRNASeqLevel1 = 'bts:ScRNA-seqLevel1',
+    scRNASeqLevel2 = 'bts:ScRNA-seqLevel2',
+    scRNASeqLevel3 = 'bts:ScRNA-seqLevel3',
+    scRNASeqLevel4 = 'bts:ScRNA-seqLevel4',
+    Treatment = 'bts:Treatment',
+}
+
 export const DEFAULT_SCHEMA: SchemaJson = {
     '@context': {},
     '@graph': [],
@@ -85,25 +110,25 @@ const schemaDataCache: { [uri: string]: SchemaJson } = {};
 
 export function getDataSchemaDependencies(
     schema: DataSchemaData,
-    schemaDataMap: { [id: string]: DataSchemaData } = {}
+    schemaDataById: { [schemaDataId: string]: DataSchemaData } = {}
 ): DataSchemaData[] {
     return _.compact(
-        schema.requiredDependencies.map((id) => schemaDataMap[id])
+        schema.requiredDependencies.map((id) => schemaDataById[id])
     );
 }
 
 export function getDataSchemaParents(
     schema: DataSchemaData,
-    schemaDataMap: { [id: string]: DataSchemaData } = {}
+    schemaDataById: { [schemaDataId: string]: DataSchemaData } = {}
 ): DataSchemaData[] {
-    return _.compact(schema.parentIds.map((id) => schemaDataMap[id]));
+    return _.compact(schema.parentIds.map((id) => schemaDataById[id]));
 }
 
 export function getDataSchemaValidValues(
     schema: DataSchemaData,
-    schemaDataMap: { [id: string]: DataSchemaData } = {}
+    schemaDataById: { [schemaDataId: string]: DataSchemaData } = {}
 ): DataSchemaData[] {
-    return _.compact(schema.validValues.map((id) => schemaDataMap[id]));
+    return _.compact(schema.validValues.map((id) => schemaDataById[id]));
 }
 
 export function hasNonEmptyValidValues(schemaData: DataSchemaData[]): boolean {
@@ -111,17 +136,23 @@ export function hasNonEmptyValidValues(schemaData: DataSchemaData[]): boolean {
 }
 
 export async function getDataSchema(
-    ids: string[],
+    ids: SchemaDataId[],
     dataUri: string = DEFAULT_SCHEMA_URL
 ): Promise<{
     dataSchemaData: DataSchemaData[];
-    schemaDataMap: { [id: string]: DataSchemaData };
+    schemaDataById: { [schemaDataId: string]: DataSchemaData };
 }> {
-    const schemaData = getDataSchemaData(await getSchemaData(dataUri));
-    const schemaDataMap = _.keyBy(schemaData, (d) => d.id);
-    const dataSchemaData = _.compact(ids.map((id) => schemaDataMap[id]));
+    const schemaDataById = await getSchemaDataMap(dataUri);
+    const dataSchemaData = _.compact(ids.map((id) => schemaDataById[id]));
 
-    return { dataSchemaData, schemaDataMap };
+    return { dataSchemaData, schemaDataById };
+}
+
+export async function getSchemaDataMap(
+    dataUri: string = DEFAULT_SCHEMA_URL
+): Promise<{ [schemaDataId: string]: DataSchemaData }> {
+    const schemaData = getDataSchemaData(await getSchemaData(dataUri));
+    return _.keyBy(schemaData, (d) => d.id);
 }
 
 export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
