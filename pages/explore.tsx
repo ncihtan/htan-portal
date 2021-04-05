@@ -44,6 +44,7 @@ import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 import styles from './styles.module.scss';
 import { ExploreSummary } from '../components/ExploreSummary';
 import PageWrapper from '../components/PageWrapper';
+import { DataSchemaData, getSchemaDataMap } from '../lib/dataSchemaHelpers';
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let slugs = ['summary-blurb-data-release'];
@@ -74,9 +75,18 @@ class Search extends React.Component<
         | IPromiseBasedObservable<LoadDataResult>
         | undefined;
 
+    @observable.ref private schemaLoadingPromise:
+        | IPromiseBasedObservable<{ [id: string]: DataSchemaData }>
+        | undefined;
+
     constructor(props: any) {
         super(props);
-        this.state = { files: [], filters: {}, atlases: [] };
+        this.state = {
+            files: [],
+            filters: {},
+            atlases: [],
+            schemaDataById: {},
+        };
 
         //@ts-ignore
         if (typeof window !== 'undefined') (window as any).me = this;
@@ -169,6 +179,11 @@ class Search extends React.Component<
             this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
             this.dataLoadingPromise.then(({ files, atlases }) => {
                 this.setState({ files, atlases });
+            });
+
+            this.schemaLoadingPromise = fromPromise(getSchemaDataMap());
+            this.schemaLoadingPromise.then((schemaDataById) => {
+                this.setState({ schemaDataById });
             });
         });
     }
@@ -287,6 +302,7 @@ class Search extends React.Component<
 
                     <ExploreTabs
                         router={this.props.router}
+                        schemaDataById={this.state.schemaDataById}
                         filteredFiles={this.filteredFiles}
                         filteredSynapseAtlases={this.filteredAtlases}
                         filteredSynapseAtlasesByNonAtlasFilters={

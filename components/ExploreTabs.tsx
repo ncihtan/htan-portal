@@ -8,6 +8,7 @@ import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import WPAtlasTable from './WPAtlasTable';
+import { DataSchemaData } from '../lib/dataSchemaHelpers';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -15,6 +16,7 @@ interface IExploreTabsProps {
     samples: Entity[];
     cases: Entity[];
     wpData: WPAtlas[];
+    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     getGroupsByPropertyFiltered: any;
     filteredSynapseAtlases: Atlas[];
     filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
@@ -119,6 +121,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     <BiospecimenTable
                         synapseAtlases={props.filteredSynapseAtlases}
                         samples={props.samples}
+                        schemaDataById={props.schemaDataById}
                     />
                 </div>
 
@@ -130,6 +133,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     <CaseTable
                         synapseAtlases={props.filteredSynapseAtlases}
                         cases={props.cases}
+                        schemaDataById={props.schemaDataById}
                     />
                 </div>
 
