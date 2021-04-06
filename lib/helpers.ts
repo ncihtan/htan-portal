@@ -13,8 +13,6 @@ import {
     SynapseSchema,
 } from './types';
 import { ExploreURLQuery } from '../pages/explore';
-import ExpandableText from '../components/ExpandableText';
-import React from 'react';
 import { ExploreTab } from '../components/ExploreTabs';
 
 // @ts-ignore
@@ -72,6 +70,7 @@ export interface Entity {
     HTANParentDataFileID: string;
     TissueorOrganofOrigin: string;
     PrimaryDiagnosis: string;
+    AgeatDiagnosis: number;
     fileFormat: string;
     filename: string;
     HTANParticipantID: string;
@@ -516,4 +515,8 @@ export function truncateFilename(
     }
 
     return displayValue;
+}
+
+export function convertAgeInDaysToYears(ageInDays: number) {
+    return Math.round(ageInDays / 365);
 }

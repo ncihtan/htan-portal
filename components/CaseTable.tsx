@@ -4,7 +4,7 @@ import {
     getDefaultDataTableStyle,
     sortByHtanParticipantId,
 } from '../lib/dataTableHelpers';
-import { Atlas, Entity } from '../lib/helpers';
+import { Atlas, Entity, convertAgeInDaysToYears } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
 
 interface ICaseTableProps {
@@ -38,8 +38,10 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
             sortable: true,
         },
         {
-            name: 'Age at Diagnosis',
+            name: 'Age at Diagnosis (years)',
             selector: 'AgeatDiagnosis',
+            format: (sample: Entity) =>
+                convertAgeInDaysToYears(sample.AgeatDiagnosis),
             wrap: true,
             sortable: true,
         },
