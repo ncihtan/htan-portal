@@ -74,6 +74,16 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 wrap: true,
                 sortable: true,
             },
+            {
+                name: '# Cases',
+                selector: 'num_cases',
+                sortable: true,
+            },
+            {
+                name: '# Biospecimens',
+                selector: 'num_biospecimens',
+                sortable: true,
+            },
             // {
             //     name: 'Atlas ID',
             //     selector: (atlas: Atlas) => atlas.htan_id.toUpperCase(),
