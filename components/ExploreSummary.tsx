@@ -1,7 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
+import pluralize from 'pluralize';
+
 import { AttributeNames } from '../lib/types';
 import { Entity } from '../lib/helpers';
+
+pluralize.addPluralRule(/specimen$/i, 'specimens');
 
 interface IExploreSummaryProps {
     filteredFiles: Entity[];
@@ -12,6 +16,29 @@ interface IExploreSummaryProps {
 export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
     props
 ) => {
+    const atlasCount = _.keys(
+        props.getGroupsByPropertyFiltered[AttributeNames.AtlasName]
+    ).length;
+
+    const organCount = _.keys(
+        props.getGroupsByPropertyFiltered[AttributeNames.TissueorOrganofOrigin]
+    ).length;
+
+    const cancerTypeCount = _.keys(
+        props.getGroupsByPropertyFiltered[AttributeNames.PrimaryDiagnosis]
+    ).length;
+
+    const biospecimenCount = _(props.filteredFiles)
+        .map((f) => f.HTANParentBiospecimenID)
+        .uniq()
+        .value().length;
+
+    const assayCount = _.keys(
+        props.getGroupsByPropertyFiltered[AttributeNames.Component]
+    ).length;
+
+    const fileCount = props.filteredFiles.length;
+
     return (
         <>
             <div className={'summary'}>
@@ -19,63 +46,13 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                     <strong>Summary:</strong>
                 </div>
 
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                AttributeNames.AtlasName
-                            ]
-                        ).length
-                    }{' '}
-                    Atlases
-                </div>
-
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                AttributeNames.TissueorOrganofOrigin
-                            ]
-                        ).length
-                    }{' '}
-                    Organs
-                </div>
-
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                AttributeNames.PrimaryDiagnosis
-                            ]
-                        ).length
-                    }{' '}
-                    Cancer Types
-                </div>
-
-                <div>{props.patientCount} Cases</div>
-
-                <div>
-                    {
-                        _(props.filteredFiles)
-                            .map((f) => f.HTANParentBiospecimenID)
-                            .uniq()
-                            .value().length
-                    }{' '}
-                    Biospecimens
-                </div>
-
-                <div>
-                    {
-                        _.keys(
-                            props.getGroupsByPropertyFiltered[
-                                AttributeNames.Component
-                            ]
-                        ).length
-                    }{' '}
-                    Assays
-                </div>
-
-                <div>{props.filteredFiles.length} Files</div>
+                <div>{pluralize('Atlas', atlasCount, true)}</div>
+                <div>{pluralize('Organ', organCount, true)}</div>
+                <div>{pluralize('Cancer Type', cancerTypeCount, true)}</div>
+                <div>{pluralize('Case', props.patientCount, true)}</div>
+                <div>{pluralize('Biospecimen', biospecimenCount, true)}</div>
+                <div>{pluralize('Assay', assayCount, true)}</div>
+                <div>{pluralize('File', fileCount, true)}</div>
             </div>
         </>
     );
