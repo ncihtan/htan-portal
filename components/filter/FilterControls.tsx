@@ -68,7 +68,8 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
             AttributeNames.TissueorOrganofOrigin,
             AttributeNames.PrimaryDiagnosis,
             AttributeNames.assayName,
-            AttributeNames.Stage,
+            AttributeNames.Level,
+            AttributeNames.FileFormat,
         ].map((attrName) => {
             return {
                 label: AttributeMap[attrName].displayName,
@@ -101,11 +102,72 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 220 }}>
-                        <FilterPanel placeholder={'Cancer Type'}>
+                    <div style={{ width: 120 }}>
+                        <FilterPanel
+                            placeholder={
+                                AttributeMap[AttributeNames.AtlasName]
+                                    .displayName
+                            }
+                        >
+                            <FilterPropertyColumnShell
+                                title={
+                                    AttributeMap[AttributeNames.AtlasName]
+                                        .displayName
+                                }
+                            >
+                                <FilterCheckList
+                                    setFilter={props.setFilter}
+                                    filters={props.selectedFiltersByGroupName}
+                                    options={options(AttributeNames.AtlasName)}
+                                />
+                            </FilterPropertyColumnShell>
+                        </FilterPanel>
+                    </div>
+                </div>
+
+                <div>
+                    <div style={{ width: 120 }}>
+                        <FilterPanel
+                            placeholder={
+                                AttributeMap[
+                                    AttributeNames.TissueorOrganofOrigin
+                                ].displayName
+                            }
+                        >
+                            <FilterPropertyColumnShell
+                                title={
+                                    AttributeMap[
+                                        AttributeNames.TissueorOrganofOrigin
+                                    ].displayName
+                                }
+                            >
+                                <FilterCheckList
+                                    setFilter={props.setFilter}
+                                    filters={props.selectedFiltersByGroupName}
+                                    options={options(
+                                        AttributeNames.TissueorOrganofOrigin
+                                    )}
+                                />
+                            </FilterPropertyColumnShell>
+                        </FilterPanel>
+                    </div>
+                </div>
+
+                <div>
+                    <div style={{ width: 164 }}>
+                        <FilterPanel
+                            placeholder={
+                                AttributeMap[AttributeNames.PrimaryDiagnosis]
+                                    .displayName
+                            }
+                        >
                             <div className={'filter-checkbox-list-container'}>
                                 <FilterPropertyColumnShell
-                                    title={'Cancer Type'}
+                                    title={
+                                        AttributeMap[
+                                            AttributeNames.PrimaryDiagnosis
+                                        ].displayName
+                                    }
                                 >
                                     <FilterCheckList
                                         setFilter={props.setFilter}
@@ -134,23 +196,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 220 }}>
-                        <FilterPanel placeholder={'Tissue Type'}>
-                            <FilterPropertyColumnShell title={'Tissue Type'}>
-                                <FilterCheckList
-                                    setFilter={props.setFilter}
-                                    filters={props.selectedFiltersByGroupName}
-                                    options={options(
-                                        AttributeNames.TissueorOrganofOrigin
-                                    )}
-                                />
-                            </FilterPropertyColumnShell>
-                        </FilterPanel>
-                    </div>
-                </div>
-
-                <div>
-                    <div style={{ width: 220 }}>
+                    <div style={{ width: 151 }}>
                         <FilterPanel placeholder={'Assay Type'}>
                             <FilterPropertyColumnShell title={'Assay Type'}>
                                 <FilterCheckList
@@ -164,7 +210,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 220 }}>
+                    <div style={{ width: 137 }}>
                         <FilterPanel placeholder={'File Type'}>
                             <div className={'filter-checkbox-list-container'}>
                                 <FilterPropertyColumnShell title={'Level'}>

@@ -45,7 +45,7 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     [AttributeNames.PrimaryDiagnosis]: {
         getValues: (e: Entity) =>
             _.uniq(e.diagnosis.map((d) => d.PrimaryDiagnosis)),
-        displayName: 'Diagnosis',
+        displayName: 'Disease Type',
     },
     [AttributeNames.Component]: {
         path: 'Component',
