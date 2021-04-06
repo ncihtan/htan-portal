@@ -90,6 +90,8 @@ export interface Entity {
 export interface Atlas {
     htan_id: string;
     htan_name: string;
+    num_cases: number;
+    num_biospecimens: number;
     WPAtlas: WPAtlas;
 }
 
@@ -286,6 +288,26 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
 
     // atlases MUST have an entry in WPAtlas
     const returnAtlases = synapseJson.atlases.filter((a: Atlas) => a.WPAtlas);
+
+    // count cases and biospecimens for each atlas
+    const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
+    const caseCountByAtlas = _.mapValues(filesByAtlas, (files) => {
+        return _.chain(files)
+            .flatMapDeep((f) => f.diagnosis)
+            .uniqBy((f) => f.HTANParticipantID)
+            .value().length;
+    });
+    const biospecimenCountByAtlas = _.mapValues(filesByAtlas, (files) => {
+        return _.chain(files)
+            .flatMapDeep((f) => f.biospecimen)
+            .uniqBy((f) => f.HTANBiospecimenID)
+            .value().length;
+    });
+
+    returnAtlases.forEach((a: Atlas) => {
+        a.num_biospecimens = biospecimenCountByAtlas[a.htan_id];
+        a.num_cases = caseCountByAtlas[a.htan_id];
+    });
 
     // filter out files without a diagnosis
     return { files: returnFiles, atlases: returnAtlases };
