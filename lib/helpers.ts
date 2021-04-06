@@ -160,13 +160,9 @@ function findAndAddPrimaryParents(
 }
 
 function addPrimaryParents(files: Entity[]) {
-    const cleanFiles = files.filter((f) => {
-        return !(doesFileHaveMultipleParents(f) && f.atlasid === 'HTA3'); // hard coded for now - level 4 HTA3 files have messed up data
-    });
+    const fileIdToFile = _.keyBy(files, (f) => f.HTANDataFileID);
 
-    const fileIdToFile = _.keyBy(cleanFiles, (f) => f.HTANDataFileID);
-
-    cleanFiles.forEach((f) => {
+    files.forEach((f) => {
         findAndAddPrimaryParents(f, fileIdToFile);
     });
 }
