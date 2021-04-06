@@ -23,6 +23,7 @@ import {
 } from '../lib/dataTableHelpers';
 import EnhancedDataTable from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
+import SimpleScrollPane from './SimpleScrollPane';
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
 
@@ -162,14 +163,41 @@ export default class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'Biospecimen',
                 selector: (file: Entity) => {
-                    const biospecimens = file.primaryParents
-                        ? _.flatMapDeep(file.primaryParents, (f) =>
-                              f.biospecimen.map((b) => b.HTANBiospecimenID)
-                          )
-                        : file.biospecimen.map((b) => b.HTANBiospecimenID);
-                    return _.uniq(biospecimens).join(', ');
+                    return _.uniq(
+                        file.biospecimen.map((b) => b.HTANBiospecimenID)
+                    ).join(', ');
                 },
-                cell: truncatedTableCell,
+                cell: (file: Entity) => {
+                    const uniqueBiospecimens = _.uniq(
+                        file.biospecimen.map((b) => b.HTANBiospecimenID)
+                    );
+                    if (uniqueBiospecimens.length === 1) {
+                        return uniqueBiospecimens[0];
+                    } else {
+                        return (
+                            <Tooltip
+                                overlay={
+                                    <SimpleScrollPane
+                                        width={100}
+                                        height={100}
+                                        style={{
+                                            padding: 5,
+                                            background: 'white',
+                                            color: 'black',
+                                            borderRadius: 2,
+                                        }}
+                                    >
+                                        {uniqueBiospecimens.join('\n')}
+                                    </SimpleScrollPane>
+                                }
+                            >
+                                <span>
+                                    {uniqueBiospecimens.length} Biospecimens
+                                </span>
+                            </Tooltip>
+                        );
+                    }
+                },
                 wrap: true,
                 sortable: true,
             },
