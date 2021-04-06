@@ -41,6 +41,7 @@
     "next": "^10.0.5",
     "node-fetch": "^2.6.0",
     "node-sass": "^4.13.1",
+    "pluralize": "^8.0.0",
     "popper.js": "^1.16.1",
     "prettier": "^2.1.2",
     "prop-types": "^15.7.2",
