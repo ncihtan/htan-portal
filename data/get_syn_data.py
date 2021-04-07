@@ -19,7 +19,8 @@ if __name__ == '__main__':
 
     # map: HTAN center names to HTAN IDs
     htan_centers = {
-                    "HTAN HTAPP": "hta1",
+                    # remove HTAPP for now
+                    # "HTAN HTAPP": "hta1",
                     "PCAPP Pilot Project": "hta2",
                     "HTAN BU": "hta3",
                     "HTAN CHOP": "hta4",
@@ -35,10 +36,10 @@ if __name__ == '__main__':
                     "HTAN TNP - TMA": "hta14"
     }
 
- 
+
     # load schematic config
     schematic.CONFIG.load_config('./config-htan.yml')
-    
+
     # instantiate synapse client
     syn = synapseclient.Synapse()
 
@@ -69,8 +70,8 @@ if __name__ == '__main__':
 
     # portal data schema skeleton
     portal_data = {
-                    "atlases":[], 
-                    "schemas":[] 
+                    "atlases":[],
+                    "schemas":[]
     }
 
 
@@ -164,7 +165,7 @@ if __name__ == '__main__':
                 for attribute in data_attributes:
                     attr_info = se.explore_class(attribute)
                     attr_id = "bts:" + attribute
-                    attr_name = attr_info["displayName"] 
+                    attr_name = attr_info["displayName"]
                     attr_desc = attr_info["description"]
 
                     schema["attributes"].append({
