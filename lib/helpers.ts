@@ -74,6 +74,7 @@ export interface Entity {
     fileFormat: string;
     filename: string;
     HTANParticipantID: string;
+    ImagingAssayType?: string;
 
     // Derived or attached in frontend
     atlas: Atlas;
@@ -108,7 +109,7 @@ function doesFileHaveMultipleParents(file: Entity) {
 
 export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
     return (
-        file.assayName !== 'Imaging' &&
+        !file.Component.startsWith('Imaging') &&
         (file.level === 'Level 1' || file.level === 'Level 2')
     );
 }
@@ -256,7 +257,10 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
     _.forEach(files, (file) => {
         // parse component to make a new level property and adjust component property
         if (file.Component) {
-            const parsedAssay = parseRawAssayType(file.Component);
+            const parsedAssay = parseRawAssayType(
+                file.Component,
+                file.ImagingAssayType
+            );
             //file.Component = parsed.name;
             if (parsedAssay.level && parsedAssay.level.length > 1) {
                 file.level = parsedAssay.level;
@@ -343,15 +347,24 @@ export function clamp(x: number, lower: number, upper: number) {
     return Math.max(lower, Math.min(x, upper));
 }
 
-export function parseRawAssayType(t: string) {
+export function parseRawAssayType(
+    componentName: string,
+    imagingAssayType?: string
+) {
     // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
     // We want to take that and spit out { name: "Camel Case-Name", level: "Level X" }
     //  (with the exception that the prefixes Sc and Sn are always treated as lower case)
 
     // See if there's a Level in it
-    const splitByLevel = t.split('Level');
+    const splitByLevel = componentName.split('Level');
     const level = splitByLevel.length > 1 ? `Level ${splitByLevel[1]}` : null;
     const extractedName = splitByLevel[0];
+
+    if (imagingAssayType) {
+        // do not parse imaging assay type, use as is
+        return { name: imagingAssayType, level };
+    }
+
     if (extractedName) {
         // Convert camel case to space case
         // Source: https://stackoverflow.com/a/15370765
@@ -370,7 +383,7 @@ export function parseRawAssayType(t: string) {
     }
 
     // Couldn't parse
-    return { name: t, level: null };
+    return { name: componentName, level: null };
 }
 
 export function urlEncodeSelectedFilters(
