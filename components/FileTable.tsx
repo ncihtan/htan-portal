@@ -24,6 +24,7 @@ import {
 import EnhancedDataTable from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
+import interleave from '../lib/interleave';
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
 
@@ -178,16 +179,15 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             <Tooltip
                                 overlay={
                                     <SimpleScrollPane
-                                        width={100}
-                                        height={100}
+                                        width={150}
+                                        height={150}
                                         style={{
-                                            padding: 5,
                                             background: 'white',
                                             color: 'black',
-                                            borderRadius: 2,
+                                            padding: '5px 10px 5px 10px',
                                         }}
                                     >
-                                        {uniqueBiospecimens.join('\n')}
+                                        {interleave(uniqueBiospecimens, <br />)}
                                     </SimpleScrollPane>
                                 }
                             >
