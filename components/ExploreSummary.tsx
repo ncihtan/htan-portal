@@ -34,7 +34,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
         .value().length;
 
     const assayCount = _.keys(
-        props.getGroupsByPropertyFiltered[AttributeNames.Component]
+        props.getGroupsByPropertyFiltered[AttributeNames.assayName]
     ).length;
 
     const fileCount = props.filteredFiles.length;
