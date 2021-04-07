@@ -189,12 +189,19 @@ function getSampleAndPatientData(
         .filter((f) => !!f) as Entity[];
 
     const diagnosis = biospecimen
-        .map(
-            (s) =>
-                diagnosisByHTANParticipantID[s.HTANParentID] as
-                    | Entity
-                    | undefined
-        )
+        .map((s) => {
+            // HTANParentID can be both participant or biospecimen, so keep
+            // going up the tree until participant is found.
+            let HTANParentID = s.HTANParentID;
+            while (HTANParentID in biospecimenByHTANBiospecimenID) {
+                let parentBioSpecimen =
+                    biospecimenByHTANBiospecimenID[HTANParentID];
+                HTANParentID = parentBioSpecimen.HTANParentID;
+            }
+            return diagnosisByHTANParticipantID[HTANParentID] as
+                | Entity
+                | undefined;
+        })
         .filter((f) => !!f) as Entity[];
 
     return { biospecimen, diagnosis };
