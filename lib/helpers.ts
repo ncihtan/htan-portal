@@ -198,9 +198,14 @@ function getSampleAndPatientData(
                     biospecimenByHTANBiospecimenID[HTANParentID];
                 HTANParentID = parentBioSpecimen.HTANParentID;
             }
-            return diagnosisByHTANParticipantID[HTANParentID] as
-                | Entity
-                | undefined;
+            if (!(HTANParentID in diagnosisByHTANParticipantID)) {
+                console.error(
+                    `${s.HTANBiospecimenID} does not have a HTANParentID with diagnosis information`
+                );
+                return undefined;
+            } else {
+                return diagnosisByHTANParticipantID[HTANParentID] as Entity;
+            }
         })
         .filter((f) => !!f) as Entity[];
 
