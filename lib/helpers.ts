@@ -194,7 +194,7 @@ function getSampleAndPatientData(
             // going up the tree until participant is found.
             let HTANParentID = s.HTANParentID;
             while (HTANParentID in biospecimenByHTANBiospecimenID) {
-                let parentBioSpecimen =
+                const parentBioSpecimen =
                     biospecimenByHTANBiospecimenID[HTANParentID];
                 HTANParentID = parentBioSpecimen.HTANParentID;
             }
