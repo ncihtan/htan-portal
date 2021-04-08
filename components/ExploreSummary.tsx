@@ -30,6 +30,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
 
     const biospecimenCount = _(props.filteredFiles)
         .map((f) => f.HTANParentBiospecimenID)
+        .filter((x) => !!x)
         .uniq()
         .value().length;
 
