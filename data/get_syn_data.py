@@ -32,8 +32,9 @@ if __name__ == '__main__':
                     "HTAN Stanford": "hta10",
                     "HTAN Vanderbilt": "hta11",
                     "HTAN WUSTL": "hta12",
-                    "HTAN TNP SARDANA": "hta13",
-                    "HTAN TNP - TMA": "hta14"
+                    # exclude TNPs for now
+                    # "HTAN TNP SARDANA": "hta13",
+                    # "HTAN TNP - TMA": "hta14"
     }
 
 
@@ -74,6 +75,9 @@ if __name__ == '__main__':
                     "schemas":[]
     }
 
+    # store all metadata synapse ids for downloading submitted metadata
+    # directly
+    portal_metadata = {}
 
     data_schemas = []
 
@@ -95,7 +99,7 @@ if __name__ == '__main__':
         datasets = dataset_group.to_dict("records")
 
         for dataset in datasets:
-            manifest_location = "./tmp/"
+            manifest_location = "./tmp/" + center_id + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
             syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
 
@@ -114,6 +118,9 @@ if __name__ == '__main__':
                 continue
 
             logging.info("Data type: " + component)
+
+            # add metadata file
+            portal_metadata.setdefault(center_id.upper(), {})[component] = dataset["id"]
 
             # get data type schema info
             schema_info = se.explore_class(component)
@@ -191,3 +198,6 @@ if __name__ == '__main__':
     # dump data portal JSON
     with open("./../public/syn_data.json", "w") as m_f:
         json.dump(portal_data, m_f, indent = 4)
+
+    with open("./../data/syn_metadata.json", "w") as m_f:
+        json.dump(portal_metadata, m_f, indent = 4)
