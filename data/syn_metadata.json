@@ -1,0 +1,90 @@
+{
+    "HTA11": {
+        "Demographics": "syn23636452",
+        "Diagnosis": "syn23636563",
+        "FamilyHistory": "syn23636595",
+        "FollowUp": "syn23636683",
+        "Therapy": "syn23636727",
+        "Exposure": "syn23662463",
+        "ScRNA-seqLevel2": "syn24828088",
+        "MolecularTest": "syn24986104",
+        "ScRNA-seqLevel3": "syn24998745",
+        "ScRNA-seqLevel1": "syn25006583",
+        "Biospecimen": "syn25126924",
+        "ImagingLevel2": "syn25165616"
+    },
+    "HTA9": {
+        "Demographics": "syn24862574",
+        "FollowUp": "syn24866859",
+        "Exposure": "syn24867724",
+        "Therapy": "syn24869018",
+        "Diagnosis": "syn24983417",
+        "ClinicalDataTier2": "syn24983433",
+        "BreastCancerTier3": "syn24983461",
+        "BulkWESLevel1": "syn24991941",
+        "BulkRNA-seqLevel1": "syn24991943",
+        "FamilyHistory": "syn24991946",
+        "MolecularTest": "syn24992072",
+        "ImagingLevel2": "syn24992074",
+        "Biospecimen": "syn24993176"
+    },
+    "HTA3": {
+        "ScRNA-seqLevel2": "syn24861213",
+        "ScRNA-seqLevel3": "syn24862405",
+        "ScRNA-seqLevel4": "syn24983535",
+        "Biospecimen": "syn24986734",
+        "Demographics": "syn24994144",
+        "Exposure": "syn24994227",
+        "FamilyHistory": "syn24994236",
+        "FollowUp": "syn24994280",
+        "Diagnosis": "syn24994554",
+        "ClinicalDataTier2": "syn24994579",
+        "LungCancerTier3": "syn24994803",
+        "Therapy": "syn24995046",
+        "ScRNA-seqLevel1": "syn25127381"
+    },
+    "HTA12": {
+        "Demographics": "syn24996542",
+        "FamilyHistory": "syn24996873",
+        "Exposure": "syn24996995",
+        "FollowUp": "syn24997499",
+        "Therapy": "syn24997689",
+        "ImagingLevel2": "syn25200520",
+        "Biospecimen": "syn25110812",
+        "Diagnosis": "syn25127027"
+    },
+    "HTA4": {
+        "ScRNA-seqLevel1": "syn23667943",
+        "ScRNA-seqLevel2": "syn24991923",
+        "ScRNA-seqLevel3": "syn24991934",
+        "Therapy": "syn25121366",
+        "Demographics": "syn25127441",
+        "Biospecimen": "syn25127500"
+    },
+    "HTA8": {
+        "Biospecimen": "syn24983247",
+        "Demographics": "syn24983524",
+        "Exposure": "syn24983587",
+        "FamilyHistory": "syn24983680",
+        "FollowUp": "syn24983736",
+        "MolecularTest": "syn24984168",
+        "Diagnosis": "syn24984223",
+        "Therapy": "syn24988429",
+        "ScRNA-seqLevel2": "syn24997789",
+        "ScRNA-seqLevel3": "syn24997862",
+        "ScRNA-seqLevel4": "syn25007034",
+        "ScRNA-seqLevel1": "syn25033273"
+    },
+    "HTA6": {
+        "Demographics": "syn25049721",
+        "Exposure": "syn25049897",
+        "FamilyHistory": "syn25050073",
+        "Therapy": "syn25050373",
+        "FollowUp": "syn25050546",
+        "MolecularTest": "syn25050891",
+        "Diagnosis": "syn25126897",
+        "Biospecimen": "syn25149097",
+        "BulkWESLevel1": "syn25178503",
+        "ImagingLevel2": "syn25178589"
+    }
+}
