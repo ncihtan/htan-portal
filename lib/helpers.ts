@@ -189,12 +189,24 @@ function getSampleAndPatientData(
         .filter((f) => !!f) as Entity[];
 
     const diagnosis = biospecimen
-        .map(
-            (s) =>
-                diagnosisByHTANParticipantID[s.HTANParentID] as
-                    | Entity
-                    | undefined
-        )
+        .map((s) => {
+            // HTANParentID can be both participant or biospecimen, so keep
+            // going up the tree until participant is found.
+            let HTANParentID = s.HTANParentID;
+            while (HTANParentID in biospecimenByHTANBiospecimenID) {
+                const parentBioSpecimen =
+                    biospecimenByHTANBiospecimenID[HTANParentID];
+                HTANParentID = parentBioSpecimen.HTANParentID;
+            }
+            if (!(HTANParentID in diagnosisByHTANParticipantID)) {
+                console.error(
+                    `${s.HTANBiospecimenID} does not have a HTANParentID with diagnosis information`
+                );
+                return undefined;
+            } else {
+                return diagnosisByHTANParticipantID[HTANParentID] as Entity;
+            }
+        })
         .filter((f) => !!f) as Entity[];
 
     return { biospecimen, diagnosis };
