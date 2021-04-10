@@ -120,7 +120,7 @@ if __name__ == '__main__':
             logging.info("Data type: " + component)
 
             # add metadata file
-            portal_metadata.setdefault(center_id.upper(), {})[component] = dataset["id"]
+            portal_metadata.setdefault(center_id.upper(), {})[component] = {"synapseId":dataset["id"],"numItems":len(manifest_df)}
 
             # get data type schema info
             schema_info = se.explore_class(component)
