@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { DataSchemaData, SchemaDataId } from '../lib/dataSchemaHelpers';
 import {
-    generateColumnsByDataSchema,
+    generateColumnsForDataSchema,
     getAtlasColumn,
     getDefaultDataTableStyle,
     sortByBiospecimenId,
@@ -20,7 +20,7 @@ interface IBiospecimenTableProps {
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
     props
 ) => {
-    const columns = generateColumnsByDataSchema(
+    const columns = generateColumnsForDataSchema(
         SchemaDataId.Biospecimen,
         props.schemaDataById,
         // need to add a custom sort function for the id
