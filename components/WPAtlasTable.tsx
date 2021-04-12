@@ -151,34 +151,34 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 sortable: true,
             },
             {
-                name: '# Cases',
-                selector: 'num_cases',
-                sortable: true,
-            },
-            {
-                name: '# Biospecimens',
-                selector: 'num_biospecimens',
-                sortable: true,
-            },
-            {
                 name: 'Metadata',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_id in atlasMetadata) {
                         return (
                             <button
-                                className={'btn btn-primary btn-sm'}
+                                className={'btn btn-sm'}
                                 onClick={action(() => {
                                     this.metadataModalAtlas = atlas;
                                 })}
                             >
-                                Download
+                                <FontAwesomeIcon icon={faDownload} />
                             </button>
                         );
                     } else {
                         return <span>None</span>;
                     }
                 },
+            },
+            {
+                name: 'Cases',
+                selector: 'num_cases',
+                sortable: true,
+            },
+            {
+                name: 'Biospecimens',
+                selector: 'num_biospecimens',
+                sortable: true,
             },
             // {
             //     name: 'Atlas ID',
