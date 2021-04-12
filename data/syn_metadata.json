@@ -1,54 +1,4 @@
 {
-    "HTA11": {
-        "Demographics": {
-            "synapseId": "syn23636452",
-            "numItems": 33
-        },
-        "Diagnosis": {
-            "synapseId": "syn23636563",
-            "numItems": 33
-        },
-        "FamilyHistory": {
-            "synapseId": "syn23636595",
-            "numItems": 23
-        },
-        "FollowUp": {
-            "synapseId": "syn23636683",
-            "numItems": 64
-        },
-        "Therapy": {
-            "synapseId": "syn23636727",
-            "numItems": 33
-        },
-        "Exposure": {
-            "synapseId": "syn23662463",
-            "numItems": 33
-        },
-        "ScRNA-seqLevel2": {
-            "synapseId": "syn24828088",
-            "numItems": 85
-        },
-        "MolecularTest": {
-            "synapseId": "syn24986104",
-            "numItems": 33
-        },
-        "ScRNA-seqLevel3": {
-            "synapseId": "syn24998745",
-            "numItems": 85
-        },
-        "ScRNA-seqLevel1": {
-            "synapseId": "syn25006583",
-            "numItems": 170
-        },
-        "Biospecimen": {
-            "synapseId": "syn25126924",
-            "numItems": 103
-        },
-        "ImagingLevel2": {
-            "synapseId": "syn25165616",
-            "numItems": 30
-        }
-    },
     "HTA9": {
         "Demographics": {
             "synapseId": "syn24862574",
@@ -189,6 +139,10 @@
         "Diagnosis": {
             "synapseId": "syn25127027",
             "numItems": 21
+        },
+        "BulkRNA-seqLevel1": {
+            "synapseId": "syn25127342",
+            "numItems": 231
         }
     },
     "HTA4": {
