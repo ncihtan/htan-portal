@@ -107,9 +107,12 @@ if __name__ == '__main__':
 
             # data type/schema component
             try:
-                component = manifest_df.values[0][0]
+                component = manifest_df['Component'].values[0]
+            except KeyError:
+                logging.error("Manifest data unexpected: " + manifest_path + " no Component column")
+                continue
             except IndexError:
-                logging.error("Manifest data unexpected: " + manifest_path + " " + str(manifest_df.values[0]))
+                logging.error("Manifest data unexpected: " + manifest_path + " " + str(manifest_df['Component'].values))
                 continue
 
             # skip components that are NA
@@ -119,11 +122,15 @@ if __name__ == '__main__':
 
             logging.info("Data type: " + component)
 
+            # get data type schema info
+            try:
+                schema_info = se.explore_class(component)
+            except KeyError:
+                logging.error("Component " + component + " does not exist in schema (" + manifest_path)
+                continue
+
             # add metadata file
             portal_metadata.setdefault(center_id.upper(), {})[component] = {"synapseId":dataset["id"],"numItems":len(manifest_df)}
-
-            # get data type schema info
-            schema_info = se.explore_class(component)
 
             # manifest might not have all columns from the schema, so add
             # missing columns
@@ -151,10 +158,14 @@ if __name__ == '__main__':
                 record_list.append(record)
 
             # add records to atlas
-            atlas[data_schema] = {
-                                    "data_schema":data_schema,
-                                    "record_list":record_list
-            }
+            if data_schema in atlas:
+                # there are multiple metadata files for this one data type
+                atlas[data_schema]["record_list"] = atlas[data_schema]["record_list"] + record_list
+            else:
+                atlas[data_schema] = {
+                                        "data_schema":data_schema,
+                                        "record_list":record_list
+                }
 
             # add data schema to JSON if not already there
             if not data_schema in data_schemas:
