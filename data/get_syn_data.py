@@ -151,10 +151,14 @@ if __name__ == '__main__':
                 record_list.append(record)
 
             # add records to atlas
-            atlas[data_schema] = {
-                                    "data_schema":data_schema,
-                                    "record_list":record_list
-            }
+            if data_schema in atlas:
+                # there are multiple metadata files for this one data type
+                atlas[data_schema]["record_list"] = atlas[data_schema]["record_list"] + record_list
+            else:
+                atlas[data_schema] = {
+                                        "data_schema":data_schema,
+                                        "record_list":record_list
+                }
 
             # add data schema to JSON if not already there
             if not data_schema in data_schemas:
