@@ -139,7 +139,7 @@ export function getAtlasColumn(atlases: Atlas[]) {
     };
 }
 
-export function generateColumnsByDataSchema<T>(
+export function generateColumnsForDataSchema<T>(
     schemaDataId: SchemaDataId,
     schemaDataById?: { [schemaDataId: string]: DataSchemaData },
     columnOverrides?: {

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { DataSchemaData, SchemaDataId } from '../lib/dataSchemaHelpers';
 import {
-    generateColumnsByDataSchema,
+    generateColumnsForDataSchema,
     getAtlasColumn,
     getDefaultDataTableStyle,
     sortByHtanParticipantId,
@@ -17,7 +17,7 @@ interface ICaseTableProps {
 }
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
-    const columns = generateColumnsByDataSchema(
+    const columns = generateColumnsForDataSchema(
         SchemaDataId.Diagnosis,
         props.schemaDataById,
         // need to add a custom sort function for the id
