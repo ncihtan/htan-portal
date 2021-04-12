@@ -5,11 +5,13 @@ import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { Atlas, setTab } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
 import { observer } from 'mobx-react';
-import { action, computed, makeObservable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ExploreTab } from './ExploreTabs';
+import { Button, Modal } from 'react-bootstrap';
+import getAtlasMetaData from '../lib/getAtlasMetaData';
 
 interface IWPAtlasTableProps {
     router: NextRouter;
@@ -19,8 +21,82 @@ interface IWPAtlasTableProps {
     onSelectAtlas?: (selected: Atlas[]) => void;
 }
 
+const atlasMetadata = getAtlasMetaData();
+
+interface IAtlasMetadataLinkModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    atlas: Atlas | null;
+}
+
+const SynapseDataLink = (props: { id: string }) => (
+    <a
+        href={`https://www.synapse.org/#!Synapse:${props.id}/files/`}
+        target={'_blank'}
+    >
+        {props.id}
+    </a>
+);
+
+const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalProps> = (
+    props
+) => {
+    return (
+        <Modal show={props.isOpen} onHide={props.onClose}>
+            {props.atlas && (
+                <>
+                    <Modal.Header closeButton>
+                        <Modal.Title>
+                            Download <strong>{props.atlas.htan_name}</strong>{' '}
+                            Metadata
+                        </Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <table className={'table table-striped'}>
+                            <thead>
+                                <tr>
+                                    <th>Synapse ID</th>
+                                    <th>Category</th>
+                                    <th>Num Items</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {_.map(
+                                    atlasMetadata[props.atlas.htan_id],
+                                    (info, category) => {
+                                        return (
+                                            <tr>
+                                                <td>
+                                                    <SynapseDataLink
+                                                        id={info.synapseId}
+                                                    />
+                                                </td>
+                                                <td>{category}</td>
+                                                <td>{info.numItems}</td>
+                                            </tr>
+                                        );
+                                    }
+                                )}
+                            </tbody>
+                        </table>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={props.onClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </>
+            )}
+        </Modal>
+    );
+};
+
 @observer
 export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
+    @observable metadataModalAtlas: Atlas | null = null;
+
     @computed
     get selectedAtlases() {
         return _.keyBy(this.props.selectedAtlases || [], (a) => a.htan_id);
@@ -75,12 +151,32 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 sortable: true,
             },
             {
-                name: '# Cases',
+                name: 'Metadata',
+                selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
+                cell: (atlas: Atlas) => {
+                    if (atlas.htan_id in atlasMetadata) {
+                        return (
+                            <button
+                                className={'btn btn-sm'}
+                                onClick={action(() => {
+                                    this.metadataModalAtlas = atlas;
+                                })}
+                            >
+                                <FontAwesomeIcon icon={faDownload} />
+                            </button>
+                        );
+                    } else {
+                        return <span>None</span>;
+                    }
+                },
+            },
+            {
+                name: 'Cases',
                 selector: 'num_cases',
                 sortable: true,
             },
             {
-                name: '# Biospecimens',
+                name: 'Biospecimens',
                 selector: 'num_biospecimens',
                 sortable: true,
             },
@@ -111,38 +207,47 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
 
     render() {
         return (
-            <EnhancedDataTable
-                customControls={
-                    <button
-                        className={classNames(
-                            'btn btn-primary',
-                            !this.hasAtlasesSelected ? 'invisible' : ''
-                        )}
-                        disabled={!this.hasAtlasesSelected}
-                        onMouseDown={this.onViewFiles}
-                    >
-                        <FontAwesomeIcon icon={faDownload} />{' '}
-                        {`View files for ${
-                            this.props.selectedAtlases?.length
-                        } selected ${
-                            this.props.selectedAtlases?.length === 1
-                                ? 'atlas'
-                                : 'atlases'
-                        }`}
-                    </button>
-                }
-                columns={this.columns}
-                defaultSortField={'WPAtlas.lead_institutions'}
-                data={this.data}
-                selectableRows={true}
-                onSelectedRowsChange={this.onSelect}
-                selectableRowSelected={(r: { isSelected: boolean }) =>
-                    r.isSelected
-                }
-                striped={true}
-                noHeader={true}
-                customStyles={getDefaultDataTableStyle()}
-            />
+            <>
+                <EnhancedDataTable
+                    customControls={
+                        <button
+                            className={classNames(
+                                'btn btn-primary',
+                                !this.hasAtlasesSelected ? 'invisible' : ''
+                            )}
+                            disabled={!this.hasAtlasesSelected}
+                            onMouseDown={this.onViewFiles}
+                        >
+                            <FontAwesomeIcon icon={faDownload} />{' '}
+                            {`View files for ${
+                                this.props.selectedAtlases?.length
+                            } selected ${
+                                this.props.selectedAtlases?.length === 1
+                                    ? 'atlas'
+                                    : 'atlases'
+                            }`}
+                        </button>
+                    }
+                    columns={this.columns}
+                    defaultSortField={'WPAtlas.lead_institutions'}
+                    data={this.data}
+                    selectableRows={true}
+                    onSelectedRowsChange={this.onSelect}
+                    selectableRowSelected={(r: { isSelected: boolean }) =>
+                        r.isSelected
+                    }
+                    striped={true}
+                    noHeader={true}
+                    customStyles={getDefaultDataTableStyle()}
+                />
+                <AtlasMetadataLinkModal
+                    isOpen={this.metadataModalAtlas !== null}
+                    onClose={action(() => {
+                        this.metadataModalAtlas = null;
+                    })}
+                    atlas={this.metadataModalAtlas}
+                />
+            </>
         );
     }
 }
