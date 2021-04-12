@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
+import { DataSchemaData, SchemaDataId } from '../lib/dataSchemaHelpers';
 import {
+    generateColumnsByDataSchema,
+    getAtlasColumn,
     getDefaultDataTableStyle,
     sortByHtanParticipantId,
 } from '../lib/dataTableHelpers';
@@ -10,42 +13,37 @@ import EnhancedDataTable from './EnhancedDataTable';
 interface ICaseTableProps {
     cases: Entity[];
     synapseAtlases: Atlas[];
+    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
 }
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
-    const atlasMap = _.keyBy(props.synapseAtlases, (a) => a.htan_id);
-
-    const columns = [
+    const columns = generateColumnsByDataSchema(
+        SchemaDataId.Diagnosis,
+        props.schemaDataById,
+        // need to add a custom sort function for the id
         {
-            name: 'HTAN Participant ID',
-            selector: 'HTANParticipantID',
-            wrap: true,
-            sortable: true,
-            sortFunction: sortByHtanParticipantId,
-        },
-        {
-            name: 'Atlas Name',
-            selector: (sample: Entity) => {
-                return atlasMap[sample.atlasid].htan_name;
+            HTANParticipantID: {
+                sortFunction: sortByHtanParticipantId,
             },
-            wrap: true,
-            sortable: true,
+            AgeatDiagnosis: {
+                name: 'Age at Diagnosis (years)',
+                format: (sample: Entity) =>
+                    convertAgeInDaysToYears(sample.AgeatDiagnosis),
+            },
         },
-        {
-            name: 'Primary Diagnosis',
-            selector: 'PrimaryDiagnosis',
-            wrap: true,
-            sortable: true,
-        },
-        {
-            name: 'Age at Diagnosis (years)',
-            selector: 'AgeatDiagnosis',
-            format: (sample: Entity) =>
-                convertAgeInDaysToYears(sample.AgeatDiagnosis),
-            wrap: true,
-            sortable: true,
-        },
-    ];
+        // Component seems to be always "Diagnosis", no need to have a column for it
+        ['Component']
+    );
+    const indexOfHtanParticipantId = _.findIndex(
+        columns,
+        (c) => c.id === 'HTANParticipantID'
+    );
+    // insert Atlas Name right after HTAN Participant ID
+    columns.splice(
+        indexOfHtanParticipantId + 1,
+        0,
+        getAtlasColumn(props.synapseAtlases)
+    );
 
     return (
         <EnhancedDataTable

@@ -1,8 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
+import { DataSchemaData, SchemaDataId } from '../lib/dataSchemaHelpers';
 import {
+    generateColumnsByDataSchema,
+    getAtlasColumn,
     getDefaultDataTableStyle,
     sortByBiospecimenId,
+    sortByHtanParentId,
 } from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
@@ -10,36 +14,37 @@ import EnhancedDataTable from './EnhancedDataTable';
 interface IBiospecimenTableProps {
     samples: Entity[];
     synapseAtlases: Atlas[];
+    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
 }
 
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
     props
 ) => {
-    const atlasMap = _.keyBy(props.synapseAtlases, (a) => a.htan_id);
-
-    const columns = [
+    const columns = generateColumnsByDataSchema(
+        SchemaDataId.Biospecimen,
+        props.schemaDataById,
+        // need to add a custom sort function for the id
         {
-            name: 'HTAN Biospecimen ID',
-            selector: 'HTANBiospecimenID',
-            wrap: true,
-            sortable: true,
-            sortFunction: sortByBiospecimenId,
-        },
-        {
-            name: 'Atlas Name',
-            selector: (sample: Entity) => {
-                return atlasMap[sample.atlasid].htan_name;
+            HTANBiospecimenID: {
+                sortFunction: sortByBiospecimenId,
             },
-            wrap: true,
-            sortable: true,
+            HTANParentID: {
+                sortFunction: sortByHtanParentId,
+            },
         },
-        {
-            name: 'Biospecimen Type',
-            selector: 'BiospecimenType',
-            wrap: true,
-            sortable: true,
-        },
-    ];
+        // Component seems to be always "Biospecimen", no need to have a column for it
+        ['Component']
+    );
+    const indexOfHtanBiospecimenId = _.findIndex(
+        columns,
+        (c) => c.id === 'HTANBiospecimenID'
+    );
+    // insert Atlas Name right after HTAN Biospecimen ID
+    columns.splice(
+        indexOfHtanBiospecimenId + 1,
+        0,
+        getAtlasColumn(props.synapseAtlases)
+    );
 
     return (
         <EnhancedDataTable
