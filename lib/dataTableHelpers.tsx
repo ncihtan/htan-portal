@@ -1,7 +1,10 @@
+import _ from 'lodash';
 import * as React from 'react';
 
+import { IEnhancedDataTableColumn } from '../components/EnhancedDataTable';
 import ExpandableText from '../components/ExpandableText';
-import { Entity } from './helpers';
+import { DataSchemaData, SchemaDataId } from './dataSchemaHelpers';
+import { Atlas, Entity } from './helpers';
 
 export function getDefaultDataTableStyle() {
     return {
@@ -93,25 +96,85 @@ function defaultNumericalComparison(
     return comparison;
 }
 
+function getDefaultHtanIdIteratees(getValue: (row: Entity) => string) {
+    // get iteratees for ids which take the form HTA[integer]_[integer]
+    return [
+        (row: Entity) => Number(getValue(row).split('_')[0].replace('HTA', '')),
+        (row: Entity) => Number(getValue(row).split('_')[1]),
+    ];
+}
+
 export function sortByHtanParticipantId(rowA: Entity, rowB: Entity) {
     // we need sort by participant id which takes the form HTA[integer]_[integer]
-    const iteratees = [
-        (row: Entity) =>
-            Number(row.HTANParticipantID.split('_')[0].replace('HTA', '')),
-        (row: Entity) => Number(row.HTANParticipantID.split('_')[1]),
-    ];
+    const iteratees = getDefaultHtanIdIteratees((row) => row.HTANParticipantID);
+    return defaultNumericalComparison(rowA, rowB, iteratees);
+}
 
+export function sortByHtanParentId(rowA: Entity, rowB: Entity) {
+    // TODO parent id potentially can also take the form HTA[integer]_[integer]_[integer]
+    // we need sort by parent id which takes the form HTA[integer]_[integer]
+    const iteratees = getDefaultHtanIdIteratees((row) => row.HTANParentID);
     return defaultNumericalComparison(rowA, rowB, iteratees);
 }
 
 export function sortByBiospecimenId(rowA: Entity, rowB: Entity) {
     // we need sort by biospecimen id which takes the form HTA[integer]_[integer]_[integer]
-    const iteratees = [
-        (row: Entity) =>
-            Number(row.HTANBiospecimenID.split('_')[0].replace('HTA', '')),
-        (row: Entity) => Number(row.HTANBiospecimenID.split('_')[1]),
-        (row: Entity) => Number(row.HTANBiospecimenID.split('_')[2]),
-    ];
+    const iteratees = getDefaultHtanIdIteratees((row) => row.HTANBiospecimenID);
+    // additional iteratee for the last integer
+    iteratees.push((row: Entity) =>
+        Number(row.HTANBiospecimenID.split('_')[2])
+    );
 
     return defaultNumericalComparison(rowA, rowB, iteratees);
+}
+
+export function getAtlasColumn(atlases: Atlas[]) {
+    const atlasMap = _.keyBy(atlases, (a) => a.htan_id);
+
+    return {
+        name: 'Atlas Name',
+        selector: (sample: Entity) => atlasMap[sample.atlasid].htan_name,
+        wrap: true,
+        sortable: true,
+    };
+}
+
+export function generateColumnsByDataSchema<T>(
+    schemaDataId: SchemaDataId,
+    schemaDataById?: { [schemaDataId: string]: DataSchemaData },
+    columnOverrides?: {
+        [columnKey: string]: Partial<IEnhancedDataTableColumn<T>>;
+    },
+    excludedColumns?: string[]
+): IEnhancedDataTableColumn<T>[] {
+    let columns: IEnhancedDataTableColumn<T>[] = [];
+
+    if (schemaDataById) {
+        const dataSchema = schemaDataById[schemaDataId];
+        const dependencies = dataSchema ? dataSchema.requiredDependencies : [];
+
+        columns = _.compact(
+            dependencies.map((id) => {
+                const schema = schemaDataById[id];
+
+                if (schema && !excludedColumns?.includes(schema.label)) {
+                    const columnKey = schema.label;
+
+                    return {
+                        id: columnKey,
+                        name: schema.attribute,
+                        selector: columnKey,
+                        omit: !schema.required,
+                        wrap: true,
+                        sortable: true,
+                        ...(columnOverrides || {})[columnKey],
+                    };
+                } else {
+                    return undefined;
+                }
+            })
+        );
+    }
+
+    return columns;
 }
