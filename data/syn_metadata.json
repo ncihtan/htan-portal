@@ -192,11 +192,15 @@
         },
         "BulkWESLevel1": {
             "synapseId": "syn25127316",
-            "numItems": 208
+            "numItems": 206
         },
         "BulkRNA-seqLevel1": {
             "synapseId": "syn25127342",
             "numItems": 231
+        },
+        "ScRNA-seqLevel1": {
+            "synapseId": "syn25178382",
+            "numItems": 217
         }
     },
     "HTA4": {
