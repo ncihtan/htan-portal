@@ -62,10 +62,9 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                 </tr>
                             </thead>
                             <tbody>
-                                {_.map(
-                                    atlasMetadata[props.atlas.htan_id],
-                                    (info, category) => {
-                                        return (
+                                {_.chain(atlasMetadata[props.atlas.htan_id])
+                                    .map((info, category) => ({
+                                        row: (
                                             <tr>
                                                 <td>
                                                     <SynapseDataLink
@@ -75,9 +74,12 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                                 <td>{category}</td>
                                                 <td>{info.numItems}</td>
                                             </tr>
-                                        );
-                                    }
-                                )}
+                                        ),
+                                        category,
+                                    }))
+                                    .sortBy((obj) => obj.category)
+                                    .map((obj) => obj.row)
+                                    .value()}
                             </tbody>
                         </table>
                     </Modal.Body>
