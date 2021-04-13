@@ -151,7 +151,9 @@ export function generateColumnsForDataSchema<T>(
 
     if (schemaDataById) {
         const dataSchema = schemaDataById[schemaDataId];
-        const dependencies = dataSchema ? dataSchema.requiredDependencies : [];
+        const dependencies = dataSchema
+            ? _.uniq(dataSchema.requiredDependencies)
+            : [];
 
         columns = _.compact(
             dependencies.map((id) => {
