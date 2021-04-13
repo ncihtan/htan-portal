@@ -43,7 +43,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 opt.group = attrName;
                 opt.isSelected = isOptionSelected(opt); // this call has to happen after setting `group`
             });
-            return ret;
+            return _.sortBy(ret, (o) => o.label);
         };
 
         const isOptionSelected = (option: ExploreSelectedFilter) => {
