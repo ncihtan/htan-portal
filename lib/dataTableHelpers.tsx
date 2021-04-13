@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Tooltip from 'rc-tooltip';
 import * as React from 'react';
 
 import { IEnhancedDataTableColumn } from '../components/EnhancedDataTable';
@@ -28,9 +29,12 @@ export function truncatedTableCell(file: Entity) {
     return <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />;
 }
 
-export function getColumnKey(col: { id?: string; name: string }): string {
+export function getColumnKey(col: {
+    id?: string | number;
+    name: string | number | React.ReactNode;
+}): string {
     // if no id exists, just use name for key
-    return col.id || col.name;
+    return (col.id || col.name || '').toString();
 }
 
 export function getColumnVisibilityMap(
@@ -132,7 +136,12 @@ export function getAtlasColumn(atlases: Atlas[]) {
     const atlasMap = _.keyBy(atlases, (a) => a.htan_id);
 
     return {
-        name: 'Atlas Name',
+        id: 'Atlas Name',
+        name: (
+            <Tooltip overlay="Name of the Atlas">
+                <span>Atlas Name</span>
+            </Tooltip>
+        ),
         selector: (sample: Entity) => atlasMap[sample.atlasid].htan_name,
         wrap: true,
         sortable: true,
@@ -143,7 +152,11 @@ export function generateColumnsForDataSchema<T>(
     schemaDataId: SchemaDataId,
     schemaDataById?: { [schemaDataId: string]: DataSchemaData },
     columnOverrides?: {
-        [columnKey: string]: Partial<IEnhancedDataTableColumn<T>>;
+        [columnKey: string]: Partial<
+            IEnhancedDataTableColumn<T> & {
+                headerTooltip?: string | React.ReactNode;
+            }
+        >;
     },
     excludedColumns?: string[]
 ): IEnhancedDataTableColumn<T>[] {
@@ -160,16 +173,26 @@ export function generateColumnsForDataSchema<T>(
                 const schema = schemaDataById[id];
 
                 if (schema && !excludedColumns?.includes(schema.label)) {
-                    const columnKey = schema.label;
+                    const selector = schema.label;
+                    const columnOverride = (columnOverrides || {})[selector];
+                    const name = columnOverride?.name || schema.attribute;
+                    const headerTooltip =
+                        columnOverride?.headerTooltip || schema.description;
 
                     return {
-                        id: columnKey,
-                        name: schema.attribute,
-                        selector: columnKey,
+                        id: schema.attribute,
+                        selector,
                         omit: !schema.required,
                         wrap: true,
                         sortable: true,
-                        ...(columnOverrides || {})[columnKey],
+                        ...columnOverride,
+                        // do not override the actual name field
+                        // we still want to keep the tooltip even if the name is customized
+                        name: (
+                            <Tooltip overlay={<span>{headerTooltip}</span>}>
+                                <span>{name}</span>
+                            </Tooltip>
+                        ),
                     };
                 } else {
                     return undefined;
