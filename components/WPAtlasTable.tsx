@@ -180,6 +180,30 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 selector: 'num_biospecimens',
                 sortable: true,
             },
+            {
+                name: 'Viewers',
+                selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
+                cell: (atlas: Atlas) => {
+                    if (atlas.htan_name === 'HTAN MSK') {
+                        return (
+                            <a href='/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+MSK"%7D%5D&tab=file'>
+                                CellxGene (11)
+                            </a>
+                        );
+                    } else if (atlas.htan_name === 'HTAN OHSU') {
+                        return (
+                            <a
+                                href="https://minerva-story-htan-ohsu-demo.surge.sh/"
+                                target="_blank"
+                            >
+                                Minerva Story (1)
+                            </a>
+                        );
+                    } else {
+                        return null;
+                    }
+                },
+            },
             // {
             //     name: 'Atlas ID',
             //     selector: (atlas: Atlas) => atlas.htan_id.toUpperCase(),
