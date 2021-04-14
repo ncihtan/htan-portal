@@ -201,6 +201,27 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                 Minerva Story (1)
                             </a>
                         );
+                    } else if (atlas.htan_name === 'HTAN BU') {
+                        return (
+                            <a
+                                href="https://cellxgene.cziscience.com/d/BFAA0C46-7E34-4FA9-B08C-6DC6013B735A.cxg/"
+                                target="_blank"
+                            >
+                                CellxGene (1)
+                            </a>
+                        );
+                    } else if (atlas.htan_name === 'HTAN Vanderbilt') {
+                        return (
+                            <a href='/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'>
+                                CellxGene (1)
+                            </a>
+                        );
+                    } else if (atlas.htan_name === 'HTAN CHOP') {
+                        return (
+                            <a href='/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file'>
+                                CellxGene (3)
+                            </a>
+                        );
                     } else {
                         return null;
                     }
