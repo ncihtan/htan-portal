@@ -29,7 +29,9 @@ if __name__ == '__main__':
                     "HTAN HMS": "hta7",
                     "HTAN MSK": "hta8",
                     "HTAN OHSU": "hta9",
-                    "HTAN Stanford": "hta10",
+                    # temp exclude stanford (>2K files makes portal sluggish)
+                    # also they have unknown levels
+                    # "HTAN Stanford": "hta10",
                     "HTAN Vanderbilt": "hta11",
                     "HTAN WUSTL": "hta12",
                     # exclude TNPs for now
