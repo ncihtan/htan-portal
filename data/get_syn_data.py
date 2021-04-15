@@ -19,8 +19,7 @@ if __name__ == '__main__':
 
     # map: HTAN center names to HTAN IDs
     htan_centers = {
-                    # remove HTAPP for now
-                    # "HTAN HTAPP": "hta1",
+                    "HTAN HTAPP": "hta1",
                     "PCAPP Pilot Project": "hta2",
                     "HTAN BU": "hta3",
                     "HTAN CHOP": "hta4",
