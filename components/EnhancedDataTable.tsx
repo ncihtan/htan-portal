@@ -1,5 +1,12 @@
 import _ from 'lodash';
-import { action, computed, makeObservable, observable } from 'mobx';
+import {
+    action,
+    autorun,
+    computed,
+    makeObservable,
+    observable,
+    runInAction,
+} from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 import DataTable, {
@@ -14,6 +21,7 @@ import {
 import DebouncedObservable from '../lib/DebouncedObservable';
 import { ColumnVisibility } from './ColumnSelect';
 import DataTableControls from './DataTableControls';
+import { pool } from 'workerpool';
 
 export interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
     toggleable?: boolean; // defaults to true if not specified (see isColumnToggleable)
@@ -129,6 +137,61 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     constructor(props: IEnhancedDataTableProps<T>) {
         super(props);
         makeObservable(this);
+
+        autorun(() => {
+            const searchText =
+                this.props.searchText || this.filterText.debouncedValue;
+            const searchTextUpperCase = searchText.toUpperCase();
+
+            // no search text -> return unfiltered data
+            if (searchTextUpperCase.length === 0) {
+                runInAction(() => {
+                    this.tableData = this.props.data;
+                });
+                return;
+            }
+
+            // no searchable column -> return unfiltered data
+            if (!_.some(this.props.columns, isColumnSearchable)) {
+                runInAction(() => {
+                    this.tableData = this.props.data;
+                });
+                return;
+            }
+
+            const strings = this.props.data.map((d: T) => {
+                return this.props.columns
+                    .filter(isColumnSearchable)
+                    .map((c, index) => defaultSearchFunction(d, c, index));
+            });
+
+            const p = pool();
+            p.exec(
+                function getFilterResults(
+                    strings: string[][],
+                    searchText: string
+                ) {
+                    return strings.map((stringArray) => {
+                        let ret = false;
+                        for (let i = 0; i < stringArray.length; i++) {
+                            ret = stringArray[i].includes(searchText) || ret;
+                            if (ret) {
+                                break;
+                            }
+                        }
+                        return ret;
+                    });
+                },
+                [strings, searchTextUpperCase]
+            ).then((result) => {
+                runInAction(() => {
+                    this.tableData = this.props.data.filter(
+                        (val, index) => result[index]
+                    );
+                });
+            });
+            // TODO: race conditions - if autorun is triggered more than once
+        });
     }
 
     get columnVisibilityByColumnDefinition() {
@@ -142,41 +205,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
         );
     }
 
-    @computed
-    get data() {
-        const searchText =
-            this.props.searchText || this.filterText.debouncedValue;
-        const searchTextUpperCase = searchText.toUpperCase();
-
-        // no search text -> return unfiltered data
-        if (searchTextUpperCase.length === 0) {
-            return this.props.data;
-        }
-
-        // no searchable column -> return unfiltered data
-        if (!_.some(this.props.columns, isColumnSearchable)) {
-            return this.props.data;
-        }
-
-        return this.props.data.filter((d) => {
-            const searchResults = this.props.columns
-                .filter(isColumnSearchable)
-                .map((c, index) => defaultSearchFunction(d, c, index))
-                .map((v) => v.includes(searchTextUpperCase));
-
-            if (this.props.additionalSearchFilter) {
-                searchResults.push(
-                    this.props.additionalSearchFilter(
-                        d,
-                        searchText,
-                        searchTextUpperCase
-                    )
-                );
-            }
-
-            return _.some(searchResults);
-        });
-    }
+    @observable.ref tableData: T[] = [];
 
     @computed
     get columns(): IDataTableColumn[] {
@@ -262,7 +291,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
 
                 <_DataTable
                     {...this.props}
-                    data={this.data}
+                    data={this.tableData}
                     columns={this.columns}
                 />
             </>

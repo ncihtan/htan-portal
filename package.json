@@ -28,6 +28,7 @@
     "@types/react-select": "^3.0.24",
     "@types/react-spinkit": "^3.0.5",
     "@types/roman-numerals": "^0.3.0",
+    "@types/workerpool": "^6.0.0",
     "better-react-spinkit": "^2.0.4",
     "bootstrap": "^4.4.1",
     "global": "^4.4.0",
@@ -62,7 +63,8 @@
     "styled-components": "^5.1.0",
     "swr": "^0.1.18",
     "unfetch": "^4.1.0",
-    "vercel": "^21.1.0"
+    "vercel": "^21.1.0",
+    "workerpool": "^6.1.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.149",
