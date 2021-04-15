@@ -17,10 +17,7 @@ import {
     getFileBase,
     truncateFilename,
 } from '../lib/helpers';
-import {
-    getDefaultDataTableStyle,
-    truncatedTableCell,
-} from '../lib/dataTableHelpers';
+import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import EnhancedDataTable from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
@@ -220,7 +217,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         file.diagnosis.map((d) => d.TissueorOrganofOrigin)
                     ).join(', ');
                 },
-                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
@@ -231,7 +227,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         file.diagnosis.map((d) => d.TissueorOrganofOrigin)
                     ).join(', ');
                 },
-                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
@@ -261,7 +256,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         return '';
                     }
                 },
-                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
