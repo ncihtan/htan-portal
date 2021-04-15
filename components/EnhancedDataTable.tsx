@@ -22,6 +22,7 @@ import DebouncedObservable from '../lib/DebouncedObservable';
 import { ColumnVisibility } from './ColumnSelect';
 import DataTableControls from './DataTableControls';
 import { pool } from 'workerpool';
+import AsyncComputed from '../lib/AsyncComputed';
 
 export interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
     toggleable?: boolean; // defaults to true if not specified (see isColumnToggleable)
@@ -137,34 +138,30 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     constructor(props: IEnhancedDataTableProps<T>) {
         super(props);
         makeObservable(this);
+    }
 
-        autorun(() => {
-            const searchText =
-                this.props.searchText || this.filterText.debouncedValue;
-            const searchTextUpperCase = searchText.toUpperCase();
+    private data = AsyncComputed<T[]>(() => {
+        const searchText =
+            this.props.searchText || this.filterText.debouncedValue;
+        const searchTextUpperCase = searchText.toUpperCase();
 
-            // no search text -> return unfiltered data
-            if (searchTextUpperCase.length === 0) {
-                runInAction(() => {
-                    this.tableData = this.props.data;
-                });
-                return;
-            }
+        // no search text -> return unfiltered data
+        if (searchTextUpperCase.length === 0) {
+            return Promise.resolve(this.props.data);
+        }
 
-            // no searchable column -> return unfiltered data
-            if (!_.some(this.props.columns, isColumnSearchable)) {
-                runInAction(() => {
-                    this.tableData = this.props.data;
-                });
-                return;
-            }
+        // no searchable column -> return unfiltered data
+        if (!_.some(this.props.columns, isColumnSearchable)) {
+            return Promise.resolve(this.props.data);
+        }
 
-            const strings = this.props.data.map((d: T) => {
-                return this.props.columns
-                    .filter(isColumnSearchable)
-                    .map((c, index) => defaultSearchFunction(d, c, index));
-            });
+        const strings = this.props.data.map((d: T) => {
+            return this.props.columns
+                .filter(isColumnSearchable)
+                .map((c, index) => defaultSearchFunction(d, c, index));
+        });
 
+        return new Promise((resolve) => {
             const p = pool();
             p.exec(
                 function getFilterResults(
@@ -184,15 +181,10 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                 },
                 [strings, searchTextUpperCase]
             ).then((result) => {
-                runInAction(() => {
-                    this.tableData = this.props.data.filter(
-                        (val, index) => result[index]
-                    );
-                });
+                resolve(this.props.data.filter((val, index) => result[index]));
             });
-            // TODO: race conditions - if autorun is triggered more than once
         });
-    }
+    }, []);
 
     get columnVisibilityByColumnDefinition() {
         return getColumnVisibilityMap(
@@ -204,8 +196,6 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                 }))
         );
     }
-
-    @observable.ref tableData: T[] = [];
 
     @computed
     get columns(): IDataTableColumn[] {
@@ -291,7 +281,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
 
                 <_DataTable
                     {...this.props}
-                    data={this.tableData}
+                    data={this.data.get()}
                     columns={this.columns}
                 />
             </>
