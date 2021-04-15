@@ -8,24 +8,32 @@ import {
     IAttributeInfo,
     ISelectedFiltersByAttrName,
 } from './types';
+import mem from 'mem';
 
-function getAttrValueFromFile(file: Entity, attrName: AttributeNames) {
-    const attrInfo = AttributeMap[attrName];
-    let attrValue: string | string[] | undefined;
+const getAttrValueFromFile = mem(
+    function getAttrValueFromFile(file: Entity, attrName: AttributeNames) {
+        const attrInfo = AttributeMap[attrName];
+        let attrValue: string | string[] | undefined;
 
-    if (attrInfo.path) {
-        attrValue = _.at<any>(file, attrInfo.path)[0];
-    } else if (attrInfo.getValues) {
-        attrValue = attrInfo.getValues(file).filter((x) => !!x);
+        if (attrInfo.path) {
+            attrValue = _.at<any>(file, attrInfo.path)[0];
+        } else if (attrInfo.getValues) {
+            attrValue = attrInfo.getValues(file).filter((x) => !!x);
+        }
+
+        if (_.isArray(attrValue) && attrValue.length === 0) {
+            // no values => undefined
+            attrValue = undefined;
+        }
+
+        return attrValue;
+    },
+    {
+        cacheKey: (arguments_) => {
+            return `${arguments_[0].HTANDataFileID};${arguments_[1]}`;
+        },
     }
-
-    if (_.isArray(attrValue) && attrValue.length === 0) {
-        // no values => undefined
-        attrValue = undefined;
-    }
-
-    return attrValue;
-}
+);
 
 export function groupFilesByAttrNameAndValue(files: Entity[]) {
     const ret: {
