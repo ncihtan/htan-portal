@@ -21,7 +21,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
     props
 ) => {
     const columns = generateColumnsForDataSchema(
-        SchemaDataId.Biospecimen,
+        [SchemaDataId.Biospecimen],
         props.schemaDataById,
         // need to add a custom sort function for the id
         {

@@ -211,7 +211,7 @@ class Search extends React.Component<
     @computed
     get filteredCases() {
         return _.chain(this.filteredFiles)
-            .flatMapDeep((f: Entity) => f.diagnosis)
+            .flatMapDeep((f: Entity) => f.cases)
             .uniqBy((f) => f.HTANParticipantID)
             .value();
     }
