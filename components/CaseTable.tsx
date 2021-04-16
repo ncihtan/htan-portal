@@ -26,7 +26,10 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
                 sortFunction: sortByHtanParticipantId,
             },
             AgeatDiagnosis: {
+                // we need to customize both the name and the tooltip since we convert days to years
                 name: 'Age at Diagnosis (years)',
+                headerTooltip:
+                    'Age at the time of diagnosis expressed in number of years since birth.',
                 format: (sample: Entity) =>
                     convertAgeInDaysToYears(sample.AgeatDiagnosis),
             },
@@ -36,7 +39,7 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     );
     const indexOfHtanParticipantId = _.findIndex(
         columns,
-        (c) => c.id === 'HTANParticipantID'
+        (c) => c.id === 'HTAN Participant ID'
     );
     // insert Atlas Name right after HTAN Participant ID
     columns.splice(

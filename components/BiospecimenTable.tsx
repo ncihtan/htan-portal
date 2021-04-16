@@ -37,7 +37,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
     );
     const indexOfHtanBiospecimenId = _.findIndex(
         columns,
-        (c) => c.id === 'HTANBiospecimenID'
+        (c) => c.id === 'HTAN Biospecimen ID'
     );
     // insert Atlas Name right after HTAN Biospecimen ID
     columns.splice(
