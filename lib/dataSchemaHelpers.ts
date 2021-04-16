@@ -94,7 +94,17 @@ export enum SchemaDataId {
     scRNASeqLevel2 = 'bts:ScRNA-seqLevel2',
     scRNASeqLevel3 = 'bts:ScRNA-seqLevel3',
     scRNASeqLevel4 = 'bts:ScRNA-seqLevel4',
-    Treatment = 'bts:Treatment',
+    Therapy = 'bts:Therapy',
+    AcuteLymphoblasticLeukemiaTier3 = 'bts:AcuteLymphoblasticLeukemiaTier3',
+    BrainCancerTier3 = 'bts:BrainCancerTier3',
+    BreastCancerTier3 = 'bts:BreastCancerTier3',
+    ColorectalCancerTier3 = 'bts:ColorectalCancerTier3',
+    LungCancerTier3 = 'bts:LungCancerTier3',
+    MelanomaTier3 = 'bts:MelanomaTier3',
+    OvarianCancerTier3 = 'bts:OvarianCancerTier3',
+    PancreaticCancerTier3 = 'bts:PancreaticCancerTier3',
+    ProstateCancerTier3 = 'bts:ProstateCancerTier3',
+    SarcomaTier3 = 'bts:SarcomaTier3',
 }
 
 export const DEFAULT_SCHEMA: SchemaJson = {
