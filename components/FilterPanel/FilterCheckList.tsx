@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import classNames from 'classnames';
 import { ActionMeta } from 'react-select';
 import { ExploreOptionType, ISelectedFiltersByAttrName } from '../../lib/types';
@@ -41,8 +41,9 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                                             ? 'select-option'
                                             : 'deselect-option',
                                     });
-                                }, 10);
+                                }, 100);
                             }}
+                            defaultChecked={checked}
                             disabled={disabled}
                             type="checkbox"
                             id={id}

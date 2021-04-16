@@ -33,7 +33,6 @@ const FilterPanelMenu: FunctionComponent<{
             }
 
             return () => {
-                console.log('removing');
                 $(window).off('click', clickHandler);
             };
         }),
