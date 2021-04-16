@@ -20,8 +20,18 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.FamilyHistory,
         SchemaDataId.FollowUp,
         SchemaDataId.MolecularTest,
-        SchemaDataId.Treatment,
+        SchemaDataId.Therapy,
         SchemaDataId.ClinicalDataTier2,
+        SchemaDataId.AcuteLymphoblasticLeukemiaTier3,
+        SchemaDataId.BrainCancerTier3,
+        SchemaDataId.BreastCancerTier3,
+        SchemaDataId.ColorectalCancerTier3,
+        SchemaDataId.LungCancerTier3,
+        SchemaDataId.MelanomaTier3,
+        SchemaDataId.OvarianCancerTier3,
+        SchemaDataId.PancreaticCancerTier3,
+        SchemaDataId.ProstateCancerTier3,
+        SchemaDataId.SarcomaTier3,
     ]);
 
     return { props: { data, dataSchemaData, schemaDataById } };
