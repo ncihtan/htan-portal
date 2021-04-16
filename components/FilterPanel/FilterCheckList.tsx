@@ -33,14 +33,16 @@ const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (
                                 styles.checkboxLabel
                             )}
                             onChange={(e) => {
-                                props.setFilter({
-                                    option,
-                                    action: e.currentTarget.checked
-                                        ? 'select-option'
-                                        : 'deselect-option',
-                                });
+                                const val = e.currentTarget.checked;
+                                setTimeout(() => {
+                                    props.setFilter({
+                                        option,
+                                        action: val
+                                            ? 'select-option'
+                                            : 'deselect-option',
+                                    });
+                                }, 10);
                             }}
-                            checked={checked}
                             disabled={disabled}
                             type="checkbox"
                             id={id}

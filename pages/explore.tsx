@@ -81,6 +81,7 @@ class Search extends React.Component<
 
     constructor(props: any) {
         super(props);
+
         this.state = {
             files: [],
             filters: {},
@@ -188,8 +189,15 @@ class Search extends React.Component<
         });
     }
 
+    @computed
     get filteredFiles() {
-        return filterFiles(this.selectedFiltersByAttrName, this.state.files);
+        //const start = performance.now();
+        const ret = filterFiles(
+            this.selectedFiltersByAttrName,
+            this.state.files
+        );
+        //console.log('filtering cost', performance.now() - start);
+        return ret;
     }
 
     @computed
