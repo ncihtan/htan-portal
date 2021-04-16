@@ -7,7 +7,7 @@ import {
     getDefaultDataTableStyle,
     sortByHtanParticipantId,
 } from '../lib/dataTableHelpers';
-import { Atlas, Entity, convertAgeInDaysToYears } from '../lib/helpers';
+import { Atlas, convertAgeInDaysToYears, Entity } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
 
 interface ICaseTableProps {
@@ -18,7 +18,7 @@ interface ICaseTableProps {
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     const columns = generateColumnsForDataSchema(
-        SchemaDataId.Diagnosis,
+        [SchemaDataId.Diagnosis, SchemaDataId.Demographics],
         props.schemaDataById,
         // need to add a custom sort function for the id
         {
