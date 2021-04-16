@@ -99,59 +99,67 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     </ul>
                 </div>
 
-                <div
-                    className={`tab-content fileTab ${
-                        activeTab !== 'file' ? 'd-none' : ''
-                    }`}
-                >
-                    <FileTable
-                        entities={props.filteredFiles}
-                        getGroupsByPropertyFiltered={
-                            props.getGroupsByPropertyFiltered
-                        }
-                        patientCount={props.cases.length}
-                    />
-                </div>
+                {activeTab === 'file' && (
+                    <div
+                        className={`tab-content fileTab ${
+                            activeTab !== 'file' ? 'd-none' : ''
+                        }`}
+                    >
+                        <FileTable
+                            entities={props.filteredFiles}
+                            getGroupsByPropertyFiltered={
+                                props.getGroupsByPropertyFiltered
+                            }
+                            patientCount={props.cases.length}
+                        />
+                    </div>
+                )}
 
-                <div
-                    className={`tab-content biospecimen ${
-                        activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
-                    }`}
-                >
-                    <BiospecimenTable
-                        synapseAtlases={props.filteredSynapseAtlases}
-                        samples={props.samples}
-                        schemaDataById={props.schemaDataById}
-                    />
-                </div>
+                {activeTab === ExploreTab.BIOSPECIMEN && (
+                    <div
+                        className={`tab-content biospecimen ${
+                            activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
+                        }`}
+                    >
+                        <BiospecimenTable
+                            synapseAtlases={props.filteredSynapseAtlases}
+                            samples={props.samples}
+                            schemaDataById={props.schemaDataById}
+                        />
+                    </div>
+                )}
 
-                <div
-                    className={`tab-content cases ${
-                        activeTab !== ExploreTab.CASES ? 'd-none' : ''
-                    }`}
-                >
-                    <CaseTable
-                        synapseAtlases={props.filteredSynapseAtlases}
-                        cases={props.cases}
-                        schemaDataById={props.schemaDataById}
-                    />
-                </div>
+                {activeTab === ExploreTab.CASES && (
+                    <div
+                        className={`tab-content cases ${
+                            activeTab !== ExploreTab.CASES ? 'd-none' : ''
+                        }`}
+                    >
+                        <CaseTable
+                            synapseAtlases={props.filteredSynapseAtlases}
+                            cases={props.cases}
+                            schemaDataById={props.schemaDataById}
+                        />
+                    </div>
+                )}
 
-                <div
-                    className={`tab-content atlasTab ${
-                        activeTab !== 'atlas' ? 'd-none' : ''
-                    }`}
-                >
-                    <WPAtlasTable
-                        router={props.router}
-                        synapseAtlasData={props.allSynapseAtlases}
-                        selectedAtlases={props.selectedSynapseAtlases}
-                        filteredAtlases={
-                            props.filteredSynapseAtlasesByNonAtlasFilters
-                        }
-                        onSelectAtlas={props.onSelectAtlas}
-                    />
-                </div>
+                {activeTab === 'atlas' && (
+                    <div
+                        className={`tab-content atlasTab ${
+                            activeTab !== 'atlas' ? 'd-none' : ''
+                        }`}
+                    >
+                        <WPAtlasTable
+                            router={props.router}
+                            synapseAtlasData={props.allSynapseAtlases}
+                            selectedAtlases={props.selectedSynapseAtlases}
+                            filteredAtlases={
+                                props.filteredSynapseAtlasesByNonAtlasFilters
+                            }
+                            onSelectAtlas={props.onSelectAtlas}
+                        />
+                    </div>
+                )}
             </>
         );
     }
