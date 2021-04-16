@@ -10,6 +10,7 @@ import DataTable, {
 import {
     resolveColumnVisibility,
     getColumnVisibilityMap,
+    getColumnKey,
 } from '../lib/dataTableHelpers';
 import DebouncedObservable from '../lib/DebouncedObservable';
 import { ColumnVisibility } from './ColumnSelect';
@@ -90,14 +91,15 @@ function getColumnVisibility<T>(
 
     (columns || [])
         .filter((column) => column.name)
-        .forEach((column) =>
+        .forEach((column) => {
+            const columnKey = getColumnKey(column);
             colVisProp.push({
-                id: column.name!.toString(),
-                name: column.name!.toString(),
-                visible: columnVisibility[column.name!.toString()],
+                id: columnKey,
+                name: columnKey,
+                visible: columnVisibility[columnKey],
                 toggleable: isColumnToggleable(column),
-            })
-        );
+            });
+        });
 
     return colVisProp;
 }
@@ -136,6 +138,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
             (this.props.columns || [])
                 .filter((c) => c.name)
                 .map((c) => ({
+                    id: getColumnKey(c),
                     name: c.name!.toString(),
                     visible: !c.omit,
                 }))
@@ -182,7 +185,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     get columns(): IDataTableColumn[] {
         return (this.props.columns || []).map((c) => ({
             ...c,
-            omit: c.name ? !this.columnVisibility[c.name.toString()] : c.omit,
+            omit: c.name ? !this.columnVisibility[getColumnKey(c)] : c.omit,
         }));
     }
 

@@ -3,6 +3,8 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import Select from 'react-select';
 
+import { getColumnKey } from '../lib/dataTableHelpers';
+
 type Option = {
     value: string;
     label: string | JSX.Element;
@@ -41,7 +43,10 @@ export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
     public get selectedOptions() {
         return (this.props.columnVisibility || [])
             .filter((c) => c.visible)
-            .map((c) => ({ value: c.id, label: <span>{c.name}</span> }));
+            .map((c) => ({
+                value: getColumnKey(c),
+                label: <span>{getColumnKey(c)}</span>,
+            }));
     }
 
     @computed
@@ -49,8 +54,8 @@ export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
         return (this.props.columnVisibility || [])
             .filter((c) => c.toggleable)
             .map((c) => ({
-                label: <span>{c.name}</span>,
-                value: c.id,
+                value: getColumnKey(c),
+                label: <span>{getColumnKey(c)}</span>,
             }));
     }
 
