@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TruncateMarkup, { TruncateProps } from 'react-truncate-markup';
 
-import styles from './expandableText.module.scss';
+import styles from './common.module.scss';
 
 interface ExpandableTextProps {
     fullText: string;
@@ -15,7 +15,7 @@ const Toggle: React.FunctionComponent<{
     onClick: () => void;
 }> = (props) => {
     return (
-        <span className={styles.toggle} onClick={props.onClick}>
+        <span className={styles.clickable} onClick={props.onClick}>
             {props.text}
         </span>
     );
