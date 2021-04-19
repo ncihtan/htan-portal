@@ -25,6 +25,8 @@ import EnhancedDataTable from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
+import styles from './common.module.scss';
+
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
 
@@ -132,7 +134,9 @@ interface IFileTableProps {
 @observer
 export default class FileTable extends React.Component<IFileTableProps> {
     @observable.ref selected: Entity[] = [];
+    @observable clicked: Entity | undefined;
     @observable isDownloadModalOpen = false;
+    @observable isLinkOutModalOpen = false;
 
     get columns() {
         return [
@@ -142,14 +146,28 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 wrap: true,
                 sortable: true,
                 cell: (file: Entity) => {
+                    const truncatedFilename = truncateFilename(file.filename);
+                    const linkOut = doesFileIncludeLevel1OrLevel2SequencingData(
+                        file
+                    ) ? (
+                        <span
+                            className={styles.clickable}
+                            onClick={(e) => this.onClick(e, file)}
+                        >
+                            {truncatedFilename}
+                        </span>
+                    ) : (
+                        <a
+                            target="_blank"
+                            href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
+                        >
+                            {truncatedFilename}
+                        </a>
+                    );
+
                     return (
                         <Tooltip overlay={getFileBase(file.filename)}>
-                            <a
-                                target="_blank"
-                                href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
-                            >
-                                {truncateFilename(file.filename)}
-                            </a>
+                            {linkOut}
                         </Tooltip>
                     );
                 },
@@ -278,8 +296,18 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.isDownloadModalOpen = true;
     };
 
-    @action onModalClose = () => {
+    @action onClick = (e: any, file: Entity) => {
+        e.preventDefault();
+        this.clicked = file;
+        this.isLinkOutModalOpen = true;
+    };
+
+    @action onDownloadModalClose = () => {
         this.isDownloadModalOpen = false;
+    };
+
+    @action onLinkOutModalClose = () => {
+        this.isLinkOutModalOpen = false;
     };
 
     onSelect = (state: {
@@ -299,8 +327,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
             <>
                 <FileDownloadModal
                     files={this.selected}
-                    onClose={this.onModalClose}
+                    onClose={this.onDownloadModalClose}
                     isOpen={this.isDownloadModalOpen}
+                />
+
+                <FileDownloadModal
+                    files={this.clicked ? [this.clicked] : []}
+                    onClose={this.onLinkOutModalClose}
+                    isOpen={this.isLinkOutModalOpen}
                 />
 
                 <EnhancedDataTable
