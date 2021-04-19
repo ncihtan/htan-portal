@@ -149,7 +149,7 @@ export function getAtlasColumn(atlases: Atlas[]) {
 }
 
 export function generateColumnsForDataSchema<T>(
-    schemaDataId: SchemaDataId,
+    schemaDataIds: SchemaDataId[],
     schemaDataById?: { [schemaDataId: string]: DataSchemaData },
     columnOverrides?: {
         [columnKey: string]: Partial<
@@ -163,10 +163,14 @@ export function generateColumnsForDataSchema<T>(
     let columns: IEnhancedDataTableColumn<T>[] = [];
 
     if (schemaDataById) {
-        const dataSchema = schemaDataById[schemaDataId];
-        const dependencies = dataSchema
-            ? _.uniq(dataSchema.requiredDependencies)
-            : [];
+        const dependencies = _.uniq(
+            _.flatten(
+                schemaDataIds.map((schemaDataId) => {
+                    const dataSchema = schemaDataById[schemaDataId];
+                    return dataSchema ? dataSchema.requiredDependencies : [];
+                })
+            )
+        );
 
         columns = _.compact(
             dependencies.map((id) => {

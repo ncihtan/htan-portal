@@ -84,6 +84,8 @@ export interface Entity {
     WPAtlas: WPAtlas;
     biospecimen: Entity[];
     diagnosis: Entity[];
+    demographics: Entity[];
+    cases: Entity[];
     primaryParents?: Entity[];
     synapseId?: string;
 }
@@ -169,10 +171,38 @@ function addPrimaryParents(files: Entity[]) {
     });
 }
 
+function getCaseData(
+    biospecimen: Entity[],
+    biospecimenByHTANBiospecimenID: { [htanBiospecimenID: string]: Entity },
+    casesByHTANParticipantID: { [htanParticipantID: string]: Entity }
+) {
+    return biospecimen
+        .map((s) => {
+            // HTANParentID can be both participant or biospecimen, so keep
+            // going up the tree until participant is found.
+            let HTANParentID = s.HTANParentID;
+            while (HTANParentID in biospecimenByHTANBiospecimenID) {
+                const parentBioSpecimen =
+                    biospecimenByHTANBiospecimenID[HTANParentID];
+                HTANParentID = parentBioSpecimen.HTANParentID;
+            }
+            if (!(HTANParentID in casesByHTANParticipantID)) {
+                console.error(
+                    `${s.HTANBiospecimenID} does not have a HTANParentID with diagnosis information`
+                );
+                return undefined;
+            } else {
+                return casesByHTANParticipantID[HTANParentID] as Entity;
+            }
+        })
+        .filter((f) => !!f) as Entity[];
+}
+
 function getSampleAndPatientData(
     file: Entity,
     biospecimenByHTANBiospecimenID: { [htanBiospecimenID: string]: Entity },
-    diagnosisByHTANParticipantID: { [htanParticipantID: string]: Entity }
+    diagnosisByHTANParticipantID: { [htanParticipantID: string]: Entity },
+    demographicsByHTANParticipantID: { [htanParticipantID: string]: Entity }
 ) {
     const primaryParents =
         file.primaryParents && file.primaryParents.length
@@ -188,28 +218,31 @@ function getSampleAndPatientData(
         )
         .filter((f) => !!f) as Entity[];
 
-    const diagnosis = biospecimen
-        .map((s) => {
-            // HTANParentID can be both participant or biospecimen, so keep
-            // going up the tree until participant is found.
-            let HTANParentID = s.HTANParentID;
-            while (HTANParentID in biospecimenByHTANBiospecimenID) {
-                const parentBioSpecimen =
-                    biospecimenByHTANBiospecimenID[HTANParentID];
-                HTANParentID = parentBioSpecimen.HTANParentID;
-            }
-            if (!(HTANParentID in diagnosisByHTANParticipantID)) {
-                console.error(
-                    `${s.HTANBiospecimenID} does not have a HTANParentID with diagnosis information`
-                );
-                return undefined;
-            } else {
-                return diagnosisByHTANParticipantID[HTANParentID] as Entity;
-            }
-        })
-        .filter((f) => !!f) as Entity[];
+    const diagnosis = getCaseData(
+        biospecimen,
+        biospecimenByHTANBiospecimenID,
+        diagnosisByHTANParticipantID
+    );
 
-    return { biospecimen, diagnosis };
+    const demographics = getCaseData(
+        biospecimen,
+        biospecimenByHTANBiospecimenID,
+        demographicsByHTANParticipantID
+    );
+
+    const cases = mergeCaseData(diagnosis, demographicsByHTANParticipantID);
+
+    return { biospecimen, diagnosis, demographics, cases };
+}
+
+function mergeCaseData(
+    diagnosis: Entity[],
+    demographicsByHTANParticipantID: { [htanParticipantID: string]: Entity }
+) {
+    return diagnosis.map((d) => ({
+        ...d,
+        ...demographicsByHTANParticipantID[d.HTANParticipantID],
+    }));
 }
 
 export async function loadData(
@@ -222,11 +255,14 @@ export async function loadData(
     return processSynapseJSON(data, WPAtlasData);
 }
 
-function extractBiospecimensAndDiagnosis(data: Entity[]) {
+function extractBiospecimensAndDiagnosisAndDemographics(data: Entity[]) {
     const biospecimenByHTANBiospecimenID: {
         [htanBiospecimenID: string]: Entity;
     } = {};
     const diagnosisByHTANParticipantID: {
+        [htanParticipantID: string]: Entity;
+    } = {};
+    const demographicsByHTANParticipantID: {
         [htanParticipantID: string]: Entity;
     } = {};
 
@@ -237,9 +273,16 @@ function extractBiospecimensAndDiagnosis(data: Entity[]) {
         if (entity.Component === 'Diagnosis') {
             diagnosisByHTANParticipantID[entity.HTANParticipantID] = entity;
         }
+        if (entity.Component === 'Demographics') {
+            demographicsByHTANParticipantID[entity.HTANParticipantID] = entity;
+        }
     });
 
-    return { biospecimenByHTANBiospecimenID, diagnosisByHTANParticipantID };
+    return {
+        biospecimenByHTANBiospecimenID,
+        diagnosisByHTANParticipantID,
+        demographicsByHTANParticipantID,
+    };
 }
 
 export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
@@ -253,7 +296,8 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
     const {
         biospecimenByHTANBiospecimenID,
         diagnosisByHTANParticipantID,
-    } = extractBiospecimensAndDiagnosis(flatData);
+        demographicsByHTANParticipantID,
+    } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
     const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
 
@@ -291,12 +335,14 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
         const parentData = getSampleAndPatientData(
             file,
             biospecimenByHTANBiospecimenID,
-            diagnosisByHTANParticipantID
+            diagnosisByHTANParticipantID,
+            demographicsByHTANParticipantID
         );
 
         file.biospecimen = parentData.biospecimen;
-
         file.diagnosis = parentData.diagnosis;
+        file.demographics = parentData.demographics;
+        file.cases = parentData.cases;
     });
 
     // files must have a diagnosis
