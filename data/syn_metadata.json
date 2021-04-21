@@ -39,10 +39,6 @@
         "Therapy": {
             "synapseId": "syn25254354",
             "numItems": 21
-        },
-        "ImagingLevel2": {
-            "synapseId": "syn25577568",
-            "numItems": 1584
         }
     },
     "HTA11": {
@@ -330,6 +326,10 @@
         },
         "Diagnosis": {
             "synapseId": "syn25581625",
+            "numItems": 30
+        },
+        "FollowUp": {
+            "synapseId": "syn25581671",
             "numItems": 30
         }
     },
