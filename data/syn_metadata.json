@@ -39,6 +39,10 @@
         "Therapy": {
             "synapseId": "syn25254354",
             "numItems": 21
+        },
+        "ImagingLevel2": {
+            "synapseId": "syn25577568",
+            "numItems": 1584
         }
     },
     "HTA11": {
@@ -147,6 +151,36 @@
         "Biospecimen": {
             "synapseId": "syn24993176",
             "numItems": 120
+        }
+    },
+    "HTA7": {
+        "Demographics": {
+            "synapseId": "syn25580400",
+            "numItems": 16
+        },
+        "Exposure": {
+            "synapseId": "syn25580422",
+            "numItems": 16
+        },
+        "FamilyHistory": {
+            "synapseId": "syn25580442",
+            "numItems": 16
+        },
+        "Diagnosis": {
+            "synapseId": "syn25580517",
+            "numItems": 16
+        },
+        "FollowUp": {
+            "synapseId": "syn25580538",
+            "numItems": 16
+        },
+        "Therapy": {
+            "synapseId": "syn25580559",
+            "numItems": 16
+        },
+        "MolecularTest": {
+            "synapseId": "syn25580742",
+            "numItems": 176
         }
     },
     "HTA3": {
@@ -292,6 +326,10 @@
         },
         "Exposure": {
             "synapseId": "syn25539104",
+            "numItems": 30
+        },
+        "Diagnosis": {
+            "synapseId": "syn25581625",
             "numItems": 30
         }
     },
