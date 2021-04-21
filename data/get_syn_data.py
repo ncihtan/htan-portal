@@ -123,6 +123,11 @@ if __name__ == '__main__':
 
             logging.info("Data type: " + component)
 
+            # exclude HTAPP imaging data for now
+            if center == "HTAN HTAPP" and "Imaging" in component:
+                logging.info("Skipping Imaging data for HTAPP (" + component + ")")
+                continue
+
             # get data type schema info
             try:
                 schema_info = se.explore_class(component)
