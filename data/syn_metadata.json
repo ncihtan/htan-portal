@@ -2,7 +2,7 @@
     "HTA1": {
         "Demographics": {
             "synapseId": "syn25010262",
-            "numItems": 21
+            "numItems": 20
         },
         "Diagnosis": {
             "synapseId": "syn25010285",
@@ -10,15 +10,15 @@
         },
         "Exposure": {
             "synapseId": "syn25010310",
-            "numItems": 21
+            "numItems": 20
         },
         "FollowUp": {
             "synapseId": "syn25010333",
-            "numItems": 21
+            "numItems": 20
         },
         "MolecularTest": {
             "synapseId": "syn25010429",
-            "numItems": 84
+            "numItems": 80
         },
         "ScRNA-seqLevel1": {
             "synapseId": "syn25112882",
@@ -38,7 +38,11 @@
         },
         "Therapy": {
             "synapseId": "syn25254354",
-            "numItems": 21
+            "numItems": 20
+        },
+        "OtherAssay": {
+            "synapseId": "syn25577269",
+            "numItems": 2
         }
     },
     "HTA11": {
@@ -423,6 +427,60 @@
         "ImagingLevel2": {
             "synapseId": "syn25178589",
             "numItems": 5564
+        }
+    },
+    "HTA10": {
+        "Biospecimen": {
+            "synapseId": "syn25539988",
+            "numItems": 176
+        },
+        "Demographics": {
+            "synapseId": "syn25540000",
+            "numItems": 7
+        },
+        "Diagnosis": {
+            "synapseId": "syn25540024",
+            "numItems": 7
+        },
+        "Exposure": {
+            "synapseId": "syn25540036",
+            "numItems": 7
+        },
+        "FamilyHistory": {
+            "synapseId": "syn25540048",
+            "numItems": 7
+        },
+        "FollowUp": {
+            "synapseId": "syn25540059",
+            "numItems": 7
+        },
+        "Therapy": {
+            "synapseId": "syn25540068",
+            "numItems": 7
+        },
+        "BulkRNA-seqLevel1": {
+            "synapseId": "syn25540138",
+            "numItems": 338
+        },
+        "BulkWESLevel1": {
+            "synapseId": "syn25540165",
+            "numItems": 108
+        },
+        "ImagingLevel2": {
+            "synapseId": "syn25540264",
+            "numItems": 385
+        },
+        "ScRNA-seqLevel1": {
+            "synapseId": "syn25540295",
+            "numItems": 222
+        },
+        "ScATAC-seqLevel1": {
+            "synapseId": "syn25540307",
+            "numItems": 384
+        },
+        "OtherAssay": {
+            "synapseId": "syn25540340",
+            "numItems": 393
         }
     }
 }
