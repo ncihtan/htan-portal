@@ -145,6 +145,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: 'filename',
                 wrap: true,
                 sortable: true,
+                grow: 1.4,
                 cell: (file: Entity) => {
                     const truncatedFilename = truncateFilename(file.filename);
                     const linkOut = doesFileIncludeLevel1OrLevel2SequencingData(
