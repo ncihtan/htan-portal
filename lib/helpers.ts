@@ -75,6 +75,7 @@ export interface Entity {
     filename: string;
     HTANParticipantID: string;
     ImagingAssayType?: string;
+    AssayType?: string;
 
     // Derived or attached in frontend
     atlas: Atlas;
@@ -324,6 +325,14 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
                 file.level = 'Unknown';
             }
             file.assayName = parsedAssay.name;
+
+            // special case for Other Assay.  These are assays that don't fit
+            // the standard model.  To have a more descriptive name use assay
+            // type field instead
+            if (parsedAssay.name === "Other Assay") {
+                file.assayName = file.AssayType || 'Other Assay';
+                file.level = 'Other'
+            }
         } else {
             file.level = 'Unknown';
         }
