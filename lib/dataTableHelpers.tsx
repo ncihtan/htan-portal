@@ -4,7 +4,11 @@ import * as React from 'react';
 
 import { IEnhancedDataTableColumn } from '../components/EnhancedDataTable';
 import ExpandableText from '../components/ExpandableText';
-import { DataSchemaData, SchemaDataId } from './dataSchemaHelpers';
+import {
+    DataSchemaData,
+    isNumericalSchemaData,
+    SchemaDataId,
+} from './dataSchemaHelpers';
 import { Atlas, Entity } from './helpers';
 
 export function getDefaultDataTableStyle() {
@@ -182,10 +186,18 @@ export function generateColumnsForDataSchema<T>(
                     const name = columnOverride?.name || schema.attribute;
                     const headerTooltip =
                         columnOverride?.headerTooltip || schema.description;
+                    const cell = isNumericalSchemaData(schema)
+                        ? (row: T) => (
+                              <span className="ml-auto">
+                                  {(row as any)[selector]}
+                              </span>
+                          )
+                        : undefined;
 
                     return {
                         id: schema.attribute,
                         selector,
+                        cell,
                         omit: !schema.required,
                         wrap: true,
                         sortable: true,
