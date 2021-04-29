@@ -133,13 +133,14 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
             {
                 name: 'Atlas Name',
                 selector: (atlas: Atlas) => atlas.htan_name,
+                grow: 1.25,
                 wrap: true,
                 sortable: true,
             },
             {
                 name: 'Lead Institution',
                 selector: (atlas: Atlas) => atlas.WPAtlas.lead_institutions,
-                grow: 2,
+                grow: 2.5,
                 wrap: true,
                 sortable: true,
             },
@@ -148,12 +149,13 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 selector: 'WPAtlas.title.rendered',
                 format: (atlas: Atlas) =>
                     atlas.WPAtlas ? atlas.WPAtlas.title.rendered : 'N/A',
-                grow: 2,
+                grow: 2.5,
                 wrap: true,
                 sortable: true,
             },
             {
                 name: 'Metadata',
+                grow: 0.5,
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_id in atlasMetadata) {
@@ -174,17 +176,25 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
             },
             {
                 name: 'Cases',
+                grow: 0.5,
                 selector: 'num_cases',
+                cell: (atlas: Atlas) => (
+                    <span className="ml-auto">{atlas.num_cases}</span>
+                ),
                 sortable: true,
             },
             {
                 name: 'Biospecimens',
                 selector: 'num_biospecimens',
+                cell: (atlas: Atlas) => (
+                    <span className="ml-auto">{atlas.num_biospecimens}</span>
+                ),
                 sortable: true,
             },
             {
                 name: 'Viewers',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
+                grow: 1.5,
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_name === 'HTAN MSK') {
                         return (
