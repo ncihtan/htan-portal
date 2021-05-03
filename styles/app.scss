@@ -8,6 +8,13 @@ $nav-tabs-link-active-border-color: $border-color $border-color #fff;
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
+// data table column alignment workaround
+
+.atlasTab #column-num_cases,
+.atlasTab #column-num_biospecimens {
+    margin-left: auto !important;
+}
+
 // customizes
 
 .rdt_TableHeadRow {

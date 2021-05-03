@@ -105,7 +105,66 @@ export enum SchemaDataId {
     PancreaticCancerTier3 = 'bts:PancreaticCancerTier3',
     ProstateCancerTier3 = 'bts:ProstateCancerTier3',
     SarcomaTier3 = 'bts:SarcomaTier3',
+
+    AgeAtDiagnosis = 'bts:AgeatDiagnosis',
+    YearOfDiagnosis = 'bts:YearofDiagnosis',
+    DaysToLastFollowup = 'bts:DaystoLastFollowup',
+    DaysToLastKnownDiseaseStatus = 'bts:DaystoLastKnownDiseaseStatus',
+    DaysToDiagnosis = 'bts:DaystoDiagnosis',
+    PercentTumorInvasion = 'bts:PercentTumorInvasion',
+    GrossTumorWeight = 'bts:GrossTumorWeight',
+    BreslowThickness = 'bts:BreslowThickness',
+    MitoticCount = 'bts:MitoticCount',
+    MarginDistance = 'bts:MarginDistance',
+    TumorDepth = 'bts:TumorDepth',
+    DaysToBirth = 'bts:DaystoBirth',
+
+    CollectionDaysfromIndex = 'bts:CollectionDaysfromIndex',
+    ProcessingDaysfromIndex = 'bts:ProcessingDaysfromIndex',
+    DysplasiaFraction = 'bts:DysplasiaFraction',
+    NumberProliferatingCells = 'bts:NumberProliferatingCells',
+    PercentEosinophilInfiltration = 'bts:PercentEosinophilInfiltration',
+    PercentGranulocyteInfiltration = 'bts:PercentGranulocyteInfiltration',
+    PercentInflamInfiltration = 'bts:PercentInflamInfiltration',
+    PercentLymphocyteInfiltration = 'bts:PercentLymphocyteInfiltration',
+    PercentMonocyteInfiltration = 'bts:PercentMonocyteInfiltration',
+    PercentNecrosis = 'bts:PercentNecrosis',
+    PercentNeutrophilInfiltration = 'bts:PercentNeutrophilInfiltration',
+    PercentNormalCells = 'bts:PercentNormalCells',
+    PercentStromalCells = 'bts:PercentStromalCells',
+    PercentTumorCells = 'bts:PercentTumorCells',
+    PercentTumorNuclei = 'bts:PercentTumorNuclei',
 }
+
+const NUMERICAL_SCHEMA_DATA_LOOKUP: { [schemaDataId: string]: boolean } = {
+    [SchemaDataId.AgeAtDiagnosis]: true,
+    [SchemaDataId.YearOfDiagnosis]: true,
+    [SchemaDataId.DaysToLastFollowup]: true,
+    [SchemaDataId.DaysToLastKnownDiseaseStatus]: true,
+    [SchemaDataId.DaysToDiagnosis]: true,
+    [SchemaDataId.PercentTumorInvasion]: true,
+    [SchemaDataId.GrossTumorWeight]: true,
+    [SchemaDataId.BreslowThickness]: true,
+    [SchemaDataId.MitoticCount]: true,
+    [SchemaDataId.MarginDistance]: true,
+    [SchemaDataId.TumorDepth]: true,
+    [SchemaDataId.DaysToBirth]: true,
+    [SchemaDataId.CollectionDaysfromIndex]: true,
+    [SchemaDataId.ProcessingDaysfromIndex]: true,
+    [SchemaDataId.DysplasiaFraction]: true,
+    [SchemaDataId.NumberProliferatingCells]: true,
+    [SchemaDataId.PercentEosinophilInfiltration]: true,
+    [SchemaDataId.PercentGranulocyteInfiltration]: true,
+    [SchemaDataId.PercentInflamInfiltration]: true,
+    [SchemaDataId.PercentLymphocyteInfiltration]: true,
+    [SchemaDataId.PercentMonocyteInfiltration]: true,
+    [SchemaDataId.PercentNecrosis]: true,
+    [SchemaDataId.PercentNeutrophilInfiltration]: true,
+    [SchemaDataId.PercentNormalCells]: true,
+    [SchemaDataId.PercentStromalCells]: true,
+    [SchemaDataId.PercentTumorCells]: true,
+    [SchemaDataId.PercentTumorNuclei]: true,
+};
 
 export const DEFAULT_SCHEMA: SchemaJson = {
     '@context': {},
@@ -260,6 +319,12 @@ export function mapSchemaDataToDataSchemaData(
             source,
         } as DataSchemaData;
     };
+}
+
+export function isNumericalSchemaData(schemaData: DataSchemaData) {
+    // TODO ideally DataSchemaData should have the data type information (integer, string, etc.) for a specific field
+    //  for now we need to use a manually defined lookup
+    return NUMERICAL_SCHEMA_DATA_LOOKUP[schemaData.id] || false;
 }
 
 function normalizeEntity(
