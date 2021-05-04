@@ -15,6 +15,18 @@ export interface IDataSchemaProps {
     dataSchemaMap: { [id: string]: DataSchemaData };
 }
 
+const LABEL_OVERRIDES: { [text: string]: string } = {
+    BulkWESLevel1: 'BulkDNALevel1',
+    BulkWESLevel2: 'BulkDNALevel2',
+    BulkWESLevel3: 'BulkDNALevel3',
+};
+
+const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
+    'Bulk WES Level 1': 'Bulk DNA Level 1',
+    'Bulk WES Level 2': 'Bulk DNA Level 2',
+    'Bulk WES Level 3': 'Bulk DNA Level 3',
+};
+
 const ExpandableComponent: React.FunctionComponent<{
     data?: DataSchemaData;
     dataSchemaMap?: { [id: string]: DataSchemaData };
@@ -43,12 +55,17 @@ const DataSchemaTable: React.FunctionComponent<{
         {
             name: 'Attribute',
             selector: 'attribute',
+            format: (schemaData: DataSchemaData) =>
+                ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
+                schemaData.attribute,
             wrap: true,
             sortable: true,
         },
         {
             name: 'Label',
             selector: 'label',
+            format: (schemaData: DataSchemaData) =>
+                LABEL_OVERRIDES[schemaData.label] || schemaData.label,
             wrap: true,
             sortable: true,
         },

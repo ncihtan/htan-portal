@@ -39,10 +39,6 @@
         "Therapy": {
             "synapseId": "syn25254354",
             "numItems": 20
-        },
-        "OtherAssay": {
-            "synapseId": "syn25577269",
-            "numItems": 2
         }
     },
     "HTA11": {
@@ -128,7 +124,7 @@
             "synapseId": "syn24983461",
             "numItems": 5
         },
-        "BulkWESLevel1": {
+        "BulkDNA-seqLevel1": {
             "synapseId": "syn24991941",
             "numItems": 144
         },
@@ -181,6 +177,10 @@
         "MolecularTest": {
             "synapseId": "syn25580742",
             "numItems": 176
+        },
+        "Biospecimen": {
+            "synapseId": "syn25619062",
+            "numItems": 32
         }
     },
     "HTA3": {
@@ -270,7 +270,7 @@
             "synapseId": "syn25127027",
             "numItems": 21
         },
-        "BulkWESLevel1": {
+        "BulkDNA-seqLevel1": {
             "synapseId": "syn25127316",
             "numItems": 208
         },
@@ -420,7 +420,7 @@
             "synapseId": "syn25149097",
             "numItems": 755
         },
-        "BulkWESLevel1": {
+        "BulkDNA-seqLevel1": {
             "synapseId": "syn25178503",
             "numItems": 1174
         },

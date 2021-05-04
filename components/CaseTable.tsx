@@ -32,6 +32,11 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
                     'Age at the time of diagnosis expressed in number of years since birth.',
                 format: (sample: Entity) =>
                     convertAgeInDaysToYears(sample.AgeatDiagnosis),
+                cell: (sample: Entity) => (
+                    <span className="ml-auto">
+                        {convertAgeInDaysToYears(sample.AgeatDiagnosis)}
+                    </span>
+                ),
             },
         },
         // Component seems to be always "Diagnosis", no need to have a column for it

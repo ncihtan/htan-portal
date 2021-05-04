@@ -122,7 +122,7 @@ if __name__ == '__main__':
             logging.info("Data type: " + component)
 
             # exclude HTAPP imaging data for now
-            if center == "HTAN HTAPP" and "Imaging" in component:
+            if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component):
                 logging.info("Skipping Imaging data for HTAPP (" + component + ")")
                 continue
 

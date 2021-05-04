@@ -145,6 +145,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: 'filename',
                 wrap: true,
                 sortable: true,
+                grow: 1.4,
                 cell: (file: Entity) => {
                     const truncatedFilename = truncateFilename(file.filename);
                     const linkOut = doesFileIncludeLevel1OrLevel2SequencingData(
@@ -190,7 +191,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     const uniqueBiospecimens = _.uniq(
                         file.biospecimen.map((b) => b.HTANBiospecimenID)
                     );
-                    if (uniqueBiospecimens.length === 1) {
+                    if (uniqueBiospecimens.length === 0) {
+                        return '0 Biospecimens';
+                    } else if (uniqueBiospecimens.length === 1) {
                         return uniqueBiospecimens[0];
                     } else {
                         return (
