@@ -124,7 +124,7 @@
             "synapseId": "syn24983461",
             "numItems": 5
         },
-        "BulkDNA-seqLevel1": {
+        "BulkDNALevel1": {
             "synapseId": "syn24991941",
             "numItems": 144
         },
@@ -270,7 +270,7 @@
             "synapseId": "syn25127027",
             "numItems": 21
         },
-        "BulkDNA-seqLevel1": {
+        "BulkDNALevel1": {
             "synapseId": "syn25127316",
             "numItems": 208
         },
@@ -420,7 +420,7 @@
             "synapseId": "syn25149097",
             "numItems": 755
         },
-        "BulkDNA-seqLevel1": {
+        "BulkDNALevel1": {
             "synapseId": "syn25178503",
             "numItems": 1174
         },
@@ -462,7 +462,7 @@
             "synapseId": "syn25540138",
             "numItems": 338
         },
-        "BulkWESLevel1": {
+        "BulkDNALevel1": {
             "synapseId": "syn25540165",
             "numItems": 108
         },
