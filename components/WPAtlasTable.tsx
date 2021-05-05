@@ -148,7 +148,18 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 name: 'Atlas Description',
                 selector: 'WPAtlas.title.rendered',
                 format: (atlas: Atlas) =>
-                    atlas.WPAtlas ? atlas.WPAtlas.title.rendered : 'N/A',
+                    atlas.WPAtlas ? (
+                        <span>
+                            <a
+                                target="_blank"
+                                href={`https://humantumoratlas.org/${atlas.htan_id}`}
+                            >
+                                {atlas.WPAtlas.title.rendered}
+                            </a>
+                        </span>
+                    ) : (
+                        'N/A'
+                    ),
                 grow: 2.5,
                 wrap: true,
                 sortable: true,
