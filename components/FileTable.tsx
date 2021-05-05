@@ -74,20 +74,42 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     return (
         <>
             <p>
-                You can use the synapse command line client to download the
-                selected files:
+                Use the{' '}
+                <a
+                    href="https://docs.synapse.org/articles/getting_started_clients.html"
+                    target="_blank"
+                >
+                    Synapse command line client
+                </a>{' '}
+                to download the selected files:
             </p>
             <pre className="pre-scrollable">
                 <code>{script}</code>
             </pre>
             <p>
-                For more information see the{' '}
+                It is required to{' '}
+                <a
+                    href="https://www.synapse.org/#!RegisterAccount:0"
+                    target="_blank"
+                >
+                    register
+                </a>{' '}
+                for a Synapse account to be able to use the{' '}
+                <a href="https://docs.synapse.org/articles/getting_started_clients.html">
+                    client
+                </a>
+                . More information can be found in the{' '}
                 <a
                     href="https://docs.synapse.org/articles/downloading_data.html"
                     target="_blank"
                 >
-                    synapse documentation
+                    Synapse documentation
                 </a>
+                .
+            </p>
+            <p>
+                Note that the files can also be downloaded manually through the
+                Synapse web interface by clicking on the file name.
             </p>
         </>
     );
