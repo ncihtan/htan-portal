@@ -76,6 +76,11 @@ if __name__ == '__main__':
                     "schemas":[]
     }
 
+    with open('image-release-1-synapse-ids.json') as f:
+        imaging_release1_ids = set(json.load(f)['synapseIds'])
+        # there should be 333 images in the first release
+        assert(len(imaging_release1_ids) == 333)
+
     # store all metadata synapse ids for downloading submitted metadata
     # directly
     portal_metadata = {}
@@ -135,9 +140,6 @@ if __name__ == '__main__':
                 logging.error("Component " + component + " does not exist in schema (" + manifest_path)
                 continue
 
-            # add metadata file
-            portal_metadata.setdefault(center_id.upper(), {})[component] = {"synapseId":dataset["id"],"numItems":len(manifest_df)}
-
             # manifest might not have all columns from the schema, so add
             # missing columns
             schema_columns = [se.explore_class(c)['displayName'] for c in schema_info['dependencies']]
@@ -157,6 +159,29 @@ if __name__ == '__main__':
 
             # get records in this dataset
             record_list = []
+
+            # ignore files without a synapse id
+            if "entityId" not in manifest_df.columns:
+                logging.error("Manifest data unexpected: " + manifest_path + " no entityId column")
+                continue
+
+            number_of_rows_without_synapse_id = pd.isnull(manifest_df["entityId"]).sum()
+            if number_of_rows_without_synapse_id > 0:
+                logging.error("skipping " + number_of_rows_without_synapse_id + "rows without synapse id in " + manifest_path)
+                manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
+
+            # only include imaging data that are in the 333 files of release 1
+            if "Imaging" in component and "entityId" in manifest_df.columns:
+                manifest_df = manifest_df[manifest_df["entityId"].isin(imaging_release1_ids)].copy()
+
+            if len(manifest_df) == 0:
+                continue
+
+            # add metadata file
+            # TODO: note that metadata from excluded images could still be in
+            # the raw manifest files, so numItems might be bigger
+            portal_metadata.setdefault(center_id.upper(), {})[component] = {"synapseId":dataset["id"],"numItems":len(manifest_df)}
+
 
             for i, row in manifest_df.iterrows():
                 record = {"values":[v if not pd.isna(v) else None for v in list(row.values)]}

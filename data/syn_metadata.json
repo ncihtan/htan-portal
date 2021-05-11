@@ -124,7 +124,7 @@
             "synapseId": "syn24983461",
             "numItems": 5
         },
-        "BulkDNA-seqLevel1": {
+        "BulkDNALevel1": {
             "synapseId": "syn24991941",
             "numItems": 144
         },
@@ -270,7 +270,7 @@
             "synapseId": "syn25127027",
             "numItems": 21
         },
-        "BulkDNA-seqLevel1": {
+        "BulkDNALevel1": {
             "synapseId": "syn25127316",
             "numItems": 208
         },
@@ -418,15 +418,11 @@
         },
         "Biospecimen": {
             "synapseId": "syn25149097",
-            "numItems": 755
+            "numItems": 568
         },
-        "BulkDNA-seqLevel1": {
+        "BulkDNALevel1": {
             "synapseId": "syn25178503",
             "numItems": 1174
-        },
-        "ImagingLevel2": {
-            "synapseId": "syn25178589",
-            "numItems": 5564
         }
     }
 }
