@@ -60,6 +60,22 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     );
 };
 
+const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
+    props
+) => {
+    return (
+        <>
+            <p>Your selection includes imaging data:</p>
+            <pre className="pre-scrollable">
+                <code>
+                    {props.files.map((f) => getFileBase(f.filename)).join('\n')}
+                </code>
+            </pre>
+            <p>It is not possible to download imaging data yet.</p>
+        </>
+    );
+};
+
 const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
@@ -118,7 +134,12 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
         doesFileIncludeLevel1OrLevel2SequencingData
     );
     const synapseFiles = props.files.filter(
-        (f) => !doesFileIncludeLevel1OrLevel2SequencingData(f)
+        (f) =>
+            !doesFileIncludeLevel1OrLevel2SequencingData(f) &&
+            !f.Component.startsWith('Imaging')
+    );
+    const imagingFiles = props.files.filter((f) =>
+        f.Component.startsWith('Imaging')
     );
 
     return (
@@ -129,6 +150,9 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 
             <Modal.Body>
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                {imagingFiles.length > 0 && (
+                    <ImagingInstructions files={imagingFiles} />
+                )}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
                 )}
@@ -166,23 +190,23 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 grow: 1.4,
                 cell: (file: Entity) => {
                     const truncatedFilename = truncateFilename(file.filename);
-                    const linkOut = doesFileIncludeLevel1OrLevel2SequencingData(
-                        file
-                    ) ? (
-                        <span
-                            className={styles.clickable}
-                            onClick={(e) => this.onClick(e, file)}
-                        >
-                            {truncatedFilename}
-                        </span>
-                    ) : (
-                        <a
-                            target="_blank"
-                            href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
-                        >
-                            {truncatedFilename}
-                        </a>
-                    );
+                    const linkOut =
+                        doesFileIncludeLevel1OrLevel2SequencingData(file) ||
+                        file.Component.startsWith('Imaging') ? (
+                            <span
+                                className={styles.clickable}
+                                onClick={(e) => this.onClick(e, file)}
+                            >
+                                {truncatedFilename}
+                            </span>
+                        ) : (
+                            <a
+                                target="_blank"
+                                href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
+                            >
+                                {truncatedFilename}
+                            </a>
+                        );
 
                     return (
                         <Tooltip overlay={getFileBase(file.filename)}>
@@ -296,6 +320,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                 <FontAwesomeIcon icon={faExternalLinkAlt} />
                             </a>
                         );
+                    } else if (file.Component.startsWith('Imaging')) {
+                        return 'Image Viewer Coming Soon';
                     } else {
                         return '';
                     }
