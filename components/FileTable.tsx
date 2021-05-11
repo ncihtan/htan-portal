@@ -50,15 +50,11 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 </code>
             </pre>
             <p>
-                These should be obtained through{' '}
-                <a
-                    href="https://datacommons.cancer.gov/repository/cancer-data-service"
-                    target="_blank"
-                >
-                    CDS/dbGaP
+                These will soon be available through{' '}
+                <a href="https://www.cancergenomicscloud.org/" target="_blank">
+                    Seven Bridges' Cancer Genomics Cloud
                 </a>
-                . Please refer to the documentation there on how to download the
-                data.
+                .
             </p>
         </>
     );
