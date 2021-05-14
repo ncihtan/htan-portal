@@ -222,9 +222,17 @@ table {
     font-size: 14px;
 }
 
+.dsa-container {
+    /*border: 1px solid #999;*/
+    width: 150px;
+}
+
 .dsa-thumb {
+    display: block;
+    margin: auto;
     height: 100px;
-    border: 1px solid #999;
+    padding: 2px;
+    /*border: 1px solid #999;*/
 }
 
 .filterControls {

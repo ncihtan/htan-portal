@@ -29,12 +29,18 @@ import styles from './common.module.scss';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
+const dsaMappings = require('../data/dsa-images.json');
 
 interface IFileDownloadModalProps {
     files: Entity[];
     onClose: () => void;
     isOpen: boolean;
 }
+
+const isDSAEnabled = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has('dsa');
+};
 
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
@@ -305,6 +311,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         cellXGeneMappings[getFileBase(file.filename)];
                     const minervaLink =
                         minervaMappings[getFileBase(file.filename)];
+                    const dsa = file.synapseId && dsaMappings[file.synapseId];
 
                     if (cellXGeneLink) {
                         return (
@@ -321,7 +328,23 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             </a>
                         );
                     } else if (file.Component.startsWith('Imaging')) {
-                        return 'Image Viewer Coming Soon';
+                        if (isDSAEnabled() && dsa && file.assayName === 'H&E') {
+                            return (
+                                <div className={'dsa-container'}>
+                                    <a
+                                        href={`https://imaging.htan.dev/girder/#item/${dsa.dsaId}`}
+                                        target="_blank"
+                                    >
+                                        <img
+                                            className={'dsa-thumb'}
+                                            src={`${dsa.dsaSmallThumbUrl}?height=100&width=100&fill=none`}
+                                        />
+                                    </a>
+                                </div>
+                            );
+                        } else {
+                            return 'Image Viewer Coming Soon';
+                        }
                     } else {
                         return '';
                     }
