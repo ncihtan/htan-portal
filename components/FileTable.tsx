@@ -331,15 +331,34 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         if (isDSAEnabled() && dsa && file.assayName === 'H&E') {
                             return (
                                 <div className={'dsa-container'}>
-                                    <a
-                                        href={`https://imaging.htan.dev/girder/#item/${dsa.dsaId}`}
-                                        target="_blank"
+                                    <Tooltip
+                                        placement="left"
+                                        overlay={
+                                            <>
+                                                <a
+                                                    href={`https://imaging.htan.dev/girder/#item/${dsa.dsaId}`}
+                                                    target="_blank"
+                                                >
+                                                    <img
+                                                        className={
+                                                            'dsa-full-image'
+                                                        }
+                                                        src={`${dsa.dsaSmallThumbUrl}`}
+                                                    />
+                                                </a>
+                                            </>
+                                        }
                                     >
-                                        <img
-                                            className={'dsa-thumb'}
-                                            src={`${dsa.dsaSmallThumbUrl}?height=100&width=100&fill=none`}
-                                        />
-                                    </a>
+                                        <a
+                                            href={`https://imaging.htan.dev/girder/#item/${dsa.dsaId}`}
+                                            target="_blank"
+                                        >
+                                            <img
+                                                className={'dsa-thumb'}
+                                                src={`${dsa.dsaSmallThumbUrl}?height=100&width=100&fill=none`}
+                                            />
+                                        </a>
+                                    </Tooltip>
                                 </div>
                             );
                         } else {
