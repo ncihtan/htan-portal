@@ -1,3 +1,4 @@
+import click
 import pandas as pd
 import numpy as np
 import wget
@@ -12,9 +13,10 @@ from schematic.store.synapse import SynapseStorage
 from schematic.schemas.explorer import SchemaExplorer
 
 
-
-if __name__ == '__main__':
-
+@click.command()
+@click.option('--include-non-public-images/--exclude-non-public-images', default=False)
+@click.option('--include-non-public-htapp-folders/--exclude-non-public-htapp-folders', default=False)
+def generate_json(include_non_public_images, include_non_public_htapp_folders):
     logging.disable(logging.DEBUG)
 
     # map: HTAN center names to HTAN IDs
@@ -80,6 +82,10 @@ if __name__ == '__main__':
         imaging_release1_ids = set(json.load(f)['synapseIds'])
         # there should be 333 images in the first release
         assert(len(imaging_release1_ids) == 333)
+
+    # for HTAPP we include only release 1 folders for now
+    htapp_release1_folder_names = set(pd.read_csv('htapp_release1.tsv',sep='\t')['Folder Name'])
+    htapp_release1_synapse_ids = set(pd.read_csv('htapp_release1.tsv',sep='\t')['Folder Synapse ID'])
 
     # store all metadata synapse ids for downloading submitted metadata
     # directly
@@ -171,8 +177,13 @@ if __name__ == '__main__':
                 manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
 
             # only include imaging data that are in the 333 files of release 1
-            if "Imaging" in component and "entityId" in manifest_df.columns:
+            if not include_non_public_images and "Imaging" in component and "entityId" in manifest_df.columns:
                 manifest_df = manifest_df[manifest_df["entityId"].isin(imaging_release1_ids)].copy()
+            
+            # exclude specific HTAPP folders
+            if center == "HTAN HTAPP" and not include_non_public_htapp_folders and 'Filename' in manifest_df.columns:
+                manifest_df = manifest_df[manifest_df["Filename"].str.contains('|'.join(htapp_release1_folder_names))].copy()
+
 
             if len(manifest_df) == 0:
                 continue
@@ -243,3 +254,7 @@ if __name__ == '__main__':
 
     with open("./../data/syn_metadata.json", "w") as m_f:
         json.dump(portal_metadata, m_f, indent = 4)
+
+
+if __name__ == '__main__':
+    generate_json()
