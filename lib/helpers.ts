@@ -211,12 +211,15 @@ function getSampleAndPatientData(
             : [file];
 
     const biospecimen = primaryParents
-        .map(
-            (p) =>
-                biospecimenByHTANBiospecimenID[p.HTANParentBiospecimenID] as
-                    | Entity
-                    | undefined
+        .map((p) =>
+            p.HTANParentBiospecimenID.split(',').map(
+                (HTANParentBiospecimenID) =>
+                    biospecimenByHTANBiospecimenID[HTANParentBiospecimenID] as
+                        | Entity
+                        | undefined
+            )
         )
+        .flat()
         .filter((f) => !!f) as Entity[];
 
     const diagnosis = getCaseData(
@@ -329,9 +332,9 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
             // special case for Other Assay.  These are assays that don't fit
             // the standard model.  To have a more descriptive name use assay
             // type field instead
-            if (parsedAssay.name === "Other Assay") {
+            if (parsedAssay.name === 'Other Assay') {
                 file.assayName = file.AssayType || 'Other Assay';
-                file.level = 'Other'
+                file.level = 'Other';
             }
         } else {
             file.level = 'Unknown';
