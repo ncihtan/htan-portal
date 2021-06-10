@@ -222,6 +222,12 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                 Minerva Story (1)
                             </a>
                         );
+                    } else if (atlas.htan_name === 'HTAN HMS') {
+                        return (
+                            <a href='/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'>
+                                Minerva Story (15)
+                            </a>
+                        );
                     } else if (atlas.htan_name === 'HTAN BU') {
                         return (
                             <a
