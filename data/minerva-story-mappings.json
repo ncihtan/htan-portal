@@ -1,3 +1,19 @@
 {
-  "HTA9_1_BA_L_ROI04.ome.tif": "https://minerva-story-htan-ohsu-demo.surge.sh/"
+  "HTA9_1_BA_L_ROI04.ome.tif": "https://minerva-story-htan-ohsu-demo.surge.sh/",
+  "CRC02.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc02-overview.html",
+  "CRC03.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc03-overview.html",
+  "CRC04.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc04-overview.html",
+  "CRC05.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc05-overview.html",
+  "CRC06.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc06-overview.html",
+  "CRC07.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc07-overview.html",
+  "CRC08.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc08-overview.html",
+  "CRC09.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc09-overview.html",
+  "CRC10.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc10-overview.html",
+  "CRC11.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc11-overview.html",
+  "CRC12.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc12-overview.html",
+  "CRC13.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc13-overview.html",
+  "CRC14.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc14-overview.html",
+  "CRC15.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc15-overview.html",
+  "CRC16.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc16-overview.html",
+  "CRC17.ome.tif": "https://labsyspharm.github.io/HTA-CRCATLAS-1/minerva/crc17-overview.html"
 }
