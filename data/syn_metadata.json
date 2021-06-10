@@ -181,6 +181,10 @@
         "Biospecimen": {
             "synapseId": "syn25619062",
             "numItems": 32
+        },
+        "ImagingLevel2": {
+            "synapseId": "syn25813013",
+            "numItems": 16
         }
     },
     "HTA3": {

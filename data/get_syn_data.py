@@ -175,9 +175,9 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders):
                 manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
 
             # only include imaging data that are in the 333 files of release 1
-            if not include_non_public_images and "Imaging" in component and "entityId" in manifest_df.columns:
+            if not center == "HTAN HMS" and not include_non_public_images and "Imaging" in component and "entityId" in manifest_df.columns:
                 manifest_df = manifest_df[manifest_df["entityId"].isin(imaging_release1_ids)].copy()
-            
+
             # exclude specific HTAPP folders
             if center == "HTAN HTAPP" and not include_non_public_htapp_folders and 'Filename' in manifest_df.columns:
                 manifest_df = manifest_df[manifest_df["Filename"].str.contains('|'.join(htapp_release1_folder_names))].copy()
