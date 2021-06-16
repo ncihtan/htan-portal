@@ -57,7 +57,7 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
         displayName: 'Biospecimen',
     },
     [AttributeNames.AtlasName]: {
-        path: 'atlas.htan_name',
+        path: 'atlas_name',
         displayName: 'Atlas',
     },
     [AttributeNames.Stage]: {
@@ -129,3 +129,6 @@ export type SynapseSchema = {
         description: string;
     }[];
 };
+
+export type FilesByHTANId = { [HTANDataFileID: string]: Entity };
+export type AtlasMap = { [atlasid: string]: Atlas };

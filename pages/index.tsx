@@ -7,7 +7,9 @@ import { GetStaticProps } from 'next';
 import { WPConstants } from '../types';
 import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
-import {computeDashboardData, processSynapseJSON } from "../lib/helpers";
+import { computeDashboardData, processSynapseJSON } from '../lib/helpers';
+import { SynapseData } from '../lib/types';
+import _ from 'lodash';
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -38,14 +40,17 @@ export const getStaticProps: GetStaticProps = async (context) => {
         getContent('card-6', 'homepage'),
     ]);
 
+    const files = processSynapseJSON(
+        (synapseData as unknown) as SynapseData,
+        atlases
+    ).files;
+
     return {
         props: {
             hero_blurb: homepageContent.content.rendered,
             cards: cards,
             atlases,
-            synapseCounts: computeDashboardData(
-                processSynapseJSON(synapseData, atlases).files
-            ),
+            synapseCounts: computeDashboardData(files),
         },
     };
 };
