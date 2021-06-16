@@ -7,6 +7,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Backend
 All data is coming from [Synapse](https://www.synapse.org/). We have a Python script that generates a JSON file that contains all the metadata. There is currently no backend, it's a fully static site i.e. all filtering happens on the frontend.
 
+## Testing
+
+There are currently no automated tests, other than building the project, so be careful when merging to master
+
 ## Getting Started
 
 First, run the development server:
