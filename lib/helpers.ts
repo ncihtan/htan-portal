@@ -8,12 +8,14 @@ import { WPAtlas } from '../types';
 import {
     ExploreOptionType,
     ExploreSelectedFilter,
+    FilesByHTANId,
     SynapseAtlas,
     SynapseData,
     SynapseSchema,
 } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
+import getData from './getData';
 
 // @ts-ignore
 let win;
@@ -48,6 +50,7 @@ export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
                     );
 
                     entity.atlasid = atlas.htan_id;
+                    entity.atlas_name = atlas.htan_name;
 
                     entities.push(entity as Entity);
                 });
@@ -58,6 +61,8 @@ export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
     return entities;
 }
 
+export type HTANDataFileID = string;
+
 export interface Entity {
     // Synapse attribute names
     AJCCPathologicStage: string;
@@ -65,7 +70,7 @@ export interface Entity {
     Component: string;
     HTANParentID: string;
     HTANBiospecimenID: string;
-    HTANDataFileID: string;
+    HTANDataFileID: HTANDataFileID; // this is used as the stable UID
     HTANParentBiospecimenID: string;
     HTANParentDataFileID: string;
     TissueorOrganofOrigin: string;
@@ -78,8 +83,8 @@ export interface Entity {
     AssayType?: string;
 
     // Derived or attached in frontend
-    atlas: Atlas;
     atlasid: string;
+    atlas_name: string;
     level: string;
     assayName?: string;
     WPAtlas: WPAtlas;
@@ -87,17 +92,17 @@ export interface Entity {
     diagnosis: Entity[];
     demographics: Entity[];
     cases: Entity[];
-    primaryParents?: Entity[];
+    primaryParents?: HTANDataFileID[];
     synapseId?: string;
 }
 
-export interface Atlas {
+export type Atlas = SynapseAtlas & {
     htan_id: string;
     htan_name: string;
     num_cases: number;
     num_biospecimens: number;
     WPAtlas: WPAtlas;
-}
+};
 
 export interface LoadDataResult {
     files: Entity[];
@@ -120,7 +125,7 @@ export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
 function findAndAddPrimaryParents(
     f: Entity,
     filesByFileId: { [HTANDataFileID: string]: Entity }
-): Entity[] {
+): HTANDataFileID[] {
     if (f.primaryParents) {
         // recursive optimization:
         //  if we've already calculated f.primaryParents, just return it
@@ -128,7 +133,7 @@ function findAndAddPrimaryParents(
     }
 
     // otherwise, compute parents
-    let primaryParents: Entity[] = [];
+    let primaryParents: HTANDataFileID[] = [];
 
     if (f.HTANParentDataFileID) {
         // if there's a parent, traverse "upwards" to find primary parent
@@ -147,16 +152,14 @@ function findAndAddPrimaryParents(
         primaryParents = _(parentFiles)
             .map((f) => findAndAddPrimaryParents(f, filesByFileId))
             .flatten()
-            .uniqBy((f) => f.HTANDataFileID)
+            .uniq()
             .value();
 
         // add primaryParents member to child file
         f.primaryParents = primaryParents;
-    }
-    {
-        // else
+    } else {
         // recursive base case: parent (has no parent itself)
-        primaryParents = [f];
+        primaryParents = [f.HTANDataFileID];
 
         // we don't add primaryParents member to the parent file
     }
@@ -201,6 +204,7 @@ function getCaseData(
 
 function getSampleAndPatientData(
     file: Entity,
+    filesByHTANId: FilesByHTANId,
     biospecimenByHTANBiospecimenID: { [htanBiospecimenID: string]: Entity },
     diagnosisByHTANParticipantID: { [htanParticipantID: string]: Entity },
     demographicsByHTANParticipantID: { [htanParticipantID: string]: Entity }
@@ -208,11 +212,11 @@ function getSampleAndPatientData(
     const primaryParents =
         file.primaryParents && file.primaryParents.length
             ? file.primaryParents
-            : [file];
+            : [file.HTANDataFileID];
 
-    const biospecimen = primaryParents
+    let biospecimen = primaryParents
         .map((p) =>
-            p.HTANParentBiospecimenID.split(',').map(
+            filesByHTANId[p].HTANParentBiospecimenID.split(',').map(
                 (HTANParentBiospecimenID) =>
                     biospecimenByHTANBiospecimenID[HTANParentBiospecimenID] as
                         | Entity
@@ -221,20 +225,30 @@ function getSampleAndPatientData(
         )
         .flat()
         .filter((f) => !!f) as Entity[];
+    biospecimen = _.uniqBy(biospecimen, (b) => b.HTANParentBiospecimenID);
 
-    const diagnosis = getCaseData(
-        biospecimen,
-        biospecimenByHTANBiospecimenID,
-        diagnosisByHTANParticipantID
+    const diagnosis = _.uniqBy(
+        getCaseData(
+            biospecimen,
+            biospecimenByHTANBiospecimenID,
+            diagnosisByHTANParticipantID
+        ),
+        (d) => d.HTANParticipantID
     );
 
-    const demographics = getCaseData(
-        biospecimen,
-        biospecimenByHTANBiospecimenID,
-        demographicsByHTANParticipantID
+    const demographics = _.uniqBy(
+        getCaseData(
+            biospecimen,
+            biospecimenByHTANBiospecimenID,
+            demographicsByHTANParticipantID
+        ),
+        (d) => d.HTANParticipantID
     );
 
-    const cases = mergeCaseData(diagnosis, demographicsByHTANParticipantID);
+    const cases = _.uniqBy(
+        mergeCaseData(diagnosis, demographicsByHTANParticipantID),
+        (c) => c.HTANParticipantID
+    );
 
     return { biospecimen, diagnosis, demographics, cases };
 }
@@ -252,9 +266,11 @@ function mergeCaseData(
 export async function loadData(
     WPAtlasData: WPAtlas[]
 ): Promise<LoadDataResult> {
-    const url = '/syn_data.json'; // '/sim.json';
+    //const url = `https://data.humantumoratlas.org/syn_data.json`; // '/sim.json';
 
-    const data: SynapseData = await fetch(url).then((r) => r.json());
+    //const data: SynapseData = await fetch(url).then((r) => r.json());
+
+    const data = getData();
 
     return processSynapseJSON(data, WPAtlasData);
 }
@@ -289,12 +305,17 @@ function extractBiospecimensAndDiagnosisAndDemographics(data: Entity[]) {
     };
 }
 
-export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
+export function processSynapseJSON(
+    synapseJson: SynapseData,
+    WPAtlasData: WPAtlas[]
+) {
     const flatData: Entity[] = extractEntitiesFromSynapseData(synapseJson);
 
     const files = flatData.filter((obj) => {
         return !!obj.filename;
     });
+
+    const filesByHTANId = _.keyBy(files, (f) => f.HTANDataFileID);
 
     addPrimaryParents(files);
     const {
@@ -308,13 +329,13 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
     const synapseAtlasMap = _.keyBy(synapseJson.atlases, (a) => a.htan_id);
 
     // tag synapse atlas with WP atlas
-    _.forEach(synapseAtlasMap, (a: Atlas) => {
+    _.forEach(synapseAtlasMap, (a: SynapseAtlas) => {
         if (WPAtlasMap[a.htan_id]) {
-            a.WPAtlas = WPAtlasMap[a.htan_id] || undefined;
+            (a as Atlas).WPAtlas = WPAtlasMap[a.htan_id] || undefined;
         }
     });
 
-    _.forEach(files, (file) => {
+    _.forEach(files, (file, index: number) => {
         // parse component to make a new level property and adjust component property
         if (file.Component) {
             const parsedAssay = parseRawAssayType(
@@ -342,10 +363,9 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
 
         file.WPAtlas = WPAtlasMap[file.atlasid.split('_')[0]];
 
-        file.atlas = synapseAtlasMap[file.atlasid];
-
         const parentData = getSampleAndPatientData(
             file,
+            filesByHTANId,
             biospecimenByHTANBiospecimenID,
             diagnosisByHTANParticipantID,
             demographicsByHTANParticipantID
@@ -361,7 +381,9 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
     const returnFiles = files.filter((f) => !!f.diagnosis);
 
     // atlases MUST have an entry in WPAtlas
-    const returnAtlases = synapseJson.atlases.filter((a: Atlas) => a.WPAtlas);
+    const returnAtlases = synapseJson.atlases.filter(
+        (a: SynapseAtlas) => !!a.WPAtlas
+    );
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
@@ -378,13 +400,13 @@ export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
             .value().length;
     });
 
-    returnAtlases.forEach((a: Atlas) => {
-        a.num_biospecimens = biospecimenCountByAtlas[a.htan_id];
-        a.num_cases = caseCountByAtlas[a.htan_id];
+    returnAtlases.forEach((a: SynapseAtlas) => {
+        (a as Atlas).num_biospecimens = biospecimenCountByAtlas[a.htan_id];
+        (a as Atlas).num_cases = caseCountByAtlas[a.htan_id];
     });
 
     // filter out files without a diagnosis
-    return { files: returnFiles, atlases: returnAtlases };
+    return { files: returnFiles, atlases: returnAtlases as Atlas[] };
 }
 
 export function sortStageOptions(options: ExploreOptionType[]) {

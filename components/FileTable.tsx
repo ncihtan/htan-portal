@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
+    Atlas,
     doesFileIncludeLevel1OrLevel2SequencingData,
     Entity,
     getFileBase,
@@ -223,8 +224,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: 'Atlas Name',
-                selector: 'atlas.htan_name',
-                format: (file: Entity) => file.atlas.htan_name,
+                selector: 'atlas_name',
                 wrap: true,
                 sortable: true,
             },

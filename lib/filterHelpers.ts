@@ -5,7 +5,6 @@ import {
     AttributeMap,
     AttributeNames,
     ExploreOptionType,
-    IAttributeInfo,
     ISelectedFiltersByAttrName,
 } from './types';
 

@@ -95,6 +95,8 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
     );
 };
 
+type WPAtlasTableData = Atlas & { isSelected: boolean };
+
 @observer
 export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
     @observable metadataModalAtlas: Atlas | null = null;
@@ -119,12 +121,13 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
 
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
-    @computed get data() {
+    @computed get data(): WPAtlasTableData[] {
         return (this.props.filteredAtlases || this.props.synapseAtlasData).map(
-            (a) => ({
-                ...a,
-                isSelected: this.isRowSelected(a),
-            })
+            (a) =>
+                ({
+                    ...a,
+                    isSelected: this.isRowSelected(a),
+                } as WPAtlasTableData)
         );
     }
 
