@@ -16,7 +16,8 @@ from schematic.schemas.explorer import SchemaExplorer
 @click.command()
 @click.option('--include-non-public-images/--exclude-non-public-images', default=False)
 @click.option('--include-non-public-htapp-folders/--exclude-non-public-htapp-folders', default=False)
-def generate_json(include_non_public_images, include_non_public_htapp_folders):
+@click.option('--include-at-risk-populations/--exclude-at-risk-populations', default=False)
+def generate_json(include_non_public_images, include_non_public_htapp_folders, include_at_risk_populations):
     logging.disable(logging.DEBUG)
 
     # map: HTAN center names to HTAN IDs
@@ -182,6 +183,11 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders):
             if center == "HTAN HTAPP" and not include_non_public_htapp_folders and 'Filename' in manifest_df.columns:
                 manifest_df = manifest_df[manifest_df["Filename"].str.contains('|'.join(htapp_release1_folder_names))].copy()
 
+            # replace race for protected populations
+            if not include_at_risk_populations and 'Race' in manifest_df:
+                manifest_df['Race'] = manifest_df['Race']\
+                    .str.replace('american indian or alaska native', 'Not Reported')\
+                    .str.replace('native hawaiian or other pacific islander', 'Not Reported')
 
             if len(manifest_df) == 0:
                 continue
