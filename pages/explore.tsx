@@ -22,6 +22,7 @@ import {
 import {
     Atlas,
     Entity,
+    fillInEntities,
     loadData,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
@@ -31,7 +32,6 @@ import {
     AttributeNames,
     ExploreActionMeta,
     ExploreSelectedFilter,
-    FilesByHTANId,
     FilterAction,
     IFilterProps,
     ISelectedFiltersByAttrName,
@@ -176,7 +176,7 @@ class Search extends React.Component<
     componentDidMount(): void {
         runInAction(() => {
             this.setState({
-                files: this.props.data.files,
+                files: fillInEntities(this.props.data),
                 atlases: this.props.data.atlases,
             });
 

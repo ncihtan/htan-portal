@@ -129,6 +129,3 @@ export type SynapseSchema = {
         description: string;
     }[];
 };
-
-export type FilesByHTANId = { [HTANDataFileID: string]: Entity };
-export type AtlasMap = { [atlasid: string]: Atlas };
