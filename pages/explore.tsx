@@ -332,11 +332,11 @@ const FilterPage = (props: IFilterPageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <Search
-                    router={props.router}
-                    wpAtlases={props.wpAtlases}
-                    data={props.data}
-                />
+                {/*<Search*/}
+                {/*    router={props.router}*/}
+                {/*    wpAtlases={props.wpAtlases}*/}
+                {/*    data={props.data}*/}
+                {/*/>*/}
             </PageWrapper>
         </>
     );
