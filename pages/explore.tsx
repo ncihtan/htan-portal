@@ -331,15 +331,15 @@ const FilterPage = (props: IFilterPageProps) => {
     return (
         <>
             <div>hello</div>
-            {/*<PreReleaseBanner />*/}
+            <PreReleaseBanner />
 
-            {/*<PageWrapper>*/}
-            {/*    <Search*/}
-            {/*        router={props.router}*/}
-            {/*        wpAtlases={props.wpAtlases}*/}
-            {/*        data={props.data}*/}
-            {/*    />*/}
-            {/*</PageWrapper>*/}
+            <PageWrapper>
+                <Search
+                    router={props.router}
+                    wpAtlases={props.wpAtlases}
+                    data={props.data}
+                />
+            </PageWrapper>
         </>
     );
 };
