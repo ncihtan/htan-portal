@@ -48,11 +48,12 @@ import { DataSchemaData, getSchemaDataMap } from '../lib/dataSchemaHelpers';
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const wpAtlases = await getAtlasList();
-    //const data = await loadData(wpAtlases);
+    const data = await loadData(wpAtlases);
 
     return {
         props: {
             wpAtlases,
+            data,
         },
     };
 };
