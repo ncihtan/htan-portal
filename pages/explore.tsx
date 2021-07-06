@@ -10,7 +10,6 @@ import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import { GetStaticProps } from 'next';
 import { withRouter, NextRouter } from 'next/router';
-import fetch from 'node-fetch';
 import React from 'react';
 import { ScaleLoader } from 'react-spinners';
 
