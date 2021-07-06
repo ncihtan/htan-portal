@@ -170,11 +170,10 @@ class Search extends React.Component<
 
     componentDidMount(): void {
         runInAction(() => {
-            this.setState({
-                files: fillInEntities(this.props.data),
-                atlases: this.props.data.atlases,
-            });
-
+            // this.setState({
+            //     files: fillInEntities(this.props.data),
+            //     atlases: this.props.data.atlases,
+            // });
             // this.schemaLoadingPromise = fromPromise(getSchemaDataMap());
             // this.schemaLoadingPromise.then((schemaDataById) => {
             //     this.setState({ schemaDataById });
@@ -330,7 +329,6 @@ interface IFilterPageProps {
 const FilterPage = (props: IFilterPageProps) => {
     return (
         <>
-            <div>hello</div>
             <PreReleaseBanner />
 
             <PageWrapper>
