@@ -47,15 +47,13 @@ import PageWrapper from '../components/PageWrapper';
 import { DataSchemaData, getSchemaDataMap } from '../lib/dataSchemaHelpers';
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    //let slugs = ['summary-blurb-data-release'];
-    //let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    //let res = await fetch(overviewURL);
-
-    //const wpAtlases = await getAtlasList();
+    const wpAtlases = await getAtlasList();
     //const data = await loadData(wpAtlases);
 
     return {
-        props: {},
+        props: {
+            wpAtlases,
+        },
     };
 };
 
