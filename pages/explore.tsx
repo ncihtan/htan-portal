@@ -180,10 +180,10 @@ class Search extends React.Component<
                 atlases: this.props.data.atlases,
             });
 
-            this.schemaLoadingPromise = fromPromise(getSchemaDataMap());
-            this.schemaLoadingPromise.then((schemaDataById) => {
-                this.setState({ schemaDataById });
-            });
+            // this.schemaLoadingPromise = fromPromise(getSchemaDataMap());
+            // this.schemaLoadingPromise.then((schemaDataById) => {
+            //     this.setState({ schemaDataById });
+            // });
         });
     }
 
