@@ -334,15 +334,16 @@ interface IFilterPageProps {
 const FilterPage = (props: IFilterPageProps) => {
     return (
         <>
-            <PreReleaseBanner />
+            <div>hello</div>
+            {/*<PreReleaseBanner />*/}
 
-            <PageWrapper>
-                <Search
-                    router={props.router}
-                    wpAtlases={props.wpAtlases}
-                    data={props.data}
-                />
-            </PageWrapper>
+            {/*<PageWrapper>*/}
+            {/*    <Search*/}
+            {/*        router={props.router}*/}
+            {/*        wpAtlases={props.wpAtlases}*/}
+            {/*        data={props.data}*/}
+            {/*    />*/}
+            {/*</PageWrapper>*/}
         </>
     );
 };
