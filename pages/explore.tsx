@@ -51,14 +51,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     //let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
     //let res = await fetch(overviewURL);
 
-    const wpAtlases = await getAtlasList();
-    const data = await loadData(wpAtlases);
+    //const wpAtlases = await getAtlasList();
+    //const data = await loadData(wpAtlases);
 
     return {
-        props: {
-            data,
-            wpAtlases,
-        },
+        props: {},
     };
 };
 
