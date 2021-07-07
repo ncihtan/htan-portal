@@ -18,7 +18,7 @@ import { AttributeNames, SynapseAtlas } from '../../lib/types';
 import { ExploreTab } from '../../components/ExploreTabs';
 
 interface IPostProps {
-    synapseAtlasData: SynapseAtlas[];
+    synapseAtlasData: Pick<SynapseAtlas, 'htan_id' | 'htan_name'>[];
     WPAtlasData: WPAtlas[];
     router: NextRouter;
 }
@@ -172,7 +172,11 @@ export default Post;
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const WPAtlasData = await getAtlasList();
-    const synapseAtlasData = (getData() as any).atlases;
+    const rawSynapseAtlasData = getData().atlases;
+    const synapseAtlasData = rawSynapseAtlasData.map((atlas) => ({
+        htan_id: atlas.htan_id,
+        htan_name: atlas.htan_name,
+    }));
 
     return {
         props: {

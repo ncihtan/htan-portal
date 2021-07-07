@@ -27,19 +27,12 @@ if (typeof window !== 'undefined') {
 
 export function extractEntitiesFromSynapseData(
     data: SynapseData,
-    WPAtlasData: WPAtlas[]
+    WPAtlasMap: { [uppercase_htan_id: string]: WPAtlas }
 ): BaseSerializableEntity[] {
     const schemasByName = _.keyBy(data.schemas, (s) => s.data_schema);
     const entities: BaseSerializableEntity[] = [];
 
-    const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
-
     _.forEach(data.atlases, (atlas: SynapseAtlas) => {
-        // tag synapse atlas with WP atlas
-        if (WPAtlasMap[atlas.htan_id]) {
-            (atlas as Atlas).WPAtlas = WPAtlasMap[atlas.htan_id] || undefined;
-        }
-
         _.forEach(atlas, (synapseRecords, key) => {
             if (key === 'htan_id' || key === 'htan_name') {
                 // skip these
@@ -90,7 +83,8 @@ export function extractEntitiesFromSynapseData(
                         entity.level = 'Unknown';
                     }
 
-                    entity.WPAtlas = WPAtlasMap[entity.atlasid.split('_')[0]];
+                    entity.WPAtlas =
+                        WPAtlasMap[entity.atlasid.split('_')[0].toUpperCase()];
 
                     entities.push(entity as BaseSerializableEntity);
                 });
@@ -149,7 +143,7 @@ export interface Entity extends SerializableEntity {
     cases: Entity[];
 }
 
-export type Atlas = SynapseAtlas & {
+export type Atlas = {
     htan_id: string;
     htan_name: string;
     num_cases: number;
@@ -408,7 +402,8 @@ export function processSynapseJSON(
     synapseJson: SynapseData,
     WPAtlasData: WPAtlas[]
 ) {
-    const flatData = extractEntitiesFromSynapseData(synapseJson, WPAtlasData);
+    const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
+    const flatData = extractEntitiesFromSynapseData(synapseJson, WPAtlasMap);
 
     const files = flatData.filter((obj) => {
         return !!obj.filename;
@@ -447,11 +442,6 @@ export function processSynapseJSON(
         })
         .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
 
-    // atlases MUST have an entry in WPAtlas
-    const returnAtlases = synapseJson.atlases.filter(
-        (a: SynapseAtlas) => !!a.WPAtlas
-    );
-
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
     const caseCountByAtlas = _.mapValues(filesByAtlas, (files) => {
@@ -467,15 +457,26 @@ export function processSynapseJSON(
             .value().length;
     });
 
-    returnAtlases.forEach((a: SynapseAtlas) => {
-        (a as Atlas).num_biospecimens = biospecimenCountByAtlas[a.htan_id];
-        (a as Atlas).num_cases = caseCountByAtlas[a.htan_id];
-    });
+    const returnAtlases: Atlas[] = [];
+    for (const atlas of synapseJson.atlases) {
+        const WPAtlas = WPAtlasMap[atlas.htan_id.toUpperCase()];
+
+        // atlases MUST have an entry in WPAtlas
+        if (WPAtlas) {
+            returnAtlases.push({
+                htan_id: atlas.htan_id,
+                htan_name: atlas.htan_name,
+                WPAtlas,
+                num_biospecimens: biospecimenCountByAtlas[atlas.htan_id],
+                num_cases: caseCountByAtlas[atlas.htan_id],
+            });
+        }
+    }
 
     // filter out files without a diagnosis
     return {
         files: returnFiles,
-        atlases: returnAtlases as Atlas[],
+        atlases: returnAtlases,
         biospecimenByHTANBiospecimenID: biospecimenByHTANBiospecimenID as {
             [HTANBiospecimenID: string]: SerializableEntity;
         },
