@@ -196,6 +196,48 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
+                    <div style={{ width: 164 }}>
+                        <FilterPanel
+                            placeholder={
+                                AttributeMap[AttributeNames.Race]
+                                    .displayName
+                            }
+                        >
+                            <div className={'filter-checkbox-list-container'}>
+                                <FilterPropertyColumnShell
+                                    title={
+                                        AttributeMap[
+                                            AttributeNames.Race
+                                        ].displayName
+                                    }
+                                >
+                                    <FilterCheckList
+                                        setFilter={props.setFilter}
+                                        filters={
+                                            props.selectedFiltersByGroupName
+                                        }
+                                        options={options(
+                                            AttributeNames.Race
+                                        )}
+                                    />
+                                </FilterPropertyColumnShell>
+                                {/*<FilterPropertyColumnShell title={'Stage'}>*/}
+                                {/*    <FilterCheckList*/}
+                                {/*        setFilter={props.setFilter}*/}
+                                {/*        filters={*/}
+                                {/*            props.selectedFiltersByGroupName*/}
+                                {/*        }*/}
+                                {/*        options={sortStageOptions(*/}
+                                {/*            options(AttributeNames.Stage)*/}
+                                {/*        )}*/}
+                                {/*    />*/}
+                                {/*</FilterPropertyColumnShell>*/}
+                            </div>
+                        </FilterPanel>
+                    </div>
+                </div>
+
+                <div>
                     <div style={{ width: 151 }}>
                         <FilterPanel placeholder={'Assay Type'}>
                             <FilterPropertyColumnShell title={'Assay Type'}>
