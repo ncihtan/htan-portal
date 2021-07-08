@@ -7,13 +7,10 @@ import { GetStaticProps } from 'next';
 import { WPConstants } from '../types';
 import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
-import {
-    computeDashboardData,
-    fillInEntities,
-    processSynapseJSON,
-} from '../lib/helpers';
+import { computeDashboardData, fillInEntities } from '../lib/helpers';
 import { SynapseData } from '../lib/types';
 import _ from 'lodash';
+import { processSynapseJSON } from '../scripts/processSynapseJSON';
 
 const Home = (data: IHomePropsProps) => {
     return (
