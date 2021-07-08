@@ -198,12 +198,26 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 <div>
                     <div style={{ width: 164 }}>
                         <FilterPanel
-                            placeholder={
-                                AttributeMap[AttributeNames.Race]
-                                    .displayName
-                            }
+                            placeholder={'Demographics'}
                         >
                             <div className={'filter-checkbox-list-container'}>
+                                <FilterPropertyColumnShell
+                                    title={
+                                        AttributeMap[
+                                            AttributeNames.Gender
+                                        ].displayName
+                                    }
+                                >
+                                    <FilterCheckList
+                                        setFilter={props.setFilter}
+                                        filters={
+                                            props.selectedFiltersByGroupName
+                                        }
+                                        options={options(
+                                            AttributeNames.Gender
+                                        )}
+                                    />
+                                </FilterPropertyColumnShell>
                                 <FilterPropertyColumnShell
                                     title={
                                         AttributeMap[
@@ -221,17 +235,23 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         )}
                                     />
                                 </FilterPropertyColumnShell>
-                                {/*<FilterPropertyColumnShell title={'Stage'}>*/}
-                                {/*    <FilterCheckList*/}
-                                {/*        setFilter={props.setFilter}*/}
-                                {/*        filters={*/}
-                                {/*            props.selectedFiltersByGroupName*/}
-                                {/*        }*/}
-                                {/*        options={sortStageOptions(*/}
-                                {/*            options(AttributeNames.Stage)*/}
-                                {/*        )}*/}
-                                {/*    />*/}
-                                {/*</FilterPropertyColumnShell>*/}
+                                <FilterPropertyColumnShell
+                                    title={
+                                        AttributeMap[
+                                            AttributeNames.Ethnicity
+                                        ].displayName
+                                    }
+                                >
+                                    <FilterCheckList
+                                        setFilter={props.setFilter}
+                                        filters={
+                                            props.selectedFiltersByGroupName
+                                        }
+                                        options={options(
+                                            AttributeNames.Ethnicity
+                                        )}
+                                    />
+                                </FilterPropertyColumnShell>
                             </div>
                         </FilterPanel>
                     </div>
