@@ -22,8 +22,8 @@ import {
 import {
     Atlas,
     Entity,
+    fetchData,
     fillInEntities,
-    loadData,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
     updateSelectedFiltersInURL,
@@ -53,11 +53,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
     //let res = await fetch(overviewURL);
 
     const wpAtlases = await getAtlasList();
-    const data = await loadData(wpAtlases);
 
     return {
         props: {
-            data,
             wpAtlases,
         },
     };
@@ -70,11 +68,11 @@ export type ExploreURLQuery = {
 
 @observer
 class Search extends React.Component<
-    { router: NextRouter; data: LoadDataResult; wpAtlases: WPAtlas[] },
+    { router: NextRouter; wpAtlases: WPAtlas[] },
     IFilterProps
 > {
-    @observable.ref private schemaLoadingPromise:
-        | IPromiseBasedObservable<{ [id: string]: DataSchemaData }>
+    @observable.ref private dataLoadingPromise:
+        | IPromiseBasedObservable<LoadDataResult>
         | undefined;
 
     constructor(props: any) {
@@ -175,13 +173,16 @@ class Search extends React.Component<
 
     componentDidMount(): void {
         runInAction(() => {
-            this.setState({
-                files: fillInEntities(this.props.data),
-                atlases: this.props.data.atlases,
+            this.dataLoadingPromise = fromPromise(fetchData());
+            this.dataLoadingPromise.then((data) => {
+                this.setState({
+                    files: fillInEntities(data),
+                    atlases: data.atlases,
+                });
             });
 
-            this.schemaLoadingPromise = fromPromise(getSchemaDataMap());
-            this.schemaLoadingPromise.then((schemaDataById) => {
+            const schemaLoadingPromise = fromPromise(getSchemaDataMap());
+            schemaLoadingPromise.then((schemaDataById) => {
                 this.setState({ schemaDataById });
             });
         });
@@ -274,6 +275,17 @@ class Search extends React.Component<
     }
 
     render() {
+        if (
+            !this.dataLoadingPromise ||
+            this.dataLoadingPromise.state === 'pending'
+        ) {
+            return (
+                <div className={styles.loadingIndicator}>
+                    <ScaleLoader />
+                </div>
+            );
+        }
+
         if (this.filteredFiles) {
             return (
                 <div className={'explorePageWrapper'}>
@@ -329,7 +341,6 @@ class Search extends React.Component<
 interface IFilterPageProps {
     wpAtlases: WPAtlas[];
     router: NextRouter;
-    data: LoadDataResult;
 }
 
 const FilterPage = (props: IFilterPageProps) => {
@@ -338,11 +349,7 @@ const FilterPage = (props: IFilterPageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <Search
-                    router={props.router}
-                    wpAtlases={props.wpAtlases}
-                    data={props.data}
-                />
+                <Search router={props.router} wpAtlases={props.wpAtlases} />
             </PageWrapper>
         </>
     );

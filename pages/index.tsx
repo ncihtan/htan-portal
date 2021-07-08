@@ -1,5 +1,5 @@
 import React from 'react';
-import synapseData from '../public/syn_data.json';
+import processedSynapseData from '../public/processed_syn_data.json';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
@@ -7,10 +7,11 @@ import { GetStaticProps } from 'next';
 import { WPConstants } from '../types';
 import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
-import { computeDashboardData, fillInEntities } from '../lib/helpers';
-import { SynapseData } from '../lib/types';
-import _ from 'lodash';
-import { processSynapseJSON } from '../scripts/processSynapseJSON';
+import {
+    computeDashboardData,
+    fillInEntities,
+    LoadDataResult,
+} from '../lib/helpers';
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -42,7 +43,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     ]);
 
     const files = fillInEntities(
-        processSynapseJSON((synapseData as unknown) as SynapseData, atlases)
+        (processedSynapseData as any) as LoadDataResult
     );
 
     return {

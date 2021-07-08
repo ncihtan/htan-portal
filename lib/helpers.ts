@@ -14,8 +14,6 @@ import {
 } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
-import getData from './getData';
-import { processSynapseJSON } from '../scripts/processSynapseJSON';
 
 // @ts-ignore
 let win;
@@ -119,16 +117,14 @@ function mergeCaseData(
     }));
 }
 
-export async function loadData(
-    WPAtlasData: WPAtlas[]
-): Promise<LoadDataResult> {
-    //const url = `https://data.humantumoratlas.org/syn_data.json`; // '/sim.json';
+export async function fetchData(): Promise<LoadDataResult> {
+    const res = await fetch('/processed_syn_data.json');
 
-    //const data: SynapseData = await fetch(url).then((r) => r.json());
+    // const json = await res.json();
+    const text = await res.text();
+    const json = JSON.parse(text);
 
-    const data = getData();
-
-    return processSynapseJSON(data, WPAtlasData);
+    return json as LoadDataResult;
 }
 
 export function fillInEntities(data: LoadDataResult): Entity[] {
