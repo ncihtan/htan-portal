@@ -24,48 +24,18 @@ if (typeof window !== 'undefined') {
     win = {} as any;
 }
 
-export function extractEntitiesFromSynapseData(data: SynapseData): Entity[] {
-    const schemasByName = _.keyBy(data.schemas, (s) => s.data_schema);
-    const entities: Entity[] = [];
-    _.forEach(data.atlases, (atlas: SynapseAtlas) => {
-        _.forEach(atlas, (synapseRecords, key) => {
-            if (key === 'htan_id' || key === 'htan_name') {
-                // skip these
-                return;
-            }
-            const schemaName = synapseRecords.data_schema;
-            if (schemaName) {
-                const schema = schemasByName[schemaName];
+export type HTANDataFileID = string;
+export type HTANBiospecimenID = string;
+export type HTANParticipantID = string;
 
-                synapseRecords.record_list.forEach((record) => {
-                    const entity: Partial<Entity> = {};
-
-                    schema.attributes.forEach(
-                        (f: SynapseSchema['attributes'][0], i: number) => {
-                            entity[f.id.replace(/^bts:/, '') as keyof Entity] =
-                                record.values[i];
-                        }
-                    );
-
-                    entity.atlasid = atlas.htan_id;
-
-                    entities.push(entity as Entity);
-                });
-            }
-        });
-    });
-
-    return entities;
-}
-
-export interface Entity {
+export interface BaseSerializableEntity {
     // Synapse attribute names
     AJCCPathologicStage: string;
     Biospecimen: string;
     Component: string;
     HTANParentID: string;
     HTANBiospecimenID: string;
-    HTANDataFileID: string;
+    HTANDataFileID: HTANDataFileID; // this is used as the stable UID
     HTANParentBiospecimenID: string;
     HTANParentDataFileID: string;
     TissueorOrganofOrigin: string;
@@ -78,30 +48,50 @@ export interface Entity {
     AssayType?: string;
 
     // Derived or attached in frontend
-    atlas: Atlas;
     atlasid: string;
+    atlas_name: string;
     level: string;
     assayName?: string;
     WPAtlas: WPAtlas;
+    primaryParents?: HTANDataFileID[];
+    synapseId?: string;
+}
+
+export interface SerializableEntity extends BaseSerializableEntity {
+    biospecimenIds: HTANBiospecimenID[];
+    diagnosisIds: HTANParticipantID[];
+    demographicsIds: HTANParticipantID[];
+}
+
+// Entity links in some referenced objects, which will help
+//  for search/filter efficiency, and adds `cases` member.
+export interface Entity extends SerializableEntity {
     biospecimen: Entity[];
     diagnosis: Entity[];
     demographics: Entity[];
     cases: Entity[];
-    primaryParents?: Entity[];
-    synapseId?: string;
 }
 
-export interface Atlas {
+export type Atlas = {
     htan_id: string;
     htan_name: string;
     num_cases: number;
     num_biospecimens: number;
     WPAtlas: WPAtlas;
-}
+};
 
 export interface LoadDataResult {
-    files: Entity[];
+    files: SerializableEntity[];
     atlases: Atlas[];
+    biospecimenByHTANBiospecimenID: {
+        [HTANBiospecimenID: string]: SerializableEntity;
+    };
+    diagnosisByHTANParticipantID: {
+        [HTANParticipantID: string]: SerializableEntity;
+    };
+    demographicsByHTANParticipantID: {
+        [HTANParticipantID: string]: SerializableEntity;
+    };
 }
 
 win.missing = [];
@@ -117,128 +107,6 @@ export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
     );
 }
 
-function findAndAddPrimaryParents(
-    f: Entity,
-    filesByFileId: { [HTANDataFileID: string]: Entity }
-): Entity[] {
-    if (f.primaryParents) {
-        // recursive optimization:
-        //  if we've already calculated f.primaryParents, just return it
-        return f.primaryParents;
-    }
-
-    // otherwise, compute parents
-    let primaryParents: Entity[] = [];
-
-    if (f.HTANParentDataFileID) {
-        // if there's a parent, traverse "upwards" to find primary parent
-        const parentIds = f.HTANParentDataFileID.split(/[,;]/);
-        const parentFiles = parentIds.reduce((aggr: Entity[], id: string) => {
-            const file = filesByFileId[id];
-            if (file) {
-                aggr.push(file);
-            } else {
-                // @ts-ignore
-                (win as any).missing.push(id);
-            }
-            return aggr;
-        }, []);
-
-        primaryParents = _(parentFiles)
-            .map((f) => findAndAddPrimaryParents(f, filesByFileId))
-            .flatten()
-            .uniqBy((f) => f.HTANDataFileID)
-            .value();
-
-        // add primaryParents member to child file
-        f.primaryParents = primaryParents;
-    }
-    {
-        // else
-        // recursive base case: parent (has no parent itself)
-        primaryParents = [f];
-
-        // we don't add primaryParents member to the parent file
-    }
-
-    return primaryParents;
-}
-
-function addPrimaryParents(files: Entity[]) {
-    const fileIdToFile = _.keyBy(files, (f) => f.HTANDataFileID);
-
-    files.forEach((f) => {
-        findAndAddPrimaryParents(f, fileIdToFile);
-    });
-}
-
-function getCaseData(
-    biospecimen: Entity[],
-    biospecimenByHTANBiospecimenID: { [htanBiospecimenID: string]: Entity },
-    casesByHTANParticipantID: { [htanParticipantID: string]: Entity }
-) {
-    return biospecimen
-        .map((s) => {
-            // HTANParentID can be both participant or biospecimen, so keep
-            // going up the tree until participant is found.
-            let HTANParentID = s.HTANParentID;
-            while (HTANParentID in biospecimenByHTANBiospecimenID) {
-                const parentBioSpecimen =
-                    biospecimenByHTANBiospecimenID[HTANParentID];
-                HTANParentID = parentBioSpecimen.HTANParentID;
-            }
-            if (!(HTANParentID in casesByHTANParticipantID)) {
-                console.error(
-                    `${s.HTANBiospecimenID} does not have a HTANParentID with diagnosis information`
-                );
-                return undefined;
-            } else {
-                return casesByHTANParticipantID[HTANParentID] as Entity;
-            }
-        })
-        .filter((f) => !!f) as Entity[];
-}
-
-function getSampleAndPatientData(
-    file: Entity,
-    biospecimenByHTANBiospecimenID: { [htanBiospecimenID: string]: Entity },
-    diagnosisByHTANParticipantID: { [htanParticipantID: string]: Entity },
-    demographicsByHTANParticipantID: { [htanParticipantID: string]: Entity }
-) {
-    const primaryParents =
-        file.primaryParents && file.primaryParents.length
-            ? file.primaryParents
-            : [file];
-
-    const biospecimen = primaryParents
-        .map((p) =>
-            p.HTANParentBiospecimenID.split(',').map(
-                (HTANParentBiospecimenID) =>
-                    biospecimenByHTANBiospecimenID[HTANParentBiospecimenID] as
-                        | Entity
-                        | undefined
-            )
-        )
-        .flat()
-        .filter((f) => !!f) as Entity[];
-
-    const diagnosis = getCaseData(
-        biospecimen,
-        biospecimenByHTANBiospecimenID,
-        diagnosisByHTANParticipantID
-    );
-
-    const demographics = getCaseData(
-        biospecimen,
-        biospecimenByHTANBiospecimenID,
-        demographicsByHTANParticipantID
-    );
-
-    const cases = mergeCaseData(diagnosis, demographicsByHTANParticipantID);
-
-    return { biospecimen, diagnosis, demographics, cases };
-}
-
 function mergeCaseData(
     diagnosis: Entity[],
     demographicsByHTANParticipantID: { [htanParticipantID: string]: Entity }
@@ -249,142 +117,41 @@ function mergeCaseData(
     }));
 }
 
-export async function loadData(
-    WPAtlasData: WPAtlas[]
-): Promise<LoadDataResult> {
-    const url = '/syn_data.json'; // '/sim.json';
+export async function fetchData(): Promise<LoadDataResult> {
+    const res = await fetch('/processed_syn_data.json');
 
-    const data: SynapseData = await fetch(url).then((r) => r.json());
+    // const json = await res.json();
+    const text = await res.text();
+    const json = JSON.parse(text);
 
-    return processSynapseJSON(data, WPAtlasData);
+    return json as LoadDataResult;
 }
 
-function extractBiospecimensAndDiagnosisAndDemographics(data: Entity[]) {
-    const biospecimenByHTANBiospecimenID: {
-        [htanBiospecimenID: string]: Entity;
-    } = {};
-    const diagnosisByHTANParticipantID: {
-        [htanParticipantID: string]: Entity;
-    } = {};
-    const demographicsByHTANParticipantID: {
-        [htanParticipantID: string]: Entity;
-    } = {};
+export function fillInEntities(data: LoadDataResult): Entity[] {
+    const biospecimenMap = data.biospecimenByHTANBiospecimenID;
+    const diagnosisMap = data.diagnosisByHTANParticipantID;
+    const demoMap = data.demographicsByHTANParticipantID;
 
-    data.forEach((entity) => {
-        if (entity.Component === 'Biospecimen') {
-            biospecimenByHTANBiospecimenID[entity.HTANBiospecimenID] = entity;
-        }
-        if (entity.Component === 'Diagnosis') {
-            diagnosisByHTANParticipantID[entity.HTANParticipantID] = entity;
-        }
-        if (entity.Component === 'Demographics') {
-            demographicsByHTANParticipantID[entity.HTANParticipantID] = entity;
-        }
-    });
-
-    return {
-        biospecimenByHTANBiospecimenID,
-        diagnosisByHTANParticipantID,
-        demographicsByHTANParticipantID,
-    };
-}
-
-export function processSynapseJSON(synapseJson: any, WPAtlasData: WPAtlas[]) {
-    const flatData: Entity[] = extractEntitiesFromSynapseData(synapseJson);
-
-    const files = flatData.filter((obj) => {
-        return !!obj.filename;
-    });
-
-    addPrimaryParents(files);
-    const {
-        biospecimenByHTANBiospecimenID,
-        diagnosisByHTANParticipantID,
-        demographicsByHTANParticipantID,
-    } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
-
-    const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
-
-    const synapseAtlasMap = _.keyBy(synapseJson.atlases, (a) => a.htan_id);
-
-    // tag synapse atlas with WP atlas
-    _.forEach(synapseAtlasMap, (a: Atlas) => {
-        if (WPAtlasMap[a.htan_id]) {
-            a.WPAtlas = WPAtlasMap[a.htan_id] || undefined;
-        }
-    });
-
-    _.forEach(files, (file) => {
-        // parse component to make a new level property and adjust component property
-        if (file.Component) {
-            const parsedAssay = parseRawAssayType(
-                file.Component,
-                file.ImagingAssayType
-            );
-            //file.Component = parsed.name;
-            if (parsedAssay.level && parsedAssay.level.length > 1) {
-                file.level = parsedAssay.level;
-            } else {
-                file.level = 'Unknown';
-            }
-            file.assayName = parsedAssay.name;
-
-            // special case for Other Assay.  These are assays that don't fit
-            // the standard model.  To have a more descriptive name use assay
-            // type field instead
-            if (parsedAssay.name === 'Other Assay') {
-                file.assayName = file.AssayType || 'Other Assay';
-                file.level = 'Other';
-            }
-        } else {
-            file.level = 'Unknown';
-        }
-
-        file.WPAtlas = WPAtlasMap[file.atlasid.split('_')[0]];
-
-        file.atlas = synapseAtlasMap[file.atlasid];
-
-        const parentData = getSampleAndPatientData(
-            file,
-            biospecimenByHTANBiospecimenID,
-            diagnosisByHTANParticipantID,
-            demographicsByHTANParticipantID
+    data.files.forEach((file) => {
+        (file as Entity).biospecimen = file.biospecimenIds.map(
+            (id) => biospecimenMap[id] as Entity
         );
-
-        file.biospecimen = parentData.biospecimen;
-        file.diagnosis = parentData.diagnosis;
-        file.demographics = parentData.demographics;
-        file.cases = parentData.cases;
+        (file as Entity).diagnosis = file.diagnosisIds.map(
+            (id) => diagnosisMap[id] as Entity
+        );
+        (file as Entity).demographics = file.demographicsIds.map(
+            (id) => demoMap[id] as Entity
+        );
+        (file as Entity).cases = _.uniqBy(
+            mergeCaseData(
+                (file as Entity).diagnosis,
+                demoMap as { [id: string]: Entity }
+            ),
+            (c) => c.HTANParticipantID
+        );
     });
 
-    // files must have a diagnosis
-    const returnFiles = files.filter((f) => !!f.diagnosis);
-
-    // atlases MUST have an entry in WPAtlas
-    const returnAtlases = synapseJson.atlases.filter((a: Atlas) => a.WPAtlas);
-
-    // count cases and biospecimens for each atlas
-    const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
-    const caseCountByAtlas = _.mapValues(filesByAtlas, (files) => {
-        return _.chain(files)
-            .flatMapDeep((f) => f.diagnosis)
-            .uniqBy((f) => f.HTANParticipantID)
-            .value().length;
-    });
-    const biospecimenCountByAtlas = _.mapValues(filesByAtlas, (files) => {
-        return _.chain(files)
-            .flatMapDeep((f) => f.biospecimen)
-            .uniqBy((f) => f.HTANBiospecimenID)
-            .value().length;
-    });
-
-    returnAtlases.forEach((a: Atlas) => {
-        a.num_biospecimens = biospecimenCountByAtlas[a.htan_id];
-        a.num_cases = caseCountByAtlas[a.htan_id];
-    });
-
-    // filter out files without a diagnosis
-    return { files: returnFiles, atlases: returnAtlases };
+    return data.files as Entity[];
 }
 
 export function sortStageOptions(options: ExploreOptionType[]) {
@@ -415,45 +182,6 @@ export function sortStageOptions(options: ExploreOptionType[]) {
 
 export function clamp(x: number, lower: number, upper: number) {
     return Math.max(lower, Math.min(x, upper));
-}
-
-export function parseRawAssayType(
-    componentName: string,
-    imagingAssayType?: string
-) {
-    // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
-    // We want to take that and spit out { name: "Camel Case-Name", level: "Level X" }
-    //  (with the exception that the prefixes Sc and Sn are always treated as lower case)
-
-    // See if there's a Level in it
-    const splitByLevel = componentName.split('Level');
-    const level = splitByLevel.length > 1 ? `Level ${splitByLevel[1]}` : null;
-    const extractedName = splitByLevel[0];
-
-    if (imagingAssayType) {
-        // do not parse imaging assay type, use as is
-        return { name: imagingAssayType, level };
-    }
-
-    if (extractedName) {
-        // Convert camel case to space case
-        // Source: https://stackoverflow.com/a/15370765
-        let name = extractedName.replace(
-            /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g,
-            '$1$4 $2$3$5'
-        );
-
-        // special case: sc as prefix
-        name = name.replace(/\bSc /g, 'sc');
-
-        // special case: sn as prefix
-        name = name.replace(/\bSn /g, 'sn');
-
-        return { name, level };
-    }
-
-    // Couldn't parse
-    return { name: componentName, level: null };
 }
 
 export function urlEncodeSelectedFilters(

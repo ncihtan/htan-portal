@@ -22,7 +22,8 @@ import {
 import {
     Atlas,
     Entity,
-    loadData,
+    fetchData,
+    fillInEntities,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
     updateSelectedFiltersInURL,
@@ -47,16 +48,15 @@ import PageWrapper from '../components/PageWrapper';
 import { DataSchemaData, getSchemaDataMap } from '../lib/dataSchemaHelpers';
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let slugs = ['summary-blurb-data-release'];
-    let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    let res = await fetch(overviewURL);
+    //let slugs = ['summary-blurb-data-release'];
+    //let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
+    //let res = await fetch(overviewURL);
 
-    const atlases = await getAtlasList();
+    const wpAtlases = await getAtlasList();
 
     return {
         props: {
-            atlasData: atlases,
-            //data,
+            wpAtlases,
         },
     };
 };
@@ -68,15 +68,11 @@ export type ExploreURLQuery = {
 
 @observer
 class Search extends React.Component<
-    { router: NextRouter; wpData: WPAtlas[] },
+    { router: NextRouter; wpAtlases: WPAtlas[] },
     IFilterProps
 > {
     @observable.ref private dataLoadingPromise:
         | IPromiseBasedObservable<LoadDataResult>
-        | undefined;
-
-    @observable.ref private schemaLoadingPromise:
-        | IPromiseBasedObservable<{ [id: string]: DataSchemaData }>
         | undefined;
 
     constructor(props: any) {
@@ -177,13 +173,16 @@ class Search extends React.Component<
 
     componentDidMount(): void {
         runInAction(() => {
-            this.dataLoadingPromise = fromPromise(loadData(this.props.wpData));
-            this.dataLoadingPromise.then(({ files, atlases }) => {
-                this.setState({ files, atlases });
+            this.dataLoadingPromise = fromPromise(fetchData());
+            this.dataLoadingPromise.then((data) => {
+                this.setState({
+                    files: fillInEntities(data),
+                    atlases: data.atlases,
+                });
             });
 
-            this.schemaLoadingPromise = fromPromise(getSchemaDataMap());
-            this.schemaLoadingPromise.then((schemaDataById) => {
+            const schemaLoadingPromise = fromPromise(getSchemaDataMap());
+            schemaLoadingPromise.then((schemaDataById) => {
                 this.setState({ schemaDataById });
             });
         });
@@ -216,12 +215,17 @@ class Search extends React.Component<
             .value();
     }
 
+    @computed get atlasMap() {
+        return _.keyBy(this.state.atlases, (a) => a.htan_id);
+    }
+
     @computed
     get filteredAtlases() {
         // get only atlases associated with filtered files
         return _.chain(this.filteredFiles)
-            .map((f) => f.atlas)
+            .map((f) => f.atlasid)
             .uniq()
+            .map((id) => this.atlasMap[id])
             .value();
     }
 
@@ -238,8 +242,9 @@ class Search extends React.Component<
                     this.state.files
                 )
             )
-                .map((f) => f.atlas)
+                .map((f) => f.atlasid)
                 .uniq()
+                .map((id) => this.atlasMap[id])
                 .value();
         } else {
             return [];
@@ -254,16 +259,18 @@ class Search extends React.Component<
         );
 
         return _.chain(filterFiles(filtersExpectAtlasFilters, this.state.files))
-            .map((f) => f.atlas)
+            .map((f) => f.atlasid)
             .uniq()
+            .map((id) => this.atlasMap[id])
             .value();
     }
 
     @computed
     get allAtlases() {
         return _.chain(this.state.files)
-            .map((f) => f.atlas)
+            .map((f) => f.atlasid)
             .uniq()
+            .map((id) => this.atlasMap[id])
             .value();
     }
 
@@ -272,7 +279,6 @@ class Search extends React.Component<
             !this.dataLoadingPromise ||
             this.dataLoadingPromise.state === 'pending'
         ) {
-            // TODO: Pretty this up
             return (
                 <div className={styles.loadingIndicator}>
                     <ScaleLoader />
@@ -321,7 +327,7 @@ class Search extends React.Component<
                         onSelectAtlas={this.onSelectAtlas}
                         samples={this.filteredSamples}
                         cases={this.filteredCases}
-                        wpData={this.props.wpData}
+                        wpData={this.props.wpAtlases}
                         getGroupsByPropertyFiltered={
                             this.getGroupsByPropertyFiltered
                         }
@@ -333,7 +339,7 @@ class Search extends React.Component<
 }
 
 interface IFilterPageProps {
-    atlasData: WPAtlas[];
+    wpAtlases: WPAtlas[];
     router: NextRouter;
 }
 
@@ -343,7 +349,7 @@ const FilterPage = (props: IFilterPageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <Search router={props.router} wpData={props.atlasData} />
+                <Search router={props.router} wpAtlases={props.wpAtlases} />
             </PageWrapper>
         </>
     );

@@ -57,7 +57,7 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
         displayName: 'Biospecimen',
     },
     [AttributeNames.AtlasName]: {
-        path: 'atlas.htan_name',
+        path: 'atlas_name',
         displayName: 'Atlas',
     },
     [AttributeNames.Stage]: {

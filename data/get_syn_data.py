@@ -259,6 +259,8 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
     with open("./../data/syn_metadata.json", "w") as m_f:
         json.dump(portal_metadata, m_f, indent = 4)
 
+    logging.info("Data fetch successful. Please run `yarn processSynapseData` in the main project directory to complete the data update.")
+
 
 if __name__ == '__main__':
     generate_json()
