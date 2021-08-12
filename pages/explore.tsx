@@ -24,11 +24,13 @@ import {
     Entity,
     fetchData,
     fillInEntities,
+    filterObject,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
 import {
+    AttributeMap,
     AttributeNames,
     ExploreActionMeta,
     ExploreSelectedFilter,
@@ -74,6 +76,8 @@ class Search extends React.Component<
     @observable.ref private dataLoadingPromise:
         | IPromiseBasedObservable<LoadDataResult>
         | undefined;
+    @observable private showAllBiospecimens = false;
+    @observable private showAllCases = false;
 
     constructor(props: any) {
         super(props);
@@ -89,6 +93,13 @@ class Search extends React.Component<
         if (typeof window !== 'undefined') (window as any).me = this;
 
         makeObservable(this);
+    }
+
+    @action.bound toggleShowAllBiospecimens() {
+        this.showAllBiospecimens = !this.showAllBiospecimens;
+    }
+    @action.bound toggleShowAllCases() {
+        this.showAllCases = !this.showAllCases;
     }
 
     get selectedFilters(): ExploreSelectedFilter[] {
@@ -201,18 +212,39 @@ class Search extends React.Component<
 
     @computed
     get filteredSamples() {
-        return _.chain(this.filteredFiles)
+        const samples = _.chain(this.filteredFiles)
             .flatMapDeep((file) => file.biospecimen)
             .uniqBy((f) => f.HTANBiospecimenID)
             .value();
+
+        if (this.showAllBiospecimens) {
+            return samples;
+        } else {
+            const filteredCaseIds = _.keyBy(
+                this.filteredCases,
+                (c) => c.HTANParticipantID
+            );
+            return samples.filter((s) => s.HTANParentID in filteredCaseIds);
+        }
     }
 
     @computed
     get filteredCases() {
-        return _.chain(this.filteredFiles)
+        const cases = _.chain(this.filteredFiles)
             .flatMapDeep((f: Entity) => f.cases)
             .uniqBy((f) => f.HTANParticipantID)
             .value();
+
+        if (this.showAllCases) {
+            return cases;
+        } else {
+            const caseFilters = filterObject(
+                this.selectedFiltersByAttrName,
+                (filters, attrName) =>
+                    !!AttributeMap[attrName as AttributeNames].caseFilter
+            );
+            return filterFiles(caseFilters, cases);
+        }
     }
 
     @computed get atlasMap() {
@@ -311,7 +343,8 @@ class Search extends React.Component<
                         getGroupsByPropertyFiltered={
                             this.getGroupsByPropertyFiltered
                         }
-                        patientCount={this.filteredCases.length}
+                        filteredBiospecimenCount={this.filteredSamples.length}
+                        filteredCaseCount={this.filteredCases.length}
                     />
 
                     <ExploreTabs
@@ -331,6 +364,12 @@ class Search extends React.Component<
                         getGroupsByPropertyFiltered={
                             this.getGroupsByPropertyFiltered
                         }
+                        showAllBiospecimens={this.showAllBiospecimens}
+                        showAllCases={this.showAllCases}
+                        toggleShowAllBiospecimens={
+                            this.toggleShowAllBiospecimens
+                        }
+                        toggleShowAllCases={this.toggleShowAllCases}
                     />
                 </div>
             );
