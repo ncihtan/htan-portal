@@ -126,14 +126,14 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
                         }`}
                     >
-                        <label className="show-all-checkbox">
+                        {/*<label className="show-all-checkbox">
                             <input
                                 type="checkbox"
                                 checked={props.showAllBiospecimens}
                                 onClick={props.toggleShowAllBiospecimens}
                             />
                             Show all biospecimens from filtered files
-                        </label>
+                        </label>*/}
                         <BiospecimenTable
                             synapseAtlases={props.filteredSynapseAtlases}
                             samples={props.samples}
@@ -148,14 +148,14 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             activeTab !== ExploreTab.CASES ? 'd-none' : ''
                         }`}
                     >
-                        <label className="show-all-checkbox">
+                        {/*<label className="show-all-checkbox">
                             <input
                                 type="checkbox"
                                 checked={props.showAllCases}
                                 onClick={props.toggleShowAllCases}
                             />
                             Show all cases from filtered files
-                        </label>
+                        </label>*/}
                         <CaseTable
                             synapseAtlases={props.filteredSynapseAtlases}
                             cases={props.cases}
