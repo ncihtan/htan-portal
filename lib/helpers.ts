@@ -335,3 +335,16 @@ export function truncateFilename(
 export function convertAgeInDaysToYears(ageInDays: number) {
     return Math.round(ageInDays / 365);
 }
+
+export function filterObject(
+    object: any,
+    filter: (val: any, key: any) => boolean
+) {
+    const filteredObj: any = {};
+    _.forEach(object, (val, key) => {
+        if (filter(val, key)) {
+            filteredObj[key] = val;
+        }
+    });
+    return filteredObj;
+}

@@ -9,8 +9,9 @@ pluralize.addPluralRule(/specimen$/i, 'specimens');
 
 interface IExploreSummaryProps {
     filteredFiles: Entity[];
+    filteredBiospecimenCount: number;
+    filteredCaseCount: number;
     getGroupsByPropertyFiltered: any;
-    patientCount: number;
 }
 
 export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
@@ -28,12 +29,6 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
         props.getGroupsByPropertyFiltered[AttributeNames.PrimaryDiagnosis]
     ).length;
 
-    const biospecimenCount = _(props.filteredFiles)
-        .map((f) => f.HTANParentBiospecimenID)
-        .filter((x) => !!x)
-        .uniq()
-        .value().length;
-
     const assayCount = _.keys(
         props.getGroupsByPropertyFiltered[AttributeNames.assayName]
     ).length;
@@ -50,8 +45,14 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
                 <div>{pluralize('Atlas', atlasCount, true)}</div>
                 <div>{pluralize('Organ', organCount, true)}</div>
                 <div>{pluralize('Cancer Type', cancerTypeCount, true)}</div>
-                <div>{pluralize('Case', props.patientCount, true)}</div>
-                <div>{pluralize('Biospecimen', biospecimenCount, true)}</div>
+                <div>{pluralize('Case', props.filteredCaseCount, true)}</div>
+                <div>
+                    {pluralize(
+                        'Biospecimen',
+                        props.filteredBiospecimenCount,
+                        true
+                    )}
+                </div>
                 <div>{pluralize('Assay', assayCount, true)}</div>
                 <div>{pluralize('File', fileCount, true)}</div>
             </div>

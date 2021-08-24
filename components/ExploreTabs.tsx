@@ -23,6 +23,11 @@ interface IExploreTabsProps {
     selectedSynapseAtlases: Atlas[];
     allSynapseAtlases: Atlas[];
     onSelectAtlas?: (selected: Atlas[]) => void;
+
+    toggleShowAllBiospecimens: () => void;
+    showAllBiospecimens: boolean;
+    toggleShowAllCases: () => void;
+    showAllCases: boolean;
 }
 
 export enum ExploreTab {
@@ -121,6 +126,14 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
                         }`}
                     >
+                        {/*<label className="show-all-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={props.showAllBiospecimens}
+                                onClick={props.toggleShowAllBiospecimens}
+                            />
+                            Show all biospecimens from filtered files
+                        </label>*/}
                         <BiospecimenTable
                             synapseAtlases={props.filteredSynapseAtlases}
                             samples={props.samples}
@@ -135,6 +148,14 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             activeTab !== ExploreTab.CASES ? 'd-none' : ''
                         }`}
                     >
+                        {/*<label className="show-all-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={props.showAllCases}
+                                onClick={props.toggleShowAllCases}
+                            />
+                            Show all cases from filtered files
+                        </label>*/}
                         <CaseTable
                             synapseAtlases={props.filteredSynapseAtlases}
                             cases={props.cases}
