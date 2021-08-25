@@ -46,6 +46,10 @@ export interface BaseSerializableEntity {
     HTANParticipantID: string;
     ImagingAssayType?: string;
     AssayType?: string;
+    Race: string;
+    Ethnicity: string;
+    CountryofResidence: string;
+    Gender: string;
 
     // Derived or attached in frontend
     atlasid: string;
@@ -330,4 +334,17 @@ export function truncateFilename(
 
 export function convertAgeInDaysToYears(ageInDays: number) {
     return Math.round(ageInDays / 365);
+}
+
+export function filterObject(
+    object: any,
+    filter: (val: any, key: any) => boolean
+) {
+    const filteredObj: any = {};
+    _.forEach(object, (val, key) => {
+        if (filter(val, key)) {
+            filteredObj[key] = val;
+        }
+    });
+    return filteredObj;
 }

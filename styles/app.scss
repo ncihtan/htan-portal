@@ -361,3 +361,11 @@ table {
     opacity: 0.2 !important;
     cursor: not-allowed;
 }
+
+.show-all-checkbox {
+    float: left;
+
+    & input {
+        margin-right: 10px;
+    }
+}

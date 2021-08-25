@@ -20,6 +20,10 @@ export enum AttributeNames {
     // Synapse attribute names
     TissueorOrganofOrigin = 'TissueorOrganofOrigin',
     PrimaryDiagnosis = 'PrimaryDiagnosis',
+    Gender = 'Gender',
+    Race = 'Race',
+    Ethnicity = 'Ethnicity',
+    CountryofResidence = 'CountryofResidence',
     Component = 'Component',
     Biospecimen = 'Biospecimen',
     AtlasName = 'AtlasName',
@@ -35,18 +39,49 @@ export interface IAttributeInfo {
     path?: string;
     getValues?: (e: Entity) => string[];
     displayName: string;
+    caseFilter?: boolean;
+}
+
+function getCaseValues(propName: keyof Entity) {
+    return (e: Entity) => {
+        if (e.cases) {
+            return _.uniq(e.cases.map((c) => c[propName] as string));
+        } else {
+            return [e[propName] as string];
+        }
+    };
 }
 
 export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     [AttributeNames.TissueorOrganofOrigin]: {
-        getValues: (e: Entity) =>
-            _.uniq(e.diagnosis.map((d) => d.TissueorOrganofOrigin)),
+        getValues: getCaseValues('TissueorOrganofOrigin'),
         displayName: 'Organ',
+        caseFilter: true,
     },
     [AttributeNames.PrimaryDiagnosis]: {
-        getValues: (e: Entity) =>
-            _.uniq(e.diagnosis.map((d) => d.PrimaryDiagnosis)),
+        getValues: getCaseValues('PrimaryDiagnosis'),
         displayName: 'Disease Type',
+        caseFilter: true,
+    },
+    [AttributeNames.Race]: {
+        getValues: getCaseValues('Race'),
+        displayName: 'Race',
+        caseFilter: true,
+    },
+    [AttributeNames.Ethnicity]: {
+        getValues: getCaseValues('Ethnicity'),
+        displayName: 'Ethnicity',
+        caseFilter: true,
+    },
+    [AttributeNames.CountryofResidence]: {
+        getValues: getCaseValues('CountryofResidence'),
+        displayName: 'Country of Residence',
+        caseFilter: true,
+    },
+    [AttributeNames.Gender]: {
+        getValues: getCaseValues('Gender'),
+        displayName: 'Gender',
+        caseFilter: true,
     },
     [AttributeNames.Component]: {
         path: 'Component',
@@ -61,9 +96,9 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
         displayName: 'Atlas',
     },
     [AttributeNames.Stage]: {
-        getValues: (e: Entity) =>
-            _.uniq(e.diagnosis.map((d) => d.AJCCPathologicStage)),
+        getValues: getCaseValues('AJCCPathologicStage'),
         displayName: 'Stage',
+        caseFilter: true,
     },
     [AttributeNames.Level]: {
         path: 'level',
