@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Table } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -22,7 +22,9 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-import EnhancedDataTable from './EnhancedDataTable';
+import EnhancedDataTable, {
+    IEnhancedDataTableColumn,
+} from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
@@ -37,6 +39,14 @@ interface IFileDownloadModalProps {
     onClose: () => void;
     isOpen: boolean;
 }
+
+interface IViewDetailsModalProps {
+    file: Entity | undefined;
+    onClose: () => void;
+    columns: IEnhancedDataTableColumn<Entity>[];
+}
+
+const DETAILS_COLUMN_NAME = 'Details';
 
 const isDSAEnabled = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -174,6 +184,52 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     );
 };
 
+function renderCell(column: IEnhancedDataTableColumn<Entity>, file: Entity) {
+    if (column.cell) {
+        return (column.cell as any)(file);
+    } else if (typeof column.selector === 'string') {
+        return _.get(file, column.selector);
+    } else if (column.selector) {
+        return (column.selector as any)(file);
+    }
+}
+
+const ViewDetailsModal: React.FunctionComponent<IViewDetailsModalProps> = (
+    props
+) => {
+    if (!props.file) {
+        return null;
+    }
+    return (
+        <Modal show={props.file !== undefined} onHide={props.onClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Details</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                <Table striped bordered>
+                    <tbody>
+                        {props.columns.map((column) => (
+                            <tr key={column.name as string}>
+                                <td style={{ fontWeight: 'bold' }}>
+                                    {column.name}
+                                </td>
+                                <td>{renderCell(column, props.file!)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="secondary" onClick={props.onClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
+};
+
 interface IFileTableProps {
     entities: Entity[];
     getGroupsByPropertyFiltered: any;
@@ -186,6 +242,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable clicked: Entity | undefined;
     @observable isDownloadModalOpen = false;
     @observable isLinkOutModalOpen = false;
+    @observable viewDetailsFile: Entity | undefined = undefined;
 
     get columns() {
         return [
@@ -372,6 +429,28 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 wrap: true,
                 sortable: true,
             },
+            {
+                name: DETAILS_COLUMN_NAME,
+                selector: (file: Entity) => 'Details',
+                cell: (file: Entity) => {
+                    if (true) {
+                        // TODO: determine if there are more details
+                        return (
+                            <button
+                                className={'btn btn-sm btn-link'}
+                                onClick={action(() => {
+                                    this.viewDetailsFile = file;
+                                })}
+                            >
+                                View Details
+                            </button>
+                        );
+                    }
+                },
+                wrap: true,
+                sortable: false,
+                searchable: false,
+            },
         ];
     }
 
@@ -399,6 +478,10 @@ export default class FileTable extends React.Component<IFileTableProps> {
         this.isLinkOutModalOpen = false;
     };
 
+    @action onViewDetailsModalClose = () => {
+        this.viewDetailsFile = undefined;
+    };
+
     onSelect = (state: {
         allSelected: boolean;
         selectedCount: number;
@@ -424,6 +507,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     files={this.clicked ? [this.clicked] : []}
                     onClose={this.onLinkOutModalClose}
                     isOpen={this.isLinkOutModalOpen}
+                />
+
+                <ViewDetailsModal
+                    file={this.viewDetailsFile}
+                    onClose={this.onViewDetailsModalClose}
+                    columns={this.columns.filter(
+                        (c) => c.name !== DETAILS_COLUMN_NAME
+                    )}
                 />
 
                 <EnhancedDataTable
