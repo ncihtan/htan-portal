@@ -29,6 +29,7 @@ import { AttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
@@ -44,6 +45,10 @@ interface IViewDetailsModalProps {
     file: Entity | undefined;
     onClose: () => void;
     columns: IEnhancedDataTableColumn<Entity>[];
+    columnVisibility: { [columnKey: string]: boolean };
+    onChangeColumnVisibility: (columnVisibility: {
+        [columnKey: string]: boolean;
+    }) => void;
 }
 
 const DETAILS_COLUMN_NAME = 'Details';
@@ -207,12 +212,48 @@ const ViewDetailsModal: React.FunctionComponent<IViewDetailsModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
-                <Table striped bordered>
+                <Table bordered>
                     <tbody>
                         {props.columns.map((column) => (
                             <tr key={column.name as string}>
-                                <td style={{ fontWeight: 'bold' }}>
+                                <td
+                                    style={{
+                                        fontWeight: 'bold',
+                                        background: 'rgb(240,240,240)',
+                                    }}
+                                >
                                     {column.name}
+                                    {!props.columnVisibility[
+                                        column.name as string
+                                    ] && (
+                                        <Tooltip
+                                            overlay={
+                                                <span>
+                                                    Add this column to the table
+                                                </span>
+                                            }
+                                        >
+                                            <span
+                                                style={{
+                                                    color: 'green',
+                                                    marginLeft: 3,
+                                                    cursor: 'pointer',
+                                                }}
+                                                onClick={() =>
+                                                    props.onChangeColumnVisibility(
+                                                        {
+                                                            ...props.columnVisibility,
+                                                            [column.name as string]: true,
+                                                        }
+                                                    )
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faPlusCircle}
+                                                />
+                                            </span>
+                                        </Tooltip>
+                                    )}
                                 </td>
                                 <td>{renderCell(column, props.file!)}</td>
                             </tr>
@@ -243,6 +284,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable isDownloadModalOpen = false;
     @observable isLinkOutModalOpen = false;
     @observable viewDetailsFile: Entity | undefined = undefined;
+    @observable columnVisibility: { [columnKey: string]: boolean } = {};
 
     get columns() {
         return [
@@ -457,6 +499,16 @@ export default class FileTable extends React.Component<IFileTableProps> {
     constructor(props: IFileTableProps) {
         super(props);
         makeObservable(this);
+
+        this.columnVisibility = _.mapValues(
+            _.keyBy(this.columns, (c) => c.name),
+            () => true
+        );
+    }
+
+    @action.bound
+    setColumnVisibility(vis: { [key: string]: boolean }) {
+        this.columnVisibility = vis;
     }
 
     @action onDownload = (e: any) => {
@@ -512,12 +564,16 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 <ViewDetailsModal
                     file={this.viewDetailsFile}
                     onClose={this.onViewDetailsModalClose}
+                    columnVisibility={this.columnVisibility}
+                    onChangeColumnVisibility={this.setColumnVisibility}
                     columns={this.columns.filter(
                         (c) => c.name !== DETAILS_COLUMN_NAME
                     )}
                 />
 
                 <EnhancedDataTable
+                    columnVisibility={this.columnVisibility}
+                    onChangeColumnVisibility={this.setColumnVisibility}
                     customControls={
                         <button
                             className={classNames(

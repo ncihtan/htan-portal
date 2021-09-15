@@ -25,6 +25,9 @@ export interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
 interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
     columns: IEnhancedDataTableColumn<T>[];
     columnVisibility?: { [columnKey: string]: boolean };
+    onChangeColumnVisibility?: (columnVisibility: {
+        [columnKey: string]: boolean;
+    }) => void;
     onChangeSearchText?: (searchText: string) => void;
     additionalSearchFilter?: (
         row: T,
@@ -124,9 +127,25 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     @observable filterText = DebouncedObservable('', 300);
 
     // this keeps the state of the latest action (latest user selection)
-    @observable userSelectedColumnVisibility:
+    @observable _userSelectedColumnVisibility:
         | { [columnKey: string]: boolean }
         | undefined;
+
+    get userSelectedColumnVisibility() {
+        if (this.props.onChangeColumnVisibility) {
+            return this.props.columnVisibility;
+        } else {
+            return this._userSelectedColumnVisibility;
+        }
+    }
+
+    set userSelectedColumnVisibility(vis) {
+        if (this.props.onChangeColumnVisibility) {
+            this.props.onChangeColumnVisibility(vis!);
+        } else {
+            this._userSelectedColumnVisibility = vis;
+        }
+    }
 
     constructor(props: IEnhancedDataTableProps<T>) {
         super(props);
