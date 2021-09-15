@@ -30,13 +30,19 @@ export interface IColumnSelectProps {
 export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
     public static defaultProps: Partial<IColumnSelectProps> = {
         name: 'dataTableColumns',
-        placeholder: 'Columns',
         width: 180,
     };
 
     constructor(props: IColumnSelectProps) {
         super(props);
         makeObservable<ColumnSelect, 'onChange'>(this);
+    }
+
+    @computed get placeholder() {
+        return (
+            this.props.placeholder ||
+            `Columns (${this.selectedOptions.length}/${this.options.length})`
+        );
     }
 
     @computed
@@ -67,7 +73,7 @@ export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
                     isSearchable={false}
                     isClearable={false}
                     name={this.props.name}
-                    placeholder={this.props.placeholder}
+                    placeholder={this.placeholder}
                     controlShouldRenderValue={false}
                     isMulti={true}
                     options={this.options as any}
