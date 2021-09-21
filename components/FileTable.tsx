@@ -40,7 +40,7 @@ interface IFileDownloadModalProps {
 
 const isThumbnailEnabled = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.has('thumbnail') && urlParams.get('thumbnail');
+    return urlParams.has('thumbnail');
 };
 
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
@@ -311,7 +311,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         cellXGeneMappings[getFileBase(file.filename)];
                     const minervaLink =
                         minervaMappings[getFileBase(file.filename)];
-                    const thumbnail = file.filename && thumbnailMappings[file.filename];
+                    const imageInfo = file.filename && thumbnailMappings.find((f:any) => f.origin === file.filename);
 
                     if (cellXGeneLink) {
                         return (
@@ -328,8 +328,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             </a>
                         );
                     } else if (file.Component.startsWith('Imaging')) {
-                        if (isThumbnailEnabled() && thumbnail) {
-                            const thumbnailUrl = `https://gist.githubusercontent.com/inodb/${isThumbnailEnabled()}/raw/cc275572ccc964f9f1bd10265c37485261ac849b/${thumbnail}`;
+                        if (isThumbnailEnabled() && imageInfo) {
+                            const thumbnailUrl = imageInfo.thumbnail.url;
+                            const minervaStoryUrl = imageInfo.minerva_story.urls.find((u:any) => u.includes('index'));
 
                             return (
                                 <div className={'dsa-container'}>
@@ -338,7 +339,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                         overlay={
                                             <>
                                                 <a
-                                                    href={thumbnailUrl}
+                                                    href={minervaStoryUrl}
                                                     target="_blank"
                                                 >
                                                     <img
@@ -352,7 +353,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                         }
                                     >
                                         <a
-                                            href={thumbnailUrl}
+                                            href={minervaStoryUrl}
                                             target="_blank"
                                         >
                                             <img
