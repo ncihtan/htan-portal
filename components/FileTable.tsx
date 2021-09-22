@@ -16,6 +16,7 @@ import {
     doesFileIncludeLevel1OrLevel2SequencingData,
     Entity,
     getFileBase,
+    selectorToColumnName,
     truncateFilename,
 } from '../lib/helpers';
 import {
@@ -214,50 +215,57 @@ const ViewDetailsModal: React.FunctionComponent<IViewDetailsModalProps> = (
             <Modal.Body>
                 <Table bordered>
                     <tbody>
-                        {props.columns.map((column) => (
-                            <tr key={column.name as string}>
-                                <td
-                                    style={{
-                                        fontWeight: 'bold',
-                                        background: 'rgb(240,240,240)',
-                                    }}
-                                >
-                                    {column.name}
-                                    {!props.columnVisibility[
-                                        column.name as string
-                                    ] && (
-                                        <Tooltip
-                                            overlay={
-                                                <span>
-                                                    Add this column to the table
-                                                </span>
-                                            }
+                        {props.columns.reduce((rows, column) => {
+                            const cell = renderCell(column, props.file!);
+                            if (cell) {
+                                rows.push(
+                                    <tr key={column.name as string}>
+                                        <td
+                                            style={{
+                                                fontWeight: 'bold',
+                                                background: 'rgb(240,240,240)',
+                                            }}
                                         >
-                                            <span
-                                                style={{
-                                                    color: 'green',
-                                                    marginLeft: 3,
-                                                    cursor: 'pointer',
-                                                }}
-                                                onClick={() =>
-                                                    props.onChangeColumnVisibility(
-                                                        {
-                                                            ...props.columnVisibility,
-                                                            [column.name as string]: true,
+                                            {column.name}
+                                            {!props.columnVisibility[
+                                                column.name as string
+                                            ] && (
+                                                <Tooltip
+                                                    overlay={
+                                                        <span>
+                                                            Add this column to
+                                                            the table
+                                                        </span>
+                                                    }
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: 'green',
+                                                            marginLeft: 3,
+                                                            cursor: 'pointer',
+                                                        }}
+                                                        onClick={() =>
+                                                            props.onChangeColumnVisibility(
+                                                                {
+                                                                    ...props.columnVisibility,
+                                                                    [column.name as string]: true,
+                                                                }
+                                                            )
                                                         }
-                                                    )
-                                                }
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={faPlusCircle}
-                                                />
-                                            </span>
-                                        </Tooltip>
-                                    )}
-                                </td>
-                                <td>{renderCell(column, props.file!)}</td>
-                            </tr>
-                        ))}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faPlusCircle}
+                                                        />
+                                                    </span>
+                                                </Tooltip>
+                                            )}
+                                        </td>
+                                        <td>{cell}</td>
+                                    </tr>
+                                );
+                            }
+                            return rows;
+                        }, [] as any[])}
                     </tbody>
                 </Table>
             </Modal.Body>
@@ -286,7 +294,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable viewDetailsFile: Entity | undefined = undefined;
     @observable columnVisibility: { [columnKey: string]: boolean } = {};
 
-    get columns() {
+    get defaultColumns(): IEnhancedDataTableColumn<Entity>[] {
         return [
             {
                 name: 'Filename',
@@ -496,12 +504,60 @@ export default class FileTable extends React.Component<IFileTableProps> {
         ];
     }
 
+    get otherColumns() {
+        const otherSelectors = this.props.entities.reduce((selectors, file) => {
+            for (const key of Object.keys(file)) {
+                selectors[key] = true;
+            }
+            return selectors;
+        }, {} as { [selector: string]: boolean });
+
+        const excludeFromOtherColumns = {
+            // selectors already used in default columns
+            filename: true,
+            biospecimen: true,
+            atlas_name: true,
+            [AttributeMap[AttributeNames.assayName].path!]: true,
+            level: true,
+            diagnosis: true,
+
+            //others to exclude
+            Component: true,
+            WPAtlas: true,
+            biospecimenIds: true,
+            cases: true,
+            demographics: true,
+            demographicsIds: true,
+            diagnosisIds: true,
+        };
+        const otherColumns = Object.keys(otherSelectors).reduce(
+            (columns, selector) => {
+                if (!(selector in excludeFromOtherColumns)) {
+                    columns.push({
+                        name: selectorToColumnName(selector),
+                        selector,
+                        wrap: true,
+                        sortable: true,
+                    });
+                }
+                return columns;
+            },
+            [] as IEnhancedDataTableColumn<Entity>[]
+        );
+
+        return otherColumns;
+    }
+
+    @computed get columns() {
+        return [...this.defaultColumns, ...this.otherColumns];
+    }
+
     constructor(props: IFileTableProps) {
         super(props);
         makeObservable(this);
 
         this.columnVisibility = _.mapValues(
-            _.keyBy(this.columns, (c) => c.name),
+            _.keyBy(this.defaultColumns, (c) => c.name),
             () => true
         );
     }

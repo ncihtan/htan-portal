@@ -246,21 +246,15 @@ export default class EnhancedDataTable<T = any> extends React.Component<
 
     @action
     updateColumnVisibility = (id: string, visible: boolean) => {
-        // no previous action, need to init
-        if (this.userSelectedColumnVisibility === undefined) {
-            this.userSelectedColumnVisibility = resolveColumnVisibility(
+        const visibility =
+            this.userSelectedColumnVisibility ||
+            resolveColumnVisibility(
                 this.columnVisibilityByColumnDefinition,
                 this.props.columnVisibility
             );
-        }
 
-        // update visibility
-        if (
-            this.userSelectedColumnVisibility &&
-            this.userSelectedColumnVisibility[id] !== undefined
-        ) {
-            this.userSelectedColumnVisibility[id] = visible;
-        }
+        visibility[id] = visible;
+        this.userSelectedColumnVisibility = visibility;
     };
 
     render() {
