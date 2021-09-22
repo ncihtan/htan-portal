@@ -486,14 +486,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     if (true) {
                         // TODO: determine if there are more details
                         return (
-                            <button
-                                className={'btn btn-sm btn-link'}
+                            <a
+                                href={'#'}
                                 onClick={action(() => {
                                     this.viewDetailsFile = file;
                                 })}
                             >
                                 View Details
-                            </button>
+                            </a>
                         );
                     }
                 },
