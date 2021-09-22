@@ -412,6 +412,28 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
+                name: DETAILS_COLUMN_NAME,
+                selector: (file: Entity) => 'Details',
+                cell: (file: Entity) => {
+                    if (true) {
+                        // TODO: determine if there are more details
+                        return (
+                            <a
+                                href={'#'}
+                                onClick={action(() => {
+                                    this.viewDetailsFile = file;
+                                })}
+                            >
+                                View Details
+                            </a>
+                        );
+                    }
+                },
+                wrap: true,
+                sortable: false,
+                searchable: false,
+            },
+            {
                 name: 'View',
                 selector: (file: Entity) => {
                     const cellXGeneLink =
@@ -478,28 +500,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
-            },
-            {
-                name: DETAILS_COLUMN_NAME,
-                selector: (file: Entity) => 'Details',
-                cell: (file: Entity) => {
-                    if (true) {
-                        // TODO: determine if there are more details
-                        return (
-                            <a
-                                href={'#'}
-                                onClick={action(() => {
-                                    this.viewDetailsFile = file;
-                                })}
-                            >
-                                View Details
-                            </a>
-                        );
-                    }
-                },
-                wrap: true,
-                sortable: false,
-                searchable: false,
             },
         ];
     }
