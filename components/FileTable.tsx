@@ -31,6 +31,8 @@ import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { returnStatement } from '@babel/types';
+import { makeListColumn } from '../lib/fileTableHelpers';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
@@ -520,6 +522,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             [AttributeMap[AttributeNames.assayName].path!]: true,
             level: true,
             diagnosis: true,
+            primaryParents: true,
 
             //others to exclude
             Component: true,
@@ -530,15 +533,30 @@ export default class FileTable extends React.Component<IFileTableProps> {
             demographicsIds: true,
             diagnosisIds: true,
         };
+
+        const listSelectors: any = {
+            HTANParentDataFileID: {
+                pluralName: 'Files',
+            },
+        };
         const otherColumns = Object.keys(otherSelectors).reduce(
             (columns, selector) => {
                 if (!(selector in excludeFromOtherColumns)) {
-                    columns.push({
-                        name: selectorToColumnName(selector),
-                        selector,
-                        wrap: true,
-                        sortable: true,
-                    });
+                    if (selector in listSelectors) {
+                        columns.push(
+                            makeListColumn(
+                                selector as keyof Entity,
+                                listSelectors[selector].pluralName
+                            )
+                        );
+                    } else {
+                        columns.push({
+                            name: selectorToColumnName(selector),
+                            selector,
+                            wrap: true,
+                            sortable: true,
+                        });
+                    }
                 }
                 return columns;
             },
@@ -549,7 +567,20 @@ export default class FileTable extends React.Component<IFileTableProps> {
     }
 
     @computed get columns() {
-        return [...this.defaultColumns, ...this.otherColumns];
+        return _.sortBy(
+            [...this.defaultColumns, ...this.otherColumns],
+            (column) => {
+                switch (column.name) {
+                    // sort Details and View to the end
+                    case DETAILS_COLUMN_NAME:
+                        return 1;
+                    case 'View':
+                        return 2;
+                    default:
+                        return 0;
+                }
+            }
+        );
     }
 
     constructor(props: IFileTableProps) {
