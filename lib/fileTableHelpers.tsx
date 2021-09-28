@@ -10,7 +10,10 @@ export function makeListColumn(selector: keyof Entity, pluralName: string) {
         name: selectorToColumnName(selector),
         selector: (file: Entity) => file[selector] as string,
         cell: (file: Entity) => {
-            const uniqueElts = _.uniq((file[selector] as string).split(','));
+            const fileFieldValue = file[selector];
+            const uniqueElts = fileFieldValue
+                ? _.uniq((fileFieldValue as string).split(','))
+                : [];
             if (uniqueElts.length === 0) {
                 return '';
             } else if (uniqueElts.length === 1) {
