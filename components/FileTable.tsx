@@ -313,6 +313,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         minervaMappings[getFileBase(file.filename)];
                     const imageInfo = file.filename && thumbnailMappings.find((f:any) => f.origin === file.filename);
                     const thumbnailUrl = imageInfo && imageInfo.thumbnail && imageInfo.thumbnail.url;
+                    const minervaStoryUrl = imageInfo && imageInfo.minerva_story && imageInfo.minerva_story.urls && imageInfo.minerva_story.urls.find((u:any) => u.includes('index'));
 
                     if (cellXGeneLink) {
                         return (
@@ -330,7 +331,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         );
                     } else if (file.Component.startsWith('Imaging')) {
                         if (isThumbnailEnabled() && imageInfo && thumbnailUrl) {
-                            const minervaStoryUrl = imageInfo.minerva_story && imageInfo.minerva_story.urls && imageInfo.minerva_story.urls.find((u:any) => u.includes('index'));
 
                             return (
                                 <div className={'dsa-container'}>
@@ -380,6 +380,11 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                     </Tooltip>
                                 </div>
                             );
+                        } else if (isThumbnailEnabled() && minervaStoryUrl) {
+                            return (<a href={minervaStoryUrl} target="_blank">
+                                Minerva{' '}
+                                <FontAwesomeIcon icon={faExternalLinkAlt} />
+                            </a>);
                         } else {
                             return 'Image Viewer Coming Soon';
                         }
