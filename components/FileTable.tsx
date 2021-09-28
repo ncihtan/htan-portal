@@ -312,6 +312,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     const minervaLink =
                         minervaMappings[getFileBase(file.filename)];
                     const imageInfo = file.filename && thumbnailMappings.find((f:any) => f.origin === file.filename);
+                    const thumbnailUrl = imageInfo && imageInfo.thumbnail && imageInfo.thumbnail.url;
 
                     if (cellXGeneLink) {
                         return (
@@ -328,9 +329,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             </a>
                         );
                     } else if (file.Component.startsWith('Imaging')) {
-                        if (isThumbnailEnabled() && imageInfo) {
-                            const thumbnailUrl = imageInfo.thumbnail.url;
-                            const minervaStoryUrl = imageInfo.minerva_story.urls.find((u:any) => u.includes('index'));
+                        if (isThumbnailEnabled() && imageInfo && thumbnailUrl) {
+                            const minervaStoryUrl = imageInfo.minerva_story && imageInfo.minerva_story.urls && imageInfo.minerva_story.urls.find((u:any) => u.includes('index'));
 
                             return (
                                 <div className={'dsa-container'}>
@@ -349,18 +349,34 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                         src={thumbnailUrl}
                                                     />
                                                 </a>
+                                                {minervaStoryUrl && (
+                                                    <div style={{textAlign:"center"}}>
+                                                        <a style={{color:"white"}} href={minervaStoryUrl} target="_blank">
+                                                            Click to view in Minerva{' '}
+                                                            <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                                        </a>
+                                                    </div>
+                                                )}
                                             </>
                                         }
                                     >
-                                        <a
-                                            href={minervaStoryUrl}
-                                            target="_blank"
-                                        >
-                                            <img
-                                                className={'dsa-thumb'}
-                                                src={thumbnailUrl}
-                                            />
-                                        </a>
+                                        <div>
+                                            <a
+                                                href={minervaStoryUrl || thumbnailUrl}
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    className={'dsa-thumb'}
+                                                    src={thumbnailUrl}
+                                                />
+                                            </a><br />
+                                            {/*minervaStoryUrl && (
+                                                <a href={minervaStoryUrl} target="_blank">
+                                                    Minerva Story{' '}
+                                                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                                </a>
+                                            )*/}
+                                        </div>
                                     </Tooltip>
                                 </div>
                             );
