@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Table } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -16,17 +16,23 @@ import {
     doesFileIncludeLevel1OrLevel2SequencingData,
     Entity,
     getFileBase,
+    selectorToColumnName,
     truncateFilename,
 } from '../lib/helpers';
 import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-import EnhancedDataTable from './EnhancedDataTable';
+import EnhancedDataTable, {
+    IEnhancedDataTableColumn,
+} from './EnhancedDataTable';
 import { AttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { returnStatement } from '@babel/types';
+import { makeListColumn } from '../lib/fileTableHelpers';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
@@ -37,6 +43,18 @@ interface IFileDownloadModalProps {
     onClose: () => void;
     isOpen: boolean;
 }
+
+interface IViewDetailsModalProps {
+    file: Entity | undefined;
+    onClose: () => void;
+    columns: IEnhancedDataTableColumn<Entity>[];
+    columnVisibility: { [columnKey: string]: boolean };
+    onChangeColumnVisibility: (columnVisibility: {
+        [columnKey: string]: boolean;
+    }) => void;
+}
+
+const DETAILS_COLUMN_NAME = 'Details';
 
 const isDSAEnabled = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -174,6 +192,95 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     );
 };
 
+function renderCell(column: IEnhancedDataTableColumn<Entity>, file: Entity) {
+    if (column.cell) {
+        return (column.cell as any)(file);
+    } else if (typeof column.selector === 'string') {
+        return _.get(file, column.selector);
+    } else if (column.selector) {
+        return (column.selector as any)(file);
+    }
+}
+
+const ViewDetailsModal: React.FunctionComponent<IViewDetailsModalProps> = (
+    props
+) => {
+    if (!props.file) {
+        return null;
+    }
+    return (
+        <Modal show={props.file !== undefined} onHide={props.onClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Details</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                <Table bordered>
+                    <tbody>
+                        {props.columns.reduce((rows, column) => {
+                            const cell = renderCell(column, props.file!);
+                            if (cell) {
+                                rows.push(
+                                    <tr key={column.name as string}>
+                                        <td
+                                            style={{
+                                                fontWeight: 'bold',
+                                                background: 'rgb(240,240,240)',
+                                            }}
+                                        >
+                                            {column.name}
+                                            {!props.columnVisibility[
+                                                column.name as string
+                                            ] && (
+                                                <Tooltip
+                                                    overlay={
+                                                        <span>
+                                                            Add this column to
+                                                            the table
+                                                        </span>
+                                                    }
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: 'green',
+                                                            marginLeft: 3,
+                                                            cursor: 'pointer',
+                                                        }}
+                                                        onClick={() =>
+                                                            props.onChangeColumnVisibility(
+                                                                {
+                                                                    ...props.columnVisibility,
+                                                                    [column.name as string]: true,
+                                                                }
+                                                            )
+                                                        }
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faPlusCircle}
+                                                        />
+                                                    </span>
+                                                </Tooltip>
+                                            )}
+                                        </td>
+                                        <td>{cell}</td>
+                                    </tr>
+                                );
+                            }
+                            return rows;
+                        }, [] as any[])}
+                    </tbody>
+                </Table>
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="secondary" onClick={props.onClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
+};
+
 interface IFileTableProps {
     entities: Entity[];
     getGroupsByPropertyFiltered: any;
@@ -186,8 +293,10 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable clicked: Entity | undefined;
     @observable isDownloadModalOpen = false;
     @observable isLinkOutModalOpen = false;
+    @observable viewDetailsFile: Entity | undefined = undefined;
+    @observable columnVisibility: { [columnKey: string]: boolean } = {};
 
-    get columns() {
+    get defaultColumns(): IEnhancedDataTableColumn<Entity>[] {
         return [
             {
                 name: 'Filename',
@@ -305,6 +414,28 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
+                name: DETAILS_COLUMN_NAME,
+                selector: (file: Entity) => 'Details',
+                cell: (file: Entity) => {
+                    if (true) {
+                        // TODO: determine if there are more details
+                        return (
+                            <a
+                                href={'#'}
+                                onClick={action(() => {
+                                    this.viewDetailsFile = file;
+                                })}
+                            >
+                                View Details
+                            </a>
+                        );
+                    }
+                },
+                wrap: true,
+                sortable: false,
+                searchable: false,
+            },
+            {
                 name: 'View',
                 selector: (file: Entity) => {
                     const cellXGeneLink =
@@ -375,9 +506,96 @@ export default class FileTable extends React.Component<IFileTableProps> {
         ];
     }
 
+    get otherColumns() {
+        const otherSelectors = this.props.entities.reduce((selectors, file) => {
+            for (const key of Object.keys(file)) {
+                selectors[key] = true;
+            }
+            return selectors;
+        }, {} as { [selector: string]: boolean });
+
+        const excludeFromOtherColumns = {
+            // selectors already used in default columns
+            filename: true,
+            biospecimen: true,
+            atlas_name: true,
+            [AttributeMap[AttributeNames.assayName].path!]: true,
+            level: true,
+            diagnosis: true,
+            primaryParents: true,
+
+            //others to exclude
+            Component: true,
+            WPAtlas: true,
+            biospecimenIds: true,
+            cases: true,
+            demographics: true,
+            demographicsIds: true,
+            diagnosisIds: true,
+        };
+
+        const listSelectors: any = {
+            HTANParentDataFileID: {
+                pluralName: 'Files',
+            },
+        };
+        const otherColumns = Object.keys(otherSelectors).reduce(
+            (columns, selector) => {
+                if (!(selector in excludeFromOtherColumns)) {
+                    if (selector in listSelectors) {
+                        columns.push(
+                            makeListColumn(
+                                selector as keyof Entity,
+                                listSelectors[selector].pluralName
+                            )
+                        );
+                    } else {
+                        columns.push({
+                            name: selectorToColumnName(selector),
+                            selector,
+                            wrap: true,
+                            sortable: true,
+                        });
+                    }
+                }
+                return columns;
+            },
+            [] as IEnhancedDataTableColumn<Entity>[]
+        );
+
+        return otherColumns;
+    }
+
+    @computed get columns() {
+        return _.sortBy(
+            [...this.defaultColumns, ...this.otherColumns],
+            (column) => {
+                switch (column.name) {
+                    // sort Details and View to the end
+                    case DETAILS_COLUMN_NAME:
+                        return 1;
+                    case 'View':
+                        return 2;
+                    default:
+                        return 0;
+                }
+            }
+        );
+    }
+
     constructor(props: IFileTableProps) {
         super(props);
         makeObservable(this);
+
+        this.columnVisibility = _.mapValues(
+            _.keyBy(this.defaultColumns, (c) => c.name),
+            () => true
+        );
+    }
+
+    @action.bound
+    setColumnVisibility(vis: { [key: string]: boolean }) {
+        this.columnVisibility = vis;
     }
 
     @action onDownload = (e: any) => {
@@ -397,6 +615,10 @@ export default class FileTable extends React.Component<IFileTableProps> {
 
     @action onLinkOutModalClose = () => {
         this.isLinkOutModalOpen = false;
+    };
+
+    @action onViewDetailsModalClose = () => {
+        this.viewDetailsFile = undefined;
     };
 
     onSelect = (state: {
@@ -426,7 +648,19 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     isOpen={this.isLinkOutModalOpen}
                 />
 
+                <ViewDetailsModal
+                    file={this.viewDetailsFile}
+                    onClose={this.onViewDetailsModalClose}
+                    columnVisibility={this.columnVisibility}
+                    onChangeColumnVisibility={this.setColumnVisibility}
+                    columns={this.columns.filter(
+                        (c) => c.name !== DETAILS_COLUMN_NAME
+                    )}
+                />
+
                 <EnhancedDataTable
+                    columnVisibility={this.columnVisibility}
+                    onChangeColumnVisibility={this.setColumnVisibility}
                     customControls={
                         <button
                             className={classNames(
