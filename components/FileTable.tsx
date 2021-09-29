@@ -36,7 +36,7 @@ import { makeListColumn } from '../lib/fileTableHelpers';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
-const dsaMappings = require('../data/dsa-images.json');
+const thumbnailMappings = require('../data/imaging-thumbnail-mappings.json');
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -56,9 +56,9 @@ interface IViewDetailsModalProps {
 
 const DETAILS_COLUMN_NAME = 'Details';
 
-const isDSAEnabled = () => {
+const isThumbnailEnabled = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.has('dsa');
+    return urlParams.has('thumbnail') || urlParams.has('thumbnails');
 };
 
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
@@ -442,7 +442,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         cellXGeneMappings[getFileBase(file.filename)];
                     const minervaLink =
                         minervaMappings[getFileBase(file.filename)];
-                    const dsa = file.synapseId && dsaMappings[file.synapseId];
+                    const imageInfo = file.filename && thumbnailMappings.find((f:any) => f.origin === file.filename);
+                    const thumbnailUrl = imageInfo && imageInfo.thumbnail && imageInfo.thumbnail.url;
+                    const minervaStoryUrl = imageInfo && imageInfo.minerva_story && imageInfo.minerva_story.urls && imageInfo.minerva_story.urls.find((u:any) => u.includes('index'));
 
                     if (cellXGeneLink) {
                         return (
@@ -459,7 +461,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             </a>
                         );
                     } else if (file.Component.startsWith('Imaging')) {
-                        if (isDSAEnabled() && dsa && file.assayName === 'H&E') {
+                        if (isThumbnailEnabled() && imageInfo && thumbnailUrl) {
+
                             return (
                                 <div className={'dsa-container'}>
                                     <Tooltip
@@ -467,31 +470,52 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                         overlay={
                                             <>
                                                 <a
-                                                    href={`https://imaging.htan.dev/girder/#item/${dsa.dsaId}`}
+                                                    href={minervaStoryUrl}
                                                     target="_blank"
                                                 >
                                                     <img
                                                         className={
                                                             'dsa-full-image'
                                                         }
-                                                        src={`${dsa.dsaSmallThumbUrl}`}
+                                                        src={thumbnailUrl}
                                                     />
                                                 </a>
+                                                {minervaStoryUrl && (
+                                                    <div style={{textAlign:"center"}}>
+                                                        <a style={{color:"white"}} href={minervaStoryUrl} target="_blank">
+                                                            Click to view in Minerva{' '}
+                                                            <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                                        </a>
+                                                    </div>
+                                                )}
                                             </>
                                         }
                                     >
-                                        <a
-                                            href={`https://imaging.htan.dev/girder/#item/${dsa.dsaId}`}
-                                            target="_blank"
-                                        >
-                                            <img
-                                                className={'dsa-thumb'}
-                                                src={`${dsa.dsaSmallThumbUrl}?height=100&width=100&fill=none`}
-                                            />
-                                        </a>
+                                        <div>
+                                            <a
+                                                href={minervaStoryUrl || thumbnailUrl}
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    className={'dsa-thumb'}
+                                                    src={thumbnailUrl}
+                                                />
+                                            </a><br />
+                                            {/*minervaStoryUrl && (
+                                                <a href={minervaStoryUrl} target="_blank">
+                                                    Minerva Story{' '}
+                                                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                                </a>
+                                            )*/}
+                                        </div>
                                     </Tooltip>
                                 </div>
                             );
+                        } else if (isThumbnailEnabled() && minervaStoryUrl) {
+                            return (<a href={minervaStoryUrl} target="_blank">
+                                Minerva{' '}
+                                <FontAwesomeIcon icon={faExternalLinkAlt} />
+                            </a>);
                         } else {
                             return 'Image Viewer Coming Soon';
                         }

@@ -235,7 +235,7 @@ table {
 
 .dsa-thumb {
     display: block;
-    margin: auto;
+    /*margin: auto; don't center thumbnail */
     height: 100px;
     padding: 2px;
     /*border: 1px solid #999;*/
