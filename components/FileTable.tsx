@@ -58,7 +58,7 @@ const DETAILS_COLUMN_NAME = 'Details';
 
 const isThumbnailEnabled = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.has('thumbnail');
+    return urlParams.has('thumbnail') || urlParams.has('thumbnails');
 };
 
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
