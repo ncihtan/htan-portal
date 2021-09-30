@@ -8,6 +8,7 @@ import { WPAtlas } from '../types';
 import {
     ExploreOptionType,
     ExploreSelectedFilter,
+    ISelectedFiltersByAttrName,
     SynapseAtlas,
     SynapseData,
     SynapseSchema,

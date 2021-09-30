@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { NextRouter } from 'next/router';
 import React from 'react';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import { Atlas, setTab } from '../lib/helpers';
+import { Atlas, Entity, setTab } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
 import { observer } from 'mobx-react';
 import { action, computed, makeObservable, observable } from 'mobx';
@@ -12,6 +12,11 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ExploreTab } from './ExploreTabs';
 import { Button, Modal } from 'react-bootstrap';
 import getAtlasMetaData from '../lib/getAtlasMetaData';
+import {
+    AttributeNames,
+    ExploreSelectedFilter,
+    ISelectedFiltersByAttrName,
+} from '../lib/types';
 
 interface IWPAtlasTableProps {
     router: NextRouter;
@@ -19,6 +24,9 @@ interface IWPAtlasTableProps {
     selectedAtlases?: Atlas[];
     filteredAtlases?: Atlas[];
     onSelectAtlas?: (selected: Atlas[]) => void;
+    selectedFiltersByAttrName: ISelectedFiltersByAttrName;
+    filteredCases: Entity[];
+    filteredBiospecimens: Entity[];
 }
 
 const atlasMetadata = getAtlasMetaData();
@@ -131,6 +139,21 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
         );
     }
 
+    @computed get filteredCasesByAtlas() {
+        return _.groupBy(this.props.filteredCases, (c: Entity) => c.atlasid);
+    }
+
+    @computed get filteredBiospecimensByAtlas() {
+        return _.groupBy(
+            this.props.filteredBiospecimens,
+            (c: Entity) => c.atlasid
+        );
+    }
+
+    @computed get shouldShowFilteredFractions() {
+        return !_.isEmpty(this.props.selectedFiltersByAttrName);
+    }
+
     get columns() {
         return [
             {
@@ -193,7 +216,18 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 grow: 0.5,
                 selector: 'num_cases',
                 cell: (atlas: Atlas) => (
-                    <span className="ml-auto">{atlas.num_cases}</span>
+                    <span className="ml-auto">
+                        {this.shouldShowFilteredFractions
+                            ? `${
+                                  (
+                                      this.filteredCasesByAtlas[
+                                          atlas.htan_id
+                                      ] || []
+                                  ).length
+                              }/`
+                            : ''}
+                        {atlas.num_cases}
+                    </span>
                 ),
                 sortable: true,
             },
@@ -201,7 +235,18 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 name: 'Biospecimens',
                 selector: 'num_biospecimens',
                 cell: (atlas: Atlas) => (
-                    <span className="ml-auto">{atlas.num_biospecimens}</span>
+                    <span className="ml-auto">
+                        {this.shouldShowFilteredFractions
+                            ? `${
+                                  (
+                                      this.filteredBiospecimensByAtlas[
+                                          atlas.htan_id
+                                      ] || []
+                                  ).length
+                              }/`
+                            : ''}
+                        {atlas.num_biospecimens}
+                    </span>
                 ),
                 sortable: true,
             },
