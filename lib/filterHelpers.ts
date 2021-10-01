@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { Entity } from './helpers';
+import { Entity, filterObject } from './helpers';
 import {
     AttributeMap,
     AttributeNames,
@@ -166,4 +166,47 @@ export function makeOptions(
             count: counts[key] || 0,
         };
     });
+}
+
+export function getFilteredCases(
+    filteredFiles: Entity[],
+    selectedFiltersByAttrName: ISelectedFiltersByAttrName,
+    showAllCases: boolean
+) {
+    const cases = _.chain(filteredFiles)
+        .flatMapDeep((f: Entity) => f.cases)
+        .uniqBy((f) => f.HTANParticipantID)
+        .value();
+
+    if (showAllCases) {
+        return cases;
+    } else {
+        const caseFilters = filterObject(
+            selectedFiltersByAttrName,
+            (filters, attrName) =>
+                !!AttributeMap[attrName as AttributeNames].caseFilter
+        );
+        return filterFiles(caseFilters, cases);
+    }
+}
+
+export function getFilteredSamples(
+    filteredFiles: Entity[],
+    filteredCases: Entity[],
+    showAllSamples: boolean
+) {
+    const samples = _.chain(filteredFiles)
+        .flatMapDeep((file) => file.biospecimen)
+        .uniqBy((f) => f.HTANBiospecimenID)
+        .value();
+
+    if (showAllSamples) {
+        return samples;
+    } else {
+        const filteredCaseIds = _.keyBy(
+            filteredCases,
+            (c) => c.HTANParticipantID
+        );
+        return samples.filter((s) => s.HTANParentID in filteredCaseIds);
+    }
 }

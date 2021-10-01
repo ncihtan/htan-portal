@@ -17,6 +17,8 @@ import { ScaleLoader } from 'react-spinners';
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
 import {
     filterFiles,
+    getFilteredCases,
+    getFilteredSamples,
     groupFilesByAttrNameAndValue,
 } from '../lib/filterHelpers';
 import {
@@ -201,50 +203,55 @@ class Search extends React.Component<
 
     @computed
     get filteredFiles() {
-        //const start = performance.now();
         const ret = filterFiles(
             this.selectedFiltersByAttrName,
             this.state.files
         );
-        //console.log('filtering cost', performance.now() - start);
         return ret;
     }
 
     @computed
-    get filteredSamples() {
-        const samples = _.chain(this.filteredFiles)
-            .flatMapDeep((file) => file.biospecimen)
-            .uniqBy((f) => f.HTANBiospecimenID)
-            .value();
+    get filteredFilesByNonAtlasFilters() {
+        return filterFiles(
+            this.nonAtlasSelectedFiltersByAttrName,
+            this.state.files
+        );
+    }
 
-        if (this.showAllBiospecimens) {
-            return samples;
-        } else {
-            const filteredCaseIds = _.keyBy(
-                this.filteredCases,
-                (c) => c.HTANParticipantID
-            );
-            return samples.filter((s) => s.HTANParentID in filteredCaseIds);
-        }
+    @computed
+    get filteredSamples() {
+        return getFilteredSamples(
+            this.filteredFiles,
+            this.filteredCases,
+            this.showAllBiospecimens
+        );
+    }
+
+    @computed
+    get filteredSamplesByNonAtlasFilters() {
+        return getFilteredSamples(
+            this.filteredFilesByNonAtlasFilters,
+            this.filteredCasesByNonAtlasFilters,
+            this.showAllBiospecimens
+        );
     }
 
     @computed
     get filteredCases() {
-        const cases = _.chain(this.filteredFiles)
-            .flatMapDeep((f: Entity) => f.cases)
-            .uniqBy((f) => f.HTANParticipantID)
-            .value();
+        return getFilteredCases(
+            this.filteredFiles,
+            this.selectedFiltersByAttrName,
+            this.showAllCases
+        );
+    }
 
-        if (this.showAllCases) {
-            return cases;
-        } else {
-            const caseFilters = filterObject(
-                this.selectedFiltersByAttrName,
-                (filters, attrName) =>
-                    !!AttributeMap[attrName as AttributeNames].caseFilter
-            );
-            return filterFiles(caseFilters, cases);
-        }
+    @computed
+    get filteredCasesByNonAtlasFilters() {
+        return getFilteredCases(
+            this.filteredFilesByNonAtlasFilters,
+            this.nonAtlasSelectedFiltersByAttrName,
+            this.showAllCases
+        );
     }
 
     @computed get atlasMap() {
@@ -283,14 +290,18 @@ class Search extends React.Component<
         }
     }
 
+    @computed get nonAtlasSelectedFiltersByAttrName() {
+        return _.omit(this.selectedFiltersByAttrName, [
+            AttributeNames.AtlasName,
+        ]);
+    }
+
     @computed
     get filteredAtlasesByNonAtlasFilters() {
-        const filtersExpectAtlasFilters = _.omit(
-            this.selectedFiltersByAttrName,
-            [AttributeNames.AtlasName]
-        );
+        const filtersExceptAtlasFilters = this
+            .nonAtlasSelectedFiltersByAttrName;
 
-        return _.chain(filterFiles(filtersExpectAtlasFilters, this.state.files))
+        return _.chain(filterFiles(filtersExceptAtlasFilters, this.state.files))
             .map((f) => f.atlasid)
             .uniq()
             .map((id) => this.atlasMap[id])
@@ -360,6 +371,15 @@ class Search extends React.Component<
                         onSelectAtlas={this.onSelectAtlas}
                         samples={this.filteredSamples}
                         cases={this.filteredCases}
+                        filteredCasesByNonAtlasFilters={
+                            this.filteredCasesByNonAtlasFilters
+                        }
+                        filteredSamplesByNonAtlasFilters={
+                            this.filteredSamplesByNonAtlasFilters
+                        }
+                        nonAtlasSelectedFiltersByAttrName={
+                            this.nonAtlasSelectedFiltersByAttrName
+                        }
                         wpData={this.props.wpAtlases}
                         getGroupsByPropertyFiltered={
                             this.getGroupsByPropertyFiltered
