@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "e2e": "npx wdio run wdio.conf.js",
     "processSynapseJSON": "npx ncc run data/processSynapseJSON.ts",
     "prettierPreCommit": "STAGED_AND_CHANGED_FILES=$(git diff HEAD --name-only --cached --diff-filter=d) && ([ -z \"$STAGED_AND_CHANGED_FILES\" ] && echo \"Nothing to prettify\" || (yarn run prettier --write $(echo $STAGED_AND_CHANGED_FILES) && git add -f $(echo $STAGED_AND_CHANGED_FILES)))",
     "prettierAll": "yarn run prettier --write $(git ls-files | grep '\\(.js\\|.ts\\|.scss\\|.css\\)')"
@@ -70,8 +71,18 @@
     "@types/node-fetch": "^2.5.5",
     "@types/react": "^16.9.23",
     "@vercel/ncc": "^0.28.6",
+    "@wdio/cli": "^7.14.1",
+    "@wdio/junit-reporter": "^7.14.1",
+    "@wdio/local-runner": "^7.14.1",
+    "@wdio/mocha-framework": "^7.14.1",
+    "@wdio/spec-reporter": "^7.14.1",
+    "chromedriver": "^94.0.0",
     "fork-ts-checker-webpack-plugin": "^6.1.0",
     "pre-commit": "^1.2.2",
-    "typescript": "^3.8.3"
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3",
+    "wdio-chromedriver-service": "^7.2.2",
+    "wdio-json-reporter": "^2.0.0",
+    "wdio-novus-visual-regression-service": "^1.2.5"
   }
 }
