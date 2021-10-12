@@ -442,9 +442,25 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         cellXGeneMappings[getFileBase(file.filename)];
                     const minervaLink =
                         minervaMappings[getFileBase(file.filename)];
-                    const imageInfo = file.filename && thumbnailMappings.find((f:any) => f.origin === file.filename);
-                    const thumbnailUrl = imageInfo && imageInfo.thumbnail && imageInfo.thumbnail.url;
-                    const minervaStoryUrl = imageInfo && imageInfo.minerva_story && imageInfo.minerva_story.urls && imageInfo.minerva_story.urls.find((u:any) => u.includes('index'));
+                    const imageInfo =
+                        file.filename &&
+                        thumbnailMappings.find(
+                            (f: any) => f.origin === file.filename
+                        );
+                    const thumbnailUrl =
+                        imageInfo &&
+                        imageInfo.thumbnail &&
+                        imageInfo.thumbnail.url;
+                    let minervaStoryUrl =
+                        imageInfo &&
+                        imageInfo.minerva_story &&
+                        imageInfo.minerva_story.urls &&
+                        imageInfo.minerva_story.urls.find((u: any) =>
+                            u.includes('index')
+                        );
+                    // hide CyCIF in introductory text by appending #s=0 to minerva story URL
+                    minervaStoryUrl =
+                        minervaStoryUrl && `${minervaStoryUrl}#s=0`;
 
                     if (cellXGeneLink) {
                         return (
@@ -462,7 +478,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         );
                     } else if (file.Component.startsWith('Imaging')) {
                         if (isThumbnailEnabled() && imageInfo && thumbnailUrl) {
-
                             return (
                                 <div className={'dsa-container'}>
                                     <Tooltip
@@ -481,10 +496,27 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                     />
                                                 </a>
                                                 {minervaStoryUrl && (
-                                                    <div style={{textAlign:"center"}}>
-                                                        <a style={{color:"white"}} href={minervaStoryUrl} target="_blank">
-                                                            Click to view in Minerva{' '}
-                                                            <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                                    <div
+                                                        style={{
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        <a
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                            href={
+                                                                minervaStoryUrl
+                                                            }
+                                                            target="_blank"
+                                                        >
+                                                            Click to view in
+                                                            Minerva{' '}
+                                                            <FontAwesomeIcon
+                                                                icon={
+                                                                    faExternalLinkAlt
+                                                                }
+                                                            />
                                                         </a>
                                                     </div>
                                                 )}
@@ -493,14 +525,18 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                     >
                                         <div>
                                             <a
-                                                href={minervaStoryUrl || thumbnailUrl}
+                                                href={
+                                                    minervaStoryUrl ||
+                                                    thumbnailUrl
+                                                }
                                                 target="_blank"
                                             >
                                                 <img
                                                     className={'dsa-thumb'}
                                                     src={thumbnailUrl}
                                                 />
-                                            </a><br />
+                                            </a>
+                                            <br />
                                             {/*minervaStoryUrl && (
                                                 <a href={minervaStoryUrl} target="_blank">
                                                     Minerva Story{' '}
@@ -512,10 +548,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                 </div>
                             );
                         } else if (isThumbnailEnabled() && minervaStoryUrl) {
-                            return (<a href={minervaStoryUrl} target="_blank">
-                                Minerva{' '}
-                                <FontAwesomeIcon icon={faExternalLinkAlt} />
-                            </a>);
+                            return (
+                                <a href={minervaStoryUrl} target="_blank">
+                                    Minerva{' '}
+                                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                </a>
+                            );
                         } else {
                             return 'Image Viewer Coming Soon';
                         }
