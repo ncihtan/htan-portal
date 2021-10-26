@@ -1050,7 +1050,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC02.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC02.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC02/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC02/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC02/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC02/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1059,7 +1068,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC03.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC03.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC03/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC03/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC03/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC03/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1068,7 +1086,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC04.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC04.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC04/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC04/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC04/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC04/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1077,7 +1104,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC05.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC05.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC05/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC05/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC05/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC05/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1086,7 +1122,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC06.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC06.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC06/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC06/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC06/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC06/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1095,7 +1140,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC07.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC07.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC07/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC07/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC07/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC07/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1104,7 +1158,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC09.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC09.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC09/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC09/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC09/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC09/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1113,7 +1176,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC10.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC10.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC10/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC10/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC10/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC10/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1122,7 +1194,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC11.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC11.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC11/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC11/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC11/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC11/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1131,7 +1212,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC12.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC12.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC12/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC12/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC12/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC12/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1140,7 +1230,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC13.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC13.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC13/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC13/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC13/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC13/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1149,7 +1248,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC14.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC14.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC14/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC14/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC14/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC14/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1158,7 +1266,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC15.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC15.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC15/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC15/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC15/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC15/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1167,7 +1284,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC16.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC16.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC16/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC16/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC16/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC16/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1176,7 +1302,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC17.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC17.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC17/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC17/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC17/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC17/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-hms",
@@ -1185,7 +1320,16 @@
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC18.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC18.ome.png"
         },
-        "minerva_story": null
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC18/exhibit.json",
+                "minerva_stories/htan-dcc-hms/imaging_level_2/CRC18/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC18/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-hms/imaging_level_2/CRC18/index.html"
+            ]
+        }
     },
     {
         "htan_bucket": "htan-dcc-washu",
@@ -2373,7 +2517,7 @@
                 "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-washu/h_and_e_level_1/HT61P%20B%20/exhibit.json",
                 "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-washu/h_and_e_level_1/HT61P%20B%20/index.html"
             ]
-        }
+         }
     },
     {
         "htan_bucket": "htan-dcc-washu",
@@ -3077,6 +3221,366 @@
             "urls": [
                 "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-washu/imc_level_2/batch_1_05102021/HT064B1_H9_A1_A4_ROI_02/exhibit.json",
                 "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-washu/imc_level_2/batch_1_05102021/HT064B1_H9_A1_A4_ROI_02/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_1938_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_1938_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_1938_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_1938_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_1938_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_1938_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_1938_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_2487_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2487_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2487_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2487_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2487_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2487_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2487_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_2951_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2951_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2951_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2951_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2951_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2951_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_2951_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_3077_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3077_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3077_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3077_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3077_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3077_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3077_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_3252_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3252_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3252_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3252_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3252_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3252_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3252_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_3331_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3331_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3331_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3331_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3331_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3331_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3331_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_3361_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3361_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3361_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3361_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3361_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3361_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3361_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_3410_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3410_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3410_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3410_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3410_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3410_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_3410_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_377_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_377_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_377_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_377_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_377_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_377_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_377_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_392_30000110116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_392_30000110116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_392_30000110116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_392_30000110116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_392_30000110116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_392_30000110116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_392_30000110116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_411_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_411_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_411_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_411_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_411_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_411_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_411_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_4255_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4255_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4255_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4255_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4255_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4255_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4255_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_4781_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4781_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4781_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4781_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4781_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4781_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4781_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_4814_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4814_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4814_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4814_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4814_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4814_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_4814_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_5212_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5212_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5212_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5212_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5212_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5212_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5212_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_5994_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5994_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5994_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5994_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5994_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5994_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_5994_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_6025_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6025_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6025_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6025_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6025_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6025_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6025_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_6134_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6134_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6134_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6134_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6134_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6134_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6134_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_6147_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6147_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6147_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6147_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6147_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6147_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_6147_20000010116110030010000009999/index.html"
+            ]
+        }
+    },
+    {
+        "htan_bucket": "htan-dcc-vanderbilt",
+        "origin": "h_and_e_level_1/HTA11_696_20000010116110030010000009999.tif",
+        "thumbnail": {
+            "file": "thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_696_20000010116110030010000009999.png",
+            "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_696_20000010116110030010000009999.png"
+        },
+        "minerva_story": {
+            "files": [
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_696_20000010116110030010000009999/exhibit.json",
+                "minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_696_20000010116110030010000009999/index.html"
+            ],
+            "urls": [
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_696_20000010116110030010000009999/exhibit.json",
+                "https://d3p249wtgzkn5u.cloudfront.net/minerva_stories/htan-dcc-vanderbilt/h_and_e_level_1/HTA11_696_20000010116110030010000009999/index.html"
             ]
         }
     }
