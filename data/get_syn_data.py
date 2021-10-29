@@ -61,7 +61,7 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
 
     # download latest schema
     schema_filename = "HTAN.jsonld"
-    url = "https://raw.githubusercontent.com/ncihtan/schematic/main/data/schema_org_schemas/HTAN.jsonld"
+    url = "https://raw.githubusercontent.com/ncihtan/data-models/main/HTAN.model.jsonld"
     #schema_file = wget.download(url, out = schema_filename)
 
     se = SchemaExplorer()
