@@ -209,25 +209,28 @@ const ViewDetailsModal: React.FunctionComponent<IViewDetailsModalProps> = (
         return null;
     }
     return (
-        <Modal show={props.file !== undefined} onHide={props.onClose}>
+        <Modal
+            dialogClassName={styles.fileTableViewDetailsModal}
+            show={props.file !== undefined}
+            onHide={props.onClose}
+        >
             <Modal.Header closeButton>
                 <Modal.Title>Details</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
-                <Table bordered>
+                <table className="table table-bordered">
+                    <colgroup>
+                        <col style={{ width: '20%' }} />
+                        <col style={{ width: '80%' }} />
+                    </colgroup>
                     <tbody>
                         {props.columns.reduce((rows, column) => {
                             const cell = renderCell(column, props.file!);
                             if (cell) {
                                 rows.push(
                                     <tr key={column.name as string}>
-                                        <td
-                                            style={{
-                                                fontWeight: 'bold',
-                                                background: 'rgb(240,240,240)',
-                                            }}
-                                        >
+                                        <td>
                                             {column.name}
                                             {!props.columnVisibility[
                                                 column.name as string
@@ -269,7 +272,7 @@ const ViewDetailsModal: React.FunctionComponent<IViewDetailsModalProps> = (
                             return rows;
                         }, [] as any[])}
                     </tbody>
-                </Table>
+                </table>
             </Modal.Body>
 
             <Modal.Footer>
