@@ -314,7 +314,7 @@
         },
         "ScRNA-seqLevel4": {
             "synapseId": "syn25538714",
-            "numItems": 3
+            "numItems": 19
         },
         "ScATAC-seqLevel1": {
             "synapseId": "syn25538898",
@@ -339,6 +339,10 @@
         "FollowUp": {
             "synapseId": "syn25581671",
             "numItems": 30
+        },
+        "ScATAC-seqLevel4": {
+            "synapseId": "syn26428844",
+            "numItems": 9
         }
     },
     "HTA8": {
