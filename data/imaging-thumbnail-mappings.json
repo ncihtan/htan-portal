@@ -1045,7 +1045,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC02.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC02.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC02.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC02.ome.png"
@@ -1063,7 +1063,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC03.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC03.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC03.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC03.ome.png"
@@ -1081,7 +1081,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC04.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC04.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC04.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC04.ome.png"
@@ -1099,7 +1099,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC05.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC05.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC05.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC05.ome.png"
@@ -1117,7 +1117,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC06.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC06.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC06.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC06.ome.png"
@@ -1135,7 +1135,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC07.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC07.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC07.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC07.ome.png"
@@ -1153,7 +1153,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC09.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC09.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC09.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC09.ome.png"
@@ -1171,7 +1171,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC10.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC10.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC10.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC10.ome.png"
@@ -1189,7 +1189,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC11.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC11.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC11.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC11.ome.png"
@@ -1207,7 +1207,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC12.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC12.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC12.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC12.ome.png"
@@ -1225,7 +1225,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC13.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC13.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC13.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC13.ome.png"
@@ -1243,7 +1243,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC14.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC14.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC14.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC14.ome.png"
@@ -1261,7 +1261,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC15.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC15.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC15.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC15.ome.png"
@@ -1279,7 +1279,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC16.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC16.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC16.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC16.ome.png"
@@ -1297,7 +1297,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC17.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC17.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC17.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC17.ome.png"
@@ -1315,7 +1315,7 @@
     },
     {
         "htan_bucket": "htan-dcc-hms",
-        "origin": "imaging_level_2/CRC18.ome.tif",
+        "origin": "imaging_level_2/CRC202105/CRC18.ome.tif",
         "thumbnail": {
             "file": "thumbnails/htan-dcc-hms/imaging_level_2/CRC18.ome.png",
             "url": "https://d3p249wtgzkn5u.cloudfront.net/thumbnails/htan-dcc-hms/imaging_level_2/CRC18.ome.png"

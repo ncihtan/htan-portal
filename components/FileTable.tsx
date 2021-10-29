@@ -440,8 +440,10 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: (file: Entity) => {
                     const cellXGeneLink =
                         cellXGeneMappings[getFileBase(file.filename)];
-                    const minervaLink =
+                    // custom submitted minerva stories (w/o thumbnails)
+                    const minervaCustomStoryLink =
                         minervaMappings[getFileBase(file.filename)];
+                    // auto generated minerva stories and thumbnails
                     const imageInfo =
                         file.filename &&
                         thumbnailMappings.find(
@@ -451,28 +453,28 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         imageInfo &&
                         imageInfo.thumbnail &&
                         imageInfo.thumbnail.url;
-                    let minervaStoryUrl =
-                        imageInfo &&
-                        imageInfo.minerva_story &&
-                        imageInfo.minerva_story.urls &&
-                        imageInfo.minerva_story.urls.find((u: any) =>
-                            u.includes('index')
-                        );
-                    // hide CyCIF in introductory text by appending #s=0 to minerva story URL
-                    minervaStoryUrl =
-                        minervaStoryUrl && `${minervaStoryUrl}#s=0`;
+                    let minervaStoryUrl;
+                    if (minervaCustomStoryLink) {
+                        // if somebody submitted a custom Minerva Story use
+                        // that, instead of the auto generated one
+                        minervaStoryUrl = minervaCustomStoryLink;
+                    } else {
+                        minervaStoryUrl =
+                            imageInfo &&
+                            imageInfo.minerva_story &&
+                            imageInfo.minerva_story.urls &&
+                            imageInfo.minerva_story.urls.find((u: any) =>
+                                u.includes('index')
+                            );
+                        // hide CyCIF in introductory text by appending #s=0 to minerva story URL
+                        minervaStoryUrl =
+                            minervaStoryUrl && `${minervaStoryUrl}#s=0`;
+                    }
 
                     if (cellXGeneLink) {
                         return (
                             <a href={cellXGeneLink} target="_blank">
                                 CellxGene{' '}
-                                <FontAwesomeIcon icon={faExternalLinkAlt} />
-                            </a>
-                        );
-                    } else if (minervaLink) {
-                        return (
-                            <a href={minervaLink} target="_blank">
-                                Minerva Story{' '}
                                 <FontAwesomeIcon icon={faExternalLinkAlt} />
                             </a>
                         );
