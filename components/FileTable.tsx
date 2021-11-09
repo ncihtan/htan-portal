@@ -489,18 +489,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                         placement="left"
                                         overlay={
                                             <>
-                                                <a
-                                                    href={minervaStoryUrl}
-                                                    target="_blank"
-                                                >
-                                                    <img
-                                                        className={
-                                                            'dsa-full-image'
-                                                        }
-                                                        src={thumbnailUrl}
-                                                    />
-                                                </a>
-                                                {minervaStoryUrl && (
+                                                {(minervaStoryUrl && (
                                                     <div
                                                         style={{
                                                             textAlign: 'center',
@@ -515,8 +504,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                             }
                                                             target="_blank"
                                                         >
-                                                            Click to view in
-                                                            Minerva{' '}
+                                                            Click to view Image
+                                                            in Minerva{' '}
                                                             <FontAwesomeIcon
                                                                 icon={
                                                                     faExternalLinkAlt
@@ -524,6 +513,52 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                             />
                                                         </a>
                                                     </div>
+                                                )) || (
+                                                    <div
+                                                        style={{
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        <a
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                            href={thumbnailUrl}
+                                                            target="_blank"
+                                                        >
+                                                            Click to view
+                                                            Thumbnail{' '}
+                                                            <FontAwesomeIcon
+                                                                icon={
+                                                                    faExternalLinkAlt
+                                                                }
+                                                            />
+                                                        </a>
+                                                    </div>
+                                                )}
+                                                <a
+                                                    href={minervaStoryUrl}
+                                                    target="_blank"
+                                                >
+                                                    <img
+                                                        className={
+                                                            'dsa-full-image'
+                                                        }
+                                                        src={thumbnailUrl}
+                                                    />
+                                                </a>
+                                                {file.assayName !== 'H&E' && (
+                                                    <span>
+                                                        Thumbnail generated with{' '}
+                                                        <a
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                            href="https://github.com/adamjtaylor/miniature"
+                                                        >
+                                                            Miniature
+                                                        </a>
+                                                    </span>
                                                 )}
                                             </>
                                         }
