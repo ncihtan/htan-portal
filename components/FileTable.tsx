@@ -499,11 +499,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                             href="https://github.com/adamjtaylor/miniature"
                                                         >
                                                             Miniature
-                                                            <FontAwesomeIcon
-                                                                icon={
-                                                                    faExternalLinkAlt
-                                                                }
-                                                            />
                                                         </a>
                                                     </span>
                                                 )}
@@ -518,7 +513,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                         src={thumbnailUrl}
                                                     />
                                                 </a>
-                                                {minervaStoryUrl && (
+                                                {(minervaStoryUrl && (
                                                     <div
                                                         style={{
                                                             textAlign: 'center',
@@ -535,6 +530,28 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                         >
                                                             Click to view Image
                                                             in Minerva{' '}
+                                                            <FontAwesomeIcon
+                                                                icon={
+                                                                    faExternalLinkAlt
+                                                                }
+                                                            />
+                                                        </a>
+                                                    </div>
+                                                )) || (
+                                                    <div
+                                                        style={{
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        <a
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                            href={thumbnailUrl}
+                                                            target="_blank"
+                                                        >
+                                                            Click to view
+                                                            Thumbnail{' '}
                                                             <FontAwesomeIcon
                                                                 icon={
                                                                     faExternalLinkAlt
