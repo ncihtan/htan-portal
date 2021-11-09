@@ -489,30 +489,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                         placement="left"
                                         overlay={
                                             <>
-                                                {file.assayName !== 'H&E' && (
-                                                    <span>
-                                                        Thumbnail generated with{' '}
-                                                        <a
-                                                            style={{
-                                                                color: 'white',
-                                                            }}
-                                                            href="https://github.com/adamjtaylor/miniature"
-                                                        >
-                                                            Miniature
-                                                        </a>
-                                                    </span>
-                                                )}
-                                                <a
-                                                    href={minervaStoryUrl}
-                                                    target="_blank"
-                                                >
-                                                    <img
-                                                        className={
-                                                            'dsa-full-image'
-                                                        }
-                                                        src={thumbnailUrl}
-                                                    />
-                                                </a>
                                                 {(minervaStoryUrl && (
                                                     <div
                                                         style={{
@@ -559,6 +535,30 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                             />
                                                         </a>
                                                     </div>
+                                                )}
+                                                <a
+                                                    href={minervaStoryUrl}
+                                                    target="_blank"
+                                                >
+                                                    <img
+                                                        className={
+                                                            'dsa-full-image'
+                                                        }
+                                                        src={thumbnailUrl}
+                                                    />
+                                                </a>
+                                                {file.assayName !== 'H&E' && (
+                                                    <span>
+                                                        Thumbnail generated with{' '}
+                                                        <a
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                            href="https://github.com/adamjtaylor/miniature"
+                                                        >
+                                                            Miniature
+                                                        </a>
+                                                    </span>
                                                 )}
                                             </>
                                         }
