@@ -515,8 +515,20 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                             }
                                                             target="_blank"
                                                         >
-                                                            Click to view in
-                                                            Minerva{' '}
+                                                            {file.assayName !==
+                                                                'H&E' && (
+                                                                <span>
+                                                                    Thumbnail
+                                                                    generated
+                                                                    with{' '}
+                                                                    <a href="https://github.com/adamjtaylor/miniature">
+                                                                        Miniature.
+                                                                    </a>
+                                                                    <br />
+                                                                </span>
+                                                            )}
+                                                            Click to view Image
+                                                            in Minerva{' '}
                                                             <FontAwesomeIcon
                                                                 icon={
                                                                     faExternalLinkAlt
