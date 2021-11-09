@@ -489,6 +489,24 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                         placement="left"
                                         overlay={
                                             <>
+                                                {file.assayName !== 'H&E' && (
+                                                    <span>
+                                                        Thumbnail generated with{' '}
+                                                        <a
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                            href="https://github.com/adamjtaylor/miniature"
+                                                        >
+                                                            Miniature
+                                                            <FontAwesomeIcon
+                                                                icon={
+                                                                    faExternalLinkAlt
+                                                                }
+                                                            />
+                                                        </a>
+                                                    </span>
+                                                )}
                                                 <a
                                                     href={minervaStoryUrl}
                                                     target="_blank"
@@ -515,18 +533,6 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                             }
                                                             target="_blank"
                                                         >
-                                                            {file.assayName !==
-                                                                'H&E' && (
-                                                                <span>
-                                                                    Thumbnail
-                                                                    generated
-                                                                    with{' '}
-                                                                    <a href="https://github.com/adamjtaylor/miniature">
-                                                                        Miniature.
-                                                                    </a>
-                                                                    <br />
-                                                                </span>
-                                                            )}
                                                             Click to view Image
                                                             in Minerva{' '}
                                                             <FontAwesomeIcon
