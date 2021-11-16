@@ -9,7 +9,7 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import React from 'react';
-import Head from 'next/dist/next-server/lib/head';
+import Head from 'next/head';
 import { WPAtlas } from '../../types';
 import { GetStaticProps } from 'next';
 import { Button } from 'react-bootstrap';
