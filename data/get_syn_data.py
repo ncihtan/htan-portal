@@ -22,21 +22,10 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
 
     # map: HTAN center names to HTAN IDs
     htan_centers = {
-                    "HTAN HTAPP": "hta1",
-                    "PCAPP Pilot Project": "hta2",
-                    "HTAN BU": "hta3",
-                    "HTAN CHOP": "hta4",
-                    "HTAN DFCI": "hta5",
-                    "HTAN Duke": "hta6",
-                    "HTAN HMS": "hta7",
-                    "HTAN MSK": "hta8",
-                    "HTAN OHSU": "hta9",
-                    "HTAN Stanford": "hta10",
-                    "HTAN Vanderbilt": "hta11",
-                    "HTAN WUSTL": "hta12",
                     # exclude TNPs for now
                     # "HTAN TNP SARDANA": "hta13",
                     # "HTAN TNP - TMA": "hta14"
+                    "HTAN SRRS": "hta15",
     }
 
 
@@ -176,7 +165,7 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
                 manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
 
             # only include imaging data that are in the 333 files of release 1
-            if not center == "HTAN HMS" and not include_non_public_images and "Imaging" in component and "entityId" in manifest_df.columns:
+            if not center == "HTAN HMS" and not center == "HTAN SRRS" and not include_non_public_images and "Imaging" in component and "entityId" in manifest_df.columns:
                 manifest_df = manifest_df[manifest_df["entityId"].isin(imaging_release1_ids)].copy()
 
             # exclude specific HTAPP folders

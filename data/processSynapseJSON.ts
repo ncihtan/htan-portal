@@ -181,13 +181,13 @@ function extractBiospecimensAndDiagnosisAndDemographics(
     } = {};
 
     data.forEach((entity) => {
-        if (entity.Component === 'Biospecimen') {
+        if (entity.Component === 'SRRSBiospecimen') {
             biospecimenByHTANBiospecimenID[entity.HTANBiospecimenID] = entity;
         }
-        if (entity.Component === 'Diagnosis') {
+        if (entity.Component === 'SRRSClinicalDataTier2') {
             diagnosisByHTANParticipantID[entity.HTANParticipantID] = entity;
         }
-        if (entity.Component === 'Demographics') {
+        if (entity.Component === 'SRRSClinicalDataTier2') {
             demographicsByHTANParticipantID[entity.HTANParticipantID] = entity;
         }
     });
