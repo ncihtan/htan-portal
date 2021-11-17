@@ -230,7 +230,7 @@ table {
 .dsa-full-image {
     /* TODO: this is max 200px because rc-tooltip is max 250px. Might be nicer to
      * show bigger image */
-    max-width: 200px;
+    max-width: 220px;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -239,9 +239,11 @@ table {
 
 .dsa-thumb {
     display: block;
-    /*margin: auto; don't center thumbnail */
-    height: 100px;
-    padding: 2px;
+    margin: auto;
+    height: 75px;
+    width: 75px;
+    object-fit: cover;
+    /*padding: 2px;*/
     /*border: 1px solid #999;*/
 }
 

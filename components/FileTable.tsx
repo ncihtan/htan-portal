@@ -56,11 +56,6 @@ interface IViewDetailsModalProps {
 
 const DETAILS_COLUMN_NAME = 'Details';
 
-const isThumbnailEnabled = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.has('thumbnail') || urlParams.has('thumbnails');
-};
-
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
@@ -481,8 +476,8 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                 <FontAwesomeIcon icon={faExternalLinkAlt} />
                             </a>
                         );
-                    } else if (file.Component.startsWith('Imaging')) {
-                        if (isThumbnailEnabled() && imageInfo && thumbnailUrl) {
+                    } else if (file.Component.includes('Imaging')) {
+                        if (imageInfo && thumbnailUrl) {
                             return (
                                 <div className={'dsa-container'}>
                                     <Tooltip
@@ -587,7 +582,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                     </Tooltip>
                                 </div>
                             );
-                        } else if (isThumbnailEnabled() && minervaStoryUrl) {
+                        } else if (minervaStoryUrl) {
                             return (
                                 <a href={minervaStoryUrl} target="_blank">
                                     Minerva{' '}
