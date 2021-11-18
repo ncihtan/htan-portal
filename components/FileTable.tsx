@@ -17,7 +17,7 @@ import {
     Entity,
     getFileBase,
     selectorToColumnName,
-    truncateFilenamet,
+    truncateFilename,
 } from '../lib/helpers';
 import {
     getDefaultDataTableStyle,
