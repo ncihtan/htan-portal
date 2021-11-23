@@ -14,9 +14,6 @@
     "prettierPreCommit"
   ],
   "dependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-proposal-decorators": "^7.12.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
@@ -39,15 +36,15 @@
     "mobx": "^6.0.4",
     "mobx-react": "^7.0.0",
     "mobx-utils": "^5.6.2",
-    "next": "^10.0.5",
+    "next": "12",
     "node-fetch": "^2.6.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "6.0.1",
     "pluralize": "^8.0.0",
     "popper.js": "^1.16.1",
     "prettier": "^2.1.2",
     "prop-types": "^15.7.2",
     "rc-tooltip": "^4.0.3",
-    "react": "16.13.0",
+    "react": "^17.0.2",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-data-table-component": "^6.9.0",
     "react-dom": "16.13.0",
@@ -70,8 +67,7 @@
     "@types/node-fetch": "^2.5.5",
     "@types/react": "^16.9.23",
     "@vercel/ncc": "^0.28.6",
-    "fork-ts-checker-webpack-plugin": "^6.1.0",
     "pre-commit": "^1.2.2",
-    "typescript": "^3.8.3"
+    "typescript": "4.3.2"
   }
 }
