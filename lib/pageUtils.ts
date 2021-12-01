@@ -10,3 +10,15 @@ export function getPageByPageName(name) {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     return fileContents;
 }
+
+export function getAllPages() {
+    const contents = fs.readdirSync(docsDirectory);
+
+    const metadata = contents.map((filename) => {
+        const fullPath = path.join(docsDirectory, filename);
+        const fileContents = fs.readFileSync(fullPath, 'utf8');
+        return matter(fileContents);
+    });
+
+    return metadata;
+}

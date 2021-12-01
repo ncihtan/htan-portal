@@ -1,5 +1,4 @@
-import { getPageByPageName } from '../lib/getPageByName';
-import compile from '@mdx-js/mdx';
+import { getAllPages, getPageByPageName } from '../lib/pageUtils';
 import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
@@ -11,8 +10,6 @@ export const getStaticProps = async function getStaticProps({ params }) {
     const page = getPageByPageName(params.page);
 
     const { data: frontMatter, content } = matter(page);
-
-    //const content = await compile(page.content || '');
 
     const mdxSource = await serialize(content);
 
@@ -37,8 +34,18 @@ function Page({ mdxSource }) {
 export default Page;
 
 export async function getStaticPaths() {
+    const pages = getAllPages();
+
+    const paths = pages.map((p) => {
+        return {
+            params: {
+                page: p.data.page,
+            },
+        };
+    });
+
     return {
-        paths: [{ params: { page: 'blah' } }],
+        paths,
         fallback: false,
     };
 }
