@@ -1,12 +1,16 @@
 import * as React from 'react';
-import HtanNavbar from './HtanNavbar';
 import Footer from './Footer';
+import HtanNavbar, { HtanNavbarNew } from './HtanNavbar';
 
-const PageWrapper = (props: any) => {
+export interface IPageWrapperProps {}
+
+const PageWrapper: React.FunctionComponent<IPageWrapperProps> = ({
+    children,
+}) => {
     return (
         <div id={'pageWrapper'}>
-            <HtanNavbar />
-            {props.children}
+            <HtanNavbarNew />
+            {children}
             <Footer />
         </div>
     );

@@ -1,31 +1,41 @@
 import { getAllPages, getPageByPageName } from '../lib/pageUtils';
 import matter from 'gray-matter';
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote } from 'next-mdx-remote';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import React from 'react';
 import PageWrapper from '../components/PageWrapper';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 
-export const getStaticProps = async function getStaticProps({ params }) {
-    const page = getPageByPageName(params.page);
+import { GetStaticProps } from 'next';
+
+export const getStaticProps: GetStaticProps = async function getStaticProps(
+    context
+) {
+    // @ts-ignore
+    const page = getPageByPageName(context.params.page);
 
     const { data: frontMatter, content } = matter(page);
 
-    const mdxSource = await serialize(content);
-
     return {
         props: {
-            mdxSource,
+            html: content,
         },
     };
 };
 
-function Page({ mdxSource }) {
+function Page({ html }: any) {
     return (
         <>
             <PreReleaseBanner />
             <PageWrapper>
-                <MDXRemote {...mdxSource}></MDXRemote>
+                <Container>
+                    <Row className={'contentWrapper'}>
+                        <div
+                            className={'col'}
+                            dangerouslySetInnerHTML={{ __html: html }}
+                        ></div>
+                    </Row>
+                </Container>
             </PageWrapper>
         </>
     );

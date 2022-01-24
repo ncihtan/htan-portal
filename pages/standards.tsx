@@ -21,30 +21,26 @@ const Standards = (data: StandardsProps) => {
             <PreReleaseBanner />
             <PageWrapper>
                 <Container>
-                    <Row>
-                        <Breadcrumb>
-                            <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                            <Breadcrumb.Item active>
-                                Data Standards
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </Row>
+                    {/*<Row>*/}
+                    {/*    <Breadcrumb>*/}
+                    {/*        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>*/}
+                    {/*        <Breadcrumb.Item active>*/}
+                    {/*            Data Standards*/}
+                    {/*        </Breadcrumb.Item>*/}
+                    {/*    </Breadcrumb>*/}
+                    {/*</Row>*/}
 
-                    <Row>
+                    <Row></Row>
+                    <Row className={'contentWrapper'}>
                         <h1>Data Standards</h1>
-                    </Row>
-                    <Row>
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: data.data[0].content.rendered,
                             }}
                         />
-                    </Row>
 
-                    <Row>
-                        <h2>Browse Standards</h2>
-                    </Row>
-                    <Row>
+                        <h2>Browser Standards</h2>
+
                         <ul>
                             <li>
                                 <Link href="/standard/design">

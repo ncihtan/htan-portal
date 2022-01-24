@@ -331,7 +331,7 @@ class Search extends React.Component<
 
         if (this.filteredFiles) {
             return (
-                <div className={'explorePageWrapper'}>
+                <div className={'pageWrapper explorePage'}>
                     <FilterControls
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={

@@ -1,10 +1,11 @@
 $primary-background: #5f008c;
-$darkgreen: #24cad5;
+$darkgreen: #004021;
 $border-color: #e2e2e2;
 $input-border: $border-color;
 $input-group-addon-border-color: $border-color;
 $nav-tabs-border-color: $border-color;
 $nav-tabs-link-active-border-color: $border-color $border-color #fff;
+$font-size-base: 0.9rem;
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
@@ -43,11 +44,9 @@ $nav-tabs-link-active-border-color: $border-color $border-color #fff;
 
 body {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.9rem;
 
     #pageWrapper {
-        min-height: 100vh;
-        padding-bottom: 40px;
+        min-height: 90vh;
         position: relative;
 
         footer.pageFooter {
@@ -71,13 +70,26 @@ a {
 
 h1 {
     font-size: 2rem;
+    margin: 1.5rem 0;
     color: $darkgreen;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-size: 1.25rem;
+}
+
+h4 {
+    font-size: 1rem;
 }
 
 h2,
 h3,
 h4 {
-    font-size: 1.5rem;
     color: $darkgreen;
     border-top: 1px dashed $border-color;
     padding-top: 20px;
@@ -264,8 +276,15 @@ table {
     }
 }
 
-.explorePageWrapper {
+.contentWrapper {
     position: relative;
+    padding-top: 10px;
+    width: 800px;
+    margin: auto;
+    line-height: 30px;
+}
+
+.explorePage {
     padding: 20px;
 
     .summary {
@@ -353,10 +372,6 @@ table {
     }
 }
 
-.container {
-    margin-left: 20px !important;
-}
-
 .filter-checkbox-list-container {
     display: flex;
 
@@ -377,4 +392,9 @@ table {
     & input {
         margin-right: 10px;
     }
+}
+
+.atlas-array img {
+    width: 240px;
+    margin-right: 15px;
 }
