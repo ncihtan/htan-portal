@@ -36,7 +36,7 @@ import { makeListColumn } from '../lib/fileTableHelpers';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
-const thumbnailMappings = require('../data/imaging-thumbnail-mappings.json');
+const thumbnailMappings = require('../data/htan-assets-latest.json');
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -445,12 +445,11 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     const imageInfo =
                         file.filename &&
                         thumbnailMappings.find(
-                            (f: any) => f.origin === file.filename
+                            (f: any) => f.synid === file.synapseId
                         );
                     const thumbnailUrl =
                         imageInfo &&
-                        imageInfo.thumbnail &&
-                        imageInfo.thumbnail.url;
+                        imageInfo.thumbnail;
                     let minervaStoryUrl;
                     if (minervaCustomStoryLink) {
                         // if somebody submitted a custom Minerva Story use
@@ -459,11 +458,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     } else {
                         minervaStoryUrl =
                             imageInfo &&
-                            imageInfo.minerva_story &&
-                            imageInfo.minerva_story.urls &&
-                            imageInfo.minerva_story.urls.find((u: any) =>
-                                u.includes('index')
-                            );
+                            imageInfo.minerva;
                         // hide CyCIF in introductory text by appending #s=0 to minerva story URL
                         minervaStoryUrl =
                             minervaStoryUrl && `${minervaStoryUrl}#s=0`;
