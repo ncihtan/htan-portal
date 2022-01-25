@@ -36,7 +36,7 @@ import { makeListColumn } from '../lib/fileTableHelpers';
 
 const cellXGeneMappings = require('../data/cellxgene-mappings.json');
 const minervaMappings = require('../data/minerva-story-mappings.json');
-const thumbnailMappings = require('../data/htan-assets-latest.json');
+const thumbnailMappings = require('../data/htan-imaging-assets.json');
 
 interface IFileDownloadModalProps {
     files: Entity[];
