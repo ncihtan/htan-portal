@@ -7,6 +7,20 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Backend
 All data is coming from [Synapse](https://www.synapse.org/). We have a Python script that generates a JSON file that contains all the metadata. There is currently no backend, it's a fully static site i.e. all filtering happens on the frontend.
 
+### Update Data Files
+
+```
+cd data
+# Run the script that pulls all the HTAN metadata
+# It outputs a JSON in public/syn_data.json and a JSON with links to metadata in data/syn_metadata.json
+python get_syn_data.py
+# Replace BulkWES -> BulkDNA-seq (this is a temp fix)
+gsed -i 's/BulkWES/BulkDNA-seq/g' ../public/syn_data.json && gsed -i 's/BulkWES/BulkDNA-seq/g' ../data/syn_metadata.json
+cd ..
+# Convert the resulting  JSON to a more efficient structure for visualization
+./node_modules/.bin/ncc run data/processSynapseJSON.ts  --transpile-only
+```
+
 ## Testing
 
 There are currently no automated tests, other than building the project, so be careful when merging to master
