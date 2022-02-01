@@ -21,15 +21,12 @@ const Standards = (data: StandardsProps) => {
             <PreReleaseBanner />
             <PageWrapper>
                 <Container>
-                    <Row className={'contentWrapper'}>
+                    <Row>
                         <h1>Data Standards</h1>
 
                         <p>
                             The HTAN Network has adopted a set of data standards
                             covering clinical, biospecimen, and assay metadata.
-                        </p>
-
-                        <p>
                             As standards are finalized, we will publish their
                             specifications below.
                         </p>

@@ -8,6 +8,10 @@ import { CmsData } from '../types';
 import DataSchema from './DataSchema';
 import Footer from './Footer';
 import { HtanNavbarNew } from './HtanNavbar';
+import { Col } from 'react-bootstrap';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 
 export interface DataStandardProps {
     title: string;
@@ -21,22 +25,15 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
         <>
             <HtanNavbarNew />
             <Container>
-                <Row>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item href="/standards">
-                            Data Standards
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item active>{props.title}</Breadcrumb.Item>
-                    </Breadcrumb>
+                <Row style={{ marginBottom: 10 }}>
+                    <Col>
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                        &nbsp;
+                        <Link href="/standards">Back to Data Standards</Link>
+                    </Col>
                 </Row>
                 <Row>
-                    {props.children}
-                    {/*<span*/}
-                    {/*    dangerouslySetInnerHTML={{*/}
-                    {/*        __html: props.data[0].content.rendered,*/}
-                    {/*    }}*/}
-                    {/*/>*/}
+                    <Col>{props.children}</Col>
                 </Row>
                 {props.schemaDataById && props.dataSchemaData && (
                     <Row>

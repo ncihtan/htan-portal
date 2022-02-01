@@ -49,12 +49,14 @@ const RnaSeq: React.FunctionComponent<DataStandardProps> = (props) => {
             </p>
 
             <table className={'table'}>
-                <tbody>
+                <thead>
                     <tr>
-                        <td>Level Number</td>
-                        <td>Definition</td>
-                        <td>Example Data</td>
+                        <th>Level Number</th>
+                        <th>Definition</th>
+                        <th>Example Data</th>
                     </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td>1</td>
                         <td>Raw data</td>

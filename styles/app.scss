@@ -16,6 +16,10 @@ $font-size-base: 0.9rem;
     margin-left: auto !important;
 }
 
+.container {
+    margin-top: 20px;
+}
+
 // customizes
 
 .rdt_TableHeadRow {
@@ -44,23 +48,20 @@ $font-size-base: 0.9rem;
 
 body {
     font-family: 'Montserrat', sans-serif !important;
+}
 
-    #pageWrapper {
-        min-height: 90vh;
-        position: relative;
+#pageWrapper {
+    min-height: 90vh;
+    position: relative;
+}
 
-        footer.pageFooter {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            padding: 10px 0;
-            color: #333;
-            a {
-                text-decoration: none;
-                color: #333;
-            }
-        }
+footer.pageFooter {
+    text-align: center;
+    margin: 30px 0;
+    color: #333;
+    a {
+        text-decoration: none;
+        color: #333;
     }
 }
 
@@ -72,6 +73,9 @@ h1 {
     font-size: 2rem;
     margin: 1.5rem 0;
     color: $darkgreen;
+    &:first-of-type {
+        margin-top: 0;
+    }
 }
 
 h2 {
@@ -91,8 +95,7 @@ h2,
 h3,
 h4 {
     color: $darkgreen;
-    border-top: 1px dashed $border-color;
-    padding-top: 20px;
+    padding: 15px 0;
     width: 100%;
 
     &:first-of-type {
@@ -100,8 +103,6 @@ h4 {
         border-top: none;
         margin-top: 10px;
     }
-
-    margin-top: 40px;
 }
 
 .jumbotron {
@@ -279,7 +280,6 @@ table {
 .contentWrapper {
     position: relative;
     padding-top: 10px;
-    width: 800px;
     margin: auto;
     line-height: 30px;
 }
@@ -396,5 +396,5 @@ table {
 
 .atlas-array img {
     width: 240px;
-    margin-right: 15px;
+    margin: 0 15px 15px 0;
 }

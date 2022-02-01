@@ -51,11 +51,13 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
             </ul>
             <p>The model consists of two tiers:</p>
             <table className={'table'}>
-                <tbody>
+                <thead>
                     <tr>
                         <th>Data Level</th>
                         <th>Description</th>
                     </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td>Tier 1</td>
                         <td>
@@ -72,7 +74,9 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
                     </tr>
                 </tbody>
             </table>
-            <h4>Biospecimen Tier 1</h4>
+            <h3>
+                <i>Biospecimen Tier 1</i>
+            </h3>
             <p>
                 Baseline HTAN biospecimen data leverages existing common data
                 elements from four sources:
@@ -105,7 +109,9 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
                 sources for a specific attribute, an HTAN-specific attribute was
                 created.
             </p>
-            <h4>Biospecimen Tier 2</h4>
+            <h3>
+                <i>Biospecimen Tier 2</i>
+            </h3>
             <p>
                 Attributes identified for inclusion in Tier 2 include those
                 described in the{' '}
