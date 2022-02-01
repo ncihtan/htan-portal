@@ -18,54 +18,6 @@ function togglePreview(on: any) {
         }
     }
 }
-
-export interface HtanNavItem {
-    text: string;
-    path: string;
-}
-
-const HtanNavbar: React.FunctionComponent<{
-    navItems?: HtanNavItem[];
-}> = () => {
-    const navItems: any[] = [
-        <Nav.Link href="/explore">Explore</Nav.Link>,
-        <Nav.Link href="/standards">Data Standards</Nav.Link>,
-        <Nav.Link href="/transfer">Data Transfer</Nav.Link>,
-        <Nav.Link href="/tools">Analysis Tools</Nav.Link>,
-    ];
-
-    return (
-        <Navbar
-            bg="nav-purple"
-            variant="dark"
-            expand="lg"
-            className={'main-nav'}
-        >
-            <Navbar.Brand href="/">
-                <img
-                    src="/Updated-HTAN-Text-Logo.png"
-                    className={'htanlogo'}
-                    alt="HTAN Data Portal"
-                />
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">{navItems}</Nav>
-            </Navbar.Collapse>
-            <Nav>
-                {/*<Nav.Link onClick={togglePreview}>*/}
-                {/*    {process.browser && window.localStorage.preview*/}
-                {/*        ? '#Disable Preview#'*/}
-                {/*        : '#Enable Preview#'}*/}
-                {/*</Nav.Link>*/}
-                <Nav.Link href="https://humantumoratlas.org/">
-                    HTAN Main Site
-                </Nav.Link>
-            </Nav>
-        </Navbar>
-    );
-};
-
 const NavSection: React.FunctionComponent<{
     text: string;
     landingPage?: string;
@@ -89,7 +41,7 @@ const NavSection: React.FunctionComponent<{
     );
 };
 
-export const HtanNavbarNew: React.FunctionComponent<{}> = () => {
+export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
         <Nav.Link href="/explore">Explore</Nav.Link>,
 
@@ -110,7 +62,6 @@ export const HtanNavbarNew: React.FunctionComponent<{}> = () => {
         </NavSection>,
 
         <Nav.Link href="/tools">Analysis Tools</Nav.Link>,
-        <Nav.Link href="/dashboard">Dashboard</Nav.Link>,
 
         <NavSection text={'Resources'}>
             <NavDropdown.Item href="/resources">Resources</NavDropdown.Item>

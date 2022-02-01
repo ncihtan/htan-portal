@@ -49,13 +49,36 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 className={'text-center'}
                 style={{ borderRadius: '0px', marginBottom: '0px' }}
             >
-                <Row className="justify-content-md-center mt-5">
+                <Row className="justify-content-md-center">
                     <Col md={{ span: 5 }} style={{ color: '#fff' }}>
-                        <h1>Human Tumor Atlas Network Data Portal</h1>
+                        <h1 style={{ color: '#fff' }}>
+                            Human Tumor Atlas Network Data Portal
+                        </h1>
                         <br />
-                        <span
-                            dangerouslySetInnerHTML={{ __html: hero_blurb }}
-                        ></span>
+
+                        <p>
+                            HTAN is a National Cancer Institute (NCI)-funded
+                            Cancer MoonshotSM initiative to construct
+                            3-dimensional atlases of the dynamic cellular,
+                            morphological, and molecular features of human
+                            cancers as they evolve from precancerous lesions to
+                            advanced disease.
+                        </p>
+
+                        <p>
+                            <i>April 2020</i> Now out in <strong>Cell</strong>:
+                            <br />
+                            <a
+                                href="https://www.sciencedirect.com/science/article/pii/S0092867420303469"
+                                style={{ color: 'lightblue' }}
+                            >
+                                The Human Tumor Atlas Network: Charting Tumor
+                                Transitions across Space and Time at Single-Cell
+                                Resolution
+                            </a>
+                            .
+                        </p>
+
                         <div
                             style={{
                                 display: 'flex',
