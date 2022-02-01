@@ -38,21 +38,14 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
 }) => {
     return (
         <>
-            <Helmet>
-                <style>
-                    {`#pageWrapper {
-                   background: #eeeeee;
-               } `}
-                </style>
-            </Helmet>
             <Jumbotron
                 className={'text-center'}
                 style={{ borderRadius: '0px', marginBottom: '0px' }}
             >
                 <Row className="justify-content-md-center">
                     <Col md={{ span: 5 }} style={{ color: '#fff' }}>
-                        <h1 style={{ color: '#fff' }}>
-                            Human Tumor Atlas Network Data Portal
+                        <h1 style={{ color: '#24cad5' }}>
+                            Human Tumor Atlas Network
                         </h1>
                         <br />
 
@@ -63,20 +56,6 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                             morphological, and molecular features of human
                             cancers as they evolve from precancerous lesions to
                             advanced disease.
-                        </p>
-
-                        <p>
-                            <i>April 2020</i> Now out in <strong>Cell</strong>:
-                            <br />
-                            <a
-                                href="https://www.sciencedirect.com/science/article/pii/S0092867420303469"
-                                style={{ color: 'lightblue' }}
-                            >
-                                The Human Tumor Atlas Network: Charting Tumor
-                                Transitions across Space and Time at Single-Cell
-                                Resolution
-                            </a>
-                            .
                         </p>
 
                         <div
@@ -91,28 +70,44 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                                     variant="primary"
                                     className="mr-4"
                                 >
-                                    Explore the Data
+                                    Explore latest Data
                                 </Button>
                             </ButtonToolbar>
                         </div>
                     </Col>
                 </Row>
-
-                <Row className="justify-content-md-center mt-3"></Row>
             </Jumbotron>
             <Container
                 fluid
                 style={{
                     backgroundColor: '#eee',
-                    paddingTop: '60px',
-                    paddingBottom: '60px',
+                    paddingTop: '30px',
+                    paddingBottom: '30px',
                 }}
             >
+                <Row className="justify-content-md-center">
+                    <p>Latest data release:</p>
+                </Row>
+
                 <Row className="justify-content-md-center">
                     {synapseCounts &&
                         synapseCounts.map((report: EntityReport) =>
                             dashboardIcon(report.text, report.description)
                         )}
+                </Row>
+            </Container>
+
+            <Container>
+                <Row className="justify-content-md-center">
+                    <p className={'text-center'}>
+                        Expected data described in <i>Cell April 2020</i>:&nbsp;
+                        <br />
+                        <a href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">
+                            The Human Tumor Atlas Network: Charting Tumor
+                            Transitions across Space and Time at Single-Cell
+                            Resolution
+                        </a>
+                    </p>
                 </Row>
             </Container>
 
