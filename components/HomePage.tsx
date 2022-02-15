@@ -106,8 +106,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             <Container
                 fluid
                 style={{
-                    backgroundColor: '#5f008c',
-                    color: '#fff',
+                    backgroundColor: '#ddd',
+                    color: 'black',
                     padding: '5px',
                 }}
             >
@@ -133,8 +133,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             <Container
                 fluid
                 style={{
-                    backgroundColor: '#5f008c',
-                    color: '#fff',
+                    backgroundColor: '#ddd',
+                    color: 'black',
                     padding: '5px',
                 }}
             >
@@ -150,7 +150,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 }}
             >
                 <Row className="justify-content-md-center">
-                    <p style={{ fontSize: 'large' }}>
+                    <p style={{ fontSize: 'medium' }}>
                         The latest HTAN data release includes tumors originating
                         from{' '}
                         <strong>
@@ -170,7 +170,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     />
                 </Row>
                 <Row className="justify-content-md-center">
-                    <p style={{ fontSize: 'large' }}>
+                    <p style={{ fontSize: 'medium' }}>
                         The tumors were profiled with{' '}
                         <strong>
                             {computeUniqueAttributeValueCount(assaySummary)}
@@ -189,7 +189,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     />
                 </Row>
                 <Row className="justify-content-md-center">
-                    <p style={{ fontSize: 'large' }}>
+                    <p style={{ fontSize: 'medium' }}>
                         We expect to profile many more tumors in the future:
                     </p>
                 </Row>
@@ -203,7 +203,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 </Row>
                 <Row className="justify-content-md-center">
                     <p
-                        style={{ fontSize: 'large', paddingTop: 20 }}
+                        style={{ fontSize: 'medium', paddingTop: 20 }}
                         className={'text-center'}
                     >
                         See <i>Cell April 2020</i>:&nbsp;

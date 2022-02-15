@@ -252,7 +252,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
 
     get chartWidth() {
         // TODO responsive?
-        return 1000;
+        return 600;
     }
 
     private get svgHeight() {
