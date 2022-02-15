@@ -1,10 +1,11 @@
 $primary-background: #5f008c;
-$darkgreen: #24cad5;
+$darkgreen: #004021;
 $border-color: #e2e2e2;
 $input-border: $border-color;
 $input-group-addon-border-color: $border-color;
 $nav-tabs-border-color: $border-color;
 $nav-tabs-link-active-border-color: $border-color $border-color #fff;
+$font-size-base: 0.9rem;
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
@@ -13,6 +14,10 @@ $nav-tabs-link-active-border-color: $border-color $border-color #fff;
 .atlasTab #column-num_cases,
 .atlasTab #column-num_biospecimens {
     margin-left: auto !important;
+}
+
+.container {
+    margin-top: 20px;
 }
 
 // customizes
@@ -43,25 +48,20 @@ $nav-tabs-link-active-border-color: $border-color $border-color #fff;
 
 body {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.9rem;
+}
 
-    #pageWrapper {
-        min-height: 100vh;
-        padding-bottom: 40px;
-        position: relative;
+#pageWrapper {
+    min-height: 80vh;
+    position: relative;
+}
 
-        footer.pageFooter {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            padding: 10px 0;
-            color: #333;
-            a {
-                text-decoration: none;
-                color: #333;
-            }
-        }
+footer.pageFooter {
+    text-align: center;
+    margin: 30px 0;
+    color: #333;
+    a {
+        text-decoration: none;
+        color: #333;
     }
 }
 
@@ -71,16 +71,31 @@ a {
 
 h1 {
     font-size: 2rem;
+    margin: 1.5rem 0;
     color: $darkgreen;
+    &:first-of-type {
+        margin-top: 0;
+    }
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-size: 1.25rem;
+}
+
+h4 {
+    font-size: 1rem;
 }
 
 h2,
 h3,
 h4 {
-    font-size: 1.5rem;
     color: $darkgreen;
-    border-top: 1px dashed $border-color;
-    padding-top: 20px;
+    padding: 15px 0;
     width: 100%;
 
     &:first-of-type {
@@ -88,8 +103,6 @@ h4 {
         border-top: none;
         margin-top: 10px;
     }
-
-    margin-top: 40px;
 }
 
 .jumbotron {
@@ -264,8 +277,14 @@ table {
     }
 }
 
-.explorePageWrapper {
+.contentWrapper {
     position: relative;
+    padding-top: 10px;
+    margin: auto;
+    line-height: 30px;
+}
+
+.explorePage {
     padding: 20px;
 
     .summary {
@@ -353,10 +372,6 @@ table {
     }
 }
 
-.container {
-    margin-left: 20px !important;
-}
-
 .filter-checkbox-list-container {
     display: flex;
 
@@ -377,4 +392,9 @@ table {
     & input {
         margin-right: 10px;
     }
+}
+
+.atlas-array img {
+    width: 240px;
+    margin: 0 15px 15px 0;
 }

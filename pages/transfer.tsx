@@ -20,18 +20,8 @@ const Transfer = (data: TransferProps) => {
             <PreReleaseBanner />
             <PageWrapper>
                 <Container>
-                    <Row>
-                        <Breadcrumb>
-                            <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                            <Breadcrumb.Item active>
-                                Data Transfer
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </Row>
-                    <Row>
+                    <Row className={'contentWrapper'}>
                         <h1>Data Transfer</h1>
-                    </Row>
-                    <Row className="mt-3">
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: data.data[0].content.rendered,

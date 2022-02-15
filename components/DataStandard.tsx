@@ -1,5 +1,4 @@
 import React from 'react';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
@@ -7,7 +6,11 @@ import { DataSchemaData } from '../lib/dataSchemaHelpers';
 import { CmsData } from '../types';
 import DataSchema from './DataSchema';
 import Footer from './Footer';
-import HtanNavbar from './HtanNavbar';
+import { HtanNavbar } from './HtanNavbar';
+import { Col } from 'react-bootstrap';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 
 export interface DataStandardProps {
     title: string;
@@ -21,21 +24,15 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
         <>
             <HtanNavbar />
             <Container>
-                <Row>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item href="/standards">
-                            Data Standards
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item active>{props.title}</Breadcrumb.Item>
-                    </Breadcrumb>
+                <Row style={{ marginBottom: 10 }}>
+                    <Col>
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                        &nbsp;
+                        <Link href="/standards">Back to Data Standards</Link>
+                    </Col>
                 </Row>
                 <Row>
-                    <span
-                        dangerouslySetInnerHTML={{
-                            __html: props.data[0].content.rendered,
-                        }}
-                    />
+                    <Col>{props.children}</Col>
                 </Row>
                 {props.schemaDataById && props.dataSchemaData && (
                     <Row>

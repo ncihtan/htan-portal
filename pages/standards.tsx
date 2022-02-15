@@ -22,29 +22,17 @@ const Standards = (data: StandardsProps) => {
             <PageWrapper>
                 <Container>
                     <Row>
-                        <Breadcrumb>
-                            <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                            <Breadcrumb.Item active>
-                                Data Standards
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </Row>
-
-                    <Row>
                         <h1>Data Standards</h1>
-                    </Row>
-                    <Row>
-                        <span
-                            dangerouslySetInnerHTML={{
-                                __html: data.data[0].content.rendered,
-                            }}
-                        />
-                    </Row>
 
-                    <Row>
-                        <h2>Browse Standards</h2>
-                    </Row>
-                    <Row>
+                        <p>
+                            The HTAN Network has adopted a set of data standards
+                            covering clinical, biospecimen, and assay metadata.
+                            As standards are finalized, we will publish their
+                            specifications below.
+                        </p>
+
+                        <h2>Browser Standards</h2>
+
                         <ul>
                             <li>
                                 <Link href="/standard/design">
