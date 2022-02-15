@@ -106,27 +106,11 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             <Container
                 fluid
                 style={{
-                    backgroundColor: '#ddd',
-                    color: 'black',
-                    padding: '5px',
-                }}
-            >
-                <Row className="justify-content-md-center">
-                    <span>Data Release: v1</span>
-                </Row>
-            </Container>
-            <Container
-                fluid
-                style={{
                     backgroundColor: '#eee',
                     paddingTop: '20px',
                     paddingBottom: '20px',
                 }}
             >
-                <Row className="justify-content-md-center">
-                    <p>Latest data release:</p>
-                </Row>
-
                 <Row className="justify-content-md-center">
                     {synapseCounts &&
                         synapseCounts.map((report: EntityReport) =>
@@ -134,7 +118,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         )}
                 </Row>
             </Container>
-            <Container
+            {/* <Container
                 fluid
                 style={{
                     backgroundColor: '#ddd',
@@ -145,7 +129,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 <Row className="justify-content-md-center">
                     <span>About this Release:</span>
                 </Row>
-            </Container>
+            </Container> */}
             <Container
                 fluid
                 style={{
@@ -207,23 +191,9 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 </Row>
                 <Row className="justify-content-md-center">
                     <p
-                        style={{ fontSize: 'medium', paddingTop: 20 }}
+                        style={{ paddingTop: 20 }}
                         className={'text-center'}
                     >
-                        See <i>Cell April 2020</i>:&nbsp;
-                        <br />
-                        <a href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">
-                            The Human Tumor Atlas Network: Charting Tumor
-                            Transitions across Space and Time at Single-Cell
-                            Resolution
-                        </a>
-                    </p>
-                </Row>
-            </Container>
-
-            <Container>
-                <Row className="justify-content-md-center">
-                    <p className={'text-center'}>
                         Expected data described in <i>Cell April 2020</i>:&nbsp;
                         <br />
                         <a href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">
