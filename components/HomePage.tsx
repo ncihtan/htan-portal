@@ -106,9 +106,21 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             <Container
                 fluid
                 style={{
+                    backgroundColor: '#5f008c',
+                    color: '#fff',
+                    padding: '5px',
+                }}
+            >
+                <Row className="justify-content-md-center">
+                    <span>Data Release: v1</span>
+                </Row>
+            </Container>
+            <Container
+                fluid
+                style={{
                     backgroundColor: '#eee',
-                    paddingTop: '60px',
-                    paddingBottom: '60px',
+                    paddingTop: '20px',
+                    paddingBottom: '20px',
                 }}
             >
                 <Row className="justify-content-md-center">
@@ -121,11 +133,24 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             <Container
                 fluid
                 style={{
+                    backgroundColor: '#5f008c',
+                    color: '#fff',
+                    padding: '5px',
+                }}
+            >
+                <Row className="justify-content-md-center">
+                    <span>About this Release:</span>
+                </Row>
+            </Container>
+            <Container
+                fluid
+                style={{
+                    paddingTop: '20px',
                     paddingBottom: '60px',
                 }}
             >
                 <Row className="justify-content-md-center">
-                    <p>
+                    <p style={{ fontSize: 'large' }}>
                         The latest HTAN data release includes tumors originating
                         from{' '}
                         <strong>
@@ -145,7 +170,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     />
                 </Row>
                 <Row className="justify-content-md-center">
-                    <p>
+                    <p style={{ fontSize: 'large' }}>
                         The tumors were profiled with{' '}
                         <strong>
                             {computeUniqueAttributeValueCount(assaySummary)}
@@ -164,10 +189,31 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     />
                 </Row>
                 <Row className="justify-content-md-center">
-                    <p>We are expecting to collect many more samples:</p>
+                    <p style={{ fontSize: 'large' }}>
+                        We expect to profile many more tumors in the future:
+                    </p>
                 </Row>
                 <Row className="justify-content-md-center">
-                    <Image src={htanMarkerPaper} alt="HTAN Marker Paper" />
+                    <Image
+                        height={600}
+                        width={600}
+                        src={htanMarkerPaper}
+                        alt="HTAN Marker Paper"
+                    />
+                </Row>
+                <Row className="justify-content-md-center">
+                    <p
+                        style={{ fontSize: 'large', paddingTop: 20 }}
+                        className={'text-center'}
+                    >
+                        See <i>Cell April 2020</i>:&nbsp;
+                        <br />
+                        <a href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">
+                            The Human Tumor Atlas Network: Charting Tumor
+                            Transitions across Space and Time at Single-Cell
+                            Resolution
+                        </a>
+                    </p>
                 </Row>
             </Container>
 
