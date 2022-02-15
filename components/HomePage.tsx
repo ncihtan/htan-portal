@@ -65,9 +65,19 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     return (
         <>
             <Jumbotron
-                className={'text-center'}
+                className={'text-center position-relative'}
                 style={{ borderRadius: '0px', marginBottom: '0px' }}
             >
+                <div
+                    className={'position-absolute'}
+                    style={{
+                        bottom: 10,
+                        right: 10,
+                        color: '#fff',
+                    }}
+                >
+                    Data Release V1
+                </div>
                 <Row className="justify-content-md-center">
                     <Col md={{ span: 5 }} style={{ color: '#fff' }}>
                         <h1 style={{ color: '#24cad5' }}>
@@ -77,7 +87,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
 
                         <p>
                             HTAN is a National Cancer Institute (NCI)-funded
-                            Cancer MoonshotSM initiative to construct
+                            Cancer Moonshot<sup>SM</sup> initiative to construct
                             3-dimensional atlases of the dynamic cellular,
                             morphological, and molecular features of human
                             cancers as they evolve from precancerous lesions to
@@ -190,10 +200,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     />
                 </Row>
                 <Row className="justify-content-md-center">
-                    <p
-                        style={{ paddingTop: 20 }}
-                        className={'text-center'}
-                    >
+                    <p style={{ paddingTop: 20 }} className={'text-center'}>
                         Expected data described in <i>Cell April 2020</i>:&nbsp;
                         <br />
                         <a href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">

@@ -66,7 +66,7 @@ interface TooltipDatum {
     distributionByAttribute?: DistributionByAttribute[];
 }
 
-export const DEFAULT_BAR_COLOR = '#666add';
+export const DEFAULT_BAR_COLOR = 'rgb(36, 202, 213)';
 
 // TODO these colors are mostly random
 const CENTER_COLORS: { [center: string]: string } = {
@@ -236,11 +236,11 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
     }
 
     get barWidth() {
-        return 20;
+        return 15;
     }
 
     get barSeparation() {
-        return 10;
+        return 20;
     }
 
     get chartHeight() {
@@ -515,6 +515,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                                 <VictoryLabel textAnchor="end" />
                             }
                             style={{
+                                ticks: { size: 0 },
                                 tickLabels: { fontSize: 16 },
                             }}
                         />
