@@ -4,6 +4,8 @@ import numpy as np
 import wget
 import json
 import logging
+import glob
+import os
 
 import synapseclient
 
@@ -88,13 +90,13 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
             include_release1_ids = set(json.load(f))
         with open('release2_include.json') as f:
             include_release2_ids = set(json.load(f))
+        include_release_ids = include_release1_ids.union(include_release2_ids)
         release2_centers = [
             "HTAN Duke",
             # "HTAN OHSU",
             # "HTAN Vanderbilt",
             "HTAN HTAPP"
         ]
-        include_release_ids = include_release1_ids.union(include_release2_ids)
 
     # for HTAPP we include only release 1 folders for now
     htapp_release1_folder_names = set(pd.read_csv('htapp_release1.tsv',sep='\t')['Folder Name'])
@@ -124,9 +126,12 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
         datasets = dataset_group.to_dict("records")
 
         for dataset in datasets:
-            manifest_location = "./tmp/" + center_id + "/"
+            manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
             syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
+            # sometimes files can be named synapse(*x).csv
+            # TODO: would be better of syn.get can take output file argument
+            os.rename(glob.glob(manifest_location + "*synapse*.csv")[0], manifest_path)
 
             manifest_df = pd.read_csv(manifest_path)
 
@@ -147,7 +152,7 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
 
             logging.info("Data type: " + component)
 
-            # exclude HTAPP imainclude_ta for now
+            # exclude HTAPP imaging data for now
             if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component):
                 logging.info("Skipping Imaging data for HTAPP (" + component + ")")
                 continue
@@ -203,7 +208,7 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
                     .str.replace('american indian or alaska native', 'Not Reported')\
                     .str.replace('native hawaiian or other pacific islander', 'Not Reported')
 
-            # only include release data
+            # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
                 if center in release2_centers:
                     manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
