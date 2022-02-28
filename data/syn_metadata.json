@@ -108,21 +108,65 @@
             "synapseId": "syn24862574",
             "numItems": 1
         },
+        "FollowUp": {
+            "synapseId": "syn24866859",
+            "numItems": 1
+        },
+        "Exposure": {
+            "synapseId": "syn24867724",
+            "numItems": 1
+        },
+        "Therapy": {
+            "synapseId": "syn24869018",
+            "numItems": 28
+        },
         "Diagnosis": {
             "synapseId": "syn24983417",
             "numItems": 1
         },
+        "ClinicalDataTier2": {
+            "synapseId": "syn24983433",
+            "numItems": 5
+        },
+        "BreastCancerTier3": {
+            "synapseId": "syn24983461",
+            "numItems": 5
+        },
         "BulkDNALevel1": {
             "synapseId": "syn24991941",
-            "numItems": 144
+            "numItems": 208
         },
         "BulkRNA-seqLevel1": {
             "synapseId": "syn24991943",
-            "numItems": 8
+            "numItems": 14
+        },
+        "FamilyHistory": {
+            "synapseId": "syn24991946",
+            "numItems": 1
+        },
+        "MolecularTest": {
+            "synapseId": "syn24992072",
+            "numItems": 124
         },
         "ImagingLevel2": {
             "synapseId": "syn24992074",
-            "numItems": 61
+            "numItems": 96
+        },
+        "Biospecimen": {
+            "synapseId": "syn24993176",
+            "numItems": 124
+        },
+        "BulkRNA-seqLevel2": {
+            "synapseId": "syn26541429",
+            "numItems": 2
+        },
+        "BulkRNA-seqLevel3": {
+            "synapseId": "syn26541430",
+            "numItems": 7
+        },
+        "BulkDNALevel2": {
+            "synapseId": "syn26541762",
+            "numItems": 19
         }
     },
     "HTA7": {
@@ -160,7 +204,7 @@
         },
         "ImagingLevel2": {
             "synapseId": "syn25813013",
-            "numItems": 16
+            "numItems": 398
         },
         "BulkRNA-seqLevel1": {
             "synapseId": "syn26592110",

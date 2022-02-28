@@ -213,6 +213,12 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
             if include_released_only and "entityId" in manifest_df.columns:
                 if center in release2_centers:
                     manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
+                elif center == "HTAN OHSU":
+                    # only include one published case HTA9_1 for now
+                    if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("WES" in component or "ATAC" in component or "RNA" in component):
+                        manifest_df = manifest_df[manifest_df["HTAN Parent Biospecimen ID"].str.contains("HTA9_1")].copy()
+                    elif "HTAN Parent ID" in manifest_df.columns and ("Biospecimen" in component):
+                        manifest_df = manifest_df[manifest_df["HTAN Parent ID"].str.contains("HTA9_1")].copy()
                 else:
                     manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_ids)].copy()
 
