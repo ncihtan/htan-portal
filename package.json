@@ -36,7 +36,7 @@
     "mobx": "^6.0.4",
     "mobx-react": "^7.0.0",
     "mobx-utils": "^5.6.2",
-    "next": "12",
+    "next": "12.1",
     "node-fetch": "^2.6.0",
     "node-sass": "6.0.1",
     "pluralize": "^8.0.0",
