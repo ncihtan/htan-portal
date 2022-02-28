@@ -1,5 +1,7 @@
 import click
+from collections import OrderedDict
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 import numpy as np
 import wget
 import json
@@ -13,6 +15,9 @@ import schematic # for now install from here: https://github.com/Sage-Bionetwork
 from schematic import CONFIG
 from schematic.store.synapse import SynapseStorage
 from schematic.schemas.explorer import SchemaExplorer
+
+
+MAX_AGE_IN_DAYS = 32849
 
 
 @click.command()
@@ -159,6 +164,11 @@ def generate_json(include_at_risk_populations, include_released_only):
                 logging.error("Component " + component + " does not exist in schema (" + manifest_path)
                 continue
 
+            # obfuscate ages >89 (TODO: do the same for <18)
+            if component == "Diagnosis" and "Age at Diagnosis" in manifest_df.columns and is_numeric_dtype(manifest_df["Age at Diagnosis"]):
+                older_than_89 = manifest_df["Age at Diagnosis"] > MAX_AGE_IN_DAYS
+                manifest_df.loc[older_than_89, ["Age at Diagnosis", "Age Is Obfuscated"]] = [MAX_AGE_IN_DAYS, True]
+
             # manifest might not have all columns from the schema, so add
             # missing columns
             schema_columns = [se.explore_class(c)['displayName'] for c in schema_info['dependencies']]
@@ -168,7 +178,11 @@ def generate_json(include_at_risk_populations, include_released_only):
 
             # use schema's column order and add synapse id to required columns
             # if it exists
+            # TODO: schema_columns can contain duplicates for whatever reason.
+            # But if one gets rid of them it messes up column indexes
+            # downstream
             column_order = schema_columns
+
             if 'entityId' not in schema_columns and 'entityId' in manifest_df.columns:
                 column_order += ['entityId']
             manifest_df = manifest_df[column_order]
@@ -194,6 +208,7 @@ def generate_json(include_at_risk_populations, include_released_only):
                 manifest_df['Race'] = manifest_df['Race']\
                     .str.replace('american indian or alaska native', 'Not Reported')\
                     .str.replace('native hawaiian or other pacific islander', 'Not Reported')
+
 
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
