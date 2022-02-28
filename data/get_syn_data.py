@@ -16,11 +16,9 @@ from schematic.schemas.explorer import SchemaExplorer
 
 
 @click.command()
-@click.option('--include-non-public-images/--exclude-non-public-images', default=False)
-@click.option('--include-non-public-htapp-folders/--exclude-non-public-htapp-folders', default=False)
 @click.option('--include-at-risk-populations/--exclude-at-risk-populations', default=False)
 @click.option('--include-released-only/--include-unreleased', default=False)
-def generate_json(include_non_public_images, include_non_public_htapp_folders, include_at_risk_populations, include_released_only):
+def generate_json(include_at_risk_populations, include_released_only):
     logging.disable(logging.DEBUG)
 
     # map: HTAN center names to HTAN IDs
@@ -80,11 +78,6 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
                     "schemas":[]
     }
 
-    with open('image-release-1-synapse-ids.json') as f:
-        imaging_release1_ids = set(json.load(f)['synapseIds'])
-        # there should be 333 images in the first release
-        assert(len(imaging_release1_ids) == 333)
-
     if include_released_only:
         with open('release1_include.json') as f:
             include_release1_ids = set(json.load(f))
@@ -129,6 +122,7 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
         for dataset in datasets:
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
+
             syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
             # sometimes files can be named synapse(*x).csv
             # TODO: would be better of syn.get can take output file argument
@@ -195,14 +189,6 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
                 logging.error("skipping " + number_of_rows_without_synapse_id + "rows without synapse id in " + manifest_path)
                 manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
 
-            # only include imaging data that are in the 333 files of release 1
-            if not center == "HTAN HMS" and not include_non_public_images and "Imaging" in component and "entityId" in manifest_df.columns:
-                manifest_df = manifest_df[manifest_df["entityId"].isin(imaging_release1_ids)].copy()
-
-            # exclude specific HTAPP folders
-            if center == "HTAN HTAPP" and not include_non_public_htapp_folders and 'Filename' in manifest_df.columns:
-                manifest_df = manifest_df[manifest_df["Filename"].str.contains('|'.join(htapp_release1_folder_names))].copy()
-
             # replace race for protected populations
             if not include_at_risk_populations and 'Race' in manifest_df:
                 manifest_df['Race'] = manifest_df['Race']\
@@ -213,6 +199,9 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
             if include_released_only and "entityId" in manifest_df.columns:
                 if center in release2_centers:
                     manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
+                    # exclude HTAPP sarcoma data (has link errors)
+                    if center == "HTAN HTAPP" and "Filename" in manifest_df.columns and ("RNA" in component):
+                        manifest_df = manifest_df[~manifest_df["Filename"].str.contains("sarcoma")].copy()
                 elif center == "HTAN OHSU":
                     # only include one published case HTA9_1 for now
                     if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("WES" in component or "ATAC" in component or "RNA" in component):
