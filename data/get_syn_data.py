@@ -17,7 +17,8 @@ from schematic.schemas.explorer import SchemaExplorer
 @click.option('--include-non-public-images/--exclude-non-public-images', default=False)
 @click.option('--include-non-public-htapp-folders/--exclude-non-public-htapp-folders', default=False)
 @click.option('--include-at-risk-populations/--exclude-at-risk-populations', default=False)
-def generate_json(include_non_public_images, include_non_public_htapp_folders, include_at_risk_populations):
+@click.option('--include-released-only/--include-unreleased', default=False)
+def generate_json(include_non_public_images, include_non_public_htapp_folders, include_at_risk_populations, include_released_only):
     logging.disable(logging.DEBUG)
 
     # map: HTAN center names to HTAN IDs
@@ -82,6 +83,19 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
         # there should be 333 images in the first release
         assert(len(imaging_release1_ids) == 333)
 
+    if include_released_only:
+        with open('release1_include.json') as f:
+            include_release1_ids = set(json.load(f))
+        with open('release2_include.json') as f:
+            include_release2_ids = set(json.load(f))
+        release2_centers = [
+            "HTAN Duke",
+            # "HTAN OHSU",
+            # "HTAN Vanderbilt",
+            "HTAN HTAPP"
+        ]
+        include_release_ids = include_release1_ids.union(include_release2_ids)
+
     # for HTAPP we include only release 1 folders for now
     htapp_release1_folder_names = set(pd.read_csv('htapp_release1.tsv',sep='\t')['Folder Name'])
     htapp_release1_synapse_ids = set(pd.read_csv('htapp_release1.tsv',sep='\t')['Folder Synapse ID'])
@@ -133,7 +147,7 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
 
             logging.info("Data type: " + component)
 
-            # exclude HTAPP imaging data for now
+            # exclude HTAPP imainclude_ta for now
             if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component):
                 logging.info("Skipping Imaging data for HTAPP (" + component + ")")
                 continue
@@ -188,6 +202,13 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
                 manifest_df['Race'] = manifest_df['Race']\
                     .str.replace('american indian or alaska native', 'Not Reported')\
                     .str.replace('native hawaiian or other pacific islander', 'Not Reported')
+
+            # only include release data
+            if include_released_only and "entityId" in manifest_df.columns:
+                if center in release2_centers:
+                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
+                else:
+                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_ids)].copy()
 
             if len(manifest_df) == 0:
                 continue
