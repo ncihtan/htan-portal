@@ -93,8 +93,9 @@ def generate_json(include_non_public_images, include_non_public_htapp_folders, i
         include_release_ids = include_release1_ids.union(include_release2_ids)
         release2_centers = [
             "HTAN Duke",
+            "HTAN HMS",
             # "HTAN OHSU",
-            # "HTAN Vanderbilt",
+            "HTAN Vanderbilt",
             "HTAN HTAPP"
         ]
 
