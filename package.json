@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "export NODE_OPTIONS=--max_old_space_size=8192 && next build",
-    "start": "next start",
+    "dev": "yarn run gunzip && next dev",
+    "gunzip": "gunzip -c public/processed_syn_data.json.gz > public/processed_syn_data.json",
+    "build": "yarn run gunzip && export NODE_OPTIONS=--max_old_space_size=6144 && next build",
+    "start": "yarn run gunzip && next start",
     "processSynapseJSON": "npx ncc run data/processSynapseJSON.ts",
     "prettierPreCommit": "STAGED_AND_CHANGED_FILES=$(git diff HEAD --name-only --cached --diff-filter=d) && ([ -z \"$STAGED_AND_CHANGED_FILES\" ] && echo \"Nothing to prettify\" || (yarn run prettier --write $(echo $STAGED_AND_CHANGED_FILES) && git add -f $(echo $STAGED_AND_CHANGED_FILES)))",
     "prettierAll": "yarn run prettier --write $(git ls-files | grep '\\(.js\\|.ts\\|.scss\\|.css\\)')"

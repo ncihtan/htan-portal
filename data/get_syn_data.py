@@ -97,10 +97,6 @@ def generate_json(include_at_risk_populations, include_released_only):
             "HTAN HTAPP"
         ]
 
-    # for HTAPP we include only release 1 folders for now
-    htapp_release1_folder_names = set(pd.read_csv('htapp_release1.tsv',sep='\t')['Folder Name'])
-    htapp_release1_synapse_ids = set(pd.read_csv('htapp_release1.tsv',sep='\t')['Folder Synapse ID'])
-
     # store all metadata synapse ids for downloading submitted metadata
     # directly
     portal_metadata = {}
@@ -214,9 +210,6 @@ def generate_json(include_at_risk_populations, include_released_only):
             if include_released_only and "entityId" in manifest_df.columns:
                 if center in release2_centers:
                     manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
-                    # exclude HTAPP sarcoma data (has link errors)
-                    if center == "HTAN HTAPP" and "Filename" in manifest_df.columns and ("RNA" in component):
-                        manifest_df = manifest_df[~manifest_df["Filename"].str.contains("sarcoma")].copy()
                 elif center == "HTAN OHSU":
                     # only include one published case HTA9_1 for now
                     if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("WES" in component or "ATAC" in component or "RNA" in component):
