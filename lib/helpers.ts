@@ -137,6 +137,17 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
     const diagnosisMap = data.diagnosisByHTANParticipantID;
     const demoMap = data.demographicsByHTANParticipantID;
 
+    // give each biospecimen it's caseid (i.e "diagnosis" HTANParticipantID)
+    // biospecimen have HTANParentID but that may or may not be it's caseid because
+    // biospecimen can have other biospecimen as parents (one case at top)
+    _.forEach(data.biospecimenByHTANBiospecimenID, (specimen) => {
+        const parentIdMatch = specimen.HTANParentID.match(/[^_]*_[^_]*/);
+        // we should always have a match
+        specimen.HTANParticipantID =
+            specimen.HTANParticipantID ||
+            (parentIdMatch ? parentIdMatch[0] : '');
+    });
+
     data.files.forEach((file) => {
         (file as Entity).biospecimen = file.biospecimenIds.map(
             (id) => biospecimenMap[id] as Entity
