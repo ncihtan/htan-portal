@@ -94,7 +94,8 @@ def generate_json(include_at_risk_populations, include_released_only):
             "HTAN HMS",
             # "HTAN OHSU",
             "HTAN Vanderbilt",
-            "HTAN HTAPP"
+            "HTAN HTAPP",
+            "HTAN Stanford"
         ]
 
     # store all metadata synapse ids for downloading submitted metadata
@@ -205,6 +206,12 @@ def generate_json(include_at_risk_populations, include_released_only):
                     .str.replace('american indian or alaska native', 'Not Reported')\
                     .str.replace('native hawaiian or other pacific islander', 'Not Reported')
 
+            # remove any duplicates
+            if "HTAN Partipant ID" in manifest_df.columns:
+                duplicates = manifest_df.duplicated("HTAN Participant ID")
+                if duplicates.any():
+                    logging.error("Removing duplicates in " + manifest_path + ": " + str(manifest_df.loc[duplicates]))
+                    manifest_df = manifest_df.drop_duplicates(subset='HTAN Participant ID')
 
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
