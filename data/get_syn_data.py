@@ -212,18 +212,10 @@ def generate_json(include_at_risk_populations, include_released_only):
                     logging.error("Removing duplicates in " + manifest_path + ": " + str(manifest_df.loc[duplicates]))
                     manifest_df = manifest_df.drop_duplicates(subset='HTAN Participant ID')
 
-            if center == "HTAN Stanford" and "scrna" in component.lower() and "level1" not in component.lower():
-                logging.warning("ignoring incorrect stanford scrnaseqlevel1-3 metadata (see https://sagebionetworks.jira.com/browse/HTAN-39)")
-                continue
-
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
                 if center in release2_centers:
-                    # TODO: Diagnosis info is not released for Stanford
-                    if center == "HTAN Stanford" and ("diagnosis" in component.lower() or "biospecimen" in component.lower() or "demographics" in component.lower()):
-                        pass
-                    else:
-                        manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
+                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
                 elif center == "HTAN OHSU":
                     # only include one published case HTA9_1 for now
                     if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("WES" in component or "ATAC" in component or "RNA" in component):
