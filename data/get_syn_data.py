@@ -28,18 +28,18 @@ def generate_json(include_at_risk_populations, include_released_only):
 
     # map: HTAN center names to HTAN IDs
     htan_centers = {
-                    "HTAN HTAPP": "hta1",
-                    "PCAPP Pilot Project": "hta2",
-                    "HTAN BU": "hta3",
-                    "HTAN CHOP": "hta4",
-                    "HTAN DFCI": "hta5",
-                    "HTAN Duke": "hta6",
-                    "HTAN HMS": "hta7",
-                    "HTAN MSK": "hta8",
-                    "HTAN OHSU": "hta9",
+                    #"HTAN HTAPP": "hta1",
+                    #"PCAPP Pilot Project": "hta2",
+                    #"HTAN BU": "hta3",
+                    #"HTAN CHOP": "hta4",
+                    #"HTAN DFCI": "hta5",
+                    #"HTAN Duke": "hta6",
+                    #"HTAN HMS": "hta7",
+                    #"HTAN MSK": "hta8",
+                    #"HTAN OHSU": "hta9",
                     "HTAN Stanford": "hta10",
-                    "HTAN Vanderbilt": "hta11",
-                    "HTAN WUSTL": "hta12",
+                    #"HTAN Vanderbilt": "hta11",
+                    #"HTAN WUSTL": "hta12",
                     # exclude TNPs for now
                     # "HTAN TNP SARDANA": "hta13",
                     # "HTAN TNP - TMA": "hta14"
@@ -94,7 +94,8 @@ def generate_json(include_at_risk_populations, include_released_only):
             "HTAN HMS",
             # "HTAN OHSU",
             "HTAN Vanderbilt",
-            "HTAN HTAPP"
+            "HTAN HTAPP",
+            "HTAN Stanford"
         ]
 
     # store all metadata synapse ids for downloading submitted metadata
@@ -205,11 +206,24 @@ def generate_json(include_at_risk_populations, include_released_only):
                     .str.replace('american indian or alaska native', 'Not Reported')\
                     .str.replace('native hawaiian or other pacific islander', 'Not Reported')
 
+            if "HTAN Partipant ID" in manifest_df.columns:
+                duplicates = manifest_df.duplicated("HTAN Participant ID")
+                if duplicates.any():
+                    logging.error("Removing duplicates in " + manifest_path + ": " + str(manifest_df.loc[duplicates]))
+                    manifest_df = manifest_df.drop_duplicates(subset='HTAN Participant ID')
+
+            if center == "HTAN Stanford" and "scrna" in component.lower() and "level1" not in component.lower():
+                logging.warning("ignoring incorrect stanford scrnaseqlevel1-3 metadata (see https://sagebionetworks.jira.com/browse/HTAN-39)")
+                continue
 
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
                 if center in release2_centers:
-                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
+                    # TODO: Diagnosis info is not released for Stanford
+                    if center == "HTAN Stanford" and ("diagnosis" in component.lower() or "biospecimen" in component.lower() or "demographics" in component.lower()):
+                        pass
+                    else:
+                        manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
                 elif center == "HTAN OHSU":
                     # only include one published case HTA9_1 for now
                     if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("WES" in component or "ATAC" in component or "RNA" in component):
