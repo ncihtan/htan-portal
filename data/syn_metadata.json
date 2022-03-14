@@ -425,6 +425,14 @@
         "OtherAssay": {
             "synapseId": "syn27352980",
             "numItems": 159
+        },
+        "ScRNA-seqLevel2": {
+            "synapseId": "syn27353183",
+            "numItems": 128
+        },
+        "ScRNA-seqLevel3": {
+            "synapseId": "syn27353220",
+            "numItems": 192
         }
     }
 }
