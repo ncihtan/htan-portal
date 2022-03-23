@@ -390,10 +390,18 @@
     "HTA6": {
         "Demographics": {
             "synapseId": "syn25049721",
-            "numItems": 352
+            "numItems": 680
         },
         "Exposure": {
             "synapseId": "syn25049897",
+            "numItems": 680
+        },
+        "FamilyHistory": {
+            "synapseId": "syn25050073",
+            "numItems": 680
+        },
+        "Therapy": {
+            "synapseId": "syn25050373",
             "numItems": 680
         },
         "FollowUp": {
@@ -406,11 +414,11 @@
         },
         "Diagnosis": {
             "synapseId": "syn25126897",
-            "numItems": 352
+            "numItems": 680
         },
         "Biospecimen": {
             "synapseId": "syn25149097",
-            "numItems": 568
+            "numItems": 1006
         },
         "BulkDNALevel1": {
             "synapseId": "syn25178503",
