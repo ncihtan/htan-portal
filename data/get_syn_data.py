@@ -92,10 +92,12 @@ def generate_json(include_at_risk_populations, include_released_only):
         release2_centers = [
             "HTAN Duke",
             "HTAN HMS",
+            "HTAN MSK",
             # "HTAN OHSU",
             "HTAN Vanderbilt",
             "HTAN HTAPP",
-            "HTAN Stanford"
+            "HTAN Stanford",
+            "HTAN WUSTL",
         ]
 
     # store all metadata synapse ids for downloading submitted metadata
