@@ -109,9 +109,21 @@ const MinervaStoryViewerLink = (props: { url: string, count: number }) => (
         <a
             href={props.url}
             target="_blank"
-            style={{paddingRight:5}}
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
         >
-            <img width={20} src="https://user-images.githubusercontent.com/1334004/156241219-a3062991-ba9d-4201-ad87-3c9c1f0c61d8.png" /> ({props.count})
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src="https://user-images.githubusercontent.com/1334004/156241219-a3062991-ba9d-4201-ad87-3c9c1f0c61d8.png" />
+        </a>
+    </Tooltip>
+);
+
+const AutoMinervaViewerLink = (props: { url: string, count: number }) => (
+    <Tooltip overlay="Autominerva">
+        <a
+            href={props.url}
+            target="_blank"
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
+        >
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src="https://user-images.githubusercontent.com/1334004/159789346-b647c772-48fe-4652-8d2b-3eecf6690f1f.png" />
         </a>
     </Tooltip>
 );
@@ -121,9 +133,9 @@ const CBioPortalViewerLink = (props: { url: string, count: number }) => (
         <a
             href={props.url}
             target="_blank"
-            style={{paddingRight:5}}
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
         >
-            <img width={20} src={'https://avatars.githubusercontent.com/u/9876251?s=20&v=4'} /> ({props.count})
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src={'https://avatars.githubusercontent.com/u/9876251?s=20&v=4'} /> 
         </a>
     </Tooltip>
 );
@@ -133,9 +145,9 @@ const CellxgeneViewerLink = (props: { url: string, count: number }) => (
         <a
             href={props.url}
             target="_blank"
-            style={{paddingRight:5}}
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
         >
-            <img width={20} src={'https://pbs.twimg.com/profile_images/1285714433981812736/-wuBO62N_400x400.jpg'} /> ({props.count})
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src={'https://pbs.twimg.com/profile_images/1285714433981812736/-wuBO62N_400x400.jpg'} />
         </a>
     </Tooltip>
 );
@@ -296,16 +308,22 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         return (
                             <CellxgeneViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+MSK"%7D%5D&tab=file'} count={11} />
                         );
+                    } else if (atlas.htan_name === 'HTAN Duke') {
+                        return (
+                            <>
+                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"mIHC"%2C"label"%3A"mIHC"%2C"group"%3A"assayName"%2C"count"%3A62%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"t-CyCIF"%2C"label"%3A"t-CyCIF"%2C"group"%3A"assayName"%2C"count"%3A400%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"MIBI"%2C"label"%3A"MIBI"%2C"group"%3A"assayName"%2C"count"%3A165%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"IMC"%2C"label"%3A"IMC"%2C"group"%3A"assayName"%2C"count"%3A41%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A254%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"CyCIF"%2C"label"%3A"CyCIF"%2C"group"%3A"assayName"%2C"count"%3A13%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Duke"%7D%5D&tab=file'} count={107} />
+                            </>
+                        );
                     } else if (atlas.htan_name === 'HTAN OHSU') {
                         return (
                             <>
-                                <MinervaStoryViewerLink url={'https://minerva-story-htan-ohsu-demo.surge.sh/'} count={1} />
                                 <CBioPortalViewerLink url={'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'} count={1} />
+                                <MinervaStoryViewerLink url={'https://minerva-story-htan-ohsu-demo.surge.sh/'} count={1} />
                             </>
                         );
                     } else if (atlas.htan_name === 'HTAN HMS') {
                         return (
-                            <MinervaStoryViewerLink url={'/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'} count={15} />
+                            <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'} count={348} />
                         );
                     } else if (atlas.htan_name === 'HTAN BU') {
                         return (
@@ -313,7 +331,17 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         );
                     } else if (atlas.htan_name === 'HTAN Vanderbilt') {
                         return (
-                            <CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />
+                            <>
+                                <CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />
+                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'} count={20} />
+                            </>
+                        );
+                    } else if (atlas.htan_name === 'HTAN WUSTL') {
+                        return (
+                            <>
+                                <CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />
+                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'} count={20} />
+                            </>
                         );
                     } else if (atlas.htan_name === 'HTAN CHOP') {
                         return (
