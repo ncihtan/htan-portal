@@ -120,7 +120,6 @@ const AutoMinervaViewerLink = (props: { url: string, count: number }) => (
     <Tooltip overlay="Autominerva">
         <a
             href={props.url}
-            target="_blank"
             style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
         >
             {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src="https://user-images.githubusercontent.com/1334004/159789346-b647c772-48fe-4652-8d2b-3eecf6690f1f.png" />
@@ -340,8 +339,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     } else if (atlas.htan_name === 'HTAN WUSTL') {
                         return (
                             <>
-                                <CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />
-                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'} count={20} />
+                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+WUSTL"%7D%2C%7B"value"%3A"IMC"%2C"label"%3A"IMC"%2C"group"%3A"assayName"%2C"count"%3A78%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A71%2C"isSelected"%3Afalse%7D%5D&tab=file'} count={149} />
                             </>
                         );
                     } else if (atlas.htan_name === 'HTAN CHOP') {

@@ -270,6 +270,10 @@
             "synapseId": "syn24997689",
             "numItems": 54
         },
+        "ImagingLevel2": {
+            "synapseId": "syn25200520",
+            "numItems": 41
+        },
         "Biospecimen": {
             "synapseId": "syn25110812",
             "numItems": 313
@@ -289,10 +293,6 @@
         "ScRNA-seqLevel1": {
             "synapseId": "syn25178382",
             "numItems": 222
-        },
-        "ImagingLevel2": {
-            "synapseId": "syn25200520",
-            "numItems": 41
         }
     },
     "HTA4": {
