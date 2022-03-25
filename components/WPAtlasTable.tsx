@@ -332,7 +332,8 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     } else if (atlas.htan_name === 'HTAN Vanderbilt') {
                         return (
                             <>
-                                <CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />
+                                {/* Outddated Cellxgene Instance */}
+                                {/*<CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />*/}
                                 <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'} count={20} />
                             </>
                         );
