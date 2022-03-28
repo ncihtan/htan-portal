@@ -1,5 +1,7 @@
 import React from 'react';
-import processedSynapseData from '../public/processed_syn_data.json';
+import fs from 'fs';
+import process from 'process';
+import path from 'path';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
@@ -46,8 +48,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
         getContent('card-6', 'homepage'),
     ]);
 
+    const processedSynapseData = await fs.readFileSync(path.join(process.cwd(), 'public/processed_syn_data.json'), 'utf8')
     const files = fillInEntities(
-        (processedSynapseData as any) as LoadDataResult
+        (JSON.parse(processedSynapseData) as any) as LoadDataResult
     );
 
     return {

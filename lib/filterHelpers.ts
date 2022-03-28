@@ -207,6 +207,8 @@ export function getFilteredSamples(
             filteredCases,
             (c) => c.HTANParticipantID
         );
-        return samples.filter((s) => s.HTANParentID in filteredCaseIds);
+        return samples.filter((s) => {
+            return s.HTANParticipantID in filteredCaseIds;
+        });
     }
 }

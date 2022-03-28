@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { NextRouter } from 'next/router';
+import Tooltip from 'rc-tooltip';
 import React from 'react';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { Atlas, Entity, setTab } from '../lib/helpers';
@@ -102,6 +103,53 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
         </Modal>
     );
 };
+
+const MinervaStoryViewerLink = (props: { url: string, count: number }) => (
+    <Tooltip overlay="Minerva Story">
+        <a
+            href={props.url}
+            target="_blank"
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
+        >
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src="https://user-images.githubusercontent.com/1334004/156241219-a3062991-ba9d-4201-ad87-3c9c1f0c61d8.png" />
+        </a>
+    </Tooltip>
+);
+
+const AutoMinervaViewerLink = (props: { url: string, count: number }) => (
+    <Tooltip overlay="Autominerva">
+        <a
+            href={props.url}
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
+        >
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src="https://user-images.githubusercontent.com/1334004/159789346-b647c772-48fe-4652-8d2b-3eecf6690f1f.png" />
+        </a>
+    </Tooltip>
+);
+
+const CBioPortalViewerLink = (props: { url: string, count: number }) => (
+    <Tooltip overlay="cBioPortal">
+        <a
+            href={props.url}
+            target="_blank"
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
+        >
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src={'https://avatars.githubusercontent.com/u/9876251?s=20&v=4'} /> 
+        </a>
+    </Tooltip>
+);
+
+const CellxgeneViewerLink = (props: { url: string, count: number }) => (
+    <Tooltip overlay="cellxgene">
+        <a
+            href={props.url}
+            target="_blank"
+            style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none"}}
+        >
+            {props.count < 100 && '\u00A0'}{props.count < 10 && '\u00A0'}{props.count} <img width={20} src={'https://pbs.twimg.com/profile_images/1285714433981812736/-wuBO62N_400x400.jpg'} />
+        </a>
+    </Tooltip>
+);
 
 type WPAtlasTableData = Atlas & { isSelected: boolean };
 
@@ -257,45 +305,46 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_name === 'HTAN MSK') {
                         return (
-                            <a href='/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+MSK"%7D%5D&tab=file'>
-                                CellxGene (11)
-                            </a>
+                            <CellxgeneViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+MSK"%7D%5D&tab=file'} count={11} />
+                        );
+                    } else if (atlas.htan_name === 'HTAN Duke') {
+                        return (
+                            <>
+                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"mIHC"%2C"label"%3A"mIHC"%2C"group"%3A"assayName"%2C"count"%3A62%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"t-CyCIF"%2C"label"%3A"t-CyCIF"%2C"group"%3A"assayName"%2C"count"%3A400%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"MIBI"%2C"label"%3A"MIBI"%2C"group"%3A"assayName"%2C"count"%3A165%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"IMC"%2C"label"%3A"IMC"%2C"group"%3A"assayName"%2C"count"%3A41%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A254%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"CyCIF"%2C"label"%3A"CyCIF"%2C"group"%3A"assayName"%2C"count"%3A13%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Duke"%7D%5D&tab=file'} count={107} />
+                            </>
                         );
                     } else if (atlas.htan_name === 'HTAN OHSU') {
                         return (
-                            <a
-                                href="https://minerva-story-htan-ohsu-demo.surge.sh/"
-                                target="_blank"
-                            >
-                                Minerva Story (1)
-                            </a>
+                            <>
+                                <CBioPortalViewerLink url={'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'} count={1} />
+                                <MinervaStoryViewerLink url={'https://minerva-story-htan-ohsu-demo.surge.sh/'} count={1} />
+                            </>
                         );
                     } else if (atlas.htan_name === 'HTAN HMS') {
                         return (
-                            <a href='/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'>
-                                Minerva Story (15)
-                            </a>
+                            <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'} count={348} />
                         );
                     } else if (atlas.htan_name === 'HTAN BU') {
                         return (
-                            <a
-                                href="https://cellxgene.cziscience.com/d/BFAA0C46-7E34-4FA9-B08C-6DC6013B735A.cxg/"
-                                target="_blank"
-                            >
-                                CellxGene (1)
-                            </a>
+                            <CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/BFAA0C46-7E34-4FA9-B08C-6DC6013B735A.cxg/'} count={1} />
                         );
                     } else if (atlas.htan_name === 'HTAN Vanderbilt') {
                         return (
-                            <a href='/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'>
-                                CellxGene (1)
-                            </a>
+                            <>
+                                {/* Outddated Cellxgene Instance */}
+                                {/*<CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />*/}
+                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'} count={20} />
+                            </>
+                        );
+                    } else if (atlas.htan_name === 'HTAN WUSTL') {
+                        return (
+                            <>
+                                <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+WUSTL"%7D%2C%7B"value"%3A"IMC"%2C"label"%3A"IMC"%2C"group"%3A"assayName"%2C"count"%3A78%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A71%2C"isSelected"%3Afalse%7D%5D&tab=file'} count={149} />
+                            </>
                         );
                     } else if (atlas.htan_name === 'HTAN CHOP') {
                         return (
-                            <a href='/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file'>
-                                CellxGene (3)
-                            </a>
+                            <CellxgeneViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file'} count={3} />
                         );
                     } else {
                         return null;

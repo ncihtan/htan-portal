@@ -16,6 +16,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules","public/processed_syn_data.json"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
