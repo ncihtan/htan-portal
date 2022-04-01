@@ -123,7 +123,10 @@ function mergeCaseData(
 }
 
 export async function fetchData(): Promise<LoadDataResult> {
-    const res = await fetch('/processed_syn_data.json');
+    // in development we use local processed syn data. In production we use
+    // other URL (too large to serve thru next max 250MB limit)
+    const processedSynURL = process.env.NODE_ENV === 'development'? '/processed_syn_data.json' : 'https://htan-synapse-json.surge.sh/processed_syn_data.json';
+    const res = await fetch(processedSynURL);
 
     // const json = await res.json();
     const text = await res.text();
