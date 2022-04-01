@@ -1,20 +1,32 @@
 {
     "HTA1": {
         "Demographics": {
-            "synapseId": "syn25885192",
-            "numItems": 18
+            "synapseId": "syn28271984",
+            "numItems": 2
         },
         "Diagnosis": {
-            "synapseId": "syn25884447",
-            "numItems": 63
+            "synapseId": "syn28272861",
+            "numItems": 2
+        },
+        "Exposure": {
+            "synapseId": "syn25885213",
+            "numItems": 18
+        },
+        "FollowUp": {
+            "synapseId": "syn28260748",
+            "numItems": 13
+        },
+        "MolecularTest": {
+            "synapseId": "syn25885930",
+            "numItems": 108
         },
         "ScRNA-seqLevel1": {
-            "synapseId": "syn27222678",
-            "numItems": 272
+            "synapseId": "syn27223815",
+            "numItems": 242
         },
         "ScRNA-seqLevel2": {
-            "synapseId": "syn27222731",
-            "numItems": 122
+            "synapseId": "syn27224327",
+            "numItems": 87
         },
         "ScRNA-seqLevel3": {
             "synapseId": "syn25113381",
@@ -24,21 +36,21 @@
             "synapseId": "syn27236524",
             "numItems": 801
         },
-        "Exposure": {
-            "synapseId": "syn25884579",
-            "numItems": 63
+        "Therapy": {
+            "synapseId": "syn25885320",
+            "numItems": 58
+        },
+        "LungCancerTier3": {
+            "synapseId": "syn25882513",
+            "numItems": 52
+        },
+        "ClinicalDataTier2": {
+            "synapseId": "syn25882773",
+            "numItems": 15
         },
         "FamilyHistory": {
-            "synapseId": "syn25884645",
-            "numItems": 63
-        },
-        "FollowUp": {
-            "synapseId": "syn25884716",
-            "numItems": 63
-        },
-        "Therapy": {
-            "synapseId": "syn25885086",
-            "numItems": 369
+            "synapseId": "syn25885235",
+            "numItems": 18
         }
     },
     "HTA11": {
@@ -272,7 +284,7 @@
         },
         "ImagingLevel2": {
             "synapseId": "syn25200520",
-            "numItems": 41
+            "numItems": 78
         },
         "Biospecimen": {
             "synapseId": "syn25110812",
