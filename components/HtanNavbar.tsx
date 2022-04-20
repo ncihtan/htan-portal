@@ -93,6 +93,14 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
                 htan@googlegroups.com
             </Nav.Link>
         </NavSection>,
+
+        <NavSection text={'News'}>
+            <NavDropdown.Item href="/data-updates">Data Updates</NavDropdown.Item>
+            <Dropdown.Divider />
+            <Nav.Link href="https://twitter.com/ncihtan">
+                Twitter
+            </Nav.Link>
+        </NavSection>,
     ];
 
     return (
