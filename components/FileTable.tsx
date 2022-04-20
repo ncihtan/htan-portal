@@ -472,6 +472,10 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             </a>
                         );
                     } else if (file.Component.startsWith('Imaging')) {
+                        // TODO: Duke images are giving an issue: https://github.com/ncihtan/htan-portal/pull/380#pullrequestreview-946257535
+                        if (file.atlas_name === 'HTAN Duke' && file.assayName == "H&E") {
+                            return 'Image Viewer Coming Soon';
+                        }
                         if (imageInfo && thumbnailUrl) {
                             return (
                                 <div className={'dsa-container'}>
