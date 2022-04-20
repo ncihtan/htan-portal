@@ -86,6 +86,10 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
 
         <NavSection text={'Submit Data'}>
             <NavDropdown.Item href="/transfer">Data Transfer</NavDropdown.Item>
+            <Dropdown.Divider />
+            <Nav.Link href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1">
+                Service Desk
+            </Nav.Link>
         </NavSection>,
 
         <NavSection text={'Support'}>
