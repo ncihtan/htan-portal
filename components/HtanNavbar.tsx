@@ -1,7 +1,8 @@
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import React, { useState } from 'react';
-import { NavDropdown } from 'react-bootstrap';
+import { Dropdown, NavDropdown } from 'react-bootstrap';
+import Link from 'next/link';
 
 function togglePreview(on: any) {
     if (process.browser) {
@@ -43,32 +44,54 @@ const NavSection: React.FunctionComponent<{
 
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
-        <Nav.Link href="/explore">Explore</Nav.Link>,
 
-        <NavSection text={'About'}>
-            <NavDropdown.Item href="/htan-dcc">
-                Data Coordinating Center
+        <NavSection text={'About HTAN'}>
+            <NavDropdown.Item href="/overview">
+                Overview
             </NavDropdown.Item>
+            {/*<NavDropdown.Item href="/htan-dcc">
+                Data Coordinating Center
+            </NavDropdown.Item>*/}
             <NavDropdown.Item href="/research-network">
                 Research Network
             </NavDropdown.Item>
             <NavDropdown.Item href="/consortium">
-                HTAN Consortium
+                Consortium
             </NavDropdown.Item>
-            <NavDropdown.Item href="/standards">
-                Data Standards
-            </NavDropdown.Item>
-            <NavDropdown.Item href="/transfer">Data Transfer</NavDropdown.Item>
-        </NavSection>,
-
-        <Nav.Link href="/tools">Analysis Tools</Nav.Link>,
-
-        <NavSection text={'Resources'}>
             <NavDropdown.Item href="/resources">Resources</NavDropdown.Item>
             <NavDropdown.Item href="/publications">
                 Publications
             </NavDropdown.Item>
             <NavDropdown.Item href="/authors">Authors</NavDropdown.Item>
+        </NavSection>,
+
+        <NavSection text={'About the Data'}>
+            <NavDropdown.Item href="/standards">
+                Data Standards
+            </NavDropdown.Item>
+            <Dropdown.Divider />
+            <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
+                Protocols.io
+            </Nav.Link>
+        </NavSection>,
+
+        <NavSection text={'Analyze Data'}>
+            <NavDropdown.Item href="/explore">
+                Explore
+            </NavDropdown.Item>
+            <NavDropdown.Item href="/tools">
+                Analysis Tools
+            </NavDropdown.Item>
+        </NavSection>,
+
+        <NavSection text={'Submit Data'}>
+            <NavDropdown.Item href="/transfer">Data Transfer</NavDropdown.Item>
+        </NavSection>,
+
+        <NavSection text={'Support'}>
+            <Nav.Link href="mailto:htan@googlegroups.com">
+                htan@googlegroups.com
+            </Nav.Link>
         </NavSection>,
     ];
 

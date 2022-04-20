@@ -76,7 +76,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         color: '#fff',
                     }}
                 >
-                    Data Release V1
+                    Data Release V2 (Last updated 2022-03-31)
                 </div>
                 <Row className="justify-content-md-center">
                     <Col md={{ span: 5 }} style={{ color: '#fff' }}>
@@ -101,6 +101,13 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                             }}
                         >
                             <ButtonToolbar>
+                                <Button
+                                    href="/overview"
+                                    variant="primary"
+                                    className="mr-4"
+                                >
+                                    Learn more about HTAN
+                                </Button>
                                 <Button
                                     href="/explore"
                                     variant="primary"
