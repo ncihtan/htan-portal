@@ -2,6 +2,7 @@ import React from 'react';
 import fs from 'fs';
 import process from 'process';
 import path from 'path';
+import zlib from 'zlib';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
@@ -48,7 +49,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         getContent('card-6', 'homepage'),
     ]);
 
-    const processedSynapseData = await fs.readFileSync(path.join(process.cwd(), 'public/processed_syn_data.json'), 'utf8')
+    const processedSynapseData = await zlib.gunzipSync(await fs.readFileSync(path.join(process.cwd(), 'public/processed_syn_data.json.gz'))).toString()
     const files = fillInEntities(
         (JSON.parse(processedSynapseData) as any) as LoadDataResult
     );

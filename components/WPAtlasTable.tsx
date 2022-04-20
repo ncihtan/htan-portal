@@ -333,6 +333,13 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                             <>
                                 {/* Outddated Cellxgene Instance */}
                                 {/*<CellxgeneViewerLink url={'https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/'} count={1} />*/}
+                                <Tooltip overlay="cellxgene temporarily disabled (update pending)">
+                                    <a
+                                        style={{paddingRight:8,fontFamily:"monospace",textDecoration:"none",cursor:"no-drop"}}
+                                    >
+                                        {'\u00A0'}{'\u00A0'}{1} <img width={20} style={{filter: 'grayscale(1)'}} src={'https://pbs.twimg.com/profile_images/1285714433981812736/-wuBO62N_400x400.jpg'} />
+                                    </a>
+                                </Tooltip>
                                 <AutoMinervaViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'} count={20} />
                             </>
                         );
