@@ -10,12 +10,13 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import React from 'react';
 import Head from 'next/head';
-import { WPAtlas } from '../../types';
+import { Category, WPAtlas } from '../../types';
 import { GetStaticProps } from 'next';
 import { Button } from 'react-bootstrap';
 import { getExplorePageURL } from '../../lib/helpers';
 import { AttributeNames, SynapseAtlas } from '../../lib/types';
 import { ExploreTab } from '../../components/ExploreTabs';
+import { AtlasWrapper } from '../../components/Atlas';
 
 interface IPostProps {
     synapseAtlasData: Pick<SynapseAtlas, 'htan_id' | 'htan_name'>[];
@@ -26,7 +27,17 @@ interface IPostProps {
 const PostContent: React.FunctionComponent<{
     wpAtlas: WPAtlas;
     router: NextRouter;
-}> = ({ wpAtlas, router }) => {
+    synapseAtlas?: SynapseAtlas
+}> = ({ wpAtlas, router, synapseAtlas }) => {
+    let mergedClinicalAndBiospecimenData: Category;
+    if (synapseAtlas) {
+        mergedClinicalAndBiospecimenData = Object.assign(
+            {},
+            synapseAtlas.clinical,
+            synapseAtlas.biospecimen
+        );
+    }
+
     return (
         <Container>
             <Row>
@@ -80,6 +91,26 @@ const PostContent: React.FunctionComponent<{
                                 Publications
                             </Nav.Link>
                         </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="clinBiospecimen">
+                                Clinical Biospecimen
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="derivedData">
+                                Derived Data
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="imagingData">
+                                Imaging Data
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="primaryNGS">
+                                Primary NGS
+                            </Nav.Link>
+                        </Nav.Item>
                     </Nav>
 
                     <Tab.Content>
@@ -122,6 +153,50 @@ const PostContent: React.FunctionComponent<{
                                 )}
                             </Container>
                         </Tab.Pane>
+                        {synapseAtlas && (
+                            <>
+                                <Tab.Pane eventKey="clinBiospecimen">
+                                    <Container className="mt-3">
+                                        <AtlasWrapper
+                                            category={
+                                                mergedClinicalAndBiospecimenData!
+                                            }
+                                        />
+                                    </Container>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="derivedData">
+                                    <Container className="mt-3">
+                                        <AtlasWrapper
+                                            category={synapseAtlas.assayData}
+                                        />
+                                    </Container>
+                                </Tab.Pane>
+                                {synapseAtlas.imagingData && (
+                                    <Tab.Pane eventKey="imagingData">
+                                        <Container className="mt-3">
+                                            <AtlasWrapper
+                                                category={
+                                                    synapseAtlas.imagingData
+                                                }
+                                            />
+                                        </Container>
+                                    </Tab.Pane>
+                                )}
+                            </>
+                        )}
+                        <Tab.Pane eventKey="primaryNGS">
+                            <Container className="mt-3">
+                                {wpAtlas ? (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: wpAtlas.primary_ngs,
+                                        }}
+                                    />
+                                ) : (
+                                    'Loading...'
+                                )}
+                            </Container>
+                        </Tab.Pane>
                     </Tab.Content>
                 </Tab.Container>
             </Row>
@@ -141,8 +216,9 @@ const Post: React.FunctionComponent<IPostProps> = ({
     });
 
     const synapseAtlas = synapseAtlasData.find((a) => {
-        return a.htan_id === htan_id;
+        return a.htan_id.toLowerCase() === htan_id.toLowerCase();
     });
+    debugger;
 
     const content = postData ? (
         <PostContent wpAtlas={postData} router={router} />
