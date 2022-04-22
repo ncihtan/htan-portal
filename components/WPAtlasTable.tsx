@@ -245,14 +245,17 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_id in atlasMetadata) {
                         return (
-                            <button
-                                className={'btn btn-sm'}
-                                onClick={action(() => {
-                                    this.metadataModalAtlas = atlas;
-                                })}
-                            >
-                                <FontAwesomeIcon icon={faDownload} />
-                            </button>
+                            <Tooltip overlay="Download of metadata temporarily disabled. Will be back by end of April.">
+                                <button
+                                    className={'btn btn-sm'}
+                                    style={{cursor:"no-drop"}}
+                                    /*onClick={action(() => {
+                                        this.metadataModalAtlas = atlas;
+                                    })}*/
+                                >
+                                    <FontAwesomeIcon icon={faDownload} />
+                                </button>
+                            </Tooltip>
                         );
                     } else {
                         return <span>None</span>;
