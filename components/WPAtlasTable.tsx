@@ -245,7 +245,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_id in atlasMetadata) {
                         return (
-                            <Tooltip overlay="Download of metadata temporarily disabled. Will be back by end of April.">
+                            <Tooltip overlay="Download of metadata temporarily disabled. Will be back soon.">
                                 <button
                                     className={'btn btn-sm'}
                                     style={{cursor:"no-drop"}}
