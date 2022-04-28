@@ -256,7 +256,6 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         return (
                             <button
                                 className={'btn btn-sm'}
-                                style={{cursor:"no-drop"}}
                                 onClick={action(() => {
                                     this.metadataModalAtlas = atlas;
                                 })}
