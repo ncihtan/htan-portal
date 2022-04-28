@@ -199,7 +199,7 @@ def generate_json(include_at_risk_populations, include_released_only):
 
             number_of_rows_without_synapse_id = pd.isnull(manifest_df["entityId"]).sum()
             if number_of_rows_without_synapse_id > 0:
-                logging.error("skipping " + number_of_rows_without_synapse_id + "rows without synapse id in " + manifest_path)
+                logging.error("skipping {} rows without synapse id in {}" .format(number_of_rows_without_synapse_id, manifest_path))
                 manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
 
             # replace race for protected populations
@@ -237,7 +237,15 @@ def generate_json(include_at_risk_populations, include_released_only):
             # add metadata file
             # TODO: note that metadata from excluded images could still be in
             # the raw manifest files, so numItems might be bigger
-            portal_metadata.setdefault(center_id.upper(), {})[component] = {"synapseId":dataset["id"],"numItems":len(manifest_df)}
+            center_metadata = {"component": component, "synapseId":dataset["id"],"numItems":len(manifest_df)}
+            try:
+                portal_metadata[center_id.upper()] += [center_metadata]
+            except KeyError:
+                portal_metadata[center_id.upper()] = [center_metadata]
+            # store normalized metadata for export
+            # result is manually uploaded to surge.sh (TODO: find a better way)
+            os.makedirs("metadata", exist_ok=True)
+            manifest_df.to_csv("metadata/{}.csv".format(dataset["id"]), index=False)
 
 
             for i, row in manifest_df.iterrows():
