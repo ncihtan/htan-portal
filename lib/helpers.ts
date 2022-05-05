@@ -125,10 +125,7 @@ function mergeCaseData(
 export async function fetchData(): Promise<LoadDataResult> {
     // in development we use local processed syn data. In production we use
     // other URL (too large to serve thru next max 250MB limit)
-    const processedSynURL =
-        process.env.NODE_ENV === 'development'
-            ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/data.json';
+    const processedSynURL = '/processed_syn_data.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();
