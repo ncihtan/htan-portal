@@ -214,7 +214,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
     get columns() {
         return [
             {
-                name: 'Atlas Name',
+                name: 'Lab Name',
                 selector: (atlas: Atlas) => atlas.htan_name,
                 grow: 1.25,
                 wrap: true,

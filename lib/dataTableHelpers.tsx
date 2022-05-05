@@ -140,9 +140,9 @@ export function getAtlasColumn(atlases: Atlas[]) {
     const atlasMap = _.keyBy(atlases, (a) => a.htan_id);
 
     return {
-        id: 'Atlas Name',
+        id: 'Lab Name',
         name: (
-            <Tooltip overlay="Name of the Atlas">
+            <Tooltip overlay="Name of the Lab">
                 <span>Atlas Name</span>
             </Tooltip>
         ),

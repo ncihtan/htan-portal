@@ -93,7 +93,7 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     },
     [AttributeNames.AtlasName]: {
         path: 'atlas_name',
-        displayName: 'Atlas',
+        displayName: 'Group',
     },
     [AttributeNames.Stage]: {
         getValues: getCaseValues('AJCCPathologicStage'),
