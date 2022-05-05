@@ -22,7 +22,7 @@ const HtanNavbar = () => (
     <Navbar bg="nav-purple" variant="dark" expand="lg" className={'main-nav'}>
         <Navbar.Brand href="/">
             <img
-                src="/Updated-HTAN-Text-Logo.png"
+                src="/gray_logo.png"
                 className={'htanlogo'}
                 alt="HTAN Data Portal"
             />
@@ -42,9 +42,6 @@ const HtanNavbar = () => (
             {/*        ? '#Disable Preview#'*/}
             {/*        : '#Enable Preview#'}*/}
             {/*</Nav.Link>*/}
-            <Nav.Link href="https://humantumoratlas.org/">
-                HTAN Main Site
-            </Nav.Link>
         </Nav>
     </Navbar>
 );

@@ -17,7 +17,6 @@ export interface ToolsProps {
 const Tools = (data: ToolsProps) => {
     return (
         <>
-            <PreReleaseBanner />
             <PageWrapper>
                 <Container>
                     <Row>

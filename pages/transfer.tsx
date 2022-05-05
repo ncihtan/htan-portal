@@ -17,7 +17,6 @@ export interface TransferProps {
 const Transfer = (data: TransferProps) => {
     return (
         <>
-            <PreReleaseBanner />
             <PageWrapper>
                 <Container>
                     <Row>

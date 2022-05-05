@@ -19,7 +19,6 @@ import {
 const Home = (data: IHomePropsProps) => {
     return (
         <>
-            <PreReleaseBanner />
             <PageWrapper>
                 <HomePage {...data} />
             </PageWrapper>

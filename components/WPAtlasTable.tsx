@@ -221,33 +221,6 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 sortable: true,
             },
             {
-                name: 'Lead Institution',
-                selector: (atlas: Atlas) => atlas.WPAtlas.lead_institutions,
-                grow: 2.5,
-                wrap: true,
-                sortable: true,
-            },
-            {
-                name: 'Atlas Description',
-                selector: 'WPAtlas.title.rendered',
-                format: (atlas: Atlas) =>
-                    atlas.WPAtlas ? (
-                        <span>
-                            <a
-                                target="_blank"
-                                href={`https://humantumoratlas.org/${atlas.htan_id}`}
-                            >
-                                {atlas.WPAtlas.title.rendered}
-                            </a>
-                        </span>
-                    ) : (
-                        'N/A'
-                    ),
-                grow: 2.5,
-                wrap: true,
-                sortable: true,
-            },
-            {
                 name: 'Metadata',
                 grow: 0.5,
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
@@ -361,6 +334,14 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     } else if (atlas.htan_name === 'HTAN CHOP') {
                         return (
                             <CellxgeneViewerLink url={'/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file'} count={3} />
+                        );
+                    } else if (atlas.htan_name === 'Brugge Lab') {
+                        return (
+                            <CellxgeneViewerLink url={'http://localhost:5005'} count={1} />
+                        );
+                    } else if (atlas.htan_name === 'Drapkin Lab') {
+                        return (
+                            <CBioPortalViewerLink url={'https://triage.cbioportal.mskcc.org/study/summary?id=ovarian_drapkin_2022'} count={1} />
                         );
                     } else {
                         return null;

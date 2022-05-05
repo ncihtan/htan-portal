@@ -405,8 +405,6 @@ interface IFilterPageProps {
 const FilterPage = (props: IFilterPageProps) => {
     return (
         <>
-            <PreReleaseBanner />
-
             <PageWrapper>
                 <Search router={props.router} wpAtlases={props.wpAtlases} />
             </PageWrapper>

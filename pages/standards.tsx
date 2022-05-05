@@ -18,7 +18,6 @@ export interface StandardsProps {
 const Standards = (data: StandardsProps) => {
     return (
         <>
-            <PreReleaseBanner />
             <PageWrapper>
                 <Container>
                     <Row>

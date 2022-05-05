@@ -28,18 +28,18 @@ def generate_json(include_at_risk_populations, include_released_only):
 
     # map: HTAN center names to HTAN IDs
     htan_centers = {
-                    "HTAN HTAPP": "hta1",
-                    "PCAPP Pilot Project": "hta2",
+                    #"HTAN HTAPP": "hta1",
+                    #"PCAPP Pilot Project": "hta2",
                     "HTAN BU": "hta3",
                     "HTAN CHOP": "hta4",
-                    "HTAN DFCI": "hta5",
-                    "HTAN Duke": "hta6",
-                    "HTAN HMS": "hta7",
-                    "HTAN MSK": "hta8",
-                    "HTAN OHSU": "hta9",
-                    "HTAN Stanford": "hta10",
-                    "HTAN Vanderbilt": "hta11",
-                    "HTAN WUSTL": "hta12",
+                    #"HTAN DFCI": "hta5",
+                    #"HTAN Duke": "hta6",
+                    #"HTAN HMS": "hta7",
+                    #"HTAN MSK": "hta8",
+                    #"HTAN OHSU": "hta9",
+                    #"HTAN Stanford": "hta10",
+                    #"HTAN Vanderbilt": "hta11",
+                    #"HTAN WUSTL": "hta12",
                     # exclude TNPs for now
                     # "HTAN TNP SARDANA": "hta13",
                     # "HTAN TNP - TMA": "hta14"
