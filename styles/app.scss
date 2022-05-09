@@ -282,6 +282,10 @@ table {
     padding-top: 10px;
     margin: auto;
     line-height: 30px;
+
+    p {
+        display: flex;
+    }
 }
 
 .explorePage {
@@ -396,5 +400,9 @@ table {
 
 .atlas-array img {
     width: 240px;
+    margin: 0 15px 15px 0;
+}
+
+.headshot {
     margin: 0 15px 15px 0;
 }
