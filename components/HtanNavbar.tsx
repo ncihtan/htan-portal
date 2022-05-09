@@ -44,15 +44,20 @@ const NavSection: React.FunctionComponent<{
 
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
+
         <NavSection text={'About HTAN'}>
-            <NavDropdown.Item href="/overview">Overview</NavDropdown.Item>
+            <NavDropdown.Item href="/overview">
+                Overview
+            </NavDropdown.Item>
             {/*<NavDropdown.Item href="/htan-dcc">
                 Data Coordinating Center
             </NavDropdown.Item>*/}
             <NavDropdown.Item href="/research-network">
                 Research Network
             </NavDropdown.Item>
-            <NavDropdown.Item href="/consortium">Consortium</NavDropdown.Item>
+            <NavDropdown.Item href="/consortium">
+                Consortium
+            </NavDropdown.Item>
             <NavDropdown.Item href="/resources">Resources</NavDropdown.Item>
             <NavDropdown.Item href="/publications">
                 Publications
@@ -65,38 +70,40 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
                 Data Standards
             </NavDropdown.Item>
             <Dropdown.Divider />
-            <NavDropdown.Item href="https://www.protocols.io/workspaces/ncihtan">
+            <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
                 Protocols.io
-            </NavDropdown.Item>
+            </Nav.Link>
         </NavSection>,
 
         <NavSection text={'Analyze Data'}>
-            <NavDropdown.Item href="/explore">Explore</NavDropdown.Item>
-            <NavDropdown.Item href="/tools">Analysis Tools</NavDropdown.Item>
+            <NavDropdown.Item href="/explore">
+                Explore
+            </NavDropdown.Item>
+            <NavDropdown.Item href="/tools">
+                Analysis Tools
+            </NavDropdown.Item>
         </NavSection>,
 
         <NavSection text={'Submit Data'}>
             <NavDropdown.Item href="/transfer">Data Transfer</NavDropdown.Item>
             <Dropdown.Divider />
-            <NavDropdown.Item href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1">
+            <Nav.Link href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1">
                 Service Desk
-            </NavDropdown.Item>
+            </Nav.Link>
         </NavSection>,
 
         <NavSection text={'Support'}>
-            <NavDropdown.Item href="mailto:htan@googlegroups.com">
+            <Nav.Link href="mailto:htan@googlegroups.com">
                 htan@googlegroups.com
-            </NavDropdown.Item>
+            </Nav.Link>
         </NavSection>,
 
         <NavSection text={'News'}>
-            <NavDropdown.Item href="/data-updates">
-                Data Updates
-            </NavDropdown.Item>
+            <NavDropdown.Item href="/data-updates">Data Updates</NavDropdown.Item>
             <Dropdown.Divider />
-            <NavDropdown.Item href="https://twitter.com/ncihtan">
+            <Nav.Link href="https://twitter.com/ncihtan">
                 Twitter
-            </NavDropdown.Item>
+            </Nav.Link>
         </NavSection>,
     ];
 
