@@ -104,20 +104,20 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         >
                             <ButtonToolbar>
                                 <Button
-                                    href="/overview"
-                                    variant="primary"
-                                    className="mr-4"
-                                    size="lg"
-                                >
-                                    Learn more about HTAN
-                                </Button>
-                                <Button
                                     href="/explore"
                                     variant="primary"
                                     className="mr-4"
                                     size="lg"
                                 >
                                     Explore latest Data
+                                </Button>
+                                <Button
+                                    href="/overview"
+                                    variant="primary"
+                                    className="mr-4"
+                                    size="lg"
+                                >
+                                    Learn more about HTAN
                                 </Button>
                             </ButtonToolbar>
                         </div>
