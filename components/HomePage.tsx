@@ -1,20 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import { WPAtlas } from '../types';
-import styles from './homeStyles.module.scss';
-import { EntityReport, getAtlasPageURL } from '../lib/helpers';
 import { Helmet } from 'react-helmet';
+import { ScalePropType } from 'victory-core';
+import { WPAtlas } from '../types';
+import { EntityReport } from '../lib/helpers';
+import {
+    EntityReportByAttribute,
+    computeUniqueAttributeValueCount,
+} from '../lib/entityReportHelpers';
+import SummaryChart from './SummaryChart';
+import Image from 'next/image';
+import htanMarkerPaper from '../public/HTAN-Marker-Paper-Table.png';
 
 export interface IHomePropsProps {
     hero_blurb: string;
     cards: any[];
     atlases: WPAtlas[];
     synapseCounts: EntityReport[];
+    organSummary: EntityReportByAttribute[];
+    assaySummary: EntityReportByAttribute[];
 }
 
 function dashboardIcon(text: string, description: string) {
@@ -30,35 +40,65 @@ function dashboardIcon(text: string, description: string) {
     );
 }
 
+const chartScale: { x: ScalePropType; y: ScalePropType } = {
+    x: 'linear',
+    y: 'log',
+};
+
+// starting from y=1 doesn't work when case count=1.
+// so we start from a slightly smaller value for a better bar chart visualization
+const minDomain = { y: 0.95 };
+
+function dependentAxisTickFormat(t: number) {
+    // only show tick labels for the integer powers of 10
+    return _.isInteger(Math.log10(t)) ? t : '';
+}
+
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     hero_blurb,
     cards,
     synapseCounts,
     atlases,
+    organSummary,
+    assaySummary,
 }) => {
     return (
         <>
-            <Helmet>
-                <style>
-                    {`#pageWrapper {
-                   background: #eeeeee;
-               } `}
-                </style>
-            </Helmet>
             <Jumbotron
-                className={'text-center'}
+                className={'text-center position-relative'}
                 style={{ borderRadius: '0px', marginBottom: '0px' }}
             >
-                <Row className="justify-content-md-center mt-5">
-                    <Col md={{ span: 5 }} style={{ color: '#fff' }}>
-                        <h1>Human Tumor Atlas Network Data Portal</h1>
+                <div
+                    className={'position-absolute'}
+                    style={{
+                        bottom: 10,
+                        right: 10,
+                        color: '#fff',
+                    }}
+                >
+                    <a style={{color:'white'}} href="/data-updates">Data Release V2 (Last updated 2022-03-30)</a>
+                </div>
+                <Row className="justify-content-md-center">
+                    <Col md={{ span: 5 }} style={{ color: '#fff', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 25, padding: 20 }}>
+                        <h1 style={{ fontSize: 40, color: '#24cad5' }}>
+                            Human Tumor Atlas Network
+                        </h1>
                         <br />
-                        <span
-                            dangerouslySetInnerHTML={{ __html: hero_blurb }}
-                        ></span>
+
+                        <p style={{fontSize:20}}>
+                            HTAN is a National Cancer Institute (NCI)-funded
+                            Cancer Moonshot<sup>SM</sup> initiative to construct
+                            3-dimensional atlases of the dynamic cellular,
+                            morphological, and molecular features of human
+                            cancers as they evolve from precancerous lesions to
+                            advanced disease. (
+                            <span style={{fontStyle:"italic"}}><a style={{color:'#fff'}} href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">Cell April 2020</a></span>)
+                        </p>
+
                         <div
                             style={{
                                 display: 'flex',
+                                paddingTop: 10,
                                 justifyContent: 'center',
                             }}
                         >
@@ -67,22 +107,29 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                                     href="/explore"
                                     variant="primary"
                                     className="mr-4"
+                                    size="lg"
                                 >
-                                    Explore the Data
+                                    Explore latest Data
+                                </Button>
+                                <Button
+                                    href="/overview"
+                                    variant="primary"
+                                    className="mr-4"
+                                    size="lg"
+                                >
+                                    Learn more about HTAN
                                 </Button>
                             </ButtonToolbar>
                         </div>
                     </Col>
                 </Row>
-
-                <Row className="justify-content-md-center mt-3"></Row>
             </Jumbotron>
             <Container
                 fluid
                 style={{
                     backgroundColor: '#eee',
-                    paddingTop: '60px',
-                    paddingBottom: '60px',
+                    paddingTop: '20px',
+                    paddingBottom: '20px',
                 }}
             >
                 <Row className="justify-content-md-center">
@@ -90,6 +137,70 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         synapseCounts.map((report: EntityReport) =>
                             dashboardIcon(report.text, report.description)
                         )}
+                </Row>
+            </Container>
+            {/* <Container
+                fluid
+                style={{
+                    backgroundColor: '#ddd',
+                    color: 'black',
+                    padding: '5px',
+                }}
+            >
+                <Row className="justify-content-md-center">
+                    <span>About this Release:</span>
+                </Row>
+            </Container> */}
+            <Container
+                fluid
+                style={{
+                    paddingTop: '20px',
+                    paddingBottom: '60px',
+                }}
+            >
+                <Row className="justify-content-md-center">
+                    <p style={{ fontSize: 'medium' }}>
+                        The latest HTAN data release includes tumors originating
+                        from{' '}
+                        <strong>
+                            {computeUniqueAttributeValueCount(organSummary)}
+                        </strong>{' '}
+                        primary tumor sites:
+                    </p>
+                </Row>
+                <Row className="pr-5 pl-5">
+                    <SummaryChart
+                        data={organSummary}
+                        dependentAxisEntityName="Case"
+                        stackedByCenter={false}
+                        scale={chartScale}
+                        minDomain={minDomain}
+                        dependentAxisTickFormat={dependentAxisTickFormat}
+                    />
+                </Row>
+                <Row className="justify-content-md-center">
+                    <p style={{ fontSize: 'medium' }}>
+                        The tumors were profiled with{' '}
+                        <strong>
+                            {computeUniqueAttributeValueCount(assaySummary)}
+                        </strong>{' '}
+                        different types of assays:
+                    </p>
+                </Row>
+                <Row className="pr-5 pl-5">
+                    <SummaryChart
+                        data={assaySummary}
+                        dependentAxisEntityName="Case"
+                        stackedByCenter={false}
+                        scale={chartScale}
+                        minDomain={minDomain}
+                        dependentAxisTickFormat={dependentAxisTickFormat}
+                    />
+                </Row>
+                <Row className="justify-content-md-center">
+                    <p style={{ fontSize: 'medium' }}>
+                        Many more profiled tumors will be available in the future. Stay tuned!
+                    </p>
                 </Row>
             </Container>
 

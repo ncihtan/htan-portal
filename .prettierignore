@@ -9,6 +9,8 @@
 *min.css
 *sh
 *yml
+*.jpg
+*.jpeg
 *json
 *md
 *bak
@@ -27,3 +29,4 @@ yarn.lock
 *.seg
 *.screenshottest
 node_modules/**
+*webp

@@ -15,6 +15,10 @@ import {
     fillInEntities,
     LoadDataResult,
 } from '../lib/helpers';
+import {
+    computeEntityReportByAssay,
+    computeEntityReportByOrgan,
+} from '../lib/entityReportHelpers';
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -56,6 +60,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
             cards: cards,
             atlases,
             synapseCounts: computeDashboardData(files),
+            organSummary: computeEntityReportByOrgan(files),
+            assaySummary: computeEntityReportByAssay(files),
         },
     };
 };
