@@ -47,6 +47,15 @@ const SynapseDataLink = (props: { id: string }) => (
     </a>
 );
 
+const MetaDataLink = (props: { id: string }) => (
+    <a
+        href={`https://htan-metadata.surge.sh/${props.id}.csv`}
+        download
+    >
+        {props.id}
+    </a>
+);
+
 const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalProps> = (
     props
 ) => {
@@ -72,21 +81,21 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                             </thead>
                             <tbody>
                                 {_.chain(atlasMetadata[props.atlas.htan_id])
-                                    .map((info, category) => ({
+                                    .map((info, index) => ({
                                         row: (
                                             <tr>
                                                 <td>
-                                                    <SynapseDataLink
+                                                    <MetaDataLink
                                                         id={info.synapseId}
                                                     />
                                                 </td>
-                                                <td>{category}</td>
+                                                <td>{info.component}</td>
                                                 <td>{info.numItems}</td>
                                             </tr>
                                         ),
-                                        category,
+                                        "component": info.component,
                                     }))
-                                    .sortBy((obj) => obj.category)
+                                    .sortBy((obj) => obj.component)
                                     .map((obj) => obj.row)
                                     .value()}
                             </tbody>
@@ -288,17 +297,14 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_id in atlasMetadata) {
                         return (
-                            <Tooltip overlay="Download of metadata temporarily disabled. Will be back soon.">
-                                <button
-                                    className={'btn btn-sm'}
-                                    style={{ cursor: 'no-drop' }}
-                                    /*onClick={action(() => {
-                                        this.metadataModalAtlas = atlas;
-                                    })}*/
-                                >
-                                    <FontAwesomeIcon icon={faDownload} />
-                                </button>
-                            </Tooltip>
+                            <button
+                                className={'btn btn-sm'}
+                                onClick={action(() => {
+                                    this.metadataModalAtlas = atlas;
+                                })}
+                            >
+                                <FontAwesomeIcon icon={faDownload} />
+                            </button>
                         );
                     } else {
                         return <span>None</span>;
