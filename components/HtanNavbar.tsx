@@ -44,6 +44,20 @@ const NavSection: React.FunctionComponent<{
 
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
+        <Nav.Link href="/explore">Explore</Nav.Link>,
+
+        <NavSection text={'About the Data'}>
+            <NavDropdown.Item href="/standards">
+                Data Standards
+            </NavDropdown.Item>
+            <NavDropdown.Item href="/tools">
+                Analysis Tools
+            </NavDropdown.Item>
+            <Dropdown.Divider />
+            <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
+                Protocols.io
+            </Nav.Link>
+        </NavSection>,
 
         <NavSection text={'About HTAN'}>
             <NavDropdown.Item href="/overview">
@@ -65,24 +79,6 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             {/*<NavDropdown.Item href="/authors">Authors</NavDropdown.Item>*/}
         </NavSection>,
 
-        <NavSection text={'About the Data'}>
-            <NavDropdown.Item href="/standards">
-                Data Standards
-            </NavDropdown.Item>
-            <Dropdown.Divider />
-            <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
-                Protocols.io
-            </Nav.Link>
-        </NavSection>,
-
-        <NavSection text={'Analyze Data'}>
-            <NavDropdown.Item href="/explore">
-                Explore
-            </NavDropdown.Item>
-            <NavDropdown.Item href="/tools">
-                Analysis Tools
-            </NavDropdown.Item>
-        </NavSection>,
 
         <NavSection text={'Submit Data'}>
             <NavDropdown.Item href="/transfer">Data Transfer</NavDropdown.Item>
