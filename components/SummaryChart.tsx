@@ -228,7 +228,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
     }
 
     get leftPadding() {
-        return 140;
+        return 150;
     }
 
     get topPadding() {
