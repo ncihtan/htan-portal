@@ -49,9 +49,9 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             <NavDropdown.Item href="/overview">
                 Overview
             </NavDropdown.Item>
-            {/*<NavDropdown.Item href="/htan-dcc">
+            <NavDropdown.Item href="/htan-dcc">
                 Data Coordinating Center
-            </NavDropdown.Item>*/}
+            </NavDropdown.Item>
             <NavDropdown.Item href="/research-network">
                 Research Network
             </NavDropdown.Item>
