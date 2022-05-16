@@ -79,24 +79,26 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     <a style={{color:'white'}} href="/data-updates">Data Release V2 (Last updated 2022-03-30)</a>
                 </div>
                 <Row className="justify-content-md-center">
-                    <Col md={{ span: 5 }} style={{ color: '#fff' }}>
-                        <h1 style={{ color: '#24cad5' }}>
+                    <Col md={{ span: 5 }} style={{ color: '#fff', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 25, padding: 20 }}>
+                        <h1 style={{ fontSize: 40, color: '#24cad5' }}>
                             Human Tumor Atlas Network
                         </h1>
                         <br />
 
-                        <p>
+                        <p style={{fontSize:20}}>
                             HTAN is a National Cancer Institute (NCI)-funded
                             Cancer Moonshot<sup>SM</sup> initiative to construct
                             3-dimensional atlases of the dynamic cellular,
                             morphological, and molecular features of human
                             cancers as they evolve from precancerous lesions to
-                            advanced disease.
+                            advanced disease. (
+                            <span style={{fontStyle:"italic"}}><a style={{color:'#fff'}} href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">Cell April 2020</a></span>)
                         </p>
 
                         <div
                             style={{
                                 display: 'flex',
+                                paddingTop: 10,
                                 justifyContent: 'center',
                             }}
                         >
@@ -105,6 +107,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                                     href="/overview"
                                     variant="primary"
                                     className="mr-4"
+                                    size="lg"
                                 >
                                     Learn more about HTAN
                                 </Button>
@@ -112,6 +115,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                                     href="/explore"
                                     variant="primary"
                                     className="mr-4"
+                                    size="lg"
                                 >
                                     Explore latest Data
                                 </Button>
@@ -195,26 +199,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 </Row>
                 <Row className="justify-content-md-center">
                     <p style={{ fontSize: 'medium' }}>
-                        We expect to profile many more tumors in the future:
-                    </p>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Image
-                        height={600}
-                        width={600}
-                        src={htanMarkerPaper}
-                        alt="HTAN Marker Paper"
-                    />
-                </Row>
-                <Row className="justify-content-md-center">
-                    <p style={{ paddingTop: 20 }} className={'text-center'}>
-                        Expected data described in <i>Cell April 2020</i>:&nbsp;
-                        <br />
-                        <a href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">
-                            The Human Tumor Atlas Network: Charting Tumor
-                            Transitions across Space and Time at Single-Cell
-                            Resolution
-                        </a>
+                        Many more profiled tumors will be available in the future. Stay tuned!
                     </p>
                 </Row>
             </Container>
