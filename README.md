@@ -21,6 +21,16 @@ cd ..
 ./node_modules/.bin/ncc run data/processSynapseJSON.ts  --transpile-only
 ```
 
+### Export to bucket
+At the moment all data is hosted on S3 for producion. This is because there is a file size limit for vercel. To update it:
+
+1. gzip file (note that it's already gzipped in the repo)
+1. Remove ".gz" extension so it's just json and rename to include current date in filename.
+3. Upload file to s3 bucket "htanfiles" (part of schultz AWS org)
+4. The file needs two meta settings:  `Content-Encloding=gzip` and `Content-Type=application/json`
+5. Once file is up, change path in
+`/lib/helpers.ts`
+
 ## Testing
 
 There are currently no automated tests, other than building the project, so be careful when merging to master
