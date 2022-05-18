@@ -76,7 +76,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         color: '#fff',
                     }}
                 >
-                    <a style={{color:'white'}} href="/data-updates">Data Release V2 (Last updated 2022-03-30)</a>
+                    <a style={{color:'white'}} href="/data-updates">Data Release V2 (Last updated 2022-05-18)</a>
                 </div>
                 <Row className="justify-content-md-center">
                     <Col md={{ span: 5 }} style={{ color: '#fff', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 25, padding: 20 }}>
