@@ -343,6 +343,10 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         return (
                             <CBioPortalViewerLink url={'https://triage.cbioportal.mskcc.org/study/summary?id=ovarian_drapkin_2022'} count={1} />
                         );
+                    } else if (atlas.htan_name === 'Ellisen Lab') {
+                        return (
+                            <CBioPortalViewerLink url={'https://triage.cbioportal.mskcc.org/study/summary?id=brca_ellisen_2022'} count={1} />
+                        );
                     } else {
                         return null;
                     }

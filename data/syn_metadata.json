@@ -82,5 +82,97 @@
             "synapseId": "syn26428844",
             "numItems": 9
         }
+    ],
+    "HTA10": [
+        {
+            "component": "Biospecimen",
+            "synapseId": "syn25539988",
+            "numItems": 205
+        },
+        {
+            "component": "Demographics",
+            "synapseId": "syn25540000",
+            "numItems": 16
+        },
+        {
+            "component": "Diagnosis",
+            "synapseId": "syn25540024",
+            "numItems": 16
+        },
+        {
+            "component": "Exposure",
+            "synapseId": "syn25540036",
+            "numItems": 16
+        },
+        {
+            "component": "FamilyHistory",
+            "synapseId": "syn25540048",
+            "numItems": 16
+        },
+        {
+            "component": "FollowUp",
+            "synapseId": "syn25540059",
+            "numItems": 16
+        },
+        {
+            "component": "Therapy",
+            "synapseId": "syn25540068",
+            "numItems": 16
+        },
+        {
+            "component": "BulkRNA-seqLevel1",
+            "synapseId": "syn25540138",
+            "numItems": 338
+        },
+        {
+            "component": "BulkDNALevel1",
+            "synapseId": "syn25540165",
+            "numItems": 108
+        },
+        {
+            "component": "ScRNA-seqLevel1",
+            "synapseId": "syn25540295",
+            "numItems": 384
+        },
+        {
+            "component": "ScATAC-seqLevel1",
+            "synapseId": "syn25540307",
+            "numItems": 640
+        },
+        {
+            "component": "OtherAssay",
+            "synapseId": "syn25540329",
+            "numItems": 176
+        },
+        {
+            "component": "OtherAssay",
+            "synapseId": "syn25540335",
+            "numItems": 360
+        },
+        {
+            "component": "OtherAssay",
+            "synapseId": "syn25540340",
+            "numItems": 392
+        },
+        {
+            "component": "OtherAssay",
+            "synapseId": "syn27352927",
+            "numItems": 13
+        },
+        {
+            "component": "OtherAssay",
+            "synapseId": "syn27352980",
+            "numItems": 159
+        },
+        {
+            "component": "ScRNA-seqLevel2",
+            "synapseId": "syn27353183",
+            "numItems": 128
+        },
+        {
+            "component": "ScRNA-seqLevel3",
+            "synapseId": "syn27353220",
+            "numItems": 192
+        }
     ]
 }

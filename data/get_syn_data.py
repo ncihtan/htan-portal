@@ -37,7 +37,7 @@ def generate_json(include_at_risk_populations, include_released_only):
                     #"HTAN HMS": "hta7",
                     #"HTAN MSK": "hta8",
                     #"HTAN OHSU": "hta9",
-                    #"HTAN Stanford": "hta10",
+                    "HTAN Stanford": "hta10",
                     #"HTAN Vanderbilt": "hta11",
                     #"HTAN WUSTL": "hta12",
                     # exclude TNPs for now

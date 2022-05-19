@@ -30,6 +30,7 @@
     "better-react-spinkit": "^2.0.4",
     "bootstrap": "^4.4.1",
     "global": "^4.4.0",
+    "gray-matter": "^4.0.3",
     "jmespath": "^0.15.0",
     "jquery": "^3.5.1",
     "lodash": "^4.17.21",
