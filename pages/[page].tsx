@@ -1,6 +1,5 @@
 import { getAllPages, getPageByPageName } from '../lib/pageUtils';
 import matter from 'gray-matter';
-import PreReleaseBanner from '../components/PreReleaseBanner';
 import React from 'react';
 import PageWrapper from '../components/PageWrapper';
 import Container from 'react-bootstrap/Container';
@@ -26,7 +25,6 @@ export const getStaticProps: GetStaticProps = async function getStaticProps(
 function Page({ html }: any) {
     return (
         <>
-            <PreReleaseBanner />
             <PageWrapper>
                 <Container>
                     <Row className={'contentWrapper'}>
