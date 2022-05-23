@@ -47,3 +47,13 @@ export interface WPAtlas {
     short_description: string;
     home_image: { guid: string };
 }
+
+export interface PublicationData {
+    title: string;
+    description: string;
+}
+
+export interface Publication {
+    id: string;
+    data: publicationData;
+}
