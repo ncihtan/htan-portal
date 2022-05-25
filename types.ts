@@ -1,3 +1,6 @@
+import { DataSchemaData } from './lib/dataSchemaHelpers';
+import { Atlas, Entity } from './lib/helpers';
+
 export interface CmsData {
     slug: string;
     content: {
@@ -48,12 +51,23 @@ export interface WPAtlas {
     home_image: { guid: string };
 }
 
+export interface Institute {
+    name: string;
+    link?: string;
+}
+
 export interface PublicationData {
     title: string;
-    description: string;
+    leadInstitute: Institute;
+    abstract: string;
+    synapseAtlas: Atlas;
+    bopspeciments: Entity[];
+    schemaDataById: {
+        [schemaDataId: string]: DataSchemaData;
+    };
 }
 
 export interface Publication {
     id: string;
-    data: publicationData;
+    publicationData: PublicationData;
 }

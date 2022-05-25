@@ -1,0 +1,177 @@
+[
+    {
+        "htan_id": "HTA9",
+        "htan_name": "HTAN OHSU",
+        "WPAtlas": {
+            "id": 1201,
+            "date": "2020-04-09T13:09:52",
+            "date_gmt": "2020-04-09T17:09:52",
+            "guid": {
+                "rendered": "https://humantumoratlas.org/?post_type=atlas&#038;p=1201"
+            },
+            "modified": "2021-02-09T13:14:21",
+            "modified_gmt": "2021-02-09T18:14:21",
+            "slug": "ohsu",
+            "status": "publish",
+            "type": "atlas",
+            "link": "https://humantumoratlas.org/atlas/ohsu/",
+            "title": {
+                "rendered": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers"
+            },
+            "content": {
+                "rendered": "",
+                "protected": false
+            },
+            "featured_media": 0,
+            "template": "",
+            "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v18.4.1 - https://yoast.com/wordpress/plugins/seo/ -->\n<title>Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network</title>\n<meta name=\"robots\" content=\"noindex, nofollow\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network\" />\n<meta property=\"og:url\" content=\"https://humantumoratlas.org/atlas/ohsu/\" />\n<meta property=\"og:site_name\" content=\"Human Tumor Atlas Network\" />\n<meta property=\"article:modified_time\" content=\"2021-02-09T18:14:21+00:00\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebSite\",\"@id\":\"https://humantumoratlas.org/#website\",\"url\":\"https://humantumoratlas.org/\",\"name\":\"Human Tumor Atlas Network\",\"description\":\"\",\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://humantumoratlas.org/?s={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}],\"inLanguage\":\"en-US\"},{\"@type\":\"WebPage\",\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#webpage\",\"url\":\"https://humantumoratlas.org/atlas/ohsu/\",\"name\":\"Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network\",\"isPartOf\":{\"@id\":\"https://humantumoratlas.org/#website\"},\"datePublished\":\"2020-04-09T17:09:52+00:00\",\"dateModified\":\"2021-02-09T18:14:21+00:00\",\"breadcrumb\":{\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://humantumoratlas.org/atlas/ohsu/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://humantumoratlas.org/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers\"}]}]}</script>\n<!-- / Yoast SEO plugin. -->",
+            "yoast_head_json": {
+                "title": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network",
+                "robots": {
+                    "index": "noindex",
+                    "follow": "nofollow"
+                },
+                "og_locale": "en_US",
+                "og_type": "article",
+                "og_title": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network",
+                "og_url": "https://humantumoratlas.org/atlas/ohsu/",
+                "og_site_name": "Human Tumor Atlas Network",
+                "article_modified_time": "2021-02-09T18:14:21+00:00",
+                "twitter_card": "summary_large_image",
+                "schema": {
+                    "@context": "https://schema.org",
+                    "@graph": [
+                        {
+                            "@type": "WebSite",
+                            "@id": "https://humantumoratlas.org/#website",
+                            "url": "https://humantumoratlas.org/",
+                            "name": "Human Tumor Atlas Network",
+                            "description": "",
+                            "potentialAction": [
+                                {
+                                    "@type": "SearchAction",
+                                    "target": {
+                                        "@type": "EntryPoint",
+                                        "urlTemplate": "https://humantumoratlas.org/?s={search_term_string}"
+                                    },
+                                    "query-input": "required name=search_term_string"
+                                }
+                            ],
+                            "inLanguage": "en-US"
+                        },
+                        {
+                            "@type": "WebPage",
+                            "@id": "https://humantumoratlas.org/atlas/ohsu/#webpage",
+                            "url": "https://humantumoratlas.org/atlas/ohsu/",
+                            "name": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network",
+                            "isPartOf": {
+                                "@id": "https://humantumoratlas.org/#website"
+                            },
+                            "datePublished": "2020-04-09T17:09:52+00:00",
+                            "dateModified": "2021-02-09T18:14:21+00:00",
+                            "breadcrumb": {
+                                "@id": "https://humantumoratlas.org/atlas/ohsu/#breadcrumb"
+                            },
+                            "inLanguage": "en-US",
+                            "potentialAction": [
+                                {
+                                    "@type": "ReadAction",
+                                    "target": [
+                                        "https://humantumoratlas.org/atlas/ohsu/"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "@type": "BreadcrumbList",
+                            "@id": "https://humantumoratlas.org/atlas/ohsu/#breadcrumb",
+                            "itemListElement": [
+                                {
+                                    "@type": "ListItem",
+                                    "position": 1,
+                                    "name": "Home",
+                                    "item": "https://humantumoratlas.org/"
+                                },
+                                {
+                                    "@type": "ListItem",
+                                    "position": 2,
+                                    "name": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "jetpack_likes_enabled": true,
+            "jetpack_sharing_enabled": true,
+            "htan_id": "hta9",
+            "synapse_id": "",
+            "atlas_type": "Other",
+            "lead_institutions": "Oregon Health & Science University (OHSU)",
+            "short_description": "This is a short description of the atlas.  It should be limited to a couple sentences.",
+            "atlas_overview": "OHSU Overview...",
+            "abstract": "Mechanisms of therapeutic resistance and vulnerability evolve in metastatic cancers as tumor cells and extrinsic microenvironmental influences change during treatment. To support the development of methods for identifying these mechanisms in individual people, here we present an omic and multidimensional spatial (OMS) atlas generated from four serial biopsies of an individual with metastatic breast cancer during 3.5 years of therapy. This resource links detailed, longitudinal clinical metadata that includes treatment times and doses, anatomic imaging, and blood-based response measurements to clinical and exploratory analyses, which includes comprehensive DNA, RNA, and protein profiles; images of multiplexed immunostaining; and 2- and 3-dimensional scanning electron micrographs. These data report aspects of heterogeneity and evolution of the cancer genome, signaling pathways, immune microenvironment, cellular composition and organization, and ultrastructure. We present illustrative examples of how integrative analyses of these data reveal potential mechanisms of response and resistance and suggest novel therapeutic vulnerabilities.",
+            "data_overview": "",
+            "publications": "",
+            "primary_ngs": "",
+            "home_image": {
+                "ID": "1513",
+                "post_author": "156972727",
+                "post_date": "2021-02-08 17:34:17",
+                "post_date_gmt": "2021-02-08 22:34:17",
+                "post_content": "",
+                "post_title": "example_1-1",
+                "post_excerpt": "",
+                "post_status": "inherit",
+                "comment_status": "closed",
+                "ping_status": "closed",
+                "post_password": "",
+                "post_name": "example_1-1",
+                "to_ping": "",
+                "pinged": "",
+                "post_modified": "2021-02-09 13:14:22",
+                "post_modified_gmt": "2021-02-09 18:14:22",
+                "post_content_filtered": "",
+                "post_parent": "1201",
+                "guid": "https://humantumoratlas.org/wp-content/uploads/2020/04/example_1-1.jpg",
+                "menu_order": "0",
+                "post_type": "attachment",
+                "post_mime_type": "image/jpeg",
+                "comment_count": "0",
+                "pod_item_id": "1513"
+            },
+            "amp_enabled": true,
+            "_links": {
+                "self": [
+                    {
+                        "href": "https://humantumoratlas.org/wp-json/wp/v2/atlas/1201"
+                    }
+                ],
+                "collection": [
+                    {
+                        "href": "https://humantumoratlas.org/wp-json/wp/v2/atlas"
+                    }
+                ],
+                "about": [
+                    {
+                        "href": "https://humantumoratlas.org/wp-json/wp/v2/types/atlas"
+                    }
+                ],
+                "wp:attachment": [
+                    {
+                        "href": "https://humantumoratlas.org/wp-json/wp/v2/media?parent=1201"
+                    }
+                ],
+                "curies": [
+                    {
+                        "name": "wp",
+                        "href": "https://api.w.org/{rel}",
+                        "templated": true
+                    }
+                ]
+            }
+        },
+        "num_biospecimens": 65,
+        "num_cases": 1
+    }
+]

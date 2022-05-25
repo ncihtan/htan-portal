@@ -5,318 +5,70 @@ import PreReleaseBanner from '../../components/PreReleaseBanner';
 import { GetStaticProps } from 'next';
 import { Publication } from '../../types';
 import PageWrapper from '../../components/PageWrapper';
-import { Nav, Tab } from 'react-bootstrap';
 import {
     getAllPublicationIds,
     getPublicationData,
 } from '../../lib/publications';
+import { useRouter } from 'next/router';
+import PublicationTabs from './PublicationTabs';
 
-const PublicationPage = (publication: Publication) => {
-    console.log(publication);
+const PublicationPage = (props: { data: Publication }) => {
+    console.log(props);
+    const router = useRouter();
 
     return (
         <>
             <PreReleaseBanner />
             <PageWrapper>
                 <Container>
-                    <Row>
-                        <h2>{publication.data.publicationData.title}</h2>
-                        <p>
-                            {publication.data.publicationData.description}
-                            <br />
-                            Pubmed:{' '}
-                            <a href="https://pubmed.ncbi.nlm.nih.gov/35243422/">
-                                35243422
-                            </a>
-                        </p>
-                    </Row>
-                    <Row>
-                        <Tab.Container defaultActiveKey="abstract">
-                            <Nav variant="tabs" fill>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="abstract">
-                                        Abstract
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="datasets">
-                                        Datasets
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="participants">
-                                        Participants
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="biospecimens">
-                                        Biospecimens
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="imagingData">
-                                        Imaging Data
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="sequencing">
-                                        Sequencing
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="tools">Tools</Nav.Link>
-                                </Nav.Item>
-                            </Nav>
-
-                            <Tab.Content>
-                                <Tab.Pane eventKey="abstract">
-                                    <Container className="mt-3">
-                                        Mechanisms of therapeutic resistance and
-                                        vulnerability evolve in metastatic
-                                        cancers as tumor cells and extrinsic
-                                        microenvironmental influences change
-                                        during treatment. To support the
-                                        development of methods for identifying
-                                        these mechanisms in individual people,
-                                        here we present an omic and
-                                        multidimensional spatial (OMS) atlas
-                                        generated from four serial biopsies of
-                                        an individual with metastatic breast
-                                        cancer during 3.5 years of therapy. This
-                                        resource links detailed, longitudinal
-                                        clinical metadata that includes
-                                        treatment times and doses, anatomic
-                                        imaging, and blood-based response
-                                        measurements to clinical and exploratory
-                                        analyses, which includes comprehensive
-                                        DNA, RNA, and protein profiles; images
-                                        of multiplexed immunostaining; and 2-
-                                        and 3-dimensional scanning electron
-                                        micrographs. These data report aspects
-                                        of heterogeneity and evolution of the
-                                        cancer genome, signaling pathways,
-                                        immune microenvironment, cellular
-                                        composition and organization, and
-                                        ultrastructure. We present illustrative
-                                        examples of how integrative analyses of
-                                        these data reveal potential mechanisms
-                                        of response and resistance and suggest
-                                        novel therapeutic vulnerabilities.
-                                    </Container>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="datasets">
-                                    <Container className="mt-3">
-                                        Mechanisms of therapeutic resistance and
-                                        vulnerability evolve in metastatic
-                                        cancers as tumor cells and extrinsic
-                                        microenvironmental influences change
-                                        during treatment. To support the
-                                        development of methods for identifying
-                                        these mechanisms in individual people,
-                                        here we present an omic and
-                                        multidimensional spatial (OMS) atlas
-                                        generated from four serial biopsies of
-                                        an individual with metastatic breast
-                                        cancer during 3.5 years of therapy. This
-                                        resource links detailed, longitudinal
-                                        clinical metadata that includes
-                                        treatment times and doses, anatomic
-                                        imaging, and blood-based response
-                                        measurements to clinical and exploratory
-                                        analyses, which includes comprehensive
-                                        DNA, RNA, and protein profiles; images
-                                        of multiplexed immunostaining; and 2-
-                                        and 3-dimensional scanning electron
-                                        micrographs. These data report aspects
-                                        of heterogeneity and evolution of the
-                                        cancer genome, signaling pathways,
-                                        immune microenvironment, cellular
-                                        composition and organization, and
-                                        ultrastructure. We present illustrative
-                                        examples of how integrative analyses of
-                                        these data reveal potential mechanisms
-                                        of response and resistance and suggest
-                                        novel therapeutic vulnerabilities.
-                                    </Container>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="participants">
-                                    <Container className="mt-3">
-                                        Mechanisms of therapeutic resistance and
-                                        vulnerability evolve in metastatic
-                                        cancers as tumor cells and extrinsic
-                                        microenvironmental influences change
-                                        during treatment. To support the
-                                        development of methods for identifying
-                                        these mechanisms in individual people,
-                                        here we present an omic and
-                                        multidimensional spatial (OMS) atlas
-                                        generated from four serial biopsies of
-                                        an individual with metastatic breast
-                                        cancer during 3.5 years of therapy. This
-                                        resource links detailed, longitudinal
-                                        clinical metadata that includes
-                                        treatment times and doses, anatomic
-                                        imaging, and blood-based response
-                                        measurements to clinical and exploratory
-                                        analyses, which includes comprehensive
-                                        DNA, RNA, and protein profiles; images
-                                        of multiplexed immunostaining; and 2-
-                                        and 3-dimensional scanning electron
-                                        micrographs. These data report aspects
-                                        of heterogeneity and evolution of the
-                                        cancer genome, signaling pathways,
-                                        immune microenvironment, cellular
-                                        composition and organization, and
-                                        ultrastructure. We present illustrative
-                                        examples of how integrative analyses of
-                                        these data reveal potential mechanisms
-                                        of response and resistance and suggest
-                                        novel therapeutic vulnerabilities.
-                                    </Container>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="biospecimens">
-                                    <Container className="mt-3">
-                                        Mechanisms of therapeutic resistance and
-                                        vulnerability evolve in metastatic
-                                        cancers as tumor cells and extrinsic
-                                        microenvironmental influences change
-                                        during treatment. To support the
-                                        development of methods for identifying
-                                        these mechanisms in individual people,
-                                        here we present an omic and
-                                        multidimensional spatial (OMS) atlas
-                                        generated from four serial biopsies of
-                                        an individual with metastatic breast
-                                        cancer during 3.5 years of therapy. This
-                                        resource links detailed, longitudinal
-                                        clinical metadata that includes
-                                        treatment times and doses, anatomic
-                                        imaging, and blood-based response
-                                        measurements to clinical and exploratory
-                                        analyses, which includes comprehensive
-                                        DNA, RNA, and protein profiles; images
-                                        of multiplexed immunostaining; and 2-
-                                        and 3-dimensional scanning electron
-                                        micrographs. These data report aspects
-                                        of heterogeneity and evolution of the
-                                        cancer genome, signaling pathways,
-                                        immune microenvironment, cellular
-                                        composition and organization, and
-                                        ultrastructure. We present illustrative
-                                        examples of how integrative analyses of
-                                        these data reveal potential mechanisms
-                                        of response and resistance and suggest
-                                        novel therapeutic vulnerabilities.
-                                    </Container>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="imagingData">
-                                    <Container className="mt-3">
-                                        Mechanisms of therapeutic resistance and
-                                        vulnerability evolve in metastatic
-                                        cancers as tumor cells and extrinsic
-                                        microenvironmental influences change
-                                        during treatment. To support the
-                                        development of methods for identifying
-                                        these mechanisms in individual people,
-                                        here we present an omic and
-                                        multidimensional spatial (OMS) atlas
-                                        generated from four serial biopsies of
-                                        an individual with metastatic breast
-                                        cancer during 3.5 years of therapy. This
-                                        resource links detailed, longitudinal
-                                        clinical metadata that includes
-                                        treatment times and doses, anatomic
-                                        imaging, and blood-based response
-                                        measurements to clinical and exploratory
-                                        analyses, which includes comprehensive
-                                        DNA, RNA, and protein profiles; images
-                                        of multiplexed immunostaining; and 2-
-                                        and 3-dimensional scanning electron
-                                        micrographs. These data report aspects
-                                        of heterogeneity and evolution of the
-                                        cancer genome, signaling pathways,
-                                        immune microenvironment, cellular
-                                        composition and organization, and
-                                        ultrastructure. We present illustrative
-                                        examples of how integrative analyses of
-                                        these data reveal potential mechanisms
-                                        of response and resistance and suggest
-                                        novel therapeutic vulnerabilities.
-                                    </Container>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="sequencing">
-                                    <Container className="mt-3">
-                                        Mechanisms of therapeutic resistance and
-                                        vulnerability evolve in metastatic
-                                        cancers as tumor cells and extrinsic
-                                        microenvironmental influences change
-                                        during treatment. To support the
-                                        development of methods for identifying
-                                        these mechanisms in individual people,
-                                        here we present an omic and
-                                        multidimensional spatial (OMS) atlas
-                                        generated from four serial biopsies of
-                                        an individual with metastatic breast
-                                        cancer during 3.5 years of therapy. This
-                                        resource links detailed, longitudinal
-                                        clinical metadata that includes
-                                        treatment times and doses, anatomic
-                                        imaging, and blood-based response
-                                        measurements to clinical and exploratory
-                                        analyses, which includes comprehensive
-                                        DNA, RNA, and protein profiles; images
-                                        of multiplexed immunostaining; and 2-
-                                        and 3-dimensional scanning electron
-                                        micrographs. These data report aspects
-                                        of heterogeneity and evolution of the
-                                        cancer genome, signaling pathways,
-                                        immune microenvironment, cellular
-                                        composition and organization, and
-                                        ultrastructure. We present illustrative
-                                        examples of how integrative analyses of
-                                        these data reveal potential mechanisms
-                                        of response and resistance and suggest
-                                        novel therapeutic vulnerabilities.
-                                    </Container>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="tools">
-                                    <Container className="mt-3">
-                                        Mechanisms of therapeutic resistance and
-                                        vulnerability evolve in metastatic
-                                        cancers as tumor cells and extrinsic
-                                        microenvironmental influences change
-                                        during treatment. To support the
-                                        development of methods for identifying
-                                        these mechanisms in individual people,
-                                        here we present an omic and
-                                        multidimensional spatial (OMS) atlas
-                                        generated from four serial biopsies of
-                                        an individual with metastatic breast
-                                        cancer during 3.5 years of therapy. This
-                                        resource links detailed, longitudinal
-                                        clinical metadata that includes
-                                        treatment times and doses, anatomic
-                                        imaging, and blood-based response
-                                        measurements to clinical and exploratory
-                                        analyses, which includes comprehensive
-                                        DNA, RNA, and protein profiles; images
-                                        of multiplexed immunostaining; and 2-
-                                        and 3-dimensional scanning electron
-                                        micrographs. These data report aspects
-                                        of heterogeneity and evolution of the
-                                        cancer genome, signaling pathways,
-                                        immune microenvironment, cellular
-                                        composition and organization, and
-                                        ultrastructure. We present illustrative
-                                        examples of how integrative analyses of
-                                        these data reveal potential mechanisms
-                                        of response and resistance and suggest
-                                        novel therapeutic vulnerabilities.
-                                    </Container>
-                                </Tab.Pane>
-                            </Tab.Content>
-                        </Tab.Container>
-                    </Row>
+                    <h2>{props.data.publicationData.title}</h2>
+                    <p>
+                        Atlas: {props.data.publicationData.leadInstitute.name}
+                        <br />
+                        Pubmed:{' '}
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/35243422/">
+                            35243422
+                        </a>
+                    </p>
+                    <PublicationTabs
+                        router={router}
+                        abstract={props.data.publicationData.abstract}
+                        synapseAtlas={props.data.publicationData.synapseAtlas}
+                        bopspeciments={props.data.publicationData.bopspeciments}
+                        schemaDataById={
+                            props.data.publicationData.schemaDataById
+                        }
+                        // schemaDataById={this.state.schemaDataById}
+                        // filteredFiles={this.filteredFiles}
+                        // filteredSynapseAtlases={this.filteredAtlases}
+                        // filteredSynapseAtlasesByNonAtlasFilters={
+                        //     this.filteredAtlasesByNonAtlasFilters
+                        // }
+                        // selectedSynapseAtlases={this.selectedAtlases}
+                        // allSynapseAtlases={this.allAtlases}
+                        // onSelectAtlas={this.onSelectAtlas}
+                        // samples={this.filteredSamples}
+                        // cases={this.filteredCases}
+                        // filteredCasesByNonAtlasFilters={
+                        //     this.filteredCasesByNonAtlasFilters
+                        // }
+                        // filteredSamplesByNonAtlasFilters={
+                        //     this.filteredSamplesByNonAtlasFilters
+                        // }
+                        // nonAtlasSelectedFiltersByAttrName={
+                        //     this.nonAtlasSelectedFiltersByAttrName
+                        // }
+                        // wpData={this.props.wpAtlases}
+                        // getGroupsByPropertyFiltered={
+                        //     this.getGroupsByPropertyFiltered
+                        // }
+                        // showAllBiospecimens={this.showAllBiospecimens}
+                        // showAllCases={this.showAllCases}
+                        // toggleShowAllBiospecimens={
+                        //     this.toggleShowAllBiospecimens
+                        // }
+                        // toggleShowAllCases={this.toggleShowAllCases}
+                    />
                 </Container>
             </PageWrapper>
         </>
@@ -332,7 +84,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export async function getStaticPaths() {
-    const paths = getAllPublicationIds();
+    const paths = await getAllPublicationIds();
     return {
         paths,
         fallback: false,
