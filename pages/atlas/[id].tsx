@@ -26,7 +26,17 @@ interface IPostProps {
 const PostContent: React.FunctionComponent<{
     wpAtlas: WPAtlas;
     router: NextRouter;
-}> = ({ wpAtlas, router }) => {
+    synapseAtlas?: SynapseAtlas;
+}> = ({ wpAtlas, router, synapseAtlas }) => {
+    let mergedClinicalAndBiospecimenData: Category;
+    // if (synapseAtlas) {
+    //     mergedClinicalAndBiospecimenData = Object.assign(
+    //         {},
+    //         synapseAtlas.clinical,
+    //         synapseAtlas.biospecimen
+    //     );
+    // }
+
     return (
         <Container>
             <Row>
@@ -115,6 +125,52 @@ const PostContent: React.FunctionComponent<{
                                     <span
                                         dangerouslySetInnerHTML={{
                                             __html: wpAtlas.publications,
+                                        }}
+                                    />
+                                ) : (
+                                    'Loading...'
+                                )}
+                            </Container>
+                        </Tab.Pane>
+                        {synapseAtlas && (
+                            <>
+                                <Tab.Pane eventKey="clinBiospecimen">
+                                    <Container className="mt-3">
+                                        <AtlasWrapper
+                                            category={
+                                                mergedClinicalAndBiospecimenData!
+                                            }
+                                        />
+                                    </Container>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="derivedData">
+                                    <Container className="mt-3">
+                                        <AtlasWrapper
+                                            category={
+                                                mergedClinicalAndBiospecimenData!
+                                            }
+                                        />
+                                    </Container>
+                                </Tab.Pane>
+                                {synapseAtlas.imagingData && (
+                                    <Tab.Pane eventKey="imagingData">
+                                        <Container className="mt-3">
+                                            <AtlasWrapper
+                                                category={
+                                                    mergedClinicalAndBiospecimenData!
+                                                }
+                                            />
+                                        </Container>
+                                    </Tab.Pane>
+                                )}
+                            </>
+                        )}
+                        <Tab.Pane eventKey="primaryNGS">
+                            <Container className="mt-3">
+                                {wpAtlas ? (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: wpAtlas.primary_ngs,
                                         }}
                                     />
                                 ) : (
