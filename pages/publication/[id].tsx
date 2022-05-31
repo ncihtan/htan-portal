@@ -11,16 +11,16 @@ import {
 } from '../../lib/publications';
 import { useRouter } from 'next/router';
 import PublicationTabs from './PublicationTabs';
+import styles from './styles.module.scss';
 
 const PublicationPage = (props: { data: Publication }) => {
-    console.log(props);
     const router = useRouter();
 
     return (
         <>
             <PreReleaseBanner />
             <PageWrapper>
-                <Container>
+                <div className={styles.publicationPage}>
                     <h2>{props.data.publicationData.title}</h2>
                     <p>
                         Atlas: {props.data.publicationData.leadInstitute.name}
@@ -35,6 +35,9 @@ const PublicationPage = (props: { data: Publication }) => {
                         abstract={props.data.publicationData.abstract}
                         synapseAtlas={props.data.publicationData.synapseAtlas}
                         bopspeciments={props.data.publicationData.bopspeciments}
+                        cases={props.data.publicationData.cases}
+                        images={props.data.publicationData.iamges}
+                        sequences={props.data.publicationData.sequences}
                         schemaDataById={
                             props.data.publicationData.schemaDataById
                         }
@@ -69,7 +72,7 @@ const PublicationPage = (props: { data: Publication }) => {
                         // }
                         // toggleShowAllCases={this.toggleShowAllCases}
                     />
-                </Container>
+                </div>
             </PageWrapper>
         </>
     );

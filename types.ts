@@ -62,6 +62,9 @@ export interface PublicationData {
     abstract: string;
     synapseAtlas: Atlas;
     bopspeciments: Entity[];
+    cases: Entity[];
+    iamges: Entity[];
+    sequences: Entity[];
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
     };

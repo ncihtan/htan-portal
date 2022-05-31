@@ -3,6 +3,9 @@ import { getSchemaDataMap } from './dataSchemaHelpers';
 
 const publicationInfo: any = require('../pages/publication/hta9_info.json');
 const bopspeciments: any = require('../pages/publication/hta9_samples.json');
+const cases: any = require('../pages/publication/hta9_cases.json');
+const iamges: any = require('../pages/publication/hta9_images.json');
+const sequences: any = require('../pages/publication/hta9_sequences.json');
 
 export async function getAllPublicationIds() {
     // TODO: we need to read this from service
@@ -47,6 +50,9 @@ export async function getPublicationData(id: string) {
         abstract,
         synapseAtlas: publicationInfo[0],
         bopspeciments,
+        cases,
+        iamges,
+        sequences,
         schemaDataById,
     };
     // Combine the data with the id
