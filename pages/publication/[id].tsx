@@ -10,8 +10,10 @@ import {
     getPublicationData,
 } from '../../lib/publications';
 import { useRouter } from 'next/router';
-import PublicationTabs from './PublicationTabs';
+import PublicationTabs from '../../components/PublicationTabs';
 import styles from './styles.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBook } from '@fortawesome/free-solid-svg-icons';
 
 const PublicationPage = (props: { data: Publication }) => {
     const router = useRouter();
@@ -21,6 +23,7 @@ const PublicationPage = (props: { data: Publication }) => {
             <PreReleaseBanner />
             <PageWrapper>
                 <div className={styles.publicationPage}>
+                    <h1>Publication</h1>
                     <h2>{props.data.publicationData.title}</h2>
                     <p>
                         Atlas: {props.data.publicationData.leadInstitute.name}
@@ -29,6 +32,11 @@ const PublicationPage = (props: { data: Publication }) => {
                         <a href="https://pubmed.ncbi.nlm.nih.gov/35243422/">
                             35243422
                         </a>
+                        <br />
+                        Authors:{' '}
+                        <span style={{ fontStyle: 'italic' }}>
+                            Johnson BE, Creason AL, Stommel JM, et al.
+                        </span>
                     </p>
                     <PublicationTabs
                         router={router}

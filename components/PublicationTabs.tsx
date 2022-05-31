@@ -2,13 +2,13 @@ import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import Tooltip from 'rc-tooltip';
 import React from 'react';
-import BiospecimenTable from '../../components/BiospecimenTable';
-import CaseTable from '../../components/CaseTable';
-import FileTable from '../../components/FileTable';
-import { DataSchemaData } from '../../lib/dataSchemaHelpers';
-import { groupFilesByAttrNameAndValue } from '../../lib/filterHelpers';
-import { Atlas, Entity, setTab } from '../../lib/helpers';
-import styles from './styles.module.scss';
+import BiospecimenTable from './BiospecimenTable';
+import CaseTable from './CaseTable';
+import FileTable from './FileTable';
+import { DataSchemaData } from '../lib/dataSchemaHelpers';
+import { groupFilesByAttrNameAndValue } from '../lib/filterHelpers';
+import { Atlas, Entity, setTab } from '../lib/helpers';
+import styles from './PublicationTabs.module.scss';
 
 interface IPublicationTabsProps {
     router: NextRouter;
@@ -174,7 +174,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 Abstract
                             </a>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <a
                                 onClick={() =>
                                     setTab(
@@ -190,7 +190,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             >
                                 Datasets
                             </a>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                             <a
                                 onClick={() =>
@@ -397,20 +397,37 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     : ''
                             }`}
                         >
-                            <>
-                                <CBioPortalViewerLink
-                                    url={
-                                        'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
-                                    }
-                                    count={1}
-                                />
-                                <MinervaStoryViewerLink
-                                    url={
-                                        'https://minerva-story-htan-ohsu-demo.surge.sh/'
-                                    }
-                                    count={1}
-                                />
-                            </>
+                            <h3>cBioPortal</h3>
+                            The{' '}
+                            <a href="https://www.cbioportal.org/">
+                                cBioPortal
+                            </a>{' '}
+                            for Cancer Genomics is an open-source software
+                            platform that enables interactive, exploratory
+                            analysis of large-scale cancer genomics data sets
+                            with a biologist-friendly interface. Click{' '}
+                            <a href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1">
+                                here
+                            </a>{' '}
+                            to view patient from cBioPortal.
+                            <br />
+                            <img
+                                style={{ width: '60%' }}
+                                src={'/cbioportal_hta9_1_patient.png'}
+                            />
+                            <h3>Minerva Story</h3>
+                            Minervais a suite of software tools for interpreting
+                            and interacting with complex images, organized
+                            around a guided analysis approach. Click{' '}
+                            <a href="https://minerva-story-htan-ohsu-demo.surge.sh/">
+                                here
+                            </a>{' '}
+                            to view patient from Minerva.
+                            <br />
+                            <img
+                                style={{ width: '60%' }}
+                                src={'/minerva_hta9_patient.png'}
+                            />
                         </div>
                     )}
                 </div>

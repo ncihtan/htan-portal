@@ -27,16 +27,16 @@ interface IPostProps {
 const PostContent: React.FunctionComponent<{
     wpAtlas: WPAtlas;
     router: NextRouter;
-    synapseAtlas?: SynapseAtlas
+    synapseAtlas?: SynapseAtlas;
 }> = ({ wpAtlas, router, synapseAtlas }) => {
     let mergedClinicalAndBiospecimenData: Category;
-    if (synapseAtlas) {
-        mergedClinicalAndBiospecimenData = Object.assign(
-            {},
-            synapseAtlas.clinical,
-            synapseAtlas.biospecimen
-        );
-    }
+    // if (synapseAtlas) {
+    //     mergedClinicalAndBiospecimenData = Object.assign(
+    //         {},
+    //         synapseAtlas.clinical,
+    //         synapseAtlas.biospecimen
+    //     );
+    // }
 
     return (
         <Container>
@@ -167,7 +167,9 @@ const PostContent: React.FunctionComponent<{
                                 <Tab.Pane eventKey="derivedData">
                                     <Container className="mt-3">
                                         <AtlasWrapper
-                                            category={synapseAtlas.assayData}
+                                            category={
+                                                mergedClinicalAndBiospecimenData!
+                                            }
                                         />
                                     </Container>
                                 </Tab.Pane>
@@ -176,7 +178,7 @@ const PostContent: React.FunctionComponent<{
                                         <Container className="mt-3">
                                             <AtlasWrapper
                                                 category={
-                                                    synapseAtlas.imagingData
+                                                    mergedClinicalAndBiospecimenData!
                                                 }
                                             />
                                         </Container>
