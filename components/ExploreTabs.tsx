@@ -63,7 +63,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         : ''
                                 }`}
                             >
-                                Groups
+                                Research Teams
                             </a>
                         </li>
                         <li className="nav-item">

@@ -143,7 +143,7 @@ export function getAtlasColumn(atlases: Atlas[]) {
         id: 'Lab Name',
         name: (
             <Tooltip overlay="Name of the Lab">
-                <span>Atlas Name</span>
+                <span>Research Team</span>
             </Tooltip>
         ),
         selector: (sample: Entity) => atlasMap[sample.atlasid].htan_name,

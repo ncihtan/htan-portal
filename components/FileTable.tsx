@@ -330,7 +330,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 },
             },
             {
-                name: 'Atlas Name',
+                name: 'Research Team',
                 selector: 'atlas_name',
                 wrap: true,
                 sortable: true,

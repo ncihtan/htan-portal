@@ -1,4 +1,4 @@
-$primary-background: #5f008c;
+$primary-background: #4a6cbd;
 $darkgreen: #24cad5;
 $border-color: #e2e2e2;
 $input-border: $border-color;
@@ -95,8 +95,8 @@ h4 {
 .jumbotron {
     //background-image: url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)),
-        url('https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),
+        url('https://www.grayfoundation.org/wp-content/uploads/2018/02/basser-slider-2-copy-1.jpg');
     //background-blend-mode: color-dodge;
     background-repeat: no-repeat;
     background-size: 100%;

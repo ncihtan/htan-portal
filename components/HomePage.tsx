@@ -51,11 +51,16 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             >
                 <Row className="justify-content-md-center mt-5">
                     <Col md={{ span: 5 }} style={{ color: '#fff' }}>
-                        <h1>Human Tumor Atlas Network Data Portal</h1>
+                        <h1>The Gray PreCancer BRCA Atlas</h1>
                         <br />
-                        <span
-                            dangerouslySetInnerHTML={{ __html: hero_blurb }}
-                        ></span>
+                        <span>
+                        Launched in September of 2020, the BRCA PreCancer Atlas
+                        is a Gray Foundation-funded initiative through which a
+                        collaborative network of research centers and a central
+                        Data Coordinating Center is constructing a BRCA
+                        PreCancer Atlas.
+                        </span>
+                        <br /><br />
                         <div
                             style={{
                                 display: 'flex',
