@@ -76,23 +76,41 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         color: '#fff',
                     }}
                 >
-                    <a style={{color:'white'}} href="/data-updates">Data Release V2 (Last updated 2022-05-18)</a>
+                    <a style={{ color: 'white' }} href="/data-updates">
+                        Data Release V2 (Last updated 2022-05-27)
+                    </a>
                 </div>
                 <Row className="justify-content-md-center">
-                    <Col md={{ span: 5 }} style={{ color: '#fff', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 25, padding: 20 }}>
+                    <Col
+                        md={{ span: 5 }}
+                        style={{
+                            color: '#fff',
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            borderRadius: 25,
+                            padding: 20,
+                        }}
+                    >
                         <h1 style={{ fontSize: 40, color: '#24cad5' }}>
                             Human Tumor Atlas Network
                         </h1>
                         <br />
 
-                        <p style={{fontSize:20}}>
+                        <p style={{ fontSize: 20 }}>
                             HTAN is a National Cancer Institute (NCI)-funded
                             Cancer Moonshot<sup>SM</sup> initiative to construct
                             3-dimensional atlases of the dynamic cellular,
                             morphological, and molecular features of human
                             cancers as they evolve from precancerous lesions to
                             advanced disease. (
-                            <span style={{fontStyle:"italic"}}><a style={{color:'#fff'}} href="https://www.sciencedirect.com/science/article/pii/S0092867420303469">Cell April 2020</a></span>)
+                            <span style={{ fontStyle: 'italic' }}>
+                                <a
+                                    style={{ color: '#fff' }}
+                                    href="https://www.sciencedirect.com/science/article/pii/S0092867420303469"
+                                >
+                                    Cell April 2020
+                                </a>
+                            </span>
+                            )
                         </p>
 
                         <div
@@ -199,7 +217,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 </Row>
                 <Row className="justify-content-md-center">
                     <p style={{ fontSize: 'medium' }}>
-                        Many more profiled tumors will be available in the future. Stay tuned!
+                        Many more profiled tumors will be available in the
+                        future. Stay tuned!
                     </p>
                 </Row>
             </Container>

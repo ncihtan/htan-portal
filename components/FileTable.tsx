@@ -70,9 +70,13 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 </code>
             </pre>
             <p>
-                These will soon be available through{' '}
-                <a href="https://www.cancergenomicscloud.org/" target="_blank">
-                    Seven Bridges' Cancer Genomics Cloud
+                These are currently only avaiable through{' '}
+                <a
+                    href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371.v1.p1"
+                    target="_blank"
+                >
+                    {' '}
+                    dbGaP{' '}
                 </a>
                 .
             </p>
@@ -447,18 +451,14 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         thumbnailMappings.find(
                             (f: any) => f.synid === file.synapseId
                         );
-                    const thumbnailUrl =
-                        imageInfo &&
-                        imageInfo.thumbnail;
+                    const thumbnailUrl = imageInfo && imageInfo.thumbnail;
                     let minervaStoryUrl;
                     if (minervaCustomStoryLink) {
                         // if somebody submitted a custom Minerva Story use
                         // that, instead of the auto generated one
                         minervaStoryUrl = minervaCustomStoryLink;
                     } else {
-                        minervaStoryUrl =
-                            imageInfo &&
-                            imageInfo.minerva;
+                        minervaStoryUrl = imageInfo && imageInfo.minerva;
                         // hide CyCIF in introductory text by appending #s=0 to minerva story URL
                         minervaStoryUrl =
                             minervaStoryUrl && `${minervaStoryUrl}#s=0`;
@@ -473,7 +473,10 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         );
                     } else if (file.Component.startsWith('Imaging')) {
                         // TODO: Duke images are giving an issue: https://github.com/ncihtan/htan-portal/pull/380#pullrequestreview-946257535
-                        if (file.atlas_name === 'HTAN Duke' && file.assayName == "H&E") {
+                        if (
+                            file.atlas_name === 'HTAN Duke' &&
+                            file.assayName == 'H&E'
+                        ) {
                             return 'Image Viewer Coming Soon';
                         }
                         if (imageInfo && thumbnailUrl) {
