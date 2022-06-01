@@ -199,6 +199,33 @@ const CellxgeneViewerLink = (props: { url: string; count: number }) => (
     </Tooltip>
 );
 
+const BroadSingleCellPortalViewerLink = (props: {
+    url: string;
+    count: number;
+}) => (
+    <Tooltip overlay="Broad Single Cell Portal">
+        <a
+            href={props.url}
+            target="_blank"
+            style={{
+                paddingRight: 8,
+                fontFamily: 'monospace',
+                textDecoration: 'none',
+            }}
+        >
+            {props.count < 100 && '\u00A0'}
+            {props.count < 10 && '\u00A0'}
+            {props.count}{' '}
+            <img
+                width={20}
+                src={
+                    'https://user-images.githubusercontent.com/1334004/171445636-2458ddf6-ce48-4f1f-ab7d-d56487b34ef0.png'
+                }
+            />
+        </a>
+    </Tooltip>
+);
+
 type WPAtlasTableData = Atlas & { isSelected: boolean };
 
 @observer
@@ -435,10 +462,20 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         );
                     } else if (atlas.htan_name === 'Brugge Lab') {
                         return (
-                            <CellxgeneViewerLink
-                                url={'https://brugge-singlecell.herokuapp.com'}
-                                count={1}
-                            />
+                            <>
+                                <CellxgeneViewerLink
+                                    url={
+                                        'https://brugge-singlecell.herokuapp.com'
+                                    }
+                                    count={1}
+                                />
+                                <BroadSingleCellPortalViewerLink
+                                    url={
+                                        'https://singlecell.broadinstitute.org/single_cell/study/SCP1731/'
+                                    }
+                                    count={1}
+                                />
+                            </>
                         );
                     } else if (atlas.htan_name === 'Drapkin Lab') {
                         return (
