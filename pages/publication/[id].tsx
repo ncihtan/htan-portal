@@ -23,21 +23,26 @@ const PublicationPage = (props: { data: Publication }) => {
             <PreReleaseBanner />
             <PageWrapper>
                 <div className={styles.publicationPage}>
-                    <h1>Publication</h1>
-                    <h2>{props.data.publicationData.title}</h2>
-                    <p>
-                        Atlas: {props.data.publicationData.leadInstitute.name}
-                        <br />
-                        Pubmed:{' '}
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/35243422/">
-                            35243422
-                        </a>
-                        <br />
-                        Authors:{' '}
-                        <span style={{ fontStyle: 'italic' }}>
-                            Johnson BE, Creason AL, Stommel JM, et al.
-                        </span>
-                    </p>
+                    <div style={{display:'flex',flexDirection:'row'}}>
+                        <div style={{fontSize:50,width:110,padding:30,color:'#5f008c'}}><FontAwesomeIcon icon={faBook} /></div>
+                        <div>
+                            <span style={{fontStyle:'italic'}}>Publication</span>
+                            <h2 style={{marginTop:0,padding:0}}>{props.data.publicationData.title}</h2>
+                            <p>
+                                Atlas: {props.data.publicationData.leadInstitute.name}
+                                <br />
+                                Pubmed:{' '}
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/35243422/">
+                                    35243422
+                                </a>
+                                <br />
+                                Authors:{' '}
+                                <span style={{ fontStyle: 'italic' }}>
+                                    Johnson BE, Creason AL, Stommel JM, et al.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
                     <PublicationTabs
                         router={router}
                         abstract={props.data.publicationData.abstract}
