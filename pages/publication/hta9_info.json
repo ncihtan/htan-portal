@@ -16,7 +16,7 @@
             "type": "atlas",
             "link": "https://humantumoratlas.org/atlas/ohsu/",
             "title": {
-                "rendered": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers"
+                "rendered": "An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer"
             },
             "content": {
                 "rendered": "",
@@ -24,16 +24,16 @@
             },
             "featured_media": 0,
             "template": "",
-            "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v18.4.1 - https://yoast.com/wordpress/plugins/seo/ -->\n<title>Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network</title>\n<meta name=\"robots\" content=\"noindex, nofollow\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network\" />\n<meta property=\"og:url\" content=\"https://humantumoratlas.org/atlas/ohsu/\" />\n<meta property=\"og:site_name\" content=\"Human Tumor Atlas Network\" />\n<meta property=\"article:modified_time\" content=\"2021-02-09T18:14:21+00:00\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebSite\",\"@id\":\"https://humantumoratlas.org/#website\",\"url\":\"https://humantumoratlas.org/\",\"name\":\"Human Tumor Atlas Network\",\"description\":\"\",\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://humantumoratlas.org/?s={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}],\"inLanguage\":\"en-US\"},{\"@type\":\"WebPage\",\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#webpage\",\"url\":\"https://humantumoratlas.org/atlas/ohsu/\",\"name\":\"Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network\",\"isPartOf\":{\"@id\":\"https://humantumoratlas.org/#website\"},\"datePublished\":\"2020-04-09T17:09:52+00:00\",\"dateModified\":\"2021-02-09T18:14:21+00:00\",\"breadcrumb\":{\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://humantumoratlas.org/atlas/ohsu/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://humantumoratlas.org/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers\"}]}]}</script>\n<!-- / Yoast SEO plugin. -->",
+            "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v18.4.1 - https://yoast.com/wordpress/plugins/seo/ -->\n<title>An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer - Human Tumor Atlas Network</title>\n<meta name=\"robots\" content=\"noindex, nofollow\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer - Human Tumor Atlas Network\" />\n<meta property=\"og:url\" content=\"https://humantumoratlas.org/atlas/ohsu/\" />\n<meta property=\"og:site_name\" content=\"Human Tumor Atlas Network\" />\n<meta property=\"article:modified_time\" content=\"2021-02-09T18:14:21+00:00\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebSite\",\"@id\":\"https://humantumoratlas.org/#website\",\"url\":\"https://humantumoratlas.org/\",\"name\":\"Human Tumor Atlas Network\",\"description\":\"\",\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://humantumoratlas.org/?s={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}],\"inLanguage\":\"en-US\"},{\"@type\":\"WebPage\",\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#webpage\",\"url\":\"https://humantumoratlas.org/atlas/ohsu/\",\"name\":\"An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer - Human Tumor Atlas Network\",\"isPartOf\":{\"@id\":\"https://humantumoratlas.org/#website\"},\"datePublished\":\"2020-04-09T17:09:52+00:00\",\"dateModified\":\"2021-02-09T18:14:21+00:00\",\"breadcrumb\":{\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://humantumoratlas.org/atlas/ohsu/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://humantumoratlas.org/atlas/ohsu/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://humantumoratlas.org/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer\"}]}]}</script>\n<!-- / Yoast SEO plugin. -->",
             "yoast_head_json": {
-                "title": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network",
+                "title": "An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer - Human Tumor Atlas Network",
                 "robots": {
                     "index": "noindex",
                     "follow": "nofollow"
                 },
                 "og_locale": "en_US",
                 "og_type": "article",
-                "og_title": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network",
+                "og_title": "An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer - Human Tumor Atlas Network",
                 "og_url": "https://humantumoratlas.org/atlas/ohsu/",
                 "og_site_name": "Human Tumor Atlas Network",
                 "article_modified_time": "2021-02-09T18:14:21+00:00",
@@ -63,7 +63,7 @@
                             "@type": "WebPage",
                             "@id": "https://humantumoratlas.org/atlas/ohsu/#webpage",
                             "url": "https://humantumoratlas.org/atlas/ohsu/",
-                            "name": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers - Human Tumor Atlas Network",
+                            "name": "An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer - Human Tumor Atlas Network",
                             "isPartOf": {
                                 "@id": "https://humantumoratlas.org/#website"
                             },
@@ -95,7 +95,7 @@
                                 {
                                     "@type": "ListItem",
                                     "position": 2,
-                                    "name": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers"
+                                    "name": "An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer"
                                 }
                             ]
                         }
