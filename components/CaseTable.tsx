@@ -14,6 +14,7 @@ interface ICaseTableProps {
     cases: Entity[];
     synapseAtlases: Atlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
+    excludedColumns?: string[];
 }
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
@@ -40,7 +41,7 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
             },
         },
         // Component seems to be always "Diagnosis", no need to have a column for it
-        ['Component']
+        ['Component', ...(props.excludedColumns ? props.excludedColumns : [])]
     );
     const indexOfHtanParticipantId = _.findIndex(
         columns,
