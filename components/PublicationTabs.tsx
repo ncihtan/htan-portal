@@ -401,7 +401,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     : ''
                             }`}
                         >
-                            <h3>cBioPortal</h3>
+                            <h3>Explore Case HTA9_1 in cBioPortal</h3>
                             The{' '}
                             <a href="https://www.cbioportal.org/">
                                 cBioPortal
@@ -409,29 +409,43 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             for Cancer Genomics is an open-source software
                             platform that enables interactive, exploratory
                             analysis of large-scale cancer genomics data sets
-                            with a biologist-friendly interface. Click{' '}
-                            <a href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1">
-                                here
-                            </a>{' '}
-                            to view patient from cBioPortal.
+                            with a biologist-friendly interface.
+                            <Tooltip overlay="Click to Explore the Clinicogenomic Profiling of Case HTA9_1 in detail in cBioPortal">
+                                <a
+                                    href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1"
+                                    target="_blank"
+                                >
+                                    <img
+                                        style={{ width: '60%' }}
+                                        src={'/cbioportal_hta9_1_patient.png'}
+                                    />
+                                </a>
+                            </Tooltip>
                             <br />
-                            <img
-                                style={{ width: '60%' }}
-                                src={'/cbioportal_hta9_1_patient.png'}
-                            />
-                            <h3>Minerva Story</h3>
-                            Minervais a suite of software tools for interpreting
-                            and interacting with complex images, organized
-                            around a guided analysis approach. Click{' '}
-                            <a href="https://minerva-story-htan-ohsu-demo.surge.sh/">
-                                here
-                            </a>{' '}
-                            to view patient from Minerva.
                             <br />
-                            <img
-                                style={{ width: '60%' }}
-                                src={'/minerva_hta9_patient.png'}
-                            />
+                            <br />
+                            <h3>
+                                Explore Case HTA9_1's Liver Metastatis Biopsy in
+                                Minerva
+                            </h3>
+                            <a href="https://www.cycif.org/software/minerva">
+                                Minerva
+                            </a>
+                            is a suite of software tools for interpreting and
+                            interacting with complex images, organized around a
+                            guided analysis approach.
+                            <br />
+                            <Tooltip overlay="Click to Explore Case HTA9_1's Breast Cancer Liver Metastatis Biopsy in Minerva">
+                                <a
+                                    href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1"
+                                    target="_blank"
+                                >
+                                    <img
+                                        style={{ width: '60%' }}
+                                        src={'/minerva_hta9_patient.png'}
+                                    />
+                                </a>
+                            </Tooltip>
                         </div>
                     )}
                 </div>
