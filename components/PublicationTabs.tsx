@@ -14,7 +14,7 @@ interface IPublicationTabsProps {
     router: NextRouter;
     abstract: string;
     synapseAtlas: Atlas;
-    bopspeciments: Entity[];
+    biospecimens: Entity[];
     cases: Entity[];
     images: Entity[];
     sequences: Entity[];
@@ -325,6 +325,10 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 synapseAtlases={[props.synapseAtlas]}
                                 cases={props.cases}
                                 schemaDataById={props.schemaDataById}
+                                excludedColumns={[
+                                    'DaystoLastFollowup',
+                                    'VitalStatus',
+                                ]}
                             />
                         </div>
                     )}
@@ -347,7 +351,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                         </label>*/}
                             <BiospecimenTable
                                 synapseAtlases={[props.synapseAtlas]}
-                                samples={props.bopspeciments}
+                                samples={props.biospecimens}
                                 schemaDataById={props.schemaDataById}
                             />
                         </div>

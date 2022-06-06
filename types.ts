@@ -61,7 +61,7 @@ export interface PublicationData {
     leadInstitute: Institute;
     abstract: string;
     synapseAtlas: Atlas;
-    bopspeciments: Entity[];
+    biospecimens: Entity[];
     cases: Entity[];
     iamges: Entity[];
     sequences: Entity[];

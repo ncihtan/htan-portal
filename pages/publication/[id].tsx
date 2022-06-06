@@ -42,7 +42,7 @@ const PublicationPage = (props: { data: Publication }) => {
                         router={router}
                         abstract={props.data.publicationData.abstract}
                         synapseAtlas={props.data.publicationData.synapseAtlas}
-                        bopspeciments={props.data.publicationData.bopspeciments}
+                        biospecimens={props.data.publicationData.biospecimens}
                         cases={props.data.publicationData.cases}
                         images={props.data.publicationData.iamges}
                         sequences={props.data.publicationData.sequences}
