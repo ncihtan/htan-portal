@@ -43,23 +43,64 @@ const PublicationPage = (props: { data: Publication }) => {
                             </h2>
                             <p>
                                 Authors:{' '}
-                                <span style={{ fontStyle: 'italic' }}>
-                                    Johnson BE, Creason AL, Stommel JM, et al.
-                                </span>
+                                {props.data.publicationData.authors.map(
+                                    (author, index) => (
+                                        <>
+                                            <span
+                                                style={{ fontStyle: 'italic' }}
+                                            >
+                                                <a
+                                                    href={`mailto: ${author.email}`}
+                                                >
+                                                    {author.name}
+                                                </a>
+                                            </span>
+                                            {', '}
+                                            {index ===
+                                                props.data.publicationData
+                                                    .authors.length -
+                                                    1 && <>{'et al.'}</>}
+                                        </>
+                                    )
+                                )}
                                 <br />
                                 Journal:{' '}
                                 <span>
-                                    <a href="https://www.cell.com/cell-reports-medicine/fulltext/S2666-3791(22)00025-8">
-                                        Cell Rep Med.
+                                    <a
+                                        href={
+                                            props.data.publicationData
+                                                .publicationInfo.journal.link
+                                        }
+                                    >
+                                        {
+                                            props.data.publicationData
+                                                .publicationInfo.journal.name
+                                        }
                                     </a>
                                 </span>{' '}
                                 &nbsp; Pubmed:{' '}
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/35243422/">
-                                    35243422
+                                <a
+                                    href={
+                                        props.data.publicationData
+                                            .publicationInfo.pubmed.link
+                                    }
+                                >
+                                    {
+                                        props.data.publicationData
+                                            .publicationInfo.pubmed.name
+                                    }
                                 </a>{' '}
                                 &nbsp; DOI:{' '}
-                                <a href="https://doi.org/10.1016/j.xcrm.2022.100525">
-                                    10.1016/j.xcrm.2022.100525
+                                <a
+                                    href={
+                                        props.data.publicationData
+                                            .publicationInfo.DOI.link
+                                    }
+                                >
+                                    {
+                                        props.data.publicationData
+                                            .publicationInfo.DOI.name
+                                    }
                                 </a>
                                 <br />
                                 Atlas:{' '}
@@ -72,8 +113,9 @@ const PublicationPage = (props: { data: Publication }) => {
                         abstract={props.data.publicationData.abstract}
                         synapseAtlas={props.data.publicationData.synapseAtlas}
                         biospecimens={props.data.publicationData.biospecimens}
+                        toolsExample={props.data.publicationData.toolsExample}
                         cases={props.data.publicationData.cases}
-                        images={props.data.publicationData.iamges}
+                        images={props.data.publicationData.images}
                         sequences={props.data.publicationData.sequences}
                         schemaDataById={
                             props.data.publicationData.schemaDataById

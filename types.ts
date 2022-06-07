@@ -56,14 +56,39 @@ export interface Institute {
     link?: string;
 }
 
+export interface ToolsExample {
+    exampleCaseName: string;
+    exampleCaseCbioportalLink: string;
+    exampleCaselMinervaLink: string;
+}
+
+export interface Author {
+    name: string;
+    email: string;
+}
+
+export interface GeneralLink {
+    name: string;
+    link: string;
+}
+
+export interface PublicationInfo {
+    journal: GeneralLink;
+    pubmed: GeneralLink;
+    DOI: GeneralLink;
+}
+
 export interface PublicationData {
     title: string;
     leadInstitute: Institute;
     abstract: string;
     synapseAtlas: Atlas;
     biospecimens: Entity[];
+    toolsExample: ToolsExample;
+    authors: Author[];
+    publicationInfo: PublicationInfo;
     cases: Entity[];
-    iamges: Entity[];
+    images: Entity[];
     sequences: Entity[];
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;

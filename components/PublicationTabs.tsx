@@ -9,12 +9,14 @@ import { DataSchemaData } from '../lib/dataSchemaHelpers';
 import { groupFilesByAttrNameAndValue } from '../lib/filterHelpers';
 import { Atlas, Entity, setTab } from '../lib/helpers';
 import styles from './PublicationTabs.module.scss';
+import { ToolsExample } from '../types';
 
 interface IPublicationTabsProps {
     router: NextRouter;
     abstract: string;
     synapseAtlas: Atlas;
     biospecimens: Entity[];
+    toolsExample: ToolsExample;
     cases: Entity[];
     images: Entity[];
     sequences: Entity[];
@@ -401,51 +403,76 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     : ''
                             }`}
                         >
-                            <h3>Explore Case HTA9_1 in cBioPortal</h3>
-                            The{' '}
-                            <a href="https://www.cbioportal.org/">
-                                cBioPortal
-                            </a>{' '}
-                            for Cancer Genomics is an open-source software
-                            platform that enables interactive, exploratory
-                            analysis of large-scale cancer genomics data sets
-                            with a biologist-friendly interface.
-                            <Tooltip overlay="Click to Explore the Clinicogenomic Profiling of Case HTA9_1 in detail in cBioPortal">
-                                <a
-                                    href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1"
-                                    target="_blank"
-                                >
-                                    <img
-                                        style={{ width: '60%' }}
-                                        src={'/cbioportal_hta9_1_patient.png'}
-                                    />
-                                </a>
-                            </Tooltip>
-                            <br />
-                            <br />
-                            <br />
-                            <h3>
-                                Explore Case HTA9_1's Liver Metastatis Biopsy in
-                                Minerva
-                            </h3>
-                            <a href="https://www.cycif.org/software/minerva">
-                                Minerva
-                            </a>
-                            is a suite of software tools for interpreting and
-                            interacting with complex images, organized around a
-                            guided analysis approach.
-                            <br />
-                            <Tooltip overlay="Click to Explore Case HTA9_1's Breast Cancer Liver Metastatis Biopsy in Minerva">
-                                <a
-                                    href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1"
-                                    target="_blank"
-                                >
-                                    <img
-                                        style={{ width: '60%' }}
-                                        src={'/minerva_hta9_patient.png'}
-                                    />
-                                </a>
-                            </Tooltip>
+                            {props.toolsExample.exampleCaseCbioportalLink && (
+                                <>
+                                    <h3>{`Explore Case ${props.toolsExample.exampleCaseName} in cBioPortal`}</h3>
+                                    The{' '}
+                                    <a href="https://www.cbioportal.org/">
+                                        cBioPortal
+                                    </a>{' '}
+                                    for Cancer Genomics is an open-source
+                                    software platform that enables interactive,
+                                    exploratory analysis of large-scale cancer
+                                    genomics data sets with a biologist-friendly
+                                    interface.
+                                    <Tooltip
+                                        overlay={`Click to Explore the Clinicogenomic Profiling of Case ${props.toolsExample.exampleCaseName} in detail in cBioPortal`}
+                                    >
+                                        <a
+                                            href={
+                                                props.toolsExample
+                                                    .exampleCaseCbioportalLink
+                                            }
+                                            target="_blank"
+                                        >
+                                            <img
+                                                style={{ width: '60%' }}
+                                                src={
+                                                    '/cbioportal_hta9_1_patient.png'
+                                                }
+                                            />
+                                        </a>
+                                    </Tooltip>
+                                    <br />
+                                    <br />
+                                    <br />
+                                </>
+                            )}
+
+                            {props.toolsExample.exampleCaselMinervaLink && (
+                                <>
+                                    <h3>
+                                        {`Explore Case ${props.toolsExample.exampleCaseName}'s Liver Metastatis Biopsy in
+                                            Minerva`}
+                                    </h3>
+                                    <a href="https://www.cycif.org/software/minerva">
+                                        Minerva
+                                    </a>
+                                    is a suite of software tools for
+                                    interpreting and interacting with complex
+                                    images, organized around a guided analysis
+                                    approach.
+                                    <br />
+                                    <Tooltip
+                                        overlay={`Click to Explore Case ${props.toolsExample.exampleCaseName}'s Breast Cancer Liver Metastatis Biopsy in Minerva`}
+                                    >
+                                        <a
+                                            href={
+                                                props.toolsExample
+                                                    .exampleCaselMinervaLink
+                                            }
+                                            target="_blank"
+                                        >
+                                            <img
+                                                style={{ width: '60%' }}
+                                                src={
+                                                    '/minerva_hta9_patient.png'
+                                                }
+                                            />
+                                        </a>
+                                    </Tooltip>
+                                </>
+                            )}
                         </div>
                     )}
                 </div>
