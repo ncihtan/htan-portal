@@ -14,6 +14,7 @@ import PublicationTabs from '../../components/PublicationTabs';
 import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
+import _ from 'lodash';
 
 const PublicationPage = (props: { data: Publication }) => {
     const router = useRouter();
@@ -116,7 +117,9 @@ const PublicationPage = (props: { data: Publication }) => {
                         toolsExample={props.data.publicationData.toolsExample}
                         cases={props.data.publicationData.cases}
                         images={props.data.publicationData.images}
-                        sequences={props.data.publicationData.sequences}
+                        sequences={_.flatMap(
+                            props.data.publicationData.levelData
+                        )}
                         schemaDataById={
                             props.data.publicationData.schemaDataById
                         }

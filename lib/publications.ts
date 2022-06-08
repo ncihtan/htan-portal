@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
     Author,
     PublicationData,
@@ -5,6 +6,9 @@ import {
     ToolsExample,
 } from '../types';
 import { getSchemaDataMap } from './dataSchemaHelpers';
+import { filterFiles, groupFilesByAttrNameAndValue } from './filterHelpers';
+import { fillInEntities, LoadDataResult } from './helpers';
+import { ExploreSelectedFilter } from './types';
 
 // const publicationInfoById: any = require('../pages/publication/hta9_info.json');
 const biospecimensById: any = require('../pages/publication/hta9_samples.json');
@@ -130,6 +134,11 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
     },
 };
 
+const filtersById: { [id: string]: ExploreSelectedFilter[] } = {
+    hta8: [{ group: 'AtlasName', value: 'HTAN MSK' }],
+    brca_hta9_htan_2022: [{ group: 'AtlasName', value: 'HTAN OHSU' }],
+};
+
 export async function getAllPublicationIds() {
     // TODO: we need to read this from service
     const ids = ['brca_hta9_htan_2022', 'hta8'];
@@ -175,6 +184,29 @@ export async function getPublicationData(id: string) {
     const toolsExample = toolsExampleById[id];
     const authors = authorsById[id];
     const publicationInfo = publicationInfoById[id];
+    // get extra data
+    const rawData = await fetch(
+        'https://htan-synapse-json.surge.sh/processed_syn_data.json'
+    );
+    const text = await rawData.text();
+    const fetchedData: LoadDataResult = JSON.parse(text) as LoadDataResult;
+    const filters = filtersById[id];
+
+    const selectedFiltersByAttrName = _.chain(filters)
+        .groupBy((item) => item.group)
+        .mapValues((filters: ExploreSelectedFilter[]) => {
+            return new Set(filters.map((f) => f.value));
+        })
+        .value();
+    const filteredFiles = filterFiles(
+        selectedFiltersByAttrName,
+        fillInEntities(fetchedData)
+    );
+    const groupedFilesByAttrNameAndValue = groupFilesByAttrNameAndValue(
+        filteredFiles
+    );
+    const levelData = groupedFilesByAttrNameAndValue['Level'];
+
     const publicationData: PublicationData = {
         title,
         leadInstitute,
@@ -188,6 +220,7 @@ export async function getPublicationData(id: string) {
         toolsExample,
         authors,
         publicationInfo,
+        levelData,
     };
     // Combine the data with the id
     return {
