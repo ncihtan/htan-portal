@@ -1,5 +1,6 @@
 import { DataSchemaData } from './lib/dataSchemaHelpers';
 import { Atlas, Entity } from './lib/helpers';
+import { ExploreSelectedFilter } from './lib/types';
 
 export interface CmsData {
     slug: string;
@@ -92,6 +93,9 @@ export interface PublicationData {
     sequences: Entity[];
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
+    };
+    levelData: {
+        [attrValue: string]: Entity[];
     };
 }
 
