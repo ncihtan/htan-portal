@@ -59,6 +59,7 @@ footer.pageFooter {
     text-align: center;
     margin: 30px 0;
     color: #333;
+
     a {
         text-decoration: none;
         color: #333;
@@ -73,6 +74,7 @@ h1 {
     font-size: 2rem;
     margin: 1.5rem 0;
     color: $darkgreen;
+
     &:first-of-type {
         margin-top: 0;
     }
@@ -106,10 +108,8 @@ h4 {
 }
 
 .jumbotron {
-    //background-image: url("https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg");
-
     background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)),
-        url('https://humantumoratlas.org/wp-content/uploads/2019/06/Vanderbilt-PCA-project-image.jpg');
+        url('/Vanderbilt-PCA-project-image.jpeg');
     //background-blend-mode: color-dodge;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -136,6 +136,7 @@ h4 {
     border-top: 4px solid $darkgreen;
     padding: 5px 20px;
     background: rgb(250, 251, 252);
+
     .nav-link {
         color: #333 !important;
         padding: 0 1.5em !important;
@@ -183,6 +184,7 @@ table {
     left: 5px;
     right: 5px;
     top: 88px;
+
     iframe {
         border: none;
         height: 100%;
@@ -210,9 +212,11 @@ table {
         position: relative;
         z-index: 10;
     }
+
     &:empty {
         display: none;
     }
+
     background: #fff;
 }
 
@@ -266,10 +270,12 @@ table {
 .filterControls {
     display: flex;
     margin-bottom: 20px;
+
     > div {
         margin-right: 24px;
         display: flex;
         align-items: center;
+
         select {
             display: inline-block;
             margin-left: 5px;
@@ -334,6 +340,7 @@ table {
 
             .attributeGroupName {
                 font-weight: bold;
+
                 &:hover {
                     text-decoration: line-through;
                     cursor: pointer;
@@ -371,6 +378,7 @@ table {
 
 .subnav {
     margin-bottom: 20px;
+
     .nav-item {
         cursor: pointer;
     }

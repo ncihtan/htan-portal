@@ -15,13 +15,13 @@ export async function getContent(tab: string, htaId: string) {
 }
 
 export function getAtlasContent(postId: number): WPAtlas {
-    let postUrl = `https://humantumoratlas.org/wp-json/wp/v2/atlas/${postId}`;
+    let postUrl = `https://humantumoratlas.wpcomstaging.com/wp-json/wp/v2/atlas/${postId}`;
     let { data } = useSWR(postUrl, fetcher);
     return data as WPAtlas;
 }
 
 export function getAtlasList(): Promise<WPAtlas[]> {
-    let postUrl = `https://humantumoratlas.org/wp-json/wp/v2/atlas?per_page=100`;
+    let postUrl = `https://humantumoratlas.wpcomstaging.com/wp-json/wp/v2/atlas?per_page=100`;
     return fetcher(postUrl);
 }
 
@@ -32,4 +32,4 @@ export async function getStaticContent(slugs: string[]) {
     return res.json();
 }
 
-export const WORDPRESS_BASE_URL = `https://humantumoratlas.org/wp-json/wp/v2/pages/?_fields=content,slug,title&cacheBuster=${new Date().getTime()}&slug=`;
+export const WORDPRESS_BASE_URL = `https://humantumoratlas.wpcomstaging.com/wp-json/wp/v2/pages/?_fields=content,slug,title&cacheBuster=${new Date().getTime()}&slug=`;
