@@ -48,10 +48,7 @@ const SynapseDataLink = (props: { id: string }) => (
 );
 
 const MetaDataLink = (props: { id: string }) => (
-    <a
-        href={`https://htan-metadata.surge.sh/${props.id}.csv`}
-        download
-    >
+    <a href={`https://htan-metadata.surge.sh/${props.id}.csv`} download>
         {props.id}
     </a>
 );
@@ -93,7 +90,7 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                                 <td>{info.numItems}</td>
                                             </tr>
                                         ),
-                                        "component": info.component,
+                                        component: info.component,
                                     }))
                                     .sortBy((obj) => obj.component)
                                     .map((obj) => obj.row)
@@ -359,7 +356,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         return (
                             <CellxgeneViewerLink
                                 url={
-                                    '/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+MSK"%7D%5D&tab=file'
+                                    'https://cellxgene.cziscience.com/collections/62e8f058-9c37-48bc-9200-e767f318a8ec'
                                 }
                                 count={11}
                             />
