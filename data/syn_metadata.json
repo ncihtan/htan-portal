@@ -517,7 +517,7 @@
         {
             "component": "BulkDNALevel2",
             "synapseId": "syn26541762",
-            "numItems": 19
+            "numItems": 22
         }
     ],
     "HTA7": [
@@ -623,7 +623,7 @@
         {
             "component": "Demographics",
             "synapseId": "syn24996542",
-            "numItems": 21
+            "numItems": 32
         },
         {
             "component": "FamilyHistory",
@@ -653,22 +653,22 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn25110812",
-            "numItems": 313
+            "numItems": 370
         },
         {
             "component": "Diagnosis",
             "synapseId": "syn25127027",
-            "numItems": 21
+            "numItems": 32
         },
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn25127316",
-            "numItems": 208
+            "numItems": 248
         },
         {
             "component": "BulkRNA-seqLevel1",
             "synapseId": "syn25127342",
-            "numItems": 232
+            "numItems": 252
         },
         {
             "component": "ScRNA-seqLevel1",
@@ -679,6 +679,16 @@
             "component": "ImagingLevel2",
             "synapseId": "syn25200520",
             "numItems": 78
+        },
+        {
+            "component": "OtherAssay",
+            "synapseId": "syn29840103",
+            "numItems": 30
+        },
+        {
+            "component": "ScRNA-seqLevel1",
+            "synapseId": "syn29840117",
+            "numItems": 22
         }
     ],
     "HTA4": [
@@ -824,17 +834,17 @@
         {
             "component": "MolecularTest",
             "synapseId": "syn25050891",
-            "numItems": 340
+            "numItems": 348
         },
         {
             "component": "Diagnosis",
             "synapseId": "syn25126897",
-            "numItems": 680
+            "numItems": 684
         },
         {
             "component": "Biospecimen",
             "synapseId": "syn25149097",
-            "numItems": 1006
+            "numItems": 1110
         },
         {
             "component": "BulkDNALevel1",
