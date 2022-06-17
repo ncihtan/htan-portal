@@ -10,12 +10,13 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import React from 'react';
 import Head from 'next/head';
-import { WPAtlas } from '../../types';
+import { Category, WPAtlas } from '../../types';
 import { GetStaticProps } from 'next';
 import { Button } from 'react-bootstrap';
 import { getExplorePageURL } from '../../lib/helpers';
 import { AttributeNames, SynapseAtlas } from '../../lib/types';
 import { ExploreTab } from '../../components/ExploreTabs';
+import { AtlasWrapper } from '../../components/Atlas';
 
 interface IPostProps {
     synapseAtlasData: Pick<SynapseAtlas, 'htan_id' | 'htan_name'>[];
