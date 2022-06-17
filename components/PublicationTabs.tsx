@@ -39,6 +39,7 @@ const toolsContent: { [id: string]: JSX.Element } = {
             <h3>{`Explore Cellxgene`}</h3>
             The <a href="https://cellxgene.cziscience.com/">cellxgene</a> is an
             interactive data explorer for single-cell datasets.
+            <br />
             <Tooltip
                 overlay={`Click to Explore the celllxgene collections page`}
             >
@@ -63,6 +64,7 @@ const toolsContent: { [id: string]: JSX.Element } = {
             Genomics is an open-source software platform that enables
             interactive, exploratory analysis of large-scale cancer genomics
             data sets with a biologist-friendly interface.
+            <br />
             <Tooltip
                 overlay={`Click to Explore the Clinicogenomic Profiling of Case HTA9_1 in detail in cBioPortal`}
             >
