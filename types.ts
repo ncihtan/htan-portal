@@ -1,5 +1,5 @@
 import { DataSchemaData } from './lib/dataSchemaHelpers';
-import { Atlas, Entity } from './lib/helpers';
+import { Atlas } from './lib/helpers';
 import { ExploreSelectedFilter } from './lib/types';
 
 export interface CmsData {
@@ -52,17 +52,6 @@ export interface WPAtlas {
     home_image: { guid: string };
 }
 
-export interface Institute {
-    name: string;
-    link?: string;
-}
-
-export interface ToolsExample {
-    exampleCaseName: string;
-    exampleCaseCbioportalLink: string;
-    exampleCaselMinervaLink: string;
-}
-
 export interface Author {
     name: string;
     email: string;
@@ -77,26 +66,20 @@ export interface PublicationInfo {
     journal: GeneralLink;
     pubmed: GeneralLink;
     DOI: GeneralLink;
+    atlas: GeneralLink;
 }
 
 export interface PublicationData {
     title: string;
-    leadInstitute: Institute;
     abstract: string;
     synapseAtlas: Atlas;
-    biospecimens: Entity[];
-    toolsExample: ToolsExample;
-    authors: Author[];
+    authors: string[];
+    correspondingAuthor: Author;
     publicationInfo: PublicationInfo;
-    cases: Entity[];
-    images: Entity[];
-    sequences: Entity[];
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
     };
-    levelData: {
-        [attrValue: string]: Entity[];
-    };
+    filters: ExploreSelectedFilter[];
 }
 
 export interface Publication {

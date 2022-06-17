@@ -9,39 +9,18 @@ import { DataSchemaData } from '../lib/dataSchemaHelpers';
 import { groupFilesByAttrNameAndValue } from '../lib/filterHelpers';
 import { Atlas, Entity, setTab } from '../lib/helpers';
 import styles from './PublicationTabs.module.scss';
-import { ToolsExample } from '../types';
 
 interface IPublicationTabsProps {
     router: NextRouter;
     abstract: string;
     synapseAtlas: Atlas;
     biospecimens: Entity[];
-    toolsExample: ToolsExample;
     cases: Entity[];
     images: Entity[];
     sequences: Entity[];
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
     };
-    // filteredFiles: Entity[];
-    // nonAtlasSelectedFiltersByAttrName: ISelectedFiltersByAttrName;
-    // samples: Entity[];
-    // cases: Entity[];
-    // filteredCasesByNonAtlasFilters: Entity[];
-    // filteredSamplesByNonAtlasFilters: Entity[];
-    // wpData: WPAtlas[];
-    // schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    // getGroupsByPropertyFiltered: any;
-    // filteredSynapseAtlases: Atlas[];
-    // filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
-    // selectedSynapseAtlases: Atlas[];
-    // allSynapseAtlases: Atlas[];
-    // onSelectAtlas?: (selected: Atlas[]) => void;
-
-    // toggleShowAllBiospecimens: () => void;
-    // showAllBiospecimens: boolean;
-    // toggleShowAllCases: () => void;
-    // showAllCases: boolean;
 }
 
 export enum PublicationTab {
@@ -54,107 +33,80 @@ export enum PublicationTab {
     TOOLS = 'tools',
 }
 
-// TODO: move this to utils
-// Replace the one in WPAtlasTable.tsx
-const CBioPortalViewerLink = (props: { url: string; count: number }) => (
-    <Tooltip overlay="cBioPortal">
-        <a
-            href={props.url}
-            target="_blank"
-            style={{
-                paddingRight: 8,
-                fontFamily: 'monospace',
-                textDecoration: 'none',
-            }}
-        >
-            {props.count < 100 && '\u00A0'}
-            {props.count < 10 && '\u00A0'}
-            {props.count}{' '}
-            <img
-                width={20}
-                src={'https://avatars.githubusercontent.com/u/9876251?s=20&v=4'}
-            />
-        </a>
-    </Tooltip>
-);
-
-// TODO: move this to utils
-// Replace the one in WPAtlasTable.tsx
-const CellxgeneViewerLink = (props: { url: string; count: number }) => (
-    <Tooltip overlay="cellxgene">
-        <a
-            href={props.url}
-            target="_blank"
-            style={{
-                paddingRight: 8,
-                fontFamily: 'monospace',
-                textDecoration: 'none',
-            }}
-        >
-            {props.count < 100 && '\u00A0'}
-            {props.count < 10 && '\u00A0'}
-            {props.count}{' '}
-            <img
-                width={20}
-                src={
-                    'https://pbs.twimg.com/profile_images/1285714433981812736/-wuBO62N_400x400.jpg'
-                }
-            />
-        </a>
-    </Tooltip>
-);
-
-// TODO: move this to utils
-// Replace the one in WPAtlasTable.tsx
-const MinervaStoryViewerLink = (props: { url: string; count: number }) => (
-    <Tooltip overlay="Minerva Story">
-        <a
-            href={props.url}
-            target="_blank"
-            style={{
-                paddingRight: 8,
-                fontFamily: 'monospace',
-                textDecoration: 'none',
-            }}
-        >
-            {props.count < 100 && '\u00A0'}
-            {props.count < 10 && '\u00A0'}
-            {props.count}{' '}
-            <img
-                width={20}
-                src="https://user-images.githubusercontent.com/1334004/156241219-a3062991-ba9d-4201-ad87-3c9c1f0c61d8.png"
-            />
-        </a>
-    </Tooltip>
-);
-
-// TODO: move this to utils
-// Replace the one in WPAtlasTable.tsx
-const AutoMinervaViewerLink = (props: { url: string; count: number }) => (
-    <Tooltip overlay="Autominerva">
-        <a
-            href={props.url}
-            style={{
-                paddingRight: 8,
-                fontFamily: 'monospace',
-                textDecoration: 'none',
-            }}
-        >
-            {props.count < 100 && '\u00A0'}
-            {props.count < 10 && '\u00A0'}
-            {props.count}{' '}
-            <img
-                width={20}
-                src="https://user-images.githubusercontent.com/1334004/159789346-b647c772-48fe-4652-8d2b-3eecf6690f1f.png"
-            />
-        </a>
-    </Tooltip>
-);
-
+const toolsContent: { [id: string]: JSX.Element } = {
+    hta8: (
+        <>
+            <h3>{`Explore Cellxgene`}</h3>
+            The <a href="https://cellxgene.cziscience.com/">cellxgene</a> is an
+            interactive data explorer for single-cell datasets.
+            <Tooltip
+                overlay={`Click to Explore the celllxgene collections page`}
+            >
+                <a
+                    href={
+                        'https://cellxgene.cziscience.com/collections/62e8f058-9c37-48bc-9200-e767f318a8ec'
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/hta8_celllxgene_example.png'}
+                    />
+                </a>
+            </Tooltip>
+        </>
+    ),
+    brca_hta9_htan_2022: (
+        <>
+            <h3>{`Explore Case HTA9_1 in cBioPortal`}</h3>
+            The <a href="https://www.cbioportal.org/">cBioPortal</a> for Cancer
+            Genomics is an open-source software platform that enables
+            interactive, exploratory analysis of large-scale cancer genomics
+            data sets with a biologist-friendly interface.
+            <Tooltip
+                overlay={`Click to Explore the Clinicogenomic Profiling of Case HTA9_1 in detail in cBioPortal`}
+            >
+                <a
+                    href={
+                        'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/cbioportal_hta9_1_patient.png'}
+                    />
+                </a>
+            </Tooltip>
+            <br />
+            <br />
+            <br />
+            <h3>
+                {`Explore Case HTA9_1's Liver Metastatis Biopsy in Minerva`}
+            </h3>
+            <a href="https://www.cycif.org/software/minerva">Minerva</a>
+            is a suite of software tools for interpreting and interacting with
+            complex images, organized around a guided analysis approach.
+            <br />
+            <Tooltip
+                overlay={`Click to Explore Case HTA9_1's Breast Cancer Liver Metastatis Biopsy in Minerva`}
+            >
+                <a
+                    href={'https://minerva-story-htan-ohsu-demo.surge.sh/'}
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/minerva_hta9_patient.png'}
+                    />
+                </a>
+            </Tooltip>
+        </>
+    ),
+};
 const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || PublicationTab.ABSTRACT;
-
         return (
             <>
                 <div className="subnav">
@@ -403,75 +355,10 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     : ''
                             }`}
                         >
-                            {props.toolsExample.exampleCaseCbioportalLink && (
-                                <>
-                                    <h3>{`Explore Case ${props.toolsExample.exampleCaseName} in cBioPortal`}</h3>
-                                    The{' '}
-                                    <a href="https://www.cbioportal.org/">
-                                        cBioPortal
-                                    </a>{' '}
-                                    for Cancer Genomics is an open-source
-                                    software platform that enables interactive,
-                                    exploratory analysis of large-scale cancer
-                                    genomics data sets with a biologist-friendly
-                                    interface.
-                                    <Tooltip
-                                        overlay={`Click to Explore the Clinicogenomic Profiling of Case ${props.toolsExample.exampleCaseName} in detail in cBioPortal`}
-                                    >
-                                        <a
-                                            href={
-                                                props.toolsExample
-                                                    .exampleCaseCbioportalLink
-                                            }
-                                            target="_blank"
-                                        >
-                                            <img
-                                                style={{ width: '60%' }}
-                                                src={
-                                                    '/cbioportal_hta9_1_patient.png'
-                                                }
-                                            />
-                                        </a>
-                                    </Tooltip>
-                                    <br />
-                                    <br />
-                                    <br />
-                                </>
-                            )}
-
-                            {props.toolsExample.exampleCaselMinervaLink && (
-                                <>
-                                    <h3>
-                                        {`Explore Case ${props.toolsExample.exampleCaseName}'s Liver Metastatis Biopsy in
-                                            Minerva`}
-                                    </h3>
-                                    <a href="https://www.cycif.org/software/minerva">
-                                        Minerva
-                                    </a>
-                                    is a suite of software tools for
-                                    interpreting and interacting with complex
-                                    images, organized around a guided analysis
-                                    approach.
-                                    <br />
-                                    <Tooltip
-                                        overlay={`Click to Explore Case ${props.toolsExample.exampleCaseName}'s Breast Cancer Liver Metastatis Biopsy in Minerva`}
-                                    >
-                                        <a
-                                            href={
-                                                props.toolsExample
-                                                    .exampleCaselMinervaLink
-                                            }
-                                            target="_blank"
-                                        >
-                                            <img
-                                                style={{ width: '60%' }}
-                                                src={
-                                                    '/minerva_hta9_patient.png'
-                                                }
-                                            />
-                                        </a>
-                                    </Tooltip>
-                                </>
+                            {props.router.query.id ? (
+                                toolsContent[props.router.query.id.toString()]
+                            ) : (
+                                <div />
                             )}
                         </div>
                     )}

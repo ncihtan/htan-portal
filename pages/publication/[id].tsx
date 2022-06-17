@@ -1,6 +1,4 @@
-import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
+import React, { useEffect, useState } from 'react';
 import PreReleaseBanner from '../../components/PreReleaseBanner';
 import { GetStaticProps } from 'next';
 import { Publication } from '../../types';
@@ -8,6 +6,8 @@ import PageWrapper from '../../components/PageWrapper';
 import {
     getAllPublicationIds,
     getPublicationData,
+    imagingAssayName,
+    sequencingAssayName,
 } from '../../lib/publications';
 import { useRouter } from 'next/router';
 import PublicationTabs from '../../components/PublicationTabs';
@@ -15,146 +15,232 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
+import {
+    Entity,
+    fetchData,
+    fillInEntities,
+    LoadDataResult,
+} from '../../lib/helpers';
+import { ScaleLoader } from 'react-spinners';
+import {
+    ExploreSelectedFilter,
+    ISelectedFiltersByAttrName,
+} from '../../lib/types';
+import {
+    filterFiles,
+    getFilteredCases,
+    groupFilesByAttrNameAndValue,
+} from '../../lib/filterHelpers';
+
+const filterByAttrName = (filters: ExploreSelectedFilter[]) => {
+    return _.chain(filters)
+        .groupBy((item) => item.group)
+        .mapValues((filters: ExploreSelectedFilter[]) => {
+            return new Set(filters.map((f) => f.value));
+        })
+        .value();
+};
+
+const getFilteredFiles = (
+    filterSelectionsByAttrName: ISelectedFiltersByAttrName,
+    files: LoadDataResult
+) => {
+    return filterFiles(filterSelectionsByAttrName, fillInEntities(files));
+};
+
+const filterAssayData = (
+    groupedData: { [attrName: string]: { [attrValue: string]: Entity[] } },
+    filterAssayName: string[]
+) => {
+    const filteredData = _.chain(groupedData['assayName'])
+        .keys()
+        .filter((key) => filterAssayName.includes(key))
+        .flatMap((key) => groupedData['assayName'][key])
+        .value();
+    return filteredData;
+};
+
+const getBiospecimensData = (
+    selectedFiltersByAttrName: { [x: string]: Set<string> },
+    filteredFiles: Entity[]
+) => {
+    const samples = _.chain(filteredFiles)
+        .flatMapDeep((file) => file.biospecimen)
+        .uniqBy((f) => f.HTANBiospecimenID)
+        .value();
+    const filteredCaseIds = _.keyBy(
+        getFilteredCases(filteredFiles, selectedFiltersByAttrName, false),
+        (c) => c.HTANParticipantID
+    );
+    return samples.filter((s) => {
+        return s.HTANParticipantID in filteredCaseIds;
+    });
+};
 
 const PublicationPage = (props: { data: Publication }) => {
     const router = useRouter();
+    const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
+    const [sequencingData, setSequencingData] = useState<Entity[]>([]);
+    const [imagingData, setImagingData] = useState<Entity[]>([]);
+    const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
+    const [casesData, setCasesData] = useState<Entity[]>([]);
+
+    useEffect(() => {
+        async function getData() {
+            await fetchData().then((data) => {
+                setData(data);
+                const selectedFiltersByAttrName = filterByAttrName(
+                    props.data.publicationData.filters
+                );
+                const filteredFiles = getFilteredFiles(
+                    selectedFiltersByAttrName,
+                    data
+                );
+                const groupedData = groupFilesByAttrNameAndValue(filteredFiles);
+                setSequencingData(
+                    filterAssayData(groupedData, sequencingAssayName)
+                );
+                setImagingData(filterAssayData(groupedData, imagingAssayName));
+                const biospecimensData = getBiospecimensData(
+                    selectedFiltersByAttrName,
+                    filteredFiles
+                );
+                setBiospecimensData(biospecimensData);
+                const casesData = getFilteredCases(
+                    filteredFiles,
+                    selectedFiltersByAttrName,
+                    false
+                );
+                setCasesData(casesData);
+            });
+        }
+        getData();
+    }, []);
+
+    const isLoading = _.isEmpty(data);
 
     return (
         <>
             <PreReleaseBanner />
             <PageWrapper>
-                <div className={styles.publicationPage}>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <div
-                            style={{
-                                fontSize: 50,
-                                width: 110,
-                                padding: 30,
-                                color: '#5f008c',
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faBook} />
-                        </div>
-                        <div>
-                            <span style={{ fontStyle: 'italic' }}>
-                                Publication
-                            </span>
-                            <h2 style={{ marginTop: 0, padding: 0 }}>
-                                {props.data.publicationData.title}
-                            </h2>
-                            <p>
-                                Authors:{' '}
-                                {props.data.publicationData.authors.map(
-                                    (author, index) => (
-                                        <>
-                                            <span
-                                                style={{ fontStyle: 'italic' }}
-                                            >
-                                                <a
-                                                    href={`mailto: ${author.email}`}
+                {isLoading && (
+                    <div className={styles.loadingIndicator}>
+                        <ScaleLoader />
+                    </div>
+                )}
+                {!isLoading && (
+                    <div className={styles.publicationPage}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            <div
+                                style={{
+                                    fontSize: 50,
+                                    width: 110,
+                                    padding: 30,
+                                    color: '#5f008c',
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faBook} />
+                            </div>
+                            <div>
+                                <span style={{ fontStyle: 'italic' }}>
+                                    Publication
+                                </span>
+                                <h2 style={{ marginTop: 0, padding: 0 }}>
+                                    {props.data.publicationData.title}
+                                </h2>
+                                <p>
+                                    Authors:{' '}
+                                    {props.data.publicationData.authors.map(
+                                        (author, index) => (
+                                            <>
+                                                <span
+                                                    style={{
+                                                        fontStyle: 'italic',
+                                                    }}
                                                 >
-                                                    {author.name}
-                                                </a>
-                                            </span>
-                                            {', '}
-                                            {index ===
+                                                    {author}
+                                                </span>
+                                                {', '}
+                                                {index ===
+                                                    props.data.publicationData
+                                                        .authors.length -
+                                                        1 && <>{'et al.'}</>}
+                                            </>
+                                        )
+                                    )}
+                                    <br />
+                                    Journal:{' '}
+                                    <span>
+                                        <a
+                                            href={
                                                 props.data.publicationData
-                                                    .authors.length -
-                                                    1 && <>{'et al.'}</>}
-                                        </>
-                                    )
-                                )}
-                                <br />
-                                Journal:{' '}
-                                <span>
+                                                    .publicationInfo.journal
+                                                    .link
+                                            }
+                                        >
+                                            {
+                                                props.data.publicationData
+                                                    .publicationInfo.journal
+                                                    .name
+                                            }
+                                        </a>
+                                    </span>{' '}
+                                    &nbsp; Pubmed:{' '}
                                     <a
                                         href={
                                             props.data.publicationData
-                                                .publicationInfo.journal.link
+                                                .publicationInfo.pubmed.link
                                         }
                                     >
                                         {
                                             props.data.publicationData
-                                                .publicationInfo.journal.name
+                                                .publicationInfo.pubmed.name
+                                        }
+                                    </a>{' '}
+                                    &nbsp; DOI:{' '}
+                                    <a
+                                        href={
+                                            props.data.publicationData
+                                                .publicationInfo.DOI.link
+                                        }
+                                    >
+                                        {
+                                            props.data.publicationData
+                                                .publicationInfo.DOI.name
                                         }
                                     </a>
-                                </span>{' '}
-                                &nbsp; Pubmed:{' '}
-                                <a
-                                    href={
-                                        props.data.publicationData
-                                            .publicationInfo.pubmed.link
-                                    }
-                                >
-                                    {
-                                        props.data.publicationData
-                                            .publicationInfo.pubmed.name
-                                    }
-                                </a>{' '}
-                                &nbsp; DOI:{' '}
-                                <a
-                                    href={
-                                        props.data.publicationData
-                                            .publicationInfo.DOI.link
-                                    }
-                                >
-                                    {
-                                        props.data.publicationData
-                                            .publicationInfo.DOI.name
-                                    }
-                                </a>
-                                <br />
-                                Atlas:{' '}
-                                {props.data.publicationData.leadInstitute.name}
-                            </p>
+                                    <br />
+                                    Atlas:{' '}
+                                    <a
+                                        href={
+                                            props.data.publicationData
+                                                .publicationInfo.atlas.link
+                                        }
+                                    >
+                                        {
+                                            props.data.publicationData
+                                                .publicationInfo.atlas.name
+                                        }
+                                    </a>
+                                </p>
+                            </div>
                         </div>
+                        <PublicationTabs
+                            router={router}
+                            abstract={props.data.publicationData.abstract}
+                            synapseAtlas={
+                                props.data.publicationData.synapseAtlas
+                            }
+                            biospecimens={biospecimensData}
+                            cases={casesData}
+                            images={imagingData}
+                            sequences={sequencingData}
+                            schemaDataById={
+                                props.data.publicationData.schemaDataById
+                            }
+                        />
                     </div>
-                    <PublicationTabs
-                        router={router}
-                        abstract={props.data.publicationData.abstract}
-                        synapseAtlas={props.data.publicationData.synapseAtlas}
-                        biospecimens={props.data.publicationData.biospecimens}
-                        toolsExample={props.data.publicationData.toolsExample}
-                        cases={props.data.publicationData.cases}
-                        images={props.data.publicationData.images}
-                        sequences={_.flatMap(
-                            props.data.publicationData.levelData
-                        )}
-                        schemaDataById={
-                            props.data.publicationData.schemaDataById
-                        }
-                        // schemaDataById={this.state.schemaDataById}
-                        // filteredFiles={this.filteredFiles}
-                        // filteredSynapseAtlases={this.filteredAtlases}
-                        // filteredSynapseAtlasesByNonAtlasFilters={
-                        //     this.filteredAtlasesByNonAtlasFilters
-                        // }
-                        // selectedSynapseAtlases={this.selectedAtlases}
-                        // allSynapseAtlases={this.allAtlases}
-                        // onSelectAtlas={this.onSelectAtlas}
-                        // samples={this.filteredSamples}
-                        // cases={this.filteredCases}
-                        // filteredCasesByNonAtlasFilters={
-                        //     this.filteredCasesByNonAtlasFilters
-                        // }
-                        // filteredSamplesByNonAtlasFilters={
-                        //     this.filteredSamplesByNonAtlasFilters
-                        // }
-                        // nonAtlasSelectedFiltersByAttrName={
-                        //     this.nonAtlasSelectedFiltersByAttrName
-                        // }
-                        // wpData={this.props.wpAtlases}
-                        // getGroupsByPropertyFiltered={
-                        //     this.getGroupsByPropertyFiltered
-                        // }
-                        // showAllBiospecimens={this.showAllBiospecimens}
-                        // showAllCases={this.showAllCases}
-                        // toggleShowAllBiospecimens={
-                        //     this.toggleShowAllBiospecimens
-                        // }
-                        // toggleShowAllCases={this.toggleShowAllCases}
-                    />
-                </div>
+                )}
             </PageWrapper>
         </>
     );
