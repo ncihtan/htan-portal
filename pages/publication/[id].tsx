@@ -141,7 +141,7 @@ const PublicationPage = (props: { data: Publication }) => {
                             >
                                 <FontAwesomeIcon icon={faBook} />
                             </div>
-                            <div>
+                            <div style={{ width: '100%' }}>
                                 <span style={{ fontStyle: 'italic' }}>
                                     Publication
                                 </span>
@@ -165,6 +165,33 @@ const PublicationPage = (props: { data: Publication }) => {
                                                     props.data.publicationData
                                                         .authors.length -
                                                         1 && <>{'et al.'}</>}
+                                            </>
+                                        )
+                                    )}{' '}
+                                    <span style={{ marginLeft: '5%' }}>
+                                        Contact:{' '}
+                                    </span>
+                                    {props.data.publicationData.correspondingAuthors.map(
+                                        (correspondingAuthor, index) => (
+                                            <>
+                                                <a
+                                                    href={`mailto:${correspondingAuthor.email}`}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            fontStyle: 'italic',
+                                                        }}
+                                                    >
+                                                        {
+                                                            correspondingAuthor.name
+                                                        }
+                                                    </span>
+                                                </a>
+                                                {index <
+                                                    props.data.publicationData
+                                                        .correspondingAuthors
+                                                        .length -
+                                                        1 && <>{', '}</>}
                                             </>
                                         )
                                     )}

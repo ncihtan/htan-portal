@@ -34,7 +34,7 @@ export enum PublicationTab {
 }
 
 const toolsContent: { [id: string]: JSX.Element } = {
-    hta8: (
+    msk_sclc_chan_2021: (
         <>
             <h3>{`Explore Cellxgene`}</h3>
             The <a href="https://cellxgene.cziscience.com/">cellxgene</a> is an
@@ -57,7 +57,7 @@ const toolsContent: { [id: string]: JSX.Element } = {
             </Tooltip>
         </>
     ),
-    brca_hta9_htan_2022: (
+    ohsu_brca_johnson_2022: (
         <>
             <h3>{`Explore Case HTA9_1 in cBioPortal`}</h3>
             The <a href="https://www.cbioportal.org/">cBioPortal</a> for Cancer
@@ -70,7 +70,7 @@ const toolsContent: { [id: string]: JSX.Element } = {
             >
                 <a
                     href={
-                        'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
+                        'https://www.cbioportal.org/patient?studyId=ohsu_brca_johnson_2022&caseId=HTA9_1'
                     }
                     target="_blank"
                 >

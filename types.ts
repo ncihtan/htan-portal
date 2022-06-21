@@ -74,7 +74,7 @@ export interface PublicationData {
     abstract: string;
     synapseAtlas: Atlas;
     authors: string[];
-    correspondingAuthor: Author;
+    correspondingAuthors: Author[];
     publicationInfo: PublicationInfo;
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
