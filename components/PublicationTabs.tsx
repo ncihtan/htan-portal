@@ -34,24 +34,46 @@ export enum PublicationTab {
 }
 
 const toolsContent: { [id: string]: JSX.Element } = {
-    msk_sclc_chan_2021: (
+    // 'htapp_crc_pelka_2021',
+    //     'duke_brca_risom_2021',
+    //     'hms_ckcm_nirmal_2022',
+    //     'ohsu_brca_johnson_2022',
+    //     'msk_sclc_chan_2021',
+    //     'vanderbilt_crc_chen_2021',
+    htapp_crc_pelka_2021: <></>,
+    duke_brca_risom_2021: (
         <>
-            <h3>{`Explore Cellxgene`}</h3>
-            The <a href="https://cellxgene.cziscience.com/">cellxgene</a> is an
-            interactive data explorer for single-cell datasets.
+            <h3>{`Explore Autominerva`}</h3>
             <br />
-            <Tooltip
-                overlay={`Click to Explore the celllxgene collections page`}
-            >
+            <Tooltip overlay={`Click to Explore Autominerva`}>
                 <a
                     href={
-                        'https://cellxgene.cziscience.com/collections/62e8f058-9c37-48bc-9200-e767f318a8ec'
+                        'https://data.humantumoratlas.org/explore?selectedFilters=%5B%7B%22value%22%3A%22mIHC%22%2C%22label%22%3A%22mIHC%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A62%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22t-CyCIF%22%2C%22label%22%3A%22t-CyCIF%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A400%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22MIBI%22%2C%22label%22%3A%22MIBI%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A165%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22IMC%22%2C%22label%22%3A%22IMC%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A41%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22H%26E%22%2C%22label%22%3A%22H%26E%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A254%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22CyCIF%22%2C%22label%22%3A%22CyCIF%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A13%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+Duke%22%7D%5D&tab=file'
                     }
                     target="_blank"
                 >
                     <img
                         style={{ width: '60%' }}
-                        src={'/hta8_celllxgene_example.png'}
+                        src={'/HTA6_Duke_tool_example.png'}
+                    />
+                </a>
+            </Tooltip>
+        </>
+    ),
+    hms_ckcm_nirmal_2022: (
+        <>
+            <h3>{`Explore Autominerva`}</h3>
+            <br />
+            <Tooltip overlay={`Click to Explore Autominerva`}>
+                <a
+                    href={
+                        'https://data.humantumoratlas.org/explore?selectedFilters=%5B%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+HMS%22%7D%2C%7B%22value%22%3A%22OME-TIFF%22%2C%22label%22%3A%22OME-TIFF%22%2C%22group%22%3A%22FileFormat%22%2C%22count%22%3A16%2C%22isSelected%22%3Afalse%7D%5D&tab=file'
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/HTA6_Duke_tool_example.png'}
                     />
                 </a>
             </Tooltip>
@@ -103,6 +125,54 @@ const toolsContent: { [id: string]: JSX.Element } = {
                     />
                 </a>
             </Tooltip>
+        </>
+    ),
+    msk_sclc_chan_2021: (
+        <>
+            <h3>{`Explore Cellxgene`}</h3>
+            The <a href="https://cellxgene.cziscience.com/">cellxgene</a> is an
+            interactive data explorer for single-cell datasets.
+            <br />
+            <Tooltip
+                overlay={`Click to Explore the celllxgene collections page`}
+            >
+                <a
+                    href={
+                        'https://cellxgene.cziscience.com/collections/62e8f058-9c37-48bc-9200-e767f318a8ec'
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/HTA8_celllxgene_example.png'}
+                    />
+                </a>
+            </Tooltip>
+        </>
+    ),
+    vanderbilt_crc_chen_2021: (
+        <>
+            <h3>{`Explore Autominerva`}</h3>
+            <br />
+            <Tooltip overlay={`Click to Explore Autominerva`}>
+                <a
+                    href={
+                        'https://data.humantumoratlas.org/explore?selectedFilters=%5B%7B%22value%22%3A%22H%26E%22%2C%22label%22%3A%22H%26E%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A692%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+Vanderbilt%22%7D%5D&tab=file'
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/HTA11_Vanderbilt_example.png'}
+                    />
+                </a>
+            </Tooltip>
+            <br />
+            <br />
+            <br />
+            <h3>
+                {`Explore in cellxgene (temporarily disabled: update pending)`}
+            </h3>
         </>
     ),
 };
