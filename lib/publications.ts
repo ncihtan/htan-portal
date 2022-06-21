@@ -3,8 +3,21 @@ import { Author, PublicationData, PublicationInfo } from '../types';
 import { getSchemaDataMap } from './dataSchemaHelpers';
 import { ExploreSelectedFilter } from './types';
 
-export const SequencingAssayName = ['Bulk DNA', 'Bulk RNA-seq', 'scRNA-seq'];
-export const ImagingAssayName = ['CyCIF', 'mIHC', 't-CyCIF', 'MIBI'];
+export const SequencingAssayName = [
+    'Bulk DNA',
+    'Bulk RNA-seq',
+    'scRNA-seq',
+    'scRNA-seq',
+];
+export const ImagingAssayName = [
+    'CyCIF',
+    'H&E',
+    'IMC',
+    'MIBI',
+    'MxIF',
+    'mIHC',
+    't-CyCIF',
+];
 export const PublicationPageLink: { [id: string]: string } = {
     HTA1: 'htapp_crc_pelka_2021',
     HTA6: 'duke_brca_risom_2021',
