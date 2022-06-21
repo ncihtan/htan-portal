@@ -6,8 +6,8 @@ import PageWrapper from '../../components/PageWrapper';
 import {
     getAllPublicationIds,
     getPublicationData,
-    imagingAssayName,
-    sequencingAssayName,
+    ImagingAssayName,
+    SequencingAssayName,
 } from '../../lib/publications';
 import { useRouter } from 'next/router';
 import PublicationTabs from '../../components/PublicationTabs';
@@ -98,9 +98,9 @@ const PublicationPage = (props: { data: Publication }) => {
                 );
                 const groupedData = groupFilesByAttrNameAndValue(filteredFiles);
                 setSequencingData(
-                    filterAssayData(groupedData, sequencingAssayName)
+                    filterAssayData(groupedData, SequencingAssayName)
                 );
-                setImagingData(filterAssayData(groupedData, imagingAssayName));
+                setImagingData(filterAssayData(groupedData, ImagingAssayName));
                 const biospecimensData = getBiospecimensData(
                     selectedFiltersByAttrName,
                     filteredFiles

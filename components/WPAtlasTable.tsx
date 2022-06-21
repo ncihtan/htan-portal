@@ -9,7 +9,7 @@ import { observer } from 'mobx-react';
 import { action, computed, makeObservable, observable } from 'mobx';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ExploreTab } from './ExploreTabs';
 import { Button, Modal } from 'react-bootstrap';
 import getAtlasMetaData from '../lib/getAtlasMetaData';
@@ -18,6 +18,7 @@ import {
     ExploreSelectedFilter,
     ISelectedFiltersByAttrName,
 } from '../lib/types';
+import { PublicationPageLink } from '../lib/publications';
 
 interface IWPAtlasTableProps {
     router: NextRouter;
@@ -199,7 +200,10 @@ const CellxgeneViewerLink = (props: { url: string; count: number }) => (
     </Tooltip>
 );
 
-type WPAtlasTableData = Atlas & { isSelected: boolean };
+type WPAtlasTableData = Atlas & {
+    isSelected: boolean;
+    publicationPageLink: string;
+};
 
 @observer
 export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
@@ -223,6 +227,10 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
         return this.selectedAtlases[atlas.htan_id] !== undefined;
     };
 
+    getPublicationPageLink = (atlas: Atlas) => {
+        return PublicationPageLink[atlas.htan_id];
+    };
+
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
     @computed get data(): WPAtlasTableData[] {
@@ -231,6 +239,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 ({
                     ...a,
                     isSelected: this.isRowSelected(a),
+                    publicationPageLink: this.getPublicationPageLink(a),
                 } as WPAtlasTableData)
         );
     }
@@ -286,6 +295,29 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 grow: 2.5,
                 wrap: true,
                 sortable: true,
+            },
+            {
+                name: 'Publication',
+                grow: 0.5,
+                selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
+                cell: (atlasTableData: WPAtlasTableData) => {
+                    console.log(atlasTableData);
+                    if (atlasTableData.publicationPageLink) {
+                        return (
+                            <Tooltip
+                                overlay={`Click to explore publication page`}
+                            >
+                                <a
+                                    href={`//${window.location.host}/publication/${atlasTableData.publicationPageLink}`}
+                                >
+                                    <FontAwesomeIcon icon={faBook} />
+                                </a>
+                            </Tooltip>
+                        );
+                    } else {
+                        return <></>;
+                    }
+                },
             },
             {
                 name: 'Metadata',
