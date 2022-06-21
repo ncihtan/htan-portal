@@ -170,7 +170,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             link: 'https://doi.org/10.1016/j.cell.2021.08.003',
         },
         atlas: {
-            name: '"Human Tumor Atlas Pilot Project (HTAPP)"',
+            name: 'Human Tumor Atlas Pilot Project (HTAPP)',
             link: 'https://data.humantumoratlas.org/hta1',
         },
     },
