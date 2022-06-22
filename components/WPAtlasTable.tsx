@@ -39,6 +39,11 @@ interface IAtlasMetadataLinkModalProps {
     atlas: Atlas | null;
 }
 
+const arePublicationPagesEnabled = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has('publication') || urlParams.has('publications') || urlParams.has('pub') || urlParams.has('pubs');
+};
+
 const SynapseDataLink = (props: { id: string }) => (
     <a
         href={`https://www.synapse.org/#!Synapse:${props.id}/files/`}
@@ -296,7 +301,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 wrap: true,
                 sortable: true,
             },
-            {
+            ...(arePublicationPagesEnabled()? [{
                 name: 'Publications',
                 grow: 0.5,
                 selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
@@ -322,7 +327,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         return <></>;
                     }
                 },
-            },
+            }] : []),
             {
                 name: 'Metadata',
                 grow: 0.5,

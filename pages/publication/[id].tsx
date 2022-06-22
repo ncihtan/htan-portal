@@ -31,6 +31,7 @@ import {
     getFilteredCases,
     groupFilesByAttrNameAndValue,
 } from '../../lib/filterHelpers';
+import { getAssayFilterValues } from '../../lib/entityReportHelpers';
 
 const filterByAttrName = (filters: ExploreSelectedFilter[]) => {
     return _.chain(filters)
@@ -80,10 +81,9 @@ const getBiospecimensData = (
 const PublicationPage = (props: { data: Publication }) => {
     const router = useRouter();
     const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
-    const [sequencingData, setSequencingData] = useState<Entity[]>([]);
-    const [imagingData, setImagingData] = useState<Entity[]>([]);
     const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
     const [casesData, setCasesData] = useState<Entity[]>([]);
+    const [assayData, setAssayData] = useState<{[assayName:string]:Entity[]}>({});
 
     useEffect(() => {
         async function getData() {
@@ -97,14 +97,7 @@ const PublicationPage = (props: { data: Publication }) => {
                     data
                 );
                 const groupedData = groupFilesByAttrNameAndValue(filteredFiles);
-                setSequencingData(
-                    filterAssayData(groupedData, SequencingAssayName)
-                );
-                setImagingData(filterAssayData(groupedData, ImagingAssayName));
-                const biospecimensData = getBiospecimensData(
-                    selectedFiltersByAttrName,
-                    filteredFiles
-                );
+                setAssayData(groupedData['assayName']);
                 setBiospecimensData(biospecimensData);
                 const casesData = getFilteredCases(
                     filteredFiles,
@@ -259,8 +252,7 @@ const PublicationPage = (props: { data: Publication }) => {
                             }
                             biospecimens={biospecimensData}
                             cases={casesData}
-                            images={imagingData}
-                            sequences={sequencingData}
+                            assays={assayData}
                             schemaDataById={
                                 props.data.publicationData.schemaDataById
                             }

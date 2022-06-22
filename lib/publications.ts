@@ -20,6 +20,7 @@ export const ImagingAssayName = [
 ];
 export const PublicationPageLink: { [id: string]: string } = {
     HTA1: 'htapp_crc_pelka_2021',
+    HTA4: 'chop_all_chen_2022',
     HTA6: 'duke_brca_risom_2021',
     HTA7: 'hms_ckcm_nirmal_2022',
     HTA8: 'msk_sclc_chan_2021',
@@ -28,6 +29,14 @@ export const PublicationPageLink: { [id: string]: string } = {
 };
 
 export const PUBLICATIONS: any = {
+    chop_all_chen_2022: {
+        title: 'Single-cell multiomics reveals increased plasticity, resistant populations, and stem-cell–like blasts in KMT2A-rearranged leukemia',
+        htan_id: 'HTA4',
+        htan_name: 'HTAN CHOP',
+        cite: 'Chen et al (2022)',
+        abstract:
+            'KMT2A-rearranged (KMT2A-r) infant acute lymphoblastic leukemia (ALL) is a devastating malignancy with a dismal outcome, and younger age at diagnosis is associated with increased risk of relapse. To discover age-specific differences and critical drivers that mediate poor outcome in KMT2A-r ALL, we subjected KMT2A-r leukemias and normal hematopoietic cells from patients of different ages to single-cell multiomics analyses. We uncovered the following critical new insights: leukemia cells from patients <6 months have significantly increased lineage plasticity. Steroid response pathways are downregulated in the most immature blasts from younger patients. We identify a hematopoietic stem and progenitor-like (HSPC-like) population in the blood of younger patients that contains leukemic blasts and form an immunosuppressive signaling circuit with cytotoxic lymphocytes. These observations offer a compelling explanation for the ability of leukemias in young patients to evade chemotherapy and immune-mediated control. Our analysis also revealed preexisting lymphomyeloid primed progenitors and myeloid blasts at initial diagnosis of B-ALL. Tracking of leukemic clones in 2 patients whose leukemia underwent a lineage switch documented the evolution of such clones into frank acute myeloid leukemia (AML). These findings provide critical insights into KMT2A-r ALL and have clinical implications for molecularly targeted and immunotherapy approaches. Beyond infant ALL, our study demonstrates the power of single-cell multiomics to detect tumor intrinsic and extrinsic factors affecting rare but critical subpopulations within a malignant population that ultimately determines patient outcome.',
+    },
     htapp_crc_pelka_2021: {
         title:
             'Spatially organized multicellular immune hubs in human colorectal cancer',
