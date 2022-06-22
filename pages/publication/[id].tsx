@@ -98,6 +98,10 @@ const PublicationPage = (props: { data: Publication }) => {
                 );
                 const groupedData = groupFilesByAttrNameAndValue(filteredFiles);
                 setAssayData(groupedData['assayName']);
+                const biospecimensData = getBiospecimensData(
+                    selectedFiltersByAttrName,
+                    filteredFiles
+                );
                 setBiospecimensData(biospecimensData);
                 const casesData = getFilteredCases(
                     filteredFiles,

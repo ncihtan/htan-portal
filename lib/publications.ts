@@ -153,7 +153,7 @@ const correspondingAuthorsById: { [id: string]: Author[] } = {
             name: 'Changya Chen',
             email: 'chenc6@email.chop.edu',
         },
-    ]
+    ],
     ohsu_brca_johnson_2022: [
         {
             name: 'Joe W. Gray',
