@@ -134,8 +134,8 @@ const PublicationPage = (props: { data: Publication }) => {
                             <div
                                 style={{
                                     fontSize: 50,
-                                    width: 110,
-                                    padding: 30,
+                                    width: 140,
+                                    padding: 40,
                                     color: '#5f008c',
                                 }}
                             >
@@ -168,9 +168,8 @@ const PublicationPage = (props: { data: Publication }) => {
                                             </>
                                         )
                                     )}{' '}
-                                    <span style={{ marginLeft: '5%' }}>
-                                        Contact:{' '}
-                                    </span>
+                                    <br />
+                                    <span>Contact: </span>
                                     {props.data.publicationData.correspondingAuthors.map(
                                         (correspondingAuthor, index) => (
                                             <>
