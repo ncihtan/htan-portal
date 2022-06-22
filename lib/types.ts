@@ -14,6 +14,7 @@ export type ExploreOptionType = {
 export type ExploreSelectedFilter = {
     group: string;
     value: string;
+    id?: string;
 };
 
 export enum AttributeNames {

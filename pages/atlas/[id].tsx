@@ -10,12 +10,13 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import React from 'react';
 import Head from 'next/head';
-import { WPAtlas } from '../../types';
+import { Category, WPAtlas } from '../../types';
 import { GetStaticProps } from 'next';
 import { Button } from 'react-bootstrap';
 import { getExplorePageURL } from '../../lib/helpers';
 import { AttributeNames, SynapseAtlas } from '../../lib/types';
 import { ExploreTab } from '../../components/ExploreTabs';
+import { AtlasWrapper } from '../../components/Atlas';
 
 interface IPostProps {
     synapseAtlasData: Pick<SynapseAtlas, 'htan_id' | 'htan_name'>[];
@@ -26,7 +27,17 @@ interface IPostProps {
 const PostContent: React.FunctionComponent<{
     wpAtlas: WPAtlas;
     router: NextRouter;
-}> = ({ wpAtlas, router }) => {
+    synapseAtlas?: SynapseAtlas;
+}> = ({ wpAtlas, router, synapseAtlas }) => {
+    let mergedClinicalAndBiospecimenData: Category;
+    // if (synapseAtlas) {
+    //     mergedClinicalAndBiospecimenData = Object.assign(
+    //         {},
+    //         synapseAtlas.clinical,
+    //         synapseAtlas.biospecimen
+    //     );
+    // }
+
     return (
         <Container>
             <Row>
@@ -115,6 +126,52 @@ const PostContent: React.FunctionComponent<{
                                     <span
                                         dangerouslySetInnerHTML={{
                                             __html: wpAtlas.publications,
+                                        }}
+                                    />
+                                ) : (
+                                    'Loading...'
+                                )}
+                            </Container>
+                        </Tab.Pane>
+                        {synapseAtlas && (
+                            <>
+                                <Tab.Pane eventKey="clinBiospecimen">
+                                    <Container className="mt-3">
+                                        <AtlasWrapper
+                                            category={
+                                                mergedClinicalAndBiospecimenData!
+                                            }
+                                        />
+                                    </Container>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="derivedData">
+                                    <Container className="mt-3">
+                                        <AtlasWrapper
+                                            category={
+                                                mergedClinicalAndBiospecimenData!
+                                            }
+                                        />
+                                    </Container>
+                                </Tab.Pane>
+                                {synapseAtlas.imagingData && (
+                                    <Tab.Pane eventKey="imagingData">
+                                        <Container className="mt-3">
+                                            <AtlasWrapper
+                                                category={
+                                                    mergedClinicalAndBiospecimenData!
+                                                }
+                                            />
+                                        </Container>
+                                    </Tab.Pane>
+                                )}
+                            </>
+                        )}
+                        <Tab.Pane eventKey="primaryNGS">
+                            <Container className="mt-3">
+                                {wpAtlas ? (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: wpAtlas.primary_ngs,
                                         }}
                                     />
                                 ) : (

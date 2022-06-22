@@ -1,3 +1,7 @@
+import { DataSchemaData } from './lib/dataSchemaHelpers';
+import { Atlas } from './lib/helpers';
+import { ExploreSelectedFilter } from './lib/types';
+
 export interface CmsData {
     slug: string;
     content: {
@@ -46,4 +50,39 @@ export interface WPAtlas {
     primary_ngs: string;
     short_description: string;
     home_image: { guid: string };
+}
+
+export interface Author {
+    name: string;
+    email: string;
+}
+
+export interface GeneralLink {
+    name: string;
+    link: string;
+}
+
+export interface PublicationInfo {
+    journal: GeneralLink;
+    pubmed: GeneralLink;
+    DOI: GeneralLink;
+    atlas: GeneralLink;
+}
+
+export interface PublicationData {
+    title: string;
+    abstract: string;
+    synapseAtlas: Atlas;
+    authors: string[];
+    correspondingAuthors: Author[];
+    publicationInfo: PublicationInfo;
+    schemaDataById: {
+        [schemaDataId: string]: DataSchemaData;
+    };
+    filters: ExploreSelectedFilter[];
+}
+
+export interface Publication {
+    id: string;
+    publicationData: PublicationData;
 }
