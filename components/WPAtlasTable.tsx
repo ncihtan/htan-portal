@@ -18,7 +18,7 @@ import {
     ExploreSelectedFilter,
     ISelectedFiltersByAttrName,
 } from '../lib/types';
-import { PublicationPageLink } from '../lib/publications';
+import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 
 interface IWPAtlasTableProps {
     router: NextRouter;
@@ -297,7 +297,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 sortable: true,
             },
             {
-                name: 'Publication',
+                name: 'Publications',
                 grow: 0.5,
                 selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
                 cell: (atlasTableData: WPAtlasTableData) => {
@@ -305,7 +305,11 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     if (atlasTableData.publicationPageLink) {
                         return (
                             <Tooltip
-                                overlay={`Click to explore publication page`}
+                                overlay={`${
+                                    PUBLICATIONS[
+                                        atlasTableData.publicationPageLink
+                                    ].cite
+                                }`}
                             >
                                 <a
                                     href={`//${window.location.host}/publication/${atlasTableData.publicationPageLink}`}
