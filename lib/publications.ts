@@ -100,6 +100,7 @@ const authorsById: { [id: string]: string[] } = {
     msk_sclc_chan_2021: ['Chan JM', 'Quintanal-Villalonga Á', 'Gao VR'],
     ohsu_brca_johnson_2022: ['Johnson BE', 'Creason AL', 'Stommel JM'],
     vanderbilt_crc_chen_2021: ['Chen B', 'Scurrah CR', 'McKinley ET'],
+    chop_all_chen_2022: ['Chen C', 'Wenbao Y','Alikarami F']
 };
 
 const correspondingAuthorsById: { [id: string]: Author[] } = {
@@ -147,6 +148,12 @@ const correspondingAuthorsById: { [id: string]: Author[] } = {
             email: 'rudinc@mskcc.org',
         },
     ],
+    chop_all_chen_2022: [
+        {
+            name: 'Changya Chen',
+            email: 'chenc6@email.chop.edu',
+        },
+    ]
     ohsu_brca_johnson_2022: [
         {
             name: 'Joe W. Gray',
@@ -245,6 +252,26 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             link: 'https://humantumoratlas.org/hta8',
         },
     },
+    chop_all_chen_2022:{
+        journal: {
+            name: 'Blood',
+            link:
+                'https://ashpublications.org/blood/article/139/14/2198/482898',
+        },
+        pubmed: {
+            name: '34864916',
+            link: 'https://pubmed.ncbi.nlm.nih.gov/34864916/',
+        },
+        DOI: {
+            name: '10.1182/blood.2021013442',
+            link: 'https://doi.org/10.1182/blood.2021013442',
+        },
+        atlas: {
+            name: "Children's Hospital of Philadelphia (CHOP)",
+            link: 'https://humantumoratlas.org/hta4',
+        },
+
+    },
     ohsu_brca_johnson_2022: {
         journal: {
             name: 'Cell Rep Med.',
@@ -302,6 +329,9 @@ const filtersById: { [id: string]: ExploreSelectedFilter[] } = {
     vanderbilt_crc_chen_2021: [
         { group: 'AtlasName', value: 'HTAN Vanderbilt', id: 'HTA11' },
     ],
+    chop_all_chen_2022: [
+        { group: 'AtlasName', value: 'HTAN CHOP', id: 'HTA4' },
+    ]
 };
 
 export async function getAllPublicationIds() {
@@ -310,6 +340,7 @@ export async function getAllPublicationIds() {
         'duke_brca_risom_2021',
         'hms_ckcm_nirmal_2022',
         'ohsu_brca_johnson_2022',
+        'chop_all_chen_2022',
         'msk_sclc_chan_2021',
         'vanderbilt_crc_chen_2021',
     ];
