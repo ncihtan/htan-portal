@@ -177,7 +177,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
         },
         atlas: {
             name: 'Human Tumor Atlas Pilot Project (HTAPP)',
-            link: 'https://data.humantumoratlas.org/hta1',
+            link: 'https://humantumoratlas.org/hta1',
         },
     },
     duke_brca_risom_2021: {
@@ -195,7 +195,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
         },
         atlas: {
             name: 'Duke University',
-            link: 'https://data.humantumoratlas.org/hta6',
+            link: 'https://humantumoratlas.org/hta6',
         },
     },
     hms_ckcm_nirmal_2022: {
@@ -214,7 +214,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
         },
         atlas: {
             name: 'Harvard Medical School, Brigham and Women’s Hospital',
-            link: 'https://data.humantumoratlas.org/hta7',
+            link: 'https://humantumoratlas.org/hta7',
         },
     },
     msk_sclc_chan_2021: {
@@ -233,7 +233,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
         },
         atlas: {
             name: 'Memorial Sloan Kettering Cancer Center',
-            link: 'https://data.humantumoratlas.org/hta8',
+            link: 'https://humantumoratlas.org/hta8',
         },
     },
     ohsu_brca_johnson_2022: {
@@ -252,7 +252,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
         },
         atlas: {
             name: 'Oregon Health & Science University (OHSU)',
-            link: 'https://data.humantumoratlas.org/hta9',
+            link: 'https://humantumoratlas.org/hta9',
         },
     },
     vanderbilt_crc_chen_2021: {
@@ -271,7 +271,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
         },
         atlas: {
             name: 'Vanderbilt University',
-            link: 'https://data.humantumoratlas.org/hta11',
+            link: 'https://humantumoratlas.org/hta11',
         },
     },
 };

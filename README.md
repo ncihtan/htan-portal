@@ -1,5 +1,5 @@
 # HTAN Data Portal
-This repo contains the code for the [Human Tumor Atlas Network Data Portal](https://data.humantumoratlas.org/)
+This repo contains the code for the [Human Tumor Atlas Network Data Portal](https://humantumoratlas.org/)
 
 ## Framework
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app)
