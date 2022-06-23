@@ -317,14 +317,22 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                 }`}
                             >
                                 <a
-                                    href={`//${window.location.host}/publication/${atlasTableData.publicationPageLink}`}
+                                    href={`//${window.location.host}/publications/${atlasTableData.publicationPageLink}`}
                                 >
                                     <FontAwesomeIcon icon={faBook} />
                                 </a>
                             </Tooltip>
                         );
                     } else {
-                        return <></>;
+                        return (
+                            <Tooltip
+                                overlay={`Publication Page Coming Soon`}
+                            >
+                                <a href='/publications'>
+                                    <FontAwesomeIcon icon={faBook} />
+                                </a>
+                            </Tooltip>
+                        );
                     }
                 },
             }] : []),
