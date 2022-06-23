@@ -166,7 +166,7 @@ const PublicationPage = (props: { data: Publication }) => {
                                         )
                                     )}{' '}
                                     <br />
-                                    <span>Contact: </span>
+                                    {/*<span>Contact: </span>
                                     {props.data.publicationData.correspondingAuthors.map(
                                         (correspondingAuthor, index) => (
                                             <>
@@ -191,7 +191,7 @@ const PublicationPage = (props: { data: Publication }) => {
                                             </>
                                         )
                                     )}
-                                    <br />
+                                    <br />*/}
                                     Journal:{' '}
                                     <span>
                                         <a

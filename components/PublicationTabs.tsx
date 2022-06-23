@@ -125,7 +125,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
     msk_sclc_chan_2021: [
         <>
             <h3>{`Explore Cellxgene`}</h3>
-            The <a href="https://cellxgene.cziscience.com/">cellxgene</a> is an
+            <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
             interactive data explorer for single-cell datasets.
             <br />
             <Tooltip

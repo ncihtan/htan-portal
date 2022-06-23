@@ -418,7 +418,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                             <>
                                 <CBioPortalViewerLink
                                     url={
-                                        'https://www.cbioportal.org/patient?studyId=ohsu_brca_johnson_2022&caseId=HTA9_1'
+                                        'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
                                     }
                                     count={1}
                                 />
