@@ -95,7 +95,7 @@ export const assayColorMap: { [center: string]: string } = {
     mIHC: '#ffa600',
     'scATAC-seq': '#911eb4',
     'scRNA-seq': '#f032e6',
-    't-CyCIF': '#de5601',
+    'CyCIF': '#de5601',
 };
 
 // TODO these should not be random!

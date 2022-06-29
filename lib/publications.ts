@@ -16,7 +16,7 @@ export const ImagingAssayName = [
     'MIBI',
     'MxIF',
     'mIHC',
-    't-CyCIF',
+    'CyCIF',
 ];
 export const PublicationPageLink: { [id: string]: string } = {
     HTA1: 'htapp_crc_pelka_2021',
