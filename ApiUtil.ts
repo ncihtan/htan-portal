@@ -2,6 +2,7 @@ import useSWR from 'swr';
 import _ from 'lodash';
 import fetch from 'node-fetch';
 import { WPAtlas } from './types';
+import { resolve } from 'path';
 
 export function fetcher(url: string) {
     return fetch(url).then((r) => r.json());
@@ -20,7 +21,32 @@ export function getAtlasContent(postId: number): WPAtlas {
     return data as WPAtlas;
 }
 
-export function getAtlasList(): Promise<WPAtlas[]> {
+export async function getAtlasList(): Promise<WPAtlas[]> {
+    const wpAtlases = await getAtlasListWordPressOnly();
+    //TODO: need to make all atlases static rather than coming from WP
+    const staticAtlases: WPAtlas[] = [
+        {
+            id: 9999,
+            title: { rendered: 'TNP SARDANA' },
+            htan_id: 'hta13',
+            slug: 'tnp-sardana',
+            atlas_overview: '',
+            data_overview: '',
+            lead_institutions: 'Trans-Network Project',
+            synapse_id: 'syn24984270',
+            content: { rendered: '' },
+            publications: '',
+            atlas_type: 'Other',
+            primary_ngs: '',
+            short_description: 'Compare imaging methods across centers',
+            // TODO: hash out which ones are required
+            home_image: { guid: '' },
+        },
+    ];
+    return wpAtlases.concat(staticAtlases);
+}
+
+export function getAtlasListWordPressOnly(): Promise<WPAtlas[]> {
     let postUrl = `https://humantumoratlas.wpcomstaging.com/wp-json/wp/v2/atlas?per_page=100`;
     return fetcher(postUrl);
 }

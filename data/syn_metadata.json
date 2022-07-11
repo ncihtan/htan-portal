@@ -953,5 +953,62 @@
             "synapseId": "syn27353220",
             "numItems": 192
         }
+    ],
+    "HTA13": [
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn25505700",
+            "numItems": 52
+        },
+        {
+            "component": "Biospecimen",
+            "synapseId": "syn25556663",
+            "numItems": 129
+        },
+        {
+            "component": "Demographics",
+            "synapseId": "syn25556685",
+            "numItems": 2
+        },
+        {
+            "component": "Diagnosis",
+            "synapseId": "syn25556707",
+            "numItems": 2
+        },
+        {
+            "component": "Exposure",
+            "synapseId": "syn25556727",
+            "numItems": 2
+        },
+        {
+            "component": "FamilyHistory",
+            "synapseId": "syn25556748",
+            "numItems": 2
+        },
+        {
+            "component": "FollowUp",
+            "synapseId": "syn25556769",
+            "numItems": 2
+        },
+        {
+            "component": "MolecularTest",
+            "synapseId": "syn25556985",
+            "numItems": 3
+        },
+        {
+            "component": "Therapy",
+            "synapseId": "syn25557006",
+            "numItems": 2
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn26486800",
+            "numItems": 7
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn26486801",
+            "numItems": 12
+        }
     ]
 }

@@ -41,7 +41,7 @@ def generate_json(include_at_risk_populations, include_released_only):
                     "HTAN Vanderbilt": "hta11",
                     "HTAN WUSTL": "hta12",
                     # exclude TNPs for now
-                    # "HTAN TNP SARDANA": "hta13",
+                    "HTAN TNP SARDANA": "hta13",
                     # "HTAN TNP - TMA": "hta14"
     }
 
@@ -98,6 +98,7 @@ def generate_json(include_at_risk_populations, include_released_only):
             "HTAN HTAPP",
             "HTAN Stanford",
             "HTAN WUSTL",
+            "HTAN TNP SARDANA",
         ]
 
     # store all metadata synapse ids for downloading submitted metadata
