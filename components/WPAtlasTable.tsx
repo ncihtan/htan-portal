@@ -41,7 +41,12 @@ interface IAtlasMetadataLinkModalProps {
 
 const arePublicationPagesEnabled = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.has('publication') || urlParams.has('publications') || urlParams.has('pub') || urlParams.has('pubs');
+    return (
+        urlParams.has('publication') ||
+        urlParams.has('publications') ||
+        urlParams.has('pub') ||
+        urlParams.has('pubs')
+    );
 };
 
 const SynapseDataLink = (props: { id: string }) => (
@@ -284,7 +289,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 name: 'Atlas Description',
                 selector: 'WPAtlas.title.rendered',
                 format: (atlas: Atlas) =>
-                    atlas.WPAtlas ? (
+                    atlas.WPAtlas && atlas.htan_id.toLowerCase() !== 'hta13' ? (
                         <span>
                             <a
                                 href={`//${
@@ -295,47 +300,52 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                             </a>
                         </span>
                     ) : (
-                        'N/A'
+                        <span>{atlas.WPAtlas.short_description}</span>
                     ),
                 grow: 2.5,
                 wrap: true,
                 sortable: true,
             },
-            ...(arePublicationPagesEnabled()? [{
-                name: 'Publications',
-                grow: 0.5,
-                selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
-                cell: (atlasTableData: WPAtlasTableData) => {
-                    console.log(atlasTableData);
-                    if (atlasTableData.publicationPageLink) {
-                        return (
-                            <Tooltip
-                                overlay={`${
-                                    PUBLICATIONS[
-                                        atlasTableData.publicationPageLink
-                                    ].cite
-                                }`}
-                            >
-                                <a
-                                    href={`//${window.location.host}/publications/${atlasTableData.publicationPageLink}`}
-                                >
-                                    <FontAwesomeIcon icon={faBook} />
-                                </a>
-                            </Tooltip>
-                        );
-                    } else {
-                        return (
-                            <Tooltip
-                                overlay={`Publication Page Coming Soon`}
-                            >
-                                <a href='/publications'>
-                                    <FontAwesomeIcon icon={faBook} />
-                                </a>
-                            </Tooltip>
-                        );
-                    }
-                },
-            }] : []),
+            ...(arePublicationPagesEnabled()
+                ? [
+                      {
+                          name: 'Publications',
+                          grow: 0.5,
+                          selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
+                          cell: (atlasTableData: WPAtlasTableData) => {
+                              console.log(atlasTableData);
+                              if (atlasTableData.publicationPageLink) {
+                                  return (
+                                      <Tooltip
+                                          overlay={`${
+                                              PUBLICATIONS[
+                                                  atlasTableData
+                                                      .publicationPageLink
+                                              ].cite
+                                          }`}
+                                      >
+                                          <a
+                                              href={`//${window.location.host}/publications/${atlasTableData.publicationPageLink}`}
+                                          >
+                                              <FontAwesomeIcon icon={faBook} />
+                                          </a>
+                                      </Tooltip>
+                                  );
+                              } else {
+                                  return (
+                                      <Tooltip
+                                          overlay={`Publication Page Coming Soon`}
+                                      >
+                                          <a href="/publications">
+                                              <FontAwesomeIcon icon={faBook} />
+                                          </a>
+                                      </Tooltip>
+                                  );
+                              }
+                          },
+                      },
+                  ]
+                : []),
             {
                 name: 'Metadata',
                 grow: 0.5,
@@ -575,6 +585,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     noHeader={true}
                     customStyles={getDefaultDataTableStyle()}
                 />
+                {/*
                 <AtlasMetadataLinkModal
                     isOpen={this.metadataModalAtlas !== null}
                     onClose={action(() => {
@@ -582,6 +593,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     })}
                     atlas={this.metadataModalAtlas}
                 />
+                */}
             </>
         );
     }
