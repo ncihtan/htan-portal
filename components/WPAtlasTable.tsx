@@ -59,7 +59,10 @@ const SynapseDataLink = (props: { id: string }) => (
 );
 
 const MetaDataLink = (props: { id: string }) => (
-    <a href={`https://htan-metadata.surge.sh/${props.id}.csv`} download>
+    <a
+        href={`https://htan-metadata-20220711.surge.sh/${props.id}.csv`}
+        download
+    >
         {props.id}
     </a>
 );
@@ -585,7 +588,6 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     noHeader={true}
                     customStyles={getDefaultDataTableStyle()}
                 />
-                {/*
                 <AtlasMetadataLinkModal
                     isOpen={this.metadataModalAtlas !== null}
                     onClose={action(() => {
@@ -593,7 +595,6 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     })}
                     atlas={this.metadataModalAtlas}
                 />
-                */}
             </>
         );
     }
