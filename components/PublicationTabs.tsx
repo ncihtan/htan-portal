@@ -17,7 +17,7 @@ interface IPublicationTabsProps {
     synapseAtlas: Atlas;
     biospecimens: Entity[];
     cases: Entity[];
-    assays: {[assayName:string]:Entity[]};
+    assays: { [assayName: string]: Entity[] };
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
     };
@@ -52,7 +52,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
                     />
                 </a>
             </Tooltip>
-        </>
+        </>,
     ],
     hms_ckcm_nirmal_2022: [
         <>
@@ -73,7 +73,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
                     />
                 </a>
             </Tooltip>
-        </>
+        </>,
     ],
     ohsu_brca_johnson_2022: [
         <>
@@ -88,7 +88,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             >
                 <a
                     href={
-                        'https://www.cbioportal.org/patient?studyId=ohsu_brca_johnson_2022&caseId=HTA9_1'
+                        'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
                     }
                     target="_blank"
                 >
@@ -120,7 +120,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
                     />
                 </a>
             </Tooltip>
-        </>
+        </>,
     ],
     msk_sclc_chan_2021: [
         <>
@@ -143,7 +143,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
                     />
                 </a>
             </Tooltip>
-        </>
+        </>,
     ],
     vanderbilt_crc_chen_2021: [
         <>
@@ -169,7 +169,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             <h3>
                 {`Explore in cellxgene (temporarily disabled: update pending)`}
             </h3>
-        </>
+        </>,
     ],
 };
 const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer(
@@ -229,9 +229,10 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                         : ''
                                 }`}
                             >
-                                Participants
-                                {' '}
-                                <Badge pill variant="light">{props.cases.length}</Badge>
+                                Participants{' '}
+                                <Badge pill variant="light">
+                                    {props.cases.length}
+                                </Badge>
                             </a>
                         </li>
                         <li className="nav-item">
@@ -248,37 +249,49 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                         : ''
                                 }`}
                             >
-                                Biospecimens
-                                {' '}
-                                <Badge pill variant="light">{props.biospecimens.length}</Badge>
+                                Biospecimens{' '}
+                                <Badge pill variant="light">
+                                    {props.biospecimens.length}
+                                </Badge>
                             </a>
                         </li>
-                        {Object.keys(props.assays).map((assayName:string) => {
-
+                        {Object.keys(props.assays).map((assayName: string) => {
                             return (
                                 <li className="nav-item">
                                     <a
                                         onClick={() =>
-                                            setTab(assayName.toLowerCase().replaceAll(' ','-'), props.router)
+                                            setTab(
+                                                assayName
+                                                    .toLowerCase()
+                                                    .replaceAll(' ', '-'),
+                                                props.router
+                                            )
                                         }
                                         className={`nav-link ${
-                                            activeTab === assayName.toLowerCase().replaceAll(' ','-')
+                                            activeTab ===
+                                            assayName
+                                                .toLowerCase()
+                                                .replaceAll(' ', '-')
                                                 ? 'active'
                                                 : ''
                                         }`}
                                     >
-                                        {assayName}
-                                        {' '}
-                                        <Badge pill variant="light">{props.assays[assayName].length}</Badge>
+                                        {assayName}{' '}
+                                        <Badge pill variant="light">
+                                            {props.assays[assayName].length}
+                                        </Badge>
                                     </a>
                                 </li>
-                            )
+                            );
                         })}
-                        {(pubId && pubId in toolsContent) && (
+                        {pubId && pubId in toolsContent && (
                             <li className="nav-item">
                                 <a
                                     onClick={() =>
-                                        setTab(PublicationTab.TOOLS, props.router)
+                                        setTab(
+                                            PublicationTab.TOOLS,
+                                            props.router
+                                        )
                                     }
                                     className={`nav-link ${
                                         activeTab === PublicationTab.TOOLS
@@ -286,9 +299,10 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                             : ''
                                     }`}
                                 >
-                                    Tools
-                                    {' '}
-                                    <Badge pill variant="light">{toolsContent[pubId].length}</Badge>
+                                    Tools{' '}
+                                    <Badge pill variant="light">
+                                        {toolsContent[pubId].length}
+                                    </Badge>
                                 </a>
                             </li>
                         )}
@@ -379,11 +393,12 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                         </div>
                     )}
 
-                    {Object.keys(props.assays).map((assayName:string) => {
+                    {Object.keys(props.assays).map((assayName: string) => {
                         return (
                             <div
                                 className={`tab-content fileTab ${
-                                    activeTab !== assayName.toLowerCase().replaceAll(' ','-')
+                                    activeTab !==
+                                    assayName.toLowerCase().replaceAll(' ', '-')
                                         ? 'd-none'
                                         : ''
                                 }`}
@@ -396,7 +411,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     patientCount={props.cases.length}
                                 />
                             </div>
-                        )
+                        );
                     })}
 
                     {activeTab === PublicationTab.TOOLS && (
@@ -407,7 +422,8 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     : ''
                             }`}
                         >
-                            {props.router.query.id && props.router.query.id.toString() in toolsContent? (
+                            {props.router.query.id &&
+                            props.router.query.id.toString() in toolsContent ? (
                                 toolsContent[props.router.query.id.toString()]
                             ) : (
                                 <div />
