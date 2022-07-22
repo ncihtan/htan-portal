@@ -111,6 +111,16 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                     .value()}
                             </tbody>
                         </table>
+                        <span>
+                            You can also explore the metadata in{' '}
+                            <a
+                                target="_blank"
+                                href="https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN/"
+                            >
+                                Google BigQuery
+                            </a>
+                            .
+                        </span>
                     </Modal.Body>
 
                     <Modal.Footer>
