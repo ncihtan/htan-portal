@@ -35,6 +35,7 @@ import { returnStatement } from '@babel/types';
 import { makeListColumn } from '../lib/fileTableHelpers';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
+const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');
 const CUSTOM_MINERVA_STORY_MAPPINGS = require('../data/minerva-story-mappings.json');
 const THUMBNAIL_AND_AUTOMINERVA_MAPPINGS = require('../data/htan-imaging-assets.json');
 
@@ -493,17 +494,41 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: (file: Entity) => {
                     const cellXGeneLink =
                         CELLXGENE_MAPPINGS[getFileBase(file.filename)];
+                    const bigQueryLink =
+                        ISBCGC_MAPPINGS[getFileBase(file.filename)];
                     const imageViewers = getImageViewersAssociatedWithFile(
                         file
                     );
 
-                    if (cellXGeneLink) {
-                        return (
-                            <a href={cellXGeneLink} target="_blank">
-                                CellxGene{' '}
-                                <FontAwesomeIcon icon={faExternalLinkAlt} />
-                            </a>
-                        );
+                    if (cellXGeneLink || bigQueryLink) {
+                        let cellViewers: JSX.Element[] = [];
+
+                        if (cellXGeneLink) {
+                            cellViewers.push(
+                                <span style={{ paddingRight: 5 }}>
+                                    <a href={cellXGeneLink} target="_blank">
+                                        CellxGene{' '}
+                                        <FontAwesomeIcon
+                                            icon={faExternalLinkAlt}
+                                        />
+                                    </a>
+                                </span>
+                            );
+                        }
+                        if (bigQueryLink) {
+                            cellViewers.push(
+                                <span style={{ paddingRight: 5 }}>
+                                    <a href={bigQueryLink} target="_blank">
+                                        BigQuery{' '}
+                                        <FontAwesomeIcon
+                                            icon={faExternalLinkAlt}
+                                        />
+                                    </a>
+                                </span>
+                            );
+                        }
+
+                        return cellViewers;
                     } else if (file.Component.startsWith('Imaging')) {
                         // TODO: Duke images are giving an issue: https://github.com/ncihtan/htan-portal/pull/380#pullrequestreview-946257535
                         if (
