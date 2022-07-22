@@ -189,6 +189,29 @@ const CBioPortalViewerLink = (props: { url: string; count: number }) => (
     </Tooltip>
 );
 
+const BigQueryLink = (props: { url: string; count: number }) => (
+    <Tooltip overlay="Explore single cell data in Google BigQuery">
+        <a
+            href={props.url}
+            style={{
+                paddingRight: 8,
+                fontFamily: 'monospace',
+                textDecoration: 'none',
+            }}
+        >
+            {props.count < 100 && '\u00A0'}
+            {props.count < 10 && '\u00A0'}
+            {props.count}{' '}
+            <img
+                width={20}
+                src={
+                    'https://user-images.githubusercontent.com/2837859/179311013-a1d0046c-de21-400c-993e-32372a080be4.png'
+                }
+            />
+        </a>
+    </Tooltip>
+);
+
 const CellxgeneViewerLink = (props: { url: string; count: number }) => (
     <Tooltip overlay="cellxgene">
         <a
@@ -462,12 +485,14 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         );
                     } else if (atlas.htan_name === 'HTAN BU') {
                         return (
-                            <CellxgeneViewerLink
-                                url={
-                                    'https://cellxgene.cziscience.com/d/BFAA0C46-7E34-4FA9-B08C-6DC6013B735A.cxg/'
-                                }
-                                count={1}
-                            />
+                            <>
+                                <CellxgeneViewerLink
+                                    url={
+                                        'https://cellxgene.cziscience.com/d/BFAA0C46-7E34-4FA9-B08C-6DC6013B735A.cxg/'
+                                    }
+                                    count={1}
+                                />
+                            </>
                         );
                     } else if (atlas.htan_name === 'HTAN Vanderbilt') {
                         return (
@@ -495,6 +520,12 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                         />
                                     </a>
                                 </Tooltip>
+                                <BigQueryLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"HTAN+Vanderbilt"%2C"label"%3A"HTAN+Vanderbilt"%2C"group"%3A"AtlasName"%2C"count"%3A4%2C"isSelected"%3Afalse%7D%5D&tab=file'
+                                    }
+                                    count={4}
+                                />
                                 <AutoMinervaViewerLink
                                     url={
                                         '/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'
@@ -516,12 +547,20 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         );
                     } else if (atlas.htan_name === 'HTAN CHOP') {
                         return (
-                            <CellxgeneViewerLink
-                                url={
-                                    '/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file'
-                                }
-                                count={3}
-                            />
+                            <>
+                                <CellxgeneViewerLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file'
+                                    }
+                                    count={3}
+                                />
+                                <BigQueryLink
+                                    url={
+                                        'explore?selectedFilters=%5B%7B%22value%22%3A%22hdf5%22%2C%22label%22%3A%22hdf5%22%2C%22group%22%3A%22FileFormat%22%2C%22count%22%3A11%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+CHOP%22%7D%5D&tab=file'
+                                    }
+                                    count={3}
+                                />
+                            </>
                         );
                     } else {
                         return null;
