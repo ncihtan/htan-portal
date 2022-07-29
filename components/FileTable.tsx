@@ -71,7 +71,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 </code>
             </pre>
             <p>
-                These are currently only avaiable through{' '}
+                These are currently only available through{' '}
                 <a
                     href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371.v1.p1"
                     target="_blank"
