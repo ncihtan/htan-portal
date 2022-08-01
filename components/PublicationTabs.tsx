@@ -192,8 +192,28 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
     ],
     chop_all_chen_2022: [
         <>
-            <h3>{`Explore in BigQuery`}</h3>
+            <h3>{`Explore Cellxgene`}</h3>
+            <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
+            interactive data explorer for single-cell datasets.
             <br />
+            <Tooltip
+                overlay={`Click to Explore the Celllxgene Collections Page`}
+            >
+                <a
+                    href={
+                        'https://humantumoratlas.org/explore?selectedFilters=%5B%7B%22value%22%3A%22hdf5%22%2C%22label%22%3A%22hdf5%22%2C%22group%22%3A%22FileFormat%22%2C%22count%22%3A11%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+CHOP%22%7D%5D&tab=file'
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/HTA11_Vanderbilt_cellxgene.png'}
+                    />
+                </a>
+            </Tooltip>
+        </>,
+        <>
+            <h3>{`Explore in BigQuery`}</h3>
             <Tooltip overlay={`Click to Explore BigQuery`}>
                 <a
                     href={
