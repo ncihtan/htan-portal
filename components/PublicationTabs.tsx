@@ -166,9 +166,66 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
         <>
+            <h3>{`Explore in BigQuery`}</h3>
+            <br />
+            <Tooltip overlay={`Click to Explore BigQuery`}>
+                <a
+                    href={
+                        typeof window !== 'undefined'
+                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"HTAN+Vanderbilt"%2C"label"%3A"HTAN+Vanderbilt"%2C"group"%3A"AtlasName"%2C"count"%3A4%2C"isSelected"%3Afalse%7D%5D&tab=file`
+                            : ''
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/HTA11_Vanderbilt_bigquery.png'}
+                    />
+                </a>
+            </Tooltip>
+        </>,
+        <>
             <h3>
                 {`Explore in cellxgene (temporarily disabled: update pending)`}
             </h3>
+        </>,
+    ],
+    chop_all_chen_2022: [
+        <>
+            <h3>{`Explore Cellxgene`}</h3>
+            <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
+            interactive data explorer for single-cell datasets.
+            <br />
+            <Tooltip
+                overlay={`Click to Explore the Celllxgene Collections Page`}
+            >
+                <a
+                    href={
+                        'https://humantumoratlas.org/explore?selectedFilters=%5B%7B%22value%22%3A%22hdf5%22%2C%22label%22%3A%22hdf5%22%2C%22group%22%3A%22FileFormat%22%2C%22count%22%3A11%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+CHOP%22%7D%5D&tab=file'
+                    }
+                    target="_blank"
+                >
+                    <img
+                        style={{ width: '60%' }}
+                        src={'/HTA11_Vanderbilt_cellxgene.png'}
+                    />
+                </a>
+            </Tooltip>
+        </>,
+        <>
+            <h3>{`Explore in BigQuery`}</h3>
+            <Tooltip overlay={`Click to Explore BigQuery`}>
+                <a
+                    href={
+                        typeof window !== 'undefined'
+                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file`
+                            : ''
+                    }
+                    target="_blank"
+                >
+                    <img style={{ width: '60%' }} src={'/HTA4_bigquery.png'} />
+                </a>
+            </Tooltip>
         </>,
     ],
 };
