@@ -102,9 +102,15 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 </code>
             </pre>
             <p>
-                It is not possible to download imaging data yet.
-                {hasAnyImageViewers &&
-                    ' However, you can browse the image via the Minerva tool see right most column'}
+                You can only download imaging data from the [Imaging Data
+                Commons (IDC)](https://imaging.datacommons.cancer.gov/explore/).
+                Search for the HTAN Collection on the IDC website.
+                {hasAnyImageViewers && (
+                    <span>
+                        Note that you can also browse the images directly in one
+                        of the viewers (see right most column)
+                    </span>
+                )}
             </p>
         </>
     );
