@@ -109,7 +109,7 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 >
                     Imaging Data Commons (IDC)
                 </a>
-                . Search for the HTAN Collection on the IDC website.
+                . Search for the HTAN Collection on the IDC website.{' '}
                 {hasAnyImageViewers && (
                     <span>
                         Note that you can also browse the images directly in one
