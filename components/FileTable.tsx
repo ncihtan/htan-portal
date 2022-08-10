@@ -102,9 +102,14 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 </code>
             </pre>
             <p>
-                You can only download imaging data from the [Imaging Data
-                Commons (IDC)](https://imaging.datacommons.cancer.gov/explore/).
-                Search for the HTAN Collection on the IDC website.
+                Imaging data is available in DICOM format from the{' '}
+                <a
+                    href="https://imaging.datacommons.cancer.gov/explore/"
+                    target="_blank"
+                >
+                    Imaging Data Commons (IDC)
+                </a>
+                . Search for the HTAN Collection on the IDC website.
                 {hasAnyImageViewers && (
                     <span>
                         Note that you can also browse the images directly in one
