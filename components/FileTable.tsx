@@ -109,7 +109,7 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 <div>
                     <p>
                         Imaging data is available in{' '}
-                        <a href="https://learn.canceridc.dev/dicom/dicom-tiff-dual-personality-files">
+                        <a href="https://learn.canceridc.dev/dicom/dicom-tiff-dual-personality-files" target="_blank">
                             DICOM-TIFF format
                         </a>{' '}
                         from the{' '}
@@ -120,13 +120,18 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                             Imaging Data Commons (IDC)
                         </a>
                         . See the{' '}
-                        <a href="https://learn.canceridc.dev/data/downloading-data">
+                        <a href="https://learn.canceridc.dev/data/downloading-data" target="_blank">
                             download instructions
                         </a>
-                        . If you have the Google Cloud command line client
-                        already set up you can start from step 2 and use the
-                        below bucket URLs for the <code>manifest.txt</code>{' '}
-                        file:
+                        .
+                    </p>
+                    <p>
+                        If you already have the <a
+                        href="https://cloud.google.com/sdk/docs/install" target="_blank">Google
+                        Cloud CLI</a> installed you can start from <a
+                        href="https://learn.canceridc.dev/data/downloading-data#step-2-download-the-files-defined-by-the-manifest" target="_blank">step
+                        2</a> and use the below bucket URLs for the{' '}
+                        <code>manifest.txt</code> file:
                     </p>
                     <pre className="pre-scrollable">
                         <code>{idcImageBucketUrls.join('\n')}</code>
@@ -148,8 +153,8 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                     </pre>
                     {hasAnyImageViewersForNonDownloadbleFiles && (
                         <span>
-                            Note however that you can still explore them in one
-                            of the viewers in the right most column.
+                            Note however that you can explore them in one of the
+                            viewers in the right most column.
                         </span>
                     )}
                 </div>
