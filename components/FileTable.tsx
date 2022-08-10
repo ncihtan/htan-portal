@@ -122,8 +122,14 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                         . See the{' '}
                         <a href="https://learn.canceridc.dev/data/downloading-data" target="_blank">
                             download instructions
-                        </a>
-                        .
+                        </a>.
+                    </p>
+                    <p>
+                        HTAN's imaging dataset is part of the Google Public Data
+                        Program (PDP) meaning download costs are covered by
+                        Google. However, if you do provide a project ID it will
+                        be charged (you can unset it with{' '} <code>gcloud
+                        config unset project</code>).
                     </p>
                     <p>
                         If you already have the <a
