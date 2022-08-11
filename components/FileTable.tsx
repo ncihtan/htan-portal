@@ -109,7 +109,10 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 <div>
                     <p>
                         Imaging data is available in{' '}
-                        <a href="https://learn.canceridc.dev/dicom/dicom-tiff-dual-personality-files" target="_blank">
+                        <a
+                            href="https://learn.canceridc.dev/dicom/dicom-tiff-dual-personality-files"
+                            target="_blank"
+                        >
                             DICOM-TIFF format
                         </a>{' '}
                         from the{' '}
@@ -120,24 +123,38 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                             Imaging Data Commons (IDC)
                         </a>
                         . See the{' '}
-                        <a href="https://learn.canceridc.dev/data/downloading-data" target="_blank">
+                        <a
+                            href="https://learn.canceridc.dev/data/downloading-data"
+                            target="_blank"
+                        >
                             download instructions
-                        </a>.
+                        </a>
+                        .
                     </p>
                     <p>
-                        HTAN's imaging dataset is part of the Google Public Data
+                        HTAN's imaging dataset is part of Google's Public Data
                         Program (PDP) meaning download costs are covered by
                         Google. However, if you do provide a project ID it will
-                        be charged (you can unset it with{' '} <code>gcloud
-                        config unset project</code>).
+                        be charged (you can unset it with{' '}
+                        <code>gcloud config unset project</code>).
                     </p>
                     <p>
-                        If you already have the <a
-                        href="https://cloud.google.com/sdk/docs/install" target="_blank">Google
-                        Cloud CLI</a> installed you can start from <a
-                        href="https://learn.canceridc.dev/data/downloading-data#step-2-download-the-files-defined-by-the-manifest" target="_blank">step
-                        2</a> and use the below bucket URLs for the{' '}
-                        <code>manifest.txt</code> file:
+                        If you already have the{' '}
+                        <a
+                            href="https://cloud.google.com/sdk/docs/install"
+                            target="_blank"
+                        >
+                            Google Cloud CLI
+                        </a>{' '}
+                        installed you can start from{' '}
+                        <a
+                            href="https://learn.canceridc.dev/data/downloading-data#step-2-download-the-files-defined-by-the-manifest"
+                            target="_blank"
+                        >
+                            step 2
+                        </a>{' '}
+                        in the download instructions and use the below bucket
+                        URLs for the <code>manifest.txt</code> file:
                     </p>
                     <pre className="pre-scrollable">
                         <code>{idcImageBucketUrls.join('\n')}</code>
