@@ -50,9 +50,10 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             <NavDropdown.Item href="/standards">
                 Data Standards
             </NavDropdown.Item>
-            <NavDropdown.Item href="/tools">
-                Analysis Tools
+            <NavDropdown.Item href="/data-download">
+                Data Download
             </NavDropdown.Item>
+            <NavDropdown.Item href="/tools">Analysis Tools</NavDropdown.Item>
             <Dropdown.Divider />
             <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
                 Protocols.io
@@ -60,9 +61,7 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
         </NavSection>,
 
         <NavSection text={'About HTAN'}>
-            <NavDropdown.Item href="/overview">
-                Overview
-            </NavDropdown.Item>
+            <NavDropdown.Item href="/overview">Overview</NavDropdown.Item>
             <NavDropdown.Item href="/htan-dcc">
                 Data Coordinating Center
             </NavDropdown.Item>
@@ -79,7 +78,6 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             {/*<NavDropdown.Item href="/authors">Authors</NavDropdown.Item>*/}
         </NavSection>,
 
-
         <NavSection text={'Submit Data'}>
             <NavDropdown.Item href="/transfer">Data Transfer</NavDropdown.Item>
             <Dropdown.Divider />
@@ -95,11 +93,11 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
         </NavSection>,
 
         <NavSection text={'News'}>
-            <NavDropdown.Item href="/data-updates">Data Updates</NavDropdown.Item>
+            <NavDropdown.Item href="/data-updates">
+                Data Updates
+            </NavDropdown.Item>
             <Dropdown.Divider />
-            <Nav.Link href="https://twitter.com/ncihtan">
-                Twitter
-            </Nav.Link>
+            <Nav.Link href="https://twitter.com/ncihtan">Twitter</Nav.Link>
         </NavSection>,
     ];
 
