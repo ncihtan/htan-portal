@@ -132,13 +132,6 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                         .
                     </p>
                     <p>
-                        HTAN's imaging dataset is part of Google's Public Data
-                        Program (PDP) meaning download costs are covered by
-                        Google. However, if you do provide a project ID it will
-                        be charged (you can unset it with{' '}
-                        <code>gcloud config unset project</code>).
-                    </p>
-                    <p>
                         If you already have the{' '}
                         <a
                             href="https://cloud.google.com/sdk/docs/install"
