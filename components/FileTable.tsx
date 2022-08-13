@@ -33,6 +33,7 @@ import styles from './common.module.scss';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { returnStatement } from '@babel/types';
 import { makeListColumn } from '../lib/fileTableHelpers';
+import LevelSelect from './LevelSelect';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');
@@ -349,6 +350,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable isLinkOutModalOpen = false;
     @observable viewDetailsFile: Entity | undefined = undefined;
     @observable columnVisibility: { [columnKey: string]: boolean } = {};
+    @observable selectedLevels: string[] = this.allLevels;
 
     get defaultColumns(): IEnhancedDataTableColumn<Entity>[] {
         return [
@@ -737,6 +739,13 @@ export default class FileTable extends React.Component<IFileTableProps> {
         return otherColumns;
     }
 
+    get allLevels() {
+        return _.chain(this.props.entities)
+            .map((e) => e.level)
+            .uniq()
+            .value();
+    }
+
     @computed get columns() {
         return _.sortBy(
             [...this.defaultColumns, ...this.otherColumns],
@@ -754,6 +763,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
         );
     }
 
+    @computed get filteredEntities() {
+        return _.chain(this.props.entities)
+            .filter((e) => this.selectedLevels.includes(e.level))
+            .value();
+    }
+
     constructor(props: IFileTableProps) {
         super(props);
         makeObservable(this);
@@ -767,6 +782,11 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @action.bound
     setColumnVisibility(vis: { [key: string]: boolean }) {
         this.columnVisibility = vis;
+    }
+
+    @action.bound
+    setSelectedLevels(levels: string[]) {
+        this.selectedLevels = levels;
     }
 
     @action onDownload = (e: any) => {
@@ -847,6 +867,13 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             }`}
                         </button>
                     }
+                    extraControlsInsideDataTableControls={
+                        <LevelSelect
+                            allLevels={this.allLevels}
+                            selectedLevels={this.selectedLevels}
+                            onLevelToggled={this.setSelectedLevels}
+                        />
+                    }
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
@@ -863,7 +890,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                             )
                         );
                     }}
-                    data={this.props.entities}
+                    data={this.filteredEntities}
                     striped={true}
                     dense={false}
                     selectableRows={true}
