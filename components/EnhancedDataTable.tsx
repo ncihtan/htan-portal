@@ -37,6 +37,7 @@ interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
     searchText?: string;
     searchBoxPlaceHolder?: string;
     customControls?: JSX.Element;
+    extraControlsInsideDataTableControls?: JSX.Element;
 }
 
 function isColumnSearchable(col: IEnhancedDataTableColumn<any>) {
@@ -273,6 +274,9 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                         onVisibilityToggle={this.onVisibilityToggle}
                         onChangeFilterText={this.onChangeFilterText}
                         searchBoxPlaceHolder={this.props.searchBoxPlaceHolder}
+                        extraControls={
+                            this.props.extraControlsInsideDataTableControls
+                        }
                     />
                 </div>
 

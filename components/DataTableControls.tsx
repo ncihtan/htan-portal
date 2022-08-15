@@ -18,6 +18,7 @@ interface IDataTableControlsProps {
     onChangeFilterText?: (filterText: string) => void;
     searchBoxPlaceHolder?: string;
     filterText?: string;
+    extraControls?: JSX.Element;
 }
 
 export default class DataTableControls extends React.Component<IDataTableControlsProps> {
@@ -32,6 +33,7 @@ export default class DataTableControls extends React.Component<IDataTableControl
     render() {
         return (
             <div className={styles.dataTableControls}>
+                {this.props.extraControls}
                 <ColumnSelect
                     columnVisibility={this.props.columnVisibility}
                     onColumnToggled={this.props.onVisibilityToggle}
