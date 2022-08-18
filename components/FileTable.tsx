@@ -425,6 +425,7 @@ interface IFileTableProps {
     entities: Entity[];
     getGroupsByPropertyFiltered: any;
     patientCount: number;
+    enableLevelFilter?: boolean; // Add or hide "Level" filter above table
 }
 
 @observer
@@ -898,9 +899,11 @@ export default class FileTable extends React.Component<IFileTableProps> {
     }
 
     @computed get filteredEntities() {
-        return _.chain(this.props.entities)
-            .filter((e) => this.selectedLevels.includes(e.level))
-            .value();
+        return this.props.enableLevelFilter
+            ? _.chain(this.props.entities)
+                  .filter((e) => this.selectedLevels.includes(e.level))
+                  .value()
+            : this.props.entities;
     }
 
     constructor(props: IFileTableProps) {
@@ -1002,11 +1005,13 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         </button>
                     }
                     extraControlsInsideDataTableControls={
-                        <LevelSelect
-                            allLevels={this.allLevels}
-                            selectedLevels={this.selectedLevels}
-                            onLevelToggled={this.setSelectedLevels}
-                        />
+                        this.props.enableLevelFilter ? (
+                            <LevelSelect
+                                allLevels={this.allLevels}
+                                selectedLevels={this.selectedLevels}
+                                onLevelToggled={this.setSelectedLevels}
+                            />
+                        ) : undefined
                     }
                     paginationServerOptions={{
                         persistSelectedOnPageChange: false,

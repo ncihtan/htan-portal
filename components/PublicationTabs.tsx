@@ -466,6 +466,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                         props.assays[assayName]
                                     )}
                                     patientCount={props.cases.length}
+                                    enableLevelFilter={true}
                                 />
                             </div>
                         );
