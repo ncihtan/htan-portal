@@ -248,7 +248,7 @@ const CellxgeneViewerLink = (props: { url: string; count: number }) => (
 
 type WPAtlasTableData = Atlas & {
     isSelected: boolean;
-    publicationPageLink: string;
+    publicationPageLink: { id: string; show: boolean };
 };
 
 @observer
@@ -342,46 +342,44 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 wrap: true,
                 sortable: true,
             },
-            ...(arePublicationPagesEnabled()
-                ? [
-                      {
-                          name: 'Publications',
-                          grow: 0.5,
-                          selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
-                          cell: (atlasTableData: WPAtlasTableData) => {
-                              console.log(atlasTableData);
-                              if (atlasTableData.publicationPageLink) {
-                                  return (
-                                      <Tooltip
-                                          overlay={`${
-                                              PUBLICATIONS[
-                                                  atlasTableData
-                                                      .publicationPageLink
-                                              ].cite
-                                          }`}
-                                      >
-                                          <a
-                                              href={`//${window.location.host}/publications/${atlasTableData.publicationPageLink}`}
-                                          >
-                                              <FontAwesomeIcon icon={faBook} />
-                                          </a>
-                                      </Tooltip>
-                                  );
-                              } else {
-                                  return (
-                                      <Tooltip
-                                          overlay={`Publication Page Coming Soon`}
-                                      >
-                                          <a href="/publications">
-                                              <FontAwesomeIcon icon={faBook} />
-                                          </a>
-                                      </Tooltip>
-                                  );
-                              }
-                          },
-                      },
-                  ]
-                : []),
+            {
+                name: 'Publications',
+                grow: 0.5,
+                selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
+                cell: (atlasTableData: WPAtlasTableData) => {
+                    if (
+                        atlasTableData.publicationPageLink &&
+                        atlasTableData.publicationPageLink.show
+                    ) {
+                        return (
+                            <Tooltip
+                                overlay={`${
+                                    PUBLICATIONS[
+                                        atlasTableData.publicationPageLink.id
+                                    ].cite
+                                }`}
+                            >
+                                <a
+                                    href={`//${window.location.host}/publications/${atlasTableData.publicationPageLink.id}`}
+                                >
+                                    <FontAwesomeIcon icon={faBook} />
+                                </a>
+                            </Tooltip>
+                        );
+                    } else {
+                        return (
+                            <Tooltip overlay={`Publication Page Coming Soon`}>
+                                <a
+                                    href="/publications"
+                                    style={{ filter: 'grayscale(1)' }}
+                                >
+                                    <FontAwesomeIcon icon={faBook} />
+                                </a>
+                            </Tooltip>
+                        );
+                    }
+                },
+            },
             {
                 name: 'Metadata',
                 grow: 0.5,

@@ -18,19 +18,22 @@ export const ImagingAssayName = [
     'mIHC',
     'CyCIF',
 ];
-export const PublicationPageLink: { [id: string]: string } = {
-    HTA1: 'htapp_crc_pelka_2021',
-    HTA4: 'chop_all_chen_2022',
-    HTA6: 'duke_brca_risom_2021',
-    HTA7: 'hms_ckcm_nirmal_2022',
-    HTA8: 'msk_sclc_chan_2021',
-    HTA9: 'ohsu_brca_johnson_2022',
-    HTA11: 'vanderbilt_crc_chen_2021',
+export const PublicationPageLink: {
+    [id: string]: { id: string; show: boolean };
+} = {
+    HTA1: { id: 'htapp_crc_pelka_2021', show: false },
+    HTA4: { id: 'chop_all_chen_2022', show: true },
+    HTA6: { id: 'duke_brca_risom_2021', show: false },
+    HTA7: { id: 'hms_ckcm_nirmal_2022', show: false },
+    HTA8: { id: 'msk_sclc_chan_2021', show: false },
+    HTA9: { id: 'ohsu_brca_johnson_2022', show: true },
+    HTA11: { id: 'vanderbilt_crc_chen_2021', show: false },
 };
 
 export const PUBLICATIONS: any = {
     chop_all_chen_2022: {
-        title: 'Single-cell multiomics reveals increased plasticity, resistant populations, and stem-cell–like blasts in KMT2A-rearranged leukemia',
+        title:
+            'Single-cell multiomics reveals increased plasticity, resistant populations, and stem-cell–like blasts in KMT2A-rearranged leukemia',
         htan_id: 'HTA4',
         htan_name: 'HTAN CHOP',
         cite: 'Chen et al (2022)',
@@ -100,7 +103,7 @@ const authorsById: { [id: string]: string[] } = {
     msk_sclc_chan_2021: ['Chan JM', 'Quintanal-Villalonga Á', 'Gao VR'],
     ohsu_brca_johnson_2022: ['Johnson BE', 'Creason AL', 'Stommel JM'],
     vanderbilt_crc_chen_2021: ['Chen B', 'Scurrah CR', 'McKinley ET'],
-    chop_all_chen_2022: ['Chen C', 'Wenbao Y','Alikarami F']
+    chop_all_chen_2022: ['Chen C', 'Wenbao Y', 'Alikarami F'],
 };
 
 const correspondingAuthorsById: { [id: string]: Author[] } = {
@@ -252,7 +255,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             link: 'https://humantumoratlas.org/hta8',
         },
     },
-    chop_all_chen_2022:{
+    chop_all_chen_2022: {
         journal: {
             name: 'Blood',
             link:
@@ -270,7 +273,6 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             name: "Children's Hospital of Philadelphia (CHOP)",
             link: 'https://humantumoratlas.org/hta4',
         },
-
     },
     ohsu_brca_johnson_2022: {
         journal: {
@@ -331,7 +333,7 @@ const filtersById: { [id: string]: ExploreSelectedFilter[] } = {
     ],
     chop_all_chen_2022: [
         { group: 'AtlasName', value: 'HTAN CHOP', id: 'HTA4' },
-    ]
+    ],
 };
 
 export async function getAllPublicationIds() {
