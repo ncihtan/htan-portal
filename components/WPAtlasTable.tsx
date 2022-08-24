@@ -349,7 +349,8 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 cell: (atlasTableData: WPAtlasTableData) => {
                     if (
                         atlasTableData.publicationPageLink &&
-                        atlasTableData.publicationPageLink.show
+                        (atlasTableData.publicationPageLink.show ||
+                            arePublicationPagesEnabled())
                     ) {
                         return (
                             <Tooltip
