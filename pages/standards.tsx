@@ -31,7 +31,7 @@ const Standards = (data: StandardsProps) => {
                             specifications below.
                         </p>
 
-                        <h2>Browser Standards</h2>
+                        <h2>Browse Standards</h2>
 
                         <ul>
                             <li>
