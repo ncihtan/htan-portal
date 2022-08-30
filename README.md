@@ -49,6 +49,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing any page. The page auto-updates as you edit the file.
 
+## Debugging processSynapseJSON
+Add `debugger;` somewhere in the code. Then run:
+```
+./node_modules/.bin/ncc build --source-map --no-source-map-register data/processSynapseJSON.ts
+```
+Followed by:
+```
+node  --inspect-brk dist/index.js
+```
+Now you can attach to it in e.g. VSCode
+
 ## Learn More about Next.js
 
 To learn more about Next.js, take a look at the following resources:
