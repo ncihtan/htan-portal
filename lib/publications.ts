@@ -25,7 +25,7 @@ export const PublicationPageLink: {
     HTA4: { id: 'chop_all_chen_2022', show: true },
     HTA6: { id: 'duke_brca_risom_2021', show: false },
     HTA7: { id: 'hms_ckcm_nirmal_2022', show: false },
-    HTA8: { id: 'msk_sclc_chan_2021', show: false },
+    HTA8: { id: 'msk_sclc_chan_2021', show: true },
     HTA9: { id: 'ohsu_brca_johnson_2022', show: true },
     HTA11: { id: 'vanderbilt_crc_chen_2021', show: false },
 };
