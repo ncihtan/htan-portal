@@ -222,7 +222,7 @@ function getSampleAndPatientData(
             filesByHTANId[p].HTANParentBiospecimenID;
         if (
             !HTANParentBiospecimenID ||
-            biospecimenByHTANBiospecimenID[HTANParentBiospecimenID]
+            !biospecimenByHTANBiospecimenID[HTANParentBiospecimenID]
         ) {
             console.error(
                 'Missing HTANParentBiospecimenID: ',
