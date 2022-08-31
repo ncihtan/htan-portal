@@ -189,6 +189,14 @@ def generate_json(include_at_risk_populations, include_released_only):
 
             if 'entityId' not in schema_columns and 'entityId' in manifest_df.columns:
                 column_order += ['entityId']
+
+            # add columns not in the schema
+            schemaless_columns = []
+            for c in manifest_df.columns:
+                if c not in column_order:
+                    schemaless_columns += [c]
+            column_order += schemaless_columns
+
             manifest_df = manifest_df[column_order]
 
             # data type schema label (TODO: use context from uri)
