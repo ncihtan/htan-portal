@@ -128,7 +128,11 @@ def generate_json(include_at_risk_populations, include_released_only):
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
 
-            syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
+            if dataset["id"] == "syn25619062":
+                # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
+                syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
+            else:
+                syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
             # sometimes files can be named synapse(*x).csv
             # TODO: would be better of syn.get can take output file argument
             os.rename(glob.glob(manifest_location + "*synapse*.csv")[0], manifest_path)
@@ -185,6 +189,14 @@ def generate_json(include_at_risk_populations, include_released_only):
 
             if 'entityId' not in schema_columns and 'entityId' in manifest_df.columns:
                 column_order += ['entityId']
+
+            # add columns not in the schema
+            schemaless_columns = []
+            for c in manifest_df.columns:
+                if c not in column_order:
+                    schemaless_columns += [c]
+            column_order += schemaless_columns
+
             manifest_df = manifest_df[column_order]
 
             # data type schema label (TODO: use context from uri)

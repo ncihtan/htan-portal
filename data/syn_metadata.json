@@ -375,7 +375,7 @@
         {
             "component": "FollowUp",
             "synapseId": "syn23636683",
-            "numItems": 119
+            "numItems": 124
         },
         {
             "component": "Therapy",
@@ -436,6 +436,11 @@
             "component": "ScRNA-seqLevel4",
             "synapseId": "syn27058722",
             "numItems": 4
+        },
+        {
+            "component": "BulkDNALevel3",
+            "synapseId": "syn33286433",
+            "numItems": 62
         }
     ],
     "HTA9": [
@@ -580,6 +585,11 @@
             "component": "BulkRNA-seqLevel3",
             "synapseId": "syn26592112",
             "numItems": 1
+        },
+        {
+            "component": "Biospecimen",
+            "synapseId": "syn35488819",
+            "numItems": 732
         }
     ],
     "HTA3": [
@@ -742,12 +752,12 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn24983247",
-            "numItems": 94
+            "numItems": 96
         },
         {
             "component": "Demographics",
             "synapseId": "syn24983524",
-            "numItems": 87
+            "numItems": 89
         },
         {
             "component": "Exposure",
@@ -849,7 +859,7 @@
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn25178503",
-            "numItems": 1174
+            "numItems": 742
         },
         {
             "component": "ImagingLevel2",
