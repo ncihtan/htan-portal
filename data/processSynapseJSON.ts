@@ -218,9 +218,16 @@ function getSampleAndPatientData(
             : [file.HTANDataFileID];
 
     for (let p of primaryParents) {
-        if (!filesByHTANId[p].HTANParentBiospecimenID) {
-            console.error("Missing HTANParentBiospecimenID: ",
-                filesByHTANId[p]);
+        const HTANParentBiospecimenID =
+            filesByHTANId[p].HTANParentBiospecimenID;
+        if (
+            !HTANParentBiospecimenID ||
+            biospecimenByHTANBiospecimenID[HTANParentBiospecimenID]
+        ) {
+            console.error(
+                'Missing HTANParentBiospecimenID: ',
+                filesByHTANId[p]
+            );
         }
     }
 
