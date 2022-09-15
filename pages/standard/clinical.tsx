@@ -8,25 +8,18 @@ import { getDataSchema, SchemaDataId } from '../../lib/dataSchemaHelpers';
 const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
         <DataStandard {...props}>
-            <h1>Clinical Data</h1>
-
-            <h2>Overview</h2>
-
+            <h2>HTAN Clinical Data</h2>
             <p>
-                This page describes the data tiers and data collection for the
-                HTAN clinical data standard.
+                HTAN clinical data consists of three tiers.
+                <p />
+                Tier 1 is in based on the{' '}
+                <a href="https://gdc.cancer.gov/about-data/gdc-data-processing/clinical-data-standardization">
+                    NCI Genomic Data Commons (GDC)
+                </a>{' '}
+                clinical data model, while Tiers 2 and 3 are extensions to the
+                GDC model.
             </p>
-
-            <h2>Description of Model</h2>
-
-            <p>
-                HTAN clinical data consists of four tiers. Tier 1 is in
-                alignment with the Genomic Data Commons (GDC) guidelines for
-                clinical data, while Tier 2, 3 and 4 are extensions to this
-                model.
-            </p>
-
-            <table className="table">
+            <table className="table table_50">
                 <tr>
                     <th>Tier</th>
                     <th>Description</th>
@@ -35,114 +28,129 @@ const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
                 <tr>
                     <td>1</td>
                     <td>
-                        Demographics, Diagnosis, Exposure, Treatment, Follow-up,
-                        Molecular Test and Family History
+                        Seven categories of clinical data, based on the GDC
+                        clinical data model. See GDC Table below.
                     </td>
                 </tr>
 
                 <tr>
                     <td>2</td>
-                    <td>Disease-agnostic extensions to the GDC</td>
+                    <td>
+                        <b>HTAN disease-agnostic</b> extensions to the GDC
+                        clinical data model.
+                    </td>
                 </tr>
 
                 <tr>
                     <td>3</td>
-                    <td>Disease-specific extensions to the GDC</td>
-                </tr>
-
-                <tr>
-                    <td>4</td>
                     <td>
-                        HTAN Research Network Atlas-specific clinical data
-                        elements not covered in a previous tier and that are
-                        recognized as a requirement by the atlas. These are
-                        attributes specific to an atlas
+                        <b>HTAN disease-specific</b> extensions to the GDC
+                        clinical data model.
                     </td>
                 </tr>
             </table>
-
-            <h4>
-                <i>Tier 1 Clinical Data</i>
-            </h4>
-
+            <h3>Tier 1 Clinical Data</h3>
+            Tier 1 clinical data consists of seven categories of data from the
+            GDC Data Model.
+            <p />
+            <table className="table table_50">
+                <tr>
+                    <th>Category</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>Demographics</td>
+                    <td>
+                        Data for the characterization of the patient by means of
+                        segmenting the population (e.g., characterization by
+                        age, sex, or race).
+                    </td>
+                </tr>
+                <tr>
+                    <td>Diagnosis</td>
+                    <td>
+                        Data from the investigation, analysis and recognition of
+                        the presence and nature of disease, condition, or injury
+                        from expressed signs and symptoms; also, the scientific
+                        determination of any kind; the concise results of such
+                        an investigation.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Exposure</td>
+                    <td>
+                        Clinically relevant patient information not immediately
+                        resulting from genetic predispositions.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Family History</td>
+                    <td>
+                        Record of a patient's background regarding cancer events
+                        of blood relatives.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Follow-up</td>
+                    <td>
+                        A visit by a patient or study participant to a medical
+                        professional. A clinical encounter that encompasses
+                        planned and unplanned trial interventions, procedures
+                        and assessments that may be performed on a subject. A
+                        visit has a start and an end, each described with a
+                        rule. The process by which information about the health
+                        status of an individual is obtained before and after a
+                        study has officially closed; an activity that continues
+                        something that has already begun or that repeats
+                        something that has already been done.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Molecular Test</td>
+                    <td>
+                        Information pertaining to any molecular tests performed
+                        on the patient during a clinical event.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Therapy</td>
+                    <td>
+                        Record of the administration and intention of
+                        therapeutic agents provided to a patient to alter the
+                        course of a pathologic process.
+                    </td>
+                </tr>
+            </table>
             <p>
                 To establish consistency across HTAN atlases and tumor types,
-                the HTAN Tier 1 clinical data consists of GDC clinical data
-                elements defined as Required, Preferred and Optional. The HTAN
-                CDE Dictionary contains a comprehensive list of elements
-                attributed as Required, Preferred and Optional.
+                the HTAN currently defines GDC Tier 1 elements as{' '}
+                <i>Required</i>, <i>Preferred</i> and <i>Optional</i>:
             </p>
-
             <ul>
                 <li>
-                    Required CDE: Data submitters must provide a value for this
-                    attribute; “Unknown”, “Not Reported” or “null” are valid
-                    values for many of these attributes if the required
-                    information is missing for a subset of patients
+                    <i>Required</i>: Data submitters must provide a value for
+                    this element.
                 </li>
                 <li>
-                    Preferred CDE: Data submitters are strongly recommended to
-                    provide values for this attribute
+                    <i>Preferred</i>: Data submitters are strongly recommended
+                    to provide values for this element.
                 </li>
                 <li>
-                    Optional CDE: Data submitters can populate this attribute
-                    based on availability of the data requested
+                    <i>Optional</i>: Data submitters can populate this element,
+                    based on availability of data.
                 </li>
             </ul>
-
-            <h4>
-                <i>Tier 2 Clinical Data</i>
-            </h4>
-
+            <h3>Tiers 2 and 3 Clinical Data</h3>
             <p>
-                Describes disease-agnostic extensions to the GDC not included in
-                Tier 1 Clinical Data that were suggested for inclusion by the
-                HTAN Research Network. These suggested CDEs were compared to NCI
-                standards described in the caDSR system and the most similar CDE
-                was selected for inclusion in the HTAN Clinical Data model. If
-                no comparable CDE was found for a particular element, an
-                HTAN-specific CDE was developed.
+                Tier 2 consists of <b>disease-agnostic</b> extensions to the GDC
+                clinical data model.
             </p>
-
-            <h4>
-                <i>Tier 3 Clinical Data</i>
-            </h4>
-
             <p>
-                Describes disease-specific extensions to the GDC not included in
-                Tier 1 Clinical Data that were suggested for inclusion by the
-                HTAN Research Network. These suggested CDEs were compared to NCI
-                standards described in the caDSR system and the most similar CDE
-                was selected for inclusion in the HTAN Clinical Data model. If
-                no comparable CDE was found for a particular element, an
-                HTAN-specific CDE was developed.
-            </p>
-
-            <p>Attributes are divided by tumor type:</p>
-
-            <ul>
-                <li>Melanoma-specific</li>
-                <li>
-                    Lung pre-cancer and cancer-specific Colorectal pre-cancer
-                    and cancer-specific
-                </li>
-                <li>Breast pre-cancer and cancer-specific</li>
-                <li>Neuroblastoma-specific</li>
-                <li>Glioma-specific</li>
-                <li>Pancreatic pre-cancer and cancer-specific</li>
-                <li>Acute lymphoblastic leukemia-specific</li>
-                <li>Sarcoma-specific</li>
-                <li>Ovarian pre-cancer and cancer-specific</li>
-                <li>Prostate pre-cancer and cancer-specific</li>
-            </ul>
-
-            <h4>
-                <i>Tier 3 Clinical Data</i>
-            </h4>
-            <p>
-                Describes clinical data elements identified as required to be
-                included in the HTAN data model and specific to an atlas, and
-                not covered in a previous tier.
+                Tier 3 consists of <b>disease-specific</b> extensions to the GDC
+                clinical data model. This covers additional elements for Acute
+                Lymphoblastic Leukemia (ALL), Brain Cancer, Breast Cancer, Lung
+                Cancer, Melanoma, Ovarian Cancer, Pancreatic Cancer, Prostate
+                Cancer and Sarcoma.
             </p>
         </DataStandard>
     );
