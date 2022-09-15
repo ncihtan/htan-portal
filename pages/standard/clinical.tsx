@@ -12,7 +12,7 @@ const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
             <p>
                 HTAN clinical data consists of three tiers.
                 <p />
-                Tier 1 is in based on the{' '}
+                Tier 1 is based on the{' '}
                 <a href="https://gdc.cancer.gov/about-data/gdc-data-processing/clinical-data-standardization">
                     NCI Genomic Data Commons (GDC)
                 </a>{' '}
