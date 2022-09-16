@@ -179,10 +179,16 @@ table {
 }
 
 .table_50 {
-    width: 50%;
+    width: 100%;
     td {
         line-height: 1.5em;
     }
+}
+
+.standards-content {
+    font-size: 16px;
+    line-height: 2em;
+    margin-right: 300px;
 }
 
 .single_cell-iframe-wrapper {
