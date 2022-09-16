@@ -87,7 +87,10 @@ export enum SchemaDataId {
     FamilyHistory = 'bts:FamilyHistory',
     FollowUp = 'bts:FollowUp',
     Imaging = 'bts:Imaging',
+    ImagingLevel1 = 'bts:ImagingLevel1',
     ImagingLevel2 = 'bts:ImagingLevel2',
+    ImagingLevel3 = 'bts:ImagingLevel3Segmentation',
+    ImagingLevel4 = 'bts:ImagingLevel4',
     MolecularTest = 'bts:MolecularTest',
     scATACSeqLevel1 = 'bts:ScATAC-seqLevel1',
     scRNASeqLevel1 = 'bts:ScRNA-seqLevel1',
@@ -173,7 +176,7 @@ export const DEFAULT_SCHEMA: SchemaJson = {
 };
 
 export const DEFAULT_SCHEMA_URL =
-    'https://raw.githubusercontent.com/ncihtan/schematic/main/data/schema_org_schemas/HTAN.jsonld';
+    'https://raw.githubusercontent.com/ncihtan/data-models/main/HTAN.model.jsonld';
 
 const schemaDataCache: { [uri: string]: SchemaJson } = {};
 
