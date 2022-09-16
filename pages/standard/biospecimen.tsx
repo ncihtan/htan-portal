@@ -24,14 +24,14 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
                 </li>
                 <li>
                     Collection information e.g. time, duration of ischemia,
-                    temperature, etc.&nbsp;&nbsp;
+                    temperature, etc.
                 </li>
                 <li>
                     Processing of parent biospecimen information e.g. fresh,
-                    frozen, etc.&nbsp;
+                    frozen, etc.
                 </li>
                 <li>
-                    Biospecimen and derivative clinical metadata ie Histologic
+                    Biospecimen and derivative clinical metadata i.e. Histologic
                     Morphology Code, e.g. based on ICD-O-3.
                 </li>
                 <li>
