@@ -9,12 +9,6 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
         <DataStandard {...props}>
             <h1>HTAN Biospecimen Data Standard</h1>
-            <h2>Overview</h2>
-            <p>
-                This page describes the data levels and data collection for the
-                HTAN biospecimen data standard.
-            </p>
-            <h2>Description of Model</h2>
             <p>
                 The HTAN biospecimen data model is designed to capture essential
                 biospecimen data elements, including:
@@ -49,36 +43,8 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
                     e.g. dissociation, sectioning, analyte isolation, etc.
                 </li>
             </ul>
-            <p>The model consists of two tiers:</p>
-            <table className={'table'}>
-                <thead>
-                    <tr>
-                        <th>Data Level</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Tier 1</td>
-                        <td>
-                            Base biospecimen data common to most assays and HTAN
-                            Research Network atlases
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tier 2</td>
-                        <td>
-                            Assay-specific or atlas-specific extensions to the
-                            base model
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <h3>
-                <i>Biospecimen Tier 1</i>
-            </h3>
             <p>
-                Baseline HTAN biospecimen data leverages existing common data
+                HTAN biospecimen metadata leverages existing common data
                 elements from four sources:
             </p>
             <ul>
@@ -102,45 +68,6 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
                     <a href="https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search">
                         NCI standards described in the caDSR system
                     </a>
-                </li>
-            </ul>
-            <p>
-                Additionally, if a comparable CDE could not be found in these
-                sources for a specific attribute, an HTAN-specific attribute was
-                created.
-            </p>
-            <h3>
-                <i>Biospecimen Tier 2</i>
-            </h3>
-            <p>
-                Attributes identified for inclusion in Tier 2 include those
-                described in the{' '}
-                <a href="https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search">
-                    caDSR system
-                </a>{' '}
-                and, similarly to Tier 1, HTAN-specific elements:
-            </p>
-            <ul>
-                <li>
-                    <b>Atlas-specific – </b>Attributes that are atlas specific,
-                    but may used by more than 1 atlas.
-                </li>
-                <li>
-                    <b>Histological Assessment – </b>Biospecimen attributes
-                    specific to histological assessment.
-                </li>
-                <li>
-                    <b>Multiplex Image Staining </b>– Biospecimen attributes
-                    specific to multiplex image staining.
-                </li>
-                <li>
-                    <b>Single Cell RNA / Single Nucleus RNA Seq </b>–
-                    Biospecimen attributes specific to Single Cell RNA / Single
-                    Nucleus RNA Seq
-                </li>
-                <li>
-                    <b>Bulk RNA &amp; DNA Seq </b>– Biospecimen attributes
-                    specific to Bulk RNA &amp; DNA Seq
                 </li>
             </ul>
         </DataStandard>
