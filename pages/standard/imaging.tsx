@@ -46,7 +46,7 @@ const Imaging: React.FunctionComponent<DataStandardProps> = (props) => {
                     into data levels as follows:
                 </p>
 
-                <table className="table table_50">
+                <table className="table table-data-levels">
                     <thead>
                         <tr>
                             <th>Level</th>

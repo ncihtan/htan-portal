@@ -20,7 +20,7 @@ const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
                     clinical data model, while Tiers 2 and 3 are extensions to
                     the GDC model.
                 </p>
-                <table className="table table_50">
+                <table className="table table-data-levels">
                     <tr>
                         <th>Tier</th>
                         <th>Description</th>
@@ -54,7 +54,7 @@ const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
                 Tier 1 clinical data consists of seven categories of data from
                 the GDC Data Model.
                 <p />
-                <table className="table table_50">
+                <table className="table table-data-levels">
                     <tr>
                         <th>Category</th>
                         <th>Description</th>

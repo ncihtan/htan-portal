@@ -54,7 +54,7 @@ const Imaging: React.FunctionComponent<DataStandardProps> = (props) => {
                     Genomic Data Commons, sequencing data are divided into four
                     levels:
                 </p>
-                <table className="table table_50">
+                <table className="table table-data-levels">
                     <thead>
                         <tr>
                             <th>Level</th>
