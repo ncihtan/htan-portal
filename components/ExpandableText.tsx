@@ -35,18 +35,15 @@ const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
     };
 
     // Disable toggler for now
-    let options: Array<JSX.Element> = [];
-    let tokens = props.fullText.split('#');
-    for (let token of tokens) {
-        if (token.length > 0) {
-            options.push(
-                <span>
-                    - {token.toLowerCase()}
-                    <br />
-                </span>
-            );
-        }
-    }
+    const tokens = props.fullText.split('#');
+    const options = tokens
+        .filter((token) => token.length > 0)
+        .map((token) => (
+            <span>
+                - {token.toLowerCase()}
+                <br />
+            </span>
+        ));
     const showMore = (
         <span>
             <br />
