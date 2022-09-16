@@ -121,25 +121,6 @@ const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
                     </td>
                 </tr>
             </table>
-            <p>
-                To establish consistency across HTAN atlases and tumor types,
-                the HTAN currently defines GDC Tier 1 elements as{' '}
-                <i>Required</i>, <i>Preferred</i> and <i>Optional</i>:
-            </p>
-            <ul>
-                <li>
-                    <i>Required</i>: Data submitters must provide a value for
-                    this element.
-                </li>
-                <li>
-                    <i>Preferred</i>: Data submitters are strongly recommended
-                    to provide values for this element.
-                </li>
-                <li>
-                    <i>Optional</i>: Data submitters can populate this element,
-                    based on availability of data.
-                </li>
-            </ul>
             <h3>Tiers 2 and 3 Clinical Data</h3>
             <p>
                 Tier 2 consists of <b>disease-agnostic</b> extensions to the GDC
