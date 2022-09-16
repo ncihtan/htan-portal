@@ -94,11 +94,13 @@ const DataSchemaTable: React.FunctionComponent<{
 
     // conditionally show valid values column
     if (hasNonEmptyValidValues(props.schemaData)) {
+        // Merge all valid values into a string with # delimeters.
+        // In the front-end code, we unpack values via the # delimeter.
         columns.push({
             name: 'Valid Values',
             selector: 'validValues',
             cell: (schemaData: DataSchemaData) => {
-                let text = getDataSchemaValidValues(
+                const text = getDataSchemaValidValues(
                     schemaData,
                     props.dataSchemaMap
                 )
