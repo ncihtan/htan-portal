@@ -79,7 +79,7 @@ const DataSchemaTable: React.FunctionComponent<{
         },
     ];
 
-    // Remove Required Column for now.f
+    // Remove Required Column for now.
     // add required column only if this is not a root table
     // if (!props.root) {
     //     columns.push({
