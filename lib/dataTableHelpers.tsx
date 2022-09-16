@@ -22,6 +22,14 @@ export function getDefaultDataTableStyle() {
         cells: {
             style: {
                 fontSize: 14,
+                lineHeight: '1.5em',
+                display: 'block',
+            },
+        },
+        rows: {
+            style: {
+                paddingTop: '10px',
+                paddingBottom: '10px',
             },
         },
     };
