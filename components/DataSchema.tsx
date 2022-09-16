@@ -61,14 +61,15 @@ const DataSchemaTable: React.FunctionComponent<{
             wrap: true,
             sortable: true,
         },
-        {
-            name: 'Label',
-            selector: 'label',
-            format: (schemaData: DataSchemaData) =>
-                LABEL_OVERRIDES[schemaData.label] || schemaData.label,
-            wrap: true,
-            sortable: true,
-        },
+        // Remove Label Column for Now.
+        // {
+        //     name: 'Label',
+        //     selector: 'label',
+        //     format: (schemaData: DataSchemaData) =>
+        //         LABEL_OVERRIDES[schemaData.label] || schemaData.label,
+        //     wrap: true,
+        //     sortable: true,
+        // },
         {
             name: 'Description',
             selector: 'description',
@@ -78,17 +79,18 @@ const DataSchemaTable: React.FunctionComponent<{
         },
     ];
 
+    // Remove Required Column for now.f
     // add required column only if this is not a root table
-    if (!props.root) {
-        columns.push({
-            name: 'Required',
-            selector: 'required',
-            wrap: true,
-            sortable: true,
-            format: (schemaData: DataSchemaData) =>
-                schemaData.required ? 'Yes' : 'No',
-        });
-    }
+    // if (!props.root) {
+    //     columns.push({
+    //         name: 'Required',
+    //         selector: 'required',
+    //         wrap: true,
+    //         sortable: true,
+    //         format: (schemaData: DataSchemaData) =>
+    //             schemaData.required ? 'Yes' : 'No',
+    //     });
+    // }
 
     // conditionally show valid values column
     if (hasNonEmptyValidValues(props.schemaData)) {
@@ -96,16 +98,16 @@ const DataSchemaTable: React.FunctionComponent<{
             name: 'Valid Values',
             selector: 'validValues',
             cell: (schemaData: DataSchemaData) => {
-                const text = getDataSchemaValidValues(
+                let text = getDataSchemaValidValues(
                     schemaData,
                     props.dataSchemaMap
                 )
-                    .map((s) => s.label)
-                    .join(', ');
-
+                    .map((s) => s.attribute)
+                    .join('#');
                 return <ExpandableText fullText={text} />;
             },
             wrap: true,
+            minWidth: '400px',
             sortable: true,
         });
     }
