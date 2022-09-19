@@ -23,7 +23,6 @@ export function getDefaultDataTableStyle() {
             style: {
                 fontSize: 14,
                 lineHeight: '1.5em',
-                display: 'block',
             },
         },
         rows: {
