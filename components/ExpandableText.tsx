@@ -34,24 +34,13 @@ const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
         setTruncated(!truncated);
     };
 
-    // Disable toggler for now
-    const tokens = props.fullText.split('#');
-    const options = tokens
-        .filter((token) => token.length > 0)
-        .map((token) => (
-            <span>
-                - {token.toLowerCase()}
-                <br />
-            </span>
-        ));
     const showMore = (
         <span>
-            <br />
-            ... <i>Number of valid options: {tokens.length}.</i>
-            <p />
+            ... <Toggle text={showMoreText} onClick={toggleTruncate} />
         </span>
     );
 
+    // render full text if expanded, truncated otherwise
     return truncated ? (
         <TruncateMarkup
             lines={10}
@@ -59,11 +48,12 @@ const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
             ellipsis={showMore}
             {...props.truncateProps}
         >
-            <span>{options}</span>
+            <span>{props.fullText}</span>
         </TruncateMarkup>
     ) : (
         <span>
-            {options} <Toggle text={showLessText} onClick={toggleTruncate} />
+            {props.fullText}{' '}
+            <Toggle text={showLessText} onClick={toggleTruncate} />
         </span>
     );
 };

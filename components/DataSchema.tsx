@@ -8,7 +8,7 @@ import {
     hasNonEmptyValidValues,
 } from '../lib/dataSchemaHelpers';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import ExpandableText from './ExpandableText';
+import ValidValues from './ValidValues';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -94,19 +94,16 @@ const DataSchemaTable: React.FunctionComponent<{
 
     // conditionally show valid values column
     if (hasNonEmptyValidValues(props.schemaData)) {
-        // Merge all valid values into a string with # delimeters.
-        // In the front-end code, we unpack values via the # delimeter.
         columns.push({
             name: 'Valid Values',
             selector: 'validValues',
             cell: (schemaData: DataSchemaData) => {
-                const text = getDataSchemaValidValues(
+                const attributes = getDataSchemaValidValues(
                     schemaData,
                     props.dataSchemaMap
-                )
-                    .map((s) => s.attribute)
-                    .join('#');
-                return <ExpandableText fullText={text} />;
+                ).map((s) => s.attribute);
+
+                return <ValidValues attributes={attributes} />;
             },
             wrap: true,
             minWidth: '400px',
