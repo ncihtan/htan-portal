@@ -27,6 +27,29 @@ export function getDefaultDataTableStyle() {
     };
 }
 
+export function getDataSchemaDataTableStyle() {
+    const defaultStyle = getDefaultDataTableStyle();
+
+    return {
+        ...defaultStyle,
+        header: {
+            style: {
+                fontSize: 16,
+            },
+        },
+        cells: {
+            ...defaultStyle.cells,
+            lineHeight: '1.5em',
+        },
+        rows: {
+            style: {
+                paddingTop: '10px',
+                paddingBottom: '10px',
+            },
+        },
+    };
+}
+
 export function truncatedTableCell(file: Entity) {
     //@ts-ignore
     const value = this.selector(file);
