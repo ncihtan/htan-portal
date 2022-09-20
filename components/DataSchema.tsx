@@ -7,7 +7,7 @@ import {
     getDataSchemaValidValues,
     hasNonEmptyValidValues,
 } from '../lib/dataSchemaHelpers';
-import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import ValidValues from './ValidValues';
 
 export interface IDataSchemaProps {
@@ -120,14 +120,7 @@ const DataSchemaTable: React.FunctionComponent<{
             pagination={false}
             noHeader={!props.title}
             title={props.title ? <strong>{props.title}</strong> : undefined}
-            customStyles={{
-                ...getDefaultDataTableStyle(),
-                header: {
-                    style: {
-                        fontSize: 16,
-                    },
-                },
-            }}
+            customStyles={getDataSchemaDataTableStyle()}
             expandableRows={props.root}
             expandableRowsComponent={
                 <ExpandableComponent dataSchemaMap={props.dataSchemaMap} />
