@@ -533,6 +533,21 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     : ''
                             }`}
                         >
+                            <div className="alert alert-info" role="alert">
+                                Supporting Links and Supporting Link
+                                Descriptions are provided by authors and are not
+                                verified by the NIH NCI or the HTAN DCC. If you
+                                think a link has been provided erroneously,
+                                please contact the corresponding author(s) and
+                                the{' '}
+                                <a
+                                    href="mailto:htan@googlegroups.com"
+                                    className="alert-link"
+                                >
+                                    HTAN DCC
+                                </a>
+                                .
+                            </div>
                             {props.router.query.id &&
                             props.router.query.id.toString() in
                                 supportingLinks ? (
