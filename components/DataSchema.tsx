@@ -79,6 +79,8 @@ const DataSchemaTable: React.FunctionComponent<{
         },
     ];
 
+    // TODO it may not be accurate to use the `required` field because an attribute may be listed as a
+    //  required dependency for the parent attribute event if `required` field is false
     // Remove Required Column for now.
     // add required column only if this is not a root table
     // if (!props.root) {

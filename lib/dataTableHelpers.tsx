@@ -5,8 +5,9 @@ import * as React from 'react';
 import { IEnhancedDataTableColumn } from '../components/EnhancedDataTable';
 import ExpandableText from '../components/ExpandableText';
 import {
-    DataSchemaData,
+    getUniqDependencyIds,
     isNumericalSchemaData,
+    SchemaDataById,
     SchemaDataId,
 } from './dataSchemaHelpers';
 import { Atlas, Entity } from './helpers';
@@ -177,7 +178,7 @@ export function getAtlasColumn(atlases: Atlas[]) {
 
 export function generateColumnsForDataSchema<T>(
     schemaDataIds: SchemaDataId[],
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData },
+    schemaDataById?: SchemaDataById,
     columnOverrides?: {
         [columnKey: string]: Partial<
             IEnhancedDataTableColumn<T> & {
@@ -190,13 +191,9 @@ export function generateColumnsForDataSchema<T>(
     let columns: IEnhancedDataTableColumn<T>[] = [];
 
     if (schemaDataById) {
-        const dependencies = _.uniq(
-            _.flatten(
-                schemaDataIds.map((schemaDataId) => {
-                    const dataSchema = schemaDataById[schemaDataId];
-                    return dataSchema ? dataSchema.requiredDependencies : [];
-                })
-            )
+        const dependencies = getUniqDependencyIds(
+            schemaDataIds,
+            schemaDataById
         );
 
         columns = _.compact(
