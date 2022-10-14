@@ -31,6 +31,13 @@ At the moment all data is hosted on S3 for producion. This is because there is a
 5. Once file is up, change path in
 `/lib/helpers.ts`
 
+Or step 1-4 as command:
+
+```
+MY_AWS_PROFILE=inodb
+aws s3 cp processed_syn_data.json.gz s3://htanfiles/processed_syn_data_$(date "+%Y%m%d").json --profile=${MY_AWS_PROFILE} --content-encoding gzip --content-type=application/json --acl public-read
+```
+
 ## Testing
 
 There are currently no automated tests, other than building the project, so be careful when merging to master
