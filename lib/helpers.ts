@@ -60,6 +60,8 @@ export interface BaseSerializableEntity {
     WPAtlas: WPAtlas;
     primaryParents?: HTANDataFileID[];
     synapseId?: string;
+    isRawSequencing?: boolean;
+    downloadSource?: 'dbGap' | 'IDC' | 'Synapse' | 'Not Downloadable';
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {

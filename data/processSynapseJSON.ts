@@ -12,6 +12,8 @@ import {
 import getData from '../lib/getData';
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
+import dgbapIds from './dbgap_release1.json';
+import idcIds from './idc-imaging-assets.json';
 
 async function writeProcessedFile() {
     const data = getData();
@@ -21,6 +23,40 @@ async function writeProcessedFile() {
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
+}
+
+function addDownloadSourcesInfo(file: BaseSerializableEntity) {
+    const dbgapSynapseSet = new Set(dgbapIds);
+
+    if (
+        file.assayName &&
+        (file.assayName.includes('Bulk') || file.assayName.includes('Seq')) &&
+        (file.level === 'Level 1' || file.level === 'Level 2')
+    ) {
+        file.isRawSequencing = true;
+        if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
+            file.downloadSource = 'dbGap';
+        } else {
+            file.downloadSource = 'Not Downloadable';
+        }
+    } else {
+        file.isRawSequencing = false;
+
+        if (file.level === 'Level 3' || file.level === 'Level 4') {
+            file.downloadSource = 'Synapse';
+        } else if (file.HTANDataFileID in idcIds) {
+            file.downloadSource = 'IDC';
+        } else if (file.Component === 'OtherAssay') {
+            if (file.AssayType === '10X Visium') {
+                // 10X Visium raw data will go to dbGap, but isn't available yet
+                file.downloadSource = 'Not Downloadable';
+            } else {
+                file.downloadSource = 'Synapse';
+            }
+        } else {
+            file.downloadSource = 'Not Downloadable';
+        }
+    }
 }
 
 function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
@@ -60,6 +96,7 @@ function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
                 (d) => d.HTANParticipantID
             );
 
+            addDownloadSourcesInfo(file);
             return file as SerializableEntity;
         })
         .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
