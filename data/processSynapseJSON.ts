@@ -30,12 +30,12 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
 
     if (
         file.assayName &&
-        (file.assayName.includes('Bulk') || file.assayName.includes('Seq')) &&
+        (file.assayName.toLowerCase().includes('bulk') || file.assayName.toLowerCase().includes('seq')) &&
         (file.level === 'Level 1' || file.level === 'Level 2')
     ) {
         file.isRawSequencing = true;
         if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
-            file.downloadSource = 'dbGap';
+            file.downloadSource = 'dbGaP';
         } else {
             file.downloadSource = 'Coming Soon';
         }

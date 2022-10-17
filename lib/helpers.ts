@@ -61,7 +61,7 @@ export interface BaseSerializableEntity {
     primaryParents?: HTANDataFileID[];
     synapseId?: string;
     isRawSequencing?: boolean;
-    downloadSource?: 'dbGap' | 'IDC' | 'Synapse' | 'Coming Soon';
+    downloadSource?: 'dbGaP' | 'IDC' | 'Synapse' | 'Coming Soon';
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {
@@ -130,7 +130,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20221017.json';
+            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20221017_1615.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();

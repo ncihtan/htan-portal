@@ -307,7 +307,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                     ).sort(
                                         (a: ExploreOptionType, b:ExploreOptionType) => {
                                             const downloadSourceOrder = [
-                                                'dbGap',
+                                                'dbGaP',
                                                 'IDC',
                                                 'Synapse',
                                                 'Coming Soon'
@@ -316,7 +316,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         }
                                     ).map((e: ExploreOptionType) => {
                                             const downloadLabels:any = {
-                                                'dbGap': 'dbGap (Level 1-2)',
+                                                'dbGaP': 'dbGaP (Level 1-2)',
                                                 'IDC': 'IDC (Imaging)',
                                                 'Synapse': 'Synapse (Level 3-4)',
                                                 'Coming Soon': 'Coming Soon',
