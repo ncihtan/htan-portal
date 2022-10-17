@@ -322,7 +322,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                                 'Coming Soon': 'Coming Soon',
                                             };
 
-                                            e.label = downloadLabels![e.label];
+                                            e.label = downloadLabels[e.label];
                                             return e
                                     })}
                                 />
