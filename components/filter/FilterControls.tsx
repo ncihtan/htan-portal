@@ -304,7 +304,27 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                     filters={props.selectedFiltersByGroupName}
                                     options={options(
                                         AttributeNames.downloadSource
-                                    )}
+                                    ).sort(
+                                        (a: ExploreOptionType, b:ExploreOptionType) => {
+                                            const downloadSourceOrder = [
+                                                'dbGap',
+                                                'IDC',
+                                                'Synapse',
+                                                'Coming Soon'
+                                            ];
+                                            return downloadSourceOrder.indexOf(a.label) - downloadSourceOrder.indexOf(b.label);
+                                        }
+                                    ).map((e: ExploreOptionType) => {
+                                            const downloadLabels:any = {
+                                                'dbGap': 'dbGap (Level 1-2)',
+                                                'IDC': 'IDC (Imaging)',
+                                                'Synapse': 'Synapse (Level 3-4)',
+                                                'Coming Soon': 'Coming Soon',
+                                            };
+
+                                            e.label = downloadLabels![e.label];
+                                            return e
+                                    })}
                                 />
                             </FilterPropertyColumnShell>
                         </FilterPanel>
