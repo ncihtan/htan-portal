@@ -61,7 +61,7 @@ export interface BaseSerializableEntity {
     primaryParents?: HTANDataFileID[];
     synapseId?: string;
     isRawSequencing?: boolean;
-    downloadSource?: 'dbGap' | 'IDC' | 'Synapse' | 'Not Downloadable';
+    downloadSource?: 'dbGap' | 'IDC' | 'Synapse' | 'Coming Soon';
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {

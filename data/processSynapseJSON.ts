@@ -37,7 +37,7 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
         if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
             file.downloadSource = 'dbGap';
         } else {
-            file.downloadSource = 'Not Downloadable';
+            file.downloadSource = 'Coming Soon';
         }
     } else {
         file.isRawSequencing = false;
@@ -49,12 +49,12 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
         } else if (file.Component === 'OtherAssay') {
             if (file.AssayType === '10X Visium') {
                 // 10X Visium raw data will go to dbGap, but isn't available yet
-                file.downloadSource = 'Not Downloadable';
+                file.downloadSource = 'Coming Soon';
             } else {
                 file.downloadSource = 'Synapse';
             }
         } else {
-            file.downloadSource = 'Not Downloadable';
+            file.downloadSource = 'Coming Soon';
         }
     }
 }
