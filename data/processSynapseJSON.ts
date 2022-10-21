@@ -12,7 +12,7 @@ import {
 import getData from '../lib/getData';
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
-import dgbapIds from './dbgap_release1.json';
+import dgbapIds from './dbgap_release_all.json';
 import idcIds from './idc-imaging-assets.json';
 
 async function writeProcessedFile() {
@@ -99,7 +99,11 @@ function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
             addDownloadSourcesInfo(file);
             return file as SerializableEntity;
         })
-        .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
+        .filter((f) => f.diagnosisIds.length > 0) // files must have a diagnosis
+        .filter(
+            (f) => f.downloadSource !== "Coming Soon" ||
+            f.ImagingAssayType
+        ) // remove files that can't be downloaded unless it's imaging
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
