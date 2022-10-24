@@ -3,6 +3,8 @@ import Nav from 'react-bootstrap/Nav';
 import React, { useState } from 'react';
 import { Dropdown, NavDropdown } from 'react-bootstrap';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 function togglePreview(on: any) {
     if (process.browser) {
@@ -45,6 +47,11 @@ const NavSection: React.FunctionComponent<{
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
         <Nav.Link href="/explore">Explore</Nav.Link>,
+
+        <Nav.Link href="https://docs.humantumoratlas.org/" target="_blank">
+            Manual{' '}
+            <FontAwesomeIcon icon={faExternalLinkAlt} />
+        </Nav.Link>,
 
         <NavSection text={'About the Data'}>
             <NavDropdown.Item href="/standards">
