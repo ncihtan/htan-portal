@@ -6,6 +6,7 @@ import { toArabic } from 'roman-numerals';
 
 import { WPAtlas } from '../types';
 import {
+    DownloadSourceCategory,
     ExploreOptionType,
     ExploreSelectedFilter,
     ISelectedFiltersByAttrName,
@@ -60,6 +61,8 @@ export interface BaseSerializableEntity {
     WPAtlas: WPAtlas;
     primaryParents?: HTANDataFileID[];
     synapseId?: string;
+    isRawSequencing?: boolean;
+    downloadSource?: DownloadSourceCategory;
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {
@@ -128,7 +131,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_08_30_2022.json';
+            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20221021_1018.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();

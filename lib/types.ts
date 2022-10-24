@@ -34,6 +34,14 @@ export enum AttributeNames {
 
     // Derived or attached in frontend
     assayName = 'assayName',
+    downloadSource = 'downloadSource',
+}
+
+export enum DownloadSourceCategory {
+    dbgap = 'dbGaP',
+    idc = 'IDC',
+    synapse = 'Synapse',
+    comingSoon = 'Coming Soon',
 }
 
 export interface IAttributeInfo {
@@ -112,6 +120,10 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     [AttributeNames.assayName]: {
         path: 'assayName',
         displayName: 'Assay',
+    },
+    [AttributeNames.downloadSource]: {
+        path: 'downloadSource',
+        displayName: 'Download Source',
     },
 };
 

@@ -1,4 +1,9 @@
-import { SynapseAtlas, SynapseData, SynapseSchema } from '../lib/types';
+import {
+    DownloadSourceCategory,
+    SynapseAtlas,
+    SynapseData,
+    SynapseSchema,
+} from '../lib/types';
 import { WPAtlas } from '../types';
 import _ from 'lodash';
 import {
@@ -12,6 +17,8 @@ import {
 import getData from '../lib/getData';
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
+import dgbapIds from './dbgap_release_all.json';
+import idcIds from './idc-imaging-assets.json';
 
 async function writeProcessedFile() {
     const data = getData();
@@ -21,6 +28,41 @@ async function writeProcessedFile() {
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
+}
+
+function addDownloadSourcesInfo(file: BaseSerializableEntity) {
+    const dbgapSynapseSet = new Set(dgbapIds);
+
+    if (
+        file.assayName &&
+        (file.assayName.toLowerCase().includes('bulk') ||
+            file.assayName.toLowerCase().includes('seq')) &&
+        (file.level === 'Level 1' || file.level === 'Level 2')
+    ) {
+        file.isRawSequencing = true;
+        if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
+            file.downloadSource = DownloadSourceCategory.dbgap;
+        } else {
+            file.downloadSource = DownloadSourceCategory.comingSoon;
+        }
+    } else {
+        file.isRawSequencing = false;
+
+        if (file.level === 'Level 3' || file.level === 'Level 4') {
+            file.downloadSource = DownloadSourceCategory.synapse;
+        } else if (file.HTANDataFileID in idcIds) {
+            file.downloadSource = DownloadSourceCategory.idc;
+        } else if (file.Component === 'OtherAssay') {
+            if (file.AssayType === '10X Visium') {
+                // 10X Visium raw data will go to dbGap, but isn't available yet
+                file.downloadSource = DownloadSourceCategory.comingSoon;
+            } else {
+                file.downloadSource = DownloadSourceCategory.synapse;
+            }
+        } else {
+            file.downloadSource = DownloadSourceCategory.comingSoon;
+        }
+    }
 }
 
 function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
@@ -60,9 +102,15 @@ function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
                 (d) => d.HTANParticipantID
             );
 
+            addDownloadSourcesInfo(file);
             return file as SerializableEntity;
         })
-        .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
+        .filter((f) => f.diagnosisIds.length > 0) // files must have a diagnosis
+        .filter(
+            (f) =>
+                f.downloadSource !== DownloadSourceCategory.comingSoon ||
+                f.ImagingAssayType
+        ); // remove files that can't be downloaded unless it's imaging
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);

@@ -17,6 +17,7 @@ import {
     AttributeMap,
     AttributeNames,
     ISelectedFiltersByAttrName,
+    DownloadSourceCategory,
 } from '../../lib/types';
 import FilterCheckList from '../FilterPanel/FilterCheckList';
 import FilterPanel from '../FilterPanel/FilterPanel';
@@ -197,15 +198,12 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
 
                 <div>
                     <div style={{ width: 164 }}>
-                        <FilterPanel
-                            placeholder={'Demographics'}
-                        >
+                        <FilterPanel placeholder={'Demographics'}>
                             <div className={'filter-checkbox-list-container'}>
                                 <FilterPropertyColumnShell
                                     title={
-                                        AttributeMap[
-                                            AttributeNames.Gender
-                                        ].displayName
+                                        AttributeMap[AttributeNames.Gender]
+                                            .displayName
                                     }
                                 >
                                     <FilterCheckList
@@ -213,16 +211,13 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         filters={
                                             props.selectedFiltersByGroupName
                                         }
-                                        options={options(
-                                            AttributeNames.Gender
-                                        )}
+                                        options={options(AttributeNames.Gender)}
                                     />
                                 </FilterPropertyColumnShell>
                                 <FilterPropertyColumnShell
                                     title={
-                                        AttributeMap[
-                                            AttributeNames.Race
-                                        ].displayName
+                                        AttributeMap[AttributeNames.Race]
+                                            .displayName
                                     }
                                 >
                                     <FilterCheckList
@@ -230,16 +225,13 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         filters={
                                             props.selectedFiltersByGroupName
                                         }
-                                        options={options(
-                                            AttributeNames.Race
-                                        )}
+                                        options={options(AttributeNames.Race)}
                                     />
                                 </FilterPropertyColumnShell>
                                 <FilterPropertyColumnShell
                                     title={
-                                        AttributeMap[
-                                            AttributeNames.Ethnicity
-                                        ].displayName
+                                        AttributeMap[AttributeNames.Ethnicity]
+                                            .displayName
                                     }
                                 >
                                     <FilterCheckList
@@ -258,7 +250,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 151 }}>
+                    <div style={{ width: 130 }}>
                         <FilterPanel placeholder={'Assay Type'}>
                             <FilterPropertyColumnShell title={'Assay Type'}>
                                 <FilterCheckList
@@ -272,7 +264,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 137 }}>
+                    <div style={{ width: 120 }}>
                         <FilterPanel placeholder={'File Type'}>
                             <div className={'filter-checkbox-list-container'}>
                                 <FilterPropertyColumnShell title={'Level'}>
@@ -298,6 +290,63 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                     ></FilterCheckList>
                                 </FilterPropertyColumnShell>
                             </div>
+                        </FilterPanel>
+                    </div>
+                </div>
+
+                <div>
+                    <div style={{ width: 170 }}>
+                        <FilterPanel placeholder={'Download Source'}>
+                            <FilterPropertyColumnShell
+                                title={'Download Source'}
+                            >
+                                <FilterCheckList
+                                    setFilter={props.setFilter}
+                                    filters={props.selectedFiltersByGroupName}
+                                    options={options(
+                                        AttributeNames.downloadSource
+                                    )
+                                        .sort(
+                                            (
+                                                a: ExploreOptionType,
+                                                b: ExploreOptionType
+                                            ) => {
+                                                const downloadSourceOrder = [
+                                                    DownloadSourceCategory.dbgap,
+                                                    DownloadSourceCategory.idc,
+                                                    DownloadSourceCategory.synapse,
+                                                    DownloadSourceCategory.comingSoon,
+                                                ];
+                                                return (
+                                                    downloadSourceOrder.indexOf(
+                                                        a.label as DownloadSourceCategory
+                                                    ) -
+                                                    downloadSourceOrder.indexOf(
+                                                        b.label as DownloadSourceCategory
+                                                    )
+                                                );
+                                            }
+                                        )
+                                        .map((e: ExploreOptionType) => {
+                                            const downloadLabels = {
+                                                [DownloadSourceCategory.dbgap]:
+                                                    'dbGaP (Level 1-2)',
+                                                [DownloadSourceCategory.idc]:
+                                                    'IDC (Imaging)',
+                                                [DownloadSourceCategory.synapse]:
+                                                    'Synapse (Level 3-4)',
+                                                [DownloadSourceCategory.comingSoon]:
+                                                    'Coming Soon',
+                                            };
+
+                                            e.label =
+                                                downloadLabels[
+                                                    e.label as DownloadSourceCategory
+                                                ];
+                                            return e;
+                                        })}
+                                />
+                            </FilterPropertyColumnShell>
                         </FilterPanel>
                     </div>
                 </div>

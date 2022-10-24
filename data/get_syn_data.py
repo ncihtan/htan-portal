@@ -19,11 +19,11 @@ from schematic.schemas.explorer import SchemaExplorer
 
 MAX_AGE_IN_DAYS = 32849
 
-
 @click.command()
 @click.option('--include-at-risk-populations/--exclude-at-risk-populations', default=False)
 @click.option('--include-released-only/--include-unreleased', default=False)
-def generate_json(include_at_risk_populations, include_released_only):
+@click.option('--do-not-download-from-synapse', default=False)
+def generate_json(include_at_risk_populations, include_released_only, do_not_download_from_synapse):
     logging.disable(logging.DEBUG)
 
     # map: HTAN center names to HTAN IDs
@@ -107,6 +107,9 @@ def generate_json(include_at_risk_populations, include_released_only):
 
     data_schemas = []
 
+    with open('release2_synapse_metadata.json') as f:
+        release2_synapse_metadata_ids = set(json.load(f))
+
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
     for project_id, dataset_group in metadata_manifests:
         atlas = {}
@@ -125,17 +128,22 @@ def generate_json(include_at_risk_populations, include_released_only):
         datasets = dataset_group.to_dict("records")
 
         for dataset in datasets:
+            # only consider metadata currently in release 2
+            if dataset["id"] not in release2_synapse_metadata_ids:
+                continue
+
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
 
-            if dataset["id"] == "syn25619062":
-                # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
-                syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
-            else:
-                syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
-            # sometimes files can be named synapse(*x).csv
-            # TODO: would be better of syn.get can take output file argument
-            os.rename(glob.glob(manifest_location + "*synapse*.csv")[0], manifest_path)
+            if not do_not_download_from_synapse:
+                if dataset["id"] == "syn25619062":
+                    # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
+                    syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
+                else:
+                    syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
+                # sometimes files can be named synapse(*x).csv
+                # TODO: would be better of syn.get can take output file argument
+                os.rename(glob.glob(manifest_location + "*synapse*.csv")[0], manifest_path)
 
             manifest_df = pd.read_csv(manifest_path)
 
@@ -157,8 +165,12 @@ def generate_json(include_at_risk_populations, include_released_only):
             logging.info("Data type: " + component)
 
             # exclude HTAPP imaging data for now
-            if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component):
-                logging.info("Skipping Imaging data for HTAPP (" + component + ")")
+            if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component or "Bulk" in component):
+                logging.info("Skipping Imaging and Bulk data for HTAPP (" + component + ")")
+                continue
+
+            # exclude HTAPP PML datasets
+            if center == "HTAN HTAPP" and len(manifest_df) > 0 and "Filename" in manifest_df.columns and ("PML" in manifest_df["Filename"].values[0] or "10x" in manifest_df["Filename"].values[0]):
                 continue
 
             # get data type schema info
@@ -228,6 +240,14 @@ def generate_json(include_at_risk_populations, include_released_only):
                     logging.error("Removing duplicates in " + manifest_path + ": " + str(manifest_df.loc[duplicates]))
                     manifest_df = manifest_df.drop_duplicates(subset='HTAN Participant ID')
 
+            # TODO: exclude Stanford proteomics data temporarily due to linking (is this still necessary?)
+            # issues
+            if center == "HTAN Stanford" and "Other" in component and len(manifest_df) > 0 and "proteomics" in manifest_df['Filename'].values[0]:
+                continue
+            # TODO: exclude HTAPP Bulk RNASeq data (has linkage issue as well)
+            if center == "HTAN HTAPP" and "BulkRNA" in component:
+                continue
+
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
                 if center in release2_centers:
@@ -235,9 +255,10 @@ def generate_json(include_at_risk_populations, include_released_only):
                         pass
                     else:
                         manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
+
                 elif center == "HTAN OHSU":
                     # only include one published case HTA9_1 for now
-                    if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("WES" in component or "ATAC" in component or "RNA" in component):
+                    if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("Imaging" in component or "WES" in component or "ATAC" in component or "RNA" in component):
                         manifest_df = manifest_df[manifest_df["HTAN Parent Biospecimen ID"].str.contains("HTA9_1")].copy()
                     elif "HTAN Parent ID" in manifest_df.columns and ("Biospecimen" in component):
                         manifest_df = manifest_df[manifest_df["HTAN Parent ID"].str.contains("HTA9_1")].copy()

@@ -556,6 +556,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
+                name: 'Download Source',
+                selector: 'downloadSource',
+                wrap: true,
+                sortable: true,
+            },
+            {
                 name: DETAILS_COLUMN_NAME,
                 selector: (file: Entity) => 'Details',
                 cell: (file: Entity) => {
@@ -831,6 +837,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             level: true,
             diagnosis: true,
             primaryParents: true,
+            downloadSource: true,
 
             //others to exclude
             Component: true,
