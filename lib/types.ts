@@ -37,6 +37,13 @@ export enum AttributeNames {
     downloadSource = 'downloadSource',
 }
 
+export enum DownloadSourceCategory {
+    dbgap = 'dbGaP',
+    idc = 'IDC',
+    synapse = 'Synapse',
+    comingSoon = 'Coming Soon',
+}
+
 export interface IAttributeInfo {
     path?: string;
     getValues?: (e: Entity) => string[];

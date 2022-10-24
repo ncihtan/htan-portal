@@ -17,6 +17,7 @@ import {
     AttributeMap,
     AttributeNames,
     ISelectedFiltersByAttrName,
+    DownloadSourceCategory,
 } from '../../lib/types';
 import FilterCheckList from '../FilterPanel/FilterCheckList';
 import FilterPanel from '../FilterPanel/FilterPanel';
@@ -304,27 +305,46 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                     filters={props.selectedFiltersByGroupName}
                                     options={options(
                                         AttributeNames.downloadSource
-                                    ).sort(
-                                        (a: ExploreOptionType, b:ExploreOptionType) => {
-                                            const downloadSourceOrder = [
-                                                'dbGaP',
-                                                'IDC',
-                                                'Synapse',
-                                                'Coming Soon'
-                                            ];
-                                            return downloadSourceOrder.indexOf(a.label) - downloadSourceOrder.indexOf(b.label);
-                                        }
-                                    ).map((e: ExploreOptionType) => {
-                                            const downloadLabels:any = {
-                                                'dbGaP': 'dbGaP (Level 1-2)',
-                                                'IDC': 'IDC (Imaging)',
-                                                'Synapse': 'Synapse (Level 3-4)',
-                                                'Coming Soon': 'Coming Soon',
+                                    )
+                                        .sort(
+                                            (
+                                                a: ExploreOptionType,
+                                                b: ExploreOptionType
+                                            ) => {
+                                                const downloadSourceOrder = [
+                                                    DownloadSourceCategory.dbgap,
+                                                    DownloadSourceCategory.idc,
+                                                    DownloadSourceCategory.synapse,
+                                                    DownloadSourceCategory.comingSoon,
+                                                ];
+                                                return (
+                                                    downloadSourceOrder.indexOf(
+                                                        a.label as DownloadSourceCategory
+                                                    ) -
+                                                    downloadSourceOrder.indexOf(
+                                                        b.label as DownloadSourceCategory
+                                                    )
+                                                );
+                                            }
+                                        )
+                                        .map((e: ExploreOptionType) => {
+                                            const downloadLabels = {
+                                                [DownloadSourceCategory.dbgap]:
+                                                    'dbGaP (Level 1-2)',
+                                                [DownloadSourceCategory.idc]:
+                                                    'IDC (Imaging)',
+                                                [DownloadSourceCategory.synapse]:
+                                                    'Synapse (Level 3-4)',
+                                                [DownloadSourceCategory.comingSoon]:
+                                                    'Coming Soon',
                                             };
 
-                                            e.label = downloadLabels[e.label];
-                                            return e
-                                    })}
+                                            e.label =
+                                                downloadLabels[
+                                                    e.label as DownloadSourceCategory
+                                                ];
+                                            return e;
+                                        })}
                                 />
                             </FilterPropertyColumnShell>
                         </FilterPanel>

@@ -6,6 +6,7 @@ import { toArabic } from 'roman-numerals';
 
 import { WPAtlas } from '../types';
 import {
+    DownloadSourceCategory,
     ExploreOptionType,
     ExploreSelectedFilter,
     ISelectedFiltersByAttrName,
@@ -61,7 +62,7 @@ export interface BaseSerializableEntity {
     primaryParents?: HTANDataFileID[];
     synapseId?: string;
     isRawSequencing?: boolean;
-    downloadSource?: 'dbGaP' | 'IDC' | 'Synapse' | 'Coming Soon';
+    downloadSource?: DownloadSourceCategory;
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {
