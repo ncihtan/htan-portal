@@ -4,6 +4,10 @@ import process from 'process';
 import path from 'path';
 import zlib from 'zlib';
 
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
+
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import { GetStaticProps } from 'next';
@@ -49,7 +53,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
         getContent('card-6', 'homepage'),
     ]);
 
-    const processedSynapseData = await zlib.gunzipSync(await fs.readFileSync(path.join(process.cwd(), 'public/processed_syn_data.json.gz'))).toString()
+    const processedSynapseData = await zlib
+        .gunzipSync(
+            await fs.readFileSync(
+                path.join(process.cwd(), 'public/processed_syn_data.json.gz')
+            )
+        )
+        .toString();
     const files = fillInEntities(
         (JSON.parse(processedSynapseData) as any) as LoadDataResult
     );
