@@ -10,7 +10,6 @@ import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import { GetStaticProps } from 'next';
 import { withRouter, NextRouter } from 'next/router';
-import fetch from 'node-fetch';
 import React from 'react';
 import { ScaleLoader } from 'react-spinners';
 
@@ -23,16 +22,13 @@ import {
 } from '../lib/filterHelpers';
 import {
     Atlas,
-    Entity,
     fetchData,
     fillInEntities,
-    filterObject,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
 import {
-    AttributeMap,
     AttributeNames,
     ExploreActionMeta,
     ExploreSelectedFilter,
@@ -49,7 +45,7 @@ import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 import styles from './styles.module.scss';
 import { ExploreSummary } from '../components/ExploreSummary';
 import PageWrapper from '../components/PageWrapper';
-import { DataSchemaData, getSchemaDataMap } from '../lib/dataSchemaHelpers';
+import { fetchAndProcessSchemaData } from '../lib/dataSchemaHelpers';
 
 export const getStaticProps: GetStaticProps = async (context) => {
     //let slugs = ['summary-blurb-data-release'];
@@ -194,7 +190,9 @@ class Search extends React.Component<
                 });
             });
 
-            const schemaLoadingPromise = fromPromise(getSchemaDataMap());
+            const schemaLoadingPromise = fromPromise(
+                fetchAndProcessSchemaData()
+            );
             schemaLoadingPromise.then((schemaDataById) => {
                 this.setState({ schemaDataById });
             });

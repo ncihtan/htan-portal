@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 
@@ -31,76 +32,90 @@ const ExpandableComponent: React.FunctionComponent<{
     data?: DataSchemaData;
     dataSchemaMap?: { [id: string]: DataSchemaData };
 }> = (props) => {
-    return props.data?.requiredDependencies ? (
-        <div className="m-3">
-            <DataSchemaTable
-                schemaData={getDataSchemaDependencies(
-                    props.data,
-                    props.dataSchemaMap
-                )}
-                dataSchemaMap={props.dataSchemaMap}
-                root={false}
-            />
-        </div>
-    ) : null;
+    let component = null;
+
+    if (props.data) {
+        const dependencies = getDataSchemaDependencies(
+            props.data,
+            props.dataSchemaMap
+        );
+
+        if (!_.isEmpty(dependencies)) {
+            component = (
+                <div className="m-3">
+                    <DataSchemaTable
+                        schemaData={dependencies}
+                        dataSchemaMap={props.dataSchemaMap}
+                    />
+                </div>
+            );
+        }
+    }
+
+    return component;
 };
 
-const DataSchemaTable: React.FunctionComponent<{
-    schemaData: DataSchemaData[];
-    dataSchemaMap?: { [id: string]: DataSchemaData };
-    title?: string;
-    root?: boolean;
-}> = (props) => {
-    const columns: IDataTableColumn[] = [
-        {
-            name: 'Attribute',
-            selector: 'attribute',
+enum ColumnName {
+    Attribute = 'Attribute',
+    Label = 'Label',
+    Description = 'Description',
+    Required = 'Required',
+    ValidValues = 'Valid Values',
+}
+
+enum ColumnSelector {
+    Attribute = 'attribute',
+    Label = 'label',
+    Description = 'description',
+    Required = 'required',
+    ValidValues = 'validValues',
+}
+
+function getColumnDef(dataSchemaMap?: {
+    [id: string]: DataSchemaData;
+}): { [name in ColumnName]: IDataTableColumn } {
+    return {
+        [ColumnName.Attribute]: {
+            name: ColumnName.Attribute,
+            selector: ColumnSelector.Attribute,
             format: (schemaData: DataSchemaData) =>
                 ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
                 schemaData.attribute,
             wrap: true,
             sortable: true,
         },
-        // Remove Label Column for Now.
-        // {
-        //     name: 'Label',
-        //     selector: 'label',
-        //     format: (schemaData: DataSchemaData) =>
-        //         LABEL_OVERRIDES[schemaData.label] || schemaData.label,
-        //     wrap: true,
-        //     sortable: true,
-        // },
-        {
-            name: 'Description',
-            selector: 'description',
+        [ColumnName.Label]: {
+            name: ColumnName.Label,
+            selector: ColumnSelector.Label,
+            format: (schemaData: DataSchemaData) =>
+                LABEL_OVERRIDES[schemaData.label] || schemaData.label,
+            wrap: true,
+            sortable: true,
+        },
+        [ColumnName.Description]: {
+            name: ColumnName.Description,
+            selector: ColumnSelector.Description,
             grow: 2,
             wrap: true,
             sortable: true,
         },
-    ];
-
-    // Remove Required Column for now.
-    // add required column only if this is not a root table
-    // if (!props.root) {
-    //     columns.push({
-    //         name: 'Required',
-    //         selector: 'required',
-    //         wrap: true,
-    //         sortable: true,
-    //         format: (schemaData: DataSchemaData) =>
-    //             schemaData.required ? 'Yes' : 'No',
-    //     });
-    // }
-
-    // conditionally show valid values column
-    if (hasNonEmptyValidValues(props.schemaData)) {
-        columns.push({
-            name: 'Valid Values',
-            selector: 'validValues',
+        [ColumnName.Required]: {
+            name: ColumnName.Required,
+            selector: ColumnSelector.Required,
+            wrap: true,
+            sortable: true,
+            // TODO it may not be accurate to use the `required` field because an attribute may be listed as a
+            //  required dependency for the parent attribute even if `required` field is false
+            format: (schemaData: DataSchemaData) =>
+                schemaData.required ? 'Yes' : 'No',
+        },
+        [ColumnName.ValidValues]: {
+            name: ColumnName.ValidValues,
+            selector: ColumnSelector.ValidValues,
             cell: (schemaData: DataSchemaData) => {
                 const attributes = getDataSchemaValidValues(
                     schemaData,
-                    props.dataSchemaMap
+                    dataSchemaMap
                 ).map((s) => s.attribute);
 
                 return <ValidValues attributes={attributes} />;
@@ -108,8 +123,34 @@ const DataSchemaTable: React.FunctionComponent<{
             wrap: true,
             minWidth: '400px',
             sortable: true,
-        });
+        },
+    };
+}
+
+const DataSchemaTable: React.FunctionComponent<{
+    schemaData: DataSchemaData[];
+    dataSchemaMap?: { [id: string]: DataSchemaData };
+    title?: string;
+    columns?: ColumnName[];
+}> = (props) => {
+    // include Attribute and Description columns by default
+    // (exclude Label and Required columns by default)
+    const availableColumns = props.columns || [
+        ColumnName.Attribute,
+        ColumnName.Description,
+    ];
+    // include Valid Values column only if there is data
+    if (
+        !availableColumns.includes(ColumnName.ValidValues) &&
+        hasNonEmptyValidValues(props.schemaData)
+    ) {
+        availableColumns.push(ColumnName.ValidValues);
     }
+
+    const columnDef = getColumnDef(props.dataSchemaMap);
+    const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
+        (name) => columnDef[name]
+    );
 
     return (
         <DataTable
@@ -121,7 +162,13 @@ const DataSchemaTable: React.FunctionComponent<{
             noHeader={!props.title}
             title={props.title ? <strong>{props.title}</strong> : undefined}
             customStyles={getDataSchemaDataTableStyle()}
-            expandableRows={props.root}
+            expandableRowDisabled={(schema) => {
+                // disable expandable row toggle if schema does not have any dependencies
+                return _.isEmpty(
+                    getDataSchemaDependencies(schema, props.dataSchemaMap)
+                );
+            }}
+            expandableRows={true}
             expandableRowsComponent={
                 <ExpandableComponent dataSchemaMap={props.dataSchemaMap} />
             }
@@ -135,7 +182,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
             schemaData={props.schemaData}
             dataSchemaMap={props.dataSchemaMap}
             title="Data Schema:"
-            root={true}
         />
     );
 };

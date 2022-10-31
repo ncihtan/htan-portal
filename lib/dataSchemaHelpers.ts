@@ -51,6 +51,12 @@ export interface DataSchemaData {
     //sms:requiresDependency
     requiredDependencies: string[];
 
+    // Built by traversing the entire schema and resolving the parent ids
+    conditionalDependencies: string[];
+
+    // Conditional dependencies not listed anywhere else as a required dependency
+    exclusiveConditionalDependencies: string[];
+
     // Built from the context and the id.
     source: string;
 
@@ -70,6 +76,10 @@ export interface DataSchemaData {
 export interface SchemaJson extends BaseEntity {
     '@context': SchemaContext;
     '@graph': SchemaData[];
+}
+
+export interface SchemaDataById {
+    [schemaDataId: string]: DataSchemaData;
 }
 
 export enum SchemaDataId {
@@ -175,30 +185,112 @@ export const DEFAULT_SCHEMA: SchemaJson = {
     '@id': '',
 };
 
+// https://raw.githubusercontent.com/Sage-Bionetworks/schematic/main/data/schema_org_schemas/example.jsonld
+// https://github.com/ncihtan/hsim/blob/master/schema/HTAN.jsonld
 export const DEFAULT_SCHEMA_URL =
     'https://raw.githubusercontent.com/ncihtan/data-models/main/HTAN.model.jsonld';
 
-const schemaDataCache: { [uri: string]: SchemaJson } = {};
+export const TBD = 'TBD';
 
 export function getDataSchemaDependencies(
     schema: DataSchemaData,
-    schemaDataById: { [schemaDataId: string]: DataSchemaData } = {}
+    schemaDataById: SchemaDataById = {},
+    excludeDependenciesWithTbdValues: boolean = true,
+    getDependencyIds: (
+        schema: DataSchemaData,
+        schemaDataById?: SchemaDataById
+    ) => string[] = getExclusiveDependencyIds
 ): DataSchemaData[] {
-    return _.compact(
-        schema.requiredDependencies.map((id) => schemaDataById[id])
+    const dependencyIds = getDependencyIds(schema, schemaDataById);
+    const dependencies = _.compact(
+        dependencyIds.map((id) => schemaDataById[id])
     );
+    return excludeDependenciesWithTbdValues
+        ? dependencies.filter((d) => d.description !== TBD)
+        : dependencies;
+}
+
+export function sortDependenciesByAttribute(
+    dependencyIds: string[],
+    schemaDataById: SchemaDataById = {}
+) {
+    const dependencies = dependencyIds.map(
+        // Fallback to dependency id in case no corresponding Schema found
+        (id) => schemaDataById[id] || ({ id, attribute: id } as DataSchemaData)
+    );
+    return _.sortBy(dependencies, (d) => d.attribute).map((d) => d.id);
+}
+
+/**
+ * Return all required dependency ids plus only exclusive conditional dependency ids.
+ */
+export function getExclusiveDependencyIds(
+    schema: DataSchemaData,
+    schemaDataById: SchemaDataById = {}
+) {
+    // sort dependencies alphabetically without changing the original order
+    const requiredDependencies = sortDependenciesByAttribute(
+        schema.requiredDependencies,
+        schemaDataById
+    );
+    const conditionalDependencies = sortDependenciesByAttribute(
+        schema.exclusiveConditionalDependencies,
+        schemaDataById
+    );
+    return _.uniq([...requiredDependencies, ...conditionalDependencies]);
+}
+
+/**
+ * Return all required and conditional dependency ids.
+ */
+export function getAllDependencyIds(
+    schema: DataSchemaData,
+    schemaDataById: SchemaDataById = {}
+) {
+    // sort dependencies alphabetically without changing the original order
+    const requiredDependencies = sortDependenciesByAttribute(
+        schema.requiredDependencies,
+        schemaDataById
+    );
+    const conditionalDependencies = sortDependenciesByAttribute(
+        schema.conditionalDependencies,
+        schemaDataById
+    );
+    return _.uniq([...requiredDependencies, ...conditionalDependencies]);
+}
+
+export function getUniqDependencyIds(
+    schemaDataIds: SchemaDataId[],
+    schemaDataById?: SchemaDataById,
+    getDependencyIds: (
+        schema: DataSchemaData,
+        schemaDataById?: SchemaDataById
+    ) => string[] = getAllDependencyIds
+) {
+    return !_.isEmpty(schemaDataById)
+        ? _.uniq(
+              _.flatten(
+                  schemaDataIds.map((schemaDataId) => {
+                      const dataSchema = schemaDataById![schemaDataId];
+                      return dataSchema
+                          ? getDependencyIds(dataSchema, schemaDataById)
+                          : [];
+                  })
+              )
+          )
+        : [];
 }
 
 export function getDataSchemaParents(
     schema: DataSchemaData,
-    schemaDataById: { [schemaDataId: string]: DataSchemaData } = {}
+    schemaDataById: SchemaDataById = {}
 ): DataSchemaData[] {
     return _.compact(schema.parentIds.map((id) => schemaDataById[id]));
 }
 
 export function getDataSchemaValidValues(
     schema: DataSchemaData,
-    schemaDataById: { [schemaDataId: string]: DataSchemaData } = {}
+    schemaDataById: SchemaDataById = {}
 ): DataSchemaData[] {
     return _.compact(schema.validValues.map((id) => schemaDataById[id]));
 }
@@ -212,22 +304,24 @@ export async function getDataSchema(
     dataUri: string = DEFAULT_SCHEMA_URL
 ): Promise<{
     dataSchemaData: DataSchemaData[];
-    schemaDataById: { [schemaDataId: string]: DataSchemaData };
+    schemaDataById: SchemaDataById;
 }> {
-    const schemaDataById = await getSchemaDataMap(dataUri);
+    const schemaDataById = await fetchAndProcessSchemaData(dataUri);
     const dataSchemaData = _.compact(ids.map((id) => schemaDataById[id]));
 
     return { dataSchemaData, schemaDataById };
 }
 
-export async function getSchemaDataMap(
+export async function fetchAndProcessSchemaData(
     dataUri: string = DEFAULT_SCHEMA_URL
-): Promise<{ [schemaDataId: string]: DataSchemaData }> {
-    const schemaData = getDataSchemaData(await getSchemaData(dataUri));
-    return _.keyBy(schemaData, (d) => d.id);
+): Promise<SchemaDataById> {
+    const schemaData = getDataSchemaData(await fetchSchemaData(dataUri));
+    const schemaDataKeyedById = _.keyBy(schemaData, (d) => d.id);
+    resolveConditionalDependencies(schemaData, schemaDataKeyedById);
+    return schemaDataKeyedById;
 }
 
-export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
+export async function fetchSchemaData(dataUri?: string): Promise<SchemaJson> {
     if (!dataUri) {
         // return {
         //     '@context': defaultSchema['@context'],
@@ -238,24 +332,12 @@ export async function getSchemaData(dataUri?: string): Promise<SchemaJson> {
         return DEFAULT_SCHEMA;
     }
 
-    // do not fetch again if fetched before
-    if (schemaDataCache[dataUri]) {
-        return schemaDataCache[dataUri];
-    }
-
     try {
-        // https://raw.githubusercontent.com/Sage-Bionetworks/schematic/main/data/schema_org_schemas/example.jsonld
-        // https://github.com/ncihtan/hsim/blob/master/schema/HTAN.jsonld
         const res = await fetch(dataUri);
 
         // const json = await res.json();
         const text = await res.text();
-        const json = JSON.parse(text);
-
-        // cache the schema data
-        schemaDataCache[dataUri] = json;
-
-        return json;
+        return JSON.parse(text);
     } catch {
         // console.error(`Invalid Url: ${dataUri}`);
         return DEFAULT_SCHEMA;
@@ -315,6 +397,8 @@ export function mapSchemaDataToDataSchemaData(
             attribute: nd['sms:displayName'] || ``,
             required: nd?.['sms:required'] === 'sms:true' || false,
             requiredDependencies,
+            conditionalDependencies: [], // taken care of later with a full schema traversal
+            exclusiveConditionalDependencies: [], // taken care of later with a full schema traversal
             validationRules: nd['sms:validationRules'] || [],
             validValues,
             domainIncludes,
@@ -322,6 +406,119 @@ export function mapSchemaDataToDataSchemaData(
             source,
         } as DataSchemaData;
     };
+}
+
+/**
+ * Traverse the entire schema data and resolve the conditional dependencies by using the parentIds.
+ *
+ * Note that this adds all children to every single schema object as conditional dependencies,
+ * so we end up having conditional dependencies even for primitive types.
+ * For example `Number` ends up having `Integer` as a conditional dependency.
+ */
+export function resolveConditionalDependencies(
+    schemaData: DataSchemaData[],
+    schemaDataKeyedById: SchemaDataById
+) {
+    const requiredDependenciesReverseLookup = constructRequiredDependenciesReverseLookup(
+        schemaData
+    );
+
+    schemaData.forEach((datum) =>
+        getDataSchemaParents(datum, schemaDataKeyedById).forEach((parent) => {
+            // add the current datum id as a conditional dependency to the parent
+            // if it is not already included in the required dependencies
+            if (!parent.requiredDependencies.includes(datum.id)) {
+                parent.conditionalDependencies =
+                    parent.conditionalDependencies || [];
+                parent.conditionalDependencies.push(datum.id);
+
+                // we only want to include current datum id as an exclusive conditional dependency
+                // if it is not already listed as a required dependency in its parent's subtree.
+                if (
+                    !isAlreadyRequiredInSubtree(
+                        datum,
+                        parent,
+                        schemaDataKeyedById,
+                        requiredDependenciesReverseLookup
+                    )
+                ) {
+                    parent.exclusiveConditionalDependencies =
+                        parent.exclusiveConditionalDependencies || [];
+                    parent.exclusiveConditionalDependencies.push(datum.id);
+                }
+            }
+        })
+    );
+}
+
+/**
+ * Check if the datum is already included as a dependency in the parent's subtree.
+ */
+function isAlreadyRequiredInSubtree(
+    datum: DataSchemaData,
+    parent: DataSchemaData,
+    schemaDataKeyedById: SchemaDataById,
+    requiredDependenciesReverseLookup: { [schemaId: string]: string[] }
+) {
+    const entitiesRequiringDatum = requiredDependenciesReverseLookup[datum.id];
+
+    return (
+        !_.isEmpty(entitiesRequiringDatum) &&
+        findAllAncestors(
+            entitiesRequiringDatum,
+            schemaDataKeyedById,
+            requiredDependenciesReverseLookup
+        ).includes(parent.id)
+    );
+}
+
+/**
+ * Find all ancestors (up to root) of given schema ids by using parentIds and requiredDependenciesReverseLookup.
+ */
+function findAllAncestors(
+    schemaIds: string[],
+    schemaDataKeyedById: SchemaDataById,
+    requiredDependenciesReverseLookup: { [schemaId: string]: string[] }
+) {
+    const ancestors = [];
+    const stack = [...schemaIds];
+
+    while (stack.length > 0) {
+        const id = stack.pop();
+
+        if (id) {
+            // both the parentIds and other entities listing current id as a required dependency is considered a parent
+            const parents = _.uniq([
+                ...(requiredDependenciesReverseLookup[id] || []),
+                ...(schemaDataKeyedById[id]?.parentIds || []),
+            ]);
+            if (!_.isEmpty(parents)) {
+                ancestors.push(...parents);
+                stack.push(...parents);
+            }
+        }
+    }
+
+    return ancestors;
+}
+
+/**
+ * Traverse the entire schema data and construct a lookup for each schema entity by mapping each entity to a list of
+ * all parent ids where that specific entity is listed as a required dependency.
+ */
+export function constructRequiredDependenciesReverseLookup(
+    schemaData: DataSchemaData[]
+): { [schemaId: string]: string[] } {
+    const requiredDependencies: { [schemaId: string]: string[] } = {};
+
+    schemaData.forEach((datum) =>
+        datum.requiredDependencies.forEach((id) => {
+            requiredDependencies[id] = requiredDependencies[id] || [];
+            requiredDependencies[id].push(datum.id);
+        })
+    );
+
+    return requiredDependencies;
 }
 
 export function isNumericalSchemaData(schemaData: DataSchemaData) {

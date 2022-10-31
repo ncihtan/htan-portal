@@ -1,6 +1,5 @@
-import _ from 'lodash';
 import { Author, PublicationData, PublicationInfo } from '../types';
-import { getSchemaDataMap } from './dataSchemaHelpers';
+import { fetchAndProcessSchemaData } from './dataSchemaHelpers';
 import { ExploreSelectedFilter } from './types';
 
 export const SequencingAssayName = [
@@ -359,7 +358,7 @@ export async function getPublicationData(id: string) {
     const info = PUBLICATIONS[id];
     const title = info.title;
     const abstract = info.abstract;
-    const schemaDataById = await getSchemaDataMap();
+    const schemaDataById = await fetchAndProcessSchemaData();
     const authors = authorsById[id];
     const publicationInfo = publicationInfoById[id];
     const filters = filtersById[id];
