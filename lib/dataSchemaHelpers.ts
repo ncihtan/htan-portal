@@ -228,7 +228,7 @@ export function getExclusiveDependencyIds(
     schema: DataSchemaData,
     schemaDataById: SchemaDataById = {}
 ) {
-    // sort dependencies alphabetically without changing the original order
+    // sort both required and conditional dependencies alphabetically
     const requiredDependencies = sortDependenciesByAttribute(
         schema.requiredDependencies,
         schemaDataById
@@ -245,17 +245,23 @@ export function getExclusiveDependencyIds(
  */
 export function getAllDependencyIds(
     schema: DataSchemaData,
-    schemaDataById: SchemaDataById = {}
+    schemaDataById: SchemaDataById = {},
+    keepDefaultOrderOfRequiredDependencies: boolean = true
 ) {
-    // sort dependencies alphabetically without changing the original order
-    const requiredDependencies = sortDependenciesByAttribute(
-        schema.requiredDependencies,
-        schemaDataById
-    );
+    // sort required dependencies alphabetically if needed
+    const requiredDependencies = keepDefaultOrderOfRequiredDependencies
+        ? schema.requiredDependencies
+        : sortDependenciesByAttribute(
+              schema.requiredDependencies,
+              schemaDataById
+          );
+
+    // sort conditional dependencies alphabetically
     const conditionalDependencies = sortDependenciesByAttribute(
         schema.conditionalDependencies,
         schemaDataById
     );
+
     return _.uniq([...requiredDependencies, ...conditionalDependencies]);
 }
 
