@@ -231,7 +231,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             link: 'https://doi.org/10.1158/2159-8290.cd-21-1357',
         },
         atlas: {
-            name: 'Harvard Medical School, Brigham and Women’s Hospital',
+            name: "Harvard Medical School, Brigham and Women's Hospital",
             link: 'https://humantumoratlas.org/hta7',
         },
     },
