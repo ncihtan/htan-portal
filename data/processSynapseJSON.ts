@@ -2,7 +2,6 @@ import {
     DownloadSourceCategory,
     SynapseAtlas,
     SynapseData,
-    SynapseSchema,
 } from '../lib/types';
 import { WPAtlas } from '../types';
 import _ from 'lodash';
@@ -15,19 +14,35 @@ import {
     SerializableEntity,
 } from '../lib/helpers';
 import getData from '../lib/getData';
+import {
+    fetchAndProcessSchemaData,
+    getAttributeToSchemaIdMap,
+    SchemaDataById,
+} from '../lib/dataSchemaHelpers';
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
 import dgbapIds from './dbgap_release_all.json';
 import idcIds from './idc-imaging-assets.json';
 
 async function writeProcessedFile() {
-    const data = getData();
+    const synapseJson = getData();
+    const schemaData = await fetchAndProcessSchemaData();
     const atlases = await getAtlasList();
-    const processed: LoadDataResult = processSynapseJSON(data, atlases);
+    const processed: LoadDataResult = processSynapseJSON(
+        synapseJson,
+        schemaData,
+        atlases
+    );
     fs.writeFileSync(
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
+
+    // TODO also save the processed schema json so that we don't need to fetch it within the webapp?
+    // fs.writeFileSync(
+    //     'public/processed_schema_data.json',
+    //     JSON.stringify(schemaData)
+    // );
 }
 
 function addDownloadSourcesInfo(file: BaseSerializableEntity) {
@@ -65,10 +80,17 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     }
 }
 
-function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
+function processSynapseJSON(
+    synapseJson: SynapseData,
+    schemaData: SchemaDataById,
+    WPAtlasData: WPAtlas[]
+) {
     const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
-    const flatData = extractEntitiesFromSynapseData(synapseJson, WPAtlasMap);
-
+    const flatData = extractEntitiesFromSynapseData(
+        synapseJson,
+        schemaData,
+        WPAtlasMap
+    );
     const files = flatData.filter((obj) => {
         return !!obj.filename;
     });
@@ -281,7 +303,7 @@ function getSampleAndPatientData(
 
     let biospecimen = primaryParents
         .map((p) =>
-            filesByHTANId[p].HTANParentBiospecimenID.split(',').map(
+            filesByHTANId[p].HTANParentBiospecimenID?.split(',').map(
                 (HTANParentBiospecimenID) =>
                     biospecimenByHTANBiospecimenID[HTANParentBiospecimenID] as
                         | Entity
@@ -346,9 +368,9 @@ function getCaseData(
 
 function extractEntitiesFromSynapseData(
     data: SynapseData,
+    schemaDataById: SchemaDataById,
     WPAtlasMap: { [uppercase_htan_id: string]: WPAtlas }
 ): BaseSerializableEntity[] {
-    const schemasByName = _.keyBy(data.schemas, (s) => s.data_schema);
     const entities: BaseSerializableEntity[] = [];
 
     _.forEach(data.atlases, (atlas: SynapseAtlas) => {
@@ -357,23 +379,43 @@ function extractEntitiesFromSynapseData(
                 // skip these
                 return;
             }
-            const schemaName = synapseRecords.data_schema;
-            if (schemaName) {
-                const schema = schemasByName[schemaName];
+            const schemaId = synapseRecords.data_schema;
+
+            if (schemaId) {
+                const schema = schemaDataById[schemaId];
+                const attributeToId = getAttributeToSchemaIdMap(
+                    schema,
+                    schemaDataById
+                );
+                // synapseId is a custom column that doesn't exist in the schema, so add it manually
+                attributeToId['entityId'] = 'bts:synapseId';
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<BaseSerializableEntity> = {};
 
-                    schema.attributes.forEach(
-                        (f: SynapseSchema['attributes'][0], i: number) => {
+                    synapseRecords.column_order.forEach((column, i) => {
+                        const id = attributeToId[column];
+
+                        if (id) {
                             entity[
-                                f.id.replace(
+                                id.replace(
                                     /^bts:/,
                                     ''
                                 ) as keyof BaseSerializableEntity
                             ] = record.values[i];
                         }
-                    );
+                    });
+
+                    // schema.attributes.forEach(
+                    //     (f: SynapseSchema['attributes'][0], i: number) => {
+                    //         entity[
+                    //             f.id.replace(
+                    //                 /^bts:/,
+                    //                 ''
+                    //             ) as keyof BaseSerializableEntity
+                    //         ] = record.values[i];
+                    //     }
+                    // );
 
                     entity.atlasid = atlas.htan_id;
                     entity.atlas_name = atlas.htan_name;

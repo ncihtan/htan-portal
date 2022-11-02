@@ -18,13 +18,26 @@
 # misc
 .DS_Store
 .env*
+.venv
+.yarn
+.yarnrc
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# config
+.synapseConfig
+credentials.json
+token.pickle
+
+# data
+public/processed_syn_data.json
+data/tmp/*
+data/metadata/*
+
+#dev
 .idea/*
 *.iml
-
 .now

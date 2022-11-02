@@ -79,8 +79,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
     # portal data schema skeleton
     portal_data = {
-                    "atlases":[],
-                    "schemas":[]
+        "atlases": []
     }
 
     if include_released_only:
@@ -101,11 +100,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             "HTAN TNP SARDANA",
         ]
 
-    # store all metadata synapse ids for downloading submitted metadata
-    # directly
+    # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
-
-    data_schemas = []
 
     with open('release2_synapse_metadata.json') as f:
         release2_synapse_metadata_ids = set(json.load(f))
@@ -293,44 +289,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 atlas[data_schema]["record_list"] = atlas[data_schema]["record_list"] + record_list
             else:
                 atlas[data_schema] = {
-                                        "data_schema":data_schema,
-                                        "record_list":record_list
+                    "data_schema": data_schema,
+                    "record_list": record_list,
+                    "column_order": column_order
                 }
-
-            # add data schema to JSON if not already there
-            if not data_schema in data_schemas:
-                data_schemas.append(data_schema)
-
-                schema = {
-                            "data_schema":data_schema,
-                            "attributes":[]
-                }
-
-                # data type attributes from schema
-                data_attributes = schema_info["dependencies"]
-
-                # add schema attributes to data portal JSON
-                for attribute in data_attributes:
-                    attr_info = se.explore_class(attribute)
-                    attr_id = "bts:" + attribute
-                    attr_name = attr_info["displayName"]
-                    attr_desc = attr_info["description"]
-
-                    schema["attributes"].append({
-                                            "id":attr_id,
-                                            "display_name":attr_name,
-                                            "description":attr_desc
-                                            })
-
-
-                # adding synapse ID to schema attributes
-                schema["attributes"].append({
-                                        "id":"synapseId",
-                                        "display_name": "Synapse Id",
-                                        "description": "Synapse ID for file"
-                                        })
-
-                portal_data["schemas"].append(schema)
 
         # add atlas to portal JSON
         portal_data["atlases"].append(atlas)

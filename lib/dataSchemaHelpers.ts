@@ -287,6 +287,27 @@ export function getUniqDependencyIds(
         : [];
 }
 
+export function getAttributeToSchemaIdMap(
+    schema: DataSchemaData,
+    schemaDataById: SchemaDataById
+): { [description: string]: string } {
+    const attributeToId: { [description: string]: string } = {};
+    const dependencies = getDataSchemaDependencies(
+        schema,
+        schemaDataById,
+        false,
+        getAllDependencyIds
+    );
+
+    dependencies.forEach((s) => {
+        if (s.attribute) {
+            attributeToId[s.attribute] = s.id;
+        }
+    });
+
+    return attributeToId;
+}
+
 export function getDataSchemaParents(
     schema: DataSchemaData,
     schemaDataById: SchemaDataById = {}

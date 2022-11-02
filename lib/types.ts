@@ -154,7 +154,6 @@ export interface ExploreActionMeta<OptionType extends OptionTypeBase>
 
 export type SynapseData = {
     atlases: SynapseAtlas[];
-    schemas: SynapseSchema[];
 };
 
 export type SynapseAtlas = {
@@ -167,13 +166,5 @@ export type SynapseAtlas = {
 export type SynapseRecords = {
     data_schema: string;
     record_list: { values: any[] }[];
-};
-
-export type SynapseSchema = {
-    data_schema: string;
-    attributes: {
-        id: string;
-        display_name: string;
-        description: string;
-    }[];
+    column_order: string[];
 };
