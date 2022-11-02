@@ -30,3 +30,4 @@ yarn.lock
 *.screenshottest
 node_modules/**
 *webp
+*.py

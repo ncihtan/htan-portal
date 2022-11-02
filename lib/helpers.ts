@@ -9,10 +9,6 @@ import {
     DownloadSourceCategory,
     ExploreOptionType,
     ExploreSelectedFilter,
-    ISelectedFiltersByAttrName,
-    SynapseAtlas,
-    SynapseData,
-    SynapseSchema,
 } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
