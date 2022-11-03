@@ -65,14 +65,14 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
                 <a
                     href={
                         typeof window !== 'undefined'
-                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+HMS%22%7D%2C%7B%22value%22%3A%22OME-TIFF%22%2C%22label%22%3A%22OME-TIFF%22%2C%22group%22%3A%22FileFormat%22%2C%22count%22%3A16%2C%22isSelected%22%3Afalse%7D%5D&tab=file`
+                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"Malignant+melanoma+NOS"%2C"label"%3A"Malignant+melanoma+NOS"%2C"group"%3A"PrimaryDiagnosis"%2C"count"%3A22%2C"isSelected"%3Afalse%7D%5D&tab=file`
                             : ''
                     }
                     target="_blank"
                 >
                     <img
                         style={{ width: '60%' }}
-                        src={'/HTA6_Duke_tool_example.png'}
+                        src={'/HTA7_HMS_tool_example.png'}
                     />
                 </a>
             </Tooltip>

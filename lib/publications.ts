@@ -23,7 +23,7 @@ export const PublicationPageLink: {
     HTA1: { id: 'htapp_crc_pelka_2021', show: false },
     HTA4: { id: 'chop_all_chen_2022', show: true },
     HTA6: { id: 'duke_brca_risom_2021', show: false },
-    HTA7: { id: 'hms_ckcm_nirmal_2022', show: false },
+    HTA7: { id: 'hms_ckcm_nirmal_2022', show: true },
     HTA8: { id: 'msk_sclc_chan_2021', show: true },
     HTA9: { id: 'ohsu_brca_johnson_2022', show: true },
     HTA11: { id: 'vanderbilt_crc_chen_2021', show: false },
@@ -231,7 +231,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             link: 'https://doi.org/10.1158/2159-8290.cd-21-1357',
         },
         atlas: {
-            name: 'Harvard Medical School, Brigham and Women’s Hospital',
+            name: "Harvard Medical School, Brigham and Women's Hospital",
             link: 'https://humantumoratlas.org/hta7',
         },
     },
@@ -322,6 +322,7 @@ const filtersById: { [id: string]: ExploreSelectedFilter[] } = {
     ],
     hms_ckcm_nirmal_2022: [
         { group: 'AtlasName', value: 'HTAN HMS', id: 'HTA7' },
+        { group: 'PrimaryDiagnosis', value: 'Malignant melanoma NOS' },
     ],
     msk_sclc_chan_2021: [{ group: 'AtlasName', value: 'HTAN MSK', id: 'HTA8' }],
     ohsu_brca_johnson_2022: [
