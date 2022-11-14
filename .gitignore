@@ -34,6 +34,7 @@ token.pickle
 
 # data
 public/processed_syn_data.json
+public/syn_data.json
 data/tmp/*
 data/metadata/*
 
