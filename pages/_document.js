@@ -26,6 +26,7 @@ export default class MyDocument extends Document {
                         }}
                     />
                     <link rel="shortcut icon" href="/favicon.ico"></link>
+                    <title>NCI Human Tumor Atlas Network</title>
                 </Head>
                 <body>
                     <Main />
