@@ -128,11 +128,12 @@ function processSynapseJSON(
             return file as SerializableEntity;
         })
         .filter((f) => f.diagnosisIds.length > 0) // files must have a diagnosis
-        .filter(
-            (f) =>
-                f.downloadSource !== DownloadSourceCategory.comingSoon ||
-                f.ImagingAssayType
-        ); // remove files that can't be downloaded unless it's imaging
+        // remove files that can't be downloaded unless it's imaging
+        // .filter(
+        //     (f) =>
+        //         f.downloadSource !== DownloadSourceCategory.comingSoon ||
+        //         f.ImagingAssayType
+        // );
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
@@ -387,8 +388,9 @@ function extractEntitiesFromSynapseData(
                     schema,
                     schemaDataById
                 );
-                // synapseId is a custom column that doesn't exist in the schema, so add it manually
+                // synapseId and Uuid is a custom column that doesn't exist in the schema, so add it manually
                 attributeToId['entityId'] = 'bts:synapseId';
+                attributeToId['Uuid'] = 'bts:uuid';
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<BaseSerializableEntity> = {};

@@ -87,7 +87,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             include_release1_ids = set(json.load(f))
         with open('release2_include.json') as f:
             include_release2_ids = set(json.load(f))
-        include_release_ids = include_release1_ids.union(include_release2_ids)
+        with open('release3_include.json') as f:
+            include_release3_ids = set(json.load(f))
+        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids)
+        include_release1_and_3_ids = include_release1_ids.union(include_release3_ids)
         release2_centers = [
             "HTAN Duke",
             "HTAN HMS",
@@ -141,9 +144,9 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                     syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
                 else:
                     syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
-                # sometimes files can be named synapse(*x).csv
+                # files can be named *.csv
                 # TODO: would be better of syn.get can take output file argument
-                os.rename(glob.glob(manifest_location + "*synapse*.csv")[0], manifest_path)
+                os.rename(glob.glob(manifest_location + "*.csv")[0], manifest_path)
 
             manifest_df = pd.read_csv(manifest_path)
 
@@ -164,14 +167,14 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
             logging.info("Data type: " + component)
 
-            # exclude HTAPP imaging data for now
-            if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component or "Bulk" in component):
-                logging.info("Skipping Imaging and Bulk data for HTAPP (" + component + ")")
-                continue
-
-            # exclude HTAPP PML datasets
-            if center == "HTAN HTAPP" and len(manifest_df) > 0 and "Filename" in manifest_df.columns and ("PML" in manifest_df["Filename"].values[0] or "10x" in manifest_df["Filename"].values[0]):
-                continue
+            # # exclude HTAPP imaging data for now
+            # if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component or "Bulk" in component):
+            #     logging.info("Skipping Imaging and Bulk data for HTAPP (" + component + ")")
+            #     continue
+            #
+            # # exclude HTAPP PML datasets
+            # if center == "HTAN HTAPP" and len(manifest_df) > 0 and "Filename" in manifest_df.columns and ("PML" in manifest_df["Filename"].values[0] or "10x" in manifest_df["Filename"].values[0]):
+            #     continue
 
             # get data type schema info
             try:
@@ -201,6 +204,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
             if 'entityId' not in schema_columns and 'entityId' in manifest_df.columns:
                 column_order += ['entityId']
+            if 'Uuid' not in schema_columns and 'Uuid' in manifest_df.columns:
+                column_order += ['Uuid']
 
             # add columns not in the schema
             schemaless_columns = []
@@ -217,15 +222,23 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             # get records in this dataset
             record_list = []
 
-            # ignore files without a synapse id
-            if "entityId" not in manifest_df.columns:
-                logging.error("Manifest data unexpected: " + manifest_path + " no entityId column")
+            # ignore files without both synapse id and Uuid
+            if "entityId" not in manifest_df.columns and "Uuid" not in manifest_df.columns:
+                logging.error("Manifest data unexpected: " + manifest_path + " no entityId or Uuid column")
                 continue
 
-            number_of_rows_without_synapse_id = pd.isnull(manifest_df["entityId"]).sum()
-            if number_of_rows_without_synapse_id > 0:
-                logging.error("skipping {} rows without synapse id in {}" .format(number_of_rows_without_synapse_id, manifest_path))
-                manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
+            if "entityId" not in manifest_df.columns:
+                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df["Uuid"])
+            elif "Uuid" not in manifest_df.columns:
+                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df["entityId"])
+            else:
+                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df[["entityId", "Uuid"]]).all(1)
+
+            number_of_rows_without_both_synapse_id_and_uuid = rows_without_both_synapse_id_and_uuid.sum()
+
+            if number_of_rows_without_both_synapse_id_and_uuid > 0:
+                logging.error("skipping {} rows without synapse id in {}" .format(number_of_rows_without_both_synapse_id_and_uuid, manifest_path))
+                manifest_df = manifest_df[~rows_without_both_synapse_id_and_uuid].copy()
 
             # replace race for protected populations
             if not include_at_risk_populations and 'Race' in manifest_df:
@@ -256,14 +269,14 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                     else:
                         manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
 
-                elif center == "HTAN OHSU":
-                    # only include one published case HTA9_1 for now
-                    if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("Imaging" in component or "WES" in component or "ATAC" in component or "RNA" in component):
-                        manifest_df = manifest_df[manifest_df["HTAN Parent Biospecimen ID"].str.contains("HTA9_1")].copy()
-                    elif "HTAN Parent ID" in manifest_df.columns and ("Biospecimen" in component):
-                        manifest_df = manifest_df[manifest_df["HTAN Parent ID"].str.contains("HTA9_1")].copy()
+                # elif center == "HTAN OHSU":
+                #     # only include one published case HTA9_1 for now
+                #     if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("Imaging" in component or "WES" in component or "ATAC" in component or "RNA" in component):
+                #         manifest_df = manifest_df[manifest_df["HTAN Parent Biospecimen ID"].str.contains("HTA9_1")].copy()
+                #     elif "HTAN Parent ID" in manifest_df.columns and ("Biospecimen" in component):
+                #         manifest_df = manifest_df[manifest_df["HTAN Parent ID"].str.contains("HTA9_1")].copy()
                 else:
-                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_ids)].copy()
+                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_and_3_ids)].copy()
 
             if len(manifest_df) == 0:
                 continue
