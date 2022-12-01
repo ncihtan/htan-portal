@@ -36,9 +36,9 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                     "HTAN Duke": "hta6",
                     "HTAN HMS": "hta7",
                     "HTAN MSK": "hta8",
-                    "HTAN OHSU": "hta9",
+                    #"HTAN OHSU": "hta9",
                     "HTAN Stanford": "hta10",
-                    "HTAN Vanderbilt": "hta11",
+                    # "HTAN Vanderbilt": "hta11",
                     "HTAN WUSTL": "hta12",
                     # exclude TNPs for now
                     "HTAN TNP SARDANA": "hta13",
@@ -75,7 +75,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
     se.load_schema(url)
 
     # get all manifests grouped by project (i.e. research center/atlas)
-    metadata_manifests = all_files[all_files["name"].str.contains("synapse_storage_manifest")][["id", "parentId", "projectId"]].groupby(["projectId"])
+    metadata_manifests = all_files.query("name.str.contains('synapse_storage_manifest_')")[["name","id", "parentId", "projectId"]].groupby(["projectId"])
 
     # portal data schema skeleton
     portal_data = {
@@ -88,12 +88,15 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             include_release1_ids = set(json.load(f))
         with open('release2_include.json') as f:
             include_release2_ids = set(json.load(f))
-        include_release_ids = include_release1_ids.union(include_release2_ids)
+        with open('release3_include.json') as f:
+            include_release3 = json.load(f)
+            include_release3_ids = set([x["entityId"] for x in include_release3 if x["type"] == "file"])
+        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids)
         release2_centers = [
             "HTAN Duke",
             "HTAN HMS",
             "HTAN MSK",
-            # "HTAN OHSU",
+            "HTAN OHSU",
             "HTAN Vanderbilt",
             "HTAN HTAPP",
             "HTAN Stanford",
@@ -101,14 +104,15 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             "HTAN TNP SARDANA",
         ]
 
+    with open('release3_synapse_metadata.json') as f:
+        release3_metadata = json.load(f)
+        release3_metadata_by_synids = {x["manifestId"]:x for x in release3_metadata}
+
     # store all metadata synapse ids for downloading submitted metadata
     # directly
     portal_metadata = {}
 
     data_schemas = []
-
-    with open('release2_synapse_metadata.json') as f:
-        release2_synapse_metadata_ids = set(json.load(f))
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
     for project_id, dataset_group in metadata_manifests:
@@ -129,21 +133,24 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
         for dataset in datasets:
             # only consider metadata currently in release 2
-            if dataset["id"] not in release2_synapse_metadata_ids:
+            #if dataset["id"] not in release2_synapse_metadata_ids:
+            #    continue
+            # only consider new style metadata files
+            if "synapse_storage_manifest_" not in dataset["name"]:
                 continue
 
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
 
             if not do_not_download_from_synapse:
-                if dataset["id"] == "syn25619062":
-                    # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
-                    syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
+                if dataset["id"] in release3_metadata_by_synids:
+                    # release 3 has versions for each metadata manifest
+                    syn.get(dataset["id"], downloadLocation=manifest_location, version=int(release3_metadata_by_synids[dataset["id"]]["manifestVersion"]), ifcollision="overwrite.local")
                 else:
                     syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
-                # sometimes files can be named synapse(*x).csv
-                # TODO: would be better of syn.get can take output file argument
-                os.rename(glob.glob(manifest_location + "*synapse*.csv")[0], manifest_path)
+                # sometimes files can be named some_random_name.csv
+                # TODO: would be better if syn.get can take output file argument
+                os.rename(glob.glob(manifest_location + "*.csv")[0], manifest_path)
 
             manifest_df = pd.read_csv(manifest_path)
 
@@ -255,13 +262,6 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                         pass
                     else:
                         manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
-
-                elif center == "HTAN OHSU":
-                    # only include one published case HTA9_1 for now
-                    if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("Imaging" in component or "WES" in component or "ATAC" in component or "RNA" in component):
-                        manifest_df = manifest_df[manifest_df["HTAN Parent Biospecimen ID"].str.contains("HTA9_1")].copy()
-                    elif "HTAN Parent ID" in manifest_df.columns and ("Biospecimen" in component):
-                        manifest_df = manifest_df[manifest_df["HTAN Parent ID"].str.contains("HTA9_1")].copy()
                 else:
                     manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_ids)].copy()
 

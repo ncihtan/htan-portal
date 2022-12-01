@@ -106,11 +106,13 @@ function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
             return file as SerializableEntity;
         })
         .filter((f) => f.diagnosisIds.length > 0) // files must have a diagnosis
+        /*
         .filter(
             (f) =>
                 f.downloadSource !== DownloadSourceCategory.comingSoon ||
                 f.ImagingAssayType
         ); // remove files that can't be downloaded unless it's imaging
+        */
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
@@ -281,7 +283,7 @@ function getSampleAndPatientData(
 
     let biospecimen = primaryParents
         .map((p) =>
-            filesByHTANId[p].HTANParentBiospecimenID.split(',').map(
+            filesByHTANId[p].HTANParentBiospecimenID.split(/[,;]/).map(
                 (HTANParentBiospecimenID) =>
                     biospecimenByHTANBiospecimenID[HTANParentBiospecimenID] as
                         | Entity
