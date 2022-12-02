@@ -111,6 +111,15 @@ const Standards = (data: StandardsProps) => {
                                         Imaging
                                     </Link>
                                 </li>
+                                <li>
+                                    <img
+                                        src="https://static.thenounproject.com/png/1167421-200.png"
+                                        width={20}
+                                    />
+                                    <Link href="https://sage-bionetworks.github.io/schema_visualization/">
+                                        HTAN schema visualization
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </Row>
