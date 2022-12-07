@@ -115,10 +115,12 @@ const Standards = (data: StandardsProps) => {
                                 </li>
                                 <li>
                                     <Link href="https://sage-bionetworks.github.io/schema_visualization/">
-                                        <FontAwesomeIcon
-                                            icon={faExternalLinkAlt}
-                                        />
-                                        HTAN schema visualization
+                                        <span>
+                                            <FontAwesomeIcon
+                                                icon={faExternalLinkAlt}
+                                            />{' '}
+                                            HTAN schema visualization
+                                        </span>
                                     </Link>
                                 </li>
                             </ul>
