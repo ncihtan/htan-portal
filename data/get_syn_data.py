@@ -106,12 +106,14 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
     # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
 
+    with open('release1_synapse_metadata.json') as f:
+        release1_synapse_metadata_ids = set(json.load(f))
     with open('release2_synapse_metadata.json') as f:
         release2_synapse_metadata_ids = set(json.load(f))
     with open('release3_synapse_metadata.json') as f:
         release3_synapse_metadata_ids = set(json.load(f))
 
-    release_synapse_metadata_ids = release2_synapse_metadata_ids.union(release3_synapse_metadata_ids)
+    release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids)
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
     for project_id, dataset_group in metadata_manifests:
@@ -131,7 +133,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
         datasets = dataset_group.to_dict("records")
 
         for dataset in datasets:
-            # only consider metadata currently in release 2
+            # only consider metadata currently in release
             if dataset["id"] not in release_synapse_metadata_ids:
                 continue
 
