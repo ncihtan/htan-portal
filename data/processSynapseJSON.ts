@@ -10,6 +10,7 @@ import {
     BaseSerializableEntity,
     Entity,
     HTANDataFileID,
+    isLowestLevel,
     LoadDataResult,
     SerializableEntity,
 } from '../lib/helpers';
@@ -127,13 +128,13 @@ function processSynapseJSON(
             addDownloadSourcesInfo(file);
             return file as SerializableEntity;
         })
-        .filter((f) => f.diagnosisIds.length > 0) // files must have a diagnosis
-        // remove files that can't be downloaded unless it's imaging
-        // .filter(
-        //     (f) =>
-        //         f.downloadSource !== DownloadSourceCategory.comingSoon ||
-        //         f.ImagingAssayType
-        // );
+        .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
+    // remove files that can't be downloaded unless it's imaging
+    // .filter(
+    //     (f) =>
+    //         f.downloadSource !== DownloadSourceCategory.comingSoon ||
+    //         f.ImagingAssayType
+    // );
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
@@ -203,7 +204,7 @@ function findAndAddPrimaryParents(
     // otherwise, compute parents
     let primaryParents: HTANDataFileID[] = [];
 
-    if (f.HTANParentDataFileID) {
+    if (f.HTANParentDataFileID && !isLowestLevel(f)) {
         // if there's a parent, traverse "upwards" to find primary parent
         const parentIds = f.HTANParentDataFileID.split(/[,;]/);
         const parentFiles = parentIds.reduce(
@@ -391,6 +392,16 @@ function extractEntitiesFromSynapseData(
                 // synapseId and Uuid is a custom column that doesn't exist in the schema, so add it manually
                 attributeToId['entityId'] = 'bts:synapseId';
                 attributeToId['Uuid'] = 'bts:uuid';
+                // this is a workaround for missing HTANParentBiospecimenID for certain schema ids
+                if (
+                    synapseRecords.column_order.includes(
+                        'HTAN Parent Biospecimen ID'
+                    ) &&
+                    !attributeToId['HTAN Parent Biospecimen ID']
+                ) {
+                    attributeToId['HTAN Parent Biospecimen ID'] =
+                        'bts:HTANParentBiospecimenID';
+                }
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<BaseSerializableEntity> = {};

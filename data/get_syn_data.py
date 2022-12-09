@@ -208,12 +208,15 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 column_order += ['entityId']
             if 'Uuid' not in schema_columns and 'Uuid' in manifest_df.columns:
                 column_order += ['Uuid']
+            if 'HTAN Parent Biospecimen ID' not in schema_columns and 'HTAN Parent Biospecimen ID' in manifest_df.columns:
+                column_order += ['HTAN Parent Biospecimen ID']
 
             # add columns not in the schema
             schemaless_columns = []
             for c in manifest_df.columns:
                 if c not in column_order:
                     schemaless_columns += [c]
+            schemaless_columns.sort()
             column_order += schemaless_columns
 
             manifest_df = manifest_df[column_order]
@@ -309,8 +312,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             else:
                 atlas[data_schema] = {
                     "data_schema": data_schema,
-                    "record_list": record_list,
-                    "column_order": column_order
+                    "column_order": column_order,
+                    "record_list": record_list
                 }
 
         # add atlas to portal JSON

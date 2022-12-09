@@ -48,6 +48,7 @@ export interface BaseSerializableEntity {
     Ethnicity: string;
     CountryofResidence: string;
     Gender: string;
+    Islowestlevel?: string;
 
     // Derived or attached in frontend
     atlasid: string;
@@ -102,6 +103,10 @@ win.missing = [];
 
 function doesFileHaveMultipleParents(file: Entity) {
     return /Level[456]/.test(file.Component);
+}
+
+export function isLowestLevel(entity: BaseSerializableEntity) {
+    return entity.Islowestlevel?.toLowerCase().startsWith('yes');
 }
 
 export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
