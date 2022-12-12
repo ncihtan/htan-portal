@@ -31,3 +31,4 @@ yarn.lock
 node_modules/**
 *webp
 *.py
+*.gz
