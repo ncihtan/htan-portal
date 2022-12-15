@@ -90,18 +90,18 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
         with open('release3_include.json') as f:
             include_release3_ids = set(json.load(f))
         include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids)
-        include_release1_and_3_ids = include_release1_ids.union(include_release3_ids)
-        release2_centers = [
-            "HTAN Duke",
-            "HTAN HMS",
-            "HTAN MSK",
-            # "HTAN OHSU",
-            "HTAN Vanderbilt",
-            "HTAN HTAPP",
-            "HTAN Stanford",
-            "HTAN WUSTL",
-            "HTAN TNP SARDANA",
-        ]
+        # include_release1_and_3_ids = include_release1_ids.union(include_release3_ids)
+        # release2_centers = [
+        #     "HTAN Duke",
+        #     "HTAN HMS",
+        #     "HTAN MSK",
+        #     "HTAN OHSU",
+        #     "HTAN Vanderbilt",
+        #     "HTAN HTAPP",
+        #     "HTAN Stanford",
+        #     "HTAN WUSTL",
+        #     "HTAN TNP SARDANA",
+        # ]
 
     # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
@@ -263,12 +263,12 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             if center == "HTAN Stanford" and "Other" in component and len(manifest_df) > 0 and "proteomics" in manifest_df['Filename'].values[0]:
                 continue
             # TODO: exclude HTAPP Bulk RNASeq data (has linkage issue as well)
-            if center == "HTAN HTAPP" and "BulkRNA" in component:
-                continue
+            # if center == "HTAN HTAPP" and "BulkRNA" in component:
+            #     continue
 
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
-                if center in release2_centers:
+                # if center in release2_centers:
                     if center == "HTAN HTAPP" and ("Biospecimen" in component or "Diagnosis" in component or "Demographics" in component):
                         pass
                     else:
@@ -280,8 +280,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 #         manifest_df = manifest_df[manifest_df["HTAN Parent Biospecimen ID"].str.contains("HTA9_1")].copy()
                 #     elif "HTAN Parent ID" in manifest_df.columns and ("Biospecimen" in component):
                 #         manifest_df = manifest_df[manifest_df["HTAN Parent ID"].str.contains("HTA9_1")].copy()
-                else:
-                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_and_3_ids)].copy()
+                # else:
+                #     manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_and_3_ids)].copy()
 
             if len(manifest_df) == 0:
                 continue
