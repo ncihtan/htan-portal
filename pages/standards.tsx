@@ -10,6 +10,8 @@ import { GetServerSideProps, GetStaticProps } from 'next';
 import { CmsData } from '../types';
 import { getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 export interface StandardsProps {
     data: CmsData[];
@@ -109,6 +111,16 @@ const Standards = (data: StandardsProps) => {
                                 <li>
                                     <Link href="/standard/imaging">
                                         Imaging
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="https://sage-bionetworks.github.io/schema_visualization/">
+                                        <a target="_blank">
+                                            HTAN schema visualization{' '}
+                                            <FontAwesomeIcon
+                                                icon={faExternalLinkAlt}
+                                            />
+                                        </a>
                                     </Link>
                                 </li>
                             </ul>
