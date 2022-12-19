@@ -338,17 +338,17 @@
         {
             "component": "Exposure",
             "synapseId": "syn42235814",
-            "numItems": 19
+            "numItems": 20
         },
         {
             "component": "Exposure",
             "synapseId": "syn42236049",
-            "numItems": 13
+            "numItems": 20
         },
         {
             "component": "Exposure",
             "synapseId": "syn42236295",
-            "numItems": 34
+            "numItems": 37
         },
         {
             "component": "Exposure",
@@ -363,17 +363,17 @@
         {
             "component": "FamilyHistory",
             "synapseId": "syn42236954",
-            "numItems": 19
+            "numItems": 20
         },
         {
             "component": "FamilyHistory",
             "synapseId": "syn42237145",
-            "numItems": 13
+            "numItems": 20
         },
         {
             "component": "FamilyHistory",
             "synapseId": "syn42237401",
-            "numItems": 52
+            "numItems": 55
         },
         {
             "component": "FamilyHistory",
@@ -388,17 +388,17 @@
         {
             "component": "FollowUp",
             "synapseId": "syn42238188",
-            "numItems": 19
+            "numItems": 20
         },
         {
             "component": "FollowUp",
             "synapseId": "syn42238553",
-            "numItems": 13
+            "numItems": 20
         },
         {
             "component": "FollowUp",
             "synapseId": "syn42239126",
-            "numItems": 52
+            "numItems": 55
         },
         {
             "component": "FollowUp",
@@ -413,12 +413,12 @@
         {
             "component": "Therapy",
             "synapseId": "syn42240597",
-            "numItems": 20
+            "numItems": 28
         },
         {
             "component": "Therapy",
             "synapseId": "syn42240903",
-            "numItems": 60
+            "numItems": 63
         },
         {
             "component": "Therapy",
@@ -428,12 +428,12 @@
         {
             "component": "MolecularTest",
             "synapseId": "syn42241413",
-            "numItems": 19
+            "numItems": 20
         },
         {
             "component": "MolecularTest",
             "synapseId": "syn42241905",
-            "numItems": 108
+            "numItems": 117
         },
         {
             "component": "ClinicalDataTier2",
@@ -508,6 +508,31 @@
         {
             "component": "Diagnosis",
             "synapseId": "syn42295733",
+            "numItems": 2
+        },
+        {
+            "component": "Exposure",
+            "synapseId": "syn42295885",
+            "numItems": 2
+        },
+        {
+            "component": "FamilyHistory",
+            "synapseId": "syn42296038",
+            "numItems": 2
+        },
+        {
+            "component": "FollowUp",
+            "synapseId": "syn42296194",
+            "numItems": 2
+        },
+        {
+            "component": "Therapy",
+            "synapseId": "syn42296367",
+            "numItems": 2
+        },
+        {
+            "component": "MolecularTest",
+            "synapseId": "syn42296523",
             "numItems": 2
         }
     ],
@@ -615,9 +640,14 @@
             "numItems": 238
         },
         {
+            "component": "Biospecimen",
+            "synapseId": "syn39141309",
+            "numItems": 283
+        },
+        {
             "component": "Diagnosis",
             "synapseId": "syn39141331",
-            "numItems": 1
+            "numItems": 5
         },
         {
             "component": "Exposure",
@@ -643,6 +673,11 @@
             "component": "MolecularTest",
             "synapseId": "syn39141939",
             "numItems": 445
+        },
+        {
+            "component": "Demographics",
+            "synapseId": "syn39141967",
+            "numItems": 5
         },
         {
             "component": "ClinicalDataTier2",
@@ -737,7 +772,7 @@
             "numItems": 1
         },
         {
-            "component": "ImagingLevel3",
+            "component": "ImagingLevel3Segmentation",
             "synapseId": "syn45226287",
             "numItems": 70
         },
@@ -1111,7 +1146,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn39283683",
-            "numItems": 227
+            "numItems": 263
         },
         {
             "component": "Demographics",
@@ -1221,7 +1256,7 @@
             "numItems": 12
         },
         {
-            "component": "ImagingLevel3",
+            "component": "ImagingLevel3Segmentation",
             "synapseId": "syn47878101",
             "numItems": 25
         },
