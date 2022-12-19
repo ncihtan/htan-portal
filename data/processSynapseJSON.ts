@@ -23,6 +23,7 @@ import {
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
 import dgbapIds from './dbgap_release_all.json';
+import dbgapImageIds from './dbgap_img_release2.json';
 import idcIds from './idc-imaging-assets.json';
 
 async function writeProcessedFile() {
@@ -48,6 +49,7 @@ async function writeProcessedFile() {
 
 function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     const dbgapSynapseSet = new Set(dgbapIds);
+    const dbgapImgSynapseSet = new Set(dbgapImageIds);
 
     if (
         file.assayName &&
@@ -64,8 +66,16 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     } else {
         file.isRawSequencing = false;
 
+        if (file.synapseId && file.synapseId === 'syn25884288') {
+            debugger;
+        }
+
         if (file.level === 'Level 3' || file.level === 'Level 4') {
             file.downloadSource = DownloadSourceCategory.synapse;
+        } else if (file.HTANDataFileID in idcIds && file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+            file.downloadSource = DownloadSourceCategory.idcDbgap;
+        } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+            file.downloadSource = DownloadSourceCategory.dbgap;
         } else if (file.HTANDataFileID in idcIds) {
             file.downloadSource = DownloadSourceCategory.idc;
         } else if (file.Component === 'OtherAssay') {

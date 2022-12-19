@@ -40,6 +40,7 @@ export enum AttributeNames {
 export enum DownloadSourceCategory {
     dbgap = 'dbGaP',
     idc = 'IDC',
+    idcDbgap = 'dbGaP and IDC',
     synapse = 'Synapse',
     comingSoon = 'Coming Soon',
 }

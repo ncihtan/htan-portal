@@ -313,6 +313,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                             ) => {
                                                 const downloadSourceOrder = [
                                                     DownloadSourceCategory.dbgap,
+                                                    DownloadSourceCategory.idcDbgap,
                                                     DownloadSourceCategory.idc,
                                                     DownloadSourceCategory.synapse,
                                                     DownloadSourceCategory.comingSoon,
@@ -330,9 +331,11 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         .map((e: ExploreOptionType) => {
                                             const downloadLabels = {
                                                 [DownloadSourceCategory.dbgap]:
-                                                    'dbGaP (Level 1-2)',
+                                                    'dbGaP (Access Controlled)',
                                                 [DownloadSourceCategory.idc]:
                                                     'IDC (Imaging)',
+                                                [DownloadSourceCategory.idcDbgap]:
+                                                    'dbGaP and IDC',
                                                 [DownloadSourceCategory.synapse]:
                                                     'Synapse (Level 3-4)',
                                                 [DownloadSourceCategory.comingSoon]:
