@@ -45,6 +45,7 @@ const arePublicationPagesEnabled = () => {
         urlParams.has('publication') ||
         urlParams.has('publications') ||
         urlParams.has('pub') ||
+        urlParams.has('qc') ||
         urlParams.has('pubs')
     );
 };
