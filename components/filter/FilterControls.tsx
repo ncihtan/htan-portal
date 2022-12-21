@@ -338,11 +338,11 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         .map((e: ExploreOptionType) => {
                                             const downloadLabels = {
                                                 [DownloadSourceCategory.dbgap]:
-                                                    'dbGaP (Access Controlled)',
+                                                    'CDS/SB-CGC (dbGaP 🔒)',
                                                 [DownloadSourceCategory.idc]:
                                                     'IDC (Imaging)',
                                                 [DownloadSourceCategory.idcDbgap]:
-                                                    'dbGaP and IDC',
+                                                    'CDS/SB-CGC and IDC',
                                                 [DownloadSourceCategory.synapse]:
                                                     'Synapse (Level 3-4)',
                                                 [DownloadSourceCategory.comingSoon]:
