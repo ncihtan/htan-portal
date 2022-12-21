@@ -25,6 +25,9 @@ import { getAtlasList } from '../ApiUtil';
 import dgbapIds from './dbgap_release_all.json';
 import dbgapImageIds from './dbgap_img_release2.json';
 import idcIds from './idc-imaging-assets.json';
+import release1Ids from './release1_include.json';
+import release2Ids from './release2_include.json';
+import release3Ids from './release3_include.json';
 
 async function writeProcessedFile() {
     const synapseJson = getData();
@@ -47,6 +50,24 @@ async function writeProcessedFile() {
     // );
 }
 
+function addReleaseInfo(file: BaseSerializableEntity) {
+    const release1SynapseSet = new Set(release1Ids);
+    const release2SynapseSet = new Set(release2Ids);
+    const release3SynapseSet = new Set(
+        release3Ids.filter((x) => x.entityId).map((x) => x.entityId)
+    );
+
+    if (file.synapseId) {
+        if (release1SynapseSet.has(file.synapseId)) {
+            file.releaseVersion = 'v1';
+        } else if (release2SynapseSet.has(file.synapseId)) {
+            file.releaseVersion = 'v2';
+        } else if (release3SynapseSet.has(file.synapseId)) {
+            file.releaseVersion = 'v3';
+        }
+    }
+}
+
 function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     const dbgapSynapseSet = new Set(dgbapIds);
     const dbgapImgSynapseSet = new Set(dbgapImageIds);
@@ -66,13 +87,13 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     } else {
         file.isRawSequencing = false;
 
-        if (file.synapseId && file.synapseId === 'syn25884288') {
-            debugger;
-        }
-
         if (file.level === 'Level 3' || file.level === 'Level 4') {
             file.downloadSource = DownloadSourceCategory.synapse;
-        } else if (file.HTANDataFileID in idcIds && file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+        } else if (
+            file.HTANDataFileID in idcIds &&
+            file.synapseId &&
+            dbgapImgSynapseSet.has(file.synapseId)
+        ) {
             file.downloadSource = DownloadSourceCategory.idcDbgap;
         } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             file.downloadSource = DownloadSourceCategory.dbgap;
@@ -136,6 +157,7 @@ function processSynapseJSON(
             );
 
             addDownloadSourcesInfo(file);
+            addReleaseInfo(file);
             return file as SerializableEntity;
         })
         .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis

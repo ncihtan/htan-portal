@@ -31,6 +31,13 @@ interface IFilterControlsProps {
     getGroupsByProperty: any;
 }
 
+const isReleaseQCEnabled = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return (
+        urlParams.has('rel') || urlParams.has('release') || urlParams.has('qc')
+    );
+};
+
 const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
     (props) => {
         const options = (attrName: AttributeNames): ExploreOptionType[] => {
@@ -103,7 +110,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 120 }}>
+                    <div style={{ width: 100 }}>
                         <FilterPanel
                             placeholder={
                                 AttributeMap[AttributeNames.AtlasName]
@@ -127,7 +134,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 120 }}>
+                    <div style={{ width: 100 }}>
                         <FilterPanel
                             placeholder={
                                 AttributeMap[
@@ -155,7 +162,7 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 164 }}>
+                    <div style={{ width: 120 }}>
                         <FilterPanel
                             placeholder={
                                 AttributeMap[AttributeNames.PrimaryDiagnosis]
@@ -250,9 +257,9 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 130 }}>
-                        <FilterPanel placeholder={'Assay Type'}>
-                            <FilterPropertyColumnShell title={'Assay Type'}>
+                    <div style={{ width: 100 }}>
+                        <FilterPanel placeholder={'Assay'}>
+                            <FilterPropertyColumnShell title={'Assay'}>
                                 <FilterCheckList
                                     setFilter={props.setFilter}
                                     filters={props.selectedFiltersByGroupName}
@@ -264,8 +271,8 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                 </div>
 
                 <div>
-                    <div style={{ width: 120 }}>
-                        <FilterPanel placeholder={'File Type'}>
+                    <div style={{ width: 80 }}>
+                        <FilterPanel placeholder={'File'}>
                             <div className={'filter-checkbox-list-container'}>
                                 <FilterPropertyColumnShell title={'Level'}>
                                     <FilterCheckList
@@ -331,11 +338,11 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                                         .map((e: ExploreOptionType) => {
                                             const downloadLabels = {
                                                 [DownloadSourceCategory.dbgap]:
-                                                    'dbGaP (Access Controlled)',
+                                                    'CDS/SB-CGC (dbGaP 🔒)',
                                                 [DownloadSourceCategory.idc]:
                                                     'IDC (Imaging)',
                                                 [DownloadSourceCategory.idcDbgap]:
-                                                    'dbGaP and IDC',
+                                                    'CDS/SB-CGC and IDC',
                                                 [DownloadSourceCategory.synapse]:
                                                     'Synapse (Level 3-4)',
                                                 [DownloadSourceCategory.comingSoon]:
@@ -353,6 +360,26 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
                         </FilterPanel>
                     </div>
                 </div>
+
+                {isReleaseQCEnabled() && (
+                    <div>
+                        <div style={{ width: 120 }}>
+                            <FilterPanel placeholder={'Release'}>
+                                <FilterPropertyColumnShell title={'Release'}>
+                                    <FilterCheckList
+                                        setFilter={props.setFilter}
+                                        filters={
+                                            props.selectedFiltersByGroupName
+                                        }
+                                        options={options(
+                                            AttributeNames.releaseVersion
+                                        )}
+                                    ></FilterCheckList>
+                                </FilterPropertyColumnShell>
+                            </FilterPanel>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

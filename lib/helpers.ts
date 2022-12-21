@@ -60,6 +60,7 @@ export interface BaseSerializableEntity {
     synapseId?: string;
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
+    releaseVersion?: 'v1' | 'v2' | 'v3';
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {
@@ -132,7 +133,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20221219_1001.json';
+            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20221221_1728.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();

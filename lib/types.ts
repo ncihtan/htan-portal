@@ -35,6 +35,7 @@ export enum AttributeNames {
     // Derived or attached in frontend
     assayName = 'assayName',
     downloadSource = 'downloadSource',
+    releaseVersion = 'releaseVersion',
 }
 
 export enum DownloadSourceCategory {
@@ -70,7 +71,7 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     },
     [AttributeNames.PrimaryDiagnosis]: {
         getValues: getCaseValues('PrimaryDiagnosis'),
-        displayName: 'Disease Type',
+        displayName: 'Disease',
         caseFilter: true,
     },
     [AttributeNames.Race]: {
@@ -125,6 +126,10 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     [AttributeNames.downloadSource]: {
         path: 'downloadSource',
         displayName: 'Download Source',
+    },
+    [AttributeNames.releaseVersion]: {
+        path: 'releaseVersion',
+        displayName: 'Release',
     },
 };
 
