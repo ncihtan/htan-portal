@@ -45,7 +45,7 @@
     "next": "12.1",
     "next-mdx-remote": "^3.0.8",
     "node-fetch": "^2.6.0",
-    "node-sass": "6.0.1",
+    "node-sass": "7.0.0",
     "pluralize": "^8.0.0",
     "popper.js": "^1.16.1",
     "prettier": "^2.1.2",
