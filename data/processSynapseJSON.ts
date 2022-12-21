@@ -2,7 +2,6 @@ import {
     DownloadSourceCategory,
     SynapseAtlas,
     SynapseData,
-    SynapseSchema,
 } from '../lib/types';
 import { WPAtlas } from '../types';
 import _ from 'lodash';
@@ -11,27 +10,46 @@ import {
     BaseSerializableEntity,
     Entity,
     HTANDataFileID,
+    isLowestLevel,
     LoadDataResult,
     SerializableEntity,
 } from '../lib/helpers';
 import getData from '../lib/getData';
+import {
+    fetchAndProcessSchemaData,
+    getAttributeToSchemaIdMap,
+    SchemaDataById,
+} from '../lib/dataSchemaHelpers';
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
 import dgbapIds from './dbgap_release_all.json';
+import dbgapImageIds from './dbgap_img_release2.json';
 import idcIds from './idc-imaging-assets.json';
 
 async function writeProcessedFile() {
-    const data = getData();
+    const synapseJson = getData();
+    const schemaData = await fetchAndProcessSchemaData();
     const atlases = await getAtlasList();
-    const processed: LoadDataResult = processSynapseJSON(data, atlases);
+    const processed: LoadDataResult = processSynapseJSON(
+        synapseJson,
+        schemaData,
+        atlases
+    );
     fs.writeFileSync(
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
+
+    // TODO also save the processed schema json so that we don't need to fetch it within the webapp?
+    // fs.writeFileSync(
+    //     'public/processed_schema_data.json',
+    //     JSON.stringify(schemaData)
+    // );
 }
 
 function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     const dbgapSynapseSet = new Set(dgbapIds);
+    const dbgapImgSynapseSet = new Set(dbgapImageIds);
 
     if (
         file.assayName &&
@@ -48,8 +66,16 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     } else {
         file.isRawSequencing = false;
 
+        if (file.synapseId && file.synapseId === 'syn25884288') {
+            debugger;
+        }
+
         if (file.level === 'Level 3' || file.level === 'Level 4') {
             file.downloadSource = DownloadSourceCategory.synapse;
+        } else if (file.HTANDataFileID in idcIds && file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+            file.downloadSource = DownloadSourceCategory.idcDbgap;
+        } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+            file.downloadSource = DownloadSourceCategory.dbgap;
         } else if (file.HTANDataFileID in idcIds) {
             file.downloadSource = DownloadSourceCategory.idc;
         } else if (file.Component === 'OtherAssay') {
@@ -65,10 +91,17 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     }
 }
 
-function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
+function processSynapseJSON(
+    synapseJson: SynapseData,
+    schemaData: SchemaDataById,
+    WPAtlasData: WPAtlas[]
+) {
     const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
-    const flatData = extractEntitiesFromSynapseData(synapseJson, WPAtlasMap);
-
+    const flatData = extractEntitiesFromSynapseData(
+        synapseJson,
+        schemaData,
+        WPAtlasMap
+    );
     const files = flatData.filter((obj) => {
         return !!obj.filename;
     });
@@ -105,12 +138,13 @@ function processSynapseJSON(synapseJson: SynapseData, WPAtlasData: WPAtlas[]) {
             addDownloadSourcesInfo(file);
             return file as SerializableEntity;
         })
-        .filter((f) => f.diagnosisIds.length > 0) // files must have a diagnosis
-        .filter(
-            (f) =>
-                f.downloadSource !== DownloadSourceCategory.comingSoon ||
-                f.ImagingAssayType
-        ); // remove files that can't be downloaded unless it's imaging
+        .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
+    // remove files that can't be downloaded unless it's imaging
+    // .filter(
+    //     (f) =>
+    //         f.downloadSource !== DownloadSourceCategory.comingSoon ||
+    //         f.ImagingAssayType
+    // );
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
@@ -180,7 +214,7 @@ function findAndAddPrimaryParents(
     // otherwise, compute parents
     let primaryParents: HTANDataFileID[] = [];
 
-    if (f.HTANParentDataFileID) {
+    if (f.HTANParentDataFileID && !isLowestLevel(f)) {
         // if there's a parent, traverse "upwards" to find primary parent
         const parentIds = f.HTANParentDataFileID.split(/[,;]/);
         const parentFiles = parentIds.reduce(
@@ -346,9 +380,9 @@ function getCaseData(
 
 function extractEntitiesFromSynapseData(
     data: SynapseData,
+    schemaDataById: SchemaDataById,
     WPAtlasMap: { [uppercase_htan_id: string]: WPAtlas }
 ): BaseSerializableEntity[] {
-    const schemasByName = _.keyBy(data.schemas, (s) => s.data_schema);
     const entities: BaseSerializableEntity[] = [];
 
     _.forEach(data.atlases, (atlas: SynapseAtlas) => {
@@ -357,23 +391,54 @@ function extractEntitiesFromSynapseData(
                 // skip these
                 return;
             }
-            const schemaName = synapseRecords.data_schema;
-            if (schemaName) {
-                const schema = schemasByName[schemaName];
+            const schemaId = synapseRecords.data_schema;
+
+            if (schemaId) {
+                const schema = schemaDataById[schemaId];
+                const attributeToId = getAttributeToSchemaIdMap(
+                    schema,
+                    schemaDataById
+                );
+                // synapseId and Uuid is a custom column that doesn't exist in the schema, so add it manually
+                attributeToId['entityId'] = 'bts:synapseId';
+                attributeToId['Uuid'] = 'bts:uuid';
+                // this is a workaround for missing HTANParentBiospecimenID for certain schema ids
+                if (
+                    synapseRecords.column_order.includes(
+                        'HTAN Parent Biospecimen ID'
+                    ) &&
+                    !attributeToId['HTAN Parent Biospecimen ID']
+                ) {
+                    attributeToId['HTAN Parent Biospecimen ID'] =
+                        'bts:HTANParentBiospecimenID';
+                }
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<BaseSerializableEntity> = {};
 
-                    schema.attributes.forEach(
-                        (f: SynapseSchema['attributes'][0], i: number) => {
+                    synapseRecords.column_order.forEach((column, i) => {
+                        const id = attributeToId[column];
+
+                        if (id) {
                             entity[
-                                f.id.replace(
+                                id.replace(
                                     /^bts:/,
                                     ''
                                 ) as keyof BaseSerializableEntity
                             ] = record.values[i];
                         }
-                    );
+                    });
+
+                    // schema.attributes.forEach(
+                    //     (f: SynapseSchema['attributes'][0], i: number) => {
+                    //         entity[
+                    //             f.id.replace(
+                    //                 /^bts:/,
+                    //                 ''
+                    //             ) as keyof BaseSerializableEntity
+                    //         ] = record.values[i];
+                    //     }
+                    // );
 
                     entity.atlasid = atlas.htan_id;
                     entity.atlas_name = atlas.htan_name;

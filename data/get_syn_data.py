@@ -19,6 +19,8 @@ from schematic.schemas.explorer import SchemaExplorer
 
 MAX_AGE_IN_DAYS = 32849
 
+MANIFESTS_WITHOUT_ENTITY_ID = ['Biospecimen','Demographics','Diagnosis','Exposure','FamilyHistory','FollowUp','MolecularTest','Therapy']
+
 @click.command()
 @click.option('--include-at-risk-populations/--exclude-at-risk-populations', default=False)
 @click.option('--include-released-only/--include-unreleased', default=False)
@@ -79,8 +81,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
     # portal data schema skeleton
     portal_data = {
-                    "atlases":[],
-                    "schemas":[]
+        "atlases": []
     }
 
     if include_released_only:
@@ -88,27 +89,23 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             include_release1_ids = set(json.load(f))
         with open('release2_include.json') as f:
             include_release2_ids = set(json.load(f))
-        include_release_ids = include_release1_ids.union(include_release2_ids)
-        release2_centers = [
-            "HTAN Duke",
-            "HTAN HMS",
-            "HTAN MSK",
-            # "HTAN OHSU",
-            "HTAN Vanderbilt",
-            "HTAN HTAPP",
-            "HTAN Stanford",
-            "HTAN WUSTL",
-            "HTAN TNP SARDANA",
-        ]
+        with open('release3_include.json') as f:
+            # release 3 include json has a different structure
+            release3_inclusions = json.load(f)
+            include_release3_ids = set([d['entityId'] for d in release3_inclusions if 'entityId' in d])
+        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids)
 
-    # store all metadata synapse ids for downloading submitted metadata
-    # directly
+    # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
 
-    data_schemas = []
-
+    with open('release1_synapse_metadata.json') as f:
+        release1_synapse_metadata_ids = set(json.load(f))
     with open('release2_synapse_metadata.json') as f:
         release2_synapse_metadata_ids = set(json.load(f))
+    with open('release3_synapse_metadata.json') as f:
+        release3_synapse_metadata_ids = set(json.load(f))
+
+    release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids)
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
     for project_id, dataset_group in metadata_manifests:
@@ -128,8 +125,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
         datasets = dataset_group.to_dict("records")
 
         for dataset in datasets:
-            # only consider metadata currently in release 2
-            if dataset["id"] not in release2_synapse_metadata_ids:
+            # only consider metadata currently in release
+            if dataset["id"] not in release_synapse_metadata_ids:
                 continue
 
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
@@ -141,9 +138,9 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                     syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
                 else:
                     syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
-                # sometimes files can be named synapse(*x).csv
+                # files can be named *.csv
                 # TODO: would be better of syn.get can take output file argument
-                os.rename(glob.glob(manifest_location + "*synapse*.csv")[0], manifest_path)
+                os.rename(glob.glob(manifest_location + "*.csv")[0], manifest_path)
 
             manifest_df = pd.read_csv(manifest_path)
 
@@ -164,14 +161,14 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
             logging.info("Data type: " + component)
 
-            # exclude HTAPP imaging data for now
-            if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component or "Bulk" in component):
-                logging.info("Skipping Imaging and Bulk data for HTAPP (" + component + ")")
-                continue
-
-            # exclude HTAPP PML datasets
-            if center == "HTAN HTAPP" and len(manifest_df) > 0 and "Filename" in manifest_df.columns and ("PML" in manifest_df["Filename"].values[0] or "10x" in manifest_df["Filename"].values[0]):
-                continue
+            # # exclude HTAPP imaging data for now
+            # if center == "HTAN HTAPP" and ("Imaging" in component or "Other" in component or "Bulk" in component):
+            #     logging.info("Skipping Imaging and Bulk data for HTAPP (" + component + ")")
+            #     continue
+            #
+            # # exclude HTAPP PML datasets
+            # if center == "HTAN HTAPP" and len(manifest_df) > 0 and "Filename" in manifest_df.columns and ("PML" in manifest_df["Filename"].values[0] or "10x" in manifest_df["Filename"].values[0]):
+            #     continue
 
             # get data type schema info
             try:
@@ -201,12 +198,17 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
             if 'entityId' not in schema_columns and 'entityId' in manifest_df.columns:
                 column_order += ['entityId']
+            if 'Uuid' not in schema_columns and 'Uuid' in manifest_df.columns:
+                column_order += ['Uuid']
+            if 'HTAN Parent Biospecimen ID' not in schema_columns and 'HTAN Parent Biospecimen ID' in manifest_df.columns:
+                column_order += ['HTAN Parent Biospecimen ID']
 
             # add columns not in the schema
             schemaless_columns = []
             for c in manifest_df.columns:
                 if c not in column_order:
                     schemaless_columns += [c]
+            schemaless_columns.sort()
             column_order += schemaless_columns
 
             manifest_df = manifest_df[column_order]
@@ -217,15 +219,23 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             # get records in this dataset
             record_list = []
 
-            # ignore files without a synapse id
-            if "entityId" not in manifest_df.columns:
-                logging.error("Manifest data unexpected: " + manifest_path + " no entityId column")
+            # ignore files without both synapse id and Uuid
+            if "entityId" not in manifest_df.columns and "Uuid" not in manifest_df.columns:
+                logging.error("Manifest data unexpected: " + manifest_path + " no entityId or Uuid column")
                 continue
 
-            number_of_rows_without_synapse_id = pd.isnull(manifest_df["entityId"]).sum()
-            if number_of_rows_without_synapse_id > 0:
-                logging.error("skipping {} rows without synapse id in {}" .format(number_of_rows_without_synapse_id, manifest_path))
-                manifest_df = manifest_df[~pd.isnull(manifest_df["entityId"])].copy()
+            if "entityId" not in manifest_df.columns:
+                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df["Uuid"])
+            elif "Uuid" not in manifest_df.columns:
+                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df["entityId"])
+            else:
+                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df[["entityId", "Uuid"]]).all(1)
+
+            number_of_rows_without_both_synapse_id_and_uuid = rows_without_both_synapse_id_and_uuid.sum()
+
+            if number_of_rows_without_both_synapse_id_and_uuid > 0:
+                logging.error("skipping {} rows without synapse id in {}" .format(number_of_rows_without_both_synapse_id_and_uuid, manifest_path))
+                manifest_df = manifest_df[~rows_without_both_synapse_id_and_uuid].copy()
 
             # replace race for protected populations
             if not include_at_risk_populations and 'Race' in manifest_df:
@@ -244,26 +254,14 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             # issues
             if center == "HTAN Stanford" and "Other" in component and len(manifest_df) > 0 and "proteomics" in manifest_df['Filename'].values[0]:
                 continue
-            # TODO: exclude HTAPP Bulk RNASeq data (has linkage issue as well)
-            if center == "HTAN HTAPP" and "BulkRNA" in component:
-                continue
 
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
-                if center in release2_centers:
-                    if center == "HTAN HTAPP" and ("Biospecimen" in component or "Diagnosis" in component or "Demographics" in component):
+                # if center in release2_centers:
+                    if component in MANIFESTS_WITHOUT_ENTITY_ID:
                         pass
                     else:
                         manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
-
-                elif center == "HTAN OHSU":
-                    # only include one published case HTA9_1 for now
-                    if "HTAN Parent Biospecimen ID" in manifest_df.columns and ("Imaging" in component or "WES" in component or "ATAC" in component or "RNA" in component):
-                        manifest_df = manifest_df[manifest_df["HTAN Parent Biospecimen ID"].str.contains("HTA9_1")].copy()
-                    elif "HTAN Parent ID" in manifest_df.columns and ("Biospecimen" in component):
-                        manifest_df = manifest_df[manifest_df["HTAN Parent ID"].str.contains("HTA9_1")].copy()
-                else:
-                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release1_ids)].copy()
 
             if len(manifest_df) == 0:
                 continue
@@ -293,44 +291,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 atlas[data_schema]["record_list"] = atlas[data_schema]["record_list"] + record_list
             else:
                 atlas[data_schema] = {
-                                        "data_schema":data_schema,
-                                        "record_list":record_list
+                    "data_schema": data_schema,
+                    "column_order": column_order,
+                    "record_list": record_list
                 }
-
-            # add data schema to JSON if not already there
-            if not data_schema in data_schemas:
-                data_schemas.append(data_schema)
-
-                schema = {
-                            "data_schema":data_schema,
-                            "attributes":[]
-                }
-
-                # data type attributes from schema
-                data_attributes = schema_info["dependencies"]
-
-                # add schema attributes to data portal JSON
-                for attribute in data_attributes:
-                    attr_info = se.explore_class(attribute)
-                    attr_id = "bts:" + attribute
-                    attr_name = attr_info["displayName"]
-                    attr_desc = attr_info["description"]
-
-                    schema["attributes"].append({
-                                            "id":attr_id,
-                                            "display_name":attr_name,
-                                            "description":attr_desc
-                                            })
-
-
-                # adding synapse ID to schema attributes
-                schema["attributes"].append({
-                                        "id":"synapseId",
-                                        "display_name": "Synapse Id",
-                                        "description": "Synapse ID for file"
-                                        })
-
-                portal_data["schemas"].append(schema)
 
         # add atlas to portal JSON
         portal_data["atlases"].append(atlas)

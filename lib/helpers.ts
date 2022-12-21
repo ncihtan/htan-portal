@@ -9,10 +9,6 @@ import {
     DownloadSourceCategory,
     ExploreOptionType,
     ExploreSelectedFilter,
-    ISelectedFiltersByAttrName,
-    SynapseAtlas,
-    SynapseData,
-    SynapseSchema,
 } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
@@ -52,6 +48,7 @@ export interface BaseSerializableEntity {
     Ethnicity: string;
     CountryofResidence: string;
     Gender: string;
+    Islowestlevel?: string;
 
     // Derived or attached in frontend
     atlasid: string;
@@ -108,6 +105,10 @@ function doesFileHaveMultipleParents(file: Entity) {
     return /Level[456]/.test(file.Component);
 }
 
+export function isLowestLevel(entity: BaseSerializableEntity) {
+    return entity.Islowestlevel?.toLowerCase().startsWith('yes');
+}
+
 export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
     return (
         !file.Component.startsWith('Imaging') &&
@@ -131,7 +132,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20221021_1018.json';
+            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20221219_1001.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();

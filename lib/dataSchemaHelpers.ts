@@ -287,6 +287,27 @@ export function getUniqDependencyIds(
         : [];
 }
 
+export function getAttributeToSchemaIdMap(
+    schema: DataSchemaData,
+    schemaDataById: SchemaDataById
+): { [description: string]: string } {
+    const attributeToId: { [description: string]: string } = {};
+    const dependencies = getDataSchemaDependencies(
+        schema,
+        schemaDataById,
+        false,
+        getAllDependencyIds
+    );
+
+    dependencies.forEach((s) => {
+        if (s.attribute) {
+            attributeToId[s.attribute] = s.id;
+        }
+    });
+
+    return attributeToId;
+}
+
 export function getDataSchemaParents(
     schema: DataSchemaData,
     schemaDataById: SchemaDataById = {}
@@ -324,6 +345,7 @@ export async function fetchAndProcessSchemaData(
     const schemaData = getDataSchemaData(await fetchSchemaData(dataUri));
     const schemaDataKeyedById = _.keyBy(schemaData, (d) => d.id);
     resolveConditionalDependencies(schemaData, schemaDataKeyedById);
+    addAliases(schemaDataKeyedById);
     return schemaDataKeyedById;
 }
 
@@ -412,6 +434,18 @@ export function mapSchemaDataToDataSchemaData(
             source,
         } as DataSchemaData;
     };
+}
+
+/**
+ * We sometimes manually modify the values and schema ids in the raw files.
+ * This results in discrepancy with the schema json, so we need to manually add these alternative ids.
+ */
+export function addAliases(schemaDataById: SchemaDataById) {
+    schemaDataById['bts:BulkDNALevel1'] = schemaDataById['bts:BulkWESLevel1'];
+    schemaDataById['bts:BulkDNALevel2'] = schemaDataById['bts:BulkWESLevel2'];
+    schemaDataById['bts:BulkDNALevel3'] = schemaDataById['bts:BulkWESLevel3'];
+    schemaDataById['bts:ImagingLevel3'] =
+        schemaDataById['bts:ImagingLevel3Segmentation'];
 }
 
 /**
