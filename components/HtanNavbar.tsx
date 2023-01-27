@@ -49,17 +49,14 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
         <Nav.Link href="/explore">Explore</Nav.Link>,
 
         <Nav.Link href="https://docs.humantumoratlas.org/" target="_blank">
-            Manual{' '}
-            <FontAwesomeIcon icon={faExternalLinkAlt} />
+            Manual <FontAwesomeIcon icon={faExternalLinkAlt} />
         </Nav.Link>,
 
         <NavSection text={'About the Data'}>
             <NavDropdown.Item href="/standards">
                 Data Standards
             </NavDropdown.Item>
-            <NavDropdown.Item href="/data-download">
-                Data Download
-            </NavDropdown.Item>
+            <NavDropdown.Item href="/data-access">Data Access</NavDropdown.Item>
             <NavDropdown.Item href="/tools">Analysis Tools</NavDropdown.Item>
             <Dropdown.Divider />
             <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
