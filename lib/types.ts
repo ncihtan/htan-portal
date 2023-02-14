@@ -125,7 +125,7 @@ export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
     },
     [AttributeNames.downloadSource]: {
         path: 'downloadSource',
-        displayName: 'Download Source',
+        displayName: 'Data Access',
     },
     [AttributeNames.releaseVersion]: {
         path: 'releaseVersion',
