@@ -556,7 +556,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
-                name: 'Download Source',
+                name: 'Data Access',
                 selector: 'downloadSource',
                 wrap: true,
                 sortable: true,

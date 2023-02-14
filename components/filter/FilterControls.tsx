@@ -303,9 +303,9 @@ const FilterControls: React.FunctionComponent<IFilterControlsProps> = observer(
 
                 <div>
                     <div style={{ width: 170 }}>
-                        <FilterPanel placeholder={'Download Source'}>
+                        <FilterPanel placeholder={'Data Access'}>
                             <FilterPropertyColumnShell
-                                title={'Download Source'}
+                                title={'Data Access'}
                             >
                                 <FilterCheckList
                                     setFilter={props.setFilter}
