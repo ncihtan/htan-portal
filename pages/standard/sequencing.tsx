@@ -101,6 +101,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.BulkWESLevel1,
         SchemaDataId.BulkWESLevel2,
         SchemaDataId.BulkWESLevel3,
+        SchemaDataId.BulkRNASeqLevel1,
+        SchemaDataId.BulkRNASeqLevel2,
+        SchemaDataId.BulkRNASeqLevel3,
     ]);
 
     return { props: { data, dataSchemaData, schemaDataById } };
