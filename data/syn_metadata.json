@@ -1047,7 +1047,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn39256250",
-            "numItems": 96
+            "numItems": 106
         },
         {
             "component": "ImagingLevel2",
