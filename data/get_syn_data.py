@@ -18,6 +18,8 @@ from schematic.schemas.explorer import SchemaExplorer
 
 
 MAX_AGE_IN_DAYS = 32849
+MIN_AGE_IN_DAYS = 6570
+CAP_AGE_COLUMNS = ["Age at Diagnosis", "Relationship Age at Diagnosis"]
 
 MANIFESTS_WITHOUT_ENTITY_ID = ['Biospecimen','Demographics','Diagnosis','Exposure','FamilyHistory','FollowUp','MolecularTest','Therapy']
 
@@ -177,10 +179,13 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 logging.error("Component " + component + " does not exist in schema (" + manifest_path)
                 continue
 
-            # obfuscate ages >89 (TODO: do the same for <18)
-            if component == "Diagnosis" and "Age at Diagnosis" in manifest_df.columns and is_numeric_dtype(manifest_df["Age at Diagnosis"]):
-                older_than_89 = manifest_df["Age at Diagnosis"] > MAX_AGE_IN_DAYS
-                manifest_df.loc[older_than_89, ["Age at Diagnosis", "Age Is Obfuscated"]] = [MAX_AGE_IN_DAYS, True]
+            # cap ages <18 and >89 for privacy reasons
+            for age_column in CAP_AGE_COLUMNS:
+                if age_column in manifest_df.columns and is_numeric_dtype(manifest_df[age_column]):
+                    older_than_89 = manifest_df[age_column] > MAX_AGE_IN_DAYS
+                    manifest_df.loc[older_than_89, [age_column, "Age Is Obfuscated"]] = [MAX_AGE_IN_DAYS, True]
+                    younger_than_18 = manifest_df[age_column] < MIN_AGE_IN_DAYS
+                    manifest_df.loc[younger_than_18, [age_column, "Age Is Obfuscated"]] = [MIN_AGE_IN_DAYS, True]
 
             # manifest might not have all columns from the schema, so add
             # missing columns
