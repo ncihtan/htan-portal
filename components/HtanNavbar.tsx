@@ -47,6 +47,7 @@ const NavSection: React.FunctionComponent<{
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
         <Nav.Link href="/explore">Explore</Nav.Link>,
+        <Nav.Link href="/explore_tools">Tools</Nav.Link>,
 
         <Nav.Link href="https://docs.humantumoratlas.org/" target="_blank">
             Manual <FontAwesomeIcon icon={faExternalLinkAlt} />
