@@ -64,7 +64,7 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
             },
             {
                 name: DETAILS_COLUMN_NAME,
-                selector: (tool: Tool) => 'Details',
+                selector: () => 'Details',
                 cell: (tool: Tool) => {
                     return (
                         <a
@@ -87,8 +87,56 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
     get columns(): IEnhancedDataTableColumn<Tool>[] {
         return [
             ...this.defaultColumns,
-            // TODO add more columns so that they will show up in the details modal
-            //  we don't need to make these columns available in the actual table
+            // adding these columns so that they will show up in the details modal
+            // we don't necessarily need to make these columns available in the actual table
+            {
+                name: 'Parent ID',
+                selector: 'Parent ID',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Publication',
+                selector: 'Tool Publication',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Homepage',
+                selector: 'Tool Homepage',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Description',
+                selector: 'Tool Description',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Topic',
+                selector: 'Tool Topic',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Operation',
+                selector: 'Tool Operation',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Input Data',
+                selector: 'Tool Input Data',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Output Data',
+                selector: 'Tool Output Data',
+                wrap: true,
+                sortable: true,
+            },
         ];
     }
 
