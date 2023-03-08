@@ -7,14 +7,18 @@ import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import React from 'react';
 import { action, makeObservable, observable } from 'mobx';
 import _ from 'lodash';
+import ViewDetailsModal from './ViewDetailsModal';
 
 interface IToolTableProps {
     tools: Tools;
 }
 
+const DETAILS_COLUMN_NAME = 'Details';
+
 @observer
 export default class ToolTable extends React.Component<IToolTableProps, {}> {
     @observable columnVisibility: { [columnKey: string]: boolean } = {};
+    @observable viewDetailsTool: Tool | undefined = undefined;
 
     constructor(props: IToolTableProps) {
         super(props);
@@ -58,6 +62,33 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 wrap: true,
                 sortable: true,
             },
+            {
+                name: DETAILS_COLUMN_NAME,
+                selector: (tool: Tool) => 'Details',
+                cell: (tool: Tool) => {
+                    return (
+                        <a
+                            href={'#'}
+                            onClick={action(() => {
+                                this.viewDetailsTool = tool;
+                            })}
+                        >
+                            View Details
+                        </a>
+                    );
+                },
+                wrap: true,
+                sortable: false,
+                searchable: false,
+            },
+        ];
+    }
+
+    get columns(): IEnhancedDataTableColumn<Tool>[] {
+        return [
+            ...this.defaultColumns,
+            // TODO add more columns so that they will show up in the details modal
+            //  we don't need to make these columns available in the actual table
         ];
     }
 
@@ -68,25 +99,39 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
 
     render() {
         return (
-            <EnhancedDataTable
-                columnVisibility={this.columnVisibility}
-                onChangeColumnVisibility={this.setColumnVisibility}
-                paginationServerOptions={{
-                    persistSelectedOnPageChange: false,
-                    persistSelectedOnSort: false,
-                }}
-                columns={this.defaultColumns}
-                data={this.props.tools.data}
-                striped={true}
-                dense={false}
-                selectableRows={false}
-                pagination={true}
-                paginationPerPage={20}
-                paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
-                noHeader={true}
-                subHeader={false}
-                customStyles={getDefaultDataTableStyle()}
-            />
+            <>
+                <ViewDetailsModal
+                    cellData={this.viewDetailsTool}
+                    onClose={this.onViewDetailsModalClose}
+                    columns={this.columns.filter(
+                        (c) => c.name !== DETAILS_COLUMN_NAME
+                    )}
+                />
+
+                <EnhancedDataTable
+                    columnVisibility={this.columnVisibility}
+                    onChangeColumnVisibility={this.setColumnVisibility}
+                    paginationServerOptions={{
+                        persistSelectedOnPageChange: false,
+                        persistSelectedOnSort: false,
+                    }}
+                    columns={this.defaultColumns}
+                    data={this.props.tools.data}
+                    striped={true}
+                    dense={false}
+                    selectableRows={false}
+                    pagination={true}
+                    paginationPerPage={20}
+                    paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
+                    noHeader={true}
+                    subHeader={false}
+                    customStyles={getDefaultDataTableStyle()}
+                />
+            </>
         );
     }
+
+    @action onViewDetailsModalClose = () => {
+        this.viewDetailsTool = undefined;
+    };
 }
