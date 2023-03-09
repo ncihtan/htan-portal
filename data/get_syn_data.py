@@ -105,7 +105,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
     with open('release2_synapse_metadata.json') as f:
         release2_synapse_metadata_ids = set(json.load(f))
     with open('release3_synapse_metadata.json') as f:
-        release3_synapse_metadata_ids = set(json.load(f))
+        release3_synapse_metadata = json.load(f)
+        release3_synapse_metadata_ids = set([d['manifestId'] for d in release3_synapse_metadata])
 
     release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids)
 
@@ -138,6 +139,9 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 if dataset["id"] == "syn25619062":
                     # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
                     syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
+                elif dataset["id"] in release3_synapse_metadata_ids:
+                    version = next(d for d in release3_synapse_metadata if d['manifestId'] == dataset['id'])['manifestVersion']
+                    syn.get(dataset["id"], version=version, downloadLocation=manifest_location, ifcollision="overwrite.local")
                 else:
                     syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
                 # files can be named *.csv

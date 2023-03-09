@@ -102,7 +102,7 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
         } else if (file.Component === 'OtherAssay') {
             if (file.AssayType === '10X Visium') {
                 // 10X Visium raw data will go to dbGap, but isn't available yet
-                file.downloadSource = DownloadSourceCategory.comingSoon;
+                file.downloadSource = DownloadSourceCategory.dbgap;
             } else {
                 file.downloadSource = DownloadSourceCategory.synapse;
             }
