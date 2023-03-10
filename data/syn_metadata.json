@@ -906,11 +906,6 @@
             "numItems": 32
         },
         {
-            "component": "OtherAssay",
-            "synapseId": "syn39169790",
-            "numItems": 30
-        },
-        {
             "component": "ScRNA-seqLevel1",
             "synapseId": "syn39169803",
             "numItems": 22
@@ -1035,7 +1030,7 @@
         {
             "component": "ScRNA-seqLevel4",
             "synapseId": "syn39247262",
-            "numItems": 19
+            "numItems": 5
         },
         {
             "component": "Demographics",
@@ -1050,7 +1045,7 @@
         {
             "component": "ScATAC-seqLevel4",
             "synapseId": "syn39247454",
-            "numItems": 9
+            "numItems": 2
         }
     ],
     "HTA8": [

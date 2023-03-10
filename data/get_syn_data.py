@@ -95,7 +95,9 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             # release 3 include json has a different structure
             release3_inclusions = json.load(f)
             include_release3_ids = set([d['entityId'] for d in release3_inclusions if 'entityId' in d])
-        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids)
+        with open('release3_exclude.json') as f:
+            exclude_release_ids = set(json.load(f))
+        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids).difference(exclude_release_ids)
 
     # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
@@ -129,7 +131,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
         for dataset in datasets:
             # only consider metadata currently in release
-            if dataset["id"] not in release_synapse_metadata_ids:
+            if dataset["id"] not in release_synapse_metadata_ids or dataset["id"] in exclude_release_ids:
                 continue
 
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"

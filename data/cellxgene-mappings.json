@@ -13,7 +13,5 @@
 	"Cohort_1_HTAN_NonEpithelial_AUCell_DR.h5ad": "https://cellxgene.cziscience.com/d/9899E3D8-ACE5-40BD-AC93-7AB7CE2AEC70.cxg/",
 	"nontcells_Seurat.h5ad": "https://cellxgene.cziscience.com/d/3DE2E3DB-9247-41B9-A3F5-35807CF85C3D.cxg/",
 	"tcells_Seurat.h5ad": "https://cellxgene.cziscience.com/d/BFAA0C46-7E34-4FA9-B08C-6DC6013B735A.cxg/",
-	"seurat_integrated_18MLLr_normal_final_rename.h5ad": "https://cellxgene.cziscience.com/e/8b0f9acd-fe8d-45ea-a7c4-5159e83da864L.cxg/",
-	"seurat_pool_logNorm_gini_FiveHD_10Xv3_downsample10000HSPC.h5ad": "https://cellxgene.cziscience.com/e/0fbfba78-5d39-4592-82fa-223c71bde19f.cxg/",
-	"seurat_regrCycleHeatShockGenes_pool_18Infants_scRNA_VEG3000_updated_rename.h5ad": "https://cellxgene.cziscience.com/e/adb025fa-1582-438a-8da9-870f116f60e2.cxg/"
+	"seurat_pool_logNorm_gini_FiveHD_10Xv3_downsample10000HSPC.h5ad": "https://cellxgene.cziscience.com/e/0fbfba78-5d39-4592-82fa-223c71bde19f.cxg/"
 }
