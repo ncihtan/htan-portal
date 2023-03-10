@@ -947,6 +947,11 @@
         },
         {
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel1",
+            "synapseId": "syn51116636",
+            "numItems": 30
+        },
+        {
+            "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel1",
             "synapseId": "syn51119038",
             "numItems": 4
         },

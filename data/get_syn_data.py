@@ -95,9 +95,12 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             # release 3 include json has a different structure
             release3_inclusions = json.load(f)
             include_release3_ids = set([d['entityId'] for d in release3_inclusions if 'entityId' in d])
+        with open('manual_include.json') as f:
+            # hack for last minute manual includes
+            manual_includes = set(json.load(f))
         with open('release3_exclude.json') as f:
             exclude_release_ids = set(json.load(f))
-        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids).difference(exclude_release_ids)
+        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids).union(manual_includes).difference(exclude_release_ids)
 
     # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
@@ -110,7 +113,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
         release3_synapse_metadata = json.load(f)
         release3_synapse_metadata_ids = set([d['manifestId'] for d in release3_synapse_metadata])
 
-    release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids)
+    release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids).union(manual_includes)
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
     for project_id, dataset_group in metadata_manifests:
