@@ -963,7 +963,7 @@
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn51121826",
-            "numItems": 68
+            "numItems": 69
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -978,7 +978,7 @@
         {
             "component": "ScRNA-seqLevel3",
             "synapseId": "syn51122332",
-            "numItems": 210
+            "numItems": 213
         }
     ],
     "HTA4": [
