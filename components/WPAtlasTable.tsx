@@ -545,7 +545,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                     url={
                                         '/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file'
                                     }
-                                    count={3}
+                                    count={1}
                                 />
                                 <BigQueryLink
                                     url={
