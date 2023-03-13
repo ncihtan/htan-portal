@@ -1,3 +1,5 @@
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import EnhancedDataTable, {
     IEnhancedDataTableColumn,
@@ -8,12 +10,41 @@ import React from 'react';
 import { action, makeObservable, observable } from 'mobx';
 import _ from 'lodash';
 import ViewDetailsModal from './ViewDetailsModal';
+import { GeneralLink } from '../types';
 
 interface IToolTableProps {
     tools: Tools;
 }
 
 const DETAILS_COLUMN_NAME = 'Details';
+
+function parseUrl(url: string): GeneralLink {
+    let name = url;
+
+    if (url.includes('pubmed.ncbi.nlm.nih.gov')) {
+        const parts = _.compact(url.split('/'));
+        const pmid = parts[parts.length - 1];
+        name = `PMID: ${pmid}`;
+    }
+
+    return { name, link: url };
+}
+
+const ExternalLink: React.FunctionComponent<{ url: string; label?: string }> = (
+    props
+) => {
+    const parsedUrl = parseUrl(props.url);
+
+    return (
+        <a href={parsedUrl.link} target="_blank" rel="noopener noreferrer">
+            {parsedUrl.name} <FontAwesomeIcon icon={faExternalLinkAlt} />
+        </a>
+    );
+};
+
+function renderExternalLink(url?: string, label?: string) {
+    return !_.isEmpty(url) ? <ExternalLink url={url!} label={label} /> : null;
+}
 
 @observer
 export default class ToolTable extends React.Component<IToolTableProps, {}> {
@@ -32,12 +63,6 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
 
     get defaultColumns(): IEnhancedDataTableColumn<Tool>[] {
         return [
-            {
-                name: 'Tool ID',
-                selector: 'Tool ID',
-                wrap: true,
-                sortable: true,
-            },
             {
                 name: 'Atlas Name',
                 selector: 'Atlas Name',
@@ -59,6 +84,14 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
             {
                 name: 'Tool Language',
                 selector: 'Tool Language',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Tool Publication',
+                selector: 'Tool Publication',
+                cell: (tool: Tool) =>
+                    renderExternalLink(tool['Tool Publication']),
                 wrap: true,
                 sortable: true,
             },
@@ -90,20 +123,21 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
             // adding these columns so that they will show up in the details modal
             // we don't necessarily need to make these columns available in the actual table
             {
+                name: 'Tool ID',
+                selector: 'Tool ID',
+                wrap: true,
+                sortable: true,
+            },
+            {
                 name: 'Parent ID',
                 selector: 'Parent ID',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Publication',
-                selector: 'Tool Publication',
-                wrap: true,
-                sortable: true,
-            },
-            {
                 name: 'Tool Homepage',
                 selector: 'Tool Homepage',
+                cell: (tool: Tool) => renderExternalLink(tool['Tool Homepage']),
                 wrap: true,
                 sortable: true,
             },
