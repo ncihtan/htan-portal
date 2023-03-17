@@ -878,7 +878,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn39168806",
-            "numItems": 371
+            "numItems": 373
         },
         {
             "component": "FollowUp",
@@ -963,7 +963,7 @@
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn51121826",
-            "numItems": 69
+            "numItems": 71
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -978,7 +978,27 @@
         {
             "component": "ScRNA-seqLevel3",
             "synapseId": "syn51122332",
-            "numItems": 213
+            "numItems": 219
+        },
+        {
+            "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel2",
+            "synapseId": "syn51203651",
+            "numItems": 15
+        },
+        {
+            "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel3",
+            "synapseId": "syn51204095",
+            "numItems": 90
+        },
+        {
+            "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel2",
+            "synapseId": "syn51204556",
+            "numItems": 2
+        },
+        {
+            "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel3",
+            "synapseId": "syn51204677",
+            "numItems": 12
         }
     ],
     "HTA4": [
