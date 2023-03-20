@@ -5,7 +5,10 @@ import EnhancedDataTable, {
     IEnhancedDataTableColumn,
 } from './EnhancedDataTable';
 import { Tool, Tools } from '../lib/tools';
-import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
+import {
+    getDefaultDataTableStyle,
+    truncatedTableCell,
+} from '../lib/dataTableHelpers';
 import React from 'react';
 import { action, makeObservable, observable } from 'mobx';
 import _ from 'lodash';
@@ -64,34 +67,41 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
     get defaultColumns(): IEnhancedDataTableColumn<Tool>[] {
         return [
             {
-                name: 'Atlas Name',
+                name: 'Atlas',
                 selector: 'Atlas Name',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Name',
+                name: 'Name',
                 selector: 'Tool Name',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Type',
+                name: 'Type',
                 selector: 'Tool Type',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Language',
+                name: 'Language',
                 selector: 'Tool Language',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Publication',
+                name: 'Publication',
                 selector: 'Tool Publication',
                 cell: (tool: Tool) =>
                     renderExternalLink(tool['Tool Publication']),
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Description',
+                selector: 'Tool Description',
+                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
@@ -123,7 +133,7 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
             // adding these columns so that they will show up in the details modal
             // we don't necessarily need to make these columns available in the actual table
             {
-                name: 'Tool ID',
+                name: 'ID',
                 selector: 'Tool ID',
                 wrap: true,
                 sortable: true,
@@ -135,38 +145,32 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 sortable: true,
             },
             {
-                name: 'Tool Homepage',
+                name: 'Homepage',
                 selector: 'Tool Homepage',
                 cell: (tool: Tool) => renderExternalLink(tool['Tool Homepage']),
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Description',
-                selector: 'Tool Description',
-                wrap: true,
-                sortable: true,
-            },
-            {
-                name: 'Tool Topic',
+                name: 'Topic',
                 selector: 'Tool Topic',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Operation',
+                name: 'Operation',
                 selector: 'Tool Operation',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Input Data',
+                name: 'Input Data',
                 selector: 'Tool Input Data',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Tool Output Data',
+                name: 'Output Data',
                 selector: 'Tool Output Data',
                 wrap: true,
                 sortable: true,

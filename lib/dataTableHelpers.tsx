@@ -51,9 +51,13 @@ export function getDataSchemaDataTableStyle() {
     };
 }
 
-export function truncatedTableCell(file: Entity) {
+export function truncatedTableCell<T>(cellData: T) {
     //@ts-ignore
-    const value = this.selector(file);
+    const selector = this.selector;
+    const value = _.isFunction(selector)
+        ? selector(cellData)
+        : cellData[selector as keyof T];
+
     return <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />;
 }
 
