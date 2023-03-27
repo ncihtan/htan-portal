@@ -6,12 +6,13 @@ import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { groupFilesByAttrNameAndValue } from '../lib/filterHelpers';
+import { groupEntitiesByAttrNameAndValue } from '../lib/filterHelpers';
 import { Atlas, Entity, setTab } from '../lib/helpers';
 import styles from './PublicationTabs.module.scss';
 import { Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { FileAttributeMap } from '../lib/types';
 
 interface IPublicationTabsProps {
     router: NextRouter;
@@ -502,8 +503,9 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             >
                                 <FileTable
                                     entities={props.assays[assayName]}
-                                    getGroupsByPropertyFiltered={groupFilesByAttrNameAndValue(
-                                        props.assays[assayName]
+                                    groupsByPropertyFiltered={groupEntitiesByAttrNameAndValue(
+                                        props.assays[assayName],
+                                        FileAttributeMap
                                     )}
                                     patientCount={props.cases.length}
                                     enableLevelFilter={true}

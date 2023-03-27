@@ -16,8 +16,11 @@ import { ScaleLoader } from 'react-spinners';
 import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
 import {
     filterFiles,
+    getFileFilterDisplayName,
     getFilteredCases,
     getFilteredSamples,
+    getNewFilters,
+    getSelectedFiltersByAttrName,
     groupFilesByAttrNameAndValue,
 } from '../lib/filterHelpers';
 import {
@@ -32,13 +35,12 @@ import {
     AttributeNames,
     ExploreActionMeta,
     ExploreSelectedFilter,
-    FilterAction,
     IFilterProps,
     ISelectedFiltersByAttrName,
 } from '../lib/types';
 import { WPAtlas } from '../types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import FilterControls from '../components/filter/FilterControls';
+import FileFilterControls from '../components/filter/FileFilterControls';
 import Filter from '../components/filter/Filter';
 import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
@@ -108,59 +110,22 @@ class Search extends React.Component<
         );
     }
 
-    get getGroupsByProperty() {
+    get groupsByProperty() {
         return groupFilesByAttrNameAndValue(this.state.files);
     }
 
-    get getGroupsByPropertyFiltered() {
+    get groupsByPropertyFiltered() {
         return groupFilesByAttrNameAndValue(this.filteredFiles);
     }
 
     @computed
     get selectedFiltersByAttrName(): ISelectedFiltersByAttrName {
-        return _.chain(this.selectedFilters)
-            .groupBy((item) => item.group)
-            .mapValues((filters: ExploreSelectedFilter[]) => {
-                return new Set(filters.map((f) => f.value));
-            })
-            .value();
+        return getSelectedFiltersByAttrName(this.selectedFilters);
     }
 
     @action.bound
     setFilter(actionMeta: ExploreActionMeta<ExploreSelectedFilter>) {
-        let newFilters: ExploreSelectedFilter[] = this.selectedFilters;
-        switch (actionMeta.action) {
-            case FilterAction.CLEAR_ALL:
-                // Deselect all filters
-                newFilters = [];
-                break;
-            case FilterAction.CLEAR:
-                if (actionMeta.option) {
-                    // Deselect all options for the given group
-                    newFilters = this.selectedFilters.filter((o) => {
-                        return o.group !== actionMeta.option!.group;
-                    });
-                }
-                break;
-            case FilterAction.SELECT:
-            case FilterAction.DESELECT:
-                if (actionMeta.option) {
-                    // first remove the item
-                    newFilters = this.selectedFilters.filter((o) => {
-                        return (
-                            o.group !== actionMeta.option!.group! ||
-                            o.value !== actionMeta.option!.value!
-                        );
-                    });
-                    if (actionMeta.action === 'select-option') {
-                        // Add it back if selecting
-                        const option = actionMeta.option;
-                        newFilters = newFilters.concat([option]);
-                    }
-                }
-                break;
-        }
-
+        const newFilters = getNewFilters(this.selectedFilters, actionMeta);
         updateSelectedFiltersInURL(newFilters, this.props.router);
     }
 
@@ -201,11 +166,7 @@ class Search extends React.Component<
 
     @computed
     get filteredFiles() {
-        const ret = filterFiles(
-            this.selectedFiltersByAttrName,
-            this.state.files
-        );
-        return ret;
+        return filterFiles(this.selectedFiltersByAttrName, this.state.files);
     }
 
     @computed
@@ -330,14 +291,14 @@ class Search extends React.Component<
         if (this.filteredFiles) {
             return (
                 <div className={'pageWrapper explorePage'}>
-                    <FilterControls
+                    <FileFilterControls
                         setFilter={this.setFilter}
                         selectedFiltersByGroupName={
                             this.selectedFiltersByAttrName
                         }
                         selectedFilters={this.selectedFilters}
-                        files={this.state.files}
-                        getGroupsByProperty={this.getGroupsByProperty}
+                        entities={this.state.files}
+                        groupsByProperty={this.groupsByProperty}
                     />
 
                     <Filter
@@ -345,13 +306,12 @@ class Search extends React.Component<
                         selectedFiltersByGroupName={
                             this.selectedFiltersByAttrName
                         }
+                        getFilterDisplayName={getFileFilterDisplayName}
                     />
 
                     <ExploreSummary
                         filteredFiles={this.filteredFiles}
-                        getGroupsByPropertyFiltered={
-                            this.getGroupsByPropertyFiltered
-                        }
+                        groupsByPropertyFiltered={this.groupsByPropertyFiltered}
                         filteredBiospecimenCount={this.filteredSamples.length}
                         filteredCaseCount={this.filteredCases.length}
                     />
@@ -379,9 +339,7 @@ class Search extends React.Component<
                             this.nonAtlasSelectedFiltersByAttrName
                         }
                         wpData={this.props.wpAtlases}
-                        getGroupsByPropertyFiltered={
-                            this.getGroupsByPropertyFiltered
-                        }
+                        groupsByPropertyFiltered={this.groupsByPropertyFiltered}
                         showAllBiospecimens={this.showAllBiospecimens}
                         showAllCases={this.showAllCases}
                         toggleShowAllBiospecimens={

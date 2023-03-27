@@ -25,7 +25,7 @@ import {
 import EnhancedDataTable, {
     IEnhancedDataTableColumn,
 } from './EnhancedDataTable';
-import { AttributeMap, AttributeNames } from '../lib/types';
+import { FileAttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
@@ -319,7 +319,9 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
 
 interface IFileTableProps {
     entities: Entity[];
-    getGroupsByPropertyFiltered: any;
+    groupsByPropertyFiltered: {
+        [attrName: string]: { [attrValue: string]: Entity[] };
+    };
     patientCount: number;
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
 }
@@ -419,7 +421,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: 'Assay',
-                selector: AttributeMap[AttributeNames.assayName].path,
+                selector: FileAttributeMap[AttributeNames.assayName].path,
                 wrap: true,
                 sortable: true,
             },
@@ -711,7 +713,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             filename: true,
             biospecimen: true,
             atlas_name: true,
-            [AttributeMap[AttributeNames.assayName].path!]: true,
+            [FileAttributeMap[AttributeNames.assayName].path!]: true,
             level: true,
             diagnosis: true,
             primaryParents: true,
