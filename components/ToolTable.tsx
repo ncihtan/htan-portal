@@ -59,7 +59,10 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
         makeObservable(this);
 
         this.columnVisibility = _.mapValues(
-            _.keyBy(this.defaultColumns, (c) => c.name),
+            _.keyBy(
+                [...this.defaultColumns, this.detailsColumn],
+                (c) => c.name
+            ),
             () => true
         );
     }
@@ -91,6 +94,12 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 sortable: true,
             },
             {
+                name: 'Topic',
+                selector: 'Tool Topic',
+                wrap: true,
+                sortable: true,
+            },
+            {
                 name: 'Publication',
                 selector: 'Tool Publication',
                 cell: (tool: Tool) =>
@@ -105,55 +114,38 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 wrap: true,
                 sortable: true,
             },
-            {
-                name: DETAILS_COLUMN_NAME,
-                selector: () => 'Details',
-                cell: (tool: Tool) => {
-                    return (
-                        <a
-                            href={'#'}
-                            onClick={action(() => {
-                                this.viewDetailsTool = tool;
-                            })}
-                        >
-                            View Details
-                        </a>
-                    );
-                },
-                wrap: true,
-                sortable: false,
-                searchable: false,
-            },
         ];
+    }
+
+    get detailsColumn() {
+        return {
+            name: DETAILS_COLUMN_NAME,
+            selector: () => 'Details',
+            cell: (tool: Tool) => {
+                return (
+                    <a
+                        href={'#'}
+                        onClick={action(() => {
+                            this.viewDetailsTool = tool;
+                        })}
+                    >
+                        View Details
+                    </a>
+                );
+            },
+            wrap: true,
+            sortable: false,
+            searchable: false,
+        };
     }
 
     get columns(): IEnhancedDataTableColumn<Tool>[] {
         return [
             ...this.defaultColumns,
-            // adding these columns so that they will show up in the details modal
-            // we don't necessarily need to make these columns available in the actual table
-            {
-                name: 'ID',
-                selector: 'Tool ID',
-                wrap: true,
-                sortable: true,
-            },
-            {
-                name: 'Parent ID',
-                selector: 'Parent ID',
-                wrap: true,
-                sortable: true,
-            },
             {
                 name: 'Homepage',
                 selector: 'Tool Homepage',
                 cell: (tool: Tool) => renderExternalLink(tool['Tool Homepage']),
-                wrap: true,
-                sortable: true,
-            },
-            {
-                name: 'Topic',
-                selector: 'Tool Topic',
                 wrap: true,
                 sortable: true,
             },
@@ -175,6 +167,19 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 wrap: true,
                 sortable: true,
             },
+            {
+                name: 'ID',
+                selector: 'Tool ID',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Parent ID',
+                selector: 'Parent ID',
+                wrap: true,
+                sortable: true,
+            },
+            this.detailsColumn,
         ];
     }
 
@@ -201,7 +206,7 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                         persistSelectedOnPageChange: false,
                         persistSelectedOnSort: false,
                     }}
-                    columns={this.defaultColumns}
+                    columns={this.columns}
                     data={this.props.tools.data}
                     striped={true}
                     dense={false}

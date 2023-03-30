@@ -58,7 +58,9 @@ export function truncatedTableCell<T>(cellData: T) {
         ? selector(cellData)
         : cellData[selector as keyof T];
 
-    return <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />;
+    return value ? (
+        <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />
+    ) : null;
 }
 
 export function getColumnKey(col: {
