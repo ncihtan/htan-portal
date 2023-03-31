@@ -1,4 +1,7 @@
 import toolsJson from '../data/tools.json';
+import customToolsJson from '../data/tools_custom.json';
+const defaultToolsJson = [...toolsJson, ...customToolsJson];
+
 import _ from 'lodash';
 
 export interface Tool {
@@ -18,6 +21,7 @@ export interface Tool {
     'Tool Operation': string;
     'Tool Input Data': string;
     'Tool Output Data': string;
+    'Tool Assay'?: string;
 }
 
 export interface Tools {
@@ -26,7 +30,7 @@ export interface Tools {
     data: Tool[];
 }
 
-export function getToolData(tools: Tool[] = toolsJson as Tool[]): Tools {
+export function getToolData(tools: Tool[] = defaultToolsJson as Tool[]): Tools {
     // first two rows is metadata, the rest is data
     return {
         headerIds: tools[0],

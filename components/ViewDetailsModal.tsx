@@ -15,6 +15,7 @@ interface IViewDetailsModalProps<CellData> {
     onChangeColumnVisibility?: (columnVisibility: {
         [columnKey: string]: boolean;
     }) => void;
+    customContent?: JSX.Element;
 }
 
 interface IAddColumnIconProps {
@@ -113,6 +114,7 @@ const ViewDetailsModal = <CellData extends object>(
                         }, [] as any[])}
                     </tbody>
                 </table>
+                {props.customContent}
             </Modal.Body>
 
             <Modal.Footer>

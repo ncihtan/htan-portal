@@ -1,0 +1,22 @@
+[
+  {
+    "": "",
+    "Atlas Name": "HTAN MSK",
+    "Grant ID": "",
+    "Tool ID": "HTA8_T0",
+    "Parent ID": "",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/23550210/",
+    "Perspective": "",
+    "Tool Name": "cBioPortal",
+    "Tool Alias": "cBioPortal for Cancer Genomics",
+    "Tool Type": "Web application",
+    "Tool Language": "Java, JavaScript",
+    "Tool Homepage": "https://cbioportal.org",
+    "Tool Description": "The cBioPortal for Cancer Genomics is an open-source software platform that enables interactive, exploratory analysis of large-scale cancer genomics data sets with a biologist-friendly interface",
+    "Tool Topic": "analysis, visualisation",
+    "Tool Operation": "analysis, annotation, visualisation",
+    "Tool Input Data": "",
+    "Tool Output Data": "",
+    "Tool Assay":  "Bulk DNA, Bulk RNA-seq, scRNA-seq"
+  }
+]

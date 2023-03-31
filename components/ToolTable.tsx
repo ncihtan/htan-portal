@@ -14,6 +14,7 @@ import { action, makeObservable, observable } from 'mobx';
 import _ from 'lodash';
 import ViewDetailsModal from './ViewDetailsModal';
 import { GeneralLink } from '../types';
+import { ToolDetails } from './tool/toolDetails';
 
 interface IToolTableProps {
     tools: Tools;
@@ -96,6 +97,12 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
             {
                 name: 'Topic',
                 selector: 'Tool Topic',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Assay',
+                selector: 'Tool Assay',
                 wrap: true,
                 sortable: true,
             },
@@ -197,6 +204,10 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                     columns={this.columns.filter(
                         (c) => c.name !== DETAILS_COLUMN_NAME
                     )}
+                    customContent={
+                        this.viewDetailsTool &&
+                        ToolDetails[this.viewDetailsTool['Tool ID']]
+                    }
                 />
 
                 <EnhancedDataTable
