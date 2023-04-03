@@ -27,7 +27,7 @@ import {
 } from '../lib/entityReportHelpers';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import {
-    AttributeMap,
+    FileAttributeMap,
     AttributeNames,
     ExploreSelectedFilter,
 } from '../lib/types';
@@ -142,8 +142,8 @@ const TooltipContent: React.FunctionComponent<TooltipDatum> = (props) => {
     const columns = [
         {
             name:
-                AttributeMap[attributeName as AttributeNames]?.displayName ||
-                attributeName,
+                FileAttributeMap[attributeName as AttributeNames]
+                    ?.displayName || attributeName,
             selector: (distribution: DistributionByAttribute) =>
                 distribution.attributeValue,
             sortable: true,

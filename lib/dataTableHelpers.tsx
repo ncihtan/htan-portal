@@ -51,10 +51,16 @@ export function getDataSchemaDataTableStyle() {
     };
 }
 
-export function truncatedTableCell(file: Entity) {
+export function truncatedTableCell<T>(cellData: T) {
     //@ts-ignore
-    const value = this.selector(file);
-    return <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />;
+    const selector = this.selector;
+    const value = _.isFunction(selector)
+        ? selector(cellData)
+        : cellData[selector as keyof T];
+
+    return value ? (
+        <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />
+    ) : null;
 }
 
 export function getColumnKey(col: {

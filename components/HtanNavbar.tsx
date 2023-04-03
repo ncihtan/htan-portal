@@ -47,6 +47,7 @@ const NavSection: React.FunctionComponent<{
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
         <Nav.Link href="/explore">Explore</Nav.Link>,
+        <Nav.Link href="/tools">Analysis Tools</Nav.Link>,
 
         <Nav.Link href="https://docs.humantumoratlas.org/" target="_blank">
             Manual <FontAwesomeIcon icon={faExternalLinkAlt} />
@@ -57,7 +58,6 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
                 Data Standards
             </NavDropdown.Item>
             <NavDropdown.Item href="/data-access">Data Access</NavDropdown.Item>
-            <NavDropdown.Item href="/tools">Analysis Tools</NavDropdown.Item>
             <Dropdown.Divider />
             <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
                 Protocols.io

@@ -8,14 +8,13 @@ import {
     ExploreActionMeta,
     ExploreSelectedFilter,
     FilterAction,
-    AttributeMap,
-    AttributeNames,
     ISelectedFiltersByAttrName,
 } from '../../lib/types';
 
 interface IFilterProps {
     setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
     selectedFiltersByGroupName: ISelectedFiltersByAttrName;
+    getFilterDisplayName: (filter: string) => string;
 }
 
 const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {
@@ -48,13 +47,7 @@ const Filter: React.FunctionComponent<IFilterProps> = observer((props) => {
                                         });
                                     }}
                                 >
-                                    {
-                                        AttributeMap[
-                                            AttributeNames[
-                                                filter as keyof typeof AttributeNames
-                                            ]
-                                        ].displayName
-                                    }
+                                    {props.getFilterDisplayName(filter)}
                                 </span>
 
                                 {[

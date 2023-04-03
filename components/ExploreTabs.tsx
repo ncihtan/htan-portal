@@ -9,10 +9,7 @@ import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import WPAtlasTable from './WPAtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import {
-    ExploreSelectedFilter,
-    ISelectedFiltersByAttrName,
-} from '../lib/types';
+import { ISelectedFiltersByAttrName } from '../lib/types';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -24,7 +21,9 @@ interface IExploreTabsProps {
     filteredSamplesByNonAtlasFilters: Entity[];
     wpData: WPAtlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    getGroupsByPropertyFiltered: any;
+    groupsByPropertyFiltered: {
+        [attrName: string]: { [attrValue: string]: Entity[] };
+    };
     filteredSynapseAtlases: Atlas[];
     filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
     selectedSynapseAtlases: Atlas[];
@@ -119,8 +118,8 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     >
                         <FileTable
                             entities={props.filteredFiles}
-                            getGroupsByPropertyFiltered={
-                                props.getGroupsByPropertyFiltered
+                            groupsByPropertyFiltered={
+                                props.groupsByPropertyFiltered
                             }
                             patientCount={props.cases.length}
                         />

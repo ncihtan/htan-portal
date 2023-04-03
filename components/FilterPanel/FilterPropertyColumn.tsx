@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 
 interface IFilterPropertyColumnShell {
     title: string;
+    countHeader: string;
 }
 
 const FilterPropertyColumnShell: React.FunctionComponent<IFilterPropertyColumnShell> = function (
@@ -12,7 +13,9 @@ const FilterPropertyColumnShell: React.FunctionComponent<IFilterPropertyColumnSh
         <div className={styles.column}>
             <div>
                 <h4>{props.title}:</h4>
-                <div className={styles.fileCountHeader}>Files</div>
+                <div className={styles.fileCountHeader}>
+                    {props.countHeader}
+                </div>
             </div>
             {props.children}
         </div>

@@ -11,26 +11,28 @@ interface IExploreSummaryProps {
     filteredFiles: Entity[];
     filteredBiospecimenCount: number;
     filteredCaseCount: number;
-    getGroupsByPropertyFiltered: any;
+    groupsByPropertyFiltered: {
+        [attrName: string]: { [attrValue: string]: Entity[] };
+    };
 }
 
 export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
     props
 ) => {
     const atlasCount = _.keys(
-        props.getGroupsByPropertyFiltered[AttributeNames.AtlasName]
+        props.groupsByPropertyFiltered[AttributeNames.AtlasName]
     ).length;
 
     const organCount = _.keys(
-        props.getGroupsByPropertyFiltered[AttributeNames.TissueorOrganofOrigin]
+        props.groupsByPropertyFiltered[AttributeNames.TissueorOrganofOrigin]
     ).length;
 
     const cancerTypeCount = _.keys(
-        props.getGroupsByPropertyFiltered[AttributeNames.PrimaryDiagnosis]
+        props.groupsByPropertyFiltered[AttributeNames.PrimaryDiagnosis]
     ).length;
 
     const assayCount = _.keys(
-        props.getGroupsByPropertyFiltered[AttributeNames.assayName]
+        props.groupsByPropertyFiltered[AttributeNames.assayName]
     ).length;
 
     const fileCount = props.filteredFiles.length;

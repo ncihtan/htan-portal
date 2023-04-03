@@ -2,20 +2,102 @@ import _ from 'lodash';
 
 import { Entity, filterObject } from './helpers';
 import {
-    AttributeMap,
+    FileAttributeMap,
     AttributeNames,
     ExploreOptionType,
+    ExploreSelectedFilter,
+    IAttributeInfo,
     ISelectedFiltersByAttrName,
+    FilterAction,
+    ExploreActionMeta,
+    ToolAttributeMap,
+    ToolAttributeNames,
 } from './types';
+import { Tool } from './tools';
 
-function getAttrValueFromFile(file: Entity, attrName: AttributeNames) {
-    const attrInfo = AttributeMap[attrName];
+export interface IFilterControlsProps<T> {
+    setFilter: (actionMeta: any) => void;
+    selectedFiltersByGroupName: ISelectedFiltersByAttrName;
+    selectedFilters: ExploreSelectedFilter[];
+    entities: T[];
+    groupsByProperty: { [attrName: string]: { [attrValue: string]: T[] } };
+}
+
+export function getSelectedFiltersByAttrName(
+    selectedFilters: ExploreSelectedFilter[]
+): ISelectedFiltersByAttrName {
+    return _.chain(selectedFilters)
+        .groupBy((item) => item.group)
+        .mapValues((filters: ExploreSelectedFilter[]) => {
+            return new Set(filters.map((f) => f.value));
+        })
+        .value();
+}
+
+export function getNewFilters(
+    selectedFilters: ExploreSelectedFilter[],
+    actionMeta: ExploreActionMeta<ExploreSelectedFilter>
+): ExploreSelectedFilter[] {
+    let newFilters: ExploreSelectedFilter[] = selectedFilters;
+    switch (actionMeta.action) {
+        case FilterAction.CLEAR_ALL:
+            // Deselect all filters
+            newFilters = [];
+            break;
+        case FilterAction.CLEAR:
+            if (actionMeta.option) {
+                // Deselect all options for the given group
+                newFilters = selectedFilters.filter((o) => {
+                    return o.group !== actionMeta.option!.group;
+                });
+            }
+            break;
+        case FilterAction.SELECT:
+        case FilterAction.DESELECT:
+            if (actionMeta.option) {
+                // first remove the item
+                newFilters = selectedFilters.filter((o) => {
+                    return (
+                        o.group !== actionMeta.option!.group! ||
+                        o.value !== actionMeta.option!.value!
+                    );
+                });
+                if (actionMeta.action === 'select-option') {
+                    // Add it back if selecting
+                    const option = actionMeta.option;
+                    newFilters = newFilters.concat([option]);
+                }
+            }
+            break;
+    }
+
+    return newFilters;
+}
+
+export function getFileFilterDisplayName(filter: string) {
+    return FileAttributeMap[
+        AttributeNames[filter as keyof typeof AttributeNames]
+    ].displayName;
+}
+
+export function getToolFilterDisplayName(filter: string) {
+    return ToolAttributeMap[
+        ToolAttributeNames[filter as keyof typeof ToolAttributeNames]
+    ].displayName;
+}
+
+function getAttrValueFromEntity<Attribute extends string, T>(
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    entity: T,
+    attrName: Attribute
+) {
+    const attrInfo = attributeMap[attrName];
     let attrValue: string | string[] | undefined;
 
     if (attrInfo.path) {
-        attrValue = _.at<any>(file, attrInfo.path)[0];
+        attrValue = _.at<any>(entity, attrInfo.path)[0];
     } else if (attrInfo.getValues) {
-        attrValue = attrInfo.getValues(file).filter((x) => !!x);
+        attrValue = attrInfo.getValues(entity).filter((x) => !!x);
     }
 
     if (_.isArray(attrValue) && attrValue.length === 0) {
@@ -27,37 +109,49 @@ function getAttrValueFromFile(file: Entity, attrName: AttributeNames) {
 }
 
 export function groupFilesByAttrNameAndValue(files: Entity[]) {
+    return groupEntitiesByAttrNameAndValue(files, FileAttributeMap);
+}
+
+export function groupToolsByAttrNameAndValue(tools: Tool[]) {
+    return groupEntitiesByAttrNameAndValue(tools, ToolAttributeMap);
+}
+
+export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
+    entities: T[],
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> }
+): { [attrName: string]: { [attrValue: string]: T[] } } {
     const ret: {
         [attrName: string]: {
-            [attrValue: string]: Entity[];
+            [attrValue: string]: T[];
         };
     } = {};
 
-    function addFileToGroup(
-        file: Entity,
-        groupedByValue: { [attrValue: string]: Entity[] },
+    function addEntityToGroup(
+        entity: T,
+        groupedByValue: { [attrValue: string]: T[] },
         attrVal: string
     ) {
         if (!groupedByValue[attrVal]) {
             groupedByValue[attrVal] = [];
         }
-        groupedByValue[attrVal].push(file);
+        groupedByValue[attrVal].push(entity);
     }
 
-    _.forEach(AttributeMap, (attrInfo, attrName) => {
+    _.forEach(attributeMap, (attrInfo, attrName) => {
         const groupedByValue = {};
-        for (const file of files) {
-            const attrVals = getAttrValueFromFile(
-                file,
-                attrName as AttributeNames
+        for (const entity of entities) {
+            const attrVals = getAttrValueFromEntity(
+                attributeMap,
+                entity,
+                attrName
             );
             if (attrVals) {
                 if (_.isArray(attrVals)) {
                     for (const val of attrVals) {
-                        addFileToGroup(file, groupedByValue, val);
+                        addEntityToGroup(entity, groupedByValue, val);
                     }
                 } else {
-                    addFileToGroup(file, groupedByValue, attrVals);
+                    addEntityToGroup(entity, groupedByValue, attrVals);
                 }
             }
         }
@@ -67,14 +161,16 @@ export function groupFilesByAttrNameAndValue(files: Entity[]) {
     return ret;
 }
 
-function doesFilePassFilter(
-    file: Entity,
+function doesEntityPassFilter<Attribute extends string, T>(
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    entity: T,
     filterSelectionsByAttrName: ISelectedFiltersByAttrName
 ) {
     return _.every(filterSelectionsByAttrName, (filterValueSet, attrName) => {
-        const attrValue = getAttrValueFromFile(
-            file,
-            attrName as AttributeNames
+        const attrValue = getAttrValueFromEntity(
+            attributeMap,
+            entity,
+            attrName
         );
         // If the file has a value relating to this filter group...
         if (attrValue) {
@@ -91,24 +187,44 @@ function doesFilePassFilter(
     });
 }
 
-export function filterFiles(
+export function filterEntities<Attribute extends string, T>(
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
     filterSelectionsByAttrName: ISelectedFiltersByAttrName,
-    files: Entity[]
+    entities: T[]
 ) {
     // If there are any filters...
     if (_.size(filterSelectionsByAttrName)) {
         //...find the files where the passed filters match
-        return files.filter((f) => {
-            return doesFilePassFilter(f, filterSelectionsByAttrName);
+        return entities.filter((e) => {
+            return doesEntityPassFilter(
+                attributeMap,
+                e,
+                filterSelectionsByAttrName
+            );
         });
     } else {
-        return files;
+        return entities;
     }
 }
 
-export function countFilteredFilesByAttrValue(
+export function filterFiles(
     filterSelectionsByAttrName: ISelectedFiltersByAttrName,
-    files: Entity[],
+    files: Entity[]
+) {
+    return filterEntities(FileAttributeMap, filterSelectionsByAttrName, files);
+}
+
+export function filtertools(
+    filterSelectionsByAttrName: ISelectedFiltersByAttrName,
+    tools: Tool[]
+) {
+    return filterEntities(ToolAttributeMap, filterSelectionsByAttrName, tools);
+}
+
+export function countFilteredEntitiesByAttrValue<Attribute extends string, T>(
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    filterSelectionsByAttrName: ISelectedFiltersByAttrName,
+    entities: T[],
     attrName: string
 ) {
     const counts: { [attrValue: string]: number } = {};
@@ -120,12 +236,18 @@ export function countFilteredFilesByAttrValue(
         counts[attrVal] += 1;
     }
 
-    files.forEach((file) => {
-        if (!doesFilePassFilter(file, filterSelectionsByAttrName)) {
+    entities.forEach((entity) => {
+        if (
+            !doesEntityPassFilter(
+                attributeMap,
+                entity,
+                filterSelectionsByAttrName
+            )
+        ) {
             // skip if file doesnt pass filter
             return;
         }
-        const attrVal = getAttrValueFromFile(file, attrName as AttributeNames);
+        const attrVal = getAttrValueFromEntity(attributeMap, entity, attrName);
         if (!attrVal) {
             // skip if no value
             return;
@@ -143,27 +265,73 @@ export function countFilteredFilesByAttrValue(
     return counts;
 }
 
-export function makeOptions(
-    attrName: AttributeNames,
+export function makeOptions<Attribute extends string, T>(
+    attrName: Attribute,
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
     selectedFiltersByAttrName: ISelectedFiltersByAttrName,
-    files: Entity[],
-    filesByProperty: { [attrName: string]: { [attrValue: string]: Entity[] } }
+    entities: T[],
+    entitiesByProperty: { [attrName: string]: { [attrValue: string]: T[] } }
 ): ExploreOptionType[] {
     const filtersWithoutThisAttr = _.omit(selectedFiltersByAttrName, [
         attrName,
     ]);
-    const counts = countFilteredFilesByAttrValue(
+    const counts = countFilteredEntitiesByAttrValue(
+        attributeMap,
         filtersWithoutThisAttr,
-        files,
+        entities,
         attrName
     );
 
-    return _.map(filesByProperty[attrName], (val, key) => {
+    return _.map(entitiesByProperty[attrName], (val, key) => {
         return {
             value: key,
             label: key,
             group: attrName,
             count: counts[key] || 0,
+        };
+    });
+}
+
+export function getOptions<Attribute extends string, T>(
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    selectedFiltersByGroupName: ISelectedFiltersByAttrName,
+    selectedFilters: ExploreSelectedFilter[],
+    entities: T[],
+    groupsByProperty: { [attrName: string]: { [attrValue: string]: T[] } }
+): (attrName: Attribute) => ExploreOptionType[] {
+    const isOptionSelected = (option: ExploreSelectedFilter) => {
+        return (
+            _.find(selectedFilters, (o: ExploreSelectedFilter) => {
+                return o.value === option.value && option.group === o.group;
+            }) !== undefined
+        );
+    };
+
+    return (attrName: Attribute): ExploreOptionType[] => {
+        const ret = makeOptions(
+            attrName,
+            attributeMap,
+            selectedFiltersByGroupName,
+            entities,
+            groupsByProperty
+        );
+        ret.forEach((opt) => {
+            opt.group = attrName;
+            opt.isSelected = isOptionSelected(opt); // this call has to happen after setting `group`
+        });
+        return _.sortBy(ret, (o) => o.label);
+    };
+}
+
+export function getSelectOptions<Attribute extends string, T>(
+    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeNames: Attribute[],
+    options: (attrName: Attribute) => ExploreOptionType[]
+): { label: string; options: ExploreOptionType[] }[] {
+    return attributeNames.map((attrName) => {
+        return {
+            label: attributeMap[attrName].displayName,
+            options: options(attrName),
         };
     });
 }
@@ -184,7 +352,7 @@ export function getFilteredCases(
         const caseFilters = filterObject(
             selectedFiltersByAttrName,
             (filters, attrName) =>
-                !!AttributeMap[attrName as AttributeNames].caseFilter
+                !!FileAttributeMap[attrName as AttributeNames].caseFilter
         );
         return filterFiles(caseFilters, cases);
     }

@@ -2,6 +2,7 @@ import { DataSchemaData } from './dataSchemaHelpers';
 import { Atlas, Entity } from './helpers';
 import { ActionMeta, ActionTypes, OptionTypeBase } from 'react-select';
 import _ from 'lodash';
+import { Tool } from './tools';
 
 export type ExploreOptionType = {
     value: string;
@@ -38,6 +39,17 @@ export enum AttributeNames {
     releaseVersion = 'releaseVersion',
 }
 
+export enum ToolAttributeNames {
+    AtlasName = 'AtlasName',
+    ToolType = 'ToolType',
+    ToolLanguage = 'ToolLanguage',
+    ToolTopic = 'ToolTopic',
+    ToolAssay = 'ToolAssay',
+    // ToolName = 'ToolName',
+    // ToolPublication = 'ToolPublication',
+    // ToolDescription = 'ToolDescription',
+}
+
 export enum DownloadSourceCategory {
     dbgap = 'dbGaP',
     idc = 'IDC',
@@ -46,9 +58,9 @@ export enum DownloadSourceCategory {
     comingSoon = 'Coming Soon',
 }
 
-export interface IAttributeInfo {
+export interface IAttributeInfo<T> {
     path?: string;
-    getValues?: (e: Entity) => string[];
+    getValues?: (e: T) => string[];
     displayName: string;
     caseFilter?: boolean;
 }
@@ -63,7 +75,39 @@ function getCaseValues(propName: keyof Entity) {
     };
 }
 
-export const AttributeMap: { [attr in AttributeNames]: IAttributeInfo } = {
+function getDelimitedValues(text: string, separator: string = ',') {
+    return text.split(separator).map((v) => v.trim());
+}
+
+export const ToolAttributeMap: {
+    [attr in ToolAttributeNames]: IAttributeInfo<Tool>;
+} = {
+    [ToolAttributeNames.AtlasName]: {
+        displayName: 'Atlas',
+        getValues: (tool: Tool) => getDelimitedValues(tool['Atlas Name']),
+    },
+    [ToolAttributeNames.ToolType]: {
+        displayName: 'Type',
+        getValues: (tool: Tool) => getDelimitedValues(tool['Tool Type']),
+    },
+    [ToolAttributeNames.ToolLanguage]: {
+        displayName: 'Language',
+        getValues: (tool: Tool) => getDelimitedValues(tool['Tool Language']),
+    },
+    [ToolAttributeNames.ToolTopic]: {
+        displayName: 'Topic',
+        getValues: (tool: Tool) => getDelimitedValues(tool['Tool Topic']),
+    },
+    [ToolAttributeNames.ToolAssay]: {
+        displayName: 'Assay',
+        getValues: (tool: Tool) =>
+            tool['Tool Assay'] ? getDelimitedValues(tool['Tool Assay']) : [],
+    },
+};
+
+export const FileAttributeMap: {
+    [attr in AttributeNames]: IAttributeInfo<Entity>;
+} = {
     [AttributeNames.TissueorOrganofOrigin]: {
         getValues: getCaseValues('TissueorOrganofOrigin'),
         displayName: 'Organ',

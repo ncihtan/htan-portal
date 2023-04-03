@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Button, Modal, Table } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -12,7 +12,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
-    Atlas,
     doesFileIncludeLevel1OrLevel2SequencingData,
     Entity,
     getFileBase,
@@ -26,14 +25,13 @@ import {
 import EnhancedDataTable, {
     IEnhancedDataTableColumn,
 } from './EnhancedDataTable';
-import { AttributeMap, AttributeNames } from '../lib/types';
+import { FileAttributeMap, AttributeNames } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import { returnStatement } from '@babel/types';
 import { makeListColumn } from '../lib/fileTableHelpers';
 import LevelSelect from './LevelSelect';
+import ViewDetailsModal from './ViewDetailsModal';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');
@@ -45,16 +43,6 @@ interface IFileDownloadModalProps {
     files: Entity[];
     onClose: () => void;
     isOpen: boolean;
-}
-
-interface IViewDetailsModalProps {
-    file: Entity | undefined;
-    onClose: () => void;
-    columns: IEnhancedDataTableColumn<Entity>[];
-    columnVisibility: { [columnKey: string]: boolean };
-    onChangeColumnVisibility: (columnVisibility: {
-        [columnKey: string]: boolean;
-    }) => void;
 }
 
 const DETAILS_COLUMN_NAME = 'Details';
@@ -271,98 +259,6 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     );
 };
 
-function renderCell(column: IEnhancedDataTableColumn<Entity>, file: Entity) {
-    if (column.cell) {
-        return (column.cell as any)(file);
-    } else if (typeof column.selector === 'string') {
-        return _.get(file, column.selector);
-    } else if (column.selector) {
-        return (column.selector as any)(file);
-    }
-}
-
-const ViewDetailsModal: React.FunctionComponent<IViewDetailsModalProps> = (
-    props
-) => {
-    if (!props.file) {
-        return null;
-    }
-    return (
-        <Modal
-            dialogClassName={styles.fileTableViewDetailsModal}
-            show={props.file !== undefined}
-            onHide={props.onClose}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Details</Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body>
-                <table className="table table-bordered">
-                    <colgroup>
-                        <col style={{ width: '20%' }} />
-                        <col style={{ width: '80%' }} />
-                    </colgroup>
-                    <tbody>
-                        {props.columns.reduce((rows, column) => {
-                            const cell = renderCell(column, props.file!);
-                            if (cell) {
-                                rows.push(
-                                    <tr key={column.name as string}>
-                                        <td>
-                                            {column.name}
-                                            {!props.columnVisibility[
-                                                column.name as string
-                                            ] && (
-                                                <Tooltip
-                                                    overlay={
-                                                        <span>
-                                                            Add this column to
-                                                            the table
-                                                        </span>
-                                                    }
-                                                >
-                                                    <span
-                                                        style={{
-                                                            color: 'green',
-                                                            marginLeft: 3,
-                                                            cursor: 'pointer',
-                                                        }}
-                                                        onClick={() =>
-                                                            props.onChangeColumnVisibility(
-                                                                {
-                                                                    ...props.columnVisibility,
-                                                                    [column.name as string]: true,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faPlusCircle}
-                                                        />
-                                                    </span>
-                                                </Tooltip>
-                                            )}
-                                        </td>
-                                        <td>{cell}</td>
-                                    </tr>
-                                );
-                            }
-                            return rows;
-                        }, [] as any[])}
-                    </tbody>
-                </table>
-            </Modal.Body>
-
-            <Modal.Footer>
-                <Button variant="secondary" onClick={props.onClose}>
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-};
-
 type ImageViewerInfo = {
     minervaUrl: string;
     hasCustomStory: boolean;
@@ -423,7 +319,9 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
 
 interface IFileTableProps {
     entities: Entity[];
-    getGroupsByPropertyFiltered: any;
+    groupsByPropertyFiltered: {
+        [attrName: string]: { [attrValue: string]: Entity[] };
+    };
     patientCount: number;
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
 }
@@ -523,7 +421,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: 'Assay',
-                selector: AttributeMap[AttributeNames.assayName].path,
+                selector: FileAttributeMap[AttributeNames.assayName].path,
                 wrap: true,
                 sortable: true,
             },
@@ -815,7 +713,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
             filename: true,
             biospecimen: true,
             atlas_name: true,
-            [AttributeMap[AttributeNames.assayName].path!]: true,
+            [FileAttributeMap[AttributeNames.assayName].path!]: true,
             level: true,
             diagnosis: true,
             primaryParents: true,
@@ -966,7 +864,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 />
 
                 <ViewDetailsModal
-                    file={this.viewDetailsFile}
+                    cellData={this.viewDetailsFile}
                     onClose={this.onViewDetailsModalClose}
                     columnVisibility={this.columnVisibility}
                     onChangeColumnVisibility={this.setColumnVisibility}

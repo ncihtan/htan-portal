@@ -1,0 +1,40 @@
+[
+  {
+    "": "",
+    "Atlas Name": "atlas_name",
+    "Grant ID": "grant_id",
+    "Tool ID": "tool_id",
+    "Parent ID": "parent_id",
+    "Tool Publication": "",
+    "Perspective": "",
+    "Tool Name": "tool_name",
+    "Tool Alias": "tool_alias",
+    "Tool Type": "tool_type",
+    "Tool Language": "tool_language",
+    "Tool Homepage": "tool_homepage",
+    "Tool Description": "tool_description",
+    "Tool Topic": "tool_topic",
+    "Tool Operation": "tool_operation",
+    "Tool Input Data": "tool_input_data",
+    "Tool Output Data": "tool_output_data"
+  },
+  {
+    "": "",
+    "Atlas Name": "HTAN Atlas associated with the tool",
+    "Grant ID": "HTAN grant(s) under which the tool was developed",
+    "Tool ID": "HTAN tool ID assigned after submission",
+    "Parent ID": "Tool \"suite\" to which a more specific tool belongs",
+    "Tool Publication": "",
+    "Perspective": "",
+    "Tool Name": "Primary (full) name/label for the tool",
+    "Tool Alias": "Short label or abbreviation for the tool; if tool name is already \"short\" then reuse for this field",
+    "Tool Type": "Type of tool according to options defined in bioToolsSchema: if the top level entry for a tool, use \"Suite\"; in most other cases, the type of \"interface\" provided for a tool. If multiple types apply (e.g., \"Bioinformatics portal\" and \"Web application\"), use the most specific/descriptive.",
+    "Tool Language": "Software language in which the tool is implemented (multiple choices might be appropriate)",
+    "Tool Homepage": "Primary homepage for the tool",
+    "Tool Description": "Overview description of the tool",
+    "Tool Topic": "",
+    "Tool Operation": "",
+    "Tool Input Data": "",
+    "Tool Output Data": ""
+  }
+]
