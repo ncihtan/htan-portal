@@ -112,7 +112,7 @@
     "Tool Type": "Suite",
     "Tool Language": "Nextflow, Python",
     "Tool Homepage": "https://mcmicro.org/",
-    "Tool Description": "",
+    "Tool Description": "MCMICRO is a software pipeline for generating single cell data from multiple tissue imaging technologies.",
     "Tool Topic": "imaging",
     "Tool Operation": "NA",
     "Tool Input Data": "Imaging",
