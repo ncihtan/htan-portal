@@ -110,7 +110,7 @@
     "Tool Name": "MCMICRO: Multiple-choice microscopy pipeline",
     "Tool Alias": "MCMICRO",
     "Tool Type": "Suite",
-    "Tool Language": "",
+    "Tool Language": "Nextflow, Python",
     "Tool Homepage": "https://mcmicro.org/",
     "Tool Description": "",
     "Tool Topic": "imaging",
