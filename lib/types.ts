@@ -1,5 +1,5 @@
 import { DataSchemaData } from './dataSchemaHelpers';
-import { Atlas, Entity } from './helpers';
+import { Atlas, Entity, getDelimitedValues } from './helpers';
 import { ActionMeta, ActionTypes, OptionTypeBase } from 'react-select';
 import _ from 'lodash';
 import { Tool } from './tools';
@@ -73,10 +73,6 @@ function getCaseValues(propName: keyof Entity) {
             return [e[propName] as string];
         }
     };
-}
-
-function getDelimitedValues(text: string, separator: string = ',') {
-    return text.split(separator).map((v) => v.trim());
 }
 
 export const ToolAttributeMap: {
