@@ -71,14 +71,14 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
     get defaultColumns(): IEnhancedDataTableColumn<Tool>[] {
         return [
             {
-                name: 'Atlas',
-                selector: 'Atlas Name',
+                name: 'Name',
+                selector: 'Tool Name',
                 wrap: true,
                 sortable: true,
             },
             {
-                name: 'Name',
-                selector: 'Tool Name',
+                name: 'Atlas',
+                selector: 'Atlas Name',
                 wrap: true,
                 sortable: true,
             },
@@ -177,12 +177,6 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
             {
                 name: 'ID',
                 selector: 'Tool ID',
-                wrap: true,
-                sortable: true,
-            },
-            {
-                name: 'Parent ID',
-                selector: 'Parent ID',
                 wrap: true,
                 sortable: true,
             },
