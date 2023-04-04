@@ -89,12 +89,6 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 sortable: true,
             },
             {
-                name: 'Language',
-                selector: 'Tool Language',
-                wrap: true,
-                sortable: true,
-            },
-            {
                 name: 'Topic',
                 selector: 'Tool Topic',
                 wrap: true,
@@ -115,9 +109,9 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 sortable: true,
             },
             {
-                name: 'Description',
-                selector: 'Tool Description',
-                cell: truncatedTableCell,
+                name: 'Homepage',
+                selector: 'Tool Homepage',
+                cell: (tool: Tool) => renderExternalLink(tool['Tool Homepage']),
                 wrap: true,
                 sortable: true,
             },
@@ -150,9 +144,9 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
         return [
             ...this.defaultColumns,
             {
-                name: 'Homepage',
-                selector: 'Tool Homepage',
-                cell: (tool: Tool) => renderExternalLink(tool['Tool Homepage']),
+                name: 'Description',
+                selector: 'Tool Description',
+                cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
@@ -171,6 +165,12 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
             {
                 name: 'Output Data',
                 selector: 'Tool Output Data',
+                wrap: true,
+                sortable: true,
+            },
+            {
+                name: 'Language',
+                selector: 'Tool Language',
                 wrap: true,
                 sortable: true,
             },
