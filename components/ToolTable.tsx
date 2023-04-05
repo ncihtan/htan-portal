@@ -15,6 +15,7 @@ import _ from 'lodash';
 import ViewDetailsModal from './ViewDetailsModal';
 import { GeneralLink } from '../types';
 import { ToolDetails } from './tool/toolDetails';
+import { getDelimitedValues } from '../lib/helpers';
 
 interface IToolTableProps {
     tools: Tools;
@@ -48,6 +49,22 @@ const ExternalLink: React.FunctionComponent<{ url: string; label?: string }> = (
 
 function renderExternalLink(url?: string, label?: string) {
     return !_.isEmpty(url) ? <ExternalLink url={url!} label={label} /> : null;
+}
+
+function renderExternalLinks(urls?: string, separator: string = ',') {
+    const links = !_.isEmpty(urls)
+        ? _.compact(getDelimitedValues(urls!, separator))
+        : [];
+
+    return !_.isEmpty(links) ? (
+        <span>
+            {links.map((link) => (
+                <div className="mb-1">
+                    <ExternalLink url={link} />
+                </div>
+            ))}
+        </span>
+    ) : null;
 }
 
 @observer
@@ -104,7 +121,7 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 name: 'Publication',
                 selector: 'Tool Publication',
                 cell: (tool: Tool) =>
-                    renderExternalLink(tool['Tool Publication']),
+                    renderExternalLinks(tool['Tool Publication']),
                 wrap: true,
                 sortable: true,
             },

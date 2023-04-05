@@ -102,6 +102,10 @@ export interface LoadDataResult {
 
 win.missing = [];
 
+export function getDelimitedValues(text: string, separator: string = ',') {
+    return text.split(separator).map((v) => v.trim());
+}
+
 function doesFileHaveMultipleParents(file: Entity) {
     return /Level[456]/.test(file.Component);
 }
