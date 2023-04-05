@@ -147,6 +147,11 @@ export enum SchemaDataId {
     PercentStromalCells = 'bts:PercentStromalCells',
     PercentTumorCells = 'bts:PercentTumorCells',
     PercentTumorNuclei = 'bts:PercentTumorNuclei',
+
+    VisiumSpatialTranscriptomicsRNASeqLevel1 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel1',
+    VisiumSpatialTranscriptomicsRNASeqLevel2 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel2',
+    VisiumSpatialTranscriptomicsRNASeqLevel3 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel3',
+    VisiumSpatialTranscriptomicsAuxiliaryFiles = 'bts:10xVisiumSpatialTranscriptomics-AuxiliaryFiles',
 }
 
 const NUMERICAL_SCHEMA_DATA_LOOKUP: { [schemaDataId: string]: boolean } = {
