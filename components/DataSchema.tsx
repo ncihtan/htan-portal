@@ -120,7 +120,12 @@ function getColumnDef(dataSchemaMap?: {
                     dataSchemaMap
                 ).map((s) => s.attribute);
 
-                return <ValidValues attributes={attributes} />;
+                return (
+                    <ValidValues
+                        attribute={schemaData.attribute}
+                        attributes={attributes}
+                    />
+                );
             },
             wrap: true,
             minWidth: '400px',
