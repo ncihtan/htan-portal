@@ -33,11 +33,11 @@
     },
     {
         "manifestId": "syn38868462",
-        "manifestVersion": 10
+        "manifestVersion": 12
     },
     {
         "manifestId": "syn38868669",
-        "manifestVersion": 7
+        "manifestVersion": 9
     },
     {
         "manifestId": "syn39042300",
@@ -53,27 +53,27 @@
     },
     {
         "manifestId": "syn39051142",
-        "manifestVersion": 6
+        "manifestVersion": 8
     },
     {
         "manifestId": "syn39051213",
-        "manifestVersion": 6
+        "manifestVersion": 8
     },
     {
         "manifestId": "syn39051263",
-        "manifestVersion": 6
+        "manifestVersion": 8
     },
     {
         "manifestId": "syn39051632",
-        "manifestVersion": 6
+        "manifestVersion": 8
     },
     {
         "manifestId": "syn39051860",
-        "manifestVersion": 6
+        "manifestVersion": 8
     },
     {
         "manifestId": "syn39051938",
-        "manifestVersion": 6
+        "manifestVersion": 8
     },
     {
         "manifestId": "syn39140594",
@@ -177,7 +177,7 @@
     },
     {
         "manifestId": "syn39168806",
-        "manifestVersion": 7
+        "manifestVersion": 9
     },
     {
         "manifestId": "syn39168815",
@@ -740,20 +740,12 @@
         "manifestVersion": 2
     },
     {
-        "manifestId": "syn51116632",
-        "manifestVersion": 2
-    },
-    {
         "manifestId": "syn51116636",
         "manifestVersion": "4"
     },
     {
         "manifestId": "syn51119038",
-        "manifestVersion": 2
-    },
-    {
-        "manifestId": "syn51119039",
-        "manifestVersion": 2
+        "manifestVersion": 4
     },
     {
         "manifestId": "syn51121826",
@@ -773,18 +765,26 @@
     },
     {
         "manifestId": "syn51203651",
-        "manifestVersion": 2
-    },
-    {
-        "manifestId": "syn51204095",
         "manifestVersion": 4
     },
     {
+        "manifestId": "syn51204095",
+        "manifestVersion": 8
+    },
+    {
         "manifestId": "syn51204556",
-        "manifestVersion": 2
+        "manifestVersion": 6
     },
     {
         "manifestId": "syn51204677",
+        "manifestVersion": 6
+    },
+    {
+        "manifestId": "syn51284480",
+        "manifestVersion": 4
+    },
+    {
+        "manifestId": "syn51295784",
         "manifestVersion": 2
     }
 ]

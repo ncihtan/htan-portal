@@ -545,12 +545,12 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn38868462",
-            "numItems": 307
+            "numItems": 333
         },
         {
             "component": "Demographics",
             "synapseId": "syn38868669",
-            "numItems": 148
+            "numItems": 157
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -565,32 +565,32 @@
         {
             "component": "Diagnosis",
             "synapseId": "syn39051142",
-            "numItems": 148
+            "numItems": 157
         },
         {
             "component": "Exposure",
             "synapseId": "syn39051213",
-            "numItems": 148
+            "numItems": 157
         },
         {
             "component": "FamilyHistory",
             "synapseId": "syn39051263",
-            "numItems": 94
+            "numItems": 107
         },
         {
             "component": "FollowUp",
             "synapseId": "syn39051632",
-            "numItems": 226
+            "numItems": 247
         },
         {
             "component": "Therapy",
             "synapseId": "syn39051860",
-            "numItems": 148
+            "numItems": 157
         },
         {
             "component": "MolecularTest",
             "synapseId": "syn39051938",
-            "numItems": 148
+            "numItems": 157
         },
         {
             "component": "ImagingLevel2",
@@ -941,11 +941,6 @@
             "numItems": 2
         },
         {
-            "component": "10xVisiumSpatialTranscriptomics-AuxiliaryFilesLevel2",
-            "synapseId": "syn51116632",
-            "numItems": 15
-        },
-        {
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel1",
             "synapseId": "syn51116636",
             "numItems": 30
@@ -954,11 +949,6 @@
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel1",
             "synapseId": "syn51119038",
             "numItems": 4
-        },
-        {
-            "component": "10xVisiumSpatialTranscriptomics-AuxiliaryFilesLevel2",
-            "synapseId": "syn51119039",
-            "numItems": 2
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -988,7 +978,7 @@
         {
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel3",
             "synapseId": "syn51204095",
-            "numItems": 90
+            "numItems": 60
         },
         {
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel2",
@@ -998,7 +988,17 @@
         {
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel3",
             "synapseId": "syn51204677",
-            "numItems": 12
+            "numItems": 8
+        },
+        {
+            "component": "10xVisiumSpatialTranscriptomics-AuxiliaryFiles",
+            "synapseId": "syn51284480",
+            "numItems": 45
+        },
+        {
+            "component": "10xVisiumSpatialTranscriptomics-AuxiliaryFiles",
+            "synapseId": "syn51295784",
+            "numItems": 6
         }
     ],
     "HTA4": [
