@@ -87,7 +87,12 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
     } else {
         file.isRawSequencing = false;
 
-        if (file.level === 'Level 3' || file.level === 'Level 4') {
+        if (
+            file.level === 'Level 3' ||
+            file.level === 'Level 4' ||
+            file.level === 'Auxiliary' ||
+            file.level === 'Other'
+        ) {
             file.downloadSource = DownloadSourceCategory.synapse;
         } else if (
             file.HTANDataFileID in idcIds &&
@@ -484,6 +489,13 @@ function extractEntitiesFromSynapseData(
                             entity.assayName =
                                 entity.AssayType || 'Other Assay';
                             entity.level = 'Other';
+                        } else if (
+                            parsedAssay.name.toLowerCase().includes('auxiliary')
+                        ) {
+                            // For 10X Visium there is Auxiliary data which
+                            // doesn't fit any levels either, so we're simply
+                            // calling it Auxiliary
+                            entity.level = 'Auxiliary';
                         }
                     } else {
                         entity.level = 'Unknown';
