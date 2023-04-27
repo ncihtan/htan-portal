@@ -1221,32 +1221,32 @@
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn39281852",
-            "numItems": 108
+            "numItems": 94
         },
         {
             "component": "BulkRNA-seqLevel1",
             "synapseId": "syn39282161",
-            "numItems": 348
+            "numItems": 346
         },
         {
             "component": "OtherAssay",
             "synapseId": "syn39283032",
-            "numItems": 360
+            "numItems": 176
         },
         {
             "component": "OtherAssay",
             "synapseId": "syn39283075",
-            "numItems": 176
+            "numItems": 84
         },
         {
             "component": "ScATAC-seqLevel1",
             "synapseId": "syn39283342",
-            "numItems": 640
+            "numItems": 608
         },
         {
             "component": "ScRNA-seqLevel1",
             "synapseId": "syn39283525",
-            "numItems": 384
+            "numItems": 360
         },
         {
             "component": "Biospecimen",

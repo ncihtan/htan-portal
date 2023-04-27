@@ -150,21 +150,25 @@ function processSynapseJSON(
                 diagnosisByHTANParticipantID,
                 demographicsByHTANParticipantID
             );
+            if (parentData) {
+                (file as SerializableEntity).biospecimenIds = parentData.biospecimen.map(
+                    (b) => b.HTANBiospecimenID
+                );
+                (file as SerializableEntity).diagnosisIds = parentData.diagnosis.map(
+                    (d) => d.HTANParticipantID
+                );
+                (file as SerializableEntity).demographicsIds = parentData.demographics.map(
+                    (d) => d.HTANParticipantID
+                );
 
-            (file as SerializableEntity).biospecimenIds = parentData.biospecimen.map(
-                (b) => b.HTANBiospecimenID
-            );
-            (file as SerializableEntity).diagnosisIds = parentData.diagnosis.map(
-                (d) => d.HTANParticipantID
-            );
-            (file as SerializableEntity).demographicsIds = parentData.demographics.map(
-                (d) => d.HTANParticipantID
-            );
-
-            addDownloadSourcesInfo(file);
-            addReleaseInfo(file);
-            return file as SerializableEntity;
+                addDownloadSourcesInfo(file);
+                addReleaseInfo(file);
+                return file as SerializableEntity;
+            } else {
+                return undefined;
+            }
         })
+        .filter(f => f) // file should be defined
         .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
     // remove files that can't be downloaded unless it's imaging
     // .filter(
@@ -333,10 +337,11 @@ function getSampleAndPatientData(
             !HTANParentBiospecimenID ||
             !biospecimenByHTANBiospecimenID[HTANParentBiospecimenID]
         ) {
-            console.error(
+            console.log(
                 'Missing HTANParentBiospecimenID: ',
                 filesByHTANId[p]
             );
+            return undefined;
         }
     }
 
