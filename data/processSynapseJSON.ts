@@ -168,7 +168,7 @@ function processSynapseJSON(
                 return undefined;
             }
         })
-        .filter(f => f) // file should be defined
+        .filter((f):f is SerializableEntity => !!f) // file should be defined (typescript doesnt understand (f=>f)
         .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
     // remove files that can't be downloaded unless it's imaging
     // .filter(
