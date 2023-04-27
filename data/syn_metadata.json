@@ -1221,12 +1221,12 @@
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn39281852",
-            "numItems": 94
+            "numItems": 53
         },
         {
             "component": "BulkRNA-seqLevel1",
             "synapseId": "syn39282161",
-            "numItems": 346
+            "numItems": 204
         },
         {
             "component": "OtherAssay",

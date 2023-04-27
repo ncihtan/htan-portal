@@ -271,11 +271,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
             # only include released data
             if include_released_only and "entityId" in manifest_df.columns:
-                # if center in release2_centers:
-                    if component in MANIFESTS_WITHOUT_ENTITY_ID:
-                        pass
-                    else:
-                        manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
+                if component in MANIFESTS_WITHOUT_ENTITY_ID:
+                    pass
+                else:
+                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
 
             if len(manifest_df) == 0:
                 continue

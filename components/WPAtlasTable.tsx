@@ -61,7 +61,7 @@ const SynapseDataLink = (props: { id: string }) => (
 
 const MetaDataLink = (props: { id: string }) => (
     <a
-        href={`https://htan-metadata-20230426-2317.surge.sh/${props.id}.csv`}
+        href={`https://htan-metadata-20230427-0813.surge.sh/${props.id}.csv`}
         download
     >
         {props.id}
