@@ -9,7 +9,7 @@ const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
         <DataStandard {...props}>
             <div className="standards-content">
-                <h2>HTAN Clinical Data</h2>
+                <h1>HTAN Clinical Data</h1>
                 <p>
                     HTAN clinical data consists of three tiers.
                     <p />

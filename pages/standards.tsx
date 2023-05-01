@@ -114,6 +114,11 @@ const Standards = (data: StandardsProps) => {
                                     </Link>
                                 </li>
                                 <li>
+                                    <Link href="/standard/spatial_transcriptomics">
+                                        Spatial Transcriptomics
+                                    </Link>
+                                </li>
+                                <li>
                                     <Link href="https://sage-bionetworks.github.io/schema_visualization/">
                                         <a target="_blank">
                                             HTAN schema visualization{' '}
