@@ -26,7 +26,7 @@ export const PublicationPageLink: {
     HTA7: { id: 'hms_ckcm_nirmal_2022', show: true },
     HTA8: { id: 'msk_sclc_chan_2021', show: true },
     HTA9: { id: 'ohsu_brca_johnson_2022', show: true },
-    HTA11: { id: 'vanderbilt_crc_chen_2021', show: false },
+    HTA11: { id: 'vanderbilt_crc_chen_2021', show: true },
 };
 
 export const PUBLICATIONS: any = {
