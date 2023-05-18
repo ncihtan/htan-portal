@@ -129,7 +129,7 @@ function processSynapseJSON(
         WPAtlasMap
     );
     const files = flatData.filter((obj) => {
-        return !!obj.filename;
+        return !!obj.Filename;
     });
 
     const filesByHTANId = _.keyBy(files, (f) => f.HTANDataFileID);
@@ -141,6 +141,7 @@ function processSynapseJSON(
         demographicsByHTANParticipantID,
     } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
+    debugger;
     const returnFiles = files
         .map((file) => {
             const parentData = getSampleAndPatientData(
@@ -168,7 +169,7 @@ function processSynapseJSON(
                 return undefined;
             }
         })
-        .filter((f):f is SerializableEntity => !!f) // file should be defined (typescript doesnt understand (f=>f)
+        .filter((f): f is SerializableEntity => !!f) // file should be defined (typescript doesnt understand (f=>f)
         .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
     // remove files that can't be downloaded unless it's imaging
     // .filter(
@@ -337,10 +338,7 @@ function getSampleAndPatientData(
             !HTANParentBiospecimenID ||
             !biospecimenByHTANBiospecimenID[HTANParentBiospecimenID]
         ) {
-            console.log(
-                'Missing HTANParentBiospecimenID: ',
-                filesByHTANId[p]
-            );
+            console.log('Missing HTANParentBiospecimenID: ', filesByHTANId[p]);
             return undefined;
         }
     }
