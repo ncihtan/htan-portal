@@ -1,7 +1,7 @@
 [
     {
         "manifestId": "syn35465046",
-        "manifestVersion": 8
+        "manifestVersion": 10
     },
     {
         "manifestId": "syn35488819",
@@ -186,6 +186,38 @@
     {
         "manifestId": "syn39169783",
         "manifestVersion": 1
+    },
+    {
+        "manifestId": "syn39247066",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn39247085",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn39247103",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn39247123",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn39247148",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn39247186",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn39247346",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn39247437",
+        "manifestVersion": 2
     },
     {
         "manifestId": "syn39253974",
@@ -377,7 +409,7 @@
     },
     {
         "manifestId": "syn41905031",
-        "manifestVersion": 4
+        "manifestVersion": 6
     },
     {
         "manifestId": "syn41905370",
@@ -457,7 +489,7 @@
     },
     {
         "manifestId": "syn41921873",
-        "manifestVersion": 4
+        "manifestVersion": 6
     },
     {
         "manifestId": "syn41922297",
@@ -469,7 +501,7 @@
     },
     {
         "manifestId": "syn41925002",
-        "manifestVersion": 3
+        "manifestVersion": 5
     },
     {
         "manifestId": "syn42232085",
@@ -764,6 +796,10 @@
         "manifestVersion": 8
     },
     {
+        "manifestId": "syn51181549",
+        "manifestVersion": 6
+    },
+    {
         "manifestId": "syn51203651",
         "manifestVersion": 4
     },
@@ -785,6 +821,14 @@
     },
     {
         "manifestId": "syn51295784",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn51425726",
+        "manifestVersion": 2
+    },
+    {
+        "manifestId": "syn51425823",
         "manifestVersion": 2
     }
 ]

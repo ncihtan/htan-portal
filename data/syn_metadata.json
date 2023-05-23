@@ -1008,11 +1008,6 @@
             "numItems": 204
         },
         {
-            "component": "ScATAC-seqLevel1",
-            "synapseId": "syn39247030",
-            "numItems": 240
-        },
-        {
             "component": "Diagnosis",
             "synapseId": "syn39247066",
             "numItems": 30
@@ -1053,11 +1048,6 @@
             "numItems": 135
         },
         {
-            "component": "ScRNA-seqLevel4",
-            "synapseId": "syn39247262",
-            "numItems": 5
-        },
-        {
             "component": "Demographics",
             "synapseId": "syn39247346",
             "numItems": 30
@@ -1068,9 +1058,19 @@
             "numItems": 34
         },
         {
+            "component": "ScATAC-seqLevel1",
+            "synapseId": "syn51181549",
+            "numItems": 240
+        },
+        {
             "component": "ScATAC-seqLevel4",
-            "synapseId": "syn39247454",
-            "numItems": 2
+            "synapseId": "syn51425726",
+            "numItems": 9
+        },
+        {
+            "component": "ScRNA-seqLevel4",
+            "synapseId": "syn51425823",
+            "numItems": 10
         }
     ],
     "HTA8": [

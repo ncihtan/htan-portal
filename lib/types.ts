@@ -156,7 +156,7 @@ export const FileAttributeMap: {
         displayName: 'Level',
     },
     [AttributeNames.FileFormat]: {
-        path: 'fileFormat',
+        path: 'FileFormat',
         displayName: 'File Format',
     },
     [AttributeNames.assayName]: {
