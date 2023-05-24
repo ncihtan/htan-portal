@@ -59,10 +59,10 @@ const ToolFilterControls: React.FunctionComponent<
                 width={120}
                 attributes={[ToolAttributeNames.ToolLanguage]}
             />
-            <FilterDropdown
+            {/*<FilterDropdown
                 {...dropdownProps}
                 attributes={[ToolAttributeNames.ToolTopic]}
-            />
+            />*/}
             <FilterDropdown
                 {...dropdownProps}
                 attributes={[ToolAttributeNames.ToolAssay]}

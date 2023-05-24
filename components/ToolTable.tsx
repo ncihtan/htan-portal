@@ -105,12 +105,12 @@ export default class ToolTable extends React.Component<IToolTableProps, {}> {
                 wrap: true,
                 sortable: true,
             },
-            {
+            /*{
                 name: 'Topic',
                 selector: 'Tool Topic',
                 wrap: true,
                 sortable: true,
-            },
+            },*/
             {
                 name: 'Assay',
                 selector: 'Tool Assay',
