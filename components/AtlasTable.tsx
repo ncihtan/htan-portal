@@ -13,14 +13,10 @@ import { faBook, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ExploreTab } from './ExploreTabs';
 import { Button, Modal } from 'react-bootstrap';
 import getAtlasMetaData from '../lib/getAtlasMetaData';
-import {
-    AttributeNames,
-    ExploreSelectedFilter,
-    ISelectedFiltersByAttrName,
-} from '../lib/types';
+import { ISelectedFiltersByAttrName } from '../lib/types';
 import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 
-interface IWPAtlasTableProps {
+interface IAtlasTableProps {
     router: NextRouter;
     synapseAtlasData: Atlas[];
     selectedAtlases?: Atlas[];
@@ -250,7 +246,7 @@ const CellxgeneViewerLink = (props: { url: string; count: number }) => (
     </Tooltip>
 );
 
-type WPAtlasTableData = Atlas & {
+type AtlasTableData = Atlas & {
     isSelected: boolean;
     publicationPageLink: { id: string; show: boolean };
 };
@@ -266,7 +262,7 @@ function filteredCount(
 }
 
 @observer
-export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
+export default class AtlasTable extends React.Component<IAtlasTableProps> {
     @observable metadataModalAtlas: Atlas | null = null;
 
     @computed
@@ -278,7 +274,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
         return (this.props.selectedAtlases || []).length > 0;
     }
 
-    constructor(props: IWPAtlasTableProps) {
+    constructor(props: IAtlasTableProps) {
         super(props);
         makeObservable(this);
     }
@@ -293,14 +289,14 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
 
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
-    @computed get data(): WPAtlasTableData[] {
+    @computed get data(): AtlasTableData[] {
         return (this.props.filteredAtlases || this.props.synapseAtlasData).map(
             (a) =>
                 ({
                     ...a,
                     isSelected: this.isRowSelected(a),
                     publicationPageLink: this.getPublicationPageLink(a),
-                } as WPAtlasTableData)
+                } as AtlasTableData)
         );
     }
 
@@ -363,27 +359,28 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
             },
             {
                 name: 'Lead Institution',
-                selector: (atlas: Atlas) => atlas.WPAtlas.lead_institutions,
+                selector: (atlas: Atlas) => atlas.AtlasMeta.lead_institutions,
                 grow: 1.6,
                 wrap: true,
                 sortable: true,
             },
             {
                 name: 'Atlas Description',
-                selector: 'WPAtlas.title.rendered',
+                selector: 'AtlasMeta.title.rendered',
                 format: (atlas: Atlas) =>
-                    atlas.WPAtlas && !['hta13','hta14'].includes(atlas.htan_id.toLowerCase()) ? (
+                    atlas.AtlasMeta &&
+                    !['hta13','hta14'].includes(atlas.htan_id.toLowerCase()) ? (
                         <span>
                             <a
                                 href={`//${
                                     window.location.host
                                 }/${atlas.htan_id.toLowerCase()}`}
                             >
-                                {atlas.WPAtlas.title.rendered}
+                                {atlas.AtlasMeta.title.rendered}
                             </a>
                         </span>
                     ) : (
-                        <span>{atlas.WPAtlas.short_description}</span>
+                        <span>{atlas.AtlasMeta.short_description}</span>
                     ),
                 grow: 2,
                 wrap: true,
@@ -393,7 +390,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 name: 'Publications',
                 grow: 0.5,
                 selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
-                cell: (atlasTableData: WPAtlasTableData) => {
+                cell: (atlasTableData: AtlasTableData) => {
                     if (
                         atlasTableData.publicationPageLink &&
                         (atlasTableData.publicationPageLink.show ||
@@ -728,7 +725,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         </button>
                     }
                     columns={this.columns}
-                    defaultSortField={'WPAtlas.lead_institutions'}
+                    defaultSortField={'AtlasMeta.lead_institutions'}
                     data={this.data}
                     selectableRows={true}
                     onSelectedRowsChange={this.onSelect}

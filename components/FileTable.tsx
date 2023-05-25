@@ -771,7 +771,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
 
             //others to exclude
             Component: true,
-            WPAtlas: true,
+            AtlasMeta: true,
             biospecimenIds: true,
             cases: true,
             demographics: true,

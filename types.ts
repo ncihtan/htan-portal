@@ -31,11 +31,7 @@ export interface Category {
     [subcat: string]: SubCategory;
 }
 
-export enum WPConstants {
-    HOMEPAGE_HERO_BLURB = 'homepage-hero-blurb',
-}
-
-export interface WPAtlas {
+export interface AtlasMeta {
     id: number;
     slug: string;
     title: { rendered: string };

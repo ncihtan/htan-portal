@@ -3,8 +3,9 @@ import {
     SynapseAtlas,
     SynapseData,
 } from '../lib/types';
-import { WPAtlas } from '../types';
+import { AtlasMeta } from '../types';
 import _ from 'lodash';
+
 import {
     Atlas,
     BaseSerializableEntity,
@@ -22,33 +23,28 @@ import {
     SchemaDataById,
 } from '../lib/dataSchemaHelpers';
 import fs from 'fs';
-import { getAtlasList } from '../ApiUtil';
 import csvToJson from 'csvtojson';
 import dgbapIds from './dbgap_release_all.json';
 import dbgapImageIds from './dbgap_img_release2.json';
 import idcIds from './idc-imaging-assets.json';
+import atlasJson from './atlases.json';
 
 async function writeProcessedFile() {
     const synapseJson = getData();
     const schemaData = await fetchAndProcessSchemaData();
-    const atlases = await getAtlasList();
     const entitiesById = await getEntitiesById();
+
+    /* @ts-ignore */
     const processed: LoadDataResult = processSynapseJSON(
         synapseJson,
         schemaData,
-        atlases,
+        atlasJson as AtlasMeta[],
         entitiesById
     );
     fs.writeFileSync(
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
-
-    // TODO also save the processed schema json so that we don't need to fetch it within the webapp?
-    // fs.writeFileSync(
-    //     'public/processed_schema_data.json',
-    //     JSON.stringify(schemaData)
-    // );
 }
 
 async function getEntitiesById() {
@@ -117,14 +113,14 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
 function processSynapseJSON(
     synapseJson: SynapseData,
     schemaData: SchemaDataById,
-    WPAtlasData: WPAtlas[],
+    AtlasMetaData: AtlasMeta[],
     entitiesById: { [entityId: string]: ReleaseEntity }
 ) {
-    const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
+    const AtlasMetaMap = _.keyBy(AtlasMetaData, (a) => a.htan_id.toUpperCase());
     const flatData = extractEntitiesFromSynapseData(
         synapseJson,
         schemaData,
-        WPAtlasMap
+        AtlasMetaMap
     );
     const files = flatData.filter((obj) => {
         return !!obj.Filename;
@@ -188,14 +184,14 @@ function processSynapseJSON(
 
     const returnAtlases: Atlas[] = [];
     for (const atlas of synapseJson.atlases) {
-        const WPAtlas = WPAtlasMap[atlas.htan_id.toUpperCase()];
+        const AtlasMeta = AtlasMetaMap[atlas.htan_id.toUpperCase()];
 
-        // atlases MUST have an entry in WPAtlas
-        if (WPAtlas) {
+        // atlases MUST have an entry in AtlasMetaMap
+        if (AtlasMeta) {
             returnAtlases.push({
                 htan_id: atlas.htan_id,
                 htan_name: atlas.htan_name,
-                WPAtlas,
+                AtlasMeta,
                 num_biospecimens: biospecimenCountByAtlas[atlas.htan_id],
                 num_cases: caseCountByAtlas[atlas.htan_id],
             });
@@ -421,7 +417,7 @@ function getCaseData(
 function extractEntitiesFromSynapseData(
     data: SynapseData,
     schemaDataById: SchemaDataById,
-    WPAtlasMap: { [uppercase_htan_id: string]: WPAtlas }
+    AtlasMetaMap: { [uppercase_htan_id: string]: AtlasMeta }
 ): BaseSerializableEntity[] {
     const entities: BaseSerializableEntity[] = [];
 
@@ -514,8 +510,10 @@ function extractEntitiesFromSynapseData(
                         entity.level = 'Unknown';
                     }
 
-                    entity.WPAtlas =
-                        WPAtlasMap[entity.atlasid.split('_')[0].toUpperCase()];
+                    entity.AtlasMeta =
+                        AtlasMetaMap[
+                            entity.atlasid.split('_')[0].toUpperCase()
+                        ];
 
                     entities.push(entity as BaseSerializableEntity);
                 });

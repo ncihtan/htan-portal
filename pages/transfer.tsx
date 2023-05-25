@@ -3,8 +3,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 
-import { CmsData } from '../types';
-
 import PageWrapper from '../components/PageWrapper';
 
 const Transfer = () => {

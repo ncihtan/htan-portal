@@ -16,11 +16,10 @@ import {
 } from '../lib/vcsHelpers';
 
 export interface StandardsProps {
-    data: CmsData[];
     releaseTag: VcsTag;
 }
 
-const Standards = (props: StandardsProps) => {
+const Standards = (props:StandardsProps) => {
     return (
         <>
             <PreReleaseBanner />
@@ -157,10 +156,9 @@ const Standards = (props: StandardsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const data = await getStaticContent(['summary-blurb-data-standards']);
-    const releaseTag = await getLatestReleaseTag();
+     const releaseTag = await getLatestReleaseTag();
 
-    return { props: { data, releaseTag } };
+    return { props: { releaseTag } };
 };
 
 export default Standards;

@@ -1,14 +1,5 @@
-import fetch from 'node-fetch';
 import React from 'react';
 
-import {
-    DataReleasePage,
-    DataReleaseProps,
-} from '../components/DataReleasePage';
-import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
-import { GetStaticProps } from 'next';
-import HtanNavbar from '../components/HtanNavbar';
-import Footer from '../components/Footer';
 import PageWrapper from '../components/PageWrapper';
 
 function ImageViewer({ query }: any) {

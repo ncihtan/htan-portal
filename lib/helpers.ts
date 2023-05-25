@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import * as Path from 'path';
 import { toArabic } from 'roman-numerals';
 
-import { WPAtlas } from '../types';
+import { AtlasMeta } from '../types';
 import {
     DownloadSourceCategory,
     ExploreOptionType,
@@ -55,7 +55,7 @@ export interface BaseSerializableEntity {
     atlas_name: string;
     level: string;
     assayName?: string;
-    WPAtlas: WPAtlas;
+    AtlasMeta: AtlasMeta;
     primaryParents?: HTANDataFileID[];
     synapseId?: string;
     isRawSequencing?: boolean;
@@ -93,7 +93,7 @@ export type Atlas = {
     htan_name: string;
     num_cases: number;
     num_biospecimens: number;
-    WPAtlas: WPAtlas;
+    AtlasMeta: AtlasMeta;
 };
 
 export interface LoadDataResult {

@@ -2,7 +2,6 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
-import { getStaticContent } from '../../ApiUtil';
 import { getDataSchema, SchemaDataId } from '../../lib/dataSchemaHelpers';
 
 const Imaging: React.FunctionComponent<DataStandardProps> = (props) => {
@@ -91,7 +90,6 @@ const Imaging: React.FunctionComponent<DataStandardProps> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const data = await getStaticContent(['data-standards-imaging-blurb']);
     const { dataSchemaData, schemaDataById } = await getDataSchema([
         SchemaDataId.scRNASeqLevel1,
         SchemaDataId.scRNASeqLevel2,
@@ -106,7 +104,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.BulkRNASeqLevel3,
     ]);
 
-    return { props: { data, dataSchemaData, schemaDataById } };
+    return { props: { dataSchemaData, schemaDataById } };
 };
 
 export default Imaging;
