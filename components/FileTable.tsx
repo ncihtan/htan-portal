@@ -231,11 +231,13 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     );
     const synapseFiles = props.files.filter(
         (f) =>
-            !doesFileIncludeLevel1OrLevel2SequencingData(f) &&
-            !f.Component.startsWith('Imaging')
+            f.downloadSource === "Synapse"
     );
-    const imagingFiles = props.files.filter((f) =>
-        f.Component.startsWith('Imaging')
+    const lowerLevelImagingFiles = props.files.filter((f) =>
+        f.Component.startsWith('Imaging') && (
+            f.level === "Level 1" ||
+            f.level == "Level 2"
+        )
     );
 
     return (
@@ -246,8 +248,8 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 
             <Modal.Body>
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
-                {imagingFiles.length > 0 && (
-                    <ImagingInstructions files={imagingFiles} />
+                {lowerLevelImagingFiles.length > 0 && (
+                    <ImagingInstructions files={lowerLevelImagingFiles} />
                 )}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
@@ -352,7 +354,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     const truncatedFilename = truncateFilename(file.Filename);
                     const linkOut =
                         doesFileIncludeLevel1OrLevel2SequencingData(file) ||
-                        file.Component.startsWith('Imaging') ? (
+                        (file.Component.startsWith('Imaging') && (file.level === "Level 1" || file.level === "Level 2")) ? (
                             <span
                                 className={styles.clickable}
                                 onClick={(e) => this.onClick(e, file)}
