@@ -32,20 +32,10 @@ export interface Category {
 }
 
 export interface AtlasMeta {
-    id: number;
-    slug: string;
     title: { rendered: string };
-    content: { rendered: string };
-    atlas_overview: string;
-    data_overview: string;
-    publications: string;
     lead_institutions: string;
-    atlas_type: string;
-    synapse_id: string;
     htan_id: string;
-    primary_ngs: string;
-    short_description: string;
-    home_image: { guid: string };
+    short_description?: string;
 }
 
 export interface Author {
