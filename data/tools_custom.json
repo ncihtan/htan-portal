@@ -37,7 +37,27 @@
     "Tool Operation": "analysis",
     "Tool Input Data": "",
     "Tool Output Data": "",
-    "Tool Assay":  "scRNA-seq"
+    "Tool Assay":  "scRNA-seq, Imaging"
+  },
+  {
+    "": "",
+    "Atlas Name": "N/A",
+    "Grant ID": "",
+    "Tool ID": "",
+    "Parent ID": "",
+    "Tool Publication": "",
+    "Perspective": "",
+    "Tool Name": "ISB-CGC Google BigQuery Notebooks",
+    "Tool Alias": "ISB-CGC Google BigQuery Notebooks",
+    "Tool Type": "Notebook",
+    "Tool Language": "SQL, Python, R",
+    "Tool Homepage": "https://isb-cancer-genomics-cloud.readthedocs.io/en/latest/sections/HTANNotebooks.html",
+    "Tool Description": "R and Python computational notebooks illustrate how HTAN data in Google BigQuery can be accessed and analyzed. Notebooks are available via the ISB-CGC Community Notebooks repository.",
+    "Tool Topic": "analysis",
+    "Tool Operation": "analysis",
+    "Tool Input Data": "",
+    "Tool Output Data": "",
+    "Tool Assay":  "scRNA-seq, Imaging"
   },
   {
     "": "",
