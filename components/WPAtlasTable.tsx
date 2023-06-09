@@ -227,7 +227,7 @@ const CellxgeneViewerLink = (props: { url: string; count: number }) => (
     <Tooltip overlay="cellxgene">
         <a
             href={props.url}
-            target="_blank"
+            target={props.url.startsWith('http') ? '_blank' : undefined}
             style={{
                 paddingRight: 8,
                 fontFamily: 'monospace',
@@ -339,7 +339,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     ) : (
                         <span>{atlas.WPAtlas.short_description}</span>
                     ),
-                grow: 2.5,
+                grow: 2,
                 wrap: true,
                 sortable: true,
             },
@@ -449,12 +449,20 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 cell: (atlas: Atlas) => {
                     if (atlas.htan_name === 'HTAN MSK') {
                         return (
-                            <CellxgeneViewerLink
-                                url={
-                                    'https://cellxgene.cziscience.com/collections/62e8f058-9c37-48bc-9200-e767f318a8ec'
-                                }
-                                count={11}
-                            />
+                            <>
+                                <CellxgeneViewerLink
+                                    url={
+                                        '/explore?tab=file&selectedFilters=%5B%7B"value"%3A"HTAN+MSK"%2C"label"%3A"HTAN+MSK"%2C"group"%3A"AtlasName"%2C"count"%3A1086%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A12%2C"isSelected"%3Afalse%7D%5D'
+                                    }
+                                    count={12}
+                                />
+                                <BigQueryLink
+                                    url={
+                                        '/explore?tab=file&selectedFilters=%5B%7B"value"%3A"HTAN+MSK"%2C"label"%3A"HTAN+MSK"%2C"group"%3A"AtlasName"%2C"count"%3A1086%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A12%2C"isSelected"%3Afalse%7D%5D'
+                                    }
+                                    count={11}
+                                />
+                            </>
                         );
                     } else if (atlas.htan_name === 'HTAN Duke') {
                         return (
