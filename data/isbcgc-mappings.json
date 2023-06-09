@@ -1,9 +1,20 @@
 {
 	"VUMC_ABNORMALS_EPI_V2.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_VUMC_ABNORMALS_EPI_V2_current",
-	"VUMC_HTAN_DIS_EPI_V2.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_VUMC_HTAN_DIS_EPI_V2_current",
-	"VUMC_HTAN_VAL_DIS_NONEPI_V2.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_VUMC_HTAN_VAL_DIS_NONEPI_V2_current",
-	"VUMC_HTAN_VAL_EPI_V2.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_VUMC_HTAN_VAL_EPI_V2_current",
+	"VUMC_HTAN_DIS_EPI_V2.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_VUMC_HTAN_DIS_EPI_cellxgene_current",
+	"VUMC_HTAN_VAL_DIS_NONEPI_V2.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_VUMC_VAL_DIS_NOEPI_cellxgene_current",
+	"VUMC_HTAN_VAL_EPI_V2.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_VUMC_HTAN_VAL_EPI_cellxgene_current",
 	"seurat_integrated_18MLLr_normal_final_rename.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_CHOP_seurat_integrated_18MLLr_normal_final_rename_current",
 	"seurat_pool_logNorm_gini_FiveHD_10Xv3_downsample10000HSPC.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_CHOP_seurat_pool_logNorm_gini_FiveHD_10Xv3_downsample10000HSPC_current",
-	"seurat_regrCycleHeatShockGenes_pool_18Infants_scRNA_VEG3000_updated_rename.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_CHOP_seurat_regrCycleHeatShockGenes_pool_18Infants_scRNA_VEG3000_updated_rename_current"
+	"seurat_regrCycleHeatShockGenes_pool_18Infants_scRNA_VEG3000_updated_rename.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_CHOP_seurat_regrCycleHeatShockGenes_pool_18Infants_scRNA_VEG3000_updated_rename_current",
+	"adata.combined.mnnc.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_SCLC_combined_samples_current/",
+	"adata.myeloid.SCLC_samples_only.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_Myeloid_SCLC_samples_only_current/",
+	"adata.NSCLC_epithelial.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_NSCLC_epithelial_cells_current/",
+	"adata.mesenchymal.updated.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_SCLC_Mesenchymal_cells_current/",
+	"adata.SCLC.RU1215.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_SCLC_RU1215_epithelial_cells_current/",
+	"adata.SCLC.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_SCLC_epithelial_cells_current/",
+	"adata.immune.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_immune_cells_current/",
+	"adata.myeloid.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_SCLC_myeloid_cells_current/",
+	"adata.immune.SCLC_samples_only.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_SCLC_immune_cells_current/",
+	"adata.tcell.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_SCLC_tcell_current/",
+	"adata.epithelial.010920.h5ad": "https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN.scRNAseq_MSK_epithelial_cells_current/"
 }
