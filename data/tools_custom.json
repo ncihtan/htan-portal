@@ -1105,7 +1105,7 @@
     "Grant ID": "CA233284",
     "Tool ID": "",
     "Parent ID": "",
-    "Tool Publication": "https://www.nature.com/articles/s41587-023-01716-9",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/36973557/",
     "Perspective": "True",
     "Tool Name": "SEACells",
     "Tool Alias": "SEACells for RNA and ATAC metacell determination",
@@ -1117,7 +1117,7 @@
     "Tool Operation": "NA",
     "Tool Input Data": "single-cell RNA-seq, single-nucleus RNA-seq, single-cell ATAC-seq",
     "Tool Output Data": "",
-    "Tool Assay": ""
+    "Tool Assay": "scRNA-seq, snRNA-seq, scATAC-seq"
   },
   {
     "": "",
@@ -1125,7 +1125,7 @@
     "Grant ID": "CA233284",
     "Tool ID": "",
     "Parent ID": "",
-    "Tool Publication": "https://www.nature.com/articles/s41590-023-01504-2",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/37127830/",
     "Perspective": "True",
     "Tool Name": "BayesPrism",
     "Tool Alias": "BayesPrism for cell type deconvolution",
@@ -1137,6 +1137,26 @@
     "Tool Operation": "NA",
     "Tool Input Data": "bulk RNA-seq, Visium RNA-seq",
     "Tool Output Data": "",
-    "Tool Assay": "Visium"
+    "Tool Assay": "10x Visium"
+  },
+  {
+    "": "",
+    "Atlas Name": "HTAN BU",
+    "Grant ID": "CA233284",
+    "Tool ID": "",
+    "Parent ID": "",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/37081260/",
+    "Perspective": "True",
+    "Tool Name": "PhylogicNDT",
+    "Tool Alias": "",
+    "Tool Type": "Suite",
+    "Tool Language": "Python",
+    "Tool Homepage": "https://github.com/broadinstitute/PhylogicNDT",
+    "Tool Description": "PhylogicNDT is an integrated suite of tools to reconstruct the clonal architecture and relative timings of genetic events using a coherent probabilistic framework25,26 and have successfully applied it in several contexts",
+    "Tool Topic": "analysis",
+    "Tool Operation": "NA",
+    "Tool Input Data":  "Bulk DNA, Bulk RNA-seq",
+    "Tool Output Data": "",
+    "Tool Assay":  "Bulk DNA, Bulk RNA-seq"
   }
 ]
