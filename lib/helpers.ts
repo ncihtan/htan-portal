@@ -22,8 +22,8 @@ if (typeof window !== 'undefined') {
     win = {} as any;
 }
 
-export type HTANDataFileID = string;
-export type HTANBiospecimenID = string;
+export type DataFileID = string;
+export type BiospecimenID = string;
 export type HTANParticipantID = string;
 
 export interface BaseSerializableEntity {
@@ -31,9 +31,9 @@ export interface BaseSerializableEntity {
     AJCCPathologicStage: string;
     Biospecimen: string;
     Component: string;
-    HTANParentID: string;
-    HTANBiospecimenID: string;
-    HTANDataFileID: HTANDataFileID; // this is used as the stable UID
+    ParentID: string;
+    BiospecimenID: string;
+    DataFileID: DataFileID; // this is used as the stable UID
     HTANParentBiospecimenID: string;
     HTANParentDataFileID: string;
     TissueorOrganofOrigin: string;
@@ -56,7 +56,7 @@ export interface BaseSerializableEntity {
     level: string;
     assayName?: string;
     AtlasMeta: AtlasMeta;
-    primaryParents?: HTANDataFileID[];
+    primaryParents?: DataFileID[];
     synapseId?: string;
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
@@ -74,7 +74,7 @@ export interface ReleaseEntity {
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {
-    biospecimenIds: HTANBiospecimenID[];
+    biospecimenIds: BiospecimenID[];
     diagnosisIds: HTANParticipantID[];
     demographicsIds: HTANParticipantID[];
 }
@@ -99,8 +99,8 @@ export type Atlas = {
 export interface LoadDataResult {
     files: SerializableEntity[];
     atlases: Atlas[];
-    biospecimenByHTANBiospecimenID: {
-        [HTANBiospecimenID: string]: SerializableEntity;
+    biospecimenByBiospecimenID: {
+        [BiospecimenID: string]: SerializableEntity;
     };
     diagnosisByHTANParticipantID: {
         [HTANParticipantID: string]: SerializableEntity;
@@ -158,15 +158,15 @@ export async function fetchData(): Promise<LoadDataResult> {
 }
 
 export function fillInEntities(data: LoadDataResult): Entity[] {
-    const biospecimenMap = data.biospecimenByHTANBiospecimenID;
+    const biospecimenMap = data.biospecimenByBiospecimenID;
     const diagnosisMap = data.diagnosisByHTANParticipantID;
     const demoMap = data.demographicsByHTANParticipantID;
 
     // give each biospecimen it's caseid (i.e "diagnosis" HTANParticipantID)
     // biospecimen have HTANParentID but that may or may not be it's caseid because
     // biospecimen can have other biospecimen as parents (one case at top)
-    _.forEach(data.biospecimenByHTANBiospecimenID, (specimen) => {
-        const parentIdMatch = specimen.HTANParentID.match(/[^_]*_[^_]*/);
+    _.forEach(data.biospecimenByBiospecimenID, (specimen) => {
+        const parentIdMatch = specimen.ParentID.match(/[^_]*_[^_]*/);
         // we should always have a match
         specimen.HTANParticipantID =
             specimen.HTANParticipantID ||
@@ -319,7 +319,7 @@ export function computeDashboardData(files: Entity[]): EntityReport[] {
             uniqueAtlases.add(file.atlasid);
         }
         for (const biospec of file.biospecimen) {
-            uniqueBiospecs.add(biospec.HTANBiospecimenID);
+            uniqueBiospecs.add(biospec.BiospecimenID);
         }
         for (const diag of file.diagnosis) {
             uniqueCases.add(diag.HTANParticipantID);

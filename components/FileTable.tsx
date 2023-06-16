@@ -289,9 +289,9 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
     // check if image is in IDC
     let idcImageUrl = undefined;
     let idcImageBucketUrls = undefined;
-    if (file.HTANDataFileID in IDC_MAPPINGS) {
-        idcImageUrl = IDC_MAPPINGS[file.HTANDataFileID]['viewer_url'];
-        const unparsedBucketUrl = IDC_MAPPINGS[file.HTANDataFileID]['gcs_urls'];
+    if (file.DataFileID in IDC_MAPPINGS) {
+        idcImageUrl = IDC_MAPPINGS[file.DataFileID]['viewer_url'];
+        const unparsedBucketUrl = IDC_MAPPINGS[file.DataFileID]['gcs_urls'];
         idcImageBucketUrls = unparsedBucketUrl
             .substr(1, unparsedBucketUrl.length - 2)
             .split(',');
@@ -399,12 +399,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 name: 'Biospecimen',
                 selector: (file: Entity) => {
                     return _.uniq(
-                        file.biospecimen.map((b) => b.HTANBiospecimenID)
+                        file.biospecimen.map((b) => b.BiospecimenID)
                     ).join(', ');
                 },
                 cell: (file: Entity) => {
                     const uniqueBiospecimens = _.uniq(
-                        file.biospecimen.map((b) => b.HTANBiospecimenID)
+                        file.biospecimen.map((b) => b.BiospecimenID)
                     );
                     if (uniqueBiospecimens.length === 0) {
                         return '0 Biospecimens';

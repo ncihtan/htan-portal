@@ -6,7 +6,7 @@ import {
     getAtlasColumn,
     getDefaultDataTableStyle,
     sortByBiospecimenId,
-    sortByHtanParentId,
+    sortByHtanParentID,
 } from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
@@ -25,11 +25,11 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
         props.schemaDataById,
         // need to add a custom sort function for the id
         {
-            HTANBiospecimenID: {
+            BiospecimenID: {
                 sortFunction: sortByBiospecimenId,
             },
-            HTANParentID: {
-                sortFunction: sortByHtanParentId,
+            ParentID: {
+                sortFunction: sortByHtanParentID,
             },
         },
         // Component seems to be always "Biospecimen", no need to have a column for it
@@ -48,7 +48,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
 
     return (
         <EnhancedDataTable
-            defaultSortField={'HTANBiospecimenID'}
+            defaultSortField={'BiospecimenID'}
             columns={columns}
             data={props.samples}
             striped={true}

@@ -148,20 +148,18 @@ export function sortByHtanParticipantId(rowA: Entity, rowB: Entity) {
     return defaultNumericalComparison(rowA, rowB, iteratees);
 }
 
-export function sortByHtanParentId(rowA: Entity, rowB: Entity) {
+export function sortByHtanParentID(rowA: Entity, rowB: Entity) {
     // TODO parent id potentially can also take the form HTA[integer]_[integer]_[integer]
     // we need sort by parent id which takes the form HTA[integer]_[integer]
-    const iteratees = getDefaultHtanIdIteratees((row) => row.HTANParentID);
+    const iteratees = getDefaultHtanIdIteratees((row) => row.ParentID);
     return defaultNumericalComparison(rowA, rowB, iteratees);
 }
 
 export function sortByBiospecimenId(rowA: Entity, rowB: Entity) {
     // we need sort by biospecimen id which takes the form HTA[integer]_[integer]_[integer]
-    const iteratees = getDefaultHtanIdIteratees((row) => row.HTANBiospecimenID);
+    const iteratees = getDefaultHtanIdIteratees((row) => row.BiospecimenID);
     // additional iteratee for the last integer
-    iteratees.push((row: Entity) =>
-        Number(row.HTANBiospecimenID.split('_')[2])
-    );
+    iteratees.push((row: Entity) => Number(row.BiospecimenID.split('_')[2]));
 
     return defaultNumericalComparison(rowA, rowB, iteratees);
 }

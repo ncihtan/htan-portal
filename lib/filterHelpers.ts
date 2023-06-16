@@ -365,7 +365,7 @@ export function getFilteredSamples(
 ) {
     const samples = _.chain(filteredFiles)
         .flatMapDeep((file) => file.biospecimen)
-        .uniqBy((f) => f.HTANBiospecimenID)
+        .uniqBy((f) => f.BiospecimenID)
         .value();
 
     if (showAllSamples) {

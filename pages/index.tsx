@@ -34,13 +34,21 @@ const Home = (data: IHomePropsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const processedSynapseData = await zlib
-        .gunzipSync(
-            await fs.readFileSync(
-                path.join(process.cwd(), 'public/processed_syn_data.json.gz')
-            )
-        )
-        .toString();
+    // const processedSynapseData = await zlib
+    //     .gunzipSync(
+    //         await fs.readFileSync(
+    //             path.join(process.cwd(), 'public/processed_syn_data.json.gz')
+    //         )
+    //     )
+    //     .toString();
+    //
+    //
+
+    const processedSynapseData = fs.readFileSync(
+        path.join(process.cwd(), 'public/processed_syn_data.json'),
+        'utf8'
+    );
+
     const files = fillInEntities(
         (JSON.parse(processedSynapseData) as any) as LoadDataResult
     );

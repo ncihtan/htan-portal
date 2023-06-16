@@ -67,7 +67,7 @@ const getBiospecimensData = (
 ) => {
     const samples = _.chain(filteredFiles)
         .flatMapDeep((file) => file.biospecimen)
-        .uniqBy((f) => f.HTANBiospecimenID)
+        .uniqBy((f) => f.BiospecimenID)
         .value();
     const filteredCaseIds = _.keyBy(
         getFilteredCases(filteredFiles, selectedFiltersByAttrName, false),
@@ -83,7 +83,9 @@ const PublicationPage = (props: { data: Publication }) => {
     const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
     const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
     const [casesData, setCasesData] = useState<Entity[]>([]);
-    const [assayData, setAssayData] = useState<{[assayName:string]:Entity[]}>({});
+    const [assayData, setAssayData] = useState<{
+        [assayName: string]: Entity[];
+    }>({});
 
     useEffect(() => {
         async function getData() {

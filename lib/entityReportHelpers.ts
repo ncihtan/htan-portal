@@ -128,7 +128,7 @@ export function computeEntityReportByAssay(
     return computeEntityReportByAttribute(
         files,
         getNormalizedAssay,
-        (d) => d.HTANDataFileID,
+        (d) => d.DataFileID,
         computeAssayDistributionByCenter
     );
 }
