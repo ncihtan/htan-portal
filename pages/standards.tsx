@@ -1,23 +1,26 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import HtanNavbar from '../components/HtanNavbar';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import Footer from '../components/Footer';
 import Link from 'next/link';
-import { GetServerSideProps, GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 import { CmsData } from '../types';
 import { getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+    getLatestReleaseTag,
+    getLinkToRelease,
+    VcsTag,
+} from '../lib/vcsHelpers';
 
 export interface StandardsProps {
     data: CmsData[];
+    releaseTag: VcsTag;
 }
 
-const Standards = (data: StandardsProps) => {
+const Standards = (props: StandardsProps) => {
     return (
         <>
             <PreReleaseBanner />
@@ -25,7 +28,23 @@ const Standards = (data: StandardsProps) => {
                 <Container>
                     <Row>
                         <div className="standards-content">
-                            <h1>HTAN Data Standards</h1>
+                            <h1>
+                                HTAN Data Standards
+                                <h4>
+                                    <Link
+                                        href={getLinkToRelease(
+                                            props.releaseTag.name
+                                        )}
+                                    >
+                                        <a target="_blank">
+                                            {props.releaseTag.name}{' '}
+                                            <FontAwesomeIcon
+                                                icon={faExternalLinkAlt}
+                                            />
+                                        </a>
+                                    </Link>
+                                </h4>
+                            </h1>
 
                             <p>
                                 All HTAN Centers are required to encode their
@@ -139,7 +158,9 @@ const Standards = (data: StandardsProps) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const data = await getStaticContent(['summary-blurb-data-standards']);
-    return { props: { data } };
+    const releaseTag = await getLatestReleaseTag();
+
+    return { props: { data, releaseTag } };
 };
 
 export default Standards;
