@@ -1,6 +1,7 @@
 // content copied (and adapted) from https://github.com/Sage-Bionetworks/Synapse-React-Client
 import _ from 'lodash';
 import fetch from 'node-fetch';
+import { getLatestReleaseSchemaUrl } from './vcsHelpers';
 
 // import * as defaultSchema from '../data/schema.json'
 
@@ -190,11 +191,6 @@ export const DEFAULT_SCHEMA: SchemaJson = {
     '@id': '',
 };
 
-// https://raw.githubusercontent.com/Sage-Bionetworks/schematic/main/data/schema_org_schemas/example.jsonld
-// https://github.com/ncihtan/hsim/blob/master/schema/HTAN.jsonld
-export const DEFAULT_SCHEMA_URL =
-    'https://raw.githubusercontent.com/ncihtan/data-models/main/HTAN.model.jsonld';
-
 export const TBD = 'TBD';
 
 export function getDataSchemaDependencies(
@@ -333,7 +329,7 @@ export function hasNonEmptyValidValues(schemaData: DataSchemaData[]): boolean {
 
 export async function getDataSchema(
     ids: SchemaDataId[],
-    dataUri: string = DEFAULT_SCHEMA_URL
+    dataUri?: string
 ): Promise<{
     dataSchemaData: DataSchemaData[];
     schemaDataById: SchemaDataById;
@@ -345,9 +341,10 @@ export async function getDataSchema(
 }
 
 export async function fetchAndProcessSchemaData(
-    dataUri: string = DEFAULT_SCHEMA_URL
+    dataUri?: string
 ): Promise<SchemaDataById> {
-    const schemaData = getDataSchemaData(await fetchSchemaData(dataUri));
+    const schemaDataUri = dataUri || (await getLatestReleaseSchemaUrl());
+    const schemaData = getDataSchemaData(await fetchSchemaData(schemaDataUri));
     const schemaDataKeyedById = _.keyBy(schemaData, (d) => d.id);
     resolveConditionalDependencies(schemaData, schemaDataKeyedById);
     addAliases(schemaDataKeyedById);

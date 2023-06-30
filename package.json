@@ -64,6 +64,7 @@
     "react-truncate-markup": "^5.1.0",
     "remark-frontmatter": "^4.0.1",
     "roman-numerals": "^0.3.2",
+    "semver": "^7.5.2",
     "styled-components": "^5.1.0",
     "swr": "^0.1.18",
     "unfetch": "^4.1.0",
@@ -75,6 +76,7 @@
     "@types/node": "^13.9.3",
     "@types/node-fetch": "^2.5.5",
     "@types/react": "^16.9.23",
+    "@types/semver": "^7.5.0",
     "@vercel/ncc": "^0.28.6",
     "pre-commit": "^1.2.2",
     "typescript": "4.3.2"
