@@ -172,12 +172,24 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     );
 };
 
+function generateDownloadScript(files: Entity[]) {
+    const filesByName = _.groupBy(files, (f) => getFileBase(f.Filename));
+
+    // append download location for files with identical names
+    return files
+        .map((f) => {
+            const script = `synapse get ${f.synapseId}`;
+            return filesByName[getFileBase(f.Filename)].length > 1
+                ? `${script} --downloadLocation ${f.synapseId}`
+                : script;
+        })
+        .join('\n');
+}
+
 const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
-    const script = props.files
-        .map((f) => `synapse get ${f.synapseId}`)
-        .join('\n');
+    const script = generateDownloadScript(props.files);
 
     return (
         <>
@@ -230,14 +242,12 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
         doesFileIncludeLevel1OrLevel2SequencingData
     );
     const synapseFiles = props.files.filter(
-        (f) =>
-            f.downloadSource === "Synapse"
+        (f) => f.downloadSource === 'Synapse'
     );
-    const lowerLevelImagingFiles = props.files.filter((f) =>
-        f.Component.startsWith('Imaging') && (
-            f.level === "Level 1" ||
-            f.level == "Level 2"
-        )
+    const lowerLevelImagingFiles = props.files.filter(
+        (f) =>
+            f.Component.startsWith('Imaging') &&
+            (f.level === 'Level 1' || f.level == 'Level 2')
     );
 
     return (
@@ -354,7 +364,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     const truncatedFilename = truncateFilename(file.Filename);
                     const linkOut =
                         doesFileIncludeLevel1OrLevel2SequencingData(file) ||
-                        (file.Component.startsWith('Imaging') && (file.level === "Level 1" || file.level === "Level 2")) ? (
+                        (file.Component.startsWith('Imaging') &&
+                            (file.level === 'Level 1' ||
+                                file.level === 'Level 2')) ? (
                             <span
                                 className={styles.clickable}
                                 onClick={(e) => this.onClick(e, file)}
