@@ -1,20 +1,13 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import HtanNavbar from '../components/HtanNavbar';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import Footer from '../components/Footer';
-import { GetServerSideProps, GetStaticProps } from 'next';
+
 import { CmsData } from '../types';
-import { getStaticContent } from '../ApiUtil';
+
 import PageWrapper from '../components/PageWrapper';
 
-export interface TransferProps {
-    data: CmsData[];
-}
-
-const Transfer = (data: TransferProps) => {
+const Transfer = () => {
     return (
         <>
             <PreReleaseBanner />
@@ -22,21 +15,16 @@ const Transfer = (data: TransferProps) => {
                 <Container>
                     <Row className={'contentWrapper'}>
                         <h1>Data Transfer</h1>
-                        <span
-                            dangerouslySetInnerHTML={{
-                                __html: data.data[0].content.rendered,
-                            }}
-                        />
+                        <p>
+                            We currently only accept data submissions of <a href="/research-network">atlas
+                            teams that are part of HTAN</a>. If you would like to
+                            submit data, please see the <a href="https://dca-docs.scrollhelp.site/DCA/Working-version/HTAN/" target="_blank">HTAN Data Ingress docs</a>.
+                        </p>
                     </Row>
                 </Container>
             </PageWrapper>
         </>
     );
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-    const data = await getStaticContent(['summary-blurb-data-transfer']);
-    return { props: { data } };
 };
 
 export default Transfer;
