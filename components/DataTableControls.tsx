@@ -1,7 +1,8 @@
 import React, { SyntheticEvent } from 'react';
 import { IDataTableColumn } from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faSearch } from '@fortawesome/free-solid-svg-icons';
+import Tooltip from 'rc-tooltip';
 
 import styles from './dataTable.module.scss';
 
@@ -14,6 +15,7 @@ interface IDataTableControlsProps {
     columnVisibility?: ColumnVisibility[];
     columns: IDataTableColumn[];
     onVisibilityToggle?: (selectedColumnKeys: string[]) => void;
+    onDownload?: () => void;
     columnSelectProps?: IColumnSelectProps;
     onChangeFilterText?: (filterText: string) => void;
     searchBoxPlaceHolder?: string;
@@ -33,6 +35,19 @@ export default class DataTableControls extends React.Component<IDataTableControl
     render() {
         return (
             <div className={styles.dataTableControls}>
+                <Tooltip
+                    overlay={
+                        <span>
+                            Download the entire table data including the hidden
+                            columns as a TSV file
+                        </span>
+                    }
+                    placement="left"
+                >
+                    <button className="btn" onClick={this.props.onDownload}>
+                        <FontAwesomeIcon icon={faDownload} />
+                    </button>
+                </Tooltip>
                 {this.props.extraControls}
                 <ColumnSelect
                     columnVisibility={this.props.columnVisibility}

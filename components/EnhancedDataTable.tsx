@@ -1,3 +1,4 @@
+import fileDownload from 'js-file-download';
 import _ from 'lodash';
 import { action, computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -6,6 +7,7 @@ import DataTable, {
     IDataTableColumn,
     IDataTableProps,
 } from 'react-data-table-component';
+import Children from 'react-children-utilities';
 
 import {
     resolveColumnVisibility,
@@ -40,6 +42,8 @@ interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
     extraControlsInsideDataTableControls?: JSX.Element;
 }
 
+const DEFAULT_DOWNLOAD_FILENAME = 'table_data.tsv';
+
 function isColumnSearchable(col: IEnhancedDataTableColumn<any>) {
     return col.searchable !== false;
 }
@@ -57,7 +61,7 @@ function getSearchValue(value: any) {
         : '';
 }
 
-function defaultSearchFunction<T = any>(
+function getDefaultTextValue<T = any>(
     d: T,
     c: IEnhancedDataTableColumn<T>,
     index: number = 0
@@ -84,7 +88,21 @@ function defaultSearchFunction<T = any>(
         }
     }
 
-    return searchValue.toUpperCase();
+    return searchValue;
+}
+
+function defaultSearchFunction<T = any>(
+    d: T,
+    c: IEnhancedDataTableColumn<T>,
+    index: number = 0
+) {
+    return getDefaultTextValue(d, c, index).toUpperCase();
+}
+
+function getColumnName<T>(column: IEnhancedDataTableColumn<T>) {
+    // Children.onlyText is probably not the best/safest way to get the column names.
+    // Here we assume column.name is simple enough that only text they contain is the header title.
+    return Children.onlyText(column.name);
 }
 
 function getColumnVisibility<T>(
@@ -233,6 +251,21 @@ export default class EnhancedDataTable<T = any> extends React.Component<
     };
 
     @action
+    onDownload = () => {
+        // download text value for each column (visible or not)
+        const columnNames = this.columns.map(getColumnName);
+        const rows = this.props.data.map((d) =>
+            this.columns.map((c, index) => getDefaultTextValue(d, c, index))
+        );
+
+        const downloadText = `${columnNames.join('\t')}\n${rows
+            .map((row) => row.join('\t'))
+            .join('\n')}`;
+        // TODO derive the filename from data/props?
+        fileDownload(downloadText, DEFAULT_DOWNLOAD_FILENAME);
+    };
+
+    @action
     onVisibilityToggle = (selectedColumnKeys: string[]) => {
         // reset all column visibility
         Object.keys(this.columnVisibility).forEach((columnKey) =>
@@ -273,6 +306,7 @@ export default class EnhancedDataTable<T = any> extends React.Component<
                         columnVisibility={this.columnVisibilitySpec}
                         onVisibilityToggle={this.onVisibilityToggle}
                         onChangeFilterText={this.onChangeFilterText}
+                        onDownload={this.onDownload}
                         searchBoxPlaceHolder={this.props.searchBoxPlaceHolder}
                         extraControls={
                             this.props.extraControlsInsideDataTableControls
