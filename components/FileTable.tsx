@@ -130,14 +130,7 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                         .
                     </p>
                     <p>
-                        If you already have the{' '}
-                        <a
-                            href="https://cloud.google.com/sdk/docs/install"
-                            target="_blank"
-                        >
-                            Google Cloud CLI
-                        </a>{' '}
-                        installed you can start from{' '}
+                        You can start from{' '}
                         <a
                             href="https://learn.canceridc.dev/data/downloading-data#step-2-download-the-files-defined-by-the-manifest"
                             target="_blank"
@@ -148,7 +141,11 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                         URLs for the <code>manifest.txt</code> file:
                     </p>
                     <pre className="pre-scrollable">
-                        <code>{idcImageBucketUrls.join('\n')}</code>
+                        <code>
+                            {idcImageBucketUrls
+                                .map((url) => `cp ${url} .`)
+                                .join('\n')}
+                        </code>
                     </pre>
                 </div>
             )}
