@@ -4,8 +4,6 @@ import Row from 'react-bootstrap/Row';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
-import { CmsData } from '../types';
-import { getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +17,7 @@ export interface StandardsProps {
     releaseTag: VcsTag;
 }
 
-const Standards = (props:StandardsProps) => {
+const Standards = (props: StandardsProps) => {
     return (
         <>
             <PreReleaseBanner />
@@ -156,7 +154,7 @@ const Standards = (props:StandardsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-     const releaseTag = await getLatestReleaseTag();
+    const releaseTag = await getLatestReleaseTag();
 
     return { props: { releaseTag } };
 };
