@@ -139,7 +139,7 @@ export function computeEntityReportByOrgan(
     return computeEntityReportByAttribute(
         _.flatten(files.map((file) => file.diagnosis)),
         getNormalizedOrgan,
-        (d) => d.HTANParticipantID,
+        (d) => d.ParticipantID,
         computeOrganDistributionByCenter
     );
 }

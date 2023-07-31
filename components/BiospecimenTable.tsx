@@ -6,15 +6,17 @@ import {
     getAtlasColumn,
     getDefaultDataTableStyle,
     sortByBiospecimenId,
-    sortByHtanParentID,
+    sortByParentID,
 } from '../lib/dataTableHelpers';
 import { Atlas, Entity } from '../lib/helpers';
 import EnhancedDataTable from './EnhancedDataTable';
+import { GenericAttributeNames } from '../lib/types';
 
 interface IBiospecimenTableProps {
     samples: Entity[];
     synapseAtlases: Atlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
+    genericAttributeMap?: { [attr: string]: GenericAttributeNames };
 }
 
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
@@ -23,32 +25,33 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
     const columns = generateColumnsForDataSchema(
         [SchemaDataId.Biospecimen],
         props.schemaDataById,
+        props.genericAttributeMap,
         // need to add a custom sort function for the id
         {
-            BiospecimenID: {
+            [GenericAttributeNames.BiospecimenID]: {
                 sortFunction: sortByBiospecimenId,
             },
-            ParentID: {
-                sortFunction: sortByHtanParentID,
+            [GenericAttributeNames.ParentID]: {
+                sortFunction: sortByParentID,
             },
         },
         // Component seems to be always "Biospecimen", no need to have a column for it
         ['Component']
     );
-    const indexOfHtanBiospecimenId = _.findIndex(
+    const indexOfBiospecimenId = _.findIndex(
         columns,
-        (c) => c.id === 'HTAN Biospecimen ID'
+        (c) => c.selector === GenericAttributeNames.BiospecimenID
     );
-    // insert Atlas Name right after HTAN Biospecimen ID
+    // insert Atlas Name right after Biospecimen ID
     columns.splice(
-        indexOfHtanBiospecimenId + 1,
+        indexOfBiospecimenId + 1,
         0,
         getAtlasColumn(props.synapseAtlases)
     );
 
     return (
         <EnhancedDataTable
-            defaultSortField={'BiospecimenID'}
+            defaultSortField={GenericAttributeNames.BiospecimenID}
             columns={columns}
             data={props.samples}
             striped={true}

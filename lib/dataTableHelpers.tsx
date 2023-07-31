@@ -142,13 +142,13 @@ function getDefaultHtanIdIteratees(getValue: (row: Entity) => string) {
     ];
 }
 
-export function sortByHtanParticipantId(rowA: Entity, rowB: Entity) {
+export function sortByParticipantId(rowA: Entity, rowB: Entity) {
     // we need sort by participant id which takes the form HTA[integer]_[integer]
-    const iteratees = getDefaultHtanIdIteratees((row) => row.HTANParticipantID);
+    const iteratees = getDefaultHtanIdIteratees((row) => row.ParticipantID);
     return defaultNumericalComparison(rowA, rowB, iteratees);
 }
 
-export function sortByHtanParentID(rowA: Entity, rowB: Entity) {
+export function sortByParentID(rowA: Entity, rowB: Entity) {
     // TODO parent id potentially can also take the form HTA[integer]_[integer]_[integer]
     // we need sort by parent id which takes the form HTA[integer]_[integer]
     const iteratees = getDefaultHtanIdIteratees((row) => row.ParentID);
@@ -183,6 +183,7 @@ export function getAtlasColumn(atlases: Atlas[]) {
 export function generateColumnsForDataSchema<T>(
     schemaDataIds: SchemaDataId[],
     schemaDataById?: SchemaDataById,
+    genericAttributeMap?: { [attr: string]: string },
     columnOverrides?: {
         [columnKey: string]: Partial<
             IEnhancedDataTableColumn<T> & {
@@ -205,7 +206,9 @@ export function generateColumnsForDataSchema<T>(
                 const schema = schemaDataById[id];
 
                 if (schema && !excludedColumns?.includes(schema.label)) {
-                    const selector = schema.label;
+                    const selector = genericAttributeMap
+                        ? genericAttributeMap[schema.label] || schema.label
+                        : schema.label;
                     const columnOverride = (columnOverrides || {})[selector];
                     const name = columnOverride?.name || schema.attribute;
                     const headerTooltip =

@@ -1,5 +1,7 @@
 import {
     DownloadSourceCategory,
+    HTANAttributeNames,
+    HTANToGenericAttributeMap,
     SynapseAtlas,
     SynapseData,
 } from '../lib/types';
@@ -126,11 +128,12 @@ function processSynapseJSON(
     );
 
     flatData.forEach((d) => {
-        const fields = ['HTANParentID', 'HTANBiospecimenID', 'HTANDataFileID'];
-
-        fields.forEach((f) => {
-            /* @ts-ignore */
-            d[f.replace(/^HTAN/, '')] = d[f];
+        Object.keys(HTANAttributeNames).forEach((attribute) => {
+            const attr: HTANAttributeNames = (HTANAttributeNames as any)[
+                attribute
+            ];
+            (d as any)[HTANToGenericAttributeMap[attr]] = (d as any)[attr];
+            // TODO delete original ref?
         });
 
         /* @ts-ignore */
@@ -146,16 +149,17 @@ function processSynapseJSON(
         return !!obj.Filename;
     });
 
-    const filesByHTANId = _.keyBy(files, (f) => f.DataFileID);
+    const filesById = _.keyBy(files, (f) => f.DataFileID);
 
     addPrimaryParents(files);
 
     const {
         biospecimenByBiospecimenID,
-        diagnosisByHTANParticipantID,
-        demographicsByHTANParticipantID,
+        diagnosisByParticipantID,
+        demographicsByParticipantID,
     } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
+    // TODO cleanup when done
     console.log('monkeys');
     console.log(
         Object.values(biospecimenByBiospecimenID).filter((n) => !n.ParentID)
@@ -167,10 +171,10 @@ function processSynapseJSON(
     const returnFiles = files.map((file) => {
         const parentData = getSampleAndPatientData(
             file,
-            filesByHTANId,
+            filesById,
             biospecimenByBiospecimenID,
-            diagnosisByHTANParticipantID,
-            demographicsByHTANParticipantID
+            diagnosisByParticipantID,
+            demographicsByParticipantID
         );
 
         (file as SerializableEntity).biospecimenIds = (
@@ -178,10 +182,10 @@ function processSynapseJSON(
         ).map((b) => b.BiospecimenID);
         (file as SerializableEntity).diagnosisIds = (
             parentData?.diagnosis || []
-        ).map((d) => d.HTANParticipantID);
+        ).map((d) => d.ParticipantID);
         (file as SerializableEntity).demographicsIds = (
             parentData?.demographics || []
-        ).map((d) => d.HTANParticipantID);
+        ).map((d) => d.ParticipantID);
 
         addDownloadSourcesInfo(file);
         addReleaseInfo(file, entitiesById);
@@ -190,6 +194,7 @@ function processSynapseJSON(
     //  .filter((f): f is SerializableEntity => !!f); // file should be defined (typescript doesnt understand (f=>f)
     //.filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
 
+    // TODO clean up when done
     console.log('shoop', returnFiles.length);
     // remove files that can't be downloaded unless it's imaging
     // .filter(
@@ -243,17 +248,17 @@ function processSynapseJSON(
         biospecimenByBiospecimenID: biospecimenByBiospecimenID as {
             [BiospecimenID: string]: SerializableEntity;
         },
-        diagnosisByHTANParticipantID: diagnosisByHTANParticipantID as {
-            [HTANParticipantID: string]: SerializableEntity;
+        diagnosisByParticipantID: diagnosisByParticipantID as {
+            [ParticipantID: string]: SerializableEntity;
         },
-        demographicsByHTANParticipantID: demographicsByHTANParticipantID as {
-            [HTANParticipantID: string]: SerializableEntity;
+        demographicsByParticipantID: demographicsByParticipantID as {
+            [ParticipantID: string]: SerializableEntity;
         },
     };
 
+    // TODO clean up
     console.log(ret.files.length);
-
-    console.log(_.size(ret.demographicsByHTANParticipantID));
+    console.log(_.size(ret.demographicsByParticipantID));
 
     return ret;
 }
@@ -279,9 +284,9 @@ function findAndAddPrimaryParents(
     // otherwise, compute parents
     let primaryParents: DataFileID[] = [];
 
-    if (f.HTANParentDataFileID && !isLowestLevel(f)) {
+    if (f.ParentDataFileID && !isLowestLevel(f)) {
         // if there's a parent, traverse "upwards" to find primary parent
-        const parentIds = f.HTANParentDataFileID.split(/[,;]/).map((s) =>
+        const parentIds = f.ParentDataFileID.split(/[,;]/).map((s) =>
             s.trim()
         );
         const parentFiles = parentIds.reduce(
@@ -320,13 +325,13 @@ function extractBiospecimensAndDiagnosisAndDemographics(
     data: BaseSerializableEntity[]
 ) {
     const biospecimenByBiospecimenID: {
-        [htanBiospecimenID: string]: BaseSerializableEntity;
+        [biospecimenID: string]: BaseSerializableEntity;
     } = {};
-    const diagnosisByHTANParticipantID: {
-        [htanParticipantID: string]: BaseSerializableEntity;
+    const diagnosisByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
     } = {};
-    const demographicsByHTANParticipantID: {
-        [htanParticipantID: string]: BaseSerializableEntity;
+    const demographicsByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
     } = {};
 
     data.forEach((entity) => {
@@ -334,17 +339,17 @@ function extractBiospecimensAndDiagnosisAndDemographics(
             biospecimenByBiospecimenID[entity.BiospecimenID] = entity;
         }
         if (entity.Component === 'Diagnosis') {
-            diagnosisByHTANParticipantID[entity.HTANParticipantID] = entity;
+            diagnosisByParticipantID[entity.ParticipantID] = entity;
         }
         if (entity.Component === 'Demographics') {
-            demographicsByHTANParticipantID[entity.HTANParticipantID] = entity;
+            demographicsByParticipantID[entity.ParticipantID] = entity;
         }
     });
 
     return {
         biospecimenByBiospecimenID,
-        diagnosisByHTANParticipantID,
-        demographicsByHTANParticipantID,
+        diagnosisByParticipantID,
+        demographicsByParticipantID,
     };
 }
 
@@ -352,13 +357,13 @@ function getSampleAndPatientData(
     file: BaseSerializableEntity,
     filesByHTANId: { [DataFileID: string]: BaseSerializableEntity },
     biospecimenByBiospecimenID: {
-        [htanBiospecimenID: string]: BaseSerializableEntity;
+        [biospecimenID: string]: BaseSerializableEntity;
     },
-    diagnosisByHTANParticipantID: {
-        [htanParticipantID: string]: BaseSerializableEntity;
+    diagnosisByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
     },
-    demographicsByHTANParticipantID: {
-        [htanParticipantID: string]: BaseSerializableEntity;
+    demographicsByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
     }
 ) {
     const primaryParents =
@@ -367,24 +372,23 @@ function getSampleAndPatientData(
             : [file.DataFileID];
 
     for (let p of primaryParents) {
-        const HTANParentBiospecimenID =
-            filesByHTANId[p].HTANParentBiospecimenID;
+        const parentBiospecimenID = filesByHTANId[p].ParentBiospecimenID;
         if (
-            !HTANParentBiospecimenID ||
-            !biospecimenByBiospecimenID[HTANParentBiospecimenID]
+            !parentBiospecimenID ||
+            !biospecimenByBiospecimenID[parentBiospecimenID]
         ) {
-            console.log('Missing HTANParentBiospecimenID: ', filesByHTANId[p]);
+            console.log('Missing ParentBiospecimenID: ', filesByHTANId[p]);
             return undefined;
         }
     }
 
     let biospecimen = primaryParents
         .map((p) =>
-            filesByHTANId[p].HTANParentBiospecimenID.split(/[,;]/).map(
+            filesByHTANId[p].ParentBiospecimenID.split(/[,;]/).map(
                 (s) => s.trim()
             ).map(
-                (HTANParentBiospecimenID) =>
-                    biospecimenByBiospecimenID[HTANParentBiospecimenID] as
+                (ParentBiospecimenID) =>
+                    biospecimenByBiospecimenID[ParentBiospecimenID] as
                         | Entity
                         | undefined
             )
@@ -397,18 +401,18 @@ function getSampleAndPatientData(
         getCaseData(
             biospecimen,
             biospecimenByBiospecimenID,
-            diagnosisByHTANParticipantID
+            diagnosisByParticipantID
         ),
-        (d) => d.HTANParticipantID
+        (d) => d.ParticipantID
     );
 
     const demographics = _.uniqBy(
         getCaseData(
             biospecimen,
             biospecimenByBiospecimenID,
-            demographicsByHTANParticipantID
+            demographicsByParticipantID
         ),
-        (d) => d.HTANParticipantID
+        (d) => d.ParticipantID
     );
 
     return { biospecimen, diagnosis, demographics };
@@ -417,15 +421,15 @@ function getSampleAndPatientData(
 function getCaseData(
     biospecimen: BaseSerializableEntity[],
     biospecimenByBiospecimenID: {
-        [htanBiospecimenID: string]: BaseSerializableEntity;
+        [biospecimenID: string]: BaseSerializableEntity;
     },
-    casesByHTANParticipantID: {
-        [htanParticipantID: string]: BaseSerializableEntity;
+    casesByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
     }
 ) {
     return biospecimen
         .map((s) => {
-            // HTANParentID can be both participant or biospecimen, so keep
+            // ParentID can be both participant or biospecimen, so keep
             // going up the tree until participant is found.
             let ParentID = s.ParentID;
 
@@ -438,13 +442,13 @@ function getCaseData(
                 }
             }
 
-            if (!(ParentID in casesByHTANParticipantID)) {
+            if (!(ParentID in casesByParticipantID)) {
                 // console.error(
-                //     `${s.BiospecimenID} does not have a HTANParentID (${HTANParentID}) with diagnosis/demographics information`
+                //     `${s.BiospecimenID} does not have a ParentID (${ParentID}) with diagnosis/demographics information`
                 // );
                 return undefined;
             } else {
-                return casesByHTANParticipantID[ParentID] as Entity;
+                return casesByParticipantID[ParentID] as Entity;
             }
         })
         .filter((f) => !!f) as BaseSerializableEntity[];

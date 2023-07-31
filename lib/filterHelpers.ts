@@ -343,7 +343,7 @@ export function getFilteredCases(
 ) {
     const cases = _.chain(filteredFiles)
         .flatMapDeep((f: Entity) => f.cases)
-        .uniqBy((f) => f.HTANParticipantID)
+        .uniqBy((f) => f.ParticipantID)
         .value();
 
     if (showAllCases) {
@@ -371,12 +371,9 @@ export function getFilteredSamples(
     if (showAllSamples) {
         return samples;
     } else {
-        const filteredCaseIds = _.keyBy(
-            filteredCases,
-            (c) => c.HTANParticipantID
-        );
+        const filteredCaseIds = _.keyBy(filteredCases, (c) => c.ParticipantID);
         return samples.filter((s) => {
-            return s.HTANParticipantID in filteredCaseIds;
+            return s.ParticipantID in filteredCaseIds;
         });
     }
 }

@@ -25,7 +25,11 @@ import {
 import EnhancedDataTable, {
     IEnhancedDataTableColumn,
 } from './EnhancedDataTable';
-import { FileAttributeMap, AttributeNames } from '../lib/types';
+import {
+    FileAttributeMap,
+    AttributeNames,
+    GenericAttributeNames,
+} from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
@@ -780,7 +784,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
         };
 
         const listSelectors: any = {
-            HTANParentDataFileID: {
+            [GenericAttributeNames.ParentDataFileID]: {
                 pluralName: 'Files',
             },
         };
@@ -961,9 +965,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         tUpperCase: string
                     ) => {
                         return _.some(e.diagnosis, (d) =>
-                            d.HTANParticipantID.toUpperCase().includes(
-                                tUpperCase
-                            )
+                            d.ParticipantID.toUpperCase().includes(tUpperCase)
                         );
                     }}
                     data={this.filteredEntities}

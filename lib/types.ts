@@ -39,6 +39,38 @@ export enum AttributeNames {
     releaseVersion = 'releaseVersion',
 }
 
+// Normalized/Generic attribute names
+export enum GenericAttributeNames {
+    ParentID = 'ParentID',
+    BiospecimenID = 'BiospecimenID',
+    DataFileID = 'DataFileID',
+    ParticipantID = 'ParticipantID',
+    ParentBiospecimenID = 'ParentBiospecimenID',
+    ParentDataFileID = 'ParentDataFileID',
+}
+
+export enum HTANAttributeNames {
+    HTANParentID = 'HTANParentID',
+    HTANBiospecimenID = 'HTANBiospecimenID',
+    HTANDataFileID = 'HTANDataFileID',
+    HTANParticipantID = 'HTANParticipantID',
+    HTANParentBiospecimenID = 'HTANParentBiospecimenID',
+    HTANParentDataFileID = 'HTANParentDataFileID',
+}
+
+export const HTANToGenericAttributeMap: {
+    [attr in HTANAttributeNames]: GenericAttributeNames;
+} = {
+    [HTANAttributeNames.HTANParentID]: GenericAttributeNames.ParentID,
+    [HTANAttributeNames.HTANBiospecimenID]: GenericAttributeNames.BiospecimenID,
+    [HTANAttributeNames.HTANDataFileID]: GenericAttributeNames.DataFileID,
+    [HTANAttributeNames.HTANParticipantID]: GenericAttributeNames.ParticipantID,
+    [HTANAttributeNames.HTANParentBiospecimenID]:
+        GenericAttributeNames.ParentBiospecimenID,
+    [HTANAttributeNames.HTANParentDataFileID]:
+        GenericAttributeNames.ParentDataFileID,
+};
+
 export enum ToolAttributeNames {
     AtlasName = 'AtlasName',
     ToolType = 'ToolType',

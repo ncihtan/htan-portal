@@ -8,7 +8,10 @@ import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import AtlasTable from './AtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { ISelectedFiltersByAttrName } from '../lib/types';
+import {
+    GenericAttributeNames,
+    ISelectedFiltersByAttrName,
+} from '../lib/types';
 import Plots from './Plots';
 import {
     computeEntityReportByAssay,
@@ -38,6 +41,8 @@ interface IExploreTabsProps {
     showAllBiospecimens: boolean;
     toggleShowAllCases: () => void;
     showAllCases: boolean;
+
+    genericAttributeMap?: { [attr: string]: GenericAttributeNames };
 }
 
 export enum ExploreTab {
@@ -165,6 +170,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             synapseAtlases={props.filteredSynapseAtlases}
                             samples={props.samples}
                             schemaDataById={props.schemaDataById}
+                            genericAttributeMap={props.genericAttributeMap}
                         />
                     </div>
                 )}
@@ -187,6 +193,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             synapseAtlases={props.filteredSynapseAtlases}
                             cases={props.cases}
                             schemaDataById={props.schemaDataById}
+                            genericAttributeMap={props.genericAttributeMap}
                         />
                     </div>
                 )}

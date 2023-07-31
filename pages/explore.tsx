@@ -33,6 +33,7 @@ import {
     AttributeNames,
     ExploreActionMeta,
     ExploreSelectedFilter,
+    HTANToGenericAttributeMap,
     IFilterProps,
     ISelectedFiltersByAttrName,
 } from '../lib/types';
@@ -326,6 +327,7 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
                             this.toggleShowAllBiospecimens
                         }
                         toggleShowAllCases={this.toggleShowAllCases}
+                        genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
                     />
                 </div>
             );

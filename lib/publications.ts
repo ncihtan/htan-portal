@@ -1,6 +1,6 @@
 import { Author, PublicationData, PublicationInfo } from '../types';
 import { fetchAndProcessSchemaData } from './dataSchemaHelpers';
-import { ExploreSelectedFilter } from './types';
+import { ExploreSelectedFilter, HTANToGenericAttributeMap } from './types';
 
 export const SequencingAssayName = [
     'Bulk DNA',
@@ -364,6 +364,7 @@ export async function getPublicationData(id: string) {
     const publicationInfo = publicationInfoById[id];
     const filters = filtersById[id];
     const correspondingAuthors = correspondingAuthorsById[id];
+    const genericAttributeMap = HTANToGenericAttributeMap; // TODO needs to be configurable
     const publicationData: PublicationData = {
         title,
         abstract,
@@ -373,6 +374,7 @@ export async function getPublicationData(id: string) {
         correspondingAuthors,
         publicationInfo,
         filters,
+        genericAttributeMap,
     };
     // Combine the data with the id
     return {

@@ -12,7 +12,7 @@ import styles from './PublicationTabs.module.scss';
 import { Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { FileAttributeMap } from '../lib/types';
+import { FileAttributeMap, GenericAttributeNames } from '../lib/types';
 
 interface IPublicationTabsProps {
     router: NextRouter;
@@ -24,6 +24,7 @@ interface IPublicationTabsProps {
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
     };
+    genericAttributeMap?: { [attr: string]: GenericAttributeNames };
 }
 
 export enum PublicationTab {
@@ -463,6 +464,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     'DaystoLastFollowup',
                                     'VitalStatus',
                                 ]}
+                                genericAttributeMap={props.genericAttributeMap}
                             />
                         </div>
                     )}
@@ -487,6 +489,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 synapseAtlases={[props.synapseAtlas]}
                                 samples={props.biospecimens}
                                 schemaDataById={props.schemaDataById}
+                                genericAttributeMap={props.genericAttributeMap}
                             />
                         </div>
                     )}

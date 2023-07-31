@@ -71,10 +71,10 @@ const getBiospecimensData = (
         .value();
     const filteredCaseIds = _.keyBy(
         getFilteredCases(filteredFiles, selectedFiltersByAttrName, false),
-        (c) => c.HTANParticipantID
+        (c) => c.ParticipantID
     );
     return samples.filter((s) => {
-        return s.HTANParticipantID in filteredCaseIds;
+        return s.ParticipantID in filteredCaseIds;
     });
 };
 
@@ -261,6 +261,9 @@ const PublicationPage = (props: { data: Publication }) => {
                             assays={assayData}
                             schemaDataById={
                                 props.data.publicationData.schemaDataById
+                            }
+                            genericAttributeMap={
+                                props.data.publicationData.genericAttributeMap
                             }
                         />
                     </div>

@@ -24,7 +24,7 @@ if (typeof window !== 'undefined') {
 
 export type DataFileID = string;
 export type BiospecimenID = string;
-export type HTANParticipantID = string;
+export type ParticipantID = string;
 
 export interface BaseSerializableEntity {
     // Synapse attribute names
@@ -34,14 +34,14 @@ export interface BaseSerializableEntity {
     ParentID: string;
     BiospecimenID: string;
     DataFileID: DataFileID; // this is used as the stable UID
-    HTANParentBiospecimenID: string;
-    HTANParentDataFileID: string;
+    ParentBiospecimenID: string;
+    ParentDataFileID: string;
     TissueorOrganofOrigin: string;
     PrimaryDiagnosis: string;
     AgeatDiagnosis: number;
     FileFormat: string;
     Filename: string;
-    HTANParticipantID: string;
+    ParticipantID: string;
     ImagingAssayType?: string;
     AssayType?: string;
     Race: string;
@@ -75,8 +75,8 @@ export interface ReleaseEntity {
 
 export interface SerializableEntity extends BaseSerializableEntity {
     biospecimenIds: BiospecimenID[];
-    diagnosisIds: HTANParticipantID[];
-    demographicsIds: HTANParticipantID[];
+    diagnosisIds: ParticipantID[];
+    demographicsIds: ParticipantID[];
 }
 
 // Entity links in some referenced objects, which will help
@@ -102,11 +102,11 @@ export interface LoadDataResult {
     biospecimenByBiospecimenID: {
         [BiospecimenID: string]: SerializableEntity;
     };
-    diagnosisByHTANParticipantID: {
-        [HTANParticipantID: string]: SerializableEntity;
+    diagnosisByParticipantID: {
+        [ParticipantID: string]: SerializableEntity;
     };
-    demographicsByHTANParticipantID: {
-        [HTANParticipantID: string]: SerializableEntity;
+    demographicsByParticipantID: {
+        [ParticipantID: string]: SerializableEntity;
     };
 }
 
@@ -133,11 +133,11 @@ export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
 
 function mergeCaseData(
     diagnosis: Entity[],
-    demographicsByHTANParticipantID: { [htanParticipantID: string]: Entity }
+    demographicsByParticipantID: { [participantID: string]: Entity }
 ) {
     return diagnosis.map((d) => ({
         ...d,
-        ...demographicsByHTANParticipantID[d.HTANParticipantID],
+        ...demographicsByParticipantID[d.ParticipantID],
     }));
 }
 
@@ -159,8 +159,8 @@ export async function fetchData(): Promise<LoadDataResult> {
 
 export function fillInEntities(data: LoadDataResult): Entity[] {
     const biospecimenMap = data.biospecimenByBiospecimenID;
-    const diagnosisMap = data.diagnosisByHTANParticipantID;
-    const demoMap = data.demographicsByHTANParticipantID;
+    const diagnosisMap = data.diagnosisByParticipantID;
+    const demoMap = data.demographicsByParticipantID;
 
     // give each biospecimen it's caseid (i.e "diagnosis" HTANParticipantID)
     // biospecimen have HTANParentID but that may or may not be it's caseid because
@@ -168,9 +168,8 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
     _.forEach(data.biospecimenByBiospecimenID, (specimen) => {
         const parentIdMatch = specimen.ParentID.match(/[^_]*_[^_]*/);
         // we should always have a match
-        specimen.HTANParticipantID =
-            specimen.HTANParticipantID ||
-            (parentIdMatch ? parentIdMatch[0] : '');
+        specimen.ParticipantID =
+            specimen.ParticipantID || (parentIdMatch ? parentIdMatch[0] : '');
     });
 
     data.files.forEach((file) => {
@@ -188,7 +187,7 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
                 (file as Entity).diagnosis,
                 demoMap as { [id: string]: Entity }
             ),
-            (c) => c.HTANParticipantID
+            (c) => c.ParticipantID
         );
     });
 
@@ -322,7 +321,7 @@ export function computeDashboardData(files: Entity[]): EntityReport[] {
             uniqueBiospecs.add(biospec.BiospecimenID);
         }
         for (const diag of file.diagnosis) {
-            uniqueCases.add(diag.HTANParticipantID);
+            uniqueCases.add(diag.ParticipantID);
             uniqueOrgans.add(diag.TissueorOrganofOrigin);
         }
     }
