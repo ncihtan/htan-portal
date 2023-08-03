@@ -31,6 +31,7 @@ yarn-error.log*
 .synapseConfig
 credentials.json
 token.pickle
+schematic_service_account_creds.json
 
 # data
 public/processed_syn_data.json
