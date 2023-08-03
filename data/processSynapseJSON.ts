@@ -209,6 +209,13 @@ function processSynapseJSON(
         }
     }
 
+    // unify all 10x Visium assays under the same assay name
+    _.forEach(returnFiles, (file) => {
+        if (file.assayName?.startsWith('10x Visium')) {
+            file.assayName = '10x Visium';
+        }
+    });
+
     // filter out files without a diagnosis
     return {
         files: returnFiles,
