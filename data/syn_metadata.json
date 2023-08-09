@@ -772,7 +772,7 @@
             "numItems": 1
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn45226287",
             "numItems": 70
         },
@@ -791,7 +791,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn39147740",
-            "numItems": 15
+            "numItems": 589
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -1296,7 +1296,7 @@
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn39285399",
-            "numItems": 128
+            "numItems": 120
         },
         {
             "component": "ScRNA-seqLevel3",
@@ -1361,7 +1361,7 @@
             "numItems": 12
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn47878101",
             "numItems": 25
         },

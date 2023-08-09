@@ -14,18 +14,20 @@ cd data
 # Run the script that pulls all the HTAN metadata
 # It outputs a JSON in public/syn_data.json and a JSON with links to metadata in data/syn_metadata.json
 python get_syn_data.py
-# Replace BulkWES -> BulkDNA-seq (this is a temp fix)
-gsed -i 's/BulkWES/BulkDNA-seq/g' ../public/syn_data.json && gsed -i 's/BulkWES/BulkDNA-seq/g' ../data/syn_metadata.json
 cd ..
+# Find and replace certain values (this is a temp fix)
+yarn findAndReplace
 # Convert the resulting  JSON to a more efficient structure for visualization
 ./node_modules/.bin/ncc run data/processSynapseJSON.ts  --transpile-only
+# we store the repo in gzipped format (can skip this step)
+gzip -c public/processed_syn_data.json > public/processed_syn_data.json.gz
 ```
 
 ### Export to bucket
 At the moment all data is hosted on S3 for producion. This is because there is a file size limit for vercel. To update it:
 
 1. gzip file (note that it's already gzipped in the repo)
-1. Remove ".gz" extension so it's just json and rename to include current date in filename.
+2. Remove ".gz" extension so it's just json and rename to include current date in filename.
 3. Upload file to s3 bucket "htanfiles" (part of schultz AWS org)
 4. The file needs two meta settings:  `Content-Encloding=gzip` and `Content-Type=application/json`
 5. Once file is up, change path in

@@ -11,7 +11,7 @@ import os
 
 import synapseclient
 
-import schematic # for now install from here: https://github.com/Sage-Bionetworks/schematic/tree/develop
+import schematic # follow installation instructions here: https://github.com/Sage-Bionetworks
 from schematic import CONFIG
 from schematic.store.synapse import SynapseStorage
 from schematic.schemas.explorer import SchemaExplorer
@@ -112,8 +112,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
     with open('release3_synapse_metadata.json') as f:
         release3_synapse_metadata = json.load(f)
         release3_synapse_metadata_ids = set([d['manifestId'] for d in release3_synapse_metadata])
+    with open('manual_metadata.json') as f:
+        manual_metadata_ids = set(json.load(f))
 
-    release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids).union(manual_includes)
+    release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids).union(manual_metadata_ids)
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
     for project_id, dataset_group in metadata_manifests:
@@ -134,7 +136,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
         for dataset in datasets:
             # only consider metadata currently in release
-            if dataset["id"] not in release_synapse_metadata_ids or dataset["id"] in exclude_release_ids:
+            if dataset["id"] not in release_synapse_metadata_ids or (include_released_only and dataset["id"] in exclude_release_ids):
                 continue
 
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
@@ -144,6 +146,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 if dataset["id"] == "syn25619062":
                     # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
                     syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
+                elif dataset["id"] == "syn39271610":
+                    # Latest Duke manifest for Imaging Level 2 is missing data
+                    # from first release, so use version 1 instead
+                    syn.get(dataset["id"], downloadLocation=manifest_location, version=1, ifcollision="overwrite.local")
                 elif dataset["id"] in release3_synapse_metadata_ids:
                     version = next(d for d in release3_synapse_metadata if d['manifestId'] == dataset['id'])['manifestVersion']
                     syn.get(dataset["id"], version=version, downloadLocation=manifest_location, ifcollision="overwrite.local")
