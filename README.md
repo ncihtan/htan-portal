@@ -17,9 +17,11 @@ python get_syn_data.py
 cd ..
 # Find and replace certain values (this is a temp fix)
 yarn findAndReplace
+# we store the result of this in gzipped format
+gzip -c public/syn_data.json > public/syn_data.json.gz
 # Convert the resulting  JSON to a more efficient structure for visualization
 ./node_modules/.bin/ncc run data/processSynapseJSON.ts  --transpile-only
-# we store the repo in gzipped format (can skip this step)
+# we also store the processed data in gzipped format
 gzip -c public/processed_syn_data.json > public/processed_syn_data.json.gz
 ```
 

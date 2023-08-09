@@ -216,10 +216,16 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             # downstream
             column_order = schema_columns
 
+            # Uuid is now called Id, but ofc there are still some old files with
+            # Uuid column name 😭
+            # see Jira ticket: https://sagebionetworks.jira.com/browse/HTAN-224
+            if 'Uuid' in manifest_df.columns:
+                manifest_df = manifest_df.rename(columns={"Uuid":"Id"})
+
             if 'entityId' not in schema_columns and 'entityId' in manifest_df.columns:
                 column_order += ['entityId']
-            if 'Uuid' not in schema_columns and 'Uuid' in manifest_df.columns:
-                column_order += ['Uuid']
+            if 'Id' not in schema_columns and 'Id' in manifest_df.columns:
+                column_order += ['Id']
             if 'HTAN Parent Biospecimen ID' not in schema_columns and 'HTAN Parent Biospecimen ID' in manifest_df.columns:
                 column_order += ['HTAN Parent Biospecimen ID']
 
@@ -239,23 +245,23 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             # get records in this dataset
             record_list = []
 
-            # ignore files without both synapse id and Uuid
-            if "entityId" not in manifest_df.columns and "Uuid" not in manifest_df.columns:
-                logging.error("Manifest data unexpected: " + manifest_path + " no entityId or Uuid column")
+            # ignore files without both synapse id and Id
+            if "entityId" not in manifest_df.columns and "Id" not in manifest_df.columns:
+                logging.error("Manifest data unexpected: " + manifest_path + " no entityId or Id column")
                 continue
 
             if "entityId" not in manifest_df.columns:
-                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df["Uuid"])
-            elif "Uuid" not in manifest_df.columns:
-                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df["entityId"])
+                rows_without_both_synapse_id_and_id = pd.isnull(manifest_df["Id"]) & pd.isnull(manifest_df["Id"])
+            elif "Id" not in manifest_df.columns and "Id" not in manifest_df.columns:
+                rows_without_both_synapse_id_and_id = pd.isnull(manifest_df["entityId"])
             else:
-                rows_without_both_synapse_id_and_uuid = pd.isnull(manifest_df[["entityId", "Uuid"]]).all(1)
+                rows_without_both_synapse_id_and_id = pd.isnull(manifest_df[["entityId", "Id"]]).all(1)
 
-            number_of_rows_without_both_synapse_id_and_uuid = rows_without_both_synapse_id_and_uuid.sum()
+            number_of_rows_without_both_synapse_id_and_id = rows_without_both_synapse_id_and_id.sum()
 
-            if number_of_rows_without_both_synapse_id_and_uuid > 0:
-                logging.error("skipping {} rows without synapse id in {}" .format(number_of_rows_without_both_synapse_id_and_uuid, manifest_path))
-                manifest_df = manifest_df[~rows_without_both_synapse_id_and_uuid].copy()
+            if number_of_rows_without_both_synapse_id_and_id > 0:
+                logging.error("skipping {} rows without synapse id in {}" .format(number_of_rows_without_both_synapse_id_and_id, manifest_path))
+                manifest_df = manifest_df[~rows_without_both_synapse_id_and_id].copy()
 
             # replace race for protected populations
             if not include_at_risk_populations and 'Race' in manifest_df:

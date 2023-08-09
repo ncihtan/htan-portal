@@ -999,6 +999,71 @@
             "component": "10xVisiumSpatialTranscriptomics-AuxiliaryFiles",
             "synapseId": "syn51295784",
             "numItems": 6
+        },
+        {
+            "component": "Demographics",
+            "synapseId": "syn52252979",
+            "numItems": 56
+        },
+        {
+            "component": "FamilyHistory",
+            "synapseId": "syn52253263",
+            "numItems": 56
+        },
+        {
+            "component": "Diagnosis",
+            "synapseId": "syn52257039",
+            "numItems": 52
+        },
+        {
+            "component": "FollowUp",
+            "synapseId": "syn52257085",
+            "numItems": 56
+        },
+        {
+            "component": "Therapy",
+            "synapseId": "syn52257153",
+            "numItems": 56
+        },
+        {
+            "component": "Biospecimen",
+            "synapseId": "syn52257185",
+            "numItems": 63
+        },
+        {
+            "component": "ScATAC-seqLevel1",
+            "synapseId": "syn52257214",
+            "numItems": 232
+        },
+        {
+            "component": "ScATAC-seqLevel2",
+            "synapseId": "syn52257241",
+            "numItems": 63
+        },
+        {
+            "component": "ScRNA-seqLevel3",
+            "synapseId": "syn52257256",
+            "numItems": 33
+        },
+        {
+            "component": "ScATAC-seqLevel3",
+            "synapseId": "syn52257258",
+            "numItems": 64
+        },
+        {
+            "component": "ScATAC-seqLevel3",
+            "synapseId": "syn52257259",
+            "numItems": 188
+        },
+        {
+            "component": "ScRNA-seqLevel2",
+            "synapseId": "syn52257977",
+            "numItems": 58
+        },
+        {
+            "component": "ScRNA-seqLevel1",
+            "synapseId": "syn52261890",
+            "numItems": 124
         }
     ],
     "HTA4": [
