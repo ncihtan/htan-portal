@@ -16,9 +16,11 @@ cd data
 python get_syn_data.py
 cd ..
 # Find and replace certain values (this is a temp fix)
-gsed -i 's/scatacseq/scATAC-seq/g' public/syn_data.json && gsed -i 's/BulkWES/BulkDNA/g' public/syn_data.json && gsed -i 's/BulkWES/BulkDNA/g' data/syn_metadata.json && gsed -i 's/"Database Search Result"/"LC-MS3"/g' public/syn_data.json && gsed -i 's/"Protein Database"/"LC-MS3"/g' public/syn_data.json && gsed -i 's/t-CyCIF/CyCIF/g' public/syn_data.json && gsed -i 's/Level3Segmentation/Level3/g' public/syn_data.json && gsed -i 's/Level3Segmentation/Level3/g' data/syn_metadata.json
+yarn findAndReplace
 # Convert the resulting  JSON to a more efficient structure for visualization
 ./node_modules/.bin/ncc run data/processSynapseJSON.ts  --transpile-only
+# we store the repo in gzipped format (can skip this step)
+gzip -c public/processed_syn_data.json > public/processed_syn_data.json.gz
 ```
 
 ### Export to bucket
