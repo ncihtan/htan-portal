@@ -352,7 +352,7 @@ function getSampleAndPatientData(
 
     let biospecimen = primaryParents
         .map((p) =>
-            filesByHTANId[p].HTANParentBiospecimenID.split(',').map(
+            filesByHTANId[p].HTANParentBiospecimenID.split(/[,;]/).map(
                 (HTANParentBiospecimenID) =>
                     biospecimenByHTANBiospecimenID[HTANParentBiospecimenID] as
                         | Entity
