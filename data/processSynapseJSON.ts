@@ -105,7 +105,7 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
         } else if (file.HTANDataFileID in idcIds) {
             file.downloadSource = DownloadSourceCategory.idc;
         } else if (file.Component === 'OtherAssay') {
-            if (file.AssayType === '10X Visium') {
+            if (file.AssayType?.toLowerCase() === '10x visium') {
                 // 10X Visium raw data will go to dbGap, but isn't available yet
                 file.downloadSource = DownloadSourceCategory.dbgap;
             } else {
@@ -211,7 +211,7 @@ function processSynapseJSON(
 
     // unify all 10x Visium assays under the same assay name
     _.forEach(returnFiles, (file) => {
-        if (file.assayName?.startsWith('10x Visium')) {
+        if (file.assayName?.toLowerCase().startsWith('10x visium')) {
             file.assayName = '10x Visium';
         }
     });

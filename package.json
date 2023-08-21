@@ -8,7 +8,7 @@
     "gzip": "gzip < public/syn_data.json > public/syn_data.json.gz && gzip < public/processed_syn_data.json > public/processed_syn_data.json.gz",
     "gunzip": "gunzip -c public/processed_syn_data.json.gz > public/processed_syn_data.json && gunzip -c public/syn_data.json.gz > public/syn_data.json",
     "findAndReplace": "bash data/findAndReplace.sh",
-    "build": "yarn run gunzip && export NODE_OPTIONS=--max_old_space_size=6144 && next build",
+    "build": "yarn run gunzip && NODE_OPTIONS=--max_old_space_size=6144 next build",
     "start": "yarn run gunzip && next start",
     "processSynapseJSON": "npx ncc run data/processSynapseJSON.ts",
     "prettierPreCommit": "STAGED_AND_CHANGED_FILES=$(git diff HEAD --name-only --cached --diff-filter=d) && ([ -z \"$STAGED_AND_CHANGED_FILES\" ] && echo \"Nothing to prettify\" || (yarn run prettier --write $(echo $STAGED_AND_CHANGED_FILES) && git add -f $(echo $STAGED_AND_CHANGED_FILES)))",
@@ -85,5 +85,6 @@
     "@vercel/ncc": "^0.28.6",
     "pre-commit": "^1.2.2",
     "typescript": "4.3.2"
-  }
+  },
+  "packageManager": "yarn@1.22.17"
 }
