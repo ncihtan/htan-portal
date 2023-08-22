@@ -13,6 +13,7 @@ import { ISelectedFiltersByAttrName } from '../lib/types';
 
 interface IExploreTabsProps {
     router: NextRouter;
+    files: Entity[];
     filteredFiles: Entity[];
     nonAtlasSelectedFiltersByAttrName: ISelectedFiltersByAttrName;
     samples: Entity[];
@@ -191,6 +192,8 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             selectedFiltersByAttrName={
                                 props.nonAtlasSelectedFiltersByAttrName
                             }
+                            files={props.files}
+                            filteredFiles={props.filteredFiles}
                         />
                     </div>
                 )}
