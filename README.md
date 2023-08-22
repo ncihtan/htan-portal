@@ -39,7 +39,11 @@ yarn findAndReplace
 # we store the result of this in gzipped format
 gzip -c public/syn_data.json > public/syn_data.json.gz
 # Convert the resulting  JSON to a more efficient structure for visualization
-./node_modules/.bin/ncc run data/processSynapseJSON.ts  --transpile-only
+# Note: we output stdout and stderr to files to share these with others for
+# data qc debugging purposes
+# TODO: there is a ssl legacy provider is hack for
+# https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+yarn processSynapseJSON > data/processSynapseJSON.log 2> data/processSynapseJSON.error.log
 # we also store the processed data in gzipped format
 gzip -c public/processed_syn_data.json > public/processed_syn_data.json.gz
 ```

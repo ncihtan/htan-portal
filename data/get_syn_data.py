@@ -44,9 +44,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                     "HTAN Stanford": "hta10",
                     "HTAN Vanderbilt": "hta11",
                     "HTAN WUSTL": "hta12",
-                    # exclude TNPs for now
                     "HTAN TNP SARDANA": "hta13",
-                    # "HTAN TNP - TMA": "hta14"
+                    "HTAN TNP - TMA": "hta14"
     }
 
 
@@ -117,7 +116,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
         for dataset in datasets:
             # only consider metadata currently in release
-            if dataset["id"] not in released_synapse_metadata_ids or (include_released_only and dataset["id"] in exclude_release_ids):
+            if dataset["id"] not in released_synapse_metadata_ids:
                 continue
 
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
@@ -129,10 +128,6 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 if dataset["id"] == "syn25619062":
                     # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
                     syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
-                elif dataset["id"] == "syn39271610":
-                    # Latest Duke manifest for Imaging Level 2 is missing data
-                    # from first release, so use version 1 instead
-                    syn.get(dataset["id"], downloadLocation=manifest_location, version=1, ifcollision="overwrite.local")
                 elif pd.isna(released_record["Manifest_Version"]):
                     syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
                 else:

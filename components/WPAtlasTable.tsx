@@ -354,6 +354,13 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 sortable: true,
             },
             {
+                name: 'Atlas ID',
+                selector: (atlas: Atlas) => atlas.htan_id.toUpperCase(),
+                wrap: true,
+                sortable: true,
+                omit: true,
+            },
+            {
                 name: 'Lead Institution',
                 selector: (atlas: Atlas) => atlas.WPAtlas.lead_institutions,
                 grow: 1.6,
@@ -364,7 +371,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                 name: 'Atlas Description',
                 selector: 'WPAtlas.title.rendered',
                 format: (atlas: Atlas) =>
-                    atlas.WPAtlas && atlas.htan_id.toLowerCase() !== 'hta13' ? (
+                    atlas.WPAtlas && !['hta13','hta14'].includes(atlas.htan_id.toLowerCase()) ? (
                         <span>
                             <a
                                 href={`//${
@@ -471,6 +478,40 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     </span>
                 ),
                 sortable: true,
+            },
+            {
+                name: 'Assays',
+                grow: 0.5,
+                selector: 'num_assays', // dummy selector, there is no num_assays field
+                cell: (atlas: Atlas) => (
+                    <span className="ml-auto">
+                        {filteredCount(
+                            atlas,
+                            this.shouldShowFilteredFractions,
+                            this.filteredAssaysByAtlas
+                        )}
+                        {(this.assaysByAtlas[atlas.htan_id] || []).length}
+                    </span>
+                ),
+                sortable: true,
+                omit: true,
+            },
+            {
+                name: 'Files',
+                grow: 0.6,
+                selector: 'num_files', // dummy selector, there is no num_files field
+                cell: (atlas: Atlas) => (
+                    <span className="ml-auto">
+                        {filteredCount(
+                            atlas,
+                            this.shouldShowFilteredFractions,
+                            this.filteredFilesByAtlas
+                        )}
+                        {(this.filesByAtlas[atlas.htan_id] || []).length}
+                    </span>
+                ),
+                sortable: true,
+                omit: true,
             },
             {
                 name: 'Viewers',
@@ -597,47 +638,6 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                         return null;
                     }
                 },
-            },
-            {
-                name: 'Atlas ID',
-                selector: (atlas: Atlas) => atlas.htan_id.toUpperCase(),
-                wrap: true,
-                sortable: true,
-                omit: true,
-            },
-            {
-                name: 'Files',
-                grow: 0.6,
-                selector: 'num_files', // dummy selector, there is no num_files field
-                cell: (atlas: Atlas) => (
-                    <span className="ml-auto">
-                        {filteredCount(
-                            atlas,
-                            this.shouldShowFilteredFractions,
-                            this.filteredFilesByAtlas
-                        )}
-                        {(this.filesByAtlas[atlas.htan_id] || []).length}
-                    </span>
-                ),
-                sortable: true,
-                omit: true,
-            },
-            {
-                name: 'Assays',
-                grow: 0.5,
-                selector: 'num_assays', // dummy selector, there is no num_assays field
-                cell: (atlas: Atlas) => (
-                    <span className="ml-auto">
-                        {filteredCount(
-                            atlas,
-                            this.shouldShowFilteredFractions,
-                            this.filteredAssaysByAtlas
-                        )}
-                        {(this.assaysByAtlas[atlas.htan_id] || []).length}
-                    </span>
-                ),
-                sortable: true,
-                omit: true,
             },
         ];
     }

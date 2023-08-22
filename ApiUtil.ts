@@ -42,6 +42,23 @@ export async function getAtlasList(): Promise<WPAtlas[]> {
             // TODO: hash out which ones are required
             home_image: { guid: '' },
         },
+        {
+            id: 9998,
+            title: { rendered: 'TNP TMA' },
+            htan_id: 'hta14',
+            slug: 'tnp-tma',
+            atlas_overview: '',
+            data_overview: '',
+            lead_institutions: 'Trans-Network Project',
+            synapse_id: 'syn22041595',
+            content: { rendered: '' },
+            publications: '',
+            atlas_type: 'Other',
+            primary_ngs: '',
+            short_description: 'Generate spatially resolved cell type/state census from tissue microarray breast FFPE specimens',
+            // TODO: hash out which ones are required
+            home_image: { guid: '' },
+        },
     ];
     return wpAtlases.concat(staticAtlases);
 }
