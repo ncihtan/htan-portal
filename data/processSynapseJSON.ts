@@ -12,6 +12,7 @@ import {
     HTANDataFileID,
     isLowestLevel,
     LoadDataResult,
+    ReleaseEntity,
     SerializableEntity,
 } from '../lib/helpers';
 import getData from '../lib/getData';
@@ -22,6 +23,7 @@ import {
 } from '../lib/dataSchemaHelpers';
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
+import csvToJson from 'csvtojson';
 import dgbapIds from './dbgap_release_all.json';
 import dbgapImageIds from './dbgap_img_release2.json';
 import idcIds from './idc-imaging-assets.json';
@@ -33,10 +35,12 @@ async function writeProcessedFile() {
     const synapseJson = getData();
     const schemaData = await fetchAndProcessSchemaData();
     const atlases = await getAtlasList();
+    const entitiesById = await getEntitiesById();
     const processed: LoadDataResult = processSynapseJSON(
         synapseJson,
         schemaData,
-        atlases
+        atlases,
+        entitiesById
     );
     fs.writeFileSync(
         'public/processed_syn_data.json',
@@ -50,7 +54,21 @@ async function writeProcessedFile() {
     // );
 }
 
-function addReleaseInfo(file: BaseSerializableEntity) {
+async function getEntitiesById() {
+    const rows = await csvToJson().fromFile('data/entities_v4.csv');
+    return _.keyBy(rows, (row) => row.entityId);
+}
+
+function addReleaseInfo(
+    file: BaseSerializableEntity,
+    entitiesById: { [entityId: string]: ReleaseEntity }
+) {
+    if (file.synapseId && entitiesById[file.synapseId]) {
+        file.releaseVersion = entitiesById[file.synapseId].Data_Release;
+    }
+}
+
+function addReleaseInfoLegacy(file: BaseSerializableEntity) {
     const release1SynapseSet = new Set(release1Ids);
     const release2SynapseSet = new Set(release2Ids);
     const release3SynapseSet = new Set(
@@ -120,7 +138,8 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
 function processSynapseJSON(
     synapseJson: SynapseData,
     schemaData: SchemaDataById,
-    WPAtlasData: WPAtlas[]
+    WPAtlasData: WPAtlas[],
+    entitiesById: { [entityId: string]: ReleaseEntity }
 ) {
     const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
     const flatData = extractEntitiesFromSynapseData(
@@ -141,7 +160,6 @@ function processSynapseJSON(
         demographicsByHTANParticipantID,
     } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
-    debugger;
     const returnFiles = files
         .map((file) => {
             const parentData = getSampleAndPatientData(
@@ -163,7 +181,7 @@ function processSynapseJSON(
                 );
 
                 addDownloadSourcesInfo(file);
-                addReleaseInfo(file);
+                addReleaseInfo(file, entitiesById);
                 return file as SerializableEntity;
             } else {
                 return undefined;

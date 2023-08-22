@@ -60,7 +60,17 @@ export interface BaseSerializableEntity {
     synapseId?: string;
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
-    releaseVersion?: 'v1' | 'v2' | 'v3';
+    releaseVersion?: string;
+}
+
+export interface ReleaseEntity {
+    entityId: string;
+    Data_Release: string;
+    Id: string;
+    type: string;
+    CDS_Release: string;
+    IDC_Release: string;
+    Component: string;
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {

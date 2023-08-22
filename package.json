@@ -10,7 +10,7 @@
     "findAndReplace": "bash data/findAndReplace.sh",
     "build": "yarn run gunzip && NODE_OPTIONS=--max_old_space_size=6144 next build",
     "start": "yarn run gunzip && next start",
-    "processSynapseJSON": "npx ncc run data/processSynapseJSON.ts",
+    "processSynapseJSON": "npx --node-options='--max_old_space_size=8192' ncc run data/processSynapseJSON.ts",
     "prettierPreCommit": "STAGED_AND_CHANGED_FILES=$(git diff HEAD --name-only --cached --diff-filter=d) && ([ -z \"$STAGED_AND_CHANGED_FILES\" ] && echo \"Nothing to prettify\" || (yarn run prettier --write $(echo $STAGED_AND_CHANGED_FILES) && git add -f $(echo $STAGED_AND_CHANGED_FILES)))",
     "prettierAll": "yarn run prettier --write $(git ls-files | grep '\\(.js\\|.ts\\|.scss\\|.css\\)')"
   },
@@ -36,6 +36,7 @@
     "@types/roman-numerals": "^0.3.0",
     "better-react-spinkit": "^2.0.4",
     "bootstrap": "^4.4.1",
+    "csvtojson": "^2.0.10",
     "global": "^4.4.0",
     "gray-matter": "^4.0.3",
     "jmespath": "^0.15.0",
