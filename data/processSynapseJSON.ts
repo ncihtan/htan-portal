@@ -27,9 +27,6 @@ import csvToJson from 'csvtojson';
 import dgbapIds from './dbgap_release_all.json';
 import dbgapImageIds from './dbgap_img_release2.json';
 import idcIds from './idc-imaging-assets.json';
-import release1Ids from './release1_include.json';
-import release2Ids from './release2_include.json';
-import release3Ids from './release3_include.json';
 
 async function writeProcessedFile() {
     const synapseJson = getData();
@@ -65,24 +62,6 @@ function addReleaseInfo(
 ) {
     if (file.synapseId && entitiesById[file.synapseId]) {
         file.releaseVersion = entitiesById[file.synapseId].Data_Release;
-    }
-}
-
-function addReleaseInfoLegacy(file: BaseSerializableEntity) {
-    const release1SynapseSet = new Set(release1Ids);
-    const release2SynapseSet = new Set(release2Ids);
-    const release3SynapseSet = new Set(
-        release3Ids.filter((x) => x.entityId).map((x) => x.entityId)
-    );
-
-    if (file.synapseId) {
-        if (release1SynapseSet.has(file.synapseId)) {
-            file.releaseVersion = 'v1';
-        } else if (release2SynapseSet.has(file.synapseId)) {
-            file.releaseVersion = 'v2';
-        } else if (release3SynapseSet.has(file.synapseId)) {
-            file.releaseVersion = 'v3';
-        }
     }
 }
 
@@ -416,14 +395,21 @@ function getCaseData(
             // HTANParentID can be both participant or biospecimen, so keep
             // going up the tree until participant is found.
             let HTANParentID = s.HTANParentID;
+
             while (HTANParentID in biospecimenByHTANBiospecimenID) {
                 const parentBioSpecimen =
                     biospecimenByHTANBiospecimenID[HTANParentID];
-                HTANParentID = parentBioSpecimen.HTANParentID;
+                if (parentBioSpecimen.HTANParentID) {
+                    HTANParentID = parentBioSpecimen.HTANParentID;
+                } else {
+                    break;
+                }
             }
+
             if (!(HTANParentID in casesByHTANParticipantID)) {
+                debugger;
                 console.error(
-                    `${s.HTANBiospecimenID} does not have a HTANParentID with diagnosis information`
+                    `${s.HTANBiospecimenID} does not have a HTANParentID (${HTANParentID}) with diagnosis/demographics information`
                 );
                 return undefined;
             } else {
