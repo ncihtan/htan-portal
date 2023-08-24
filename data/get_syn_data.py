@@ -77,8 +77,15 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
     se.load_schema(url)
 
-    # get all manifests grouped by project (i.e. research center/atlas)
-    metadata_manifests = all_files[all_files["name"].str.contains("synapse_storage_manifest")][["id", "parentId", "projectId"]].groupby(["projectId"])
+
+    # only consider newest manifest for each folder
+    metadata_manifests_newest_per_folder = all_files[all_files["name"].str.contains(
+        "synapse_storage_manifest")][
+        ["id", "projectId", "parentId", "modifiedOn"]
+        ].groupby(["parentId"]).max().reset_index().copy()
+
+    #  group them by project (i.e. research center/atlas)
+    metadata_manifests_per_project = metadata_manifests_newest_per_folder[["id", "parentId", "projectId"]].groupby(["projectId"])
 
     # portal data schema skeleton
     portal_data = {
@@ -98,7 +105,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
     released_metadata_df["release_float"] = released_metadata_df["Data_Release"].str.split().str[-1].astype(float)
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
-    for project_id, dataset_group in metadata_manifests:
+    for project_id, dataset_group in metadata_manifests_per_project:
         atlas = {}
         center = syn.get(project_id, downloadFile = False).name
         if not center in htan_centers:
