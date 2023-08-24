@@ -248,7 +248,9 @@ function findAndAddPrimaryParents(
 
     if (f.HTANParentDataFileID && !isLowestLevel(f)) {
         // if there's a parent, traverse "upwards" to find primary parent
-        const parentIds = f.HTANParentDataFileID.split(/[,;]/);
+        const parentIds = f.HTANParentDataFileID.split(/[,;]/).map((s) =>
+            s.trim()
+        );
         const parentFiles = parentIds.reduce(
             (aggr: BaseSerializableEntity[], id: string) => {
                 const file = filesByFileId[id];
@@ -403,7 +405,6 @@ function getCaseData(
             }
 
             if (!(HTANParentID in casesByHTANParticipantID)) {
-                debugger;
                 console.error(
                     `${s.HTANBiospecimenID} does not have a HTANParentID (${HTANParentID}) with diagnosis/demographics information`
                 );

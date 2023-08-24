@@ -1,12 +1,10 @@
-yarn run v1.22.17
-$ npx --node-options='--openssl-legacy-provider --max_old_space_size=8192' ncc run data/processSynapseJSON.ts
 ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@4.3.2 (local user-provided)
    40kB  sourcemap-register.js
-39119kB  index.js
+39070kB  index.js
  1285kB  index.js.map
-39159kB  [29893ms] - ncc 0.28.6
+39110kB  [57751ms] - ncc 0.28.6
 Missing HTANParentBiospecimenID:  {
   Component: '10xVisiumSpatialTranscriptomics-RNA-seqLevel1',
   Filename: 'visium_level_1/7794-AS-1_S1_L005_R1_001.fastq.gz',
@@ -5048,6 +5046,139 @@ Missing HTANParentBiospecimenID:  {
   releaseVersion: 'Release 2.0'
 }
 Missing HTANParentBiospecimenID:  {
+  Component: 'BulkRNA-seqLevel1',
+  Filename: 'PickSeq_Level_1/S163_R1.fastq.gz',
+  FileFormat: 'fastq',
+  HTANParentBiospecimenID: 'HTA7_1_183\n',
+  HTANDataFileID: 'HTA7_1_1151',
+  LibraryLayout: 'Paired End',
+  ReadIndicator: 'R1',
+  NucleicAcidSource: 'Bulk Whole Cell',
+  'Micro-regionSeqPlatform': null,
+  ROITag: null,
+  SequencingPlatform: 'Illumina NextSeq',
+  SequencingBatchID: 3,
+  ReadLength: '75bp',
+  LibrarySelectionMethod: 'Poly-T Enrichment',
+  LibraryPreparationKitName: 'ThruPLEX DNA-seq Kit',
+  LibraryPreparationKitVendor: 'Takara Bio',
+  LibraryPreparationKitVersion: 'R400674',
+  LibraryPreparationDaysfromIndex: null,
+  SpikeIn: 'No Spike In',
+  AdapterName: null,
+  AdapterSequence: null,
+  BaseCallerName: null,
+  BaseCallerVersion: null,
+  Flow: null,
+  CellBarcode: null,
+  FragmentMaximumLength: null,
+  FragmentMeanLength: null,
+  FragmentMinimumLength: null,
+  FragmentStandardDeviationLength: null,
+  LaneNumber: null,
+  LibraryStrand: null,
+  MultiplexBarcode: null,
+  SizeSelectionRange: null,
+  TargetDepth: null,
+  ToTrimAdapterSequence: null,
+  TranscriptIntegrityNumber: null,
+  RIN: null,
+  DV200: null,
+  AdapterContent: null,
+  BasicStatistics: null,
+  Encoding: null,
+  KmerContent: null,
+  OverrepresentedSequences: null,
+  PerBaseNContent: null,
+  PerBaseSequenceContent: null,
+  PerBaseSequenceQuality: null,
+  PerSequenceGCContent: null,
+  PerSequenceQualityScore: null,
+  PerTileSequenceQuality: null,
+  PercentGCContent: null,
+  SequenceDuplicationLevels: null,
+  SequenceLengthDistribution: null,
+  TotalReads: null,
+  QCWorkflowType: null,
+  QCWorkflowVersion: null,
+  QCWorkflowLink: null,
+  synapseId: 'syn25883441',
+  atlasid: 'HTA7',
+  atlas_name: 'HTAN HMS',
+  level: 'Level 1',
+  assayName: 'Bulk RNA-seq',
+  WPAtlas: {
+    id: 1194,
+    date: '2020-04-08T11:07:37',
+    date_gmt: '2020-04-08T15:07:37',
+    guid: {
+      rendered: 'https://humantumoratlas.wpcomstaging.com/?post_type=atlas&#038;p=1194'
+    },
+    modified: '2021-02-03T16:52:15',
+    modified_gmt: '2021-02-03T21:52:15',
+    slug: 'hms',
+    status: 'publish',
+    type: 'atlas',
+    link: 'https://humantumoratlas.wpcomstaging.com/atlas/hms/',
+    title: {
+      rendered: 'Pre-Cancer Atlases of Cutaneous and Hematologic Origin'
+    },
+    content: { rendered: '', protected: false },
+    featured_media: 0,
+    template: '',
+    yoast_head: '<!-- This site is optimized with the Yoast SEO plugin v21.0 - https://yoast.com/wordpress/plugins/seo/ -->\n' +
+      '<title>Pre-Cancer Atlases of Cutaneous and Hematologic Origin - Human Tumor Atlas Network</title>\n' +
+      '<meta name="robots" content="noindex, nofollow" />\n' +
+      '<meta property="og:locale" content="en_US" />\n' +
+      '<meta property="og:type" content="article" />\n' +
+      '<meta property="og:title" content="Pre-Cancer Atlases of Cutaneous and Hematologic Origin - Human Tumor Atlas Network" />\n' +
+      '<meta property="og:url" content="https://humantumoratlas.wpcomstaging.com/atlas/hms/" />\n' +
+      '<meta property="og:site_name" content="Human Tumor Atlas Network" />\n' +
+      '<meta property="article:modified_time" content="2021-02-03T21:52:15+00:00" />\n' +
+      '<meta name="twitter:card" content="summary_large_image" />\n' +
+      '<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://humantumoratlas.wpcomstaging.com/atlas/hms/","url":"https://humantumoratlas.wpcomstaging.com/atlas/hms/","name":"Pre-Cancer Atlases of Cutaneous and Hematologic Origin - Human Tumor Atlas Network","isPartOf":{"@id":"https://humantumoratlas.wpcomstaging.com/#website"},"datePublished":"2020-04-08T15:07:37+00:00","dateModified":"2021-02-03T21:52:15+00:00","breadcrumb":{"@id":"https://humantumoratlas.wpcomstaging.com/atlas/hms/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://humantumoratlas.wpcomstaging.com/atlas/hms/"]}]},{"@type":"BreadcrumbList","@id":"https://humantumoratlas.wpcomstaging.com/atlas/hms/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://humantumoratlas.wpcomstaging.com/"},{"@type":"ListItem","position":2,"name":"Pre-Cancer Atlases of Cutaneous and Hematologic Origin"}]},{"@type":"WebSite","@id":"https://humantumoratlas.wpcomstaging.com/#website","url":"https://humantumoratlas.wpcomstaging.com/","name":"Human Tumor Atlas Network","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://humantumoratlas.wpcomstaging.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"en-US"}]}</script>\n' +
+      '<!-- / Yoast SEO plugin. -->',
+    yoast_head_json: {
+      title: 'Pre-Cancer Atlases of Cutaneous and Hematologic Origin - Human Tumor Atlas Network',
+      robots: [Object],
+      og_locale: 'en_US',
+      og_type: 'article',
+      og_title: 'Pre-Cancer Atlases of Cutaneous and Hematologic Origin - Human Tumor Atlas Network',
+      og_url: 'https://humantumoratlas.wpcomstaging.com/atlas/hms/',
+      og_site_name: 'Human Tumor Atlas Network',
+      article_modified_time: '2021-02-03T21:52:15+00:00',
+      twitter_card: 'summary_large_image',
+      schema: [Object]
+    },
+    jetpack_likes_enabled: true,
+    jetpack_sharing_enabled: true,
+    htan_id: 'hta7',
+    synapse_id: '',
+    atlas_type: 'Pre-Cancer',
+    lead_institutions: 'Harvard Medical School, Brigham and Women’s Hospital',
+    short_description: '',
+    atlas_overview: 'HMS Overview...',
+    data_overview: '',
+    publications: '',
+    primary_ngs: '',
+    home_image: false,
+    amp_enabled: true,
+    _links: {
+      self: [Array],
+      collection: [Array],
+      about: [Array],
+      'wp:attachment': [Array],
+      curies: [Array]
+    }
+  },
+  biospecimenIds: [],
+  diagnosisIds: [],
+  demographicsIds: [],
+  isRawSequencing: true,
+  downloadSource: 'dbGaP',
+  releaseVersion: 'Release 2.0'
+}
+Missing HTANParentBiospecimenID:  {
   Component: 'ScRNA-seqLevel1',
   Filename: 'snRNA-Seq_level_1_atac_tumor/HT270P2-Th1Fc1-TWCE-HT270P2-Th1Fc1N1Z1_1Bmn1_1_S2_L003_R1_001.fastq.gz',
   FileFormat: 'gzip',
@@ -7134,408 +7265,6 @@ Missing HTANParentBiospecimenID:  {
   }
 }
 Missing HTANParentBiospecimenID:  {
-  Component: 'BulkWESLevel3',
-  Filename: 'bulk_DNAseq_level_3/TBCRC/H_SL-M-011-Block_2.seg',
-  FileFormat: 'seg',
-  HTANParentDataFileID: 'HTA6_106_37',
-  HTANDataFileID: 'HTA6_106_38',
-  GenomicReference: 'Gencode Release 38 (GRCh38.p13)',
-  GenomicReferenceURL: 'https://www.gencodegenes.org/human/release_38.html',
-  GermlineVariantsWorkflowURL: 'Not Applicable',
-  GermlineVariantsWorkflowType: 'None',
-  SomaticVariantsWorkflowURL: 'Not Applicable',
-  SomaticVariantsWorkflowType: 'None',
-  SomaticVariantsSampleType: 'Not Applicable',
-  StructuralVariantWorkflowURL: 'https://github.com/cancersysbio/htan-DCIS/tree/main/analysis/sWGS_CNA_pipeline',
-  StructuralVariantWorkflowType: 'CNV',
-  synapseId: 'syn51672940',
-  atlasid: 'HTA6',
-  atlas_name: 'HTAN Duke',
-  level: 'Level 3',
-  assayName: 'Bulk WES',
-  WPAtlas: {
-    id: 1193,
-    date: '2020-04-08T11:07:10',
-    date_gmt: '2020-04-08T15:07:10',
-    guid: {
-      rendered: 'https://humantumoratlas.wpcomstaging.com/?post_type=atlas&#038;p=1193'
-    },
-    modified: '2021-02-03T16:52:46',
-    modified_gmt: '2021-02-03T21:52:46',
-    slug: 'duke',
-    status: 'publish',
-    type: 'atlas',
-    link: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-    title: { rendered: 'Breast Pre-Cancer Atlas' },
-    content: { rendered: '', protected: false },
-    featured_media: 0,
-    template: '',
-    yoast_head: '<!-- This site is optimized with the Yoast SEO plugin v21.0 - https://yoast.com/wordpress/plugins/seo/ -->\n' +
-      '<title>Breast Pre-Cancer Atlas - Human Tumor Atlas Network</title>\n' +
-      '<meta name="robots" content="noindex, nofollow" />\n' +
-      '<meta property="og:locale" content="en_US" />\n' +
-      '<meta property="og:type" content="article" />\n' +
-      '<meta property="og:title" content="Breast Pre-Cancer Atlas - Human Tumor Atlas Network" />\n' +
-      '<meta property="og:url" content="https://humantumoratlas.wpcomstaging.com/atlas/duke/" />\n' +
-      '<meta property="og:site_name" content="Human Tumor Atlas Network" />\n' +
-      '<meta property="article:modified_time" content="2021-02-03T21:52:46+00:00" />\n' +
-      '<meta name="twitter:card" content="summary_large_image" />\n' +
-      '<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","url":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","name":"Breast Pre-Cancer Atlas - Human Tumor Atlas Network","isPartOf":{"@id":"https://humantumoratlas.wpcomstaging.com/#website"},"datePublished":"2020-04-08T15:07:10+00:00","dateModified":"2021-02-03T21:52:46+00:00","breadcrumb":{"@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://humantumoratlas.wpcomstaging.com/atlas/duke/"]}]},{"@type":"BreadcrumbList","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://humantumoratlas.wpcomstaging.com/"},{"@type":"ListItem","position":2,"name":"Breast Pre-Cancer Atlas"}]},{"@type":"WebSite","@id":"https://humantumoratlas.wpcomstaging.com/#website","url":"https://humantumoratlas.wpcomstaging.com/","name":"Human Tumor Atlas Network","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://humantumoratlas.wpcomstaging.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"en-US"}]}</script>\n' +
-      '<!-- / Yoast SEO plugin. -->',
-    yoast_head_json: {
-      title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      robots: [Object],
-      og_locale: 'en_US',
-      og_type: 'article',
-      og_title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      og_url: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-      og_site_name: 'Human Tumor Atlas Network',
-      article_modified_time: '2021-02-03T21:52:46+00:00',
-      twitter_card: 'summary_large_image',
-      schema: [Object]
-    },
-    jetpack_likes_enabled: true,
-    jetpack_sharing_enabled: true,
-    htan_id: 'hta6',
-    synapse_id: '',
-    atlas_type: 'Pre-Cancer',
-    lead_institutions: 'Duke University',
-    short_description: '',
-    atlas_overview: 'Duke Overview...',
-    data_overview: '',
-    publications: '',
-    primary_ngs: '',
-    home_image: false,
-    amp_enabled: true,
-    _links: {
-      self: [Array],
-      collection: [Array],
-      about: [Array],
-      'wp:attachment': [Array],
-      curies: [Array]
-    }
-  },
-  primaryParents: []
-}
-Missing HTANParentBiospecimenID:  {
-  Component: 'BulkWESLevel3',
-  Filename: 'bulk_DNAseq_level_3/TBCRC/H_SL-IU-009-E3.seg',
-  FileFormat: 'seg',
-  HTANParentDataFileID: 'HTA6_99_35',
-  HTANDataFileID: 'HTA6_99_36',
-  GenomicReference: 'Gencode Release 38 (GRCh38.p13)',
-  GenomicReferenceURL: 'https://www.gencodegenes.org/human/release_38.html',
-  GermlineVariantsWorkflowURL: 'Not Applicable',
-  GermlineVariantsWorkflowType: 'None',
-  SomaticVariantsWorkflowURL: 'Not Applicable',
-  SomaticVariantsWorkflowType: 'None',
-  SomaticVariantsSampleType: 'Not Applicable',
-  StructuralVariantWorkflowURL: 'https://github.com/cancersysbio/htan-DCIS/tree/main/analysis/sWGS_CNA_pipeline',
-  StructuralVariantWorkflowType: 'CNV',
-  synapseId: 'syn51672930',
-  atlasid: 'HTA6',
-  atlas_name: 'HTAN Duke',
-  level: 'Level 3',
-  assayName: 'Bulk WES',
-  WPAtlas: {
-    id: 1193,
-    date: '2020-04-08T11:07:10',
-    date_gmt: '2020-04-08T15:07:10',
-    guid: {
-      rendered: 'https://humantumoratlas.wpcomstaging.com/?post_type=atlas&#038;p=1193'
-    },
-    modified: '2021-02-03T16:52:46',
-    modified_gmt: '2021-02-03T21:52:46',
-    slug: 'duke',
-    status: 'publish',
-    type: 'atlas',
-    link: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-    title: { rendered: 'Breast Pre-Cancer Atlas' },
-    content: { rendered: '', protected: false },
-    featured_media: 0,
-    template: '',
-    yoast_head: '<!-- This site is optimized with the Yoast SEO plugin v21.0 - https://yoast.com/wordpress/plugins/seo/ -->\n' +
-      '<title>Breast Pre-Cancer Atlas - Human Tumor Atlas Network</title>\n' +
-      '<meta name="robots" content="noindex, nofollow" />\n' +
-      '<meta property="og:locale" content="en_US" />\n' +
-      '<meta property="og:type" content="article" />\n' +
-      '<meta property="og:title" content="Breast Pre-Cancer Atlas - Human Tumor Atlas Network" />\n' +
-      '<meta property="og:url" content="https://humantumoratlas.wpcomstaging.com/atlas/duke/" />\n' +
-      '<meta property="og:site_name" content="Human Tumor Atlas Network" />\n' +
-      '<meta property="article:modified_time" content="2021-02-03T21:52:46+00:00" />\n' +
-      '<meta name="twitter:card" content="summary_large_image" />\n' +
-      '<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","url":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","name":"Breast Pre-Cancer Atlas - Human Tumor Atlas Network","isPartOf":{"@id":"https://humantumoratlas.wpcomstaging.com/#website"},"datePublished":"2020-04-08T15:07:10+00:00","dateModified":"2021-02-03T21:52:46+00:00","breadcrumb":{"@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://humantumoratlas.wpcomstaging.com/atlas/duke/"]}]},{"@type":"BreadcrumbList","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://humantumoratlas.wpcomstaging.com/"},{"@type":"ListItem","position":2,"name":"Breast Pre-Cancer Atlas"}]},{"@type":"WebSite","@id":"https://humantumoratlas.wpcomstaging.com/#website","url":"https://humantumoratlas.wpcomstaging.com/","name":"Human Tumor Atlas Network","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://humantumoratlas.wpcomstaging.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"en-US"}]}</script>\n' +
-      '<!-- / Yoast SEO plugin. -->',
-    yoast_head_json: {
-      title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      robots: [Object],
-      og_locale: 'en_US',
-      og_type: 'article',
-      og_title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      og_url: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-      og_site_name: 'Human Tumor Atlas Network',
-      article_modified_time: '2021-02-03T21:52:46+00:00',
-      twitter_card: 'summary_large_image',
-      schema: [Object]
-    },
-    jetpack_likes_enabled: true,
-    jetpack_sharing_enabled: true,
-    htan_id: 'hta6',
-    synapse_id: '',
-    atlas_type: 'Pre-Cancer',
-    lead_institutions: 'Duke University',
-    short_description: '',
-    atlas_overview: 'Duke Overview...',
-    data_overview: '',
-    publications: '',
-    primary_ngs: '',
-    home_image: false,
-    amp_enabled: true,
-    _links: {
-      self: [Array],
-      collection: [Array],
-      about: [Array],
-      'wp:attachment': [Array],
-      curies: [Array]
-    }
-  },
-  primaryParents: []
-}
-Missing HTANParentBiospecimenID:  {
-  Component: 'BulkWESLevel2',
-  Filename: 'bulk_DNAseq_level_2/TBCRC/H_SL-M-011-Block_2.md.bam',
-  FileFormat: 'bam',
-  HTANParentDataFileID: 'HTA6_106_13, HTA6_106_6, HTA6_106_14, HTA6_106_7',
-  HTANDataFileID: 'HTA6_106_37',
-  AlignmentWorkflowType: 'BWA-mem',
-  GenomicReference: 'Gencode Release 38 (GRCh38.p13)',
-  GenomicReferenceURL: 'https://www.gencodegenes.org/human/release_38.html',
-  IndexFileName: 'bulk_DNAseq_level_2/TBCRC/H_SL-M-011-Block_2.md.bam.bai',
-  AverageBaseQuality: null,
-  AverageInsertSize: null,
-  AverageReadLength: null,
-  Contamination: null,
-  ContaminationError: null,
-  MeanCoverage: null,
-  AdapterContent: null,
-  BasicStatistics: null,
-  Encoding: null,
-  OverrepresentedSequences: null,
-  PerBaseNContent: null,
-  PerBaseSequenceContent: null,
-  PerBaseSequenceQuality: null,
-  PerSequenceGCContent: null,
-  PerSequenceQualityScore: null,
-  PerTileSequenceQuality: null,
-  PercentGCContent: null,
-  SequenceDuplicationLevels: null,
-  SequenceLengthDistribution: null,
-  QCWorkflowType: null,
-  QCWorkflowVersion: null,
-  QCWorkflowLink: null,
-  MSIWorkflowLink: null,
-  MSIScore: null,
-  MSIStatus: null,
-  PairsOnDiffCHR: null,
-  TotalReads: null,
-  TotalUniquelyMapped: null,
-  TotalUnmappedreads: null,
-  ProportionReadsDuplicated: null,
-  ProportionReadsMapped: null,
-  ProportionTargetsNoCoverage: null,
-  ProportionBaseMismatch: null,
-  ShortReads: null,
-  ProportionCoverage10x: null,
-  ProportionCoverage30X: null,
-  Islowestlevel: null,
-  synapseId: 'syn51690967',
-  HTANParentBiospecimenID: null,
-  atlasid: 'HTA6',
-  atlas_name: 'HTAN Duke',
-  level: 'Level 2',
-  assayName: 'Bulk WES',
-  WPAtlas: {
-    id: 1193,
-    date: '2020-04-08T11:07:10',
-    date_gmt: '2020-04-08T15:07:10',
-    guid: {
-      rendered: 'https://humantumoratlas.wpcomstaging.com/?post_type=atlas&#038;p=1193'
-    },
-    modified: '2021-02-03T16:52:46',
-    modified_gmt: '2021-02-03T21:52:46',
-    slug: 'duke',
-    status: 'publish',
-    type: 'atlas',
-    link: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-    title: { rendered: 'Breast Pre-Cancer Atlas' },
-    content: { rendered: '', protected: false },
-    featured_media: 0,
-    template: '',
-    yoast_head: '<!-- This site is optimized with the Yoast SEO plugin v21.0 - https://yoast.com/wordpress/plugins/seo/ -->\n' +
-      '<title>Breast Pre-Cancer Atlas - Human Tumor Atlas Network</title>\n' +
-      '<meta name="robots" content="noindex, nofollow" />\n' +
-      '<meta property="og:locale" content="en_US" />\n' +
-      '<meta property="og:type" content="article" />\n' +
-      '<meta property="og:title" content="Breast Pre-Cancer Atlas - Human Tumor Atlas Network" />\n' +
-      '<meta property="og:url" content="https://humantumoratlas.wpcomstaging.com/atlas/duke/" />\n' +
-      '<meta property="og:site_name" content="Human Tumor Atlas Network" />\n' +
-      '<meta property="article:modified_time" content="2021-02-03T21:52:46+00:00" />\n' +
-      '<meta name="twitter:card" content="summary_large_image" />\n' +
-      '<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","url":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","name":"Breast Pre-Cancer Atlas - Human Tumor Atlas Network","isPartOf":{"@id":"https://humantumoratlas.wpcomstaging.com/#website"},"datePublished":"2020-04-08T15:07:10+00:00","dateModified":"2021-02-03T21:52:46+00:00","breadcrumb":{"@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://humantumoratlas.wpcomstaging.com/atlas/duke/"]}]},{"@type":"BreadcrumbList","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://humantumoratlas.wpcomstaging.com/"},{"@type":"ListItem","position":2,"name":"Breast Pre-Cancer Atlas"}]},{"@type":"WebSite","@id":"https://humantumoratlas.wpcomstaging.com/#website","url":"https://humantumoratlas.wpcomstaging.com/","name":"Human Tumor Atlas Network","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://humantumoratlas.wpcomstaging.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"en-US"}]}</script>\n' +
-      '<!-- / Yoast SEO plugin. -->',
-    yoast_head_json: {
-      title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      robots: [Object],
-      og_locale: 'en_US',
-      og_type: 'article',
-      og_title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      og_url: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-      og_site_name: 'Human Tumor Atlas Network',
-      article_modified_time: '2021-02-03T21:52:46+00:00',
-      twitter_card: 'summary_large_image',
-      schema: [Object]
-    },
-    jetpack_likes_enabled: true,
-    jetpack_sharing_enabled: true,
-    htan_id: 'hta6',
-    synapse_id: '',
-    atlas_type: 'Pre-Cancer',
-    lead_institutions: 'Duke University',
-    short_description: '',
-    atlas_overview: 'Duke Overview...',
-    data_overview: '',
-    publications: '',
-    primary_ngs: '',
-    home_image: false,
-    amp_enabled: true,
-    _links: {
-      self: [Array],
-      collection: [Array],
-      about: [Array],
-      'wp:attachment': [Array],
-      curies: [Array]
-    }
-  },
-  primaryParents: []
-}
-Missing HTANParentBiospecimenID:  {
-  Component: 'BulkWESLevel2',
-  Filename: 'bulk_DNAseq_level_2/TBCRC/H_SL-IU-009-E3.md.bam',
-  FileFormat: 'bam',
-  HTANParentDataFileID: 'HTA6_99_12, HTA6_99_4, HTA6_99_13, HTA6_99_5',
-  HTANDataFileID: 'HTA6_99_35',
-  AlignmentWorkflowType: 'BWA-mem',
-  GenomicReference: 'Gencode Release 38 (GRCh38.p13)',
-  GenomicReferenceURL: 'https://www.gencodegenes.org/human/release_38.html',
-  IndexFileName: 'bulk_DNAseq_level_2/TBCRC/H_SL-IU-009-E3.md.bam.bai',
-  AverageBaseQuality: null,
-  AverageInsertSize: null,
-  AverageReadLength: null,
-  Contamination: null,
-  ContaminationError: null,
-  MeanCoverage: null,
-  AdapterContent: null,
-  BasicStatistics: null,
-  Encoding: null,
-  OverrepresentedSequences: null,
-  PerBaseNContent: null,
-  PerBaseSequenceContent: null,
-  PerBaseSequenceQuality: null,
-  PerSequenceGCContent: null,
-  PerSequenceQualityScore: null,
-  PerTileSequenceQuality: null,
-  PercentGCContent: null,
-  SequenceDuplicationLevels: null,
-  SequenceLengthDistribution: null,
-  QCWorkflowType: null,
-  QCWorkflowVersion: null,
-  QCWorkflowLink: null,
-  MSIWorkflowLink: null,
-  MSIScore: null,
-  MSIStatus: null,
-  PairsOnDiffCHR: null,
-  TotalReads: null,
-  TotalUniquelyMapped: null,
-  TotalUnmappedreads: null,
-  ProportionReadsDuplicated: null,
-  ProportionReadsMapped: null,
-  ProportionTargetsNoCoverage: null,
-  ProportionBaseMismatch: null,
-  ShortReads: null,
-  ProportionCoverage10x: null,
-  ProportionCoverage30X: null,
-  Islowestlevel: null,
-  synapseId: 'syn51690960',
-  HTANParentBiospecimenID: null,
-  atlasid: 'HTA6',
-  atlas_name: 'HTAN Duke',
-  level: 'Level 2',
-  assayName: 'Bulk WES',
-  WPAtlas: {
-    id: 1193,
-    date: '2020-04-08T11:07:10',
-    date_gmt: '2020-04-08T15:07:10',
-    guid: {
-      rendered: 'https://humantumoratlas.wpcomstaging.com/?post_type=atlas&#038;p=1193'
-    },
-    modified: '2021-02-03T16:52:46',
-    modified_gmt: '2021-02-03T21:52:46',
-    slug: 'duke',
-    status: 'publish',
-    type: 'atlas',
-    link: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-    title: { rendered: 'Breast Pre-Cancer Atlas' },
-    content: { rendered: '', protected: false },
-    featured_media: 0,
-    template: '',
-    yoast_head: '<!-- This site is optimized with the Yoast SEO plugin v21.0 - https://yoast.com/wordpress/plugins/seo/ -->\n' +
-      '<title>Breast Pre-Cancer Atlas - Human Tumor Atlas Network</title>\n' +
-      '<meta name="robots" content="noindex, nofollow" />\n' +
-      '<meta property="og:locale" content="en_US" />\n' +
-      '<meta property="og:type" content="article" />\n' +
-      '<meta property="og:title" content="Breast Pre-Cancer Atlas - Human Tumor Atlas Network" />\n' +
-      '<meta property="og:url" content="https://humantumoratlas.wpcomstaging.com/atlas/duke/" />\n' +
-      '<meta property="og:site_name" content="Human Tumor Atlas Network" />\n' +
-      '<meta property="article:modified_time" content="2021-02-03T21:52:46+00:00" />\n' +
-      '<meta name="twitter:card" content="summary_large_image" />\n' +
-      '<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","url":"https://humantumoratlas.wpcomstaging.com/atlas/duke/","name":"Breast Pre-Cancer Atlas - Human Tumor Atlas Network","isPartOf":{"@id":"https://humantumoratlas.wpcomstaging.com/#website"},"datePublished":"2020-04-08T15:07:10+00:00","dateModified":"2021-02-03T21:52:46+00:00","breadcrumb":{"@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://humantumoratlas.wpcomstaging.com/atlas/duke/"]}]},{"@type":"BreadcrumbList","@id":"https://humantumoratlas.wpcomstaging.com/atlas/duke/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://humantumoratlas.wpcomstaging.com/"},{"@type":"ListItem","position":2,"name":"Breast Pre-Cancer Atlas"}]},{"@type":"WebSite","@id":"https://humantumoratlas.wpcomstaging.com/#website","url":"https://humantumoratlas.wpcomstaging.com/","name":"Human Tumor Atlas Network","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://humantumoratlas.wpcomstaging.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"en-US"}]}</script>\n' +
-      '<!-- / Yoast SEO plugin. -->',
-    yoast_head_json: {
-      title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      robots: [Object],
-      og_locale: 'en_US',
-      og_type: 'article',
-      og_title: 'Breast Pre-Cancer Atlas - Human Tumor Atlas Network',
-      og_url: 'https://humantumoratlas.wpcomstaging.com/atlas/duke/',
-      og_site_name: 'Human Tumor Atlas Network',
-      article_modified_time: '2021-02-03T21:52:46+00:00',
-      twitter_card: 'summary_large_image',
-      schema: [Object]
-    },
-    jetpack_likes_enabled: true,
-    jetpack_sharing_enabled: true,
-    htan_id: 'hta6',
-    synapse_id: '',
-    atlas_type: 'Pre-Cancer',
-    lead_institutions: 'Duke University',
-    short_description: '',
-    atlas_overview: 'Duke Overview...',
-    data_overview: '',
-    publications: '',
-    primary_ngs: '',
-    home_image: false,
-    amp_enabled: true,
-    _links: {
-      self: [Array],
-      collection: [Array],
-      about: [Array],
-      'wp:attachment': [Array],
-      curies: [Array]
-    }
-  },
-  primaryParents: []
-}
-Missing HTANParentBiospecimenID:  {
   Component: 'ScRNA-seqLevel2',
   Filename: 'scrnaseq_level_2/F007_possorted_genome_corrected_bam.bam',
   FileFormat: 'bam',
@@ -9291,4 +9020,3 @@ Missing HTANParentBiospecimenID:  {
   },
   primaryParents: []
 }
-Done in 115.10s.
