@@ -139,35 +139,31 @@ function processSynapseJSON(
         demographicsByHTANParticipantID,
     } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
-    const returnFiles = files
-        .map((file) => {
-            const parentData = getSampleAndPatientData(
-                file,
-                filesByHTANId,
-                biospecimenByHTANBiospecimenID,
-                diagnosisByHTANParticipantID,
-                demographicsByHTANParticipantID
-            );
-            if (parentData) {
-                (file as SerializableEntity).biospecimenIds = parentData.biospecimen.map(
-                    (b) => b.HTANBiospecimenID
-                );
-                (file as SerializableEntity).diagnosisIds = parentData.diagnosis.map(
-                    (d) => d.HTANParticipantID
-                );
-                (file as SerializableEntity).demographicsIds = parentData.demographics.map(
-                    (d) => d.HTANParticipantID
-                );
+    const returnFiles = files.map((file) => {
+        const parentData = getSampleAndPatientData(
+            file,
+            filesByHTANId,
+            biospecimenByHTANBiospecimenID,
+            diagnosisByHTANParticipantID,
+            demographicsByHTANParticipantID
+        );
 
-                addDownloadSourcesInfo(file);
-                addReleaseInfo(file, entitiesById);
-                return file as SerializableEntity;
-            } else {
-                return undefined;
-            }
-        })
-        .filter((f): f is SerializableEntity => !!f) // file should be defined (typescript doesnt understand (f=>f)
-        .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
+        (file as SerializableEntity).biospecimenIds = (
+            parentData?.biospecimen || []
+        ).map((b) => b.HTANBiospecimenID);
+        (file as SerializableEntity).diagnosisIds = (
+            parentData?.diagnosis || []
+        ).map((d) => d.HTANParticipantID);
+        (file as SerializableEntity).demographicsIds = (
+            parentData?.demographics || []
+        ).map((d) => d.HTANParticipantID);
+
+        addDownloadSourcesInfo(file);
+        addReleaseInfo(file, entitiesById);
+        return file as SerializableEntity;
+    });
+    //  .filter((f): f is SerializableEntity => !!f) // file should be defined (typescript doesnt understand (f=>f)
+    //  .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
     // remove files that can't be downloaded unless it's imaging
     // .filter(
     //     (f) =>
