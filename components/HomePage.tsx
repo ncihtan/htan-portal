@@ -147,7 +147,16 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     <span>About this Release:</span>
                 </Row>
             </Container> */}
-            <Plots organSummary={organSummary} assaySummary={assaySummary} />
+            <Plots
+                organSummary={organSummary}
+                assaySummary={assaySummary}
+                footerContent={
+                    <p style={{ fontSize: 'medium' }}>
+                        Many more profiled tumors will be available in the
+                        future. Stay tuned!
+                    </p>
+                }
+            />
 
             {/*<div className={styles.atlasCardContainer}>*/}
             {/*    {atlases.map((atlas) => {*/}
