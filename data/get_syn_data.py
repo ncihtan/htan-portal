@@ -44,9 +44,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                     "HTAN Stanford": "hta10",
                     "HTAN Vanderbilt": "hta11",
                     "HTAN WUSTL": "hta12",
-                    # exclude TNPs for now
                     "HTAN TNP SARDANA": "hta13",
-                    # "HTAN TNP - TMA": "hta14"
+                    "HTAN TNP - TMA": "hta14"
     }
 
 
@@ -78,8 +77,15 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
     se.load_schema(url)
 
-    # get all manifests grouped by project (i.e. research center/atlas)
-    metadata_manifests = all_files[all_files["name"].str.contains("synapse_storage_manifest")][["id", "parentId", "projectId"]].groupby(["projectId"])
+
+    # only consider newest manifest for each folder
+    metadata_manifests_newest_per_folder = all_files[all_files["name"].str.contains(
+        "synapse_storage_manifest")][
+        ["id", "projectId", "parentId", "modifiedOn"]
+        ].groupby(["parentId"]).max().reset_index().copy()
+
+    #  group them by project (i.e. research center/atlas)
+    metadata_manifests_per_project = metadata_manifests_newest_per_folder[["id", "parentId", "projectId"]].groupby(["projectId"])
 
     # portal data schema skeleton
     portal_data = {
@@ -87,38 +93,19 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
     }
 
     if include_released_only:
-        with open('release1_include.json') as f:
-            include_release1_ids = set(json.load(f))
-        with open('release2_include.json') as f:
-            include_release2_ids = set(json.load(f))
-        with open('release3_include.json') as f:
-            # release 3 include json has a different structure
-            release3_inclusions = json.load(f)
-            include_release3_ids = set([d['entityId'] for d in release3_inclusions if 'entityId' in d])
-        with open('manual_include.json') as f:
-            # hack for last minute manual includes
-            manual_includes = set(json.load(f))
-        with open('release3_exclude.json') as f:
-            exclude_release_ids = set(json.load(f))
-        include_release_ids = include_release1_ids.union(include_release2_ids).union(include_release3_ids).union(manual_includes).difference(exclude_release_ids)
+        released_entities_df = pd.read_csv("entities_v4.csv")
+        include_release_ids = set(released_entities_df['entityId'])
 
     # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
 
-    with open('release1_synapse_metadata.json') as f:
-        release1_synapse_metadata_ids = set(json.load(f))
-    with open('release2_synapse_metadata.json') as f:
-        release2_synapse_metadata_ids = set(json.load(f))
-    with open('release3_synapse_metadata.json') as f:
-        release3_synapse_metadata = json.load(f)
-        release3_synapse_metadata_ids = set([d['manifestId'] for d in release3_synapse_metadata])
-    with open('manual_metadata.json') as f:
-        manual_metadata_ids = set(json.load(f))
-
-    release_synapse_metadata_ids = release1_synapse_metadata_ids.union(release2_synapse_metadata_ids).union(release3_synapse_metadata_ids).union(manual_metadata_ids)
+    released_metadata_df = pd.read_csv("metadata_v4.csv")
+    released_synapse_metadata_ids = set(released_metadata_df['Manifest_Id'])
+    # use release_float for finding most recent release of metadata manifest
+    released_metadata_df["release_float"] = released_metadata_df["Data_Release"].str.split().str[-1].astype(float)
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
-    for project_id, dataset_group in metadata_manifests:
+    for project_id, dataset_group in metadata_manifests_per_project:
         atlas = {}
         center = syn.get(project_id, downloadFile = False).name
         if not center in htan_centers:
@@ -136,25 +123,22 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
         for dataset in datasets:
             # only consider metadata currently in release
-            if dataset["id"] not in release_synapse_metadata_ids or (include_released_only and dataset["id"] in exclude_release_ids):
+            if dataset["id"] not in released_synapse_metadata_ids:
                 continue
 
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
 
+            released_record = released_metadata_df[released_metadata_df["Manifest_Id"] == dataset["id"]].sort_values("release_float",ascending=False).iloc[0]
+
             if not do_not_download_from_synapse:
                 if dataset["id"] == "syn25619062":
                     # TODO: Use harcoded version for HMS b/c: https://github.com/ncihtan/data-release-tracker/issues/407
                     syn.get(dataset["id"], downloadLocation=manifest_location, version=6, ifcollision="overwrite.local")
-                elif dataset["id"] == "syn39271610":
-                    # Latest Duke manifest for Imaging Level 2 is missing data
-                    # from first release, so use version 1 instead
-                    syn.get(dataset["id"], downloadLocation=manifest_location, version=1, ifcollision="overwrite.local")
-                elif dataset["id"] in release3_synapse_metadata_ids:
-                    version = next(d for d in release3_synapse_metadata if d['manifestId'] == dataset['id'])['manifestVersion']
-                    syn.get(dataset["id"], version=version, downloadLocation=manifest_location, ifcollision="overwrite.local")
-                else:
+                elif pd.isna(released_record["Manifest_Version"]):
                     syn.get(dataset["id"], downloadLocation=manifest_location, ifcollision="overwrite.local")
+                else:
+                    syn.get(dataset["id"], version=released_record["Manifest_Version"], downloadLocation=manifest_location, ifcollision="overwrite.local")
                 # files can be named *.csv
                 # TODO: would be better of syn.get can take output file argument
                 os.rename(glob.glob(manifest_location + "*.csv")[0], manifest_path)

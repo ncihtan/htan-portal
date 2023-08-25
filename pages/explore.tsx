@@ -319,6 +319,7 @@ class Search extends React.Component<
                     <ExploreTabs
                         router={this.props.router}
                         schemaDataById={this.state.schemaDataById}
+                        files={this.state.files}
                         filteredFiles={this.filteredFiles}
                         filteredSynapseAtlases={this.filteredAtlases}
                         filteredSynapseAtlasesByNonAtlasFilters={

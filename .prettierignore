@@ -32,3 +32,5 @@ node_modules/**
 *webp
 *.py
 *.gz
+*.log
+*.csv

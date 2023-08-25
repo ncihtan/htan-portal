@@ -6,7 +6,7 @@ import {
     getSelectOptions,
     IFilterControlsProps,
 } from '../../lib/filterHelpers';
-import { Entity } from '../../lib/helpers';
+import { Entity, isReleaseQCEnabled } from '../../lib/helpers';
 import {
     AttributeNames,
     DownloadSourceCategory,
@@ -15,13 +15,6 @@ import {
 } from '../../lib/types';
 import FilterSearch from './FilterSearch';
 import FilterDropdown from './FilterDropdown';
-
-const isReleaseQCEnabled = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return (
-        urlParams.has('rel') || urlParams.has('release') || urlParams.has('qc')
-    );
-};
 
 const FileFilterControls: React.FunctionComponent<
     IFilterControlsProps<Entity>

@@ -60,7 +60,17 @@ export interface BaseSerializableEntity {
     synapseId?: string;
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
-    releaseVersion?: 'v1' | 'v2' | 'v3';
+    releaseVersion?: string;
+}
+
+export interface ReleaseEntity {
+    entityId: string;
+    Data_Release: string;
+    Id: string;
+    type: string;
+    CDS_Release: string;
+    IDC_Release: string;
+    Component: string;
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {
@@ -137,7 +147,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20230809_1815.json';
+            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20230824_1759.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();
@@ -387,4 +397,11 @@ export function selectorToColumnName(selector: string) {
     str = str.trim();
 
     return str;
+}
+
+export function isReleaseQCEnabled() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return (
+        urlParams.has('rel') || urlParams.has('release') || urlParams.has('qc')
+    );
 }

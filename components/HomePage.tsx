@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,17 +5,10 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import { Helmet } from 'react-helmet';
-import { ScalePropType } from 'victory-core';
 import { WPAtlas } from '../types';
 import { EntityReport } from '../lib/helpers';
-import {
-    EntityReportByAttribute,
-    computeUniqueAttributeValueCount,
-} from '../lib/entityReportHelpers';
-import SummaryChart from './SummaryChart';
-import Image from 'next/image';
-import htanMarkerPaper from '../public/HTAN-Marker-Paper-Table.png';
+import { EntityReportByAttribute } from '../lib/entityReportHelpers';
+import Plots from './Plots';
 
 export interface IHomePropsProps {
     hero_blurb: string;
@@ -38,20 +30,6 @@ function dashboardIcon(text: string, description: string) {
             </div>
         </Col>
     );
-}
-
-const chartScale: { x: ScalePropType; y: ScalePropType } = {
-    x: 'linear',
-    y: 'log',
-};
-
-// starting from y=1 doesn't work when case count=1.
-// so we start from a slightly smaller value for a better bar chart visualization
-const minDomain = { y: 0.95 };
-
-function dependentAxisTickFormat(t: number) {
-    // only show tick labels for the integer powers of 10
-    return _.isInteger(Math.log10(t)) ? t : '';
 }
 
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
@@ -77,7 +55,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     }}
                 >
                     <a style={{ color: 'white' }} href="/data-updates">
-                        Data Release V3.5 (Last updated 2023-08-09)
+                        Data Release V4.0 (Last updated 2023-08-25)
                     </a>
                 </div>
                 <Row className="justify-content-md-center">
@@ -169,59 +147,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     <span>About this Release:</span>
                 </Row>
             </Container> */}
-            <Container
-                fluid
-                style={{
-                    paddingTop: '20px',
-                    paddingBottom: '60px',
-                }}
-            >
-                <Row className="justify-content-md-center">
-                    <p style={{ fontSize: 'medium' }}>
-                        The latest HTAN data release includes tumors originating
-                        from{' '}
-                        <strong>
-                            {computeUniqueAttributeValueCount(organSummary)}
-                        </strong>{' '}
-                        primary tumor sites:
-                    </p>
-                </Row>
-                <Row className="pr-5 pl-5">
-                    <SummaryChart
-                        data={organSummary}
-                        dependentAxisEntityName="Case"
-                        stackedByCenter={false}
-                        scale={chartScale}
-                        minDomain={minDomain}
-                        dependentAxisTickFormat={dependentAxisTickFormat}
-                    />
-                </Row>
-                <Row className="justify-content-md-center">
-                    <p style={{ fontSize: 'medium' }}>
-                        The tumors were profiled with{' '}
-                        <strong>
-                            {computeUniqueAttributeValueCount(assaySummary)}
-                        </strong>{' '}
-                        different types of assays:
-                    </p>
-                </Row>
-                <Row className="pr-5 pl-5">
-                    <SummaryChart
-                        data={assaySummary}
-                        dependentAxisEntityName="Case"
-                        stackedByCenter={false}
-                        scale={chartScale}
-                        minDomain={minDomain}
-                        dependentAxisTickFormat={dependentAxisTickFormat}
-                    />
-                </Row>
-                <Row className="justify-content-md-center">
-                    <p style={{ fontSize: 'medium' }}>
-                        Many more profiled tumors will be available in the
-                        future. Stay tuned!
-                    </p>
-                </Row>
-            </Container>
+            <Plots organSummary={organSummary} assaySummary={assaySummary} />
 
             {/*<div className={styles.atlasCardContainer}>*/}
             {/*    {atlases.map((atlas) => {*/}

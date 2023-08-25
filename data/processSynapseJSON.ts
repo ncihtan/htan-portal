@@ -12,6 +12,7 @@ import {
     HTANDataFileID,
     isLowestLevel,
     LoadDataResult,
+    ReleaseEntity,
     SerializableEntity,
 } from '../lib/helpers';
 import getData from '../lib/getData';
@@ -22,21 +23,21 @@ import {
 } from '../lib/dataSchemaHelpers';
 import fs from 'fs';
 import { getAtlasList } from '../ApiUtil';
+import csvToJson from 'csvtojson';
 import dgbapIds from './dbgap_release_all.json';
 import dbgapImageIds from './dbgap_img_release2.json';
 import idcIds from './idc-imaging-assets.json';
-import release1Ids from './release1_include.json';
-import release2Ids from './release2_include.json';
-import release3Ids from './release3_include.json';
 
 async function writeProcessedFile() {
     const synapseJson = getData();
     const schemaData = await fetchAndProcessSchemaData();
     const atlases = await getAtlasList();
+    const entitiesById = await getEntitiesById();
     const processed: LoadDataResult = processSynapseJSON(
         synapseJson,
         schemaData,
-        atlases
+        atlases,
+        entitiesById
     );
     fs.writeFileSync(
         'public/processed_syn_data.json',
@@ -50,21 +51,17 @@ async function writeProcessedFile() {
     // );
 }
 
-function addReleaseInfo(file: BaseSerializableEntity) {
-    const release1SynapseSet = new Set(release1Ids);
-    const release2SynapseSet = new Set(release2Ids);
-    const release3SynapseSet = new Set(
-        release3Ids.filter((x) => x.entityId).map((x) => x.entityId)
-    );
+async function getEntitiesById() {
+    const rows = await csvToJson().fromFile('data/entities_v4.csv');
+    return _.keyBy(rows, (row) => row.entityId);
+}
 
-    if (file.synapseId) {
-        if (release1SynapseSet.has(file.synapseId)) {
-            file.releaseVersion = 'v1';
-        } else if (release2SynapseSet.has(file.synapseId)) {
-            file.releaseVersion = 'v2';
-        } else if (release3SynapseSet.has(file.synapseId)) {
-            file.releaseVersion = 'v3';
-        }
+function addReleaseInfo(
+    file: BaseSerializableEntity,
+    entitiesById: { [entityId: string]: ReleaseEntity }
+) {
+    if (file.synapseId && entitiesById[file.synapseId]) {
+        file.releaseVersion = entitiesById[file.synapseId].Data_Release;
     }
 }
 
@@ -105,7 +102,7 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
         } else if (file.HTANDataFileID in idcIds) {
             file.downloadSource = DownloadSourceCategory.idc;
         } else if (file.Component === 'OtherAssay') {
-            if (file.AssayType === '10X Visium') {
+            if (file.AssayType?.toLowerCase() === '10x visium') {
                 // 10X Visium raw data will go to dbGap, but isn't available yet
                 file.downloadSource = DownloadSourceCategory.dbgap;
             } else {
@@ -120,7 +117,8 @@ function addDownloadSourcesInfo(file: BaseSerializableEntity) {
 function processSynapseJSON(
     synapseJson: SynapseData,
     schemaData: SchemaDataById,
-    WPAtlasData: WPAtlas[]
+    WPAtlasData: WPAtlas[],
+    entitiesById: { [entityId: string]: ReleaseEntity }
 ) {
     const WPAtlasMap = _.keyBy(WPAtlasData, (a) => a.htan_id.toUpperCase());
     const flatData = extractEntitiesFromSynapseData(
@@ -141,36 +139,31 @@ function processSynapseJSON(
         demographicsByHTANParticipantID,
     } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
-    debugger;
-    const returnFiles = files
-        .map((file) => {
-            const parentData = getSampleAndPatientData(
-                file,
-                filesByHTANId,
-                biospecimenByHTANBiospecimenID,
-                diagnosisByHTANParticipantID,
-                demographicsByHTANParticipantID
-            );
-            if (parentData) {
-                (file as SerializableEntity).biospecimenIds = parentData.biospecimen.map(
-                    (b) => b.HTANBiospecimenID
-                );
-                (file as SerializableEntity).diagnosisIds = parentData.diagnosis.map(
-                    (d) => d.HTANParticipantID
-                );
-                (file as SerializableEntity).demographicsIds = parentData.demographics.map(
-                    (d) => d.HTANParticipantID
-                );
+    const returnFiles = files.map((file) => {
+        const parentData = getSampleAndPatientData(
+            file,
+            filesByHTANId,
+            biospecimenByHTANBiospecimenID,
+            diagnosisByHTANParticipantID,
+            demographicsByHTANParticipantID
+        );
 
-                addDownloadSourcesInfo(file);
-                addReleaseInfo(file);
-                return file as SerializableEntity;
-            } else {
-                return undefined;
-            }
-        })
-        .filter((f): f is SerializableEntity => !!f) // file should be defined (typescript doesnt understand (f=>f)
-        .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
+        (file as SerializableEntity).biospecimenIds = (
+            parentData?.biospecimen || []
+        ).map((b) => b.HTANBiospecimenID);
+        (file as SerializableEntity).diagnosisIds = (
+            parentData?.diagnosis || []
+        ).map((d) => d.HTANParticipantID);
+        (file as SerializableEntity).demographicsIds = (
+            parentData?.demographics || []
+        ).map((d) => d.HTANParticipantID);
+
+        addDownloadSourcesInfo(file);
+        addReleaseInfo(file, entitiesById);
+        return file as SerializableEntity;
+    });
+    //  .filter((f): f is SerializableEntity => !!f) // file should be defined (typescript doesnt understand (f=>f)
+    //  .filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
     // remove files that can't be downloaded unless it's imaging
     // .filter(
     //     (f) =>
@@ -211,7 +204,7 @@ function processSynapseJSON(
 
     // unify all 10x Visium assays under the same assay name
     _.forEach(returnFiles, (file) => {
-        if (file.assayName?.startsWith('10x Visium')) {
+        if (file.assayName?.toLowerCase().startsWith('10x visium')) {
             file.assayName = '10x Visium';
         }
     });
@@ -255,7 +248,9 @@ function findAndAddPrimaryParents(
 
     if (f.HTANParentDataFileID && !isLowestLevel(f)) {
         // if there's a parent, traverse "upwards" to find primary parent
-        const parentIds = f.HTANParentDataFileID.split(/[,;]/);
+        const parentIds = f.HTANParentDataFileID.split(/[,;]/).map((s) =>
+            s.trim()
+        );
         const parentFiles = parentIds.reduce(
             (aggr: BaseSerializableEntity[], id: string) => {
                 const file = filesByFileId[id];
@@ -353,6 +348,8 @@ function getSampleAndPatientData(
     let biospecimen = primaryParents
         .map((p) =>
             filesByHTANId[p].HTANParentBiospecimenID.split(/[,;]/).map(
+                (s) => s.trim()
+            ).map(
                 (HTANParentBiospecimenID) =>
                     biospecimenByHTANBiospecimenID[HTANParentBiospecimenID] as
                         | Entity
@@ -398,14 +395,20 @@ function getCaseData(
             // HTANParentID can be both participant or biospecimen, so keep
             // going up the tree until participant is found.
             let HTANParentID = s.HTANParentID;
+
             while (HTANParentID in biospecimenByHTANBiospecimenID) {
                 const parentBioSpecimen =
                     biospecimenByHTANBiospecimenID[HTANParentID];
-                HTANParentID = parentBioSpecimen.HTANParentID;
+                if (parentBioSpecimen.HTANParentID) {
+                    HTANParentID = parentBioSpecimen.HTANParentID;
+                } else {
+                    break;
+                }
             }
+
             if (!(HTANParentID in casesByHTANParticipantID)) {
                 console.error(
-                    `${s.HTANBiospecimenID} does not have a HTANParentID with diagnosis information`
+                    `${s.HTANBiospecimenID} does not have a HTANParentID (${HTANParentID}) with diagnosis/demographics information`
                 );
                 return undefined;
             } else {
