@@ -39,7 +39,7 @@ const CUSTOM_MINERVA_STORY_MAPPINGS = require('../data/minerva-story-mappings.js
 const THUMBNAIL_AND_AUTOMINERVA_MAPPINGS = require('../data/htan-imaging-assets.json');
 const IDC_MAPPINGS = require('../data/idc-imaging-assets.json');
 const IMG_CHANNEL_METADATA_MAP = _.keyBy(
-    require('../data/img_channel_map_r3.2.json'),
+    require('../data/img_channel_map_r4.json'),
     'image_synapseID'
 );
 
