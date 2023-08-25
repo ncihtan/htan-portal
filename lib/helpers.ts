@@ -398,3 +398,10 @@ export function selectorToColumnName(selector: string) {
 
     return str;
 }
+
+export function isReleaseQCEnabled() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return (
+        urlParams.has('rel') || urlParams.has('release') || urlParams.has('qc')
+    );
+}

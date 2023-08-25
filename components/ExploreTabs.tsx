@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import React from 'react';
 
-import { Atlas, Entity, setTab } from '../lib/helpers';
+import { Atlas, Entity, isReleaseQCEnabled, setTab } from '../lib/helpers';
 import { WPAtlas } from '../types';
 import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
@@ -10,6 +10,11 @@ import FileTable from './FileTable';
 import WPAtlasTable from './WPAtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
 import { ISelectedFiltersByAttrName } from '../lib/types';
+import Plots from './Plots';
+import {
+    computeEntityReportByAssay,
+    computeEntityReportByOrgan,
+} from '../lib/entityReportHelpers';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -42,6 +47,7 @@ export enum ExploreTab {
     ATLAS = 'atlas',
     BIOSPECIMEN = 'biospecimen',
     CASES = 'cases',
+    PLOTS = 'plots',
 }
 
 const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
@@ -108,13 +114,29 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 Files
                             </a>
                         </li>
+                        {isReleaseQCEnabled() && (
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
+                                        setTab(ExploreTab.PLOTS, props.router)
+                                    }
+                                    className={`nav-link ${
+                                        activeTab === ExploreTab.PLOTS
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Plots
+                                </a>
+                            </li>
+                        )}
                     </ul>
                 </div>
 
-                {activeTab === 'file' && (
+                {activeTab === ExploreTab.FILE && (
                     <div
                         className={`tab-content fileTab ${
-                            activeTab !== 'file' ? 'd-none' : ''
+                            activeTab !== ExploreTab.FILE ? 'd-none' : ''
                         }`}
                     >
                         <FileTable
@@ -171,10 +193,10 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     </div>
                 )}
 
-                {activeTab === 'atlas' && (
+                {activeTab === ExploreTab.ATLAS && (
                     <div
                         className={`tab-content atlasTab ${
-                            activeTab !== 'atlas' ? 'd-none' : ''
+                            activeTab !== ExploreTab.ATLAS ? 'd-none' : ''
                         }`}
                     >
                         <WPAtlasTable
@@ -194,6 +216,23 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             }
                             files={props.files}
                             filteredFiles={props.filteredFiles}
+                        />
+                    </div>
+                )}
+
+                {activeTab === ExploreTab.PLOTS && isReleaseQCEnabled() && (
+                    <div
+                        className={`tab-content fileTab ${
+                            activeTab !== ExploreTab.PLOTS ? 'd-none' : ''
+                        }`}
+                    >
+                        <Plots
+                            organSummary={computeEntityReportByOrgan(
+                                props.filteredFiles
+                            )}
+                            assaySummary={computeEntityReportByAssay(
+                                props.filteredFiles
+                            )}
                         />
                     </div>
                 )}
