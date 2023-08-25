@@ -25,12 +25,19 @@ function dependentAxisTickFormat(t: number) {
 export interface IPlotsProps {
     organSummary: EntityReportByAttribute[];
     assaySummary: EntityReportByAttribute[];
+    summaryDataDescriptor?: string;
+    footerContent?: JSX.Element;
 }
 
 const Plots: React.FunctionComponent<IPlotsProps> = ({
     organSummary,
     assaySummary,
+    summaryDataDescriptor,
+    footerContent,
 }) => {
+    summaryDataDescriptor =
+        summaryDataDescriptor || 'The latest HTAN data release';
+
     return (
         <Container
             fluid
@@ -41,8 +48,7 @@ const Plots: React.FunctionComponent<IPlotsProps> = ({
         >
             <Row className="justify-content-md-center">
                 <p style={{ fontSize: 'medium' }}>
-                    The latest HTAN data release includes tumors originating
-                    from{' '}
+                    {summaryDataDescriptor} includes tumors originating from{' '}
                     <strong>
                         {computeUniqueAttributeValueCount(organSummary)}
                     </strong>{' '}
@@ -78,12 +84,9 @@ const Plots: React.FunctionComponent<IPlotsProps> = ({
                     dependentAxisTickFormat={dependentAxisTickFormat}
                 />
             </Row>
-            <Row className="justify-content-md-center">
-                <p style={{ fontSize: 'medium' }}>
-                    Many more profiled tumors will be available in the future.
-                    Stay tuned!
-                </p>
-            </Row>
+            {footerContent !== undefined && (
+                <Row className="justify-content-md-center">{footerContent}</Row>
+            )}
         </Container>
     );
 };

@@ -227,6 +227,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <Plots
+                            summaryDataDescriptor={'Your selection'}
                             organSummary={computeEntityReportByOrgan(
                                 props.filteredFiles
                             )}
