@@ -169,6 +169,7 @@ const AutoMinervaViewerLink = (props: { url: string; count: number }) => (
                 textDecoration: 'none',
             }}
         >
+            {props.count < 1000 && '\u00A0'}
             {props.count < 100 && '\u00A0'}
             {props.count < 10 && '\u00A0'}
             {props.count}{' '}
@@ -521,6 +522,12 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     if (atlas.htan_name === 'HTAN MSK') {
                         return (
                             <>
+                                <AutoMinervaViewerLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+MSK"%7D%2C%7B"value"%3A"MIBI"%2C"label"%3A"MIBI"%2C"group"%3A"assayName"%2C"count"%3A58%2C"isSelected"%3Afalse%7D%5D&tab=file'
+                                    }
+                                    count={58}
+                                />
                                 <CellxgeneViewerLink
                                     url={
                                         '/explore?tab=file&selectedFilters=%5B%7B"value"%3A"HTAN+MSK"%2C"label"%3A"HTAN+MSK"%2C"group"%3A"AtlasName"%2C"count"%3A1086%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A12%2C"isSelected"%3Afalse%7D%5D'
@@ -542,22 +549,28 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                     url={
                                         '/explore?selectedFilters=%5B%7B"value"%3A"mIHC"%2C"label"%3A"mIHC"%2C"group"%3A"assayName"%2C"count"%3A62%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"CyCIF"%2C"label"%3A"CyCIF"%2C"group"%3A"assayName"%2C"count"%3A400%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"MIBI"%2C"label"%3A"MIBI"%2C"group"%3A"assayName"%2C"count"%3A165%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"IMC"%2C"label"%3A"IMC"%2C"group"%3A"assayName"%2C"count"%3A41%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A254%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"CyCIF"%2C"label"%3A"CyCIF"%2C"group"%3A"assayName"%2C"count"%3A13%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Duke"%7D%5D&tab=file'
                                     }
-                                    count={107}
+                                    count={1023}
                                 />
                             </>
                         );
                     } else if (atlas.htan_name === 'HTAN OHSU') {
                         return (
                             <>
-                                <CBioPortalViewerLink
+                                <AutoMinervaViewerLink
                                     url={
-                                        'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
+                                        '/explore?selectedFilters=%5B%7B"value"%3A"mIHC"%2C"label"%3A"mIHC"%2C"group"%3A"assayName"%2C"count"%3A94%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"CyCIF"%2C"label"%3A"CyCIF"%2C"group"%3A"assayName"%2C"count"%3A56%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+OHSU"%7D%5D&tab=atlas'
                                     }
-                                    count={1}
+                                    count={149}
                                 />
                                 <MinervaStoryViewerLink
                                     url={
                                         'https://minerva-story-htan-ohsu-demo.surge.sh/'
+                                    }
+                                    count={1}
+                                />
+                                <CBioPortalViewerLink
+                                    url={
+                                        'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
                                     }
                                     count={1}
                                 />
@@ -569,7 +582,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                 url={
                                     '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'
                                 }
-                                count={348}
+                                count={659}
                             />
                         );
                     } else if (atlas.htan_name === 'HTAN BU') {
@@ -586,6 +599,12 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                     } else if (atlas.htan_name === 'HTAN Vanderbilt') {
                         return (
                             <>
+                                <AutoMinervaViewerLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%2C%7B"value"%3A"MxIF"%2C"label"%3A"MxIF"%2C"group"%3A"assayName"%2C"count"%3A93%2C"isSelected"%3Afalse%7D%5D&tab=file'
+                                    }
+                                    count={123}
+                                />
                                 <CellxgeneViewerLink
                                     url={
                                         'https://cellxgene.cziscience.com/collections/a48f5033-3438-4550-8574-cdff3263fdfd'
@@ -598,12 +617,6 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                     }
                                     count={4}
                                 />
-                                <AutoMinervaViewerLink
-                                    url={
-                                        '/explore?selectedFilters=%5B%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A692%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+Vanderbilt"%7D%5D&tab=file'
-                                    }
-                                    count={20}
-                                />
                             </>
                         );
                     } else if (atlas.htan_name === 'HTAN WUSTL') {
@@ -613,7 +626,7 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                     url={
                                         '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+WUSTL"%7D%2C%7B"value"%3A"IMC"%2C"label"%3A"IMC"%2C"group"%3A"assayName"%2C"count"%3A78%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A71%2C"isSelected"%3Afalse%7D%5D&tab=file'
                                     }
-                                    count={149}
+                                    count={150}
                                 />
                             </>
                         );
@@ -631,6 +644,39 @@ export default class WPAtlasTable extends React.Component<IWPAtlasTableProps> {
                                         'explore?selectedFilters=%5B%7B%22value%22%3A%22hdf5%22%2C%22label%22%3A%22hdf5%22%2C%22group%22%3A%22FileFormat%22%2C%22count%22%3A11%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+CHOP%22%7D%5D&tab=file'
                                     }
                                     count={3}
+                                />
+                            </>
+                        );
+                    } else if (atlas.htan_name === 'HTAN TNP - TMA') {
+                        return (
+                            <>
+                                <AutoMinervaViewerLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+TNP+-+TMA"%7D%2C%7B"value"%3A"CODEX"%2C"label"%3A"CODEX"%2C"group"%3A"assayName"%2C"count"%3A13%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"CyCIF"%2C"label"%3A"CyCIF"%2C"group"%3A"assayName"%2C"count"%3A1250%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A32%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"HI-C-seq"%2C"label"%3A"HI-C-seq"%2C"group"%3A"assayName"%2C"count"%3A102%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"MIBI"%2C"label"%3A"MIBI"%2C"group"%3A"assayName"%2C"count"%3A175%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"SABER"%2C"label"%3A"SABER"%2C"group"%3A"assayName"%2C"count"%3A6%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"mIHC"%2C"label"%3A"mIHC"%2C"group"%3A"assayName"%2C"count"%3A403%2C"isSelected"%3Afalse%7D%5D&tab=file'
+                                    }
+                                    count={1293}
+                                />
+                            </>
+                        );
+                    } else if (atlas.htan_name === 'HTAN TNP SARDANA') {
+                        return (
+                            <>
+                                <AutoMinervaViewerLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+TNP+SARDANA"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A276%2C"isSelected"%3Afalse%7D%5D&tab=file'
+                                    }
+                                    count={276}
+                                />
+                            </>
+                        );
+                    } else if (atlas.htan_name === 'HTAN HTAPP') {
+                        return (
+                            <>
+                                <AutoMinervaViewerLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HTAPP"%7D%2C%7B"value"%3A"H%26E"%2C"label"%3A"H%26E"%2C"group"%3A"assayName"%2C"count"%3A10%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"MIBI"%2C"label"%3A"MIBI"%2C"group"%3A"assayName"%2C"count"%3A117%2C"isSelected"%3Afalse%7D%5D&tab=file'
+                                    }
+                                    count={127}
                                 />
                             </>
                         );
