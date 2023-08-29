@@ -109,5 +109,14 @@
         "htan_id": "hta13",
         "short_description": "Compare imaging methods across centers",
         "lead_institutions": "Trans-Network Project"
+    },
+    {
+
+        "title": {
+            "rendered": "TNP - TMA"
+        },
+        "htan_id": "hta14",
+        "short_description": "Generate spatially resolved cell type/state census from tissue microarray breast FFPE specimens",
+        "lead_institutions": "Trans-Network Project"
     }
 ]
