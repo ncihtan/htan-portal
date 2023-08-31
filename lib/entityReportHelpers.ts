@@ -88,8 +88,13 @@ export function computeEntityReportByAttribute(
     const entitiesByAttributeValue: { [value: string]: Entity[] } = {};
 
     for (const entity of entities) {
+        // first we get value using the getter (which retrieves value of selected field)
         const value = getAttributeValue(entity);
+        // if there is no value then we throw it away
+        // we might want to introduce an N/A value here
         if (value) {
+            // if there is a value then we push into a collection corresponding
+            // to the key (e.g. "female" if field is gender)
             entitiesByAttributeValue[value] =
                 entitiesByAttributeValue[value] || [];
             entitiesByAttributeValue[value].push(entity);
@@ -111,11 +116,12 @@ export function computeEntityReportByAttribute(
 }
 
 export function getNormalizedOrgan(entity: Entity) {
-    return (
-        tissueOrOriginToOrganMap[
-            normalizeTissueOrOrganOrSite(entity.TissueorOrganofOrigin)
-        ] || entity.TissueorOrganofOrigin
-    );
+    return entity.TissueorOrganofOrigin;
+    // return (
+    //     tissueOrOriginToOrganMap[
+    //         normalizeTissueOrOrganOrSite(entity.TissueorOrganofOrigin)
+    //     ] || entity.TissueorOrganofOrigin
+    // );
 }
 
 export function getNormalizedAssay(entity: Entity) {
@@ -142,6 +148,34 @@ export function computeEntityReportByOrgan(
         (d) => d.ParticipantID,
         computeOrganDistributionByCenter
     );
+}
+
+export function computeEntityReportGeneralized(
+    entities: Entity[],
+    field: string = 'TissueorOrganofOrigin',
+    uniqByAttribute: (e: Entity) => string,
+    counter: (entities: Entity[]) => number
+): EntityReportByAttribute[] {
+    const getAttributeValue = (entity: Entity) =>
+        entity[field as keyof Entity] as string | undefined;
+
+    const reports = computeEntityReportByAttribute(
+        entities,
+        getAttributeValue,
+        uniqByAttribute,
+        (entities) => {
+            return {
+                // assuming that attribute value is the same for all entities in the input list
+                attributeValue: getAttributeValue(entities[0]),
+                attributeName: field,
+                attributeFilterValues: [],
+                totalCount: counter(entities),
+                distributionByCenter: [],
+            };
+        }
+    );
+
+    return reports;
 }
 
 export function entityReportByAttributeToByCenter(
@@ -272,6 +306,19 @@ export function computeOrganDistributionByCenter(
     return computeAttributeDistributionByCenter(
         diagnosesByOrgan,
         AttributeNames.TissueorOrganofOrigin,
+        getNormalizedOrgan,
+        getOrganFilterValues,
+        (entities) => entities.length,
+        computeDistributionByDisease
+    );
+}
+
+export function computeDistributionByCenterGeneral(
+    diagnoses: Entity[]
+): EntityReportByAttribute | undefined {
+    return computeAttributeDistributionByCenter(
+        diagnoses,
+        AttributeNames.PrimaryDiagnosis,
         getNormalizedOrgan,
         getOrganFilterValues,
         (entities) => entities.length,

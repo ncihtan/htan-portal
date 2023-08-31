@@ -1,6 +1,6 @@
-import { observer } from 'mobx-react';
+import { observer, useLocalStore } from 'mobx-react';
 import { NextRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Atlas, Entity, isReleaseQCEnabled, setTab } from '../lib/helpers';
 import BiospecimenTable from './BiospecimenTable';
@@ -13,7 +13,12 @@ import Plots from './Plots';
 import {
     computeEntityReportByAssay,
     computeEntityReportByOrgan,
+    computeEntityReportGeneralized,
 } from '../lib/entityReportHelpers';
+import Select from 'react-select';
+import SummaryChart from './SummaryChart';
+import { ScalePropType } from 'victory-core';
+import _ from 'lodash';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 
@@ -26,6 +31,9 @@ interface IExploreTabsProps {
     cases: Entity[];
     filteredCasesByNonAtlasFilters: Entity[];
     filteredSamplesByNonAtlasFilters: Entity[];
+    filteredCases: Entity[];
+    filteredSamples: Entity[];
+    wpData: WPAtlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     groupsByPropertyFiltered: {
         [attrName: string]: { [attrValue: string]: Entity[] };
@@ -52,9 +60,60 @@ export enum ExploreTab {
     PLOTS = 'plots',
 }
 
+enum PlotMode {
+    SAMPLE = 'SAMPLE',
+    CASE = 'CASE',
+}
+
+type IExploreTabsState = {
+    selectedField: any;
+    xaxis: any;
+    mode: () => PlotMode;
+};
+
 const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || ExploreTab.ATLAS;
+
+        const samplesByCaseId = useMemo(() => {
+            return _.groupBy(props.filteredSamples, (s) => s.HTANParticipantID);
+        }, [props.filteredSamples]);
+
+        let options = _.map(props.groupsByPropertyFiltered, (value, key) => {
+            return {
+                value: key,
+                label: key
+                    .replace(/[A-Z]/g, (s) => ` ${s}`)
+                    .replace(/of|or/g, (s) => ` ${s}`)
+                    .replace(/$./, (s) => s.toUpperCase()),
+            };
+        });
+
+        // let options = _.map(props.groupsByPropertyFiltered,(value, key)=>{
+        //     return {
+        //         value:key,
+        //         label:key.replace(/[A-Z]/g,(s)=>` ${s}`)
+        //             .replace(/of|or/g,(s)=>` ${s}`)
+        //             .replace(/$./,(s)=>s.toUpperCase())
+        //     }
+        // });
+
+        const xaxisOptions = [
+            { value: 'HTANParticipantID', label: 'Case Count' },
+            { value: 'HTANBiospecimenID', label: 'Specimen Count' },
+        ];
+
+        const myStore = useLocalStore<IExploreTabsState>(() => {
+            return {
+                selectedField: options[0],
+                xaxis: xaxisOptions[0],
+                mode() {
+                    return this.xaxis.value === 'HTANParticipantID'
+                        ? PlotMode.CASE
+                        : PlotMode.SAMPLE;
+                },
+            };
+        });
 
         return (
             <>
@@ -230,14 +289,92 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             activeTab !== ExploreTab.PLOTS ? 'd-none' : ''
                         }`}
                     >
-                        <Plots
-                            summaryDataDescriptor={'Your selection'}
-                            organSummary={computeEntityReportByOrgan(
-                                props.filteredFiles
+                        <div style={{ display: 'flex' }}>
+                            <div style={{ width: 300, marginRight: 10 }}>
+                                <Select
+                                    classNamePrefix={'react-select'}
+                                    isSearchable={false}
+                                    isClearable={false}
+                                    name={'field'}
+                                    controlShouldRenderValue={true}
+                                    options={options}
+                                    defaultValue={options[0]}
+                                    hideSelectedOptions={false}
+                                    closeMenuOnSelect={true}
+                                    onChange={(e) => {
+                                        myStore.selectedField = e;
+                                    }}
+                                />
+                            </div>
+                            <div style={{ width: 300 }}>
+                                <Select
+                                    classNamePrefix={'react-select'}
+                                    isSearchable={false}
+                                    isClearable={false}
+                                    name={'xaxis'}
+                                    controlShouldRenderValue={true}
+                                    options={xaxisOptions}
+                                    hideSelectedOptions={false}
+                                    closeMenuOnSelect={true}
+                                    onChange={(e) => {
+                                        myStore.xaxis = e?.value;
+                                    }}
+                                    defaultValue={xaxisOptions[0]}
+                                />
+                            </div>
+                        </div>
+
+                        {/*<Plots*/}
+                        {/*    summaryDataDescriptor={'Your selection'}*/}
+                        {/*    organSummary={computeEntityReportGeneralized(*/}
+                        {/*        props.filteredFiles,*/}
+                        {/*        myStore.selectedField.value,*/}
+                        {/*    )}*/}
+                        {/*    assaySummary={computeEntityReportByAssay(*/}
+                        {/*        props.filteredFiles*/}
+                        {/*    )}*/}
+                        {/*/>*/}
+
+                        <SummaryChart
+                            data={computeEntityReportGeneralized(
+                                props.filteredCases,
+                                myStore.selectedField.value,
+                                (d) => d['HTANParticipantID'],
+                                (entities) => {
+                                    if (
+                                        myStore.xaxis.value !==
+                                        'HTANParticipantID'
+                                    ) {
+                                        return _.sumBy(entities, (entity) => {
+                                            return (
+                                                samplesByCaseId?.[
+                                                    entity.HTANParticipantID
+                                                ].length || 0
+                                            );
+                                        });
+                                    } else {
+                                        return entities.length;
+                                    }
+                                }
                             )}
-                            assaySummary={computeEntityReportByAssay(
-                                props.filteredFiles
-                            )}
+                            dependentAxisEntityName="Case"
+                            stackedByCenter={false}
+                            scale={{
+                                x: 'linear',
+                                y: 'log',
+                            }}
+                            minDomain={{ y: 0.95 }}
+                            dependentAxisTickFormat={(t: number) => {
+                                // only show tick labels for the integer powers of 10
+                                return _.isInteger(Math.log10(t)) ? t : '';
+                            }}
+                            tooltipContent={(datum) => {
+                                return (
+                                    <div style={{ margin: 10 }}>{`${
+                                        datum.totalCount
+                                    } ${myStore.mode().toLowerCase()}s`}</div>
+                                );
+                            }}
                         />
                     </div>
                 )}

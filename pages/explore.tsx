@@ -311,6 +311,8 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
                         filteredSynapseAtlasesByNonAtlasFilters={
                             this.filteredAtlasesByNonAtlasFilters
                         }
+                        filteredSamples={this.filteredSamples}
+                        filteredCases={this.filteredCases}
                         selectedSynapseAtlases={this.selectedAtlases}
                         allSynapseAtlases={this.allAtlases}
                         onSelectAtlas={this.onSelectAtlas}

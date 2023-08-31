@@ -7,7 +7,7 @@ import { Popover, PopoverContent } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import * as ReactDOM from 'react-dom';
 import { VictoryBar, VictoryBarTTargetType } from 'victory-bar';
-import { VictoryChart } from 'victory-chart';
+import { VictoryChart, VictoryChartProps } from 'victory-chart';
 import { VictoryAxis } from 'victory-axis';
 import {
     D3Scale,
@@ -48,6 +48,7 @@ export interface SummaryChartProps {
               y?: ScalePropType | D3Scale;
           };
     minDomain?: number | { x?: number; y?: number }; // useful when using a non linear scale
+    tooltipContent?: (datum: any) => JSX.Element;
 }
 
 export const VERTICAL_OFFSET = 17;
@@ -543,7 +544,11 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                     }}
                     placement="right"
                 >
-                    <TooltipContent {...datum} />
+                    {this.props.tooltipContent ? (
+                        this.props.tooltipContent(datum)
+                    ) : (
+                        <TooltipContent {...datum} />
+                    )}
                 </Popover>,
                 document.body
             );
