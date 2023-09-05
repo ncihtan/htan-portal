@@ -8,8 +8,9 @@ import {
     sortByParticipantId,
 } from '../lib/dataTableHelpers';
 import { Atlas, convertAgeInDaysToYears, Entity } from '../lib/helpers';
-import EnhancedDataTable from './EnhancedDataTable';
 import { GenericAttributeNames } from '../lib/types';
+
+import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
 
 interface ICaseTableProps {
     cases: Entity[];

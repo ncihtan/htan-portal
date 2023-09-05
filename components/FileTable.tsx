@@ -22,9 +22,6 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-import EnhancedDataTable, {
-    IEnhancedDataTableColumn,
-} from './EnhancedDataTable';
 import {
     FileAttributeMap,
     AttributeNames,
@@ -36,6 +33,10 @@ import styles from './common.module.scss';
 import { makeListColumn } from '../lib/fileTableHelpers';
 import LevelSelect from './LevelSelect';
 import ViewDetailsModal from './ViewDetailsModal';
+
+import EnhancedDataTable, {
+    IEnhancedDataTableColumn,
+} from '../packages/data-portal-table/src/components/EnhancedDataTable';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import Select from 'react-select';
 
-import { getColumnKey } from '../lib/dataTableHelpers';
+import { getColumnKey } from '../libs/helpers';
 
 type Option = {
     value: string;

@@ -1,9 +1,6 @@
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
-import EnhancedDataTable, {
-    IEnhancedDataTableColumn,
-} from './EnhancedDataTable';
 import { Tool, Tools } from '../lib/tools';
 import {
     getDefaultDataTableStyle,
@@ -16,6 +13,10 @@ import ViewDetailsModal from './ViewDetailsModal';
 import { GeneralLink } from '../types';
 import { ToolDetails } from './tool/toolDetails';
 import { getDelimitedValues } from '../lib/helpers';
+
+import EnhancedDataTable, {
+    IEnhancedDataTableColumn,
+} from '../packages/data-portal-table/src/components/EnhancedDataTable';
 
 interface IToolTableProps {
     tools: Tools;

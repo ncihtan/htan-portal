@@ -13,10 +13,11 @@ import {
     resolveColumnVisibility,
     getColumnVisibilityMap,
     getColumnKey,
-} from '../lib/dataTableHelpers';
-import DebouncedObservable from '../lib/DebouncedObservable';
+} from '../libs/helpers';
 import { ColumnVisibility } from './ColumnSelect';
 import DataTableControls from './DataTableControls';
+
+import DebouncedObservable from '../../../data-portal-utils/src/libs/DebouncedObservable';
 
 export interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
     toggleable?: boolean; // defaults to true if not specified (see isColumnToggleable)

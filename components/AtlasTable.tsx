@@ -4,7 +4,6 @@ import Tooltip from 'rc-tooltip';
 import React from 'react';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { Atlas, Entity, setTab } from '../lib/helpers';
-import EnhancedDataTable from './EnhancedDataTable';
 import { observer } from 'mobx-react';
 import { action, computed, makeObservable, observable } from 'mobx';
 import classNames from 'classnames';
@@ -16,6 +15,7 @@ import getAtlasMetaData from '../lib/getAtlasMetaData';
 import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
+import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
 
 interface IAtlasTableProps {
     router: NextRouter;
