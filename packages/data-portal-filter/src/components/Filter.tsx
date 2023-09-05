@@ -5,14 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import {
-    ExploreActionMeta,
-    ExploreSelectedFilter,
+    FilterActionMeta,
+    SelectedFilter,
     FilterAction,
     ISelectedFiltersByAttrName,
-} from '../../lib/types';
+} from '../libs/types';
 
 interface IFilterProps {
-    setFilter: (actionMeta: ExploreActionMeta<ExploreSelectedFilter>) => void;
+    setFilter: (actionMeta: FilterActionMeta<SelectedFilter>) => void;
     selectedFiltersByGroupName: ISelectedFiltersByAttrName;
     getFilterDisplayName: (filter: string) => string;
 }

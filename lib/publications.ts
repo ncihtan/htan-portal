@@ -1,6 +1,8 @@
 import { Author, PublicationData, PublicationInfo } from '../types';
 import { fetchAndProcessSchemaData } from './dataSchemaHelpers';
-import { ExploreSelectedFilter, HTANToGenericAttributeMap } from './types';
+import { HTANToGenericAttributeMap } from './types';
+
+import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 
 export const SequencingAssayName = [
     'Bulk DNA',
@@ -313,7 +315,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
     },
 };
 
-const filtersById: { [id: string]: ExploreSelectedFilter[] } = {
+const filtersById: { [id: string]: SelectedFilter[] } = {
     htapp_crc_pelka_2021: [
         { group: 'AtlasName', value: 'HTAN HTAPP', id: 'HTA1' },
     ],

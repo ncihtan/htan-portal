@@ -26,11 +26,8 @@ import {
     dataWithoutUnknownValues,
 } from '../lib/entityReportHelpers';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import {
-    FileAttributeMap,
-    AttributeNames,
-    ExploreSelectedFilter,
-} from '../lib/types';
+import { FileAttributeMap, AttributeNames } from '../lib/types';
+import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 
 export interface SummaryChartProps {
     data: EntityReportByAttribute[];
@@ -111,7 +108,7 @@ function generateBaseExploreUrl(
     attributeFilterValues: string[],
     center?: string
 ) {
-    const filters: ExploreSelectedFilter[] = [];
+    const filters: SelectedFilter[] = [];
 
     // filter by original attribute values
     filters.push(

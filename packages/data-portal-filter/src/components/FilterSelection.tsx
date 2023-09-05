@@ -1,6 +1,4 @@
 import React from 'react';
-import { Portal } from 'react-portal';
-import { Atlas, Entity } from '../../lib/helpers';
 import styles from './filterSelection.module.scss';
 
 interface IFilterSelectionProps {

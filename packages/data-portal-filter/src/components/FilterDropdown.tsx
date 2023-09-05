@@ -1,17 +1,16 @@
 import React from 'react';
-import FilterPanel from '../FilterPanel/FilterPanel';
-import FilterPropertyColumnShell from '../FilterPanel/FilterPropertyColumn';
-import FilterCheckList from '../FilterPanel/FilterCheckList';
-import {
-    ExploreOptionType,
-    IAttributeInfo,
-    ISelectedFiltersByAttrName,
-} from '../../lib/types';
+
+import FilterPanel from './FilterPanel';
+import FilterPropertyColumnShell from './FilterPropertyColumn';
+import FilterCheckList from './FilterCheckList';
+import { OptionType, ISelectedFiltersByAttrName } from '../libs/types';
+
+import { IAttributeInfo } from '../../../data-portal-utils/src/libs/types';
 
 interface IFilterDropdownProps<Attribute extends string, T> {
     attributes: Attribute[];
     attributeMap: { [attr in Attribute]: IAttributeInfo<T> };
-    options: (attrName: Attribute) => ExploreOptionType[];
+    options: (attrName: Attribute) => OptionType[];
     setFilter: (actionMeta: any) => void;
     selectedFiltersByGroupName: ISelectedFiltersByAttrName;
     countHeader: string;

@@ -1,14 +1,15 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import classNames from 'classnames';
 import { ActionMeta } from 'react-select';
-import { ExploreOptionType, ISelectedFiltersByAttrName } from '../../lib/types';
 import { observer } from 'mobx-react';
+
+import { OptionType, ISelectedFiltersByAttrName } from '../libs/types';
 import styles from './styles.module.scss';
 
 interface IFilterCheckList {
-    setFilter: (actionMeta: ActionMeta<ExploreOptionType>) => void;
+    setFilter: (actionMeta: ActionMeta<OptionType>) => void;
     filters: ISelectedFiltersByAttrName;
-    options: ExploreOptionType[];
+    options: OptionType[];
 }
 
 const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(function (

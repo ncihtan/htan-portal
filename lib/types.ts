@@ -1,22 +1,9 @@
-import { DataSchemaData } from './dataSchemaHelpers';
 import { Atlas, Entity, getDelimitedValues } from './helpers';
-import { ActionMeta, ActionTypes, OptionTypeBase } from 'react-select';
 import _ from 'lodash';
 import { Tool } from './tools';
+import { DataSchemaData } from './dataSchemaHelpers';
 
-export type ExploreOptionType = {
-    value: string;
-    label: string;
-    group: string;
-    count?: number;
-    isSelected?: boolean;
-};
-
-export type ExploreSelectedFilter = {
-    group: string;
-    value: string;
-    id?: string;
-};
+import { IAttributeInfo } from '../packages/data-portal-utils/src/libs/types';
 
 export enum AttributeNames {
     // Synapse attribute names
@@ -88,13 +75,6 @@ export enum DownloadSourceCategory {
     idcDbgap = 'dbGaP and IDC',
     synapse = 'Synapse',
     comingSoon = 'Coming Soon',
-}
-
-export interface IAttributeInfo<T> {
-    path?: string;
-    getValues?: (e: T) => string[];
-    displayName: string;
-    caseFilter?: boolean;
 }
 
 function getCaseValues(propName: keyof Entity) {
@@ -211,23 +191,6 @@ export interface IFilterProps {
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     atlases: Atlas[];
     atlasData?: any;
-}
-
-export interface ISelectedFiltersByAttrName {
-    [groupName: string]: Set<string>;
-}
-
-export enum FilterAction {
-    CLEAR_ALL = 'clear-all',
-    // these strings are hard-coded in react-select
-    CLEAR = 'clear',
-    SELECT = 'select-option',
-    DESELECT = 'deselect-option',
-}
-
-export interface ExploreActionMeta<OptionType extends OptionTypeBase>
-    extends Omit<ActionMeta<OptionType>, 'action'> {
-    action: ActionTypes | FilterAction;
 }
 
 export type SynapseData = {

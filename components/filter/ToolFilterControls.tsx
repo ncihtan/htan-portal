@@ -1,14 +1,15 @@
 import React from 'react';
+import { IFilterControlsProps } from '../../lib/filterHelpers';
+import { observer } from 'mobx-react';
+import { ToolAttributeMap, ToolAttributeNames } from '../../lib/types';
+import { Tool } from '../../lib/tools';
+
 import {
     getOptions,
     getSelectOptions,
-    IFilterControlsProps,
-} from '../../lib/filterHelpers';
-import { observer } from 'mobx-react';
-import { ToolAttributeMap, ToolAttributeNames } from '../../lib/types';
-import FilterSearch from './FilterSearch';
-import { Tool } from '../../lib/tools';
-import FilterDropdown from './FilterDropdown';
+} from '../../packages/data-portal-filter/src/libs/helpers';
+import FilterSearch from '../../packages/data-portal-filter/src/components/FilterSearch';
+import FilterDropdown from '../../packages/data-portal-filter/src/components/FilterDropdown';
 
 const ToolFilterControls: React.FunctionComponent<
     IFilterControlsProps<Tool>

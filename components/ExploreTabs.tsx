@@ -8,15 +8,14 @@ import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import AtlasTable from './AtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import {
-    GenericAttributeNames,
-    ISelectedFiltersByAttrName,
-} from '../lib/types';
+import { GenericAttributeNames } from '../lib/types';
 import Plots from './Plots';
 import {
     computeEntityReportByAssay,
     computeEntityReportByOrgan,
 } from '../lib/entityReportHelpers';
+
+import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 
 interface IExploreTabsProps {
     router: NextRouter;

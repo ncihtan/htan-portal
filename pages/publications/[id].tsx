@@ -23,20 +23,20 @@ import {
 } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
-    ExploreSelectedFilter,
-    ISelectedFiltersByAttrName,
-} from '../../lib/types';
-import {
     filterFiles,
     getFilteredCases,
     groupFilesByAttrNameAndValue,
 } from '../../lib/filterHelpers';
-import { getAssayFilterValues } from '../../lib/entityReportHelpers';
 
-const filterByAttrName = (filters: ExploreSelectedFilter[]) => {
+import {
+    ISelectedFiltersByAttrName,
+    SelectedFilter,
+} from '../../packages/data-portal-filter/src/libs/types';
+
+const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)
         .groupBy((item) => item.group)
-        .mapValues((filters: ExploreSelectedFilter[]) => {
+        .mapValues((filters: SelectedFilter[]) => {
             return new Set(filters.map((f) => f.value));
         })
         .value();

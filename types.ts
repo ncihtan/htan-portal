@@ -1,6 +1,7 @@
 import { DataSchemaData } from './lib/dataSchemaHelpers';
 import { Atlas } from './lib/helpers';
-import { ExploreSelectedFilter, GenericAttributeNames } from './lib/types';
+import { GenericAttributeNames } from './lib/types';
+import { SelectedFilter } from './packages/data-portal-filter/src/libs/types';
 
 export interface CmsData {
     slug: string;
@@ -66,7 +67,7 @@ export interface PublicationData {
         [schemaDataId: string]: DataSchemaData;
     };
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
-    filters: ExploreSelectedFilter[];
+    filters: SelectedFilter[];
 }
 
 export interface Publication {

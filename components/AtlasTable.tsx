@@ -13,8 +13,9 @@ import { faBook, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ExploreTab } from './ExploreTabs';
 import { Button, Modal } from 'react-bootstrap';
 import getAtlasMetaData from '../lib/getAtlasMetaData';
-import { ISelectedFiltersByAttrName } from '../lib/types';
 import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
+
+import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 
 interface IAtlasTableProps {
     router: NextRouter;
@@ -369,7 +370,9 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
                 selector: 'AtlasMeta.title.rendered',
                 format: (atlas: Atlas) =>
                     atlas.AtlasMeta &&
-                    !['hta13','hta14'].includes(atlas.htan_id.toLowerCase()) ? (
+                    !['hta13', 'hta14'].includes(
+                        atlas.htan_id.toLowerCase()
+                    ) ? (
                         <span>
                             <a
                                 href={`//${

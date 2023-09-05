@@ -1,11 +1,12 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
-import styles from './styles.module.scss';
 import { Portal } from 'react-portal';
 import { observer, useLocalStore } from 'mobx-react';
 import Select from 'react-select';
 import $ from 'jquery';
-import { clamp } from '../../lib/helpers';
 import { action } from 'mobx';
+
+import { clamp } from '../../../data-portal-utils/src/libs/clamp';
+import styles from './styles.module.scss';
 
 const FilterPanelMenu: FunctionComponent<{
     panelStyle: any;

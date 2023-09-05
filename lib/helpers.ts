@@ -5,13 +5,13 @@ import * as Path from 'path';
 import { toArabic } from 'roman-numerals';
 
 import { AtlasMeta } from '../types';
-import {
-    DownloadSourceCategory,
-    ExploreOptionType,
-    ExploreSelectedFilter,
-} from './types';
+import { DownloadSourceCategory } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
+import {
+    OptionType,
+    SelectedFilter,
+} from '../packages/data-portal-filter/src/libs/types';
 
 // @ts-ignore
 let win;
@@ -194,7 +194,8 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
     return data.files as Entity[];
 }
 
-export function sortStageOptions(options: ExploreOptionType[]) {
+// TODO this function doesn't seem to be used anywhere anymore
+export function sortStageOptions(options: OptionType[]) {
     const sortedOptions = _.sortBy(options, (option) => {
         const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
         let val = undefined;
@@ -220,18 +221,12 @@ export function sortStageOptions(options: ExploreOptionType[]) {
     //return options;
 }
 
-export function clamp(x: number, lower: number, upper: number) {
-    return Math.max(lower, Math.min(x, upper));
-}
-
-export function urlEncodeSelectedFilters(
-    selectedFilters: ExploreSelectedFilter[]
-) {
+export function urlEncodeSelectedFilters(selectedFilters: SelectedFilter[]) {
     return JSON.stringify(selectedFilters);
 }
 export function parseSelectedFiltersFromUrl(
     selectedFiltersURLQueryParam: string | undefined
-): ExploreSelectedFilter[] | null {
+): SelectedFilter[] | null {
     if (selectedFiltersURLQueryParam) {
         return JSON.parse(selectedFiltersURLQueryParam);
     }
@@ -257,10 +252,7 @@ function addQueryStringToURL(
     }
 }
 
-export function getExplorePageURL(
-    tab: ExploreTab,
-    filters: ExploreSelectedFilter[]
-) {
+export function getExplorePageURL(tab: ExploreTab, filters: SelectedFilter[]) {
     let url = '/explore';
     if (filters.length > 0) {
         const query: ExploreURLQuery = {
@@ -277,7 +269,7 @@ export function getAtlasPageURL(id: string) {
 }
 
 export function updateSelectedFiltersInURL(
-    filters: ExploreSelectedFilter[],
+    filters: SelectedFilter[],
     router: NextRouter
 ) {
     router.push(

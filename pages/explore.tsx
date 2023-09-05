@@ -17,8 +17,6 @@ import {
     getFileFilterDisplayName,
     getFilteredCases,
     getFilteredSamples,
-    getNewFilters,
-    getSelectedFiltersByAttrName,
     groupFilesByAttrNameAndValue,
 } from '../lib/filterHelpers';
 import {
@@ -31,21 +29,28 @@ import {
 } from '../lib/helpers';
 import {
     AttributeNames,
-    ExploreActionMeta,
-    ExploreSelectedFilter,
     HTANToGenericAttributeMap,
     IFilterProps,
-    ISelectedFiltersByAttrName,
 } from '../lib/types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import FileFilterControls from '../components/filter/FileFilterControls';
-import Filter from '../components/filter/Filter';
 import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
 import { ExploreSummary } from '../components/ExploreSummary';
 import PageWrapper from '../components/PageWrapper';
 import { fetchAndProcessSchemaData } from '../lib/dataSchemaHelpers';
+
+import {
+    FilterActionMeta,
+    ISelectedFiltersByAttrName,
+    SelectedFilter,
+} from '../packages/data-portal-filter/src/libs/types';
+import {
+    getNewFilters,
+    getSelectedFiltersByAttrName,
+} from '../packages/data-portal-filter/src/libs/helpers';
+import Filter from '../packages/data-portal-filter/src/components/Filter';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;
@@ -83,7 +88,7 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
         this.showAllCases = !this.showAllCases;
     }
 
-    get selectedFilters(): ExploreSelectedFilter[] {
+    get selectedFilters(): SelectedFilter[] {
         return (
             parseSelectedFiltersFromUrl(
                 (this.props.router.query as ExploreURLQuery).selectedFilters // use casting as ExploreURLQuery to use typescript to ensure URL correctness
@@ -105,7 +110,7 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
     }
 
     @action.bound
-    setFilter(actionMeta: ExploreActionMeta<ExploreSelectedFilter>) {
+    setFilter(actionMeta: FilterActionMeta<SelectedFilter>) {
         const newFilters = getNewFilters(this.selectedFilters, actionMeta);
         updateSelectedFiltersInURL(newFilters, this.props.router);
     }
@@ -115,7 +120,7 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
         const group = AttributeNames.AtlasName;
 
         // remove all previous atlas filters
-        const newFilters: ExploreSelectedFilter[] =
+        const newFilters: SelectedFilter[] =
             this.selectedFilters.filter((f) => f.group !== group) || [];
 
         // add the new ones
