@@ -23,20 +23,20 @@ import {
 } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
-    ExploreSelectedFilter,
-    ISelectedFiltersByAttrName,
-} from '../../lib/types';
-import {
     filterFiles,
     getFilteredCases,
     groupFilesByAttrNameAndValue,
 } from '../../lib/filterHelpers';
-import { getAssayFilterValues } from '../../lib/entityReportHelpers';
 
-const filterByAttrName = (filters: ExploreSelectedFilter[]) => {
+import {
+    ISelectedFiltersByAttrName,
+    SelectedFilter,
+} from '../../packages/data-portal-filter/src/libs/types';
+
+const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)
         .groupBy((item) => item.group)
-        .mapValues((filters: ExploreSelectedFilter[]) => {
+        .mapValues((filters: SelectedFilter[]) => {
             return new Set(filters.map((f) => f.value));
         })
         .value();
@@ -67,14 +67,14 @@ const getBiospecimensData = (
 ) => {
     const samples = _.chain(filteredFiles)
         .flatMapDeep((file) => file.biospecimen)
-        .uniqBy((f) => f.HTANBiospecimenID)
+        .uniqBy((f) => f.BiospecimenID)
         .value();
     const filteredCaseIds = _.keyBy(
         getFilteredCases(filteredFiles, selectedFiltersByAttrName, false),
-        (c) => c.HTANParticipantID
+        (c) => c.ParticipantID
     );
     return samples.filter((s) => {
-        return s.HTANParticipantID in filteredCaseIds;
+        return s.ParticipantID in filteredCaseIds;
     });
 };
 
@@ -83,7 +83,9 @@ const PublicationPage = (props: { data: Publication }) => {
     const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
     const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
     const [casesData, setCasesData] = useState<Entity[]>([]);
-    const [assayData, setAssayData] = useState<{[assayName:string]:Entity[]}>({});
+    const [assayData, setAssayData] = useState<{
+        [assayName: string]: Entity[];
+    }>({});
 
     useEffect(() => {
         async function getData() {
@@ -259,6 +261,9 @@ const PublicationPage = (props: { data: Publication }) => {
                             assays={assayData}
                             schemaDataById={
                                 props.data.publicationData.schemaDataById
+                            }
+                            genericAttributeMap={
+                                props.data.publicationData.genericAttributeMap
                             }
                         />
                     </div>

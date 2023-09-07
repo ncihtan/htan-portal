@@ -5,7 +5,7 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import { WPAtlas } from '../types';
+import { AtlasMeta } from '../types';
 import { EntityReport } from '../lib/helpers';
 import { EntityReportByAttribute } from '../lib/entityReportHelpers';
 import Plots from './Plots';
@@ -13,7 +13,7 @@ import Plots from './Plots';
 export interface IHomePropsProps {
     hero_blurb: string;
     cards: any[];
-    atlases: WPAtlas[];
+    atlases: AtlasMeta[];
     synapseCounts: EntityReport[];
     organSummary: EntityReportByAttribute[];
     assaySummary: EntityReportByAttribute[];

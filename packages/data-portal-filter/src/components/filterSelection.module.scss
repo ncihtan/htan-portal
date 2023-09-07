@@ -1,0 +1,17 @@
+.select {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #999;
+    padding: 5px 10px;
+    border-radius: 2px;
+    overflow: visible;
+}
+
+.selectPanel {
+    position: absolute;
+    left: 0;
+    height: 100px;
+    width: 96vw;
+    background: #fff;
+    border: 1px solid black;
+}

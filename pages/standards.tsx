@@ -4,8 +4,6 @@ import Row from 'react-bootstrap/Row';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
-import { CmsData } from '../types';
-import { getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
@@ -16,7 +14,6 @@ import {
 } from '../lib/vcsHelpers';
 
 export interface StandardsProps {
-    data: CmsData[];
     releaseTag: VcsTag;
 }
 
@@ -157,10 +154,9 @@ const Standards = (props: StandardsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const data = await getStaticContent(['summary-blurb-data-standards']);
     const releaseTag = await getLatestReleaseTag();
 
-    return { props: { data, releaseTag } };
+    return { props: { releaseTag } };
 };
 
 export default Standards;

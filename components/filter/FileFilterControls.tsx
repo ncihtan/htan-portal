@@ -1,20 +1,21 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import {
-    getOptions,
-    getSelectOptions,
-    IFilterControlsProps,
-} from '../../lib/filterHelpers';
+import { IFilterControlsProps } from '../../lib/filterHelpers';
 import { Entity, isReleaseQCEnabled } from '../../lib/helpers';
 import {
     AttributeNames,
     DownloadSourceCategory,
-    ExploreOptionType,
     FileAttributeMap,
 } from '../../lib/types';
-import FilterSearch from './FilterSearch';
-import FilterDropdown from './FilterDropdown';
+
+import {
+    getOptions,
+    getSelectOptions,
+} from '../../packages/data-portal-filter/src/libs/helpers';
+import FilterSearch from '../../packages/data-portal-filter/src/components/FilterSearch';
+import FilterDropdown from '../../packages/data-portal-filter/src/components/FilterDropdown';
+import { OptionType } from '../../packages/data-portal-filter/src/libs/types';
 
 const FileFilterControls: React.FunctionComponent<
     IFilterControlsProps<Entity>
@@ -97,7 +98,7 @@ const FileFilterControls: React.FunctionComponent<
                 width={170}
                 options={(attrName: AttributeNames) => {
                     return options(attrName)
-                        .sort((a: ExploreOptionType, b: ExploreOptionType) => {
+                        .sort((a: OptionType, b: OptionType) => {
                             const downloadSourceOrder = [
                                 DownloadSourceCategory.dbgap,
                                 DownloadSourceCategory.idcDbgap,
@@ -114,7 +115,7 @@ const FileFilterControls: React.FunctionComponent<
                                 )
                             );
                         })
-                        .map((e: ExploreOptionType) => {
+                        .map((e: OptionType) => {
                             const downloadLabels = {
                                 [DownloadSourceCategory.dbgap]:
                                     'CDS/SB-CGC (dbGaP 🔒)',

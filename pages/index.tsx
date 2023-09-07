@@ -11,8 +11,6 @@ config.autoAddCss = false;
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import { GetStaticProps } from 'next';
-import { WPConstants } from '../types';
-import { getAtlasList, getContent, getStaticContent } from '../ApiUtil';
 import PageWrapper from '../components/PageWrapper';
 import {
     computeDashboardData,
@@ -36,39 +34,32 @@ const Home = (data: IHomePropsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const data = await getStaticContent([WPConstants.HOMEPAGE_HERO_BLURB]);
+    // const processedSynapseData = await zlib
+    //     .gunzipSync(
+    //         await fs.readFileSync(
+    //             path.join(process.cwd(), 'public/processed_syn_data.json.gz')
+    //         )
+    //     )
+    //     .toString();
+    //
+    //
 
-    const homepageContent = data.find(
-        (d: any) => d.slug === WPConstants.HOMEPAGE_HERO_BLURB
+    const processedSynapseData = fs.readFileSync(
+        path.join(process.cwd(), 'public/processed_syn_data.json'),
+        'utf8'
     );
 
-    const atlases = await getAtlasList();
-
-    const cards = await Promise.all([
-        getContent('card-1', 'homepage'),
-        getContent('card-2', 'homepage'),
-        getContent('card-3', 'homepage'),
-        getContent('card-4', 'homepage'),
-        getContent('card-5', 'homepage'),
-        getContent('card-6', 'homepage'),
-    ]);
-
-    const processedSynapseData = await zlib
-        .gunzipSync(
-            await fs.readFileSync(
-                path.join(process.cwd(), 'public/processed_syn_data.json.gz')
-            )
-        )
-        .toString();
     const files = fillInEntities(
         (JSON.parse(processedSynapseData) as any) as LoadDataResult
     );
 
+    const blurb = `
+    HTAN is a National Cancer Institute (NCI)-funded Cancer MoonshotSM initiative to construct 3-dimensional atlases of the dynamic cellular, morphological, and molecular features of human cancers as they evolve from precancerous lesions to advanced disease. (Cell April 2020)
+    `;
+
     return {
         props: {
-            hero_blurb: homepageContent.content.rendered,
-            cards: cards,
-            atlases,
+            hero_blurb: blurb,
             synapseCounts: computeDashboardData(files),
             organSummary: computeEntityReportByOrgan(files),
             assaySummary: computeEntityReportByAssay(files),

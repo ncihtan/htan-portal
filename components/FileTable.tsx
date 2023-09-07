@@ -22,16 +22,21 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-import EnhancedDataTable, {
-    IEnhancedDataTableColumn,
-} from './EnhancedDataTable';
-import { FileAttributeMap, AttributeNames } from '../lib/types';
+import {
+    FileAttributeMap,
+    AttributeNames,
+    GenericAttributeNames,
+} from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
 import { makeListColumn } from '../lib/fileTableHelpers';
 import LevelSelect from './LevelSelect';
 import ViewDetailsModal from './ViewDetailsModal';
+
+import EnhancedDataTable, {
+    IEnhancedDataTableColumn,
+} from '../packages/data-portal-table/src/components/EnhancedDataTable';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');
@@ -289,9 +294,9 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
     // check if image is in IDC
     let idcImageUrl = undefined;
     let idcImageBucketUrls = undefined;
-    if (file.HTANDataFileID in IDC_MAPPINGS) {
-        idcImageUrl = IDC_MAPPINGS[file.HTANDataFileID]['viewer_url'];
-        const unparsedBucketUrl = IDC_MAPPINGS[file.HTANDataFileID]['gcs_urls'];
+    if (file.DataFileID in IDC_MAPPINGS) {
+        idcImageUrl = IDC_MAPPINGS[file.DataFileID]['viewer_url'];
+        const unparsedBucketUrl = IDC_MAPPINGS[file.DataFileID]['gcs_urls'];
         idcImageBucketUrls = unparsedBucketUrl
             .substr(1, unparsedBucketUrl.length - 2)
             .split(',');
@@ -399,12 +404,12 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 name: 'Biospecimen',
                 selector: (file: Entity) => {
                     return _.uniq(
-                        file.biospecimen.map((b) => b.HTANBiospecimenID)
+                        file.biospecimen.map((b) => b.BiospecimenID)
                     ).join(', ');
                 },
                 cell: (file: Entity) => {
                     const uniqueBiospecimens = _.uniq(
-                        file.biospecimen.map((b) => b.HTANBiospecimenID)
+                        file.biospecimen.map((b) => b.BiospecimenID)
                     );
                     if (uniqueBiospecimens.length === 0) {
                         return '0 Biospecimens';
@@ -771,7 +776,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
 
             //others to exclude
             Component: true,
-            WPAtlas: true,
+            AtlasMeta: true,
             biospecimenIds: true,
             cases: true,
             demographics: true,
@@ -780,7 +785,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
         };
 
         const listSelectors: any = {
-            HTANParentDataFileID: {
+            [GenericAttributeNames.ParentDataFileID]: {
                 pluralName: 'Files',
             },
         };
@@ -961,9 +966,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         tUpperCase: string
                     ) => {
                         return _.some(e.diagnosis, (d) =>
-                            d.HTANParticipantID.toUpperCase().includes(
-                                tUpperCase
-                            )
+                            d.ParticipantID.toUpperCase().includes(tUpperCase)
                         );
                     }}
                     data={this.filteredEntities}

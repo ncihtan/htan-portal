@@ -3,18 +3,19 @@ import { NextRouter } from 'next/router';
 import React from 'react';
 
 import { Atlas, Entity, isReleaseQCEnabled, setTab } from '../lib/helpers';
-import { WPAtlas } from '../types';
 import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
-import WPAtlasTable from './WPAtlasTable';
+import AtlasTable from './AtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { ISelectedFiltersByAttrName } from '../lib/types';
+import { GenericAttributeNames } from '../lib/types';
 import Plots from './Plots';
 import {
     computeEntityReportByAssay,
     computeEntityReportByOrgan,
 } from '../lib/entityReportHelpers';
+
+import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -25,7 +26,6 @@ interface IExploreTabsProps {
     cases: Entity[];
     filteredCasesByNonAtlasFilters: Entity[];
     filteredSamplesByNonAtlasFilters: Entity[];
-    wpData: WPAtlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     groupsByPropertyFiltered: {
         [attrName: string]: { [attrValue: string]: Entity[] };
@@ -40,6 +40,8 @@ interface IExploreTabsProps {
     showAllBiospecimens: boolean;
     toggleShowAllCases: () => void;
     showAllCases: boolean;
+
+    genericAttributeMap?: { [attr: string]: GenericAttributeNames };
 }
 
 export enum ExploreTab {
@@ -167,6 +169,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             synapseAtlases={props.filteredSynapseAtlases}
                             samples={props.samples}
                             schemaDataById={props.schemaDataById}
+                            genericAttributeMap={props.genericAttributeMap}
                         />
                     </div>
                 )}
@@ -189,6 +192,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             synapseAtlases={props.filteredSynapseAtlases}
                             cases={props.cases}
                             schemaDataById={props.schemaDataById}
+                            genericAttributeMap={props.genericAttributeMap}
                         />
                     </div>
                 )}
@@ -199,7 +203,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             activeTab !== ExploreTab.ATLAS ? 'd-none' : ''
                         }`}
                     >
-                        <WPAtlasTable
+                        <AtlasTable
                             router={props.router}
                             synapseAtlasData={props.allSynapseAtlases}
                             selectedAtlases={props.selectedSynapseAtlases}

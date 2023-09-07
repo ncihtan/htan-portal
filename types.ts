@@ -1,6 +1,7 @@
 import { DataSchemaData } from './lib/dataSchemaHelpers';
 import { Atlas } from './lib/helpers';
-import { ExploreSelectedFilter } from './lib/types';
+import { GenericAttributeNames } from './lib/types';
+import { SelectedFilter } from './packages/data-portal-filter/src/libs/types';
 
 export interface CmsData {
     slug: string;
@@ -31,25 +32,11 @@ export interface Category {
     [subcat: string]: SubCategory;
 }
 
-export enum WPConstants {
-    HOMEPAGE_HERO_BLURB = 'homepage-hero-blurb',
-}
-
-export interface WPAtlas {
-    id: number;
-    slug: string;
+export interface AtlasMeta {
     title: { rendered: string };
-    content: { rendered: string };
-    atlas_overview: string;
-    data_overview: string;
-    publications: string;
     lead_institutions: string;
-    atlas_type: string;
-    synapse_id: string;
     htan_id: string;
-    primary_ngs: string;
-    short_description: string;
-    home_image: { guid: string };
+    short_description?: string;
 }
 
 export interface Author {
@@ -79,7 +66,8 @@ export interface PublicationData {
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
     };
-    filters: ExploreSelectedFilter[];
+    genericAttributeMap?: { [attr: string]: GenericAttributeNames };
+    filters: SelectedFilter[];
 }
 
 export interface Publication {

@@ -8,19 +8,15 @@ import {
 } from 'mobx';
 import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
-import { GetStaticProps } from 'next';
 import { withRouter, NextRouter } from 'next/router';
 import React from 'react';
 import { ScaleLoader } from 'react-spinners';
 
-import { getAtlasList, WORDPRESS_BASE_URL } from '../ApiUtil';
 import {
     filterFiles,
     getFileFilterDisplayName,
     getFilteredCases,
     getFilteredSamples,
-    getNewFilters,
-    getSelectedFiltersByAttrName,
     groupFilesByAttrNameAndValue,
 } from '../lib/filterHelpers';
 import {
@@ -33,15 +29,11 @@ import {
 } from '../lib/helpers';
 import {
     AttributeNames,
-    ExploreActionMeta,
-    ExploreSelectedFilter,
+    HTANToGenericAttributeMap,
     IFilterProps,
-    ISelectedFiltersByAttrName,
 } from '../lib/types';
-import { WPAtlas } from '../types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import FileFilterControls from '../components/filter/FileFilterControls';
-import Filter from '../components/filter/Filter';
 import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
@@ -49,19 +41,16 @@ import { ExploreSummary } from '../components/ExploreSummary';
 import PageWrapper from '../components/PageWrapper';
 import { fetchAndProcessSchemaData } from '../lib/dataSchemaHelpers';
 
-export const getStaticProps: GetStaticProps = async (context) => {
-    //let slugs = ['summary-blurb-data-release'];
-    //let overviewURL = `${WORDPRESS_BASE_URL}${JSON.stringify(slugs)}`;
-    //let res = await fetch(overviewURL);
-
-    const wpAtlases = await getAtlasList();
-
-    return {
-        props: {
-            wpAtlases,
-        },
-    };
-};
+import {
+    FilterActionMeta,
+    ISelectedFiltersByAttrName,
+    SelectedFilter,
+} from '../packages/data-portal-filter/src/libs/types';
+import {
+    getNewFilters,
+    getSelectedFiltersByAttrName,
+} from '../packages/data-portal-filter/src/libs/helpers';
+import Filter from '../packages/data-portal-filter/src/components/Filter';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;
@@ -69,10 +58,7 @@ export type ExploreURLQuery = {
 };
 
 @observer
-class Search extends React.Component<
-    { router: NextRouter; wpAtlases: WPAtlas[] },
-    IFilterProps
-> {
+class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
     @observable.ref private dataLoadingPromise:
         | IPromiseBasedObservable<LoadDataResult>
         | undefined;
@@ -102,7 +88,7 @@ class Search extends React.Component<
         this.showAllCases = !this.showAllCases;
     }
 
-    get selectedFilters(): ExploreSelectedFilter[] {
+    get selectedFilters(): SelectedFilter[] {
         return (
             parseSelectedFiltersFromUrl(
                 (this.props.router.query as ExploreURLQuery).selectedFilters // use casting as ExploreURLQuery to use typescript to ensure URL correctness
@@ -124,7 +110,7 @@ class Search extends React.Component<
     }
 
     @action.bound
-    setFilter(actionMeta: ExploreActionMeta<ExploreSelectedFilter>) {
+    setFilter(actionMeta: FilterActionMeta<SelectedFilter>) {
         const newFilters = getNewFilters(this.selectedFilters, actionMeta);
         updateSelectedFiltersInURL(newFilters, this.props.router);
     }
@@ -134,7 +120,7 @@ class Search extends React.Component<
         const group = AttributeNames.AtlasName;
 
         // remove all previous atlas filters
-        const newFilters: ExploreSelectedFilter[] =
+        const newFilters: SelectedFilter[] =
             this.selectedFilters.filter((f) => f.group !== group) || [];
 
         // add the new ones
@@ -339,7 +325,6 @@ class Search extends React.Component<
                         nonAtlasSelectedFiltersByAttrName={
                             this.nonAtlasSelectedFiltersByAttrName
                         }
-                        wpData={this.props.wpAtlases}
                         groupsByPropertyFiltered={this.groupsByPropertyFiltered}
                         showAllBiospecimens={this.showAllBiospecimens}
                         showAllCases={this.showAllCases}
@@ -347,6 +332,7 @@ class Search extends React.Component<
                             this.toggleShowAllBiospecimens
                         }
                         toggleShowAllCases={this.toggleShowAllCases}
+                        genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
                     />
                 </div>
             );
@@ -355,7 +341,6 @@ class Search extends React.Component<
 }
 
 interface IFilterPageProps {
-    wpAtlases: WPAtlas[];
     router: NextRouter;
 }
 
@@ -365,7 +350,7 @@ const FilterPage = (props: IFilterPageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <Search router={props.router} wpAtlases={props.wpAtlases} />
+                <Search router={props.router} />
             </PageWrapper>
         </>
     );

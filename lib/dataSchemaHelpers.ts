@@ -291,8 +291,8 @@ export function getUniqDependencyIds(
 export function getAttributeToSchemaIdMap(
     schema: DataSchemaData,
     schemaDataById: SchemaDataById
-): { [description: string]: string } {
-    const attributeToId: { [description: string]: string } = {};
+): { [attribute: string]: string } {
+    const attributeToId: { [attribute: string]: string } = {};
     const dependencies = getDataSchemaDependencies(
         schema,
         schemaDataById,

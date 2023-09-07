@@ -4,14 +4,14 @@ import fetch from 'node-fetch';
 import * as Path from 'path';
 import { toArabic } from 'roman-numerals';
 
-import { WPAtlas } from '../types';
-import {
-    DownloadSourceCategory,
-    ExploreOptionType,
-    ExploreSelectedFilter,
-} from './types';
+import { AtlasMeta } from '../types';
+import { DownloadSourceCategory } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
+import {
+    OptionType,
+    SelectedFilter,
+} from '../packages/data-portal-filter/src/libs/types';
 
 // @ts-ignore
 let win;
@@ -22,26 +22,26 @@ if (typeof window !== 'undefined') {
     win = {} as any;
 }
 
-export type HTANDataFileID = string;
-export type HTANBiospecimenID = string;
-export type HTANParticipantID = string;
+export type DataFileID = string;
+export type BiospecimenID = string;
+export type ParticipantID = string;
 
 export interface BaseSerializableEntity {
     // Synapse attribute names
     AJCCPathologicStage: string;
     Biospecimen: string;
     Component: string;
-    HTANParentID: string;
-    HTANBiospecimenID: string;
-    HTANDataFileID: HTANDataFileID; // this is used as the stable UID
-    HTANParentBiospecimenID: string;
-    HTANParentDataFileID: string;
+    ParentID: string;
+    BiospecimenID: string;
+    DataFileID: DataFileID; // this is used as the stable UID
+    ParentBiospecimenID: string;
+    ParentDataFileID: string;
     TissueorOrganofOrigin: string;
     PrimaryDiagnosis: string;
     AgeatDiagnosis: number;
     FileFormat: string;
     Filename: string;
-    HTANParticipantID: string;
+    ParticipantID: string;
     ImagingAssayType?: string;
     AssayType?: string;
     Race: string;
@@ -55,8 +55,8 @@ export interface BaseSerializableEntity {
     atlas_name: string;
     level: string;
     assayName?: string;
-    WPAtlas: WPAtlas;
-    primaryParents?: HTANDataFileID[];
+    AtlasMeta: AtlasMeta;
+    primaryParents?: DataFileID[];
     synapseId?: string;
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
@@ -74,9 +74,9 @@ export interface ReleaseEntity {
 }
 
 export interface SerializableEntity extends BaseSerializableEntity {
-    biospecimenIds: HTANBiospecimenID[];
-    diagnosisIds: HTANParticipantID[];
-    demographicsIds: HTANParticipantID[];
+    biospecimenIds: BiospecimenID[];
+    diagnosisIds: ParticipantID[];
+    demographicsIds: ParticipantID[];
 }
 
 // Entity links in some referenced objects, which will help
@@ -93,20 +93,20 @@ export type Atlas = {
     htan_name: string;
     num_cases: number;
     num_biospecimens: number;
-    WPAtlas: WPAtlas;
+    AtlasMeta: AtlasMeta;
 };
 
 export interface LoadDataResult {
     files: SerializableEntity[];
     atlases: Atlas[];
-    biospecimenByHTANBiospecimenID: {
-        [HTANBiospecimenID: string]: SerializableEntity;
+    biospecimenByBiospecimenID: {
+        [BiospecimenID: string]: SerializableEntity;
     };
-    diagnosisByHTANParticipantID: {
-        [HTANParticipantID: string]: SerializableEntity;
+    diagnosisByParticipantID: {
+        [ParticipantID: string]: SerializableEntity;
     };
-    demographicsByHTANParticipantID: {
-        [HTANParticipantID: string]: SerializableEntity;
+    demographicsByParticipantID: {
+        [ParticipantID: string]: SerializableEntity;
     };
 }
 
@@ -133,11 +133,11 @@ export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
 
 function mergeCaseData(
     diagnosis: Entity[],
-    demographicsByHTANParticipantID: { [htanParticipantID: string]: Entity }
+    demographicsByParticipantID: { [participantID: string]: Entity }
 ) {
     return diagnosis.map((d) => ({
         ...d,
-        ...demographicsByHTANParticipantID[d.HTANParticipantID],
+        ...demographicsByParticipantID[d.ParticipantID],
     }));
 }
 
@@ -147,7 +147,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20230824_1759.json';
+            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20230907_0519.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();
@@ -158,19 +158,18 @@ export async function fetchData(): Promise<LoadDataResult> {
 }
 
 export function fillInEntities(data: LoadDataResult): Entity[] {
-    const biospecimenMap = data.biospecimenByHTANBiospecimenID;
-    const diagnosisMap = data.diagnosisByHTANParticipantID;
-    const demoMap = data.demographicsByHTANParticipantID;
+    const biospecimenMap = data.biospecimenByBiospecimenID;
+    const diagnosisMap = data.diagnosisByParticipantID;
+    const demoMap = data.demographicsByParticipantID;
 
     // give each biospecimen it's caseid (i.e "diagnosis" HTANParticipantID)
     // biospecimen have HTANParentID but that may or may not be it's caseid because
     // biospecimen can have other biospecimen as parents (one case at top)
-    _.forEach(data.biospecimenByHTANBiospecimenID, (specimen) => {
-        const parentIdMatch = specimen.HTANParentID.match(/[^_]*_[^_]*/);
+    _.forEach(data.biospecimenByBiospecimenID, (specimen) => {
+        const parentIdMatch = specimen.ParentID.match(/[^_]*_[^_]*/);
         // we should always have a match
-        specimen.HTANParticipantID =
-            specimen.HTANParticipantID ||
-            (parentIdMatch ? parentIdMatch[0] : '');
+        specimen.ParticipantID =
+            specimen.ParticipantID || (parentIdMatch ? parentIdMatch[0] : '');
     });
 
     data.files.forEach((file) => {
@@ -188,14 +187,15 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
                 (file as Entity).diagnosis,
                 demoMap as { [id: string]: Entity }
             ),
-            (c) => c.HTANParticipantID
+            (c) => c.ParticipantID
         );
     });
 
     return data.files as Entity[];
 }
 
-export function sortStageOptions(options: ExploreOptionType[]) {
+// TODO this function doesn't seem to be used anywhere anymore
+export function sortStageOptions(options: OptionType[]) {
     const sortedOptions = _.sortBy(options, (option) => {
         const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
         let val = undefined;
@@ -221,18 +221,12 @@ export function sortStageOptions(options: ExploreOptionType[]) {
     //return options;
 }
 
-export function clamp(x: number, lower: number, upper: number) {
-    return Math.max(lower, Math.min(x, upper));
-}
-
-export function urlEncodeSelectedFilters(
-    selectedFilters: ExploreSelectedFilter[]
-) {
+export function urlEncodeSelectedFilters(selectedFilters: SelectedFilter[]) {
     return JSON.stringify(selectedFilters);
 }
 export function parseSelectedFiltersFromUrl(
     selectedFiltersURLQueryParam: string | undefined
-): ExploreSelectedFilter[] | null {
+): SelectedFilter[] | null {
     if (selectedFiltersURLQueryParam) {
         return JSON.parse(selectedFiltersURLQueryParam);
     }
@@ -258,10 +252,7 @@ function addQueryStringToURL(
     }
 }
 
-export function getExplorePageURL(
-    tab: ExploreTab,
-    filters: ExploreSelectedFilter[]
-) {
+export function getExplorePageURL(tab: ExploreTab, filters: SelectedFilter[]) {
     let url = '/explore';
     if (filters.length > 0) {
         const query: ExploreURLQuery = {
@@ -278,7 +269,7 @@ export function getAtlasPageURL(id: string) {
 }
 
 export function updateSelectedFiltersInURL(
-    filters: ExploreSelectedFilter[],
+    filters: SelectedFilter[],
     router: NextRouter
 ) {
     router.push(
@@ -319,10 +310,10 @@ export function computeDashboardData(files: Entity[]): EntityReport[] {
             uniqueAtlases.add(file.atlasid);
         }
         for (const biospec of file.biospecimen) {
-            uniqueBiospecs.add(biospec.HTANBiospecimenID);
+            uniqueBiospecs.add(biospec.BiospecimenID);
         }
         for (const diag of file.diagnosis) {
-            uniqueCases.add(diag.HTANParticipantID);
+            uniqueCases.add(diag.ParticipantID);
             uniqueOrgans.add(diag.TissueorOrganofOrigin);
         }
     }

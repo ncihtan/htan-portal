@@ -128,7 +128,7 @@ export function computeEntityReportByAssay(
     return computeEntityReportByAttribute(
         files,
         getNormalizedAssay,
-        (d) => d.HTANDataFileID,
+        (d) => d.DataFileID,
         computeAssayDistributionByCenter
     );
 }
@@ -139,7 +139,7 @@ export function computeEntityReportByOrgan(
     return computeEntityReportByAttribute(
         _.flatten(files.map((file) => file.diagnosis)),
         getNormalizedOrgan,
-        (d) => d.HTANParticipantID,
+        (d) => d.ParticipantID,
         computeOrganDistributionByCenter
     );
 }

@@ -1,4 +1,3 @@
-import { IEnhancedDataTableColumn } from './EnhancedDataTable';
 import _ from 'lodash';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
@@ -6,6 +5,8 @@ import styles from './common.module.scss';
 import Tooltip from 'rc-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+
+import { IEnhancedDataTableColumn } from '../packages/data-portal-table/src/components/EnhancedDataTable';
 
 interface IViewDetailsModalProps<CellData> {
     cellData?: CellData;

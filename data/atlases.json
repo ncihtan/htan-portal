@@ -1,0 +1,122 @@
+[
+    {
+        "title": {
+            "rendered": "Omic and Multidimensional Spatial Atlas of Metastatic Breast Cancers"
+        },
+        "htan_id": "hta9",
+        "lead_institutions": "Oregon Health & Science University (OHSU)"
+    },
+    {
+        "title": {
+            "rendered": "Washington University Human Tumor Atlas Research Center"
+        },
+        "htan_id": "hta12",
+        "lead_institutions": "Washington University"
+    },
+    {
+        "title": {
+            "rendered": "Colon Molecular Atlas Project"
+        },
+        "htan_id": "hta11",
+        "lead_institutions": "Vanderbilt University"
+    },
+    {
+        "title": {
+            "rendered": "Multi-omic Characterization of Transformation of Familial Adenomatous Polyposis"
+        },
+        "htan_id": "hta10",
+        "lead_institutions": "Stanford University"
+    },
+    {
+        "title": {
+            "rendered": "Transition to Metastatic State: Lung Cancer, Pancreatic Cancer and Brain Metastasis"
+        },
+        "htan_id": "hta8",
+
+
+        "lead_institutions": "Memorial Sloan Kettering Cancer Center"
+
+    },
+    {
+        "title": {
+            "rendered": "Pre-Cancer Atlases of Cutaneous and Hematologic Origin"
+        },
+        "htan_id": "hta7",
+
+        "lead_institutions": "Harvard Medical School, Brigham and Women’s Hospital"
+        
+    },
+    {
+        "title": {
+            "rendered": "Breast Pre-Cancer Atlas"
+        },
+        "htan_id": "hta6",
+        "lead_institutions": "Duke University"
+    },
+    {
+        "title": {
+            "rendered": "The Cellular Geography of Therapeutic Resistance in Cancer"
+        },
+        "htan_id": "hta5",
+
+
+        "lead_institutions": "Dana-Farber Cancer Institute, Broad Institute"
+    },
+    {
+        "title": {
+            "rendered": "Center for Pediatric Tumor Cell Atlas"
+        },
+
+        "htan_id": "hta4",
+        "lead_institutions": "Children’s Hospital of Philadelphia"
+
+
+    },
+    {
+
+        "title": {
+            "rendered": "The Lung Pre-Cancer Atlas"
+        },
+
+
+        "htan_id": "hta3",
+
+
+        "lead_institutions": "Boston University, University of California, Los Angeles (UCLA)"
+
+
+    },
+    {
+        "title": {
+            "rendered": "Pre-Cancer Atlas Pilot Project (PCAPP)"
+        },
+        "htan_id": "hta2",
+        "featured_media": 0,
+        "lead_institutions": "Boston University"
+    },
+    {
+        "title": {
+            "rendered": "Human Tumor Atlas Pilot Project (HTAPP)"
+        },
+        "htan_id": "hta1",
+        "lead_institutions": "Broad Institute, Dana-Farber Cancer Institute, Harvard Medical School"
+    },
+    {
+
+        "title": {
+            "rendered": "TNP SARDANA"
+        },
+        "htan_id": "hta13",
+        "short_description": "Compare imaging methods across centers",
+        "lead_institutions": "Trans-Network Project"
+    },
+    {
+
+        "title": {
+            "rendered": "TNP - TMA"
+        },
+        "htan_id": "hta14",
+        "short_description": "Generate spatially resolved cell type/state census from tissue microarray breast FFPE specimens",
+        "lead_institutions": "Trans-Network Project"
+    }
+]
