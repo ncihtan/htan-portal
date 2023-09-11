@@ -8,13 +8,13 @@ import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import AtlasTable from './AtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { GenericAttributeNames } from '../lib/types';
 import { getNormalizedOrgan } from '../lib/entityReportHelpers';
 import Select, { MultiValueProps } from 'react-select';
 import _ from 'lodash';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 import ExplorePlot, { DEFAULT_EXPLORE_PLOT_OPTIONS } from './ExplorePlot';
+import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
 
 interface IExploreTabsProps {
     router: NextRouter;

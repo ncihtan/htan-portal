@@ -22,11 +22,7 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-import {
-    FileAttributeMap,
-    AttributeNames,
-    GenericAttributeNames,
-} from '../lib/types';
+import { FileAttributeMap } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
@@ -37,6 +33,10 @@ import ViewDetailsModal from './ViewDetailsModal';
 import EnhancedDataTable, {
     IEnhancedDataTableColumn,
 } from '../packages/data-portal-table/src/components/EnhancedDataTable';
+import {
+    AttributeNames,
+    GenericAttributeNames,
+} from '../packages/data-portal-utils/src/libs/types';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');

@@ -3,11 +3,7 @@ import React from 'react';
 
 import { IFilterControlsProps } from '../../lib/filterHelpers';
 import { Entity, isReleaseQCEnabled } from '../../lib/helpers';
-import {
-    AttributeNames,
-    DownloadSourceCategory,
-    FileAttributeMap,
-} from '../../lib/types';
+import { DownloadSourceCategory, FileAttributeMap } from '../../lib/types';
 
 import {
     getOptions,
@@ -16,6 +12,7 @@ import {
 import FilterSearch from '../../packages/data-portal-filter/src/components/FilterSearch';
 import FilterDropdown from '../../packages/data-portal-filter/src/components/FilterDropdown';
 import { OptionType } from '../../packages/data-portal-filter/src/libs/types';
+import { AttributeNames } from '../../packages/data-portal-utils/src/libs/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
 

@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { Entity, filterObject } from './helpers';
 import {
     FileAttributeMap,
-    AttributeNames,
     ToolAttributeMap,
     ToolAttributeNames,
 } from './types';
@@ -17,6 +16,7 @@ import {
     filterEntities,
     groupEntitiesByAttrNameAndValue,
 } from '../packages/data-portal-filter/src/libs/helpers';
+import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
 
 export interface IFilterControlsProps<T> {
     setFilter: (actionMeta: any) => void;

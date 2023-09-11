@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Entity } from './helpers';
-import { AttributeNames } from './types';
+import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
 
 const organMapping: OrganMapping = require('../data/human-organ-mappings.json');
 

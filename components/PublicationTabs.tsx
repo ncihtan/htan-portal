@@ -11,8 +11,9 @@ import styles from './PublicationTabs.module.scss';
 import { Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { FileAttributeMap, GenericAttributeNames } from '../lib/types';
+import { FileAttributeMap } from '../lib/types';
 import { groupEntitiesByAttrNameAndValue } from '../packages/data-portal-filter/src/libs/helpers';
+import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
 
 interface IPublicationTabsProps {
     router: NextRouter;

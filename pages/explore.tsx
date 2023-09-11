@@ -27,17 +27,12 @@ import {
     parseSelectedFiltersFromUrl,
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
-import {
-    AttributeNames,
-    HTANToGenericAttributeMap,
-    IFilterProps,
-} from '../lib/types';
+import { HTANToGenericAttributeMap, IFilterProps } from '../lib/types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import FileFilterControls from '../components/filter/FileFilterControls';
 import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
-import { ExploreSummary } from '../components/ExploreSummary';
 import PageWrapper from '../components/PageWrapper';
 import { fetchAndProcessSchemaData } from '../lib/dataSchemaHelpers';
 
@@ -51,6 +46,9 @@ import {
     getSelectedFiltersByAttrName,
 } from '../packages/data-portal-filter/src/libs/helpers';
 import Filter from '../packages/data-portal-filter/src/components/Filter';
+import { getDefaultSummaryData } from '../packages/data-portal-explore/src/libs/helpers';
+import { ExploreSummary } from '../packages/data-portal-explore/src/components/ExploreSummary';
+import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;
@@ -296,10 +294,12 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
                     />
 
                     <ExploreSummary
-                        filteredFiles={this.filteredFiles}
-                        groupsByPropertyFiltered={this.groupsByPropertyFiltered}
-                        filteredBiospecimenCount={this.filteredSamples.length}
-                        filteredCaseCount={this.filteredCases.length}
+                        summaryData={getDefaultSummaryData(
+                            this.filteredCases,
+                            this.filteredSamples,
+                            this.filteredFiles,
+                            this.groupsByPropertyFiltered
+                        )}
                     />
 
                     <ExploreTabs
