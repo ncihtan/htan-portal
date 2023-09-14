@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -42,7 +42,10 @@ const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');
 const CUSTOM_MINERVA_STORY_MAPPINGS = require('../data/minerva-story-mappings.json');
 const THUMBNAIL_AND_AUTOMINERVA_MAPPINGS = require('../data/htan-imaging-assets.json');
-const IDC_MAPPINGS = require('../data/idc-imaging-assets.json');
+const IDC_MAPPINGS = _.keyBy(
+    require('../data/idc-imaging-assets.json'),
+    'ContainerIdentifier'
+);
 const IMG_CHANNEL_METADATA_MAP = _.keyBy(
     require('../data/img_channel_map_r4.json'),
     'image_synapseID'
@@ -87,14 +90,21 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
+    const [cloudSource, setCloudSource] = useState<'gcp' | 'aws'>('gcp');
+    const getImageBucketUrl = (info: ImageViewerInfo) => {
+        return cloudSource === 'gcp'
+            ? info.idcImageBucketGcpUrl
+            : info.idcImageBucketAwsUrl;
+    };
+
     const idcImageBucketUrls: string[] = props.files
         .map(
-            (f) => getImageViewersAssociatedWithFile(f).idcImageBucketUrls || []
+            (f) => getImageBucketUrl(getImageViewersAssociatedWithFile(f)) || []
         )
         .flat();
     const filesNotDownloadableFromIDC: Entity[] = props.files.filter(
         (f) =>
-            getImageViewersAssociatedWithFile(f).idcImageBucketUrls ===
+            getImageBucketUrl(getImageViewersAssociatedWithFile(f)) ===
             undefined
     );
     const hasAnyImageViewersForNonDownloadbleFiles = filesNotDownloadableFromIDC.some(
@@ -120,32 +130,55 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                         >
                             Imaging Data Commons (IDC)
                         </a>
-                        . See the{' '}
-                        <a
-                            href="https://learn.canceridc.dev/data/downloading-data"
-                            target="_blank"
-                        >
-                            download instructions
-                        </a>
-                        .
                     </p>
                     <p>
-                        You can start from{' '}
+                        Cloud source:{' '}
+                        <Form>
+                            <Form.Group>
+                                <Form.Check
+                                    onChange={() => setCloudSource('gcp')}
+                                    type="radio"
+                                    label={
+                                        'GCP - sponsored by Google Public Data Program'
+                                    }
+                                    checked={cloudSource === 'gcp'}
+                                />
+                                <Form.Check
+                                    onChange={() => setCloudSource('aws')}
+                                    type="radio"
+                                    label={
+                                        'AWS - sponsored by AWS Open Data Sponsorship Program'
+                                    }
+                                    checked={cloudSource === 'aws'}
+                                />
+                            </Form.Group>
+                        </Form>
+                    </p>
+                    <p>
+                        To download the images in this manifest,{' '}
                         <a
-                            href="https://learn.canceridc.dev/data/downloading-data#step-2-download-the-files-defined-by-the-manifest"
+                            href={'https://github.com/peak/s5cmd#installation'}
                             target="_blank"
                         >
-                            step 2
-                        </a>{' '}
-                        in the download instructions and use the below bucket
-                        URLs for the <code>manifest.txt</code> file:
+                            install s5cmd
+                        </a>
+                        , then run the following command:
+                    </p>
+                    <p>
+                        <strong>
+                            s5cmd --no-sign-request --endpoint-url{' '}
+                            {cloudSource === 'gcp'
+                                ? 'https://storage.googleapis.com'
+                                : 'https://s3.amazonaws.com'}{' '}
+                            run manifest.txt
+                        </strong>
+                    </p>
+                    <p>
+                        You can use the below bucket URLs for the{' '}
+                        <code>manifest.txt</code> file:
                     </p>
                     <pre className="pre-scrollable">
-                        <code>
-                            {idcImageBucketUrls
-                                .map((url) => `cp ${url} .`)
-                                .join('\n')}
-                        </code>
+                        <code>{idcImageBucketUrls.join('\n')}</code>
                     </pre>
                 </div>
             )}
@@ -284,19 +317,21 @@ type ImageViewerInfo = {
     thumbnailUrl: string;
     autogeneratedImageInfo: any;
     idcImageUrl: string | undefined;
-    idcImageBucketUrls: string[] | undefined;
+    idcImageBucketAwsUrl: string | undefined;
+    idcImageBucketGcpUrl: string | undefined;
 };
 
 function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
     // check if image is in IDC
     let idcImageUrl = undefined;
-    let idcImageBucketUrls = undefined;
+    let idcImageBucketAwsUrl = undefined;
+    let idcImageBucketGcpUrl = undefined;
     if (file.DataFileID in IDC_MAPPINGS) {
-        idcImageUrl = IDC_MAPPINGS[file.DataFileID]['viewer_url'];
-        const unparsedBucketUrl = IDC_MAPPINGS[file.DataFileID]['gcs_urls'];
-        idcImageBucketUrls = unparsedBucketUrl
-            .substr(1, unparsedBucketUrl.length - 2)
-            .split(',');
+        idcImageUrl = IDC_MAPPINGS[file.DataFileID]['viewer_url']; // TODO currently viewer_url field is missing
+        idcImageBucketAwsUrl =
+            IDC_MAPPINGS[file.DataFileID]['s5cmd_manifest_aws'];
+        idcImageBucketGcpUrl =
+            IDC_MAPPINGS[file.DataFileID]['s5cmd_manifest_gcp'];
     }
 
     // custom submitted minerva stories (w/o thumbnails)
@@ -331,7 +366,8 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
         // generated
         hasImageViewer: !!minervaUrl || idcImageUrl !== undefined,
         idcImageUrl,
-        idcImageBucketUrls,
+        idcImageBucketAwsUrl,
+        idcImageBucketGcpUrl,
     };
 }
 
