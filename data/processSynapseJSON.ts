@@ -28,8 +28,10 @@ import fs from 'fs';
 import csvToJson from 'csvtojson';
 import dgbapIds from './dbgap_release_all.json';
 import dbgapImageIds from './dbgap_img_release2.json';
-import idcIds from './idc-imaging-assets.json';
+import idcAssets from './idc-imaging-assets.json';
 import atlasJson from './atlases.json';
+
+const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');
 
 async function writeProcessedFile() {
     const synapseJson = getData();
@@ -167,7 +169,6 @@ function processSynapseJSON(
     );
     console.log(Object.values(biospecimenByBiospecimenID).length);
 
-
     const returnFiles = files.map((file) => {
         const parentData = getSampleAndPatientData(
             file,
@@ -286,9 +287,7 @@ function findAndAddPrimaryParents(
 
     if (f.ParentDataFileID && !isLowestLevel(f)) {
         // if there's a parent, traverse "upwards" to find primary parent
-        const parentIds = f.ParentDataFileID.split(/[,;]/).map((s) =>
-            s.trim()
-        );
+        const parentIds = f.ParentDataFileID.split(/[,;]/).map((s) => s.trim());
         const parentFiles = parentIds.reduce(
             (aggr: BaseSerializableEntity[], id: string) => {
                 const file = filesByFileId[id];
@@ -384,14 +383,14 @@ function getSampleAndPatientData(
 
     let biospecimen = primaryParents
         .map((p) =>
-            filesByHTANId[p].ParentBiospecimenID.split(/[,;]/).map(
-                (s) => s.trim()
-            ).map(
-                (ParentBiospecimenID) =>
-                    biospecimenByBiospecimenID[ParentBiospecimenID] as
-                        | Entity
-                        | undefined
-            )
+            filesByHTANId[p].ParentBiospecimenID.split(/[,;]/)
+                .map((s) => s.trim())
+                .map(
+                    (ParentBiospecimenID) =>
+                        biospecimenByBiospecimenID[ParentBiospecimenID] as
+                            | Entity
+                            | undefined
+                )
         )
         .flat()
         .filter((f) => !!f) as BaseSerializableEntity[];
