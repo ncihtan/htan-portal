@@ -100,6 +100,7 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             <NavDropdown.Item href="/data-updates">
                 Data Updates
             </NavDropdown.Item>
+            <NavDropdown.Item href="/events">Events</NavDropdown.Item>
             <Dropdown.Divider />
             <Nav.Link href="https://twitter.com/ncihtan">Twitter</Nav.Link>
         </NavSection>,
