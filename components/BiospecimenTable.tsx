@@ -8,10 +8,11 @@ import {
     sortByBiospecimenId,
     sortByParentID,
 } from '../lib/dataTableHelpers';
-import { Atlas, Entity } from '../lib/helpers';
+import { Atlas } from '../lib/helpers';
 
 import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 interface IBiospecimenTableProps {
     samples: Entity[];

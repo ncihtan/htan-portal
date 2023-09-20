@@ -5,8 +5,8 @@ import { VictoryBar } from 'victory-bar';
 import React from 'react';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
-import { Entity } from '../lib/helpers';
 import { Option } from 'react-select/src/filters';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 export function getExploreChartOptions(
     filteredCases: Entity[],

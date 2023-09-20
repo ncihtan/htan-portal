@@ -12,11 +12,11 @@ import _ from 'lodash';
 import ViewDetailsModal from './ViewDetailsModal';
 import { GeneralLink } from '../types';
 import { ToolDetails } from './tool/toolDetails';
-import { getDelimitedValues } from '../lib/helpers';
 
 import EnhancedDataTable, {
     IEnhancedDataTableColumn,
 } from '../packages/data-portal-table/src/components/EnhancedDataTable';
+import { getDelimitedValues } from '../packages/data-portal-utils/src/libs/getDelimitedValues';
 
 interface IToolTableProps {
     tools: Tools;

@@ -13,7 +13,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
     doesFileIncludeLevel1OrLevel2SequencingData,
-    Entity,
     getFileBase,
     selectorToColumnName,
     truncateFilename,
@@ -22,7 +21,6 @@ import {
     getDefaultDataTableStyle,
     truncatedTableCell,
 } from '../lib/dataTableHelpers';
-import { FileAttributeMap } from '../lib/types';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
@@ -37,6 +35,8 @@ import {
     AttributeNames,
     GenericAttributeNames,
 } from '../packages/data-portal-utils/src/libs/types';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
+import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');

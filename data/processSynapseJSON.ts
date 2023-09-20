@@ -1,22 +1,11 @@
-import {
-    DownloadSourceCategory,
-    HTANAttributeNames,
-    HTANToGenericAttributeMap,
-    SynapseAtlas,
-    SynapseData,
-} from '../lib/types';
-import { AtlasMeta } from '../types';
+import { SynapseAtlas, SynapseData } from '../lib/types';
 import _ from 'lodash';
 
 import {
     Atlas,
-    BaseSerializableEntity,
-    Entity,
-    DataFileID,
     isLowestLevel,
     LoadDataResult,
     ReleaseEntity,
-    SerializableEntity,
 } from '../lib/helpers';
 import getData from '../lib/getData';
 import {
@@ -27,6 +16,18 @@ import {
 import fs from 'fs';
 import csvToJson from 'csvtojson';
 import atlasJson from './atlases.json';
+import {
+    AtlasMeta,
+    BaseSerializableEntity,
+    DataFileID,
+    DownloadSourceCategory,
+    Entity,
+    SerializableEntity,
+} from '../packages/data-portal-commons/src/libs/entity';
+import {
+    HTANAttributeNames,
+    HTANToGenericAttributeMap,
+} from '../packages/data-portal-commons/src/libs/types';
 
 // import idcAssets from './idc-imaging-assets.json';
 // const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');

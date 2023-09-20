@@ -35,3 +35,7 @@ export enum GenericAttributeNames {
     ParentBiospecimenID = 'ParentBiospecimenID',
     ParentDataFileID = 'ParentDataFileID',
 }
+
+export type AttributeMap<T, Attribute extends string> = {
+    [attr in Attribute]: IAttributeInfo<T>;
+};

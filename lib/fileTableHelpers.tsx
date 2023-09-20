@@ -1,9 +1,10 @@
-import { Entity, selectorToColumnName } from './helpers';
+import { selectorToColumnName } from './helpers';
 import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
 import SimpleScrollPane from '../components/SimpleScrollPane';
 import interleave from './interleave';
 import React from 'react';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 export function makeListColumn(selector: keyof Entity, pluralName: string) {
     return {

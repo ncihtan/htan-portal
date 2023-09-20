@@ -1,52 +1,39 @@
 import React from 'react';
-import { IFilterControlsProps } from '../../lib/filterHelpers';
 import { observer } from 'mobx-react';
 import { ToolAttributeMap, ToolAttributeNames } from '../../lib/types';
 import { Tool } from '../../lib/tools';
-
 import {
-    getOptions,
-    getSelectOptions,
+    getDropdownOptionsFromProps,
+    getOptionsFromProps,
 } from '../../packages/data-portal-filter/src/libs/helpers';
-import FilterSearch from '../../packages/data-portal-filter/src/components/FilterSearch';
+import FilterControls from '../../packages/data-portal-filter/src/components/FilterControls';
 import FilterDropdown from '../../packages/data-portal-filter/src/components/FilterDropdown';
+import { IFilterControlsProps } from '../../packages/data-portal-filter/src/libs/types';
 
 const ToolFilterControls: React.FunctionComponent<
-    IFilterControlsProps<Tool>
+    IFilterControlsProps<Tool, ToolAttributeNames>
 > = observer((props) => {
-    const options = getOptions(
-        ToolAttributeMap,
-        props.selectedFiltersByGroupName,
-        props.selectedFilters,
-        props.entities,
-        props.groupsByProperty
-    );
-    const selectOptions = getSelectOptions(
-        ToolAttributeMap,
-        [
+    const filterControlsProps = {
+        ...props,
+        countHeader: 'Tools',
+        attributeMap: ToolAttributeMap,
+        attributeNames: [
             ToolAttributeNames.AtlasName,
             ToolAttributeNames.ToolType,
             ToolAttributeNames.ToolLanguage,
             ToolAttributeNames.ToolTopic,
             ToolAttributeNames.ToolAssay,
         ],
-        options
-    );
-    const dropdownProps = {
-        options,
-        countHeader: 'Tools',
-        setFilter: props.setFilter,
-        selectedFiltersByGroupName: props.selectedFiltersByGroupName,
-        attributeMap: ToolAttributeMap,
     };
 
-    return (
-        <div className="filterControls">
-            <FilterSearch
-                selectOptions={selectOptions}
-                setFilter={props.setFilter}
-            />
+    const options = getOptionsFromProps(filterControlsProps);
+    const dropdownProps = getDropdownOptionsFromProps(
+        filterControlsProps,
+        options
+    );
 
+    return (
+        <FilterControls {...filterControlsProps}>
             <FilterDropdown
                 {...dropdownProps}
                 attributes={[ToolAttributeNames.AtlasName]}
@@ -68,7 +55,7 @@ const ToolFilterControls: React.FunctionComponent<
                 {...dropdownProps}
                 attributes={[ToolAttributeNames.ToolAssay]}
             />
-        </div>
+        </FilterControls>
     );
 });
 

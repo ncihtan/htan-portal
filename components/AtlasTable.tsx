@@ -3,7 +3,7 @@ import { NextRouter } from 'next/router';
 import Tooltip from 'rc-tooltip';
 import React from 'react';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import { Atlas, Entity, setTab } from '../lib/helpers';
+import { Atlas, setTab } from '../lib/helpers';
 import { observer } from 'mobx-react';
 import { action, computed, makeObservable, observable } from 'mobx';
 import classNames from 'classnames';
@@ -16,6 +16,7 @@ import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 interface IAtlasTableProps {
     router: NextRouter;

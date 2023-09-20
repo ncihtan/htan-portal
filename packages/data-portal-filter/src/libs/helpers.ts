@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { IAttributeInfo } from '../../../data-portal-utils/src/libs/types';
+import { AttributeMap } from '../../../data-portal-utils/src/libs/types';
 
 import {
     SelectedFilter,
@@ -8,6 +8,7 @@ import {
     FilterActionMeta,
     FilterAction,
     OptionType,
+    IGenericFilterControlProps,
 } from './types';
 
 export function getSelectedFiltersByAttrName(
@@ -62,7 +63,7 @@ export function getNewFilters(
 }
 
 function getAttrValueFromEntity<Attribute extends string, T>(
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeMap: AttributeMap<T, Attribute>,
     entity: T,
     attrName: Attribute
 ) {
@@ -85,7 +86,7 @@ function getAttrValueFromEntity<Attribute extends string, T>(
 
 export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
     entities: T[],
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> }
+    attributeMap: AttributeMap<T, Attribute>
 ): { [attrName: string]: { [attrValue: string]: T[] } } {
     const ret: {
         [attrName: string]: {
@@ -110,7 +111,7 @@ export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
             const attrVals = getAttrValueFromEntity(
                 attributeMap,
                 entity,
-                attrName
+                attrName as Attribute
             );
             if (attrVals) {
                 if (_.isArray(attrVals)) {
@@ -129,7 +130,7 @@ export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
 }
 
 function doesEntityPassFilter<Attribute extends string, T>(
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeMap: AttributeMap<T, Attribute>,
     entity: T,
     filterSelectionsByAttrName: ISelectedFiltersByAttrName
 ) {
@@ -137,7 +138,7 @@ function doesEntityPassFilter<Attribute extends string, T>(
         const attrValue = getAttrValueFromEntity(
             attributeMap,
             entity,
-            attrName
+            attrName as Attribute
         );
         // If the file has a value relating to this filter group...
         if (attrValue) {
@@ -155,7 +156,7 @@ function doesEntityPassFilter<Attribute extends string, T>(
 }
 
 export function filterEntities<Attribute extends string, T>(
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeMap: AttributeMap<T, Attribute>,
     filterSelectionsByAttrName: ISelectedFiltersByAttrName,
     entities: T[]
 ) {
@@ -175,10 +176,10 @@ export function filterEntities<Attribute extends string, T>(
 }
 
 export function countFilteredEntitiesByAttrValue<Attribute extends string, T>(
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeMap: AttributeMap<T, Attribute>,
     filterSelectionsByAttrName: ISelectedFiltersByAttrName,
     entities: T[],
-    attrName: string
+    attrName: Attribute
 ) {
     const counts: { [attrValue: string]: number } = {};
 
@@ -220,7 +221,7 @@ export function countFilteredEntitiesByAttrValue<Attribute extends string, T>(
 
 export function makeOptions<Attribute extends string, T>(
     attrName: Attribute,
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeMap: AttributeMap<T, Attribute>,
     selectedFiltersByAttrName: ISelectedFiltersByAttrName,
     entities: T[],
     entitiesByProperty: { [attrName: string]: { [attrValue: string]: T[] } }
@@ -245,8 +246,40 @@ export function makeOptions<Attribute extends string, T>(
     });
 }
 
+export function getOptionsFromProps<Attribute extends string, T>(
+    props: IGenericFilterControlProps<T, Attribute>
+): (attrName: Attribute) => OptionType[] {
+    return getOptions(
+        props.attributeMap,
+        props.selectedFiltersByGroupName,
+        props.selectedFilters,
+        props.entities,
+        props.groupsByProperty
+    );
+}
+
+export function getSelectOptionsFromProps<Attribute extends string, T>(
+    props: IGenericFilterControlProps<T, Attribute>,
+    options: (attrName: Attribute) => OptionType[]
+) {
+    return getSelectOptions(props.attributeMap, props.attributeNames, options);
+}
+
+export function getDropdownOptionsFromProps<Attribute extends string, T>(
+    props: IGenericFilterControlProps<T, Attribute>,
+    options: (attrName: Attribute) => OptionType[]
+) {
+    return {
+        options,
+        countHeader: props.countHeader,
+        setFilter: props.setFilter,
+        selectedFiltersByGroupName: props.selectedFiltersByGroupName,
+        attributeMap: props.attributeMap,
+    };
+}
+
 export function getOptions<Attribute extends string, T>(
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeMap: AttributeMap<T, Attribute>,
     selectedFiltersByGroupName: ISelectedFiltersByAttrName,
     selectedFilters: SelectedFilter[],
     entities: T[],
@@ -277,7 +310,7 @@ export function getOptions<Attribute extends string, T>(
 }
 
 export function getSelectOptions<Attribute extends string, T>(
-    attributeMap: { [attr in Attribute]: IAttributeInfo<T> },
+    attributeMap: AttributeMap<T, Attribute>,
     attributeNames: Attribute[],
     options: (attrName: Attribute) => OptionType[]
 ): { label: string; options: OptionType[] }[] {

@@ -32,13 +32,6 @@ export interface Category {
     [subcat: string]: SubCategory;
 }
 
-export interface AtlasMeta {
-    title: { rendered: string };
-    lead_institutions: string;
-    htan_id: string;
-    short_description?: string;
-}
-
 export interface Author {
     name: string;
     email: string;

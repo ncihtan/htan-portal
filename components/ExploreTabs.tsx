@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { Atlas, Entity, setTab } from '../lib/helpers';
+import { Atlas, setTab } from '../lib/helpers';
 import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
@@ -15,6 +15,7 @@ import _ from 'lodash';
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 import ExplorePlot, { DEFAULT_EXPLORE_PLOT_OPTIONS } from './ExplorePlot';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 interface IExploreTabsProps {
     router: NextRouter;

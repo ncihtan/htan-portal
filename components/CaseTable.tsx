@@ -7,10 +7,11 @@ import {
     getDefaultDataTableStyle,
     sortByParticipantId,
 } from '../lib/dataTableHelpers';
-import { Atlas, convertAgeInDaysToYears, Entity } from '../lib/helpers';
+import { Atlas, convertAgeInDaysToYears } from '../lib/helpers';
 
 import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 interface ICaseTableProps {
     cases: Entity[];

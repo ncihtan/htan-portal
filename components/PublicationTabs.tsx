@@ -6,14 +6,15 @@ import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { Atlas, Entity, setTab } from '../lib/helpers';
+import { Atlas, setTab } from '../lib/helpers';
 import styles from './PublicationTabs.module.scss';
 import { Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { FileAttributeMap } from '../lib/types';
 import { groupEntitiesByAttrNameAndValue } from '../packages/data-portal-filter/src/libs/helpers';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
+import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
 
 interface IPublicationTabsProps {
     router: NextRouter;

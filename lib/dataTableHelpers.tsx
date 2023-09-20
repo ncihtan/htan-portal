@@ -8,10 +8,11 @@ import {
     SchemaDataById,
     SchemaDataId,
 } from './dataSchemaHelpers';
-import { Atlas, Entity } from './helpers';
+import { Atlas } from './helpers';
 
 import { IEnhancedDataTableColumn } from '../packages/data-portal-table/src/components/EnhancedDataTable';
 import ExpandableText from '../components/ExpandableText';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 export function getDefaultDataTableStyle() {
     return {

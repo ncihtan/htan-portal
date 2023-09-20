@@ -1,30 +1,17 @@
 import _ from 'lodash';
 
-import { Entity, filterObject } from './helpers';
-import {
-    FileAttributeMap,
-    ToolAttributeMap,
-    ToolAttributeNames,
-} from './types';
+import { filterObject } from './helpers';
+import { ToolAttributeMap, ToolAttributeNames } from './types';
 import { Tool } from './tools';
 
-import {
-    ISelectedFiltersByAttrName,
-    SelectedFilter,
-} from '../packages/data-portal-filter/src/libs/types';
+import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 import {
     filterEntities,
     groupEntitiesByAttrNameAndValue,
 } from '../packages/data-portal-filter/src/libs/helpers';
 import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
-
-export interface IFilterControlsProps<T> {
-    setFilter: (actionMeta: any) => void;
-    selectedFiltersByGroupName: ISelectedFiltersByAttrName;
-    selectedFilters: SelectedFilter[];
-    entities: T[];
-    groupsByProperty: { [attrName: string]: { [attrValue: string]: T[] } };
-}
+import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
+import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 
 export function getFileFilterDisplayName(filter: string) {
     return FileAttributeMap[

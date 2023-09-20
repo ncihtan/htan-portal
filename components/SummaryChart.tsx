@@ -26,9 +26,9 @@ import {
     dataWithoutUnknownValues,
 } from '../lib/entityReportHelpers';
 import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import { FileAttributeMap } from '../lib/types';
 import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
+import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
 
 export interface SummaryChartProps {
     data: EntityReportByAttribute[];

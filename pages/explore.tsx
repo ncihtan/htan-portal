@@ -23,13 +23,13 @@ import {
     Atlas,
     fetchData,
     fillInEntities,
+    isReleaseQCEnabled,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
-import { HTANToGenericAttributeMap, IFilterProps } from '../lib/types';
+import { IFilterProps } from '../lib/types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import FileFilterControls from '../components/filter/FileFilterControls';
 import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
@@ -49,6 +49,8 @@ import Filter from '../packages/data-portal-filter/src/components/Filter';
 import { getDefaultSummaryData } from '../packages/data-portal-explore/src/libs/helpers';
 import { ExploreSummary } from '../packages/data-portal-explore/src/components/ExploreSummary';
 import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
+import FileFilterControls from '../packages/data-portal-explore/src/components/FileFilterControls';
+import { HTANToGenericAttributeMap } from '../packages/data-portal-commons/src/libs/types';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;
@@ -283,6 +285,7 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
                         selectedFilters={this.selectedFilters}
                         entities={this.state.files}
                         groupsByProperty={this.groupsByProperty}
+                        enableReleaseFilter={isReleaseQCEnabled()}
                     />
 
                     <Filter

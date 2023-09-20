@@ -6,8 +6,6 @@ import PageWrapper from '../../components/PageWrapper';
 import {
     getAllPublicationIds,
     getPublicationData,
-    ImagingAssayName,
-    SequencingAssayName,
 } from '../../lib/publications';
 import { useRouter } from 'next/router';
 import PublicationTabs from '../../components/PublicationTabs';
@@ -15,12 +13,7 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
-import {
-    Entity,
-    fetchData,
-    fillInEntities,
-    LoadDataResult,
-} from '../../lib/helpers';
+import { fetchData, fillInEntities, LoadDataResult } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
     filterFiles,
@@ -32,6 +25,7 @@ import {
     ISelectedFiltersByAttrName,
     SelectedFilter,
 } from '../../packages/data-portal-filter/src/libs/types';
+import { Entity } from '../../packages/data-portal-commons/src/libs/entity';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)

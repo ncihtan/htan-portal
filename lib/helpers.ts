@@ -3,11 +3,15 @@ import { NextRouter } from 'next/router';
 import fetch from 'node-fetch';
 import * as Path from 'path';
 
-import { AtlasMeta } from '../types';
-import { DownloadSourceCategory } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
 import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
+import {
+    AtlasMeta,
+    BaseSerializableEntity,
+    Entity,
+    SerializableEntity,
+} from '../packages/data-portal-commons/src/libs/entity';
 
 // @ts-ignore
 let win;
@@ -18,47 +22,6 @@ if (typeof window !== 'undefined') {
     win = {} as any;
 }
 
-export type DataFileID = string;
-export type BiospecimenID = string;
-export type ParticipantID = string;
-
-export interface BaseSerializableEntity {
-    // Synapse attribute names
-    AJCCPathologicStage: string;
-    Biospecimen: string;
-    Component: string;
-    ParentID: string;
-    BiospecimenID: string;
-    DataFileID: DataFileID; // this is used as the stable UID
-    ParentBiospecimenID: string;
-    ParentDataFileID: string;
-    TissueorOrganofOrigin: string;
-    PrimaryDiagnosis: string;
-    AgeatDiagnosis: number;
-    FileFormat: string;
-    Filename: string;
-    ParticipantID: string;
-    ImagingAssayType?: string;
-    AssayType?: string;
-    Race: string;
-    Ethnicity: string;
-    CountryofResidence: string;
-    Gender: string;
-    Islowestlevel?: string;
-
-    // Derived or attached in frontend
-    atlasid: string;
-    atlas_name: string;
-    level: string;
-    assayName?: string;
-    AtlasMeta: AtlasMeta;
-    primaryParents?: DataFileID[];
-    synapseId?: string;
-    isRawSequencing?: boolean;
-    downloadSource?: DownloadSourceCategory;
-    releaseVersion?: string;
-}
-
 export interface ReleaseEntity {
     entityId: string;
     Data_Release: string;
@@ -67,21 +30,6 @@ export interface ReleaseEntity {
     CDS_Release: string;
     IDC_Release: string;
     Component: string;
-}
-
-export interface SerializableEntity extends BaseSerializableEntity {
-    biospecimenIds: BiospecimenID[];
-    diagnosisIds: ParticipantID[];
-    demographicsIds: ParticipantID[];
-}
-
-// Entity links in some referenced objects, which will help
-//  for search/filter efficiency, and adds `cases` member.
-export interface Entity extends SerializableEntity {
-    biospecimen: Entity[];
-    diagnosis: Entity[];
-    demographics: Entity[];
-    cases: Entity[];
 }
 
 export type Atlas = {
@@ -107,10 +55,6 @@ export interface LoadDataResult {
 }
 
 win.missing = [];
-
-export function getDelimitedValues(text: string, separator: string = ',') {
-    return text.split(separator).map((v) => v.trim());
-}
 
 function doesFileHaveMultipleParents(file: Entity) {
     return /Level[456]/.test(file.Component);
