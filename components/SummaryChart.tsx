@@ -477,9 +477,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                 viewBox={`0 0 ${this.svgWidth} ${this.svgHeight}`}
                 onMouseMove={this.onMouseMove}
             >
-                <g
-                    transform={`translate(${this.leftPadding}, ${this.topPadding})`}
-                >
+                <g>
                     <VictoryChart
                         theme={VictoryTheme.material}
                         width={this.chartWidth}
@@ -500,7 +498,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                                 tickLabels: { fontSize: 16 },
                                 axisLabel: { fontSize: 14, padding: 30 },
                             }}
-                            orientation="bottom"
+                            orientation="top"
                             tickFormat={this.props.dependentAxisTickFormat}
                         />
 
