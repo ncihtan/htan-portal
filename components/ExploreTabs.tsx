@@ -34,7 +34,6 @@ interface IExploreTabsProps {
     filteredSamplesByNonAtlasFilters: Entity[];
     filteredCases: Entity[];
     filteredSamples: Entity[];
-    wpData: WPAtlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     groupsByPropertyFiltered: {
         [attrName: string]: { [attrValue: string]: Entity[] };
@@ -77,7 +76,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         const activeTab = props.router.query.tab || ExploreTab.ATLAS;
 
         const samplesByCaseId = useMemo(() => {
-            return _.groupBy(props.filteredSamples, (s) => s.HTANParticipantID);
+            return _.groupBy(props.filteredSamples, (s) => s.ParticipantID);
         }, [props.filteredSamples]);
 
         let options = _.map(props.groupsByPropertyFiltered, (value, key) => {
@@ -100,8 +99,8 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         // });
 
         const xaxisOptions = [
-            { value: 'HTANParticipantID', label: 'Case Count' },
-            { value: 'HTANBiospecimenID', label: 'Specimen Count' },
+            { value: 'HTAParticipantID', label: 'Case Count' },
+            { value: 'BiospecimenID', label: 'Specimen Count' },
         ];
 
         const myStore = useLocalStore<IExploreTabsState>(() => {
@@ -109,7 +108,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                 selectedField: options[0],
                 xaxis: xaxisOptions[0],
                 mode() {
-                    return this.xaxis.value === 'HTANParticipantID'
+                    return this.xaxis.value === 'ParticipantID'
                         ? PlotMode.CASE
                         : PlotMode.SAMPLE;
                 },
@@ -335,16 +334,15 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             data={computeEntityReportGeneralized(
                                 props.filteredCases,
                                 myStore.selectedField.value,
-                                (d) => d['HTANParticipantID'],
+                                (d) => d['ParticipantID'],
                                 (entities) => {
                                     if (
-                                        myStore.xaxis.value !==
-                                        'HTANParticipantID'
+                                        myStore.xaxis.value !== 'ParticipantID'
                                     ) {
                                         return _.sumBy(entities, (entity) => {
                                             return (
                                                 samplesByCaseId?.[
-                                                    entity.HTANParticipantID
+                                                    entity.ParticipantID
                                                 ].length || 0
                                             );
                                         });
