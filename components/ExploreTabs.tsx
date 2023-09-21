@@ -21,6 +21,7 @@ import { ScalePropType } from 'victory-core';
 import _ from 'lodash';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
+import Alert from 'react-bootstrap/Alert';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -175,7 +176,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 Files
                             </a>
                         </li>
-                        {isReleaseQCEnabled() && (
+                        {
                             <li className="nav-item">
                                 <a
                                     onClick={() =>
@@ -187,10 +188,13 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                             : ''
                                     }`}
                                 >
-                                    Plots
+                                    Plots{' '}
+                                    <span style={{ color: 'orange' }}>
+                                        Beta!
+                                    </span>
                                 </a>
                             </li>
-                        )}
+                        }
                     </ul>
                 </div>
 
@@ -283,12 +287,15 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     </div>
                 )}
 
-                {activeTab === ExploreTab.PLOTS && isReleaseQCEnabled() && (
+                {activeTab === ExploreTab.PLOTS && (
                     <div
                         className={`tab-content fileTab ${
                             activeTab !== ExploreTab.PLOTS ? 'd-none' : ''
                         }`}
                     >
+                        <div className={'alert alert-warning'}>
+                            This feature is in beta.
+                        </div>
                         <div style={{ display: 'flex' }}>
                             <div style={{ width: 300, marginRight: 10 }}>
                                 <Select
@@ -306,34 +313,23 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                     }}
                                 />
                             </div>
-                            <div style={{ width: 300 }}>
-                                <Select
-                                    classNamePrefix={'react-select'}
-                                    isSearchable={false}
-                                    isClearable={false}
-                                    name={'xaxis'}
-                                    controlShouldRenderValue={true}
-                                    options={xaxisOptions}
-                                    hideSelectedOptions={false}
-                                    closeMenuOnSelect={true}
-                                    onChange={(e) => {
-                                        myStore.xaxis = e?.value;
-                                    }}
-                                    defaultValue={xaxisOptions[0]}
-                                />
-                            </div>
+                            {/*<div style={{ width: 300 }}>*/}
+                            {/*    <Select*/}
+                            {/*        classNamePrefix={'react-select'}*/}
+                            {/*        isSearchable={false}*/}
+                            {/*        isClearable={false}*/}
+                            {/*        name={'xaxis'}*/}
+                            {/*        controlShouldRenderValue={true}*/}
+                            {/*        options={xaxisOptions}*/}
+                            {/*        hideSelectedOptions={false}*/}
+                            {/*        closeMenuOnSelect={true}*/}
+                            {/*        onChange={(e) => {*/}
+                            {/*            myStore.xaxis = e?.value;*/}
+                            {/*        }}*/}
+                            {/*        defaultValue={xaxisOptions[0]}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                         </div>
-
-                        {/*<Plots*/}
-                        {/*    summaryDataDescriptor={'Your selection'}*/}
-                        {/*    organSummary={computeEntityReportGeneralized(*/}
-                        {/*        props.filteredFiles,*/}
-                        {/*        myStore.selectedField.value,*/}
-                        {/*    )}*/}
-                        {/*    assaySummary={computeEntityReportByAssay(*/}
-                        {/*        props.filteredFiles*/}
-                        {/*    )}*/}
-                        {/*/>*/}
 
                         <SummaryChart
                             data={computeEntityReportGeneralized(
