@@ -11,7 +11,7 @@ import {
     getLatestReleaseTag,
     getLinkToRelease,
     VcsTag,
-} from '../lib/vcsHelpers';
+} from '../packages/data-portal-schema/src/libs/vcsHelpers';
 
 export interface StandardsProps {
     releaseTag: VcsTag;

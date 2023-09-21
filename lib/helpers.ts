@@ -7,7 +7,7 @@ import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
 import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 import {
-    AtlasMeta,
+    Atlas,
     BaseSerializableEntity,
     Entity,
     SerializableEntity,
@@ -31,14 +31,6 @@ export interface ReleaseEntity {
     IDC_Release: string;
     Component: string;
 }
-
-export type Atlas = {
-    htan_id: string;
-    htan_name: string;
-    num_cases: number;
-    num_biospecimens: number;
-    AtlasMeta: AtlasMeta;
-};
 
 export interface LoadDataResult {
     files: SerializableEntity[];

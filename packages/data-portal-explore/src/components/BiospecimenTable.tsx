@@ -1,18 +1,21 @@
 import _ from 'lodash';
 import React from 'react';
-import { DataSchemaData, SchemaDataId } from '../lib/dataSchemaHelpers';
+
+import { getDefaultDataTableStyle } from '../../../data-portal-table/src/libs/helpers';
+import { Atlas, Entity } from '../../../data-portal-commons/src/libs/entity';
+import { GenericAttributeNames } from '../../../data-portal-utils/src/libs/types';
+import {
+    DataSchemaData,
+    SchemaDataId,
+} from '../../../data-portal-schema/src/libs/dataSchemaHelpers';
+import EnhancedDataTable from '../../../data-portal-table/src/components/EnhancedDataTable';
+
 import {
     generateColumnsForDataSchema,
     getAtlasColumn,
-    getDefaultDataTableStyle,
     sortByBiospecimenId,
     sortByParentID,
-} from '../lib/dataTableHelpers';
-import { Atlas } from '../lib/helpers';
-
-import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
-import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import { Entity } from '../packages/data-portal-commons/src/libs/entity';
+} from '../libs/dataTableHelpers';
 
 interface IBiospecimenTableProps {
     samples: Entity[];

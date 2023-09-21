@@ -17,10 +17,7 @@ import {
     selectorToColumnName,
     truncateFilename,
 } from '../lib/helpers';
-import {
-    getDefaultDataTableStyle,
-    truncatedTableCell,
-} from '../lib/dataTableHelpers';
+import { truncatedTableCell } from '../lib/dataTableHelpers';
 import SimpleScrollPane from './SimpleScrollPane';
 import interleave from '../lib/interleave';
 import styles from './common.module.scss';
@@ -37,6 +34,7 @@ import {
 } from '../packages/data-portal-utils/src/libs/types';
 import { Entity } from '../packages/data-portal-commons/src/libs/entity';
 import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
+import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
 
 const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');

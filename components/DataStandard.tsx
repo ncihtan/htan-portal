@@ -2,7 +2,6 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import { DataSchemaData } from '../lib/dataSchemaHelpers';
 import { CmsData } from '../types';
 import DataSchema from './DataSchema';
 import Footer from './Footer';
@@ -11,6 +10,7 @@ import { Col } from 'react-bootstrap';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 
 export interface DataStandardProps {
     title: string;

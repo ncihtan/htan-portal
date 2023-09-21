@@ -2,19 +2,19 @@ import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import Tooltip from 'rc-tooltip';
 import React from 'react';
-import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
-import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { Atlas, setTab } from '../lib/helpers';
+import { setTab } from '../lib/helpers';
 import styles from './PublicationTabs.module.scss';
 import { Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { groupEntitiesByAttrNameAndValue } from '../packages/data-portal-filter/src/libs/helpers';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import { Entity } from '../packages/data-portal-commons/src/libs/entity';
+import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
 import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
+import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
+import BiospecimenTable from '../packages/data-portal-explore/src/components/BiospecimenTable';
 
 interface IPublicationTabsProps {
     router: NextRouter;

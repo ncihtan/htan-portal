@@ -20,7 +20,6 @@ import {
     groupFilesByAttrNameAndValue,
 } from '../lib/filterHelpers';
 import {
-    Atlas,
     fetchData,
     fillInEntities,
     isReleaseQCEnabled,
@@ -34,7 +33,6 @@ import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
 import PageWrapper from '../components/PageWrapper';
-import { fetchAndProcessSchemaData } from '../lib/dataSchemaHelpers';
 
 import {
     FilterActionMeta,
@@ -51,6 +49,8 @@ import { ExploreSummary } from '../packages/data-portal-explore/src/components/E
 import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
 import FileFilterControls from '../packages/data-portal-explore/src/components/FileFilterControls';
 import { HTANToGenericAttributeMap } from '../packages/data-portal-commons/src/libs/types';
+import { Atlas } from '../packages/data-portal-commons/src/libs/entity';
+import { fetchAndProcessSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;

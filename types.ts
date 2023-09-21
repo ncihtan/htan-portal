@@ -1,7 +1,7 @@
-import { DataSchemaData } from './lib/dataSchemaHelpers';
-import { Atlas } from './lib/helpers';
 import { SelectedFilter } from './packages/data-portal-filter/src/libs/types';
 import { GenericAttributeNames } from './packages/data-portal-utils/src/libs/types';
+import { Atlas } from './packages/data-portal-commons/src/libs/entity';
+import { DataSchemaData } from './packages/data-portal-schema/src/libs/dataSchemaHelpers';
 
 export interface CmsData {
     slug: string;

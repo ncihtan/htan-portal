@@ -2,8 +2,10 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
-
-import { getDataSchema, SchemaDataId } from '../../lib/dataSchemaHelpers';
+import {
+    getDataSchema,
+    SchemaDataId,
+} from '../../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 
 const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
     return (

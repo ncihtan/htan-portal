@@ -2,12 +2,10 @@ import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { Atlas, setTab } from '../lib/helpers';
-import BiospecimenTable from './BiospecimenTable';
+import { setTab } from '../lib/helpers';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import AtlasTable from './AtlasTable';
-import { DataSchemaData } from '../lib/dataSchemaHelpers';
 import { getNormalizedOrgan } from '../lib/entityReportHelpers';
 import Select, { MultiValueProps } from 'react-select';
 import _ from 'lodash';
@@ -15,7 +13,9 @@ import _ from 'lodash';
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 import ExplorePlot, { DEFAULT_EXPLORE_PLOT_OPTIONS } from './ExplorePlot';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import { Entity } from '../packages/data-portal-commons/src/libs/entity';
+import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
+import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
+import BiospecimenTable from '../packages/data-portal-explore/src/components/BiospecimenTable';
 
 interface IExploreTabsProps {
     router: NextRouter;

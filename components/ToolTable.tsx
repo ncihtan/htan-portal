@@ -2,10 +2,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { Tool, Tools } from '../lib/tools';
-import {
-    getDefaultDataTableStyle,
-    truncatedTableCell,
-} from '../lib/dataTableHelpers';
+import { truncatedTableCell } from '../lib/dataTableHelpers';
 import React from 'react';
 import { action, makeObservable, observable } from 'mobx';
 import _ from 'lodash';
@@ -17,6 +14,7 @@ import EnhancedDataTable, {
     IEnhancedDataTableColumn,
 } from '../packages/data-portal-table/src/components/EnhancedDataTable';
 import { getDelimitedValues } from '../packages/data-portal-utils/src/libs/getDelimitedValues';
+import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
 
 interface IToolTableProps {
     tools: Tools;

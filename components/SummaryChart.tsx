@@ -25,10 +25,10 @@ import {
     entityReportByAttributeToByCenter,
     dataWithoutUnknownValues,
 } from '../lib/entityReportHelpers';
-import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
 import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
 import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
+import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
 
 export interface SummaryChartProps {
     data: EntityReportByAttribute[];

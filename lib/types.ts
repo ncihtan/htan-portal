@@ -1,9 +1,8 @@
-import { DataSchemaData } from './dataSchemaHelpers';
-import { Atlas } from './helpers';
 import { Tool } from './tools';
-import { Entity } from '../packages/data-portal-commons/src/libs/entity';
+import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
 import { getDelimitedValues } from '../packages/data-portal-utils/src/libs/getDelimitedValues';
 import { AttributeMap } from '../packages/data-portal-utils/src/libs/types';
+import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 
 export enum ToolAttributeNames {
     AtlasName = 'AtlasName',

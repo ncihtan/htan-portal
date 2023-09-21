@@ -69,3 +69,11 @@ export interface AtlasMeta {
     htan_id: string;
     short_description?: string;
 }
+
+export type Atlas = {
+    htan_id: string;
+    htan_name: string;
+    num_cases: number;
+    num_biospecimens: number;
+    AtlasMeta: AtlasMeta;
+};

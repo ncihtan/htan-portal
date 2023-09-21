@@ -7,7 +7,7 @@ import {
     getDataSchemaDependencies,
     getDataSchemaValidValues,
     hasNonEmptyValidValues,
-} from '../lib/dataSchemaHelpers';
+} from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import ValidValues from './ValidValues';
 

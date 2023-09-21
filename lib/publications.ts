@@ -1,7 +1,7 @@
 import { Author, PublicationData, PublicationInfo } from '../types';
-import { fetchAndProcessSchemaData } from './dataSchemaHelpers';
 import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 import { HTANToGenericAttributeMap } from '../packages/data-portal-commons/src/libs/types';
+import { fetchAndProcessSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 
 export const SequencingAssayName = [
     'Bulk DNA',
