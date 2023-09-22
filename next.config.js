@@ -7,11 +7,11 @@ module.exports = withMDX({
     redirects: async () => {
         // Note: don't put trailing slash in the redirect URLs
         return [
-          {
-            source: '/htan-authors',
-            destination: '/authors',
-            permanent: true,
-          },
-        ]
+            {
+                source: '/htan-authors',
+                destination: '/authors',
+                permanent: true,
+            },
+        ];
     },
 });
