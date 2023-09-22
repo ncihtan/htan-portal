@@ -12,6 +12,16 @@ module.exports = withMDX({
             destination: '/authors',
             permanent: true,
           },
+          // fix case sensitivity for HTA/hta
+          // see https://github.com/vercel/next.js/issues/21498
+          // We can remove this when we upgrade next
+          ...Array.from({length:20}, (_, i) => {
+            return {
+              source:`/HTA${i}`,
+              destination: `/hta${i}`,
+              permanent: true,
+            }
+          })
         ]
-    },
+    }
 });
