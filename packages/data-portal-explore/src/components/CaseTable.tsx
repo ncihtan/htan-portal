@@ -1,20 +1,20 @@
 import _ from 'lodash';
 import React from 'react';
-import { convertAgeInDaysToYears } from '../lib/helpers';
 
-import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
-import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
+import EnhancedDataTable from '../../../data-portal-table/src/components/EnhancedDataTable';
+import { GenericAttributeNames } from '../../../data-portal-utils/src/libs/types';
+import { Atlas, Entity } from '../../../data-portal-commons/src/libs/entity';
 import {
     generateColumnsForDataSchema,
     getAtlasColumn,
     sortByParticipantId,
-} from '../packages/data-portal-explore/src/libs/dataTableHelpers';
+} from '../libs/dataTableHelpers';
 import {
     DataSchemaData,
     SchemaDataId,
-} from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
-import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
+} from '../../../data-portal-schema/src/libs/dataSchemaHelpers';
+import { getDefaultDataTableStyle } from '../../../data-portal-table/src/libs/helpers';
+import { convertAgeInDaysToYears } from '../../../data-portal-utils/src/libs/convert';
 
 interface ICaseTableProps {
     cases: Entity[];

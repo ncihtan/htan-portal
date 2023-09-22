@@ -3,9 +3,7 @@ import { NextRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import { setTab } from '../lib/helpers';
-import CaseTable from './CaseTable';
 import FileTable from './FileTable';
-import AtlasTable from './AtlasTable';
 import { getNormalizedOrgan } from '../lib/entityReportHelpers';
 import Select, { MultiValueProps } from 'react-select';
 import _ from 'lodash';
@@ -15,7 +13,12 @@ import ExplorePlot, { DEFAULT_EXPLORE_PLOT_OPTIONS } from './ExplorePlot';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
 import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
 import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
+import AtlasTable from '../packages/data-portal-explore/src/components/AtlasTable';
 import BiospecimenTable from '../packages/data-portal-explore/src/components/BiospecimenTable';
+import CaseTable from '../packages/data-portal-explore/src/components/CaseTable';
+import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
+import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
+import getAtlasMetaData from '../lib/getAtlasMetaData';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -44,14 +47,6 @@ interface IExploreTabsProps {
     showAllCases: boolean;
 
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
-}
-
-export enum ExploreTab {
-    FILE = 'file',
-    ATLAS = 'atlas',
-    BIOSPECIMEN = 'biospecimen',
-    CASES = 'cases',
-    PLOTS = 'plots',
 }
 
 const metricTypes = [
@@ -268,7 +263,12 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <AtlasTable
-                            router={props.router}
+                            setTab={(tab: ExploreTab) =>
+                                setTab(tab, props.router)
+                            }
+                            publicationPageLink={PublicationPageLink}
+                            publications={PUBLICATIONS}
+                            getAtlasMetaData={getAtlasMetaData}
                             synapseAtlasData={props.allSynapseAtlases}
                             selectedAtlases={props.selectedSynapseAtlases}
                             filteredAtlases={

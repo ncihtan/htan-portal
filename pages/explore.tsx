@@ -29,7 +29,7 @@ import {
 } from '../lib/helpers';
 import { IFilterProps } from '../lib/types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import ExploreTabs, { ExploreTab } from '../components/ExploreTabs';
+import ExploreTabs from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
 import PageWrapper from '../components/PageWrapper';
@@ -51,6 +51,7 @@ import FileFilterControls from '../packages/data-portal-explore/src/components/F
 import { HTANToGenericAttributeMap } from '../packages/data-portal-commons/src/libs/types';
 import { Atlas } from '../packages/data-portal-commons/src/libs/entity';
 import { fetchAndProcessSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
+import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;

@@ -1,25 +1,28 @@
 import _ from 'lodash';
-import { NextRouter } from 'next/router';
 import Tooltip from 'rc-tooltip';
 import React from 'react';
-import { setTab } from '../lib/helpers';
 import { observer } from 'mobx-react';
 import { action, computed, makeObservable, observable } from 'mobx';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faDownload } from '@fortawesome/free-solid-svg-icons';
-import { ExploreTab } from './ExploreTabs';
 import { Button, Modal } from 'react-bootstrap';
-import getAtlasMetaData from '../lib/getAtlasMetaData';
-import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 
-import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
-import EnhancedDataTable from '../packages/data-portal-table/src/components/EnhancedDataTable';
-import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
-import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
+import { ISelectedFiltersByAttrName } from '../../../data-portal-filter/src/libs/types';
+import EnhancedDataTable from '../../../data-portal-table/src/components/EnhancedDataTable';
+import {
+    Atlas,
+    AtlasMetaData,
+    Entity,
+} from '../../../data-portal-commons/src/libs/entity';
+import { getDefaultDataTableStyle } from '../../../data-portal-table/src/libs/helpers';
+import { ExploreTab } from '../libs/types';
 
 interface IAtlasTableProps {
-    router: NextRouter;
+    publications: { [id: string]: { cite: string } };
+    publicationPageLink: { [id: string]: { id: string; show: boolean } };
+    getAtlasMetaData: () => AtlasMetaData;
+    setTab: (tab: ExploreTab) => void;
     synapseAtlasData: Atlas[];
     selectedAtlases?: Atlas[];
     filteredAtlases?: Atlas[];
@@ -31,12 +34,11 @@ interface IAtlasTableProps {
     filteredFiles: Entity[];
 }
 
-const atlasMetadata = getAtlasMetaData();
-
 interface IAtlasMetadataLinkModalProps {
     isOpen: boolean;
     onClose: () => void;
     atlas: Atlas | null;
+    atlasMetaData: AtlasMetaData;
 }
 
 const arePublicationPagesEnabled = () => {
@@ -92,7 +94,9 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                 </tr>
                             </thead>
                             <tbody>
-                                {_.chain(atlasMetadata[props.atlas.htan_id])
+                                {_.chain(
+                                    props.atlasMetaData[props.atlas.htan_id]
+                                )
                                     .map((info, index) => ({
                                         row: (
                                             <tr>
@@ -266,7 +270,7 @@ function filteredCount(
 @observer
 export default class AtlasTable extends React.Component<IAtlasTableProps> {
     @observable metadataModalAtlas: Atlas | null = null;
-
+    atlasMetaData: AtlasMetaData;
     @computed
     get selectedAtlases() {
         return _.keyBy(this.props.selectedAtlases || [], (a) => a.htan_id);
@@ -279,6 +283,7 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
     constructor(props: IAtlasTableProps) {
         super(props);
         makeObservable(this);
+        this.atlasMetaData = this.props.getAtlasMetaData();
     }
 
     isRowSelected = (atlas: Atlas) => {
@@ -286,7 +291,7 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
     };
 
     getPublicationPageLink = (atlas: Atlas) => {
-        return PublicationPageLink[atlas.htan_id];
+        return this.props.publicationPageLink[atlas.htan_id];
     };
 
     // we need to update data every time the selection changes to rerender the table
@@ -403,7 +408,7 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
                         return (
                             <Tooltip
                                 overlay={`${
-                                    PUBLICATIONS[
+                                    this.props.publications[
                                         atlasTableData.publicationPageLink.id
                                     ].cite
                                 }`}
@@ -434,7 +439,7 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
                 grow: 0.5,
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 cell: (atlas: Atlas) => {
-                    if (atlas.htan_id in atlasMetadata) {
+                    if (atlas.htan_id in this.atlasMetaData) {
                         return (
                             <button
                                 className={'btn btn-sm'}
@@ -702,7 +707,7 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
 
     @action onViewFiles = (e: any) => {
         e.preventDefault();
-        setTab(ExploreTab.FILE, this.props.router);
+        this.props.setTab(ExploreTab.FILE);
     };
 
     render() {
@@ -746,6 +751,7 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
                         this.metadataModalAtlas = null;
                     })}
                     atlas={this.metadataModalAtlas}
+                    atlasMetaData={this.atlasMetaData}
                 />
             </>
         );

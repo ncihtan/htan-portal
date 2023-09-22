@@ -4,7 +4,6 @@ import fetch from 'node-fetch';
 import * as Path from 'path';
 
 import { ExploreURLQuery } from '../pages/explore';
-import { ExploreTab } from '../components/ExploreTabs';
 import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 import {
     Atlas,
@@ -12,6 +11,7 @@ import {
     Entity,
     SerializableEntity,
 } from '../packages/data-portal-commons/src/libs/entity';
+import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
 
 // @ts-ignore
 let win;
@@ -299,11 +299,6 @@ export function truncateFilename(
 
     return displayValue;
 }
-
-export function convertAgeInDaysToYears(ageInDays: number) {
-    return Math.round(ageInDays / 365);
-}
-
 export function filterObject(
     object: any,
     filter: (val: any, key: any) => boolean

@@ -77,3 +77,11 @@ export type Atlas = {
     num_biospecimens: number;
     AtlasMeta: AtlasMeta;
 };
+
+export interface AtlasMetaData {
+    [atlasId: string]: {
+        component: string;
+        synapseId: string;
+        numItems: number;
+    }[];
+}
