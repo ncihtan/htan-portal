@@ -1,22 +1,13 @@
 import { SynapseAtlas, SynapseData } from '../lib/types';
 import _ from 'lodash';
 
-import {
-    Atlas,
-    isLowestLevel,
-    LoadDataResult,
-    ReleaseEntity,
-} from '../lib/helpers';
+import { isLowestLevel, LoadDataResult, ReleaseEntity } from '../lib/helpers';
 import getData from '../lib/getData';
-import {
-    fetchAndProcessSchemaData,
-    getAttributeToSchemaIdMap,
-    SchemaDataById,
-} from '../lib/dataSchemaHelpers';
 import fs from 'fs';
 import csvToJson from 'csvtojson';
 import atlasJson from './atlases.json';
 import {
+    Atlas,
     AtlasMeta,
     BaseSerializableEntity,
     DataFileID,
@@ -28,8 +19,13 @@ import {
     HTANAttributeNames,
     HTANToGenericAttributeMap,
 } from '../packages/data-portal-commons/src/libs/types';
+import {
+    fetchAndProcessSchemaData,
+    getAttributeToSchemaIdMap,
+    SchemaDataById,
+} from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 
-// import idcAssets from './idc-imaging-assets.json';
+// import idcAssets from '../packages/data-portal-explore/src/assets/idc-imaging-assets.json';
 // const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');
 
 async function writeProcessedFile() {

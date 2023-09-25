@@ -11,41 +11,43 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {
-    doesFileIncludeLevel1OrLevel2SequencingData,
-    getFileBase,
-    selectorToColumnName,
-    truncateFilename,
-} from '../lib/helpers';
-import { truncatedTableCell } from '../lib/dataTableHelpers';
+import { doesFileIncludeLevel1OrLevel2SequencingData } from '../libs/helpers';
+import { truncatedTableCell } from '../libs/dataTableHelpers';
 import SimpleScrollPane from './SimpleScrollPane';
-import interleave from '../lib/interleave';
-import styles from './common.module.scss';
-import { makeListColumn } from '../lib/fileTableHelpers';
+import { makeListColumn } from '../libs/fileTableHelpers';
 import LevelSelect from './LevelSelect';
-import ViewDetailsModal from './ViewDetailsModal';
+import styles from './common.module.scss';
 
 import EnhancedDataTable, {
     IEnhancedDataTableColumn,
-} from '../packages/data-portal-table/src/components/EnhancedDataTable';
+} from '../../../data-portal-table/src/components/EnhancedDataTable';
 import {
     AttributeNames,
     GenericAttributeNames,
-} from '../packages/data-portal-utils/src/libs/types';
-import { Entity } from '../packages/data-portal-commons/src/libs/entity';
-import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
-import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
+} from '../../../data-portal-utils/src/libs/types';
+import { Entity } from '../../../data-portal-commons/src/libs/entity';
+import { FileAttributeMap } from '../../../data-portal-commons/src/libs/types';
+import {
+    getDefaultDataTableStyle,
+    selectorToColumnName,
+} from '../../../data-portal-table/src/libs/helpers';
+import {
+    getFileBase,
+    truncateFilename,
+} from '../../../data-portal-utils/src/libs/file';
+import interleave from '../../../data-portal-utils/src/libs/interleave';
+import ViewDetailsModal from '../../../data-portal-commons/src/components/ViewDetailsModal';
 
-const CELLXGENE_MAPPINGS = require('../data/cellxgene-mappings.json');
-const ISBCGC_MAPPINGS = require('../data/isbcgc-mappings.json');
-const CUSTOM_MINERVA_STORY_MAPPINGS = require('../data/minerva-story-mappings.json');
-const THUMBNAIL_AND_AUTOMINERVA_MAPPINGS = require('../data/htan-imaging-assets.json');
+const CELLXGENE_MAPPINGS = require('../assets/cellxgene-mappings.json');
+const ISBCGC_MAPPINGS = require('../assets/isbcgc-mappings.json');
+const CUSTOM_MINERVA_STORY_MAPPINGS = require('../assets/minerva-story-mappings.json');
+const THUMBNAIL_AND_AUTOMINERVA_MAPPINGS = require('../assets/htan-imaging-assets.json');
 const IDC_MAPPINGS = _.keyBy(
-    require('../data/idc-imaging-assets.json'),
+    require('../assets/idc-imaging-assets.json'),
     'ContainerIdentifier'
 );
 const IMG_CHANNEL_METADATA_MAP = _.keyBy(
-    require('../data/img_channel_map_r4.json'),
+    require('../assets/img_channel_map_r4.json'),
     'image_synapseID'
 );
 
@@ -662,7 +664,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                         ) {
                             const channelMetadata =
                                 file.synapseId &&
-                                IMG_CHANNEL_METADATA_MAP[file.synapseId];
+                                this.props.imgChannelMetadataMap?.[
+                                    file.synapseId
+                                ];
 
                             return (
                                 <div className={'dsa-container'}>

@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { NextRouter } from 'next/router';
 import fetch from 'node-fetch';
-import * as Path from 'path';
 
 import { ExploreURLQuery } from '../pages/explore';
 import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
@@ -54,13 +53,6 @@ function doesFileHaveMultipleParents(file: Entity) {
 
 export function isLowestLevel(entity: BaseSerializableEntity) {
     return entity.Islowestlevel?.toLowerCase().startsWith('yes');
-}
-
-export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
-    return (
-        !file.Component.startsWith('Imaging') &&
-        (file.level === 'Level 1' || file.level === 'Level 2')
-    );
 }
 
 function mergeCaseData(
@@ -265,40 +257,6 @@ export function computeDashboardData(files: Entity[]): EntityReport[] {
     ];
 }
 
-export function getFileBase(filename: string) {
-    return Path.basename(filename);
-}
-
-export function getFileExtension(filename: string) {
-    return Path.extname(filename);
-}
-
-export function getFilenameWithoutExtension(base: string) {
-    return base.includes('.') ? base.slice(0, base.lastIndexOf('.')) : base;
-}
-
-export function truncateFilename(
-    filename: string,
-    leadThreshold: number = 10,
-    trailThreshold: number = 5
-) {
-    const base = getFileBase(filename);
-    const ext = getFileExtension(filename);
-    const name = getFilenameWithoutExtension(base);
-
-    let displayValue = base;
-
-    if (name.length > leadThreshold + trailThreshold) {
-        // get the first <leadThreshold> characters of the name
-        const lead = name.slice(0, leadThreshold);
-        // get the last <trailThreshold> characters of the name
-        const trail = name.slice(-trailThreshold);
-        // always keep the extension (everything after the last dot)
-        displayValue = `${lead}...${trail}${ext}`;
-    }
-
-    return displayValue;
-}
 export function filterObject(
     object: any,
     filter: (val: any, key: any) => boolean
@@ -310,19 +268,6 @@ export function filterObject(
         }
     });
     return filteredObj;
-}
-
-export function selectorToColumnName(selector: string) {
-    // capitalize first letter always
-    let str = `${selector[0].toUpperCase()}${selector.substr(1)}`;
-    // insert a space before each capital letter that has a lower case letter after it
-    str = str.replace(/([A-Z])(?=[a-z])/g, ' $1');
-    // insert a space after each lower case letter that has a capital after it
-    str = str.replace(/([a-z])(?=[A-Z])/g, '$1 ');
-    // remove any trailing spaces
-    str = str.trim();
-
-    return str;
 }
 
 export function isReleaseQCEnabled() {

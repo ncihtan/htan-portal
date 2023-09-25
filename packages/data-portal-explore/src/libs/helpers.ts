@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { AttributeNames } from '../../../data-portal-utils/src/libs/types';
+import { Entity } from '../../../data-portal-commons/src/libs/entity';
 
 export function getDefaultSummaryData<T>(
     filteredCases: T[],
@@ -64,4 +65,11 @@ export function getSummaryData<T>(
     } else {
         return [];
     }
+}
+
+export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
+    return (
+        !file.Component.startsWith('Imaging') &&
+        (file.level === 'Level 1' || file.level === 'Level 2')
+    );
 }

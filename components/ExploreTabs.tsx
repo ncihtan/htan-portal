@@ -3,7 +3,6 @@ import { NextRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import { setTab } from '../lib/helpers';
-import FileTable from './FileTable';
 import { getNormalizedOrgan } from '../lib/entityReportHelpers';
 import Select, { MultiValueProps } from 'react-select';
 import _ from 'lodash';
@@ -19,6 +18,7 @@ import CaseTable from '../packages/data-portal-explore/src/components/CaseTable'
 import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
 import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 import getAtlasMetaData from '../lib/getAtlasMetaData';
+import FileTable from '../packages/data-portal-explore/src/components/FileTable';
 
 interface IExploreTabsProps {
     router: NextRouter;

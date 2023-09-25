@@ -9,6 +9,7 @@ import {
     SchemaDataId,
 } from '../../../data-portal-schema/src/libs/dataSchemaHelpers';
 import { Atlas, Entity } from '../../../data-portal-commons/src/libs/entity';
+import ExpandableText from '../../../data-portal-commons/src/components/ExpandableText';
 
 export function generateColumnsForDataSchema<T>(
     schemaDataIds: SchemaDataId[],
@@ -139,4 +140,16 @@ export function sortByBiospecimenId(rowA: Entity, rowB: Entity) {
     iteratees.push((row: Entity) => Number(row.BiospecimenID.split('_')[2]));
 
     return defaultNumericalComparison(rowA, rowB, iteratees);
+}
+
+export function truncatedTableCell<T>(cellData: T) {
+    //@ts-ignore
+    const selector = this.selector;
+    const value = _.isFunction(selector)
+        ? selector(cellData)
+        : cellData[selector as keyof T];
+
+    return value ? (
+        <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />
+    ) : null;
 }

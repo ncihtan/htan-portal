@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import Tooltip from 'rc-tooltip';
 import React from 'react';
-import FileTable from './FileTable';
 import { setTab } from '../lib/helpers';
 import styles from './PublicationTabs.module.scss';
 import { Badge } from 'react-bootstrap';
@@ -15,6 +14,7 @@ import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types
 import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 import BiospecimenTable from '../packages/data-portal-explore/src/components/BiospecimenTable';
 import CaseTable from '../packages/data-portal-explore/src/components/CaseTable';
+import FileTable from '../packages/data-portal-explore/src/components/FileTable';
 
 interface IPublicationTabsProps {
     router: NextRouter;

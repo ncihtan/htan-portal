@@ -67,3 +67,16 @@ export function getDefaultDataTableStyle() {
         },
     };
 }
+
+export function selectorToColumnName(selector: string) {
+    // capitalize first letter always
+    let str = `${selector[0].toUpperCase()}${selector.substr(1)}`;
+    // insert a space before each capital letter that has a lower case letter after it
+    str = str.replace(/([A-Z])(?=[a-z])/g, ' $1');
+    // insert a space after each lower case letter that has a capital after it
+    str = str.replace(/([a-z])(?=[A-Z])/g, '$1 ');
+    // remove any trailing spaces
+    str = str.trim();
+
+    return str;
+}
