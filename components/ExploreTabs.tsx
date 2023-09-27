@@ -8,7 +8,7 @@ import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import AtlasTable from './AtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { GenericAttributeNames } from '../lib/types';
+import { AttributeNames, GenericAttributeNames } from '../lib/types';
 import Plots from './Plots';
 import {
     computeEntityReportByAssay,
@@ -17,11 +17,20 @@ import {
 } from '../lib/entityReportHelpers';
 import Select from 'react-select';
 import SummaryChart from './SummaryChart';
-import { ScalePropType } from 'victory-core';
+import {
+    ScalePropType,
+    VictoryContainer,
+    VictoryLabel,
+    VictoryTheme,
+} from 'victory-core';
 import _ from 'lodash';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 import Alert from 'react-bootstrap/Alert';
+import { VictoryChart } from 'victory-chart';
+import { VictoryBar } from 'victory-bar';
+import { VictoryAxis } from 'victory-axis';
+import ExplorePlot from './ExplorePlot';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -60,60 +69,9 @@ export enum ExploreTab {
     PLOTS = 'plots',
 }
 
-enum PlotMode {
-    SAMPLE = 'SAMPLE',
-    CASE = 'CASE',
-}
-
-type IExploreTabsState = {
-    selectedField: any;
-    xaxis: any;
-    mode: () => PlotMode;
-};
-
 const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || ExploreTab.ATLAS;
-
-        const samplesByCaseId = useMemo(() => {
-            return _.groupBy(props.filteredSamples, (s) => s.ParticipantID);
-        }, [props.filteredSamples]);
-
-        let options = _.map(props.groupsByPropertyFiltered, (value, key) => {
-            return {
-                value: key,
-                label: key
-                    .replace(/[A-Z]/g, (s) => ` ${s}`)
-                    .replace(/of|or/g, (s) => ` ${s}`)
-                    .replace(/$./, (s) => s.toUpperCase()),
-            };
-        });
-
-        // let options = _.map(props.groupsByPropertyFiltered,(value, key)=>{
-        //     return {
-        //         value:key,
-        //         label:key.replace(/[A-Z]/g,(s)=>` ${s}`)
-        //             .replace(/of|or/g,(s)=>` ${s}`)
-        //             .replace(/$./,(s)=>s.toUpperCase())
-        //     }
-        // });
-
-        const xaxisOptions = [
-            { value: 'HTAParticipantID', label: 'Case Count' },
-            { value: 'BiospecimenID', label: 'Specimen Count' },
-        ];
-
-        const myStore = useLocalStore<IExploreTabsState>(() => {
-            return {
-                selectedField: options[0],
-                xaxis: xaxisOptions[0],
-                mode() {
-                    return this.xaxis.value === 'ParticipantID'
-                        ? PlotMode.CASE
-                        : PlotMode.SAMPLE;
-                },
-            };
-        });
 
         return (
             <>
@@ -295,81 +253,16 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         <div className={'alert alert-warning'}>
                             This feature is in beta.
                         </div>
-                        <div style={{ display: 'flex' }}>
-                            <div style={{ width: 300, marginRight: 10 }}>
-                                <Select
-                                    classNamePrefix={'react-select'}
-                                    isSearchable={false}
-                                    isClearable={false}
-                                    name={'field'}
-                                    controlShouldRenderValue={true}
-                                    options={options}
-                                    defaultValue={options[0]}
-                                    hideSelectedOptions={false}
-                                    closeMenuOnSelect={true}
-                                    onChange={(e) => {
-                                        myStore.selectedField = e;
-                                    }}
-                                />
-                            </div>
-                            {/*<div style={{ width: 300 }}>*/}
-                            {/*    <Select*/}
-                            {/*        classNamePrefix={'react-select'}*/}
-                            {/*        isSearchable={false}*/}
-                            {/*        isClearable={false}*/}
-                            {/*        name={'xaxis'}*/}
-                            {/*        controlShouldRenderValue={true}*/}
-                            {/*        options={xaxisOptions}*/}
-                            {/*        hideSelectedOptions={false}*/}
-                            {/*        closeMenuOnSelect={true}*/}
-                            {/*        onChange={(e) => {*/}
-                            {/*            myStore.xaxis = e?.value;*/}
-                            {/*        }}*/}
-                            {/*        defaultValue={xaxisOptions[0]}*/}
-                            {/*    />*/}
-                            {/*</div>*/}
-                        </div>
 
-                        <SummaryChart
-                            data={computeEntityReportGeneralized(
-                                props.filteredCases,
-                                myStore.selectedField.value,
-                                (d) => d['ParticipantID'],
-                                (entities) => {
-                                    if (
-                                        myStore.xaxis.value !== 'ParticipantID'
-                                    ) {
-                                        return _.sumBy(entities, (entity) => {
-                                            return (
-                                                samplesByCaseId?.[
-                                                    entity.ParticipantID
-                                                ].length || 0
-                                            );
-                                        });
-                                    } else {
-                                        return entities.length;
-                                    }
+                        {props.filteredCases.length && (
+                            <ExplorePlot
+                                groupsByPropertyFiltered={
+                                    props.groupsByPropertyFiltered
                                 }
-                            )}
-                            dependentAxisEntityName="Case"
-                            stackedByCenter={false}
-                            scale={{
-                                x: 'linear',
-                                y: 'log',
-                            }}
-                            minDomain={{ y: 0.95 }}
-                            dependentAxisTickFormat={(t: number) => {
-                                // only show tick labels for the integer powers of 10
-                                return _.isInteger(Math.log10(t)) ? t : '';
-                            }}
-                            tooltipContent={(datum) => {
-                                return (
-                                    <div style={{ margin: 10 }}>{`${
-                                        datum.totalCount
-                                    } ${myStore.mode().toLowerCase()}s`}</div>
-                                );
-                            }}
-                        />
+                                filteredCases={props.filteredCases}
+                                filteredSamples={props.filteredSamples}
+                            />
+                        )}
                     </div>
                 )}
             </>

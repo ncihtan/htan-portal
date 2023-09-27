@@ -225,11 +225,12 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
     }
 
     get leftPadding() {
-        return 150;
-    }
-
-    get topPadding() {
-        return -40;
+        if (this.categoryLabels) {
+            const longestLabel = _.maxBy(this.categoryLabels, (l) => l.length);
+            return longestLabel.length * 8;
+        } else {
+            return 100;
+        }
     }
 
     get barWidth() {
@@ -249,7 +250,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
 
     get chartWidth() {
         // TODO responsive?
-        return 600;
+        return this.leftPadding + 500;
     }
 
     private get svgHeight() {
@@ -488,6 +489,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                             y: true,
                             x: false,
                         }}
+                        padding={{ left: this.leftPadding, top: 70 }}
                         scale={this.props.scale}
                         minDomain={this.props.minDomain}
                     >
@@ -496,7 +498,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                             label={this.dependentAxisLabel}
                             style={{
                                 tickLabels: { fontSize: 16 },
-                                axisLabel: { fontSize: 14, padding: 30 },
+                                axisLabel: { fontSize: 14, padding: 40 },
                             }}
                             orientation="top"
                             tickFormat={this.props.dependentAxisTickFormat}
