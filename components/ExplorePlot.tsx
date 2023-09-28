@@ -7,6 +7,7 @@ import React from 'react';
 import { observer, useLocalStore } from 'mobx-react';
 import _ from 'lodash';
 import { Entity } from '../lib/helpers';
+import { Option } from 'react-select/src/filters';
 
 interface IExplorePlotProps {
     groupsByPropertyFiltered: Record<string, Entity[]>;
@@ -14,45 +15,69 @@ interface IExplorePlotProps {
     filteredSamples: Entity[];
 }
 
-enum PlotMode {
+enum EntityType {
     SAMPLE = 'SAMPLE',
     CASE = 'CASE',
 }
 
 type IExploreTabsState = {
-    selectedField: any;
+    selectedField: Option;
+    _selectedField: Option | null;
     xaxis: any;
-    mode: () => PlotMode;
+    mode: () => EntityType;
 };
 
 const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
     function ({ groupsByPropertyFiltered, filteredCases, filteredSamples }) {
-        let options = _.map(groupsByPropertyFiltered, (value, key) => {
-            return {
-                value: key,
-                label: key
-                    .replace(/[A-Z]/g, (s) => ` ${s}`)
-                    .replace(/of|or/g, (s) => ` ${s}`)
-                    .replace(/$./, (s) => s.toUpperCase()),
-                type: 'CASE',
-            };
-        });
-
         const xaxisOptions = [
             { value: 'ParticipantID', label: 'Case Count' },
             { value: 'BiospecimenID', label: 'Specimen Count' },
         ];
 
-        const myStore = useLocalStore<IExploreTabsState>((props) => {
+        const caseOps: Option[] = _.chain(filteredCases)
+            .flatMap(_.entries)
+            .reduce((agg: string[], [k, v]) => {
+                if (!!v) agg.push(k);
+                return agg;
+            }, [])
+            .uniq()
+            .map((k) => {
+                return {
+                    value: k,
+                    label: k + ':Case',
+                    data: { type: EntityType.CASE },
+                };
+            })
+            .value();
+
+        const sampleOps: Option[] = _.chain(filteredSamples)
+            .flatMap(_.entries)
+            .reduce((agg: string[], [k, v]) => {
+                if (v !== undefined && v !== null) agg.push(k);
+                return agg;
+            }, [])
+            .uniq()
+            .map((k) => {
+                return {
+                    value: k,
+                    label: k + ':Sample',
+                    data: { type: EntityType.SAMPLE },
+                };
+            })
+            .value();
+
+        const ops = [...caseOps, ...sampleOps];
+
+        const myStore = useLocalStore<IExploreTabsState>(() => {
             return {
                 xaxis: xaxisOptions[0],
                 mode() {
                     return this.xaxis.value === 'ParticipantID'
-                        ? PlotMode.CASE
-                        : PlotMode.SAMPLE;
+                        ? EntityType.CASE
+                        : EntityType.SAMPLE;
                 },
                 get selectedField() {
-                    return this._selectedField || options[0];
+                    return this._selectedField || (ops[0] as Option);
                 },
                 _selectedField: null,
             };
@@ -60,19 +85,20 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
 
         const casesByIdMap = _.keyBy(filteredCases, (c) => c.ParticipantID);
 
-        const propertyType: PlotMode = PlotMode.CASE;
+        const propertyType = myStore.selectedField.data.type;
 
         const samplesByValueMap = _.groupBy(filteredSamples, (sample) => {
             // these will result in the counts
-            if (propertyType === PlotMode.CASE) {
+
+            if (propertyType === EntityType.CASE) {
                 // should actually be propery type
                 // this will group the samples by a property of the case to which they belong,
                 // allowing us to count them by a case property
                 return casesByIdMap[sample.ParticipantID][
-                    myStore.selectedField.value
+                    myStore.selectedField.value as keyof Entity
                 ];
             } else {
-                return sample[myStore.selectedField.value];
+                return sample[myStore.selectedField.value as keyof Entity];
             }
         });
 
@@ -91,33 +117,13 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                 return {
                     label: k,
                     count:
-                        myStore.mode() === PlotMode.CASE
+                        myStore.mode() === EntityType.CASE
                             ? v.caseCount
                             : v.sampleCount,
                 };
             })
             .sortBy((datum) => datum.count)
             .value();
-
-        const ops = _.chain(filteredCases)
-            .flatMap(_.entries)
-            .reduce((agg: string[], [k, v]) => {
-                if (!!v) agg.push(k);
-                return agg;
-            }, [])
-            .uniq()
-            .map((k) => {
-                return {
-                    value: k,
-                    label: k
-                        .replace(/[A-Z]/g, (s) => ` ${s}`)
-                        .replace(/of|or/g, (s) => ` ${s}`)
-                        .replace(/$./, (s) => s.toUpperCase()),
-                };
-            })
-            .value();
-
-        debugger;
 
         return (
             <>
@@ -130,11 +136,11 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                             name={'field'}
                             controlShouldRenderValue={true}
                             options={ops}
-                            defaultValue={options[0]}
+                            defaultValue={ops[0]}
                             hideSelectedOptions={false}
                             closeMenuOnSelect={true}
                             onChange={(e) => {
-                                myStore._selectedField = e;
+                                myStore._selectedField = e!;
                             }}
                         />
                     </div>
@@ -159,7 +165,7 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                     theme={VictoryTheme.material}
                     scale={{ x: 'linear', y: 'log' }}
                     width={900}
-                    height={plotData.length * 50}
+                    height={plotData.length * 50 + 100}
                     containerComponent={<VictoryContainer responsive={false} />}
                     domainPadding={{
                         x: 30,
@@ -174,7 +180,7 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                     <VictoryAxis
                         dependentAxis={true}
                         label={
-                            myStore.mode() === PlotMode.SAMPLE
+                            myStore.mode() === EntityType.SAMPLE
                                 ? `Samples (log)`
                                 : `Cases (log10)`
                         }
