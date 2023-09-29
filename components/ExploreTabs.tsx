@@ -44,9 +44,7 @@ interface IExploreTabsProps {
     filteredCases: Entity[];
     filteredSamples: Entity[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    groupsByPropertyFiltered: {
-        [attrName: string]: { [attrValue: string]: Entity[] };
-    };
+    groupsByPropertyFiltered: Record<string, Entity[]>;
     filteredSynapseAtlases: Atlas[];
     filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
     selectedSynapseAtlases: Atlas[];

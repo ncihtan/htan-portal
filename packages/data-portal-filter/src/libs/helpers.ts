@@ -9,6 +9,8 @@ import {
     FilterAction,
     OptionType,
 } from './types';
+import { Entity } from '../../../../lib/helpers';
+import FileTable from '../../../../components/FileTable';
 
 export function getSelectedFiltersByAttrName(
     selectedFilters: SelectedFilter[]
@@ -86,22 +88,21 @@ function getAttrValueFromEntity<Attribute extends string, T>(
 export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
     entities: T[],
     attributeMap: { [attr in Attribute]: IAttributeInfo<T> }
-): { [attrName: string]: { [attrValue: string]: T[] } } {
+): Record<string, Entity[]> {
     const ret: {
-        [attrName: string]: {
-            [attrValue: string]: T[];
-        };
+        [attrName: string]: Record<string, Entity[]>;
     } = {};
 
     function addEntityToGroup(
-        entity: T,
-        groupedByValue: { [attrValue: string]: T[] },
+        entity: Entity,
+        groupedByValue: { [attrValue: string]: Entity[] },
         attrVal: string
     ) {
         if (!groupedByValue[attrVal]) {
             groupedByValue[attrVal] = [];
         }
-        groupedByValue[attrVal].push(entity);
+        /* @ts-ignore */
+        groupedByValue[attrVal].push(entity as Entity);
     }
 
     _.forEach(attributeMap, (attrInfo, attrName) => {
@@ -115,9 +116,11 @@ export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
             if (attrVals) {
                 if (_.isArray(attrVals)) {
                     for (const val of attrVals) {
+                        /* @ts-ignore */
                         addEntityToGroup(entity, groupedByValue, val);
                     }
                 } else {
+                    /* @ts-ignore */
                     addEntityToGroup(entity, groupedByValue, attrVals);
                 }
             }
@@ -125,6 +128,7 @@ export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
         ret[attrName] = groupedByValue;
     });
 
+    /* @ts-ignore */
     return ret;
 }
 
