@@ -27,6 +27,31 @@ type IExploreTabsState = {
     mode: () => EntityType;
 };
 
+const defaultOptions = [
+    {
+        value: 'PrimaryDiagnosis',
+        label: 'Primary Diagnosis',
+        data: { type: 'CASE' },
+    },
+    {
+        value: 'TissueorOrganofOrigin',
+        label: 'Organ',
+        data: { type: 'CASE' },
+    },
+    { value: 'assayName', label: 'Assay', data: { type: 'SAMPLE' } },
+    {
+        value: 'Ethnicity',
+        label: 'Ethnicity',
+        data: { type: 'CASE' },
+    },
+    { value: 'Gender', label: 'Gender', data: { type: 'CASE' } },
+    {
+        value: 'Race',
+        label: 'Race',
+        data: { type: 'CASE' },
+    },
+];
+
 const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
     function ({ groupsByPropertyFiltered, filteredCases, filteredSamples }) {
         const xaxisOptions = [
@@ -66,7 +91,9 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
             })
             .value();
 
-        const ops = [...caseOps, ...sampleOps];
+        let ops = [...caseOps, ...sampleOps];
+
+        ops = defaultOptions;
 
         const myStore = useLocalStore<IExploreTabsState>(() => {
             return {
