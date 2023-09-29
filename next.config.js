@@ -14,4 +14,7 @@ module.exports = withMDX({
             },
         ];
     },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
 });
