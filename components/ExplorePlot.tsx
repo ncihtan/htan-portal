@@ -8,12 +8,19 @@ import { observer, useLocalStore } from 'mobx-react';
 import _ from 'lodash';
 import { Entity } from '../lib/helpers';
 import { Option } from 'react-select/src/filters';
+import { getNormalizedOrgan } from '../lib/entityReportHelpers';
+import { log } from 'util';
 
 interface IExplorePlotProps {
     filteredCases: Entity[];
     filteredSamples: Entity[];
     selectedField?: Option;
     hideSelectors?: boolean;
+    title: string;
+    normalizersByField?: Record<string, (entity: Entity) => string>;
+    width?: number;
+    logScale: boolean;
+    metricType: any;
 }
 
 enum EntityType {
@@ -21,11 +28,15 @@ enum EntityType {
     CASE = 'CASE',
 }
 
+function dependentAxisTickFormat(t: number) {
+    // only show tick labels for the integer powers of 10
+    return _.isInteger(Math.log10(t)) ? t : '';
+}
+
 type IExploreTabsState = {
     selectedField: Option;
     _selectedField: Option | null;
     xaxis: any;
-    mode: () => EntityType;
 };
 
 const defaultOptions = [
@@ -59,6 +70,11 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
         hideSelectors,
         filteredSamples,
         selectedField,
+        title,
+        width = 800,
+        logScale,
+        metricType,
+        normalizersByField,
     }) {
         const xaxisOptions = [
             { value: 'ParticipantID', label: 'Case Count' },
@@ -101,14 +117,14 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
 
         //ops = defaultOptions;
 
+        const mode =
+            metricType.value === 'ParticipantID'
+                ? EntityType.CASE
+                : EntityType.SAMPLE;
+
         const myStore = useLocalStore<IExploreTabsState>(() => {
             return {
                 xaxis: xaxisOptions[0],
-                mode() {
-                    return this.xaxis.value === 'ParticipantID'
-                        ? EntityType.CASE
-                        : EntityType.SAMPLE;
-                },
                 get selectedField() {
                     return (
                         selectedField ||
@@ -124,19 +140,31 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
 
         const propertyType = myStore.selectedField.data.type;
 
+        const selectedValue: keyof Entity = myStore.selectedField
+            .value as keyof Entity;
+
+        let accessor =
+            normalizersByField?.[selectedValue] ||
+            ((e: Entity) => e[selectedValue]);
+
+        // if (selectedValue === "TissueorOrganofOrigin") {
+        //     accessor =
+        // }
+
         const samplesByValueMap = _.groupBy(filteredSamples, (sample) => {
             // these will result in the counts
-
+            let val: string | undefined = undefined;
+            let entity: Entity;
             if (propertyType === EntityType.CASE) {
                 // should actually be propery type
                 // this will group the samples by a property of the case to which they belong,
                 // allowing us to count them by a case property
-                return casesByIdMap[sample.ParticipantID][
-                    myStore.selectedField.value as keyof Entity
-                ];
+                entity = casesByIdMap[sample.ParticipantID];
             } else {
-                return sample[myStore.selectedField.value as keyof Entity];
+                entity = sample;
             }
+
+            return accessor(entity);
         });
 
         // generate reports
@@ -148,21 +176,35 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
             return report;
         });
 
-        console.log(ops);
-
         // transform reports into format required by plot
         const plotData = _(reportsByValueMap)
             .map((v, k) => {
                 return {
                     label: k,
                     count:
-                        myStore.mode() === EntityType.CASE
-                            ? v.caseCount
-                            : v.sampleCount,
+                        mode === EntityType.CASE ? v.caseCount : v.sampleCount,
                 };
             })
             .sortBy((datum) => datum.count)
             .value();
+
+        const ticks = _.times(Math.ceil(Math.log10(plotData[0].count)), (i) => {
+            return 10 ** i;
+        });
+
+        const tickProps = logScale
+            ? {
+                  tickFormat: dependentAxisTickFormat,
+                  tickValues: ticks,
+              }
+            : {};
+
+        const metric =
+            mode === EntityType.SAMPLE
+                ? `# Samples ${logScale ? '(log)' : ''}`
+                : `# Cases ${logScale ? '(log)' : ''}`;
+
+        const plotTitle = `${title ? title + ' ' : ''} ${metric}`;
 
         return (
             <>
@@ -204,33 +246,37 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                 )}
                 <VictoryChart
                     theme={VictoryTheme.material}
-                    scale={{ x: 'linear', y: 'linear' }}
-                    width={800}
+                    width={width}
                     height={plotData.length * 30 + 100}
                     containerComponent={<VictoryContainer responsive={false} />}
                     domainPadding={{
                         x: 30,
                         y: 100,
                     }}
+                    singleQuadrantDomainPadding={{
+                        y: true,
+                        x: false,
+                    }}
                     padding={{
                         left: 0,
                         top: 70,
-                        right: 400,
+                        right: 100,
                     }}
+                    minDomain={{ y: 0.95 }}
+                    scale={{ y: logScale ? 'log' : 'linear', x: 'linear' }}
                 >
                     <VictoryAxis
                         dependentAxis={true}
-                        label={
-                            myStore.mode() === EntityType.SAMPLE
-                                ? `Samples`
-                                : `Cases`
-                        }
-                        //tickFormat={(t)=>_.isInteger(Math.log10(t)) ? t : ''}
+                        label={plotTitle}
+                        {...tickProps}
                         orientation="top"
                         style={{
                             ticks: { size: 10 },
                             tickLabels: { fontSize: 10 },
                             axisLabel: { fontSize: 15, padding: 40 },
+                            grid: {
+                                stroke: 'none',
+                            },
                         }}
                     />
 

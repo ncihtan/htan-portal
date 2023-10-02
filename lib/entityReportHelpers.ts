@@ -42,7 +42,7 @@ export type EntityReportByCenter = {
     }[];
 };
 
-function normalizeTissueOrOrganOrSite(value: string) {
+export function normalizeTissueOrOrganOrSite(value: string) {
     return value.toLowerCase().replace(/,/g, '');
 }
 

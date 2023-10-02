@@ -14,6 +14,7 @@ import {
     computeEntityReportByAssay,
     computeEntityReportByOrgan,
     computeEntityReportGeneralized,
+    getNormalizedOrgan,
 } from '../lib/entityReportHelpers';
 import Select from 'react-select';
 import SummaryChart from './SummaryChart';
@@ -31,6 +32,7 @@ import { VictoryChart } from 'victory-chart';
 import { VictoryBar } from 'victory-bar';
 import { VictoryAxis } from 'victory-axis';
 import ExplorePlot from './ExplorePlot';
+import { log } from 'util';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -67,9 +69,23 @@ export enum ExploreTab {
     PLOTS = 'plots',
 }
 
+enum EntityType {
+    SAMPLE = 'SAMPLE',
+    CASE = 'CASE',
+}
+
+const metricTypes = [
+    { value: 'ParticipantID', label: 'Case Count' },
+    { value: 'BiospecimenID', label: 'Specimen Count' },
+];
+
 const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || ExploreTab.ATLAS;
+
+        const [logScale, setLogScale] = useState(false);
+
+        const [metric, setMetric] = useState(metricTypes[0]);
 
         return (
             <>
@@ -252,6 +268,31 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             This feature is in beta.
                         </div>
 
+                        <Select
+                            classNamePrefix={'react-select'}
+                            isSearchable={false}
+                            isClearable={false}
+                            name={'xaxis'}
+                            controlShouldRenderValue={true}
+                            options={metricTypes}
+                            hideSelectedOptions={false}
+                            closeMenuOnSelect={true}
+                            onChange={(e) => {
+                                setMetric(e!);
+                            }}
+                            value={metric}
+                        />
+
+                        <div className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                checked={logScale}
+                                onChange={(e) => setLogScale(!logScale)}
+                            />
+                            <label className="form-check-label">Log</label>
+                        </div>
+
                         {props.filteredCases.length && (
                             <div className={'d-flex'}>
                                 <ExplorePlot
@@ -263,16 +304,28 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                     filteredCases={props.filteredCases}
                                     filteredSamples={props.filteredSamples}
                                     hideSelectors={true}
+                                    normalizersByField={{
+                                        TissueorOrganofOrigin: (e: Entity) =>
+                                            getNormalizedOrgan(e),
+                                    }}
+                                    title={'Organs'}
+                                    width={500}
+                                    logScale={logScale}
+                                    metricType={metric}
                                 />
                                 <ExplorePlot
+                                    title={'Assays'}
                                     selectedField={{
                                         data: { type: 'SAMPLE' },
                                         label: 'Assay',
                                         value: 'assayName',
                                     }}
+                                    width={500}
                                     filteredCases={props.filteredCases}
                                     filteredSamples={props.filteredFiles}
                                     hideSelectors={true}
+                                    logScale={logScale}
+                                    metricType={metric}
                                 />
                             </div>
                         )}
@@ -281,6 +334,8 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             <ExplorePlot
                                 filteredCases={props.filteredCases}
                                 filteredSamples={props.filteredSamples}
+                                logScale={logScale}
+                                metricType={metric}
                             />
                         )}
                     </div>
