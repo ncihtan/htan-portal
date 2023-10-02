@@ -253,10 +253,32 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </div>
 
                         {props.filteredCases.length && (
+                            <div className={'d-flex'}>
+                                <ExplorePlot
+                                    selectedField={{
+                                        value: 'TissueorOrganofOrigin',
+                                        label: 'Organ',
+                                        data: { type: 'CASE' },
+                                    }}
+                                    filteredCases={props.filteredCases}
+                                    filteredSamples={props.filteredSamples}
+                                    hideSelectors={true}
+                                />
+                                <ExplorePlot
+                                    selectedField={{
+                                        data: { type: 'SAMPLE' },
+                                        label: 'Assay',
+                                        value: 'assayName',
+                                    }}
+                                    filteredCases={props.filteredCases}
+                                    filteredSamples={props.filteredFiles}
+                                    hideSelectors={true}
+                                />
+                            </div>
+                        )}
+
+                        {props.filteredCases.length && (
                             <ExplorePlot
-                                groupsByPropertyFiltered={
-                                    props.groupsByPropertyFiltered
-                                }
                                 filteredCases={props.filteredCases}
                                 filteredSamples={props.filteredSamples}
                             />

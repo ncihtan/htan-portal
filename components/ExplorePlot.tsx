@@ -10,9 +10,10 @@ import { Entity } from '../lib/helpers';
 import { Option } from 'react-select/src/filters';
 
 interface IExplorePlotProps {
-    groupsByPropertyFiltered: Record<string, Entity[]>;
     filteredCases: Entity[];
     filteredSamples: Entity[];
+    selectedField?: Option;
+    hideSelectors?: boolean;
 }
 
 enum EntityType {
@@ -53,7 +54,12 @@ const defaultOptions = [
 ];
 
 const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
-    function ({ groupsByPropertyFiltered, filteredCases, filteredSamples }) {
+    function ({
+        filteredCases,
+        hideSelectors,
+        filteredSamples,
+        selectedField,
+    }) {
         const xaxisOptions = [
             { value: 'ParticipantID', label: 'Case Count' },
             { value: 'BiospecimenID', label: 'Specimen Count' },
@@ -93,7 +99,7 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
 
         let ops = [...caseOps, ...sampleOps];
 
-        ops = defaultOptions;
+        //ops = defaultOptions;
 
         const myStore = useLocalStore<IExploreTabsState>(() => {
             return {
@@ -104,7 +110,11 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                         : EntityType.SAMPLE;
                 },
                 get selectedField() {
-                    return this._selectedField || (ops[0] as Option);
+                    return (
+                        selectedField ||
+                        this._selectedField ||
+                        (ops[0] as Option)
+                    );
                 },
                 _selectedField: null,
             };
@@ -138,6 +148,8 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
             return report;
         });
 
+        console.log(ops);
+
         // transform reports into format required by plot
         const plotData = _(reportsByValueMap)
             .map((v, k) => {
@@ -154,45 +166,47 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
 
         return (
             <>
-                <div style={{ display: 'flex' }}>
-                    <div style={{ width: 300, marginRight: 10 }}>
-                        <Select
-                            classNamePrefix={'react-select'}
-                            isSearchable={false}
-                            isClearable={false}
-                            name={'field'}
-                            controlShouldRenderValue={true}
-                            options={ops}
-                            defaultValue={ops[0]}
-                            hideSelectedOptions={false}
-                            closeMenuOnSelect={true}
-                            onChange={(e) => {
-                                myStore._selectedField = e!;
-                            }}
-                        />
+                {!hideSelectors && (
+                    <div style={{ display: 'flex' }}>
+                        <div style={{ width: 300, marginRight: 10 }}>
+                            <Select
+                                classNamePrefix={'react-select'}
+                                isSearchable={false}
+                                isClearable={false}
+                                name={'field'}
+                                controlShouldRenderValue={true}
+                                options={ops}
+                                defaultValue={ops[0]}
+                                hideSelectedOptions={false}
+                                closeMenuOnSelect={true}
+                                onChange={(e) => {
+                                    myStore._selectedField = e!;
+                                }}
+                            />
+                        </div>
+                        <div style={{ width: 300 }}>
+                            <Select
+                                classNamePrefix={'react-select'}
+                                isSearchable={false}
+                                isClearable={false}
+                                name={'xaxis'}
+                                controlShouldRenderValue={true}
+                                options={xaxisOptions}
+                                hideSelectedOptions={false}
+                                closeMenuOnSelect={true}
+                                onChange={(e) => {
+                                    myStore.xaxis = e;
+                                }}
+                                defaultValue={xaxisOptions[0]}
+                            />
+                        </div>
                     </div>
-                    <div style={{ width: 300 }}>
-                        <Select
-                            classNamePrefix={'react-select'}
-                            isSearchable={false}
-                            isClearable={false}
-                            name={'xaxis'}
-                            controlShouldRenderValue={true}
-                            options={xaxisOptions}
-                            hideSelectedOptions={false}
-                            closeMenuOnSelect={true}
-                            onChange={(e) => {
-                                myStore.xaxis = e;
-                            }}
-                            defaultValue={xaxisOptions[0]}
-                        />
-                    </div>
-                </div>
+                )}
                 <VictoryChart
                     theme={VictoryTheme.material}
-                    scale={{ x: 'linear', y: 'log' }}
-                    width={900}
-                    height={plotData.length * 50 + 100}
+                    scale={{ x: 'linear', y: 'linear' }}
+                    width={800}
+                    height={plotData.length * 30 + 100}
                     containerComponent={<VictoryContainer responsive={false} />}
                     domainPadding={{
                         x: 30,
@@ -208,9 +222,10 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                         dependentAxis={true}
                         label={
                             myStore.mode() === EntityType.SAMPLE
-                                ? `Samples (log)`
-                                : `Cases (log10)`
+                                ? `Samples`
+                                : `Cases`
                         }
+                        //tickFormat={(t)=>_.isInteger(Math.log10(t)) ? t : ''}
                         orientation="top"
                         style={{
                             ticks: { size: 10 },
