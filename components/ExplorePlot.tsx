@@ -8,15 +8,50 @@ import { observer, useLocalStore } from 'mobx-react';
 import _ from 'lodash';
 import { Entity } from '../lib/helpers';
 import { Option } from 'react-select/src/filters';
-import { getNormalizedOrgan } from '../lib/entityReportHelpers';
-import { log } from 'util';
+
+export function getExploreChartOptions(
+    filteredCases: Entity[],
+    filteredSamples: Entity[]
+) {
+    const caseOps: Option[] = _.chain(filteredCases)
+        .flatMap(_.entries)
+        .reduce((agg: string[], [k, v]) => {
+            if (!!v) agg.push(k);
+            return agg;
+        }, [])
+        .uniq()
+        .map((k) => {
+            return {
+                value: k,
+                label: k + ':Case',
+                data: { type: EntityType.CASE },
+            };
+        })
+        .value();
+
+    const sampleOps: Option[] = _.chain(filteredSamples)
+        .flatMap(_.entries)
+        .reduce((agg: string[], [k, v]) => {
+            if (v !== undefined && v !== null) agg.push(k);
+            return agg;
+        }, [])
+        .uniq()
+        .map((k) => {
+            return {
+                value: k,
+                label: k + ':Sample',
+                data: { type: EntityType.SAMPLE },
+            };
+        })
+        .value();
+
+    return [...caseOps, ...sampleOps];
+}
 
 interface IExplorePlotProps {
     filteredCases: Entity[];
     filteredSamples: Entity[];
-    selectedField?: Option;
-    hideSelectors?: boolean;
-    title: string;
+    selectedField: Option;
     normalizersByField?: Record<string, (entity: Entity) => string>;
     width?: number;
     logScale: boolean;
@@ -33,13 +68,12 @@ function dependentAxisTickFormat(t: number) {
     return _.isInteger(Math.log10(t)) ? t : '';
 }
 
-type IExploreTabsState = {
-    selectedField: Option;
-    _selectedField: Option | null;
-    xaxis: any;
-};
-
-const defaultOptions = [
+export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
+    {
+        value: 'Summary',
+        label: 'Summary (Organ/Assay)',
+        data: { type: 'CASE' },
+    },
     {
         value: 'PrimaryDiagnosis',
         label: 'Primary Diagnosis',
@@ -50,7 +84,7 @@ const defaultOptions = [
         label: 'Organ',
         data: { type: 'CASE' },
     },
-    { value: 'assayName', label: 'Assay', data: { type: 'SAMPLE' } },
+    // { value: 'assayName', label: 'Assay', data: { type: 'SAMPLE' } },
     {
         value: 'Ethnicity',
         label: 'Ethnicity',
@@ -64,92 +98,34 @@ const defaultOptions = [
     },
 ];
 
+const CustomTickComponent: React.FunctionComponent<any> = function (...args) {
+    return null;
+};
+
 const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
     function ({
         filteredCases,
-        hideSelectors,
         filteredSamples,
         selectedField,
-        title,
         width = 800,
         logScale,
         metricType,
         normalizersByField,
     }) {
-        const xaxisOptions = [
-            { value: 'ParticipantID', label: 'Case Count' },
-            { value: 'BiospecimenID', label: 'Specimen Count' },
-        ];
-
-        const caseOps: Option[] = _.chain(filteredCases)
-            .flatMap(_.entries)
-            .reduce((agg: string[], [k, v]) => {
-                if (!!v) agg.push(k);
-                return agg;
-            }, [])
-            .uniq()
-            .map((k) => {
-                return {
-                    value: k,
-                    label: k + ':Case',
-                    data: { type: EntityType.CASE },
-                };
-            })
-            .value();
-
-        const sampleOps: Option[] = _.chain(filteredSamples)
-            .flatMap(_.entries)
-            .reduce((agg: string[], [k, v]) => {
-                if (v !== undefined && v !== null) agg.push(k);
-                return agg;
-            }, [])
-            .uniq()
-            .map((k) => {
-                return {
-                    value: k,
-                    label: k + ':Sample',
-                    data: { type: EntityType.SAMPLE },
-                };
-            })
-            .value();
-
-        let ops = [...caseOps, ...sampleOps];
-
-        //ops = defaultOptions;
-
         const mode =
             metricType.value === 'ParticipantID'
                 ? EntityType.CASE
                 : EntityType.SAMPLE;
 
-        const myStore = useLocalStore<IExploreTabsState>(() => {
-            return {
-                xaxis: xaxisOptions[0],
-                get selectedField() {
-                    return (
-                        selectedField ||
-                        this._selectedField ||
-                        (ops[0] as Option)
-                    );
-                },
-                _selectedField: null,
-            };
-        });
-
         const casesByIdMap = _.keyBy(filteredCases, (c) => c.ParticipantID);
 
-        const propertyType = myStore.selectedField.data.type;
+        const propertyType = selectedField.data.type;
 
-        const selectedValue: keyof Entity = myStore.selectedField
-            .value as keyof Entity;
+        const selectedValue: keyof Entity = selectedField.value as keyof Entity;
 
         let accessor =
             normalizersByField?.[selectedValue] ||
             ((e: Entity) => e[selectedValue]);
-
-        // if (selectedValue === "TissueorOrganofOrigin") {
-        //     accessor =
-        // }
 
         const samplesByValueMap = _.groupBy(filteredSamples, (sample) => {
             // these will result in the counts
@@ -201,49 +177,13 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
 
         const metric =
             mode === EntityType.SAMPLE
-                ? `# Samples ${logScale ? '(log)' : ''}`
-                : `# Cases ${logScale ? '(log)' : ''}`;
+                ? `#Samples ${logScale ? '(log)' : ''}`
+                : `#Cases ${logScale ? '(log)' : ''}`;
 
-        const plotTitle = `${title ? title + ' ' : ''} ${metric}`;
+        const plotTitle = `${selectedField.label} ${metric}`;
 
         return (
             <>
-                {!hideSelectors && (
-                    <div style={{ display: 'flex' }}>
-                        <div style={{ width: 300, marginRight: 10 }}>
-                            <Select
-                                classNamePrefix={'react-select'}
-                                isSearchable={false}
-                                isClearable={false}
-                                name={'field'}
-                                controlShouldRenderValue={true}
-                                options={ops}
-                                defaultValue={ops[0]}
-                                hideSelectedOptions={false}
-                                closeMenuOnSelect={true}
-                                onChange={(e) => {
-                                    myStore._selectedField = e!;
-                                }}
-                            />
-                        </div>
-                        <div style={{ width: 300 }}>
-                            <Select
-                                classNamePrefix={'react-select'}
-                                isSearchable={false}
-                                isClearable={false}
-                                name={'xaxis'}
-                                controlShouldRenderValue={true}
-                                options={xaxisOptions}
-                                hideSelectedOptions={false}
-                                closeMenuOnSelect={true}
-                                onChange={(e) => {
-                                    myStore.xaxis = e;
-                                }}
-                                defaultValue={xaxisOptions[0]}
-                            />
-                        </div>
-                    </div>
-                )}
                 <VictoryChart
                     theme={VictoryTheme.material}
                     width={width}
@@ -270,6 +210,7 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                         label={plotTitle}
                         {...tickProps}
                         orientation="top"
+                        //tickComponent={<CustomTickComponent />}
                         style={{
                             ticks: { size: 10 },
                             tickLabels: { fontSize: 10 },

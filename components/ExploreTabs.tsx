@@ -31,8 +31,12 @@ import Alert from 'react-bootstrap/Alert';
 import { VictoryChart } from 'victory-chart';
 import { VictoryBar } from 'victory-bar';
 import { VictoryAxis } from 'victory-axis';
-import ExplorePlot from './ExplorePlot';
+import ExplorePlot, {
+    DEFAULT_EXPLORE_PLOT_OPTIONS,
+    getExploreChartOptions,
+} from './ExplorePlot';
 import { log } from 'util';
+import { Option } from 'react-select/src/filters';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -86,6 +90,10 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         const [logScale, setLogScale] = useState(false);
 
         const [metric, setMetric] = useState(metricTypes[0]);
+
+        const [selectedField, setSelectedField] = useState(
+            DEFAULT_EXPLORE_PLOT_OPTIONS[0]
+        );
 
         return (
             <>
@@ -268,76 +276,112 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             This feature is in beta.
                         </div>
 
-                        <Select
-                            classNamePrefix={'react-select'}
-                            isSearchable={false}
-                            isClearable={false}
-                            name={'xaxis'}
-                            controlShouldRenderValue={true}
-                            options={metricTypes}
-                            hideSelectedOptions={false}
-                            closeMenuOnSelect={true}
-                            onChange={(e) => {
-                                setMetric(e!);
-                            }}
-                            value={metric}
-                        />
-
-                        <div className="form-check">
-                            <input
-                                className="form-check-input"
-                                type="checkbox"
-                                checked={logScale}
-                                onChange={(e) => setLogScale(!logScale)}
-                            />
-                            <label className="form-check-label">Log</label>
-                        </div>
-
-                        {props.filteredCases.length && (
-                            <div className={'d-flex'}>
-                                <ExplorePlot
-                                    selectedField={{
-                                        value: 'TissueorOrganofOrigin',
-                                        label: 'Organ',
-                                        data: { type: 'CASE' },
+                        <form
+                            className={'d-flex'}
+                            style={{ alignItems: 'center' }}
+                        >
+                            <div style={{ width: 300, marginRight: 20 }}>
+                                <Select
+                                    classNamePrefix={'react-select'}
+                                    isSearchable={false}
+                                    isClearable={false}
+                                    name={'field'}
+                                    controlShouldRenderValue={true}
+                                    options={DEFAULT_EXPLORE_PLOT_OPTIONS}
+                                    defaultValue={
+                                        DEFAULT_EXPLORE_PLOT_OPTIONS[0]
+                                    }
+                                    hideSelectedOptions={false}
+                                    closeMenuOnSelect={true}
+                                    onChange={(e) => {
+                                        setSelectedField(e);
+                                        //myStore._selectedField = e!;
                                     }}
-                                    filteredCases={props.filteredCases}
-                                    filteredSamples={props.filteredSamples}
-                                    hideSelectors={true}
-                                    normalizersByField={{
-                                        TissueorOrganofOrigin: (e: Entity) =>
-                                            getNormalizedOrgan(e),
-                                    }}
-                                    title={'Organs'}
-                                    width={500}
-                                    logScale={logScale}
-                                    metricType={metric}
-                                />
-                                <ExplorePlot
-                                    title={'Assays'}
-                                    selectedField={{
-                                        data: { type: 'SAMPLE' },
-                                        label: 'Assay',
-                                        value: 'assayName',
-                                    }}
-                                    width={500}
-                                    filteredCases={props.filteredCases}
-                                    filteredSamples={props.filteredFiles}
-                                    hideSelectors={true}
-                                    logScale={logScale}
-                                    metricType={metric}
                                 />
                             </div>
-                        )}
 
-                        {props.filteredCases.length && (
-                            <ExplorePlot
-                                filteredCases={props.filteredCases}
-                                filteredSamples={props.filteredSamples}
-                                logScale={logScale}
-                                metricType={metric}
-                            />
-                        )}
+                            <div style={{ width: 300, marginRight: 20 }}>
+                                <Select
+                                    classNamePrefix={'react-select'}
+                                    isSearchable={false}
+                                    isClearable={false}
+                                    name={'xaxis'}
+                                    controlShouldRenderValue={true}
+                                    options={metricTypes}
+                                    hideSelectedOptions={false}
+                                    closeMenuOnSelect={true}
+                                    onChange={(e) => {
+                                        setMetric(e!);
+                                    }}
+                                    value={metric}
+                                />
+                            </div>
+                            <div>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={logScale}
+                                        onChange={(e) => setLogScale(!logScale)}
+                                    />
+                                    <label className="form-check-label">
+                                        Log
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+
+                        {props.filteredCases.length &&
+                            selectedField.value === 'Summary' && (
+                                <div className={'d-flex'}>
+                                    <ExplorePlot
+                                        selectedField={{
+                                            value: 'TissueorOrganofOrigin',
+                                            label: 'Organ',
+                                            data: { type: 'CASE' },
+                                        }}
+                                        filteredCases={props.filteredCases}
+                                        filteredSamples={props.filteredSamples}
+                                        hideSelectors={true}
+                                        normalizersByField={{
+                                            TissueorOrganofOrigin: (
+                                                e: Entity
+                                            ) => getNormalizedOrgan(e),
+                                        }}
+                                        title={'Organs'}
+                                        width={500}
+                                        logScale={logScale}
+                                        metricType={metric}
+                                    />
+                                    <ExplorePlot
+                                        title={'Assays'}
+                                        selectedField={{
+                                            data: { type: 'SAMPLE' },
+                                            label: 'Assay',
+                                            value: 'assayName',
+                                        }}
+                                        width={500}
+                                        filteredCases={props.filteredCases}
+                                        filteredSamples={props.filteredFiles}
+                                        hideSelectors={true}
+                                        logScale={logScale}
+                                        metricType={metric}
+                                    />
+                                </div>
+                            )}
+
+                        {props.filteredCases.length &&
+                            selectedField.value !== 'Summary' && (
+                                <ExplorePlot
+                                    filteredCases={props.filteredCases}
+                                    filteredSamples={props.filteredSamples}
+                                    logScale={logScale}
+                                    metricType={metric}
+                                    selectedField={selectedField}
+                                    hideSelectors={true}
+                                    title={selectedField.label}
+                                />
+                            )}
                     </div>
                 )}
             </>
