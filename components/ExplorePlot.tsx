@@ -56,6 +56,7 @@ interface IExplorePlotProps {
     width?: number;
     logScale: boolean;
     metricType: any;
+    samplesByValueMap?: Record<string, Entity[]>;
 }
 
 enum EntityType {
@@ -111,6 +112,7 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
         logScale,
         metricType,
         normalizersByField,
+        samplesByValueMap,
     }) {
         const mode =
             metricType.value === 'ParticipantID'
@@ -127,24 +129,26 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
             normalizersByField?.[selectedValue] ||
             ((e: Entity) => e[selectedValue]);
 
-        const samplesByValueMap = _.groupBy(filteredSamples, (sample) => {
-            // these will result in the counts
-            let val: string | undefined = undefined;
-            let entity: Entity;
-            if (propertyType === EntityType.CASE) {
-                // should actually be propery type
-                // this will group the samples by a property of the case to which they belong,
-                // allowing us to count them by a case property
-                entity = casesByIdMap[sample.ParticipantID];
-            } else {
-                entity = sample;
-            }
+        const _samplesByValueMap =
+            samplesByValueMap ||
+            _.groupBy(filteredSamples, (sample) => {
+                // these will result in the counts
+                let val: string | undefined = undefined;
+                let entity: Entity;
+                if (propertyType === EntityType.CASE) {
+                    // should actually be propery type
+                    // this will group the samples by a property of the case to which they belong,
+                    // allowing us to count them by a case property
+                    entity = casesByIdMap[sample.ParticipantID];
+                } else {
+                    entity = sample;
+                }
 
-            return accessor(entity);
-        });
+                return accessor(entity);
+            });
 
         // generate reports
-        const reportsByValueMap = _.mapValues(samplesByValueMap, (samples) => {
+        const reportsByValueMap = _.mapValues(_samplesByValueMap, (samples) => {
             const report = {
                 sampleCount: _.uniqBy(samples, (s) => s.BiospecimenID).length,
                 caseCount: _.uniqBy(samples, (s) => s.ParticipantID).length,
@@ -161,12 +165,15 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                         mode === EntityType.CASE ? v.caseCount : v.sampleCount,
                 };
             })
-            .sortBy((datum) => datum.count)
+            .orderBy((datum) => datum.count, 'asc')
             .value();
 
-        const ticks = _.times(Math.ceil(Math.log10(plotData[0].count)), (i) => {
-            return 10 ** i;
-        });
+        const ticks = _.times(
+            Math.ceil(Math.log10(plotData[plotData.length - 1].count)),
+            (i) => {
+                return 10 ** i;
+            }
+        );
 
         const tickProps = logScale
             ? {

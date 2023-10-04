@@ -272,14 +272,6 @@ function processSynapseJSON(
         demographicsByParticipantID,
     } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
-    // TODO cleanup when done
-    // console.log('monkeys');
-    // console.log(
-    //     Object.values(biospecimenByBiospecimenID).filter((n) => !n.ParentID)
-    //         .length
-    // );
-    // console.log(Object.values(biospecimenByBiospecimenID).length);
-
     const dbgapSynapseSet = new Set<string>(getDbgapSynapseIds(entitiesById));
     const dbgapImgSynapseSet = new Set<string>(
         getDbgapImgSynapseIds(entitiesById)
@@ -312,7 +304,6 @@ function processSynapseJSON(
     //.filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
 
     // TODO clean up when done
-    console.log('shoop', returnFiles.length);
     // remove files that can't be downloaded unless it's imaging
     // .filter(
     //     (f) =>

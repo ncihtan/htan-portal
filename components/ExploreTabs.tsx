@@ -83,6 +83,23 @@ const metricTypes = [
     { value: 'BiospecimenID', label: 'Specimen Count' },
 ];
 
+function getSamplesByValueMap(
+    entities: Entity[],
+    countByField: string
+): Record<string, Entity[]> {
+    const ret = entities.reduce((agg: Record<string, Entity[]>, file) => {
+        if (file.assayName) {
+            agg[file.assayName] = agg[file.assayName] || [];
+            agg[file.assayName].push(...file.biospecimen);
+        }
+        return agg;
+    }, {});
+
+    return _.mapValues(ret, (v, k) =>
+        _.uniqBy(v, (e) => e[countByField as keyof Entity])
+    );
+}
+
 const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || ExploreTab.ATLAS;
@@ -366,6 +383,10 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         hideSelectors={true}
                                         logScale={logScale}
                                         metricType={metric}
+                                        samplesByValueMap={getSamplesByValueMap(
+                                            props.filteredFiles,
+                                            metric.value
+                                        )}
                                     />
                                 </div>
                             )}
