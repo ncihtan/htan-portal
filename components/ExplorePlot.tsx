@@ -168,10 +168,11 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
             .orderBy((datum) => datum.count, 'asc')
             .value();
 
+        // these are used only if we are in logscale
         const ticks = _.times(
             Math.ceil(Math.log10(plotData[plotData.length - 1].count)),
             (i) => {
-                return 10 ** i;
+                return 10 ** (i + 1);
             }
         );
 
