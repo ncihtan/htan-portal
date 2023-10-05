@@ -150,6 +150,8 @@ export async function fetchData(): Promise<LoadDataResult> {
     const text = await res.text();
     const json = JSON.parse(text);
 
+    //window.myJSON = JSON.parse(text);
+
     return json as LoadDataResult;
 }
 
@@ -166,6 +168,11 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
         // we should always have a match
         specimen.ParticipantID =
             specimen.ParticipantID || (parentIdMatch ? parentIdMatch[0] : '');
+    });
+
+    // get rid of files
+    data.files = data.files.filter((f) => {
+        return f.demographicsIds.length > 0 && f.diagnosisIds.length > 0;
     });
 
     data.files.forEach((file) => {
