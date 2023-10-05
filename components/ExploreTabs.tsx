@@ -106,6 +106,8 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
 
         const [logScale, setLogScale] = useState(false);
 
+        const [hideNA, setHideNA] = useState(false);
+
         const [metric, setMetric] = useState(metricTypes[0]);
 
         const [selectedField, setSelectedField] = useState(
@@ -333,7 +335,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                     value={metric}
                                 />
                             </div>
-                            <div>
+                            <div style={{ marginRight: 20 }}>
                                 <div className="form-check">
                                     <input
                                         className="form-check-input"
@@ -343,6 +345,20 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                     />
                                     <label className="form-check-label">
                                         Log
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={hideNA}
+                                        onChange={(e) => setHideNA(!hideNA)}
+                                    />
+                                    <label className="form-check-label">
+                                        Hide NA
                                     </label>
                                 </div>
                             </div>
@@ -359,7 +375,6 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         }}
                                         filteredCases={props.filteredCases}
                                         filteredSamples={props.filteredSamples}
-                                        hideSelectors={true}
                                         normalizersByField={{
                                             TissueorOrganofOrigin: (
                                                 e: Entity
@@ -369,6 +384,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         width={500}
                                         logScale={logScale}
                                         metricType={metric}
+                                        hideNA={hideNA}
                                     />
                                     <ExplorePlot
                                         title={'Assays'}
@@ -380,13 +396,13 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         width={500}
                                         filteredCases={props.filteredCases}
                                         filteredSamples={props.filteredFiles}
-                                        hideSelectors={true}
                                         logScale={logScale}
                                         metricType={metric}
                                         samplesByValueMap={getSamplesByValueMap(
                                             props.filteredFiles,
                                             metric.value
                                         )}
+                                        hideNA={hideNA}
                                     />
                                 </div>
                             )}
@@ -401,6 +417,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                     selectedField={selectedField}
                                     hideSelectors={true}
                                     title={selectedField.label}
+                                    hideNA={hideNA}
                                 />
                             )}
                     </div>

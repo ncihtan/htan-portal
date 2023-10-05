@@ -57,6 +57,8 @@ interface IExplorePlotProps {
     logScale: boolean;
     metricType: any;
     samplesByValueMap?: Record<string, Entity[]>;
+    hideNA?: boolean;
+    normalizeNA?: boolean;
 }
 
 enum EntityType {
@@ -99,10 +101,6 @@ export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
     },
 ];
 
-const CustomTickComponent: React.FunctionComponent<any> = function (...args) {
-    return null;
-};
-
 const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
     function ({
         filteredCases,
@@ -113,6 +111,7 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
         metricType,
         normalizersByField,
         samplesByValueMap,
+        hideNA,
     }) {
         const mode =
             metricType.value === 'ParticipantID'
@@ -129,7 +128,16 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
             normalizersByField?.[selectedValue] ||
             ((e: Entity) => e[selectedValue]);
 
-        const _samplesByValueMap =
+        const unknownNormalizer = (entity: Entity) => {
+            const val = accessor(entity);
+            if (/^unknown|not reported|^NA/i.test(val)) {
+                return 'NA';
+            } else {
+                return val;
+            }
+        };
+
+        let _samplesByValueMap =
             samplesByValueMap ||
             _.groupBy(filteredSamples, (sample) => {
                 // these will result in the counts
@@ -144,8 +152,11 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                     entity = sample;
                 }
 
-                return accessor(entity);
+                return unknownNormalizer(entity);
+                //return accessor(entity);
             });
+
+        if (hideNA) delete _samplesByValueMap['NA'];
 
         // generate reports
         const reportsByValueMap = _.mapValues(_samplesByValueMap, (samples) => {
