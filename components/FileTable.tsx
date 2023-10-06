@@ -57,7 +57,7 @@ interface IFileDownloadModalProps {
     isOpen: boolean;
 }
 
-const DETAILS_COLUMN_NAME = 'Details';
+const DETAILS_COLUMN_NAME = 'Metadata';
 
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
@@ -390,6 +390,34 @@ export default class FileTable extends React.Component<IFileTableProps> {
     @observable columnVisibility: { [columnKey: string]: boolean } = {};
     @observable selectedLevels: string[] = this.allLevels;
 
+    getDownloadButton(
+        disabledText: string,
+        style?: React.CSSProperties
+    ): JSX.Element {
+        return (
+            <button
+                className={classNames(
+                    'btn',
+                    this.hasFilesSelected ? 'btn-primary' : 'btn-secondary'
+                )}
+                disabled={!this.hasFilesSelected}
+                onMouseDown={this.onDownload}
+                style={style}
+            >
+                {this.hasFilesSelected ? (
+                    <>
+                        <FontAwesomeIcon icon={faDownload} />{' '}
+                        {`Download ${this.selected.length} selected ${
+                            this.selected.length === 1 ? 'file' : 'files'
+                        }`}
+                    </>
+                ) : (
+                    disabledText
+                )}
+            </button>
+        );
+    }
+
     get defaultColumns(): IEnhancedDataTableColumn<Entity>[] {
         return [
             {
@@ -528,7 +556,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                     this.viewDetailsFile = file;
                                 })}
                             >
-                                View Details
+                                View Metadata
                             </a>
                         );
                     }
@@ -964,21 +992,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 <EnhancedDataTable
                     columnVisibility={this.columnVisibility}
                     onChangeColumnVisibility={this.setColumnVisibility}
-                    customControls={
-                        <button
-                            className={classNames(
-                                'btn btn-primary',
-                                !this.hasFilesSelected ? 'invisible' : ''
-                            )}
-                            disabled={!this.hasFilesSelected}
-                            onMouseDown={this.onDownload}
-                        >
-                            <FontAwesomeIcon icon={faDownload} />{' '}
-                            {`Download ${this.selected.length} selected ${
-                                this.selected.length === 1 ? 'file' : 'files'
-                            }`}
-                        </button>
-                    }
+                    customControls={this.getDownloadButton(
+                        'Select files to download below'
+                    )}
                     extraControlsInsideDataTableControls={
                         this.props.enableLevelFilter ? (
                             <LevelSelect
@@ -1015,20 +1031,9 @@ export default class FileTable extends React.Component<IFileTableProps> {
                     customStyles={getDefaultDataTableStyle()}
                 />
 
-                <button
-                    style={{ marginTop: -70 }}
-                    className={classNames(
-                        'btn btn-primary',
-                        !this.hasFilesSelected ? 'invisible' : ''
-                    )}
-                    disabled={!this.hasFilesSelected}
-                    onMouseDown={this.onDownload}
-                >
-                    <FontAwesomeIcon icon={faDownload} />{' '}
-                    {this.hasFilesSelected
-                        ? 'Download selected files'
-                        : 'Select files for download below'}
-                </button>
+                {this.getDownloadButton('Select files to download above', {
+                    marginTop: -70,
+                })}
             </>
         ) : null;
     }
