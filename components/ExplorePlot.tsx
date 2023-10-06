@@ -83,7 +83,6 @@ export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
         label: 'Primary Diagnosis',
         data: { type: 'CASE' },
     },
-    // { value: 'assayName', label: 'Assay', data: { type: 'SAMPLE' } },
     {
         value: 'Ethnicity',
         label: 'Ethnicity',

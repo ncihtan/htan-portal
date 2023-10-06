@@ -460,7 +460,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                                     label: 'Assay',
                                                     value: 'assayName',
                                                 }}
-                                                width={400}
+                                                width={500}
                                                 filteredCases={
                                                     props.filteredCases
                                                 }
