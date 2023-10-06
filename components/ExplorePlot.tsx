@@ -72,19 +72,15 @@ function dependentAxisTickFormat(t: number) {
 }
 
 export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
+    { data: { type: 'SAMPLE' }, label: 'Assay', value: 'assayName' },
     {
-        value: 'Summary',
-        label: 'Summary (Organ/Assay)',
+        value: 'TissueorOrganofOrigin',
+        label: 'Organ',
         data: { type: 'CASE' },
     },
     {
         value: 'PrimaryDiagnosis',
         label: 'Primary Diagnosis',
-        data: { type: 'CASE' },
-    },
-    {
-        value: 'TissueorOrganofOrigin',
-        label: 'Organ',
         data: { type: 'CASE' },
     },
     // { value: 'assayName', label: 'Assay', data: { type: 'SAMPLE' } },
