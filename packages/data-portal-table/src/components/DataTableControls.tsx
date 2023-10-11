@@ -38,14 +38,18 @@ export default class DataTableControls extends React.Component<IDataTableControl
                 <Tooltip
                     overlay={
                         <span>
-                            Download the entire table data including the hidden
-                            columns as a TSV file
+                            Download the entire metadata table below as a TSV
+                            file including the hidden columns
                         </span>
                     }
                     placement="left"
                 >
-                    <button className="btn" onClick={this.props.onDownload}>
-                        <FontAwesomeIcon icon={faDownload} />
+                    <button
+                        className="btn btn-light"
+                        onClick={this.props.onDownload}
+                        style={{ marginRight: 10 }}
+                    >
+                        <FontAwesomeIcon icon={faDownload} /> Download Metadata
                     </button>
                 </Tooltip>
                 {this.props.extraControls}
