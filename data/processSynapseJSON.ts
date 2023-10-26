@@ -26,8 +26,6 @@ import {
 } from '../lib/dataSchemaHelpers';
 import fs from 'fs';
 import csvToJson from 'csvtojson';
-import dgbapIds from './dbgap_release_all.json';
-import dbgapImageIds from './dbgap_img_release2.json';
 import idcAssets from './idc-imaging-assets.json';
 import atlasJson from './atlases.json';
 
@@ -67,10 +65,37 @@ function addReleaseInfo(
     }
 }
 
-function addDownloadSourcesInfo(file: BaseSerializableEntity) {
-    const dbgapSynapseSet = new Set(dgbapIds);
-    const dbgapImgSynapseSet = new Set(dbgapImageIds);
+function getDbgapSynapseIds(entitiesById: {
+    [entityId: string]: ReleaseEntity;
+}) {
+    return getReleaseSynapseIds(
+        entitiesById,
+        (e) => !_.isEmpty(e.CDS_Release) && !e.CDS_Release.endsWith('.img')
+    );
+}
 
+function getDbgapImgSynapseIds(entitiesById: {
+    [entityId: string]: ReleaseEntity;
+}) {
+    return getReleaseSynapseIds(entitiesById, (e) =>
+        e.CDS_Release?.endsWith('.img')
+    );
+}
+
+function getReleaseSynapseIds(
+    entitiesById: { [entityId: string]: ReleaseEntity },
+    predicate: (e: ReleaseEntity) => boolean
+) {
+    return _.values(entitiesById)
+        .filter(predicate)
+        .map((e) => e.entityId);
+}
+
+function addDownloadSourcesInfo(
+    file: BaseSerializableEntity,
+    dbgapSynapseSet: Set<string>,
+    dbgapImgSynapseSet: Set<string>
+) {
     if (
         file.assayName &&
         (file.assayName.toLowerCase().includes('bulk') ||
@@ -162,12 +187,17 @@ function processSynapseJSON(
     } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
 
     // TODO cleanup when done
-    console.log('monkeys');
-    console.log(
-        Object.values(biospecimenByBiospecimenID).filter((n) => !n.ParentID)
-            .length
+    // console.log('monkeys');
+    // console.log(
+    //     Object.values(biospecimenByBiospecimenID).filter((n) => !n.ParentID)
+    //         .length
+    // );
+    // console.log(Object.values(biospecimenByBiospecimenID).length);
+
+    const dbgapSynapseSet = new Set<string>(getDbgapSynapseIds(entitiesById));
+    const dbgapImgSynapseSet = new Set<string>(
+        getDbgapImgSynapseIds(entitiesById)
     );
-    console.log(Object.values(biospecimenByBiospecimenID).length);
 
     const returnFiles = files.map((file) => {
         const parentData = getSampleAndPatientData(
@@ -188,7 +218,7 @@ function processSynapseJSON(
             parentData?.demographics || []
         ).map((d) => d.ParticipantID);
 
-        addDownloadSourcesInfo(file);
+        addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
         return file as SerializableEntity;
     });
