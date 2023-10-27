@@ -370,7 +370,7 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
                 selector: 'AtlasMeta.title.rendered',
                 format: (atlas: Atlas) =>
                     atlas.AtlasMeta &&
-                    !['hta13', 'hta14'].includes(
+                    !['hta13', 'hta14', 'hta15'].includes(
                         atlas.htan_id.toLowerCase()
                     ) ? (
                         <span>
