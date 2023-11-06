@@ -132,12 +132,13 @@ export function doesFileIncludeLevel1OrLevel2SequencingData(file: Entity) {
 }
 
 function mergeCaseData(
-    diagnosis: Entity[],
+    participantIds: string[],
+    diagnosisByParticipantID: { [participantID: string]: Entity },
     demographicsByParticipantID: { [participantID: string]: Entity }
 ) {
-    return diagnosis.map((d) => ({
-        ...d,
-        ...demographicsByParticipantID[d.ParticipantID],
+    return participantIds.map((id) => ({
+        ...diagnosisByParticipantID[id],
+        ...demographicsByParticipantID[id],
     }));
 }
 
@@ -184,7 +185,13 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
         );
         (file as Entity).cases = _.uniqBy(
             mergeCaseData(
-                (file as Entity).diagnosis,
+                _.uniq(
+                    [
+                        ...(file as Entity).diagnosis,
+                        ...(file as Entity).demographics,
+                    ].map((e) => e.ParticipantID)
+                ),
+                diagnosisMap as { [id: string]: Entity },
                 demoMap as { [id: string]: Entity }
             ),
             (c) => c.ParticipantID
