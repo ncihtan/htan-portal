@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@4.3.2 (local user-provided)
    40kB  sourcemap-register.js
-38976kB  index.js
- 1174kB  index.js.map
-39016kB  [54518ms] - ncc 0.28.6
+38241kB  index.js
+ 1175kB  index.js.map
+38281kB  [77377ms] - ncc 0.28.6
 monkeys
 0
 10747

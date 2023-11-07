@@ -148,7 +148,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20230907_0519.json';
+            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_PR564_20231107_1123.json';
     const res = await fetch(processedSynURL);
 
     // const json = await res.json();
