@@ -570,8 +570,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                 selector: (file: Entity) => {
                     const cellXGeneLink =
                         CELLXGENE_MAPPINGS[getFileBase(file.Filename)];
-                    const bigQueryLink =
-                        ISBCGC_MAPPINGS[getFileBase(file.Filename)];
+                    const bigQueryLink = ISBCGC_MAPPINGS[file.synapseId || ''];
                     const imageViewers = getImageViewersAssociatedWithFile(
                         file
                     );
