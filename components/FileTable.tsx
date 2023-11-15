@@ -87,7 +87,78 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     );
 };
 
-const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
+const ImagingInstructionsNotDownloadable: React.FunctionComponent<{
+    files: Entity[];
+}> = (props) => {
+    const hasAnyImageViewersForNonDownloadableFiles = props.files.some(
+        (f) => getImageViewersAssociatedWithFile(f).hasImageViewer
+    );
+
+    return props.files.length > 0 ? (
+        <div>
+            <p>
+                Your selection includes imaging data that is not downloadable
+                yet:
+            </p>
+            <pre className="pre-scrollable">
+                <code>
+                    {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
+                </code>
+            </pre>
+            {hasAnyImageViewersForNonDownloadableFiles && (
+                <span>
+                    Note however that you can explore them in one of the viewers
+                    in the right most column.
+                </span>
+            )}
+        </div>
+    ) : null;
+};
+
+const ImagingInstructionsCDS: React.FunctionComponent<{ files: Entity[] }> = (
+    props
+) => {
+    const downloadableFiles: Entity[] = props.files.filter(
+        (f) => !f.downloadSource?.includes('Coming Soon')
+    );
+    const filesNotDownloadableFromCDS: Entity[] = props.files.filter((f) =>
+        f.downloadSource?.includes('Coming Soon')
+    );
+
+    return (
+        <>
+            {downloadableFiles.length > 0 && (
+                <>
+                    <p>Your selection includes Level 2 imaging data:</p>
+                    <pre className="pre-scrollable">
+                        <code>
+                            {downloadableFiles
+                                .map((f) => getFileBase(f.Filename))
+                                .join('\n')}
+                        </code>
+                    </pre>
+                    <p>
+                        These are now available through the NCI SB-CGC Cancer
+                        Data Service (CDS). To download these files follow the
+                        instructions{' '}
+                        <a
+                            href="https://docs.humantumoratlas.org/open_access/cds_imaging/"
+                            target="_blank"
+                        >
+                            here
+                        </a>
+                        .
+                    </p>
+                </>
+            )}
+            <ImagingInstructionsNotDownloadable
+                files={filesNotDownloadableFromCDS}
+            />
+        </>
+    );
+};
+
+const ImagingInstructionsIDC: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
     const [cloudSource, setCloudSource] = useState<'gcp' | 'aws'>('gcp');
@@ -106,9 +177,6 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
         (f) =>
             getImageBucketUrl(getImageViewersAssociatedWithFile(f)) ===
             undefined
-    );
-    const hasAnyImageViewersForNonDownloadbleFiles = filesNotDownloadableFromIDC.some(
-        (f) => getImageViewersAssociatedWithFile(f).hasImageViewer
     );
 
     return (
@@ -182,27 +250,9 @@ const ImagingInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                     </pre>
                 </div>
             )}
-            {filesNotDownloadableFromIDC.length > 0 && (
-                <div>
-                    <p>
-                        Your selection includes imaging data that is not
-                        downloadable yet:
-                    </p>
-                    <pre className="pre-scrollable">
-                        <code>
-                            {props.files
-                                .map((f) => getFileBase(f.Filename))
-                                .join('\n')}
-                        </code>
-                    </pre>
-                    {hasAnyImageViewersForNonDownloadbleFiles && (
-                        <span>
-                            Note however that you can explore them in one of the
-                            viewers in the right most column.
-                        </span>
-                    )}
-                </div>
-            )}
+            <ImagingInstructionsNotDownloadable
+                files={filesNotDownloadableFromIDC}
+            />
         </>
     );
 };
@@ -294,7 +344,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             <Modal.Body>
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
                 {lowerLevelImagingFiles.length > 0 && (
-                    <ImagingInstructions files={lowerLevelImagingFiles} />
+                    <ImagingInstructionsCDS files={lowerLevelImagingFiles} />
                 )}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
@@ -327,7 +377,7 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
     let idcImageBucketAwsUrl = undefined;
     let idcImageBucketGcpUrl = undefined;
     if (file.DataFileID in IDC_MAPPINGS) {
-        idcImageUrl = IDC_MAPPINGS[file.DataFileID]['viewer_url']; // TODO currently viewer_url field is missing
+        idcImageUrl = IDC_MAPPINGS[file.DataFileID]['viewer_url'];
         idcImageBucketAwsUrl =
             IDC_MAPPINGS[file.DataFileID]['s5cmd_manifest_aws'];
         idcImageBucketGcpUrl =

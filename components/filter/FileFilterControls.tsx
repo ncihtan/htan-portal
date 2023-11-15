@@ -101,8 +101,8 @@ const FileFilterControls: React.FunctionComponent<
                         .sort((a: OptionType, b: OptionType) => {
                             const downloadSourceOrder = [
                                 DownloadSourceCategory.dbgap,
-                                DownloadSourceCategory.idcDbgap,
-                                DownloadSourceCategory.idc,
+                                DownloadSourceCategory.cds,
+                                // DownloadSourceCategory.idc,
                                 DownloadSourceCategory.synapse,
                                 DownloadSourceCategory.comingSoon,
                             ];
@@ -119,9 +119,9 @@ const FileFilterControls: React.FunctionComponent<
                             const downloadLabels = {
                                 [DownloadSourceCategory.dbgap]:
                                     'CDS/SB-CGC (dbGaP 🔒)',
-                                [DownloadSourceCategory.idc]: 'IDC (Imaging)',
-                                [DownloadSourceCategory.idcDbgap]:
-                                    'CDS/SB-CGC and IDC',
+                                // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
+                                [DownloadSourceCategory.cds]:
+                                    'CDS/SB-CGC (Open Access 🔓)',
                                 [DownloadSourceCategory.synapse]:
                                     'Synapse (Level 3-4)',
                                 [DownloadSourceCategory.comingSoon]:
