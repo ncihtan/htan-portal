@@ -32,20 +32,21 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
     # map: HTAN center names to HTAN IDs
     htan_centers = {
-                    "HTAN HTAPP": "hta1",
-                    "PCAPP Pilot Project": "hta2",
-                    "HTAN BU": "hta3",
-                    "HTAN CHOP": "hta4",
-                    "HTAN DFCI": "hta5",
-                    "HTAN Duke": "hta6",
-                    "HTAN HMS": "hta7",
-                    "HTAN MSK": "hta8",
-                    "HTAN OHSU": "hta9",
-                    "HTAN Stanford": "hta10",
-                    "HTAN Vanderbilt": "hta11",
-                    "HTAN WUSTL": "hta12",
-                    "HTAN TNP SARDANA": "hta13",
-                    "HTAN TNP - TMA": "hta14"
+        "HTAN HTAPP": "hta1",
+        "PCAPP Pilot Project": "hta2",
+        "HTAN BU": "hta3",
+        "HTAN CHOP": "hta4",
+        "HTAN DFCI": "hta5",
+        "HTAN Duke": "hta6",
+        "HTAN HMS": "hta7",
+        "HTAN MSK": "hta8",
+        "HTAN OHSU": "hta9",
+        "HTAN Stanford": "hta10",
+        "HTAN Vanderbilt": "hta11",
+        "HTAN WUSTL": "hta12",
+        "HTAN TNP SARDANA": "hta13",
+        "HTAN TNP - TMA": "hta14",
+        "HTAN SRRS": "hta15"
     }
 
 
@@ -77,12 +78,21 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
     se.load_schema(url)
 
+    # get manifest files and group by parent id
+    synapse_storage_manifest_files = all_files[all_files["name"].str.contains("synapse_storage_manifest")]
+    synapse_storage_manifest_files_grouped_by_parent = synapse_storage_manifest_files.groupby(["parentId"])
 
-    # only consider newest manifest for each folder
-    metadata_manifests_newest_per_folder = all_files[all_files["name"].str.contains(
-        "synapse_storage_manifest")][
-        ["id", "projectId", "parentId", "modifiedOn"]
-        ].groupby(["parentId"]).max().reset_index().copy()
+    # if synapse_storage_manifest.csv is the only file keep it,
+    # otherwise keep ALL OTHER files except synapse_storage_manifest.csv
+    metadata_manifests_newest_per_folder = synapse_storage_manifest_files[
+        synapse_storage_manifest_files.apply(
+            lambda f:
+                "synapse_storage_manifest_" in f["name"]
+                or
+                synapse_storage_manifest_files_grouped_by_parent.groups[f["parentId"]].size == 1,
+            axis=1
+        )
+    ]
 
     #  group them by project (i.e. research center/atlas)
     metadata_manifests_per_project = metadata_manifests_newest_per_folder[["id", "parentId", "projectId"]].groupby(["projectId"])
@@ -101,8 +111,6 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
 
     released_metadata_df = pd.read_csv("metadata_v4.csv")
     released_synapse_metadata_ids = set(released_metadata_df['Manifest_Id'])
-    # use release_float for finding most recent release of metadata manifest
-    released_metadata_df["release_float"] = released_metadata_df["Data_Release"].str.split().str[-1].astype(float)
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump
     for project_id, dataset_group in metadata_manifests_per_project:
@@ -129,7 +137,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             manifest_location = "./tmp/" + center_id + "/" + dataset["id"] + "/"
             manifest_path = manifest_location + "synapse_storage_manifest.csv"
 
-            released_record = released_metadata_df[released_metadata_df["Manifest_Id"] == dataset["id"]].sort_values("release_float",ascending=False).iloc[0]
+            released_record = released_metadata_df[released_metadata_df["Manifest_Id"] == dataset["id"]].sort_values("Manifest_Version",ascending=False).iloc[0]
 
             if not do_not_download_from_synapse:
                 if dataset["id"] == "syn25619062":

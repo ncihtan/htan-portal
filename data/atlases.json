@@ -118,5 +118,13 @@
         "htan_id": "hta14",
         "short_description": "Generate spatially resolved cell type/state census from tissue microarray breast FFPE specimens",
         "lead_institutions": "Trans-Network Project"
+    },
+    {
+        "title": {
+            "rendered": "SRRS"
+        },
+        "htan_id": "hta15",
+        "short_description": "Standardized Repository of Reference Specimens",
+        "lead_institutions": "CU Anschutz Medical Campus"
     }
 ]

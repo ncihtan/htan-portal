@@ -172,6 +172,92 @@ function processSynapseJSON(
 
     //flatData = flatData.filter((f) => f.atlasid === 'HTA7');
 
+    // split entity into 2 separate entities, Diagnosis and Demographics, if component is 'SRRSClinicalDataTier2'
+    flatData = _.flatten(
+        flatData.map((d) => {
+            if (d.Component === 'SRRSClinicalDataTier2') {
+                // TODO figure out where these should go (demographics vs diagnosis)
+                //  we can't show these at this point because these are only defined in SRRSClinicalDataTier2 schema,
+                //  we don't have these in Diagnosis or Demographics schema.
+                // [
+                //     'bts:TimepointLabel', // ???
+                //     'bts:StartDaysfromIndex', // ???
+                //     'bts:StopDaysfromIndex', // ???
+                //     'bts:EducationLevel', // Demographics
+                //     'bts:CountryofBirth', // Demographics
+                //     'bts:MedicallyUnderservedArea', // Demographics
+                //     'bts:RuralvsUrban', // Demographics
+                //     'bts:CancerIncidence', // ???
+                //     'bts:CancerIncidenceLocation', // ???
+                //     'bts:DaystoRecurrence', // Diagnosis
+                //     'bts:NCIAtlasCancerSite', // Dia
+                //     'bts:PackYearsSmoked', // ???
+                //     'bts:YearsSmoked', // ???
+                //     'bts:DaystoFollowUp', // Dia
+                //     'bts:GeneSymbol', // Dia
+                //     'bts:MolecularAnalysisMethod', // Dia
+                //     'bts:TestResult', // Dia
+                //     'bts:TreatmentType' // Dia
+                // ]
+
+                const demographics = {
+                    synapseId: d.synapseId,
+                    Component: 'Demographics',
+                    assayName: 'Demographics',
+                    ParticipantID: d.ParticipantID,
+                    EducationLevel: (d as any).EducationLevel,
+                    CountryofBirth: (d as any).CountryofBirth,
+                    MedicallyUnderservedArea: (d as any)
+                        .MedicallyUnderservedArea,
+                    RuralvsUrban: (d as any).RuralvsUrban,
+                    Ethnicity: d.Ethnicity,
+                    Gender: d.Gender,
+                    Race: d.Race,
+                    VitalStatus: (d as any).VitalStatus,
+                    atlasid: d.atlasid,
+                    atlas_name: d.atlas_name,
+                    AtlasMeta: d.AtlasMeta,
+                    level: d.level,
+                };
+
+                const diagnosis = {
+                    synapseId: d.synapseId,
+                    Component: 'Diagnosis',
+                    assayName: 'Diagnosis',
+                    ParticipantID: d.ParticipantID,
+                    AgeatDiagnosis: d.AgeatDiagnosis,
+                    DaystoLastFollowup: (d as any).DaystoLastFollowup,
+                    DaystoLastKnownDiseaseStatus: (d as any)
+                        .DaystoLastKnownDiseaseStatus,
+                    DaystoRecurrence: (d as any).DaystoRecurrence,
+                    LastKnownDiseaseStatus: (d as any).LastKnownDiseaseStatus,
+                    Morphology: (d as any).Morphology,
+                    PrimaryDiagnosis: d.PrimaryDiagnosis,
+                    ProgressionorRecurrence: (d as any).ProgressionorRecurrence,
+                    SiteofResectionorBiopsy: (d as any).SiteofResectionorBiopsy,
+                    TissueorOrganofOrigin: d.TissueorOrganofOrigin,
+                    NCIAtlasCancerSite: (d as any).NCIAtlasCancerSite,
+                    TumorGrade: (d as any).TumorGrade,
+                    DaystoFollowup: (d as any).DaystoFollowup,
+                    GeneSymbol: (d as any).GeneSymbol,
+                    MolecularAnalysisMethod: (d as any).MolecularAnalysisMethod,
+                    TestResult: (d as any).TestResult,
+                    TreatmentType: (d as any).TreatmentType,
+                    TumorLargestDimensionDiameter: (d as any)
+                        .TumorLargestDimensionDiameter,
+                    atlasid: d.atlasid,
+                    atlas_name: d.atlas_name,
+                    AtlasMeta: d.AtlasMeta,
+                    level: d.level,
+                };
+
+                return [diagnosis as any, demographics as any];
+            } else {
+                return d;
+            }
+        })
+    );
+
     const files = flatData.filter((obj) => {
         return !!obj.Filename;
     });
