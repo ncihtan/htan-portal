@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@4.3.2 (local user-provided)
    40kB  sourcemap-register.js
-38262kB  index.js
+38153kB  index.js
  1179kB  index.js.map
-38302kB  [80149ms] - ncc 0.28.6
+38193kB  [80472ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: '10xVisiumSpatialTranscriptomics-RNA-seqLevel1',
   Filename: 'visium_level_1/7794-AS-1_S1_L005_R1_001.fastq.gz',
