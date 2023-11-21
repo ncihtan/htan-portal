@@ -2,16 +2,12 @@ import _ from 'lodash';
 import { NextRouter } from 'next/router';
 import fetch from 'node-fetch';
 import * as Path from 'path';
-import { toArabic } from 'roman-numerals';
 
 import { AtlasMeta } from '../types';
 import { DownloadSourceCategory } from './types';
 import { ExploreURLQuery } from '../pages/explore';
 import { ExploreTab } from '../components/ExploreTabs';
-import {
-    OptionType,
-    SelectedFilter,
-} from '../packages/data-portal-filter/src/libs/types';
+import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
 
 // @ts-ignore
 let win;
@@ -195,35 +191,36 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
 }
 
 // TODO this function doesn't seem to be used anywhere anymore
-export function sortStageOptions(options: OptionType[]) {
-    const sortedOptions = _.sortBy(options, (option) => {
-        const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
-        let val = undefined;
-        if (!!numeral && numeral.length > 1) {
-            try {
-                const number = toArabic(numeral[1]);
-            } catch (ex) {
-                val = numeral[1];
-            }
-        }
-        return option.label;
-    });
-
-    const withStage = sortedOptions.filter((option) =>
-        /stage/i.test(option.label)
-    );
-    const withoutStage = sortedOptions.filter(
-        (option) => !/stage/i.test(option.label)
-    );
-
-    return withStage.concat(withoutStage);
-
-    //return options;
-}
+// export function sortStageOptions(options: OptionType[]) {
+//     const sortedOptions = _.sortBy(options, (option) => {
+//         const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
+//         let val = undefined;
+//         if (!!numeral && numeral.length > 1) {
+//             try {
+//                 const number = toArabic(numeral[1]);
+//             } catch (ex) {
+//                 val = numeral[1];
+//             }
+//         }
+//         return option.label;
+//     });
+//
+//     const withStage = sortedOptions.filter((option) =>
+//         /stage/i.test(option.label)
+//     );
+//     const withoutStage = sortedOptions.filter(
+//         (option) => !/stage/i.test(option.label)
+//     );
+//
+//     return withStage.concat(withoutStage);
+// }
 
 export function urlEncodeSelectedFilters(selectedFilters: SelectedFilter[]) {
-    return JSON.stringify(selectedFilters);
+    // it is possible to pass OptionType[] here for selected filters, and
+    // JSON.stringify() breaks when OptionType.label is an instance of JSX.Element so we need to exclude it
+    return JSON.stringify(selectedFilters.map((f) => _.omit(f, ['label'])));
 }
+
 export function parseSelectedFiltersFromUrl(
     selectedFiltersURLQueryParam: string | undefined
 ): SelectedFilter[] | null {

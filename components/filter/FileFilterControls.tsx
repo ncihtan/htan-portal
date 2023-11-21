@@ -16,6 +16,8 @@ import {
 import FilterSearch from '../../packages/data-portal-filter/src/components/FilterSearch';
 import FilterDropdown from '../../packages/data-portal-filter/src/components/FilterDropdown';
 import { OptionType } from '../../packages/data-portal-filter/src/libs/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 const FileFilterControls: React.FunctionComponent<
     IFilterControlsProps<Entity>
@@ -95,6 +97,7 @@ const FileFilterControls: React.FunctionComponent<
             <FilterDropdown
                 {...dropdownProps}
                 attributes={[AttributeNames.downloadSource]}
+                className="filter-checkbox-list-container"
                 width={170}
                 options={(attrName: AttributeNames) => {
                     return options(attrName)
@@ -108,10 +111,10 @@ const FileFilterControls: React.FunctionComponent<
                             ];
                             return (
                                 downloadSourceOrder.indexOf(
-                                    a.label as DownloadSourceCategory
+                                    a.value as DownloadSourceCategory
                                 ) -
                                 downloadSourceOrder.indexOf(
-                                    b.label as DownloadSourceCategory
+                                    b.value as DownloadSourceCategory
                                 )
                             );
                         })
@@ -120,17 +123,33 @@ const FileFilterControls: React.FunctionComponent<
                                 [DownloadSourceCategory.dbgap]:
                                     'CDS/SB-CGC (dbGaP 🔒)',
                                 // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
-                                [DownloadSourceCategory.cds]:
-                                    'CDS/SB-CGC (Open Access 🔓)',
-                                [DownloadSourceCategory.synapse]:
-                                    'Synapse (Level 3-4)',
+                                [DownloadSourceCategory.cds]: (
+                                    <span>
+                                        CDS/SB-CGC (Open Access{' '}
+                                        <FontAwesomeIcon
+                                            color="#1adb54"
+                                            icon={faLockOpen}
+                                        />
+                                        )
+                                    </span>
+                                ),
+                                [DownloadSourceCategory.synapse]: (
+                                    <span>
+                                        Synapse (Open Access{' '}
+                                        <FontAwesomeIcon
+                                            color="#1adb54"
+                                            icon={faLockOpen}
+                                        />
+                                        )
+                                    </span>
+                                ),
                                 [DownloadSourceCategory.comingSoon]:
                                     'Coming Soon',
                             };
 
                             e.label =
                                 downloadLabels[
-                                    e.label as DownloadSourceCategory
+                                    e.value as DownloadSourceCategory
                                 ];
                             return e;
                         });
