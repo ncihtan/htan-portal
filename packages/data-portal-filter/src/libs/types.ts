@@ -2,7 +2,7 @@ import { ActionMeta, ActionTypes, OptionTypeBase } from 'react-select';
 
 export type OptionType = {
     value: string;
-    label: string;
+    label: string | JSX.Element;
     group: string;
     count?: number;
     isSelected?: boolean;

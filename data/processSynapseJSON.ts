@@ -26,10 +26,10 @@ import {
 } from '../lib/dataSchemaHelpers';
 import fs from 'fs';
 import csvToJson from 'csvtojson';
-import idcAssets from './idc-imaging-assets.json';
 import atlasJson from './atlases.json';
 
-const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');
+// import idcAssets from './idc-imaging-assets.json';
+// const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');
 
 async function writeProcessedFile() {
     const synapseJson = getData();
@@ -118,16 +118,16 @@ function addDownloadSourcesInfo(
             file.level === 'Other'
         ) {
             file.downloadSource = DownloadSourceCategory.synapse;
-        } else if (
-            file.DataFileID in idcIds &&
-            file.synapseId &&
-            dbgapImgSynapseSet.has(file.synapseId)
-        ) {
-            file.downloadSource = DownloadSourceCategory.idcDbgap;
         } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
-            file.downloadSource = DownloadSourceCategory.dbgap;
-        } else if (file.DataFileID in idcIds) {
-            file.downloadSource = DownloadSourceCategory.idc;
+            // Level 2 imaging data is open access
+            if (
+                file.level === 'Level 2' &&
+                file.Component.startsWith('Imaging')
+            ) {
+                file.downloadSource = DownloadSourceCategory.cds;
+            } else {
+                file.downloadSource = DownloadSourceCategory.dbgap;
+            }
         } else if (file.Component === 'OtherAssay') {
             if (file.AssayType?.toLowerCase() === '10x visium') {
                 // 10X Visium raw data will go to dbGap, but isn't available yet

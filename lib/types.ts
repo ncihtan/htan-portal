@@ -71,8 +71,8 @@ export enum ToolAttributeNames {
 
 export enum DownloadSourceCategory {
     dbgap = 'dbGaP',
-    idc = 'IDC',
-    idcDbgap = 'dbGaP and IDC',
+    // idc = 'IDC',
+    cds = 'CDS/SB-CGC (open access)',
     synapse = 'Synapse',
     comingSoon = 'Coming Soon',
 }
