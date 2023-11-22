@@ -414,7 +414,7 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
         hasCustomStory,
         // has a viewer of there is a minerva link either custom or auto
         // generated
-        hasImageViewer: !!minervaUrl || idcImageUrl !== undefined,
+        hasImageViewer: !!minervaUrl /*|| idcImageUrl !== undefined*/,
         idcImageUrl,
         idcImageBucketAwsUrl,
         idcImageBucketGcpUrl,
@@ -697,10 +697,11 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                             />
                                                         </a>
                                                     )}
-                                                    {imageViewers.minervaUrl &&
+                                                    {/*imageViewers.minervaUrl &&
                                                         imageViewers.idcImageUrl &&
-                                                        ' or '}
-                                                    {imageViewers.idcImageUrl && (
+                                                        ' or '
+                                                    */}
+                                                    {/*imageViewers.idcImageUrl && (
                                                         <a
                                                             style={{
                                                                 color: 'white',
@@ -717,7 +718,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                                 }
                                                             />
                                                         </a>
-                                                    )}
+                                                    )*/}
                                                     {!imageViewers.hasImageViewer && (
                                                         <a
                                                             style={{
@@ -838,7 +839,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                             />
                                         </a>
                                     )}
-                                    {imageViewers.idcImageUrl && (
+                                    {/*imageViewers.idcImageUrl && (
                                         <a
                                             href={imageViewers.idcImageUrl}
                                             target="_blank"
@@ -848,7 +849,7 @@ export default class FileTable extends React.Component<IFileTableProps> {
                                                 icon={faExternalLinkAlt}
                                             />
                                         </a>
-                                    )}
+                                    )*/}
                                 </>
                             );
                         } else {
