@@ -51,7 +51,9 @@ interface IExploreTabsProps {
     filteredCases: Entity[];
     filteredSamples: Entity[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    groupsByPropertyFiltered: Record<string, Entity[]>;
+    groupsByPropertyFiltered: {
+        [attrName: string]: { [attrValue: string]: Entity[] };
+    };
     filteredSynapseAtlases: Atlas[];
     filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
     selectedSynapseAtlases: Atlas[];
@@ -454,7 +456,6 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                     if (option.value === 'assayName') {
                                         return (
                                             <ExplorePlot
-                                                title={'Assays'}
                                                 selectedField={{
                                                     data: { type: 'SAMPLE' },
                                                     label: 'Assay',
@@ -493,7 +494,6 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                                     }
                                                     metricType={metric}
                                                     selectedField={option}
-                                                    title={option.label}
                                                     hideNA={hideNA}
                                                 />{' '}
                                             </div>

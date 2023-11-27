@@ -1,10 +1,9 @@
-import Select from 'react-select';
 import { VictoryChart } from 'victory-chart';
 import { VictoryContainer, VictoryLabel, VictoryTheme } from 'victory-core';
 import { VictoryAxis } from 'victory-axis';
 import { VictoryBar } from 'victory-bar';
 import React from 'react';
-import { observer, useLocalStore } from 'mobx-react';
+import { observer } from 'mobx-react';
 import _ from 'lodash';
 import { Entity } from '../lib/helpers';
 import { Option } from 'react-select/src/filters';
@@ -71,6 +70,19 @@ function dependentAxisTickFormat(t: number) {
     return _.isInteger(Math.log10(t)) ? t : '';
 }
 
+function normalizeUnknownValues(
+    entity: Entity,
+    accessor?: (entity: Entity) => Entity[keyof Entity]
+) {
+    const val = accessor ? accessor(entity) || '' : '';
+
+    if (/^unknown|not reported|^NA/i.test(val.toString())) {
+        return 'NA';
+    } else {
+        return val;
+    }
+}
+
 export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
     { data: { type: 'SAMPLE' }, label: 'Assay', value: 'assayName' },
     {
@@ -117,29 +129,19 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
 
         const propertyType = selectedField.data.type;
 
-        const selectedValue: keyof Entity = selectedField.value as keyof Entity;
+        const entityField: keyof Entity = selectedField.value as keyof Entity;
 
-        let accessor =
-            normalizersByField?.[selectedValue] ||
-            ((e: Entity) => e[selectedValue]);
+        const accessor =
+            normalizersByField?.[entityField] ||
+            ((e: Entity) => e[entityField]);
 
-        const unknownNormalizer = (entity: Entity) => {
-            const val = accessor(entity);
-            if (/^unknown|not reported|^NA/i.test(val)) {
-                return 'NA';
-            } else {
-                return val;
-            }
-        };
-
-        let _samplesByValueMap =
+        const _samplesByValueMap =
             samplesByValueMap ||
             _.groupBy(filteredSamples, (sample) => {
                 // these will result in the counts
-                let val: string | undefined = undefined;
                 let entity: Entity;
                 if (propertyType === EntityType.CASE) {
-                    // should actually be propery type
+                    // should actually be property type
                     // this will group the samples by a property of the case to which they belong,
                     // allowing us to count them by a case property
                     entity = casesByIdMap[sample.ParticipantID];
@@ -147,19 +149,17 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                     entity = sample;
                 }
 
-                return unknownNormalizer(entity);
-                //return accessor(entity);
+                return normalizeUnknownValues(entity, accessor);
             });
 
         if (hideNA) delete _samplesByValueMap['NA'];
 
         // generate reports
         const reportsByValueMap = _.mapValues(_samplesByValueMap, (samples) => {
-            const report = {
+            return {
                 sampleCount: _.uniqBy(samples, (s) => s.BiospecimenID).length,
                 caseCount: _.uniqBy(samples, (s) => s.ParticipantID).length,
             };
-            return report;
         });
 
         // transform reports into format required by plot
@@ -255,7 +255,7 @@ const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                             labels: { fontSize: 12 },
                             data: { fill: '#11c8d4' },
                         }}
-                    ></VictoryBar>
+                    />
                 </VictoryChart>
             </>
         );

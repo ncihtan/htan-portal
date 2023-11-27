@@ -423,7 +423,9 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
 
 interface IFileTableProps {
     entities: Entity[];
-    groupsByPropertyFiltered: Record<string, Entity[]>;
+    groupsByPropertyFiltered: {
+        [attrName: string]: { [attrValue: string]: Entity[] };
+    };
     patientCount: number;
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
 }
