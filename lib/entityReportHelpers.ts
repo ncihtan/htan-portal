@@ -116,7 +116,6 @@ export function computeEntityReportByAttribute(
 }
 
 export function getNormalizedOrgan(entity: Entity) {
-    //return entity.TissueorOrganofOrigin;
     return (
         tissueOrOriginToOrganMap[
             normalizeTissueOrOrganOrSite(entity.TissueorOrganofOrigin)
@@ -150,6 +149,7 @@ export function computeEntityReportByOrgan(
     );
 }
 
+// TODO this function doesn't seem to be used anywhere
 export function computeEntityReportGeneralized(
     entities: Entity[],
     field: string = 'TissueorOrganofOrigin',
@@ -313,7 +313,8 @@ export function computeOrganDistributionByCenter(
     );
 }
 
-export function computeDistributionByCenterGeneral(
+// TODO this function doesn't seem to be used anywhere
+export function computeDistributionByCenterGeneralized(
     diagnoses: Entity[]
 ): EntityReportByAttribute | undefined {
     return computeAttributeDistributionByCenter(

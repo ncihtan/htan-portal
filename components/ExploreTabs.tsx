@@ -1,43 +1,20 @@
-import { observer, useLocalStore } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
-import { Atlas, Entity, isReleaseQCEnabled, setTab } from '../lib/helpers';
+import { Atlas, Entity, setTab } from '../lib/helpers';
 import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import AtlasTable from './AtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
-import { AttributeNames, GenericAttributeNames } from '../lib/types';
-import Plots from './Plots';
-import {
-    computeEntityReportByAssay,
-    computeEntityReportByOrgan,
-    computeEntityReportGeneralized,
-    getNormalizedOrgan,
-} from '../lib/entityReportHelpers';
+import { GenericAttributeNames } from '../lib/types';
+import { getNormalizedOrgan } from '../lib/entityReportHelpers';
 import Select, { MultiValueProps } from 'react-select';
-import SummaryChart from './SummaryChart';
-import {
-    ScalePropType,
-    VictoryContainer,
-    VictoryLabel,
-    VictoryTheme,
-} from 'victory-core';
 import _ from 'lodash';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
-import Alert from 'react-bootstrap/Alert';
-import { VictoryChart } from 'victory-chart';
-import { VictoryBar } from 'victory-bar';
-import { VictoryAxis } from 'victory-axis';
-import ExplorePlot, {
-    DEFAULT_EXPLORE_PLOT_OPTIONS,
-    getExploreChartOptions,
-} from './ExplorePlot';
-import { log } from 'util';
-import { Option } from 'react-select/src/filters';
-import { MultiValueGenericProps } from 'react-select/src/components/MultiValue';
+import ExplorePlot, { DEFAULT_EXPLORE_PLOT_OPTIONS } from './ExplorePlot';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -74,11 +51,6 @@ export enum ExploreTab {
     BIOSPECIMEN = 'biospecimen',
     CASES = 'cases',
     PLOTS = 'plots',
-}
-
-enum EntityType {
-    SAMPLE = 'SAMPLE',
-    CASE = 'CASE',
 }
 
 const metricTypes = [
@@ -127,6 +99,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
 
         const [logScale, setLogScale] = useState(false);
 
+        // TODO harmonization is not functional yet
         const [harmonize, setHarmonize] = useState(true);
 
         const [hideNA, setHideNA] = useState(false);
@@ -369,7 +342,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         className="form-check-input"
                                         type="checkbox"
                                         checked={logScale}
-                                        onChange={(e) => setLogScale(!logScale)}
+                                        onChange={() => setLogScale(!logScale)}
                                     />
                                     <label className="form-check-label">
                                         Log
@@ -383,7 +356,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         className="form-check-input"
                                         type="checkbox"
                                         checked={hideNA}
-                                        onChange={(e) => setHideNA(!hideNA)}
+                                        onChange={() => setHideNA(!hideNA)}
                                     />
                                     <label className="form-check-label">
                                         Hide NA
@@ -397,7 +370,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         className="form-check-input"
                                         type="checkbox"
                                         checked={harmonize}
-                                        onChange={(e) =>
+                                        onChange={() =>
                                             setHarmonize(!harmonize)
                                         }
                                     />

@@ -170,10 +170,10 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
             specimen.ParticipantID || (parentIdMatch ? parentIdMatch[0] : '');
     });
 
-    // get rid of files
-    data.files = data.files.filter((f) => {
-        return f.demographicsIds.length > 0 && f.diagnosisIds.length > 0;
-    });
+    // TODO we cannot do this, we need to deal with this in a different way in Plots tab
+    // data.files = data.files.filter((f) => {
+    //     return f.demographicsIds.length > 0 && f.diagnosisIds.length > 0;
+    // });
 
     data.files.forEach((file) => {
         (file as Entity).biospecimen = file.biospecimenIds.map(
