@@ -1,21 +1,20 @@
 import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Atlas, Entity, isReleaseQCEnabled, setTab } from '../lib/helpers';
+import { Atlas, Entity, setTab } from '../lib/helpers';
 import BiospecimenTable from './BiospecimenTable';
 import CaseTable from './CaseTable';
 import FileTable from './FileTable';
 import AtlasTable from './AtlasTable';
 import { DataSchemaData } from '../lib/dataSchemaHelpers';
 import { GenericAttributeNames } from '../lib/types';
-import Plots from './Plots';
-import {
-    computeEntityReportByAssay,
-    computeEntityReportByOrgan,
-} from '../lib/entityReportHelpers';
+import { getNormalizedOrgan } from '../lib/entityReportHelpers';
+import Select, { MultiValueProps } from 'react-select';
+import _ from 'lodash';
 
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
+import ExplorePlot, { DEFAULT_EXPLORE_PLOT_OPTIONS } from './ExplorePlot';
 
 interface IExploreTabsProps {
     router: NextRouter;
@@ -26,6 +25,8 @@ interface IExploreTabsProps {
     cases: Entity[];
     filteredCasesByNonAtlasFilters: Entity[];
     filteredSamplesByNonAtlasFilters: Entity[];
+    filteredCases: Entity[];
+    filteredSamples: Entity[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     groupsByPropertyFiltered: {
         [attrName: string]: { [attrValue: string]: Entity[] };
@@ -52,9 +53,68 @@ export enum ExploreTab {
     PLOTS = 'plots',
 }
 
+const metricTypes = [
+    { value: 'ParticipantID', label: 'Case Count' },
+    { value: 'BiospecimenID', label: 'Specimen Count' },
+];
+
+const MultiValue = (props: MultiValueProps<any>) => {
+    const indexInSelection = props.selectProps.value.indexOf(props.data);
+    if (indexInSelection === 0) {
+        const moreCountLanguage =
+            props.selectProps.value.length > 1
+                ? ` + ${props.selectProps.value.length - 1} more`
+                : '';
+        return (
+            <span>
+                {props.data.label}
+                {moreCountLanguage}
+            </span>
+        );
+    } else {
+        return <></>;
+    }
+};
+
+function getSamplesByValueMap(
+    entities: Entity[],
+    countByField: string
+): Record<string, Entity[]> {
+    const ret = entities.reduce((agg: Record<string, Entity[]>, file) => {
+        if (file.assayName) {
+            agg[file.assayName] = agg[file.assayName] || [];
+            agg[file.assayName].push(...file.biospecimen);
+        }
+        return agg;
+    }, {});
+
+    return _.mapValues(ret, (v, k) =>
+        _.uniqBy(v, (e) => e[countByField as keyof Entity])
+    );
+}
+
 const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || ExploreTab.ATLAS;
+
+        const [logScale, setLogScale] = useState(false);
+
+        // TODO harmonization is not functional yet
+        const [harmonize, setHarmonize] = useState(true);
+
+        const [hideNA, setHideNA] = useState(false);
+
+        const [metric, setMetric] = useState(metricTypes[0]);
+
+        const [selectedFields, setSelectedFields] = useState(
+            DEFAULT_EXPLORE_PLOT_OPTIONS.filter((opt) =>
+                /TissueorOrganofOrigin|assayName/.test(opt.value)
+            )
+        );
+
+        const normalizersByField = {
+            TissueorOrganofOrigin: (e: Entity) => getNormalizedOrgan(e),
+        };
 
         return (
             <>
@@ -116,7 +176,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 Files
                             </a>
                         </li>
-                        {isReleaseQCEnabled() && (
+                        {
                             <li className="nav-item">
                                 <a
                                     onClick={() =>
@@ -128,10 +188,13 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                             : ''
                                     }`}
                                 >
-                                    Plots
+                                    Plots{' '}
+                                    <span style={{ color: 'orange' }}>
+                                        Beta!
+                                    </span>
                                 </a>
                             </li>
-                        )}
+                        }
                     </ul>
                 </div>
 
@@ -224,21 +287,193 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     </div>
                 )}
 
-                {activeTab === ExploreTab.PLOTS && isReleaseQCEnabled() && (
+                {activeTab === ExploreTab.PLOTS && (
                     <div
                         className={`tab-content fileTab ${
                             activeTab !== ExploreTab.PLOTS ? 'd-none' : ''
                         }`}
                     >
-                        <Plots
-                            summaryDataDescriptor={'Your selection'}
-                            organSummary={computeEntityReportByOrgan(
-                                props.filteredFiles
-                            )}
-                            assaySummary={computeEntityReportByAssay(
-                                props.filteredFiles
-                            )}
-                        />
+                        <div className={'alert alert-warning'}>
+                            This feature is in beta.
+                        </div>
+
+                        <form
+                            className={'d-flex'}
+                            style={{ alignItems: 'center' }}
+                        >
+                            <div style={{ width: 300, marginRight: 20 }}>
+                                <Select
+                                    classNamePrefix={'react-select'}
+                                    isSearchable={false}
+                                    isClearable={false}
+                                    isMulti={true}
+                                    name={'field'}
+                                    components={{ MultiValue }}
+                                    controlShouldRenderValue={true}
+                                    options={DEFAULT_EXPLORE_PLOT_OPTIONS}
+                                    defaultValue={selectedFields}
+                                    hideSelectedOptions={false}
+                                    closeMenuOnSelect={false}
+                                    onChange={(e) => {
+                                        setSelectedFields(e as any);
+                                    }}
+                                />
+                            </div>
+
+                            <div style={{ width: 300, marginRight: 20 }}>
+                                <Select
+                                    classNamePrefix={'react-select'}
+                                    isSearchable={false}
+                                    isClearable={false}
+                                    name={'xaxis'}
+                                    controlShouldRenderValue={true}
+                                    options={metricTypes}
+                                    hideSelectedOptions={false}
+                                    closeMenuOnSelect={true}
+                                    onChange={(e) => {
+                                        setMetric(e!);
+                                    }}
+                                    value={metric}
+                                />
+                            </div>
+                            <div style={{ marginRight: 20 }}>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={logScale}
+                                        onChange={() => setLogScale(!logScale)}
+                                    />
+                                    <label className="form-check-label">
+                                        Log
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div style={{ marginRight: 20 }}>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={hideNA}
+                                        onChange={() => setHideNA(!hideNA)}
+                                    />
+                                    <label className="form-check-label">
+                                        Hide NA
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/*<div>*/}
+                            {/*    <div className="form-check">*/}
+                            {/*        <input*/}
+                            {/*            className="form-check-input"*/}
+                            {/*            type="checkbox"*/}
+                            {/*            checked={harmonize}*/}
+                            {/*            onChange={() =>*/}
+                            {/*                setHarmonize(!harmonize)*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*        <label className="form-check-label">*/}
+                            {/*            Harmonize data*/}
+                            {/*        </label>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                        </form>
+
+                        {/*{props.filteredCases.length &&*/}
+                        {/*    selectedFields.value === 'Summary' && (*/}
+                        {/*        <div className={'d-flex'}>*/}
+                        {/*            <ExplorePlot*/}
+                        {/*                selectedField={{*/}
+                        {/*                    value: 'TissueorOrganofOrigin',*/}
+                        {/*                    label: 'Organ',*/}
+                        {/*                    data: { type: 'CASE' },*/}
+                        {/*                }}*/}
+                        {/*                filteredCases={props.filteredCases}*/}
+                        {/*                filteredSamples={props.filteredSamples}*/}
+                        {/*                normalizersByField={{*/}
+                        {/*                    TissueorOrganofOrigin: (*/}
+                        {/*                        e: Entity*/}
+                        {/*                    ) => getNormalizedOrgan(e),*/}
+                        {/*                }}*/}
+                        {/*                title={'Organs'}*/}
+                        {/*                width={500}*/}
+                        {/*                logScale={logScale}*/}
+                        {/*                metricType={metric}*/}
+                        {/*                hideNA={hideNA}*/}
+                        {/*            />*/}
+                        {/*            <ExplorePlot*/}
+                        {/*                title={'Assays'}*/}
+                        {/*                selectedField={{*/}
+                        {/*                    data: { type: 'SAMPLE' },*/}
+                        {/*                    label: 'Assay',*/}
+                        {/*                    value: 'assayName',*/}
+                        {/*                }}*/}
+                        {/*                width={500}*/}
+                        {/*                filteredCases={props.filteredCases}*/}
+                        {/*                filteredSamples={props.filteredFiles}*/}
+                        {/*                logScale={logScale}*/}
+                        {/*                metricType={metric}*/}
+                        {/*                samplesByValueMap={getSamplesByValueMap(*/}
+                        {/*                    props.filteredFiles,*/}
+                        {/*                    metric.value*/}
+                        {/*                )}*/}
+                        {/*                hideNA={hideNA}*/}
+                        {/*            />*/}
+                        {/*        </div>*/}
+                        {/*    )}*/}
+                        <div className={'d-flex flex-wrap'}>
+                            {props.filteredCases.length &&
+                                selectedFields.map((option) => {
+                                    if (option.value === 'assayName') {
+                                        return (
+                                            <ExplorePlot
+                                                selectedField={{
+                                                    data: { type: 'SAMPLE' },
+                                                    label: 'Assay',
+                                                    value: 'assayName',
+                                                }}
+                                                width={500}
+                                                filteredCases={
+                                                    props.filteredCases
+                                                }
+                                                filteredSamples={
+                                                    props.filteredFiles
+                                                }
+                                                logScale={logScale}
+                                                metricType={metric}
+                                                samplesByValueMap={getSamplesByValueMap(
+                                                    props.filteredFiles,
+                                                    metric.value
+                                                )}
+                                                hideNA={hideNA}
+                                            />
+                                        );
+                                    } else {
+                                        return (
+                                            <div style={{ marginRight: 20 }}>
+                                                <ExplorePlot
+                                                    filteredCases={
+                                                        props.filteredCases
+                                                    }
+                                                    filteredSamples={
+                                                        props.filteredSamples
+                                                    }
+                                                    logScale={logScale}
+                                                    width={400}
+                                                    normalizersByField={
+                                                        normalizersByField
+                                                    }
+                                                    metricType={metric}
+                                                    selectedField={option}
+                                                    hideNA={hideNA}
+                                                />{' '}
+                                            </div>
+                                        );
+                                    }
+                                })}
+                        </div>
                     </div>
                 )}
             </>

@@ -7,7 +7,7 @@ import { Popover, PopoverContent } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import * as ReactDOM from 'react-dom';
 import { VictoryBar, VictoryBarTTargetType } from 'victory-bar';
-import { VictoryChart } from 'victory-chart';
+import { VictoryChart, VictoryChartProps } from 'victory-chart';
 import { VictoryAxis } from 'victory-axis';
 import {
     D3Scale,
@@ -48,6 +48,7 @@ export interface SummaryChartProps {
               y?: ScalePropType | D3Scale;
           };
     minDomain?: number | { x?: number; y?: number }; // useful when using a non linear scale
+    tooltipContent?: (datum: any) => JSX.Element;
 }
 
 export const VERTICAL_OFFSET = 17;
@@ -224,11 +225,12 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
     }
 
     get leftPadding() {
-        return 150;
-    }
-
-    get topPadding() {
-        return -40;
+        if (this.categoryLabels) {
+            const longestLabel = _.maxBy(this.categoryLabels, (l) => l.length);
+            return longestLabel!.length * 8;
+        } else {
+            return 100;
+        }
     }
 
     get barWidth() {
@@ -248,7 +250,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
 
     get chartWidth() {
         // TODO responsive?
-        return 600;
+        return this.leftPadding + 500;
     }
 
     private get svgHeight() {
@@ -476,9 +478,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                 viewBox={`0 0 ${this.svgWidth} ${this.svgHeight}`}
                 onMouseMove={this.onMouseMove}
             >
-                <g
-                    transform={`translate(${this.leftPadding}, ${this.topPadding})`}
-                >
+                <g>
                     <VictoryChart
                         theme={VictoryTheme.material}
                         width={this.chartWidth}
@@ -489,6 +489,7 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                             y: true,
                             x: false,
                         }}
+                        padding={{ left: this.leftPadding, top: 70 }}
                         scale={this.props.scale}
                         minDomain={this.props.minDomain}
                     >
@@ -497,9 +498,9 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                             label={this.dependentAxisLabel}
                             style={{
                                 tickLabels: { fontSize: 16 },
-                                axisLabel: { fontSize: 14, padding: 30 },
+                                axisLabel: { fontSize: 14, padding: 40 },
                             }}
-                            orientation="bottom"
+                            orientation="top"
                             tickFormat={this.props.dependentAxisTickFormat}
                         />
 
@@ -543,7 +544,11 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
                     }}
                     placement="right"
                 >
-                    <TooltipContent {...datum} />
+                    {this.props.tooltipContent ? (
+                        this.props.tooltipContent(datum)
+                    ) : (
+                        <TooltipContent {...datum} />
+                    )}
                 </Popover>,
                 document.body
             );

@@ -150,6 +150,8 @@ export async function fetchData(): Promise<LoadDataResult> {
     const text = await res.text();
     const json = JSON.parse(text);
 
+    //window.myJSON = JSON.parse(text);
+
     return json as LoadDataResult;
 }
 
@@ -167,6 +169,11 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
         specimen.ParticipantID =
             specimen.ParticipantID || (parentIdMatch ? parentIdMatch[0] : '');
     });
+
+    // TODO we cannot do this, we need to deal with this in a different way in Plots tab
+    // data.files = data.files.filter((f) => {
+    //     return f.demographicsIds.length > 0 && f.diagnosisIds.length > 0;
+    // });
 
     data.files.forEach((file) => {
         (file as Entity).biospecimen = file.biospecimenIds.map(
