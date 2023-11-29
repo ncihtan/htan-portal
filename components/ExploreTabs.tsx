@@ -364,21 +364,21 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 </div>
                             </div>
 
-                            <div>
-                                <div className="form-check">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        checked={harmonize}
-                                        onChange={() =>
-                                            setHarmonize(!harmonize)
-                                        }
-                                    />
-                                    <label className="form-check-label">
-                                        Harmonize data
-                                    </label>
-                                </div>
-                            </div>
+                            {/*<div>*/}
+                            {/*    <div className="form-check">*/}
+                            {/*        <input*/}
+                            {/*            className="form-check-input"*/}
+                            {/*            type="checkbox"*/}
+                            {/*            checked={harmonize}*/}
+                            {/*            onChange={() =>*/}
+                            {/*                setHarmonize(!harmonize)*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*        <label className="form-check-label">*/}
+                            {/*            Harmonize data*/}
+                            {/*        </label>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                         </form>
 
                         {/*{props.filteredCases.length &&*/}
