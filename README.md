@@ -73,7 +73,12 @@ There are currently no automated tests, other than building the project, so be c
 
 ## Getting Started
 
-First, run the development server:
+First, make sure you have the latest processed json file:
+```bash
+yarn gunzip
+```
+
+Run the development server:
 
 ```bash
 npm run dev

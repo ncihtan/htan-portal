@@ -28,6 +28,7 @@ export const PublicationPageLink: {
     HTA8: { id: 'msk_sclc_chan_2021', show: true },
     HTA9: { id: 'ohsu_brca_johnson_2022', show: true },
     HTA11: { id: 'vanderbilt_crc_chen_2021', show: true },
+    HTAXX: { id: 'htapp_mbc_klughammer_2023 ', show: false },
 };
 
 export const PUBLICATIONS: any = {
@@ -94,6 +95,13 @@ export const PUBLICATIONS: any = {
         abstract:
             'Colorectal cancers (CRCs) arise from precursor polyps whose cellular origins, molecular heterogeneity, and immunogenic potential may reveal diagnostic and therapeutic insights when analyzed at high resolution. We present a single-cell transcriptomic and imaging atlas of the two most common human colorectal polyps, conventional adenomas and serrated polyps, and their resulting CRC counterparts. Integrative analysis of 128 datasets from 62 participants reveals adenomas arise from WNT-driven expansion of stem cells, while serrated polyps derive from differentiated cells through gastric metaplasia. Metaplasia-associated damage is coupled to a cytotoxic immune microenvironment preceding hypermutation, driven partly by antigen-presentation differences associated with tumor cell-differentiation status. Microsatellite unstable CRCs contain distinct non-metaplastic regions where tumor cells acquire stem cell properties and cytotoxic immune cells are depleted. Our multi-omic atlas provides insights into malignant progression of colorectal polyps and their microenvironment, serving as a framework for precision surveillance and prevention of CRC.',
     },
+    htapp_mbc_klughammer_2023: {
+        title: 'htapp_mbc_klughammer_2023',
+        htan_id: 'HTAXX',
+        htan_name: 'HTAN HTAPP',
+        cite: 'Author 1, Author 2 ... ',
+        abstract: 'This is the abstract for htapp_mbc_klughammer_2023',
+    },
 };
 
 const authorsById: { [id: string]: string[] } = {
@@ -104,6 +112,7 @@ const authorsById: { [id: string]: string[] } = {
     ohsu_brca_johnson_2022: ['Johnson BE', 'Creason AL', 'Stommel JM'],
     vanderbilt_crc_chen_2021: ['Chen B', 'Scurrah CR', 'McKinley ET'],
     chop_all_chen_2022: ['Chen C', 'Wenbao Y', 'Alikarami F'],
+    htapp_mbc_klughammer_2023: ['author 1', 'author 2', 'author 3'],
 };
 
 const correspondingAuthorsById: { [id: string]: Author[] } = {
@@ -175,6 +184,20 @@ const correspondingAuthorsById: { [id: string]: Author[] } = {
         {
             name: 'Ken S. Lau',
             email: 'ken.s.lau@vanderbilt.edu',
+        },
+    ],
+    htapp_mbc_klughammer_2023: [
+        {
+            name: 'Author 1',
+            email: 'email@email.org',
+        },
+        {
+            name: 'Author 2',
+            email: 'email@email.org',
+        },
+        {
+            name: 'Author 3',
+            email: 'email@email.org',
         },
     ],
 };
@@ -312,6 +335,24 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             link: 'https://humantumoratlas.org/hta11',
         },
     },
+    htapp_mbc_klughammer_2023: {
+        journal: {
+            name: 'Journal',
+            link: 'https://www.journallink.com/',
+        },
+        pubmed: {
+            name: '123456',
+            link: 'https://pubmed.ncbi.nlm.nih.gov/123456/',
+        },
+        DOI: {
+            name: '12.3456',
+            link: 'https://doi.org/12.3456',
+        },
+        atlas: {
+            name: 'Atlas Name',
+            link: 'https://humantumoratlas.org/htaxx',
+        },
+    },
 };
 
 const filtersById: { [id: string]: SelectedFilter[] } = {
@@ -335,6 +376,9 @@ const filtersById: { [id: string]: SelectedFilter[] } = {
     chop_all_chen_2022: [
         { group: 'AtlasName', value: 'HTAN CHOP', id: 'HTA4' },
     ],
+    htapp_mbc_klughammer_2023: [
+        { group: 'AtlasName', value: 'HTAN HTAPP', id: 'HTAXX' },
+    ],
 };
 
 export async function getAllPublicationIds() {
@@ -346,6 +390,7 @@ export async function getAllPublicationIds() {
         'chop_all_chen_2022',
         'msk_sclc_chan_2021',
         'vanderbilt_crc_chen_2021',
+        'htapp_mbc_klughammer_2023',
     ];
     return ids.map((id) => {
         return {

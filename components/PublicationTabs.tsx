@@ -237,6 +237,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
+    htapp_mbc_klughammer_2023: [<></>],
 };
 
 const supportingLinks: { [id: string]: JSX.Element[] } = {
