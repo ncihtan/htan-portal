@@ -1,24 +1,26 @@
 import { observer } from 'mobx-react';
 import { NextRouter } from 'next/router';
 import React, { useState } from 'react';
-
-import { setTab } from '../lib/helpers';
-import { getNormalizedOrgan } from '../lib/entityReportHelpers';
 import Select, { MultiValueProps } from 'react-select';
 import _ from 'lodash';
 
+import { setTab } from '../lib/helpers';
+import { getNormalizedOrgan } from '../lib/entityReportHelpers';
+import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
+import getAtlasMetaData from '../lib/getAtlasMetaData';
+
 import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
-import ExplorePlot, { DEFAULT_EXPLORE_PLOT_OPTIONS } from './ExplorePlot';
 import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
 import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
 import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
 import AtlasTable from '../packages/data-portal-explore/src/components/AtlasTable';
 import BiospecimenTable from '../packages/data-portal-explore/src/components/BiospecimenTable';
 import CaseTable from '../packages/data-portal-explore/src/components/CaseTable';
-import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
-import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
-import getAtlasMetaData from '../lib/getAtlasMetaData';
+import ExplorePlot, {
+    DEFAULT_EXPLORE_PLOT_OPTIONS,
+} from '../packages/data-portal-explore/src/components/ExplorePlot';
 import FileTable from '../packages/data-portal-explore/src/components/FileTable';
+import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
 
 interface IExploreTabsProps {
     router: NextRouter;
