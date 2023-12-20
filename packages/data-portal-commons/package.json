@@ -1,0 +1,42 @@
+{
+  "name": "@htan/data-portal-commons",
+  "version": "0.0.0",
+  "type": "module",
+  "files": ["dist"],
+  "module": "./dist/index.es.js",
+  "main": "./dist/index.cjs.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    }
+  },
+  "scripts": {
+    "tsm": "typed-scss-modules 'src/**/*.scss'",
+    "build": "yarn run tsm && tsc && vite build"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@htan/data-portal-filter": "^0.0.0",
+    "@htan/data-portal-utils": "^0.0.0",
+    "lodash": "^4.17.21",
+    "node-fetch": "^2.6.0",
+    "rc-tooltip": "^4.0.3",
+    "react-bootstrap": "^1.0.0-beta.17",
+    "react-truncate-markup": "^5.1.0"
+  },
+  "peerDependencies": {
+    "mobx": "6.x",
+    "mobx-react": "7.x",
+    "react": "17.x || 18.x",
+    "react-dom": "17.x || 18.x",
+    "styled-components": "5.x || 6.x"
+  }
+}
