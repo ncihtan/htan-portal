@@ -1,15 +1,14 @@
 import * as React from 'react';
 import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
-import { IEnhancedDataTableColumn } from '../../../data-portal-table/src/components/EnhancedDataTable';
+import { IEnhancedDataTableColumn } from '@htan/data-portal-table';
 import {
     getUniqDependencyIds,
     isNumericalSchemaData,
     SchemaDataById,
     SchemaDataId,
-} from '../../../data-portal-schema/src/libs/dataSchemaHelpers';
-import { Atlas, Entity } from '../../../data-portal-commons/src/libs/entity';
-import ExpandableText from '../../../data-portal-commons/src/components/ExpandableText';
+} from '@htan/data-portal-schema';
+import { Atlas, Entity, ExpandableText } from '@htan/data-portal-commons';
 
 export function generateColumnsForDataSchema<T>(
     schemaDataIds: SchemaDataId[],

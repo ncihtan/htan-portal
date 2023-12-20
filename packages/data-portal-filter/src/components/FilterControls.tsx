@@ -1,13 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import {
-    getOptionsFromProps,
-    getSelectOptionsFromProps,
-} from '../libs/helpers';
-import { IGenericFilterControlProps } from '../libs/types';
+import { getOptionsFromProps, getSelectOptionsFromProps } from '../lib/helpers';
+import { IGenericFilterControlProps } from '../lib/types';
 import FilterSearch from './FilterSearch';
 
-const FilterControls = observer(
+export const FilterControls = observer(
     <T, Attribute extends string>(
         props: React.PropsWithChildren<IGenericFilterControlProps<T, Attribute>>
     ) => {

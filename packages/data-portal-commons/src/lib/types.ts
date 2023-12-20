@@ -2,7 +2,7 @@ import {
     AttributeNames,
     GenericAttributeNames,
     IAttributeInfo,
-} from '../../../data-portal-utils/src/libs/types';
+} from '@htan/data-portal-utils';
 import { getCaseValues } from './getCaseValues';
 import { Entity } from './entity';
 

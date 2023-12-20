@@ -1,7 +1,7 @@
-import { SelectedFilter } from './packages/data-portal-filter/src/libs/types';
-import { GenericAttributeNames } from './packages/data-portal-utils/src/libs/types';
-import { Atlas } from './packages/data-portal-commons/src/libs/entity';
-import { DataSchemaData } from './packages/data-portal-schema/src/libs/dataSchemaHelpers';
+import { SelectedFilter } from '@htan/data-portal-filter';
+import { GenericAttributeNames } from '@htan/data-portal-utils';
+import { Atlas } from '@htan/data-portal-commons';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 export interface CmsData {
     slug: string;

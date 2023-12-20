@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { AttributeMap } from '../../../data-portal-utils/src/libs/types';
+import { AttributeMap } from '@htan/data-portal-utils';
 
 import {
     SelectedFilter,

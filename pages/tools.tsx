@@ -20,14 +20,12 @@ import {
 import { action } from 'mobx';
 
 import {
+    Filter,
     FilterActionMeta,
-    SelectedFilter,
-} from '../packages/data-portal-filter/src/libs/types';
-import {
     getNewFilters,
     getSelectedFiltersByAttrName,
-} from '../packages/data-portal-filter/src/libs/helpers';
-import Filter from '../packages/data-portal-filter/src/components/Filter';
+    SelectedFilter,
+} from '@htan/data-portal-filter';
 
 const ToolPage = observer((props: { router: NextRouter; tools: Tools }) => {
     const selectedFilters =

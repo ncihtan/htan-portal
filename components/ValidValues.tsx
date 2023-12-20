@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import TruncateMarkup, { TruncateProps } from 'react-truncate-markup';
-import styles from './common.module.scss';
 import { Modal } from 'react-bootstrap';
+
+import { commonStyles } from '@htan/data-portal-commons';
 
 interface ValidValuesProps {
     attribute: string;
@@ -47,7 +48,7 @@ const ValidValues: React.FunctionComponent<ValidValuesProps> = (props) => {
                 onClose={onModalClose}
             />
             ... <i>Number of valid options: {options.length}</i> (
-            <span className={styles.clickable} onClick={onClick}>
+            <span className={commonStyles.clickable} onClick={onClick}>
                 Show all
             </span>
             )

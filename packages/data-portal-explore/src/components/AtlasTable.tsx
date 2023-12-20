@@ -8,15 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Button, Modal } from 'react-bootstrap';
 
-import { ISelectedFiltersByAttrName } from '../../../data-portal-filter/src/libs/types';
-import EnhancedDataTable from '../../../data-portal-table/src/components/EnhancedDataTable';
+import { ISelectedFiltersByAttrName } from '@htan/data-portal-filter';
 import {
-    Atlas,
-    AtlasMetaData,
-    Entity,
-} from '../../../data-portal-commons/src/libs/entity';
-import { getDefaultDataTableStyle } from '../../../data-portal-table/src/libs/helpers';
-import { ExploreTab } from '../libs/types';
+    EnhancedDataTable,
+    getDefaultDataTableStyle,
+} from '@htan/data-portal-table';
+import { Atlas, AtlasMetaData, Entity } from '@htan/data-portal-commons';
+import { ExploreTab } from '../lib/types';
 
 interface IAtlasTableProps {
     publications: { [id: string]: { cite: string } };
@@ -268,7 +266,7 @@ function filteredCount(
 }
 
 @observer
-export default class AtlasTable extends React.Component<IAtlasTableProps> {
+export class AtlasTable extends React.Component<IAtlasTableProps> {
     @observable metadataModalAtlas: Atlas | null = null;
     atlasMetaData: AtlasMetaData;
     @computed
@@ -757,3 +755,5 @@ export default class AtlasTable extends React.Component<IAtlasTableProps> {
         );
     }
 }
+
+export default AtlasTable;

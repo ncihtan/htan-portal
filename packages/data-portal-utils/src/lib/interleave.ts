@@ -1,4 +1,4 @@
-export default function interleave(array: any[], delimiter: any) {
+export function interleave(array: any[], delimiter: any) {
     const ret = [];
     for (const obj of array) {
         ret.push(obj);
@@ -7,3 +7,5 @@ export default function interleave(array: any[], delimiter: any) {
     ret.pop();
     return ret;
 }
+
+export default interleave;

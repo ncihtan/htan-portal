@@ -1,21 +1,20 @@
 import _ from 'lodash';
 import React from 'react';
 
-import { getDefaultDataTableStyle } from '../../../data-portal-table/src/libs/helpers';
-import { Atlas, Entity } from '../../../data-portal-commons/src/libs/entity';
-import { GenericAttributeNames } from '../../../data-portal-utils/src/libs/types';
 import {
-    DataSchemaData,
-    SchemaDataId,
-} from '../../../data-portal-schema/src/libs/dataSchemaHelpers';
-import EnhancedDataTable from '../../../data-portal-table/src/components/EnhancedDataTable';
+    EnhancedDataTable,
+    getDefaultDataTableStyle,
+} from '@htan/data-portal-table';
+import { Atlas, Entity } from '@htan/data-portal-commons';
+import { GenericAttributeNames } from '@htan/data-portal-utils';
+import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
 
 import {
     generateColumnsForDataSchema,
     getAtlasColumn,
     sortByBiospecimenId,
     sortByParentID,
-} from '../libs/dataTableHelpers';
+} from '../lib/dataTableHelpers';
 
 interface IBiospecimenTableProps {
     samples: Entity[];

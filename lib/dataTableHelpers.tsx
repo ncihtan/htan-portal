@@ -1,4 +1,4 @@
-import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
+import { getDefaultDataTableStyle } from '@htan/data-portal-table';
 
 export function getDataSchemaDataTableStyle() {
     const defaultStyle = getDefaultDataTableStyle();

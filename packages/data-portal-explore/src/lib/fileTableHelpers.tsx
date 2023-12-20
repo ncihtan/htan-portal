@@ -2,10 +2,10 @@ import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
 import React from 'react';
 
-import { Entity } from '../../../data-portal-commons/src/libs/entity';
-import interleave from '../../../data-portal-utils/src/libs/interleave';
+import { Entity } from '@htan/data-portal-commons';
+import { interleave } from '@htan/data-portal-utils';
 import SimpleScrollPane from '../components/SimpleScrollPane';
-import { selectorToColumnName } from '../../../data-portal-table/src/libs/helpers';
+import { selectorToColumnName } from '@htan/data-portal-table';
 
 export function makeListColumn(selector: keyof Entity, pluralName: string) {
     return {

@@ -9,18 +9,19 @@ import { getNormalizedOrgan } from '../lib/entityReportHelpers';
 import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 import getAtlasMetaData from '../lib/getAtlasMetaData';
 
-import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
-import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
-import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
-import AtlasTable from '../packages/data-portal-explore/src/components/AtlasTable';
-import BiospecimenTable from '../packages/data-portal-explore/src/components/BiospecimenTable';
-import CaseTable from '../packages/data-portal-explore/src/components/CaseTable';
-import ExplorePlot, {
+import { ISelectedFiltersByAttrName } from '@htan/data-portal-filter';
+import { GenericAttributeNames } from '@htan/data-portal-utils';
+import { Atlas, Entity } from '@htan/data-portal-commons';
+import { DataSchemaData } from '@htan/data-portal-schema';
+import {
+    AtlasTable,
+    BiospecimenTable,
+    CaseTable,
     DEFAULT_EXPLORE_PLOT_OPTIONS,
-} from '../packages/data-portal-explore/src/components/ExplorePlot';
-import FileTable from '../packages/data-portal-explore/src/components/FileTable';
-import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
+    ExplorePlot,
+    ExploreTab,
+    FileTable,
+} from '@htan/data-portal-explore';
 
 interface IExploreTabsProps {
     router: NextRouter;

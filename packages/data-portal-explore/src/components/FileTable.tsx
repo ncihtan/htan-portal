@@ -11,32 +11,30 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { doesFileIncludeLevel1OrLevel2SequencingData } from '../libs/helpers';
-import { truncatedTableCell } from '../libs/dataTableHelpers';
+import { doesFileIncludeLevel1OrLevel2SequencingData } from '../lib/helpers';
+import { truncatedTableCell } from '../lib/dataTableHelpers';
 import SimpleScrollPane from './SimpleScrollPane';
-import { makeListColumn } from '../libs/fileTableHelpers';
+import { makeListColumn } from '../lib/fileTableHelpers';
 import LevelSelect from './LevelSelect';
 import styles from './common.module.scss';
 
-import EnhancedDataTable, {
+import {
+    EnhancedDataTable,
     IEnhancedDataTableColumn,
-} from '../../../data-portal-table/src/components/EnhancedDataTable';
+} from '@htan/data-portal-table';
 import {
     AttributeNames,
     GenericAttributeNames,
-} from '../../../data-portal-utils/src/libs/types';
-import { Entity } from '../../../data-portal-commons/src/libs/entity';
-import { FileAttributeMap } from '../../../data-portal-commons/src/libs/types';
+    getFileBase,
+    interleave,
+    truncateFilename,
+} from '@htan/data-portal-utils';
+import { Entity, FileAttributeMap } from '@htan/data-portal-commons';
 import {
     getDefaultDataTableStyle,
     selectorToColumnName,
-} from '../../../data-portal-table/src/libs/helpers';
-import {
-    getFileBase,
-    truncateFilename,
-} from '../../../data-portal-utils/src/libs/file';
-import interleave from '../../../data-portal-utils/src/libs/interleave';
-import ViewDetailsModal from '../../../data-portal-commons/src/components/ViewDetailsModal';
+} from '@htan/data-portal-table';
+import { ViewDetailsModal } from '@htan/data-portal-commons';
 
 const CELLXGENE_MAPPINGS = require('../assets/cellxgene-mappings.json');
 const ISBCGC_MAPPINGS = require('../assets/isbcgc-mappings.json');
@@ -431,7 +429,7 @@ interface IFileTableProps {
 }
 
 @observer
-export default class FileTable extends React.Component<IFileTableProps> {
+export class FileTable extends React.Component<IFileTableProps> {
     @observable.ref selected: Entity[] = [];
     @observable clicked: Entity | undefined;
     @observable isDownloadModalOpen = false;
@@ -1090,3 +1088,5 @@ export default class FileTable extends React.Component<IFileTableProps> {
         ) : null;
     }
 }
+
+export default FileTable;

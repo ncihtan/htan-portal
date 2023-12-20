@@ -3,9 +3,9 @@ import React from 'react';
 import FilterPanel from './FilterPanel';
 import FilterPropertyColumnShell from './FilterPropertyColumn';
 import FilterCheckList from './FilterCheckList';
-import { OptionType, ISelectedFiltersByAttrName } from '../libs/types';
+import { OptionType, ISelectedFiltersByAttrName } from '../lib/types';
 
-import { IAttributeInfo } from '../../../data-portal-utils/src/libs/types';
+import { IAttributeInfo } from '@htan/data-portal-utils';
 
 interface IFilterDropdownProps<Attribute extends string, T> {
     attributes: Attribute[];
@@ -19,7 +19,7 @@ interface IFilterDropdownProps<Attribute extends string, T> {
     className?: string;
 }
 
-const FilterDropdown = <Attribute extends string, T>(
+export const FilterDropdown = <Attribute extends string, T>(
     props: IFilterDropdownProps<Attribute, T>
 ) => {
     const width = props.width || 100;

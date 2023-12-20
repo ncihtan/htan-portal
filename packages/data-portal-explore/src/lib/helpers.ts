@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { AttributeNames } from '../../../data-portal-utils/src/libs/types';
-import { Entity } from '../../../data-portal-commons/src/libs/entity';
+import { AttributeNames } from '@htan/data-portal-utils';
+import { Entity } from '@htan/data-portal-commons';
 
 export function getDefaultSummaryData<T>(
     filteredCases: T[],

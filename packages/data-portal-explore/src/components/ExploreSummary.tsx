@@ -28,3 +28,5 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
         </>
     );
 };
+
+export default ExploreSummary;

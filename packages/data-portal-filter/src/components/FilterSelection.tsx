@@ -5,7 +5,7 @@ interface IFilterSelectionProps {
     options: string[];
 }
 
-export default class FilterSelection extends React.Component<
+export class FilterSelection extends React.Component<
     IFilterSelectionProps,
     { open: boolean }
 > {
@@ -34,3 +34,5 @@ export default class FilterSelection extends React.Component<
         );
     }
 }
+
+export default FilterSelection;

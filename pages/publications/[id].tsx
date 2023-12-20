@@ -24,8 +24,8 @@ import {
 import {
     ISelectedFiltersByAttrName,
     SelectedFilter,
-} from '../../packages/data-portal-filter/src/libs/types';
-import { Entity } from '../../packages/data-portal-commons/src/libs/entity';
+} from '@htan/data-portal-filter';
+import { Entity } from '@htan/data-portal-commons';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)

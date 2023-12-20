@@ -14,16 +14,16 @@ import {
     DownloadSourceCategory,
     Entity,
     SerializableEntity,
-} from '../packages/data-portal-commons/src/libs/entity';
+} from '../packages/data-portal-commons/src/lib/entity';
 import {
     HTANAttributeNames,
     HTANToGenericAttributeMap,
-} from '../packages/data-portal-commons/src/libs/types';
+} from '../packages/data-portal-commons/src/lib/types';
 import {
     fetchAndProcessSchemaData,
     getAttributeToSchemaIdMap,
     SchemaDataById,
-} from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
+} from '../packages/data-portal-schema/src/lib/dataSchemaHelpers';
 
 // import idcAssets from '../packages/data-portal-explore/src/assets/idc-imaging-assets.json';
 // const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');

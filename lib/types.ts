@@ -1,8 +1,7 @@
 import { Tool } from './tools';
-import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
-import { getDelimitedValues } from '../packages/data-portal-utils/src/libs/getDelimitedValues';
-import { AttributeMap } from '../packages/data-portal-utils/src/libs/types';
-import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
+import { Atlas, Entity } from '@htan/data-portal-commons';
+import { AttributeMap, getDelimitedValues } from '@htan/data-portal-utils';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 export enum ToolAttributeNames {
     AtlasName = 'AtlasName',

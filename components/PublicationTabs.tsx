@@ -7,14 +7,16 @@ import styles from './PublicationTabs.module.scss';
 import { Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { groupEntitiesByAttrNameAndValue } from '../packages/data-portal-filter/src/libs/helpers';
-import { GenericAttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import { Atlas, Entity } from '../packages/data-portal-commons/src/libs/entity';
-import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
-import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
-import BiospecimenTable from '../packages/data-portal-explore/src/components/BiospecimenTable';
-import CaseTable from '../packages/data-portal-explore/src/components/CaseTable';
-import FileTable from '../packages/data-portal-explore/src/components/FileTable';
+
+import { groupEntitiesByAttrNameAndValue } from '@htan/data-portal-filter';
+import { GenericAttributeNames } from '@htan/data-portal-utils';
+import { Atlas, Entity, FileAttributeMap } from '@htan/data-portal-commons';
+import { DataSchemaData } from '@htan/data-portal-schema';
+import {
+    BiospecimenTable,
+    CaseTable,
+    FileTable,
+} from '@htan/data-portal-explore';
 
 interface IPublicationTabsProps {
     router: NextRouter;

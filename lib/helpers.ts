@@ -3,14 +3,14 @@ import { NextRouter } from 'next/router';
 import fetch from 'node-fetch';
 
 import { ExploreURLQuery } from '../pages/explore';
-import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
+import { SelectedFilter } from '@htan/data-portal-filter';
 import {
     Atlas,
     BaseSerializableEntity,
     Entity,
     SerializableEntity,
-} from '../packages/data-portal-commons/src/libs/entity';
-import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
+} from '@htan/data-portal-commons';
+import { ExploreTab } from '@htan/data-portal-explore';
 
 // @ts-ignore
 let win;

@@ -8,7 +8,7 @@ interface ISimpleScrollPaneProps {
     children: any;
 }
 
-export default function SimpleScrollPane(props: ISimpleScrollPaneProps) {
+export function SimpleScrollPane(props: ISimpleScrollPaneProps) {
     const divProps: any = {
         style: {
             width: props.width,
@@ -22,3 +22,5 @@ export default function SimpleScrollPane(props: ISimpleScrollPaneProps) {
     }
     return <div {...divProps}>{props.children}</div>;
 }
+
+export default SimpleScrollPane;

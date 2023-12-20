@@ -8,13 +8,14 @@ import _ from 'lodash';
 import { GeneralLink } from '../types';
 import { ToolDetails } from './tool/toolDetails';
 
-import EnhancedDataTable, {
+import {
+    EnhancedDataTable,
+    getDefaultDataTableStyle,
     IEnhancedDataTableColumn,
-} from '../packages/data-portal-table/src/components/EnhancedDataTable';
-import { getDelimitedValues } from '../packages/data-portal-utils/src/libs/getDelimitedValues';
-import { getDefaultDataTableStyle } from '../packages/data-portal-table/src/libs/helpers';
-import { truncatedTableCell } from '../packages/data-portal-explore/src/libs/dataTableHelpers';
-import ViewDetailsModal from '../packages/data-portal-commons/src/components/ViewDetailsModal';
+} from '@htan/data-portal-table';
+import { getDelimitedValues } from '@htan/data-portal-utils';
+import { truncatedTableCell } from '@htan/data-portal-explore';
+import { ViewDetailsModal } from '@htan/data-portal-commons';
 
 interface IToolTableProps {
     tools: Tools;

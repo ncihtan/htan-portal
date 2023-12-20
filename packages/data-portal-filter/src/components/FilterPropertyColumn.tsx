@@ -6,7 +6,7 @@ interface IFilterPropertyColumnShell {
     countHeader: string;
 }
 
-const FilterPropertyColumnShell: React.FunctionComponent<IFilterPropertyColumnShell> = function (
+export const FilterPropertyColumnShell: React.FunctionComponent<IFilterPropertyColumnShell> = function (
     props
 ) {
     return (

@@ -6,7 +6,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
 import { Option } from 'react-select/src/filters';
-import { Entity } from '../../../data-portal-commons/src/libs/entity';
+import { Entity } from '@htan/data-portal-commons';
 
 export function getExploreChartOptions(
     filteredCases: Entity[],
@@ -108,7 +108,7 @@ export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
     },
 ];
 
-const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
+export const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
     function ({
         filteredCases,
         filteredSamples,

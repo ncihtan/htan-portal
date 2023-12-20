@@ -5,7 +5,7 @@ import Tooltip from 'rc-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { IEnhancedDataTableColumn } from '../../../data-portal-table/src/components/EnhancedDataTable';
+import { IEnhancedDataTableColumn } from '@htan/data-portal-table';
 import styles from './ViewDetailsModal.module.scss';
 
 interface IViewDetailsModalProps<CellData> {
@@ -62,7 +62,7 @@ const AddColumnIcon: React.FunctionComponent<IAddColumnIconProps> = (props) => {
     ) : null;
 };
 
-const ViewDetailsModal = <CellData extends object>(
+export const ViewDetailsModal = <CellData extends object>(
     props: IViewDetailsModalProps<CellData>
 ) => {
     if (!props.cellData) {

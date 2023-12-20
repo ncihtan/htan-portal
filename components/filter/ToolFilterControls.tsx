@@ -3,12 +3,12 @@ import { observer } from 'mobx-react';
 import { ToolAttributeMap, ToolAttributeNames } from '../../lib/types';
 import { Tool } from '../../lib/tools';
 import {
+    FilterControls,
+    FilterDropdown,
     getDropdownOptionsFromProps,
     getOptionsFromProps,
-} from '../../packages/data-portal-filter/src/libs/helpers';
-import FilterControls from '../../packages/data-portal-filter/src/components/FilterControls';
-import FilterDropdown from '../../packages/data-portal-filter/src/components/FilterDropdown';
-import { IFilterControlsProps } from '../../packages/data-portal-filter/src/libs/types';
+    IFilterControlsProps,
+} from '@htan/data-portal-filter';
 
 const ToolFilterControls: React.FunctionComponent<
     IFilterControlsProps<Tool, ToolAttributeNames>

@@ -35,23 +35,22 @@ import styles from './styles.module.scss';
 import PageWrapper from '../components/PageWrapper';
 
 import {
+    Filter,
     FilterActionMeta,
-    ISelectedFiltersByAttrName,
-    SelectedFilter,
-} from '../packages/data-portal-filter/src/libs/types';
-import {
     getNewFilters,
     getSelectedFiltersByAttrName,
-} from '../packages/data-portal-filter/src/libs/helpers';
-import Filter from '../packages/data-portal-filter/src/components/Filter';
-import { getDefaultSummaryData } from '../packages/data-portal-explore/src/libs/helpers';
-import { ExploreSummary } from '../packages/data-portal-explore/src/components/ExploreSummary';
-import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import FileFilterControls from '../packages/data-portal-explore/src/components/FileFilterControls';
-import { HTANToGenericAttributeMap } from '../packages/data-portal-commons/src/libs/types';
-import { Atlas } from '../packages/data-portal-commons/src/libs/entity';
-import { fetchAndProcessSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
-import { ExploreTab } from '../packages/data-portal-explore/src/libs/types';
+    ISelectedFiltersByAttrName,
+    SelectedFilter,
+} from '@htan/data-portal-filter';
+import {
+    ExploreSummary,
+    ExploreTab,
+    FileFilterControls,
+    getDefaultSummaryData,
+} from '@htan/data-portal-explore';
+import { AttributeNames } from '@htan/data-portal-utils';
+import { Atlas, HTANToGenericAttributeMap } from '@htan/data-portal-commons';
+import { fetchAndProcessSchemaData } from '@htan/data-portal-schema';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;

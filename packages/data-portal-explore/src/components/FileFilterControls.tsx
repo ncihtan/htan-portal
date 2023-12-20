@@ -3,29 +3,27 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
-import FilterControls from '../../../data-portal-filter/src/components/FilterControls';
-import { AttributeNames } from '../../../data-portal-utils/src/libs/types';
-import FilterDropdown from '../../../data-portal-filter/src/components/FilterDropdown';
 import {
+    FilterControls,
+    FilterDropdown,
     getDropdownOptionsFromProps,
     getOptionsFromProps,
-} from '../../../data-portal-filter/src/libs/helpers';
-import { FileAttributeMap } from '../../../data-portal-commons/src/libs/types';
+    IFilterControlsProps,
+    OptionType,
+} from '@htan/data-portal-filter';
+import { AttributeNames } from '@htan/data-portal-utils';
 import {
     DownloadSourceCategory,
     Entity,
-} from '../../../data-portal-commons/src/libs/entity';
-import {
-    IFilterControlsProps,
-    OptionType,
-} from '../../../data-portal-filter/src/libs/types';
+    FileAttributeMap,
+} from '@htan/data-portal-commons';
 
 interface IFileFilterControlProps
     extends IFilterControlsProps<Entity, AttributeNames> {
     enableReleaseFilter?: boolean;
 }
 
-const FileFilterControls: React.FunctionComponent<IFileFilterControlProps> = observer(
+export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps> = observer(
     (props) => {
         const filterControlsProps = {
             ...props,

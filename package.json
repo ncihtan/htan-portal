@@ -2,6 +2,12 @@
   "name": "htan-portal-nextjs",
   "version": "0.1.0",
   "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "."
+    ]
+  },
   "scripts": {
     "dev": "yarn run next dev",
     "updateData": "yarn run findAndReplace && yarn run processSynapseJSON && yarn run gzip",

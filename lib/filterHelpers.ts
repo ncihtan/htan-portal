@@ -4,14 +4,13 @@ import { filterObject } from './helpers';
 import { ToolAttributeMap, ToolAttributeNames } from './types';
 import { Tool } from './tools';
 
-import { ISelectedFiltersByAttrName } from '../packages/data-portal-filter/src/libs/types';
 import {
     filterEntities,
     groupEntitiesByAttrNameAndValue,
-} from '../packages/data-portal-filter/src/libs/helpers';
-import { AttributeNames } from '../packages/data-portal-utils/src/libs/types';
-import { FileAttributeMap } from '../packages/data-portal-commons/src/libs/types';
-import { Entity } from '../packages/data-portal-commons/src/libs/entity';
+    ISelectedFiltersByAttrName,
+} from '@htan/data-portal-filter';
+import { AttributeNames } from '@htan/data-portal-utils';
+import { Entity, FileAttributeMap } from '@htan/data-portal-commons';
 
 export function getFileFilterDisplayName(filter: string) {
     return FileAttributeMap[

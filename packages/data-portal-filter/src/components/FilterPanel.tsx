@@ -5,10 +5,10 @@ import Select from 'react-select';
 import $ from 'jquery';
 import { action } from 'mobx';
 
-import { clamp } from '../../../data-portal-utils/src/libs/clamp';
+import { clamp } from '@htan/data-portal-utils';
 import styles from './styles.module.scss';
 
-const FilterPanelMenu: FunctionComponent<{
+export const FilterPanelMenu: FunctionComponent<{
     panelStyle: any;
     closeMenu: () => void;
 }> = observer(function ({ panelStyle, closeMenu, children }) {

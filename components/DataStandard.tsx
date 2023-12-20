@@ -10,7 +10,7 @@ import { Col } from 'react-bootstrap';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
-import { DataSchemaData } from '../packages/data-portal-schema/src/libs/dataSchemaHelpers';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 export interface DataStandardProps {
     title: string;

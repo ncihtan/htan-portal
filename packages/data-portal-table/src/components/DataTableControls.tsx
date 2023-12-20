@@ -23,7 +23,7 @@ interface IDataTableControlsProps {
     extraControls?: JSX.Element;
 }
 
-export default class DataTableControls extends React.Component<IDataTableControlsProps> {
+export class DataTableControls extends React.Component<IDataTableControlsProps> {
     onChangeFilterText = (evt: SyntheticEvent<any>) => {
         const caseFilterText = (evt.target as any).value;
 
@@ -80,3 +80,5 @@ export default class DataTableControls extends React.Component<IDataTableControl
         );
     }
 }
+
+export default DataTableControls;

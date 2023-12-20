@@ -1,5 +1,5 @@
 import { ActionMeta, ActionTypes, OptionTypeBase } from 'react-select';
-import { AttributeMap } from '../../../data-portal-utils/src/libs/types';
+import { AttributeMap } from '@htan/data-portal-utils';
 
 export type OptionType = {
     value: string;

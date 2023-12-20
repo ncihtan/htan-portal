@@ -21,7 +21,7 @@ const Toggle: React.FunctionComponent<{
     );
 };
 
-const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
+export const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
     props
 ) => {
     // truncate text by default

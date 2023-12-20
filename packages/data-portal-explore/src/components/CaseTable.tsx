@@ -1,20 +1,21 @@
 import _ from 'lodash';
 import React from 'react';
 
-import EnhancedDataTable from '../../../data-portal-table/src/components/EnhancedDataTable';
-import { GenericAttributeNames } from '../../../data-portal-utils/src/libs/types';
-import { Atlas, Entity } from '../../../data-portal-commons/src/libs/entity';
+import {
+    EnhancedDataTable,
+    getDefaultDataTableStyle,
+} from '@htan/data-portal-table';
+import {
+    convertAgeInDaysToYears,
+    GenericAttributeNames,
+} from '@htan/data-portal-utils';
+import { Atlas, Entity } from '@htan/data-portal-commons';
 import {
     generateColumnsForDataSchema,
     getAtlasColumn,
     sortByParticipantId,
-} from '../libs/dataTableHelpers';
-import {
-    DataSchemaData,
-    SchemaDataId,
-} from '../../../data-portal-schema/src/libs/dataSchemaHelpers';
-import { getDefaultDataTableStyle } from '../../../data-portal-table/src/libs/helpers';
-import { convertAgeInDaysToYears } from '../../../data-portal-utils/src/libs/convert';
+} from '../lib/dataTableHelpers';
+import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
 
 interface ICaseTableProps {
     cases: Entity[];
