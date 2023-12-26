@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { AttributeNames } from '@htan/data-portal-utils';
 import { Entity } from '@htan/data-portal-commons';
+import humanOrganMappings from '../data/human-organ-mappings.json';
 
-const organMapping: OrganMapping = require('../data/human-organ-mappings.json');
+const organMapping: OrganMapping = humanOrganMappings;
 
 export type OrganMapping = {
     [organ: string]: {
