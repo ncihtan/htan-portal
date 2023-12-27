@@ -16,7 +16,9 @@ import { truncatedTableCell } from '../lib/dataTableHelpers';
 import SimpleScrollPane from './SimpleScrollPane';
 import { makeListColumn } from '../lib/fileTableHelpers';
 import LevelSelect from './LevelSelect';
-import styles from './common.module.scss';
+
+import commonStyles from './common.module.scss';
+import styles from './fileTable.module.scss';
 
 import {
     EnhancedDataTable,
@@ -521,7 +523,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                             (file.level === 'Level 1' ||
                                 file.level === 'Level 2')) ? (
                             <span
-                                className={styles.clickable}
+                                className={commonStyles.clickable}
                                 onClick={(e) => this.onClick(e, file)}
                             >
                                 {truncatedFilename}
@@ -712,7 +714,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                                 ];
 
                             return (
-                                <div className={'dsa-container'}>
+                                <div className={styles.dsaContainer}>
                                     <Tooltip
                                         placement="left"
                                         overlay={
@@ -792,7 +794,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                                                 >
                                                     <img
                                                         className={
-                                                            'dsa-full-image'
+                                                            styles.dsaFullImage
                                                         }
                                                         src={
                                                             imageViewers.thumbnailUrl
@@ -848,7 +850,9 @@ export class FileTable extends React.Component<IFileTableProps> {
                                                 target="_blank"
                                             >
                                                 <img
-                                                    className={'dsa-thumb'}
+                                                    className={
+                                                        commonStyles.dsaThumb
+                                                    }
                                                     src={
                                                         imageViewers.thumbnailUrl
                                                     }

@@ -321,3 +321,18 @@ export function getSelectOptions<Attribute extends string, T>(
         };
     });
 }
+
+export function urlEncodeSelectedFilters(selectedFilters: SelectedFilter[]) {
+    // it is possible to pass OptionType[] here for selected filters, and
+    // JSON.stringify() breaks when OptionType.label is an instance of JSX.Element so we need to exclude it
+    return JSON.stringify(selectedFilters.map((f) => _.omit(f, ['label'])));
+}
+
+export function parseSelectedFiltersFromUrl(
+    selectedFiltersURLQueryParam: string | undefined
+): SelectedFilter[] | null {
+    if (selectedFiltersURLQueryParam) {
+        return JSON.parse(selectedFiltersURLQueryParam);
+    }
+    return null;
+}

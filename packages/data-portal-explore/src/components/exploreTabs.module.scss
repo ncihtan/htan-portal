@@ -1,0 +1,7 @@
+// data table column alignment workaround
+.atlasTab {
+    :global(#column-num_cases),
+    :global(#column-num_biospecimens) {
+        margin-left: auto !important;
+    }
+}

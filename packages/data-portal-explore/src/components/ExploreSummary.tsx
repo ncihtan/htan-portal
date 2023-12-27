@@ -1,5 +1,6 @@
 import React from 'react';
 import pluralize from 'pluralize';
+import styles from './exploreSummary.module.scss';
 
 pluralize.addPluralRule(/specimen$/i, 'specimens');
 
@@ -15,7 +16,7 @@ export const ExploreSummary: React.FunctionComponent<IExploreSummaryProps> = (
 ) => {
     return (
         <>
-            <div className={'summary'}>
+            <div className={styles.summary}>
                 <div>
                     <strong>Summary:</strong>
                 </div>

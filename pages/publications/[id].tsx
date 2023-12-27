@@ -13,19 +13,21 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
-import { fetchData, fillInEntities, LoadDataResult } from '../../lib/helpers';
+import { fetchData } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
+    Entity,
+    fillInEntities,
+    LoadDataResult,
     filterFiles,
     getFilteredCases,
     groupFilesByAttrNameAndValue,
-} from '../../lib/filterHelpers';
+} from '@htan/data-portal-commons';
 
 import {
     ISelectedFiltersByAttrName,
     SelectedFilter,
 } from '@htan/data-portal-filter';
-import { Entity } from '@htan/data-portal-commons';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)

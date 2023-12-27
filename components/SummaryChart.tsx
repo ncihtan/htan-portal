@@ -17,8 +17,10 @@ import {
 } from 'victory-core';
 import { VictoryStack } from 'victory-stack';
 
-import { urlEncodeSelectedFilters } from '../lib/helpers';
-import { SelectedFilter } from '@htan/data-portal-filter';
+import {
+    SelectedFilter,
+    urlEncodeSelectedFilters,
+} from '@htan/data-portal-filter';
 import { AttributeNames } from '@htan/data-portal-utils';
 import {
     dataWithoutUnknownValues,

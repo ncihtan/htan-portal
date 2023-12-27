@@ -85,3 +85,13 @@ export interface AtlasMetaData {
         numItems: number;
     }[];
 }
+
+export interface ReleaseEntity {
+    entityId: string;
+    Data_Release: string;
+    Id: string;
+    type: string;
+    CDS_Release: string;
+    IDC_Release: string;
+    Component: string;
+}

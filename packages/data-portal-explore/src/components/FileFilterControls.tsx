@@ -18,6 +18,8 @@ import {
     FileAttributeMap,
 } from '@htan/data-portal-commons';
 
+import styles from './fileFilterControls.module.scss';
+
 interface IFileFilterControlProps
     extends IFilterControlsProps<Entity, AttributeNames> {
     enableReleaseFilter?: boolean;
@@ -60,7 +62,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                     attributes={[
                         AttributeNames.PrimaryDiagnosis /*AttributeNames.Stage*/,
                     ]}
-                    className="filter-checkbox-list-container"
+                    className={styles.filterCheckboxListContainer}
                     width={120}
                 />
                 <FilterDropdown
@@ -71,7 +73,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                         AttributeNames.Race,
                         AttributeNames.Ethnicity,
                     ]}
-                    className="filter-checkbox-list-container"
+                    className={styles.filterCheckboxListContainer}
                     width={164}
                 />
                 <FilterDropdown
@@ -85,13 +87,13 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                         AttributeNames.Level,
                         AttributeNames.FileFormat,
                     ]}
-                    className="filter-checkbox-list-container"
+                    className={styles.filterCheckboxListContainer}
                     width={80}
                 />
                 <FilterDropdown
                     {...dropdownProps}
                     attributes={[AttributeNames.downloadSource]}
-                    className="filter-checkbox-list-container"
+                    className={styles.filterCheckboxListContainer}
                     width={170}
                     options={(attrName: AttributeNames) => {
                         return options(attrName)

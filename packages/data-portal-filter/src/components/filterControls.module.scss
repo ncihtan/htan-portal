@@ -1,0 +1,15 @@
+.filterControls {
+    display: flex;
+    margin-bottom: 20px;
+
+    > div {
+        margin-right: 24px;
+        display: flex;
+        align-items: center;
+
+        select {
+            display: inline-block;
+            margin-left: 5px;
+        }
+    }
+}

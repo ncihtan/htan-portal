@@ -20,6 +20,8 @@ import { DEFAULT_EXPLORE_PLOT_OPTIONS, ExplorePlot } from './ExplorePlot';
 import { FileTable } from './FileTable';
 import { ExploreTab } from '../lib/types';
 
+import styles from './exploreTabs.module.scss';
+
 interface IExploreTabsProps {
     setTab?: (tab: ExploreTab) => void;
     getTab?: () => ExploreTab;
@@ -259,7 +261,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
 
                 {activeTab === ExploreTab.ATLAS && (
                     <div
-                        className={`tab-content atlasTab ${
+                        className={`tab-content ${styles.atlasTab} ${
                             activeTab !== ExploreTab.ATLAS ? 'd-none' : ''
                         }`}
                     >

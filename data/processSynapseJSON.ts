@@ -1,7 +1,5 @@
-import { SynapseAtlas, SynapseData } from '../lib/types';
 import _ from 'lodash';
 
-import { isLowestLevel, LoadDataResult, ReleaseEntity } from '../lib/helpers';
 import getData from '../lib/getData';
 import fs from 'fs';
 import csvToJson from 'csvtojson';
@@ -13,12 +11,19 @@ import {
     DataFileID,
     DownloadSourceCategory,
     Entity,
+    ReleaseEntity,
     SerializableEntity,
 } from '../packages/data-portal-commons/src/lib/entity';
 import {
     HTANAttributeNames,
     HTANToGenericAttributeMap,
+    LoadDataResult,
 } from '../packages/data-portal-commons/src/lib/types';
+import {
+    SynapseAtlas,
+    SynapseData,
+} from '../packages/data-portal-commons/src/lib/synapse';
+import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
 import {
     fetchAndProcessSchemaData,
     getAttributeToSchemaIdMap,

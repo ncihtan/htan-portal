@@ -357,37 +357,37 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
             },
             {
                 name: 'Atlas ID',
-                selector: (atlas: Atlas) => atlas.htan_id.toUpperCase(),
+                selector: (atlas: Atlas) => atlas.htan_id?.toUpperCase(),
                 wrap: true,
                 sortable: true,
                 omit: true,
             },
             {
                 name: 'Lead Institution',
-                selector: (atlas: Atlas) => atlas.AtlasMeta.lead_institutions,
+                selector: (atlas: Atlas) => atlas.AtlasMeta?.lead_institutions,
                 grow: 1.6,
                 wrap: true,
                 sortable: true,
             },
             {
                 name: 'Atlas Description',
-                selector: 'AtlasMeta.title.rendered',
+                selector: (atlas: Atlas) => atlas.AtlasMeta?.title?.rendered,
                 format: (atlas: Atlas) =>
                     atlas.AtlasMeta &&
                     !['hta13', 'hta14', 'hta15'].includes(
-                        atlas.htan_id.toLowerCase()
+                        atlas.htan_id?.toLowerCase()
                     ) ? (
                         <span>
                             <a
                                 href={`//${
                                     window.location.host
-                                }/${atlas.htan_id.toLowerCase()}`}
+                                }/${atlas.htan_id?.toLowerCase()}`}
                             >
-                                {atlas.AtlasMeta.title.rendered}
+                                {atlas.AtlasMeta?.title?.rendered}
                             </a>
                         </span>
                     ) : (
-                        <span>{atlas.AtlasMeta.short_description}</span>
+                        <span>{atlas.AtlasMeta?.short_description}</span>
                     ),
                 grow: 2,
                 wrap: true,

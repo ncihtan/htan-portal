@@ -9,13 +9,6 @@ $font-size-base: 0.9rem;
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
-// data table column alignment workaround
-
-.atlasTab #column-num_cases,
-.atlasTab #column-num_biospecimens {
-    margin-left: auto !important;
-}
-
 .container {
     margin-top: 20px;
 }
@@ -85,7 +78,6 @@ h2 {
 }
 
 h3 {
-    font-size: 1.25rem;
     font-size: 1.25rem;
 }
 
@@ -257,43 +249,12 @@ table {
     font-size: 14px;
 }
 
-.dsa-container {
-    /*border: 1px solid #999;*/
-    width: 150px;
-}
-
-.dsa-full-image {
-    /* TODO: this is max 200px because rc-tooltip is max 250px. Might be nicer to
-     * show bigger image */
-    max-width: 200px;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    padding: 3px;
-}
-
 .dsa-thumb {
     display: block;
     /*margin: auto; don't center thumbnail */
     height: 100px;
     padding: 2px;
     /*border: 1px solid #999;*/
-}
-
-.filterControls {
-    display: flex;
-    margin-bottom: 20px;
-
-    > div {
-        margin-right: 24px;
-        display: flex;
-        align-items: center;
-
-        select {
-            display: inline-block;
-            margin-left: 5px;
-        }
-    }
 }
 
 .contentWrapper {
@@ -307,102 +268,11 @@ table {
     }
 }
 
-.explorePage {
-    padding: 20px;
-
-    .summary {
-        display: flex;
-        z-index: -1;
-        margin-bottom: 10px;
-        justify-content: flex-end;
-        margin-bottom: -17px;
-        position: relative;
-        font-size: 13px;
-        top: 12px;
-
-        > div {
-            padding: 0 10px;
-            border-right: 1px dashed #eee;
-
-            &:first-child {
-                padding-left: 0px;
-                border-right: none;
-            }
-        }
-    }
-
-    .filter {
-        padding-bottom: 15px;
-
-        > * {
-            margin-right: 6px;
-            border-radius: 4px;
-            padding: 5px 10px;
-        }
-
-        > .logicalOr,
-        > .logicalAnd {
-            background: green;
-            color: #fff;
-            color: lightsalmon;
-        }
-
-        .attributeGroup {
-            color: #fff;
-            background: darkcyan;
-
-            .attributeGroupName {
-                font-weight: bold;
-
-                &:hover {
-                    text-decoration: line-through;
-                    cursor: pointer;
-                }
-            }
-
-            .logicalOr,
-            .logicalAnd {
-                font-weight: bold;
-                color: lightsalmon;
-            }
-
-            .logicalParentheses {
-                padding-left: 4px;
-                padding-right: 4px;
-            }
-
-            .attributeValue {
-                padding-left: 4px;
-                padding-right: 4px;
-
-                &:hover {
-                    text-decoration: line-through;
-                    cursor: pointer;
-                }
-            }
-        }
-    }
-
-    .clearFilterButton {
-        background: #eee;
-        cursor: pointer;
-    }
-}
-
 .subnav {
     margin-bottom: 20px;
 
     .nav-item {
         cursor: pointer;
-    }
-}
-
-.filter-checkbox-list-container {
-    display: flex;
-
-    > div {
-        margin-right: 20px;
-        min-width: 300px;
     }
 }
 

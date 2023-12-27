@@ -1,0 +1,56 @@
+.filter {
+    padding-bottom: 15px;
+
+    > * {
+        margin-right: 6px;
+        border-radius: 4px;
+        padding: 5px 10px;
+    }
+
+    > .logicalOr,
+    > .logicalAnd {
+        background: green;
+        color: lightsalmon;
+    }
+
+    .attributeGroup {
+        color: #fff;
+        background: darkcyan;
+
+        .attributeGroupName {
+            font-weight: bold;
+
+            &:hover {
+                text-decoration: line-through;
+                cursor: pointer;
+            }
+        }
+
+        .logicalOr,
+        .logicalAnd {
+            font-weight: bold;
+            color: lightsalmon;
+        }
+
+        .logicalParentheses {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+        .attributeValues {
+            .attributeValue {
+                padding-left: 4px;
+                padding-right: 4px;
+
+                &:hover {
+                    text-decoration: line-through;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+.clearFilterButton {
+    background: #eee;
+    cursor: pointer;
+}

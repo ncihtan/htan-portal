@@ -4,7 +4,7 @@ import {
     IAttributeInfo,
 } from '@htan/data-portal-utils';
 import { getCaseValues } from './getCaseValues';
-import { Entity } from './entity';
+import { Atlas, Entity, SerializableEntity } from './entity';
 
 export enum HTANAttributeNames {
     HTANParentID = 'HTANParentID',
@@ -99,3 +99,17 @@ export const FileAttributeMap: {
         displayName: 'Release',
     },
 };
+
+export interface LoadDataResult {
+    files: SerializableEntity[];
+    atlases: Atlas[];
+    biospecimenByBiospecimenID: {
+        [BiospecimenID: string]: SerializableEntity;
+    };
+    diagnosisByParticipantID: {
+        [ParticipantID: string]: SerializableEntity;
+    };
+    demographicsByParticipantID: {
+        [ParticipantID: string]: SerializableEntity;
+    };
+}

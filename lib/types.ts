@@ -1,7 +1,6 @@
 import { Tool } from './tools';
-import { Atlas, Entity } from '@htan/data-portal-commons';
+import { Atlas } from '@htan/data-portal-commons';
 import { AttributeMap, getDelimitedValues } from '@htan/data-portal-utils';
-import { DataSchemaData } from '@htan/data-portal-schema';
 
 export enum ToolAttributeNames {
     AtlasName = 'AtlasName',
@@ -36,29 +35,4 @@ export const ToolAttributeMap: AttributeMap<Tool, ToolAttributeNames> = {
         getValues: (tool: Tool) =>
             tool['Tool Assay'] ? getDelimitedValues(tool['Tool Assay']) : [],
     },
-};
-
-export interface IFilterProps {
-    files: Entity[];
-    filters: { [key: string]: string[] };
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    atlases: Atlas[];
-    atlasData?: any;
-}
-
-export type SynapseData = {
-    atlases: SynapseAtlas[];
-};
-
-export type SynapseAtlas = {
-    htan_id: string;
-    htan_name: string;
-} & {
-    [data_schema: string]: SynapseRecords;
-};
-
-export type SynapseRecords = {
-    data_schema: string;
-    record_list: { values: any[] }[];
-    column_order: string[];
 };

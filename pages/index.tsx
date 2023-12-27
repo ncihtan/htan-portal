@@ -2,7 +2,6 @@ import React from 'react';
 import fs from 'fs';
 import process from 'process';
 import path from 'path';
-import zlib from 'zlib';
 
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -12,14 +11,12 @@ import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import { GetStaticProps } from 'next';
 import PageWrapper from '../components/PageWrapper';
-import {
-    computeDashboardData,
-    fillInEntities,
-    LoadDataResult,
-} from '../lib/helpers';
+import { computeDashboardData } from '../lib/helpers';
 import {
     computeEntityReportByAssay,
     computeEntityReportByOrgan,
+    fillInEntities,
+    LoadDataResult,
 } from '@htan/data-portal-commons';
 
 const Home = (data: IHomePropsProps) => {

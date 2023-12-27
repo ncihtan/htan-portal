@@ -11,6 +11,8 @@ import {
     ISelectedFiltersByAttrName,
 } from '../lib/types';
 
+import styles from './filter.module.scss';
+
 interface IFilterProps {
     setFilter: (actionMeta: FilterActionMeta<SelectedFilter>) => void;
     selectedFiltersByGroupName: ISelectedFiltersByAttrName;
@@ -24,21 +26,21 @@ export const Filter: React.FunctionComponent<IFilterProps> = observer(
         }
 
         return (
-            <div className={'filter'}>
+            <div className={styles.filter}>
                 {Object.keys(props.selectedFiltersByGroupName).map(
                     (filter, i, filters) => {
                         const numberOfAttributes = filters.length;
                         const addAnd =
                             numberOfAttributes > 1 &&
                             i < numberOfAttributes - 1 ? (
-                                <span className="logicalAnd">AND</span>
+                                <span className={styles.logicalAnd}>AND</span>
                             ) : null;
 
                         return (
                             <>
-                                <span className="attributeGroup">
+                                <span className={styles.attributeGroup}>
                                     <span
-                                        className="attributeGroupName"
+                                        className={styles.attributeGroupName}
                                         onClick={() => {
                                             props.setFilter({
                                                 action: FilterAction.CLEAR,
@@ -60,30 +62,46 @@ export const Filter: React.FunctionComponent<IFilterProps> = observer(
                                         const numberOfValues = values.length;
                                         const openParenthesis =
                                             numberOfValues > 1 && i == 0 ? (
-                                                <span className="logicalParentheses">
+                                                <span
+                                                    className={
+                                                        styles.logicalParentheses
+                                                    }
+                                                >
                                                     (
                                                 </span>
                                             ) : null;
                                         const addOr =
                                             numberOfValues > 1 &&
                                             i < numberOfValues - 1 ? (
-                                                <span className="logicalOr">
+                                                <span
+                                                    className={styles.logicalOr}
+                                                >
                                                     OR
                                                 </span>
                                             ) : null;
                                         const closeParenthesis =
                                             numberOfValues > 1 &&
                                             i == numberOfValues - 1 ? (
-                                                <span className="logicalParentheses">
+                                                <span
+                                                    className={
+                                                        styles.logicalParentheses
+                                                    }
+                                                >
                                                     )
                                                 </span>
                                             ) : null;
 
                                         return (
-                                            <span className="attributeValues">
+                                            <span
+                                                className={
+                                                    styles.attributeValues
+                                                }
+                                            >
                                                 {openParenthesis}
                                                 <span
-                                                    className="attributeValue"
+                                                    className={
+                                                        styles.attributeValue
+                                                    }
                                                     onClick={() => {
                                                         props.setFilter({
                                                             action:
@@ -109,7 +127,7 @@ export const Filter: React.FunctionComponent<IFilterProps> = observer(
                     }
                 )}
                 {!_.isEmpty(props.selectedFiltersByGroupName) && (
-                    <span className={'clearFilterButton'}>
+                    <span className={styles.clearFilterButton}>
                         <span
                             onClick={() => {
                                 props.setFilter({

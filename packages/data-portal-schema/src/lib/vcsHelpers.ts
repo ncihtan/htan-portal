@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
-import semverCompare from 'semver/functions/compare';
-import semverValid from 'semver/functions/valid';
+import { compare as semverCompare, valid as semverValid } from 'semver';
 
 export interface VcsTag {
     name: string;

@@ -7,16 +7,13 @@ import React from 'react';
 import ToolFilterControls from '../components/filter/ToolFilterControls';
 import { observer } from 'mobx-react';
 import { NextRouter, withRouter } from 'next/router';
-import {
-    parseSelectedFiltersFromUrl,
-    updateSelectedFiltersInURL,
-} from '../lib/helpers';
-import { ExploreURLQuery } from './explore';
+import { ExploreURLQuery, updateSelectedFiltersInURL } from '../lib/helpers';
 import {
     filtertools,
     getToolFilterDisplayName,
     groupToolsByAttrNameAndValue,
 } from '../lib/filterHelpers';
+import { parseSelectedFiltersFromUrl } from '@htan/data-portal-filter';
 import { action } from 'mobx';
 
 import {
@@ -26,6 +23,8 @@ import {
     getSelectedFiltersByAttrName,
     SelectedFilter,
 } from '@htan/data-portal-filter';
+
+import styles from './tools.module.scss';
 
 const ToolPage = observer((props: { router: NextRouter; tools: Tools }) => {
     const selectedFilters =
@@ -49,7 +48,7 @@ const ToolPage = observer((props: { router: NextRouter; tools: Tools }) => {
         <>
             <PreReleaseBanner />
             <PageWrapper>
-                <div className={'pageWrapper explorePage'}>
+                <div className={styles.tools}>
                     <ToolFilterControls
                         setFilter={setFilter}
                         selectedFiltersByGroupName={selectedFiltersByAttrName}

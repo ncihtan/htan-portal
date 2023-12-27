@@ -3,3 +3,23 @@
     cursor: pointer;
     color: #007bff;
 }
+
+/* TODO duplicate style */
+.loadingIndicator {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 10000;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    animation: fadein 1s;
+}
+
+/* TODO duplicate style */
+.dsaThumb {
+    display: block;
+    /*margin: auto; don't center thumbnail */
+    height: 100px;
+    padding: 2px;
+    /*border: 1px solid #999;*/
+}

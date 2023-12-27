@@ -1,6 +1,7 @@
 export * from './components/AtlasTable';
 export * from './components/BiospecimenTable';
 export * from './components/CaseTable';
+export * from './components/Explore';
 export * from './components/ExplorePlot';
 export * from './components/ExploreTabs';
 export * from './components/ExploreSummary';
