@@ -6,9 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import { EntityReport } from '../lib/helpers';
-import { EntityReportByAttribute } from '../lib/entityReportHelpers';
 import Plots from './Plots';
-import { AtlasMeta } from '@htan/data-portal-commons';
+import { AtlasMeta, EntityReportByAttribute } from '@htan/data-portal-commons';
 
 export interface IHomePropsProps {
     hero_blurb: string;

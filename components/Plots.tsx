@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import {
     computeUniqueAttributeValueCount,
     EntityReportByAttribute,
-} from '../lib/entityReportHelpers';
+} from '@htan/data-portal-commons';
 import SummaryChart from './SummaryChart';
 import Container from 'react-bootstrap/Container';
 import React from 'react';

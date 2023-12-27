@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { AttributeNames } from '@htan/data-portal-utils';
-import { Entity } from '@htan/data-portal-commons';
-import humanOrganMappings from '../data/human-organ-mappings.json';
+import { Entity } from './entity';
+import humanOrganMappings from '../assets/human-organ-mappings.json';
 
 const organMapping: OrganMapping = humanOrganMappings;
 
@@ -239,7 +239,7 @@ export function computeAttributeValueDistributionByCenter(
         entities: Entity[]
     ) => DistributionByAttribute[]
 ) {
-    const entitiesByAtlas = _.groupBy(
+    const entitiesByAtlas = _.groupBy<Entity>(
         entitiesByAttributeValue,
         (d) => d.atlas_name
     );

@@ -1,4 +1,5 @@
 export * from './lib/entity';
+export * from './lib/entityReportHelpers';
 export * from './lib/getCaseValues';
 export * from './lib/types';
 

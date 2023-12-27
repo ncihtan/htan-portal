@@ -20,7 +20,7 @@ import {
 import {
     computeEntityReportByAssay,
     computeEntityReportByOrgan,
-} from '../lib/entityReportHelpers';
+} from '@htan/data-portal-commons';
 
 const Home = (data: IHomePropsProps) => {
     return (

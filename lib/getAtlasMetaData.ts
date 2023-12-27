@@ -1,11 +1,6 @@
 import metaData from '../data/syn_metadata.json';
+import { AtlasMetaData } from '@htan/data-portal-commons';
 
-export default function getAtlasMetaData() {
-    return (metaData as any) as {
-        [atlasId: string]: {
-                component: string; 
-                synapseId: string;
-                numItems: number;
-            }[];
-    };
-};
+export default function getAtlasMetaData(): AtlasMetaData {
+    return metaData as AtlasMetaData;
+}

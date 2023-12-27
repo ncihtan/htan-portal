@@ -8,9 +8,11 @@ import {
 } from 'mobx';
 import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
-import { withRouter, NextRouter } from 'next/router';
+import { NextRouter, withRouter } from 'next/router';
 import React from 'react';
 import { ScaleLoader } from 'react-spinners';
+
+import { ExploreTabs } from '@htan/data-portal-explore';
 
 import {
     filterFiles,
@@ -25,11 +27,11 @@ import {
     isReleaseQCEnabled,
     LoadDataResult,
     parseSelectedFiltersFromUrl,
+    setTab,
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
 import { IFilterProps } from '../lib/types';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import ExploreTabs from '../components/ExploreTabs';
 
 import styles from './styles.module.scss';
 import PageWrapper from '../components/PageWrapper';
@@ -51,6 +53,8 @@ import {
 import { AttributeNames } from '@htan/data-portal-utils';
 import { Atlas, HTANToGenericAttributeMap } from '@htan/data-portal-commons';
 import { fetchAndProcessSchemaData } from '@htan/data-portal-schema';
+import getAtlasMetaData from '../lib/getAtlasMetaData';
+import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 
 export type ExploreURLQuery = {
     selectedFilters: string | undefined;
@@ -306,7 +310,13 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
                     />
 
                     <ExploreTabs
-                        router={this.props.router}
+                        setTab={(tab: ExploreTab) =>
+                            setTab(tab, this.props.router)
+                        }
+                        getTab={() =>
+                            (this.props.router.query.tab ||
+                                ExploreTab.ATLAS) as ExploreTab
+                        }
                         schemaDataById={this.state.schemaDataById}
                         files={this.state.files}
                         filteredFiles={this.filteredFiles}
@@ -337,6 +347,9 @@ class Search extends React.Component<{ router: NextRouter }, IFilterProps> {
                             this.toggleShowAllBiospecimens
                         }
                         toggleShowAllCases={this.toggleShowAllCases}
+                        getAtlasMetaData={getAtlasMetaData}
+                        publications={PUBLICATIONS}
+                        publicationPageLink={PublicationPageLink}
                         genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
                     />
                 </div>

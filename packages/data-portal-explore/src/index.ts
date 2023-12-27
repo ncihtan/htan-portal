@@ -2,6 +2,7 @@ export * from './components/AtlasTable';
 export * from './components/BiospecimenTable';
 export * from './components/CaseTable';
 export * from './components/ExplorePlot';
+export * from './components/ExploreTabs';
 export * from './components/ExploreSummary';
 export * from './components/FileFilterControls';
 export * from './components/FileTable';

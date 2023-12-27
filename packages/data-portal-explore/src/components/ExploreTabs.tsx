@@ -1,30 +1,28 @@
 import { observer } from 'mobx-react';
-import { NextRouter } from 'next/router';
 import React, { useState } from 'react';
 import Select, { MultiValueProps } from 'react-select';
 import _ from 'lodash';
 
-import { setTab } from '../lib/helpers';
-import { getNormalizedOrgan } from '../lib/entityReportHelpers';
-import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
-import getAtlasMetaData from '../lib/getAtlasMetaData';
-
 import { ISelectedFiltersByAttrName } from '@htan/data-portal-filter';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
-import { Atlas, Entity } from '@htan/data-portal-commons';
-import { DataSchemaData } from '@htan/data-portal-schema';
 import {
-    AtlasTable,
-    BiospecimenTable,
-    CaseTable,
-    DEFAULT_EXPLORE_PLOT_OPTIONS,
-    ExplorePlot,
-    ExploreTab,
-    FileTable,
-} from '@htan/data-portal-explore';
+    Atlas,
+    AtlasMetaData,
+    Entity,
+    getNormalizedOrgan,
+} from '@htan/data-portal-commons';
+import { DataSchemaData } from '@htan/data-portal-schema';
+
+import { AtlasTable } from './AtlasTable';
+import { BiospecimenTable } from './BiospecimenTable';
+import { CaseTable } from './CaseTable';
+import { DEFAULT_EXPLORE_PLOT_OPTIONS, ExplorePlot } from './ExplorePlot';
+import { FileTable } from './FileTable';
+import { ExploreTab } from '../lib/types';
 
 interface IExploreTabsProps {
-    router: NextRouter;
+    setTab?: (tab: ExploreTab) => void;
+    getTab?: () => ExploreTab;
     files: Entity[];
     filteredFiles: Entity[];
     nonAtlasSelectedFiltersByAttrName: ISelectedFiltersByAttrName;
@@ -50,6 +48,9 @@ interface IExploreTabsProps {
     showAllCases: boolean;
 
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
+    getAtlasMetaData: () => AtlasMetaData;
+    publications: { [id: string]: { cite: string } };
+    publicationPageLink: { [id: string]: { id: string; show: boolean } };
 }
 
 const metricTypes = [
@@ -92,9 +93,16 @@ function getSamplesByValueMap(
     );
 }
 
-const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
+export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
-        const activeTab = props.router.query.tab || ExploreTab.ATLAS;
+        let activeTab: string;
+        let setTab: (tab: ExploreTab) => void;
+        if (props.getTab && props.setTab) {
+            activeTab = props.getTab();
+            setTab = props.setTab;
+        } else {
+            [activeTab, setTab] = useState<ExploreTab>(ExploreTab.ATLAS);
+        }
 
         const [logScale, setLogScale] = useState(false);
 
@@ -121,9 +129,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     <ul className="nav nav-tabs">
                         <li className="nav-item">
                             <a
-                                onClick={() =>
-                                    setTab(ExploreTab.ATLAS, props.router)
-                                }
+                                onClick={() => setTab(ExploreTab.ATLAS)}
                                 className={`nav-link ${
                                     activeTab === ExploreTab.ATLAS
                                         ? 'active'
@@ -135,9 +141,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() =>
-                                    setTab(ExploreTab.CASES, props.router)
-                                }
+                                onClick={() => setTab(ExploreTab.CASES)}
                                 className={`nav-link ${
                                     activeTab === ExploreTab.CASES
                                         ? 'active'
@@ -149,9 +153,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() =>
-                                    setTab(ExploreTab.BIOSPECIMEN, props.router)
-                                }
+                                onClick={() => setTab(ExploreTab.BIOSPECIMEN)}
                                 className={`nav-link ${
                                     activeTab === ExploreTab.BIOSPECIMEN
                                         ? 'active'
@@ -163,9 +165,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() =>
-                                    setTab(ExploreTab.FILE, props.router)
-                                }
+                                onClick={() => setTab(ExploreTab.FILE)}
                                 className={`nav-link ${
                                     activeTab === ExploreTab.FILE
                                         ? 'active'
@@ -178,9 +178,7 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         {
                             <li className="nav-item">
                                 <a
-                                    onClick={() =>
-                                        setTab(ExploreTab.PLOTS, props.router)
-                                    }
+                                    onClick={() => setTab(ExploreTab.PLOTS)}
                                     className={`nav-link ${
                                         activeTab === ExploreTab.PLOTS
                                             ? 'active'
@@ -266,12 +264,10 @@ const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <AtlasTable
-                            setTab={(tab: ExploreTab) =>
-                                setTab(tab, props.router)
-                            }
-                            publicationPageLink={PublicationPageLink}
-                            publications={PUBLICATIONS}
-                            getAtlasMetaData={getAtlasMetaData}
+                            setTab={setTab}
+                            publicationPageLink={props.publicationPageLink}
+                            publications={props.publications}
+                            getAtlasMetaData={props.getAtlasMetaData}
                             synapseAtlasData={props.allSynapseAtlases}
                             selectedAtlases={props.selectedSynapseAtlases}
                             filteredAtlases={
