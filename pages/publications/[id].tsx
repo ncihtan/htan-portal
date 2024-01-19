@@ -16,6 +16,7 @@ import _ from 'lodash';
 import { fetchData } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
+    commonStyles,
     Entity,
     fillInEntities,
     LoadDataResult,
@@ -119,7 +120,7 @@ const PublicationPage = (props: { data: Publication }) => {
             <PreReleaseBanner />
             <PageWrapper>
                 {isLoading && (
-                    <div className={styles.loadingIndicator}>
+                    <div className={commonStyles.loadingIndicator}>
                         <ScaleLoader />
                     </div>
                 )}

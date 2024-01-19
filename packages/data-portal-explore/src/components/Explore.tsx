@@ -21,6 +21,7 @@ import {
 import {
     Atlas,
     AtlasMetaData,
+    commonStyles,
     Entity,
     fetchDefaultSynData,
     fillInEntities,
@@ -44,7 +45,6 @@ import { FileFilterControls } from './FileFilterControls';
 import { getDefaultSummaryData } from '../lib/helpers';
 import { ExploreTab } from '../lib/types';
 
-import commonStyles from './common.module.scss';
 import styles from './explore.module.scss';
 
 export interface IExploreState {

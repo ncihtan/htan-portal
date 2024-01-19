@@ -17,7 +17,6 @@ import SimpleScrollPane from './SimpleScrollPane';
 import { makeListColumn } from '../lib/fileTableHelpers';
 import LevelSelect from './LevelSelect';
 
-import commonStyles from './common.module.scss';
 import styles from './fileTable.module.scss';
 
 import {
@@ -31,7 +30,11 @@ import {
     interleave,
     truncateFilename,
 } from '@htan/data-portal-utils';
-import { Entity, FileAttributeMap } from '@htan/data-portal-commons';
+import {
+    commonStyles,
+    Entity,
+    FileAttributeMap,
+} from '@htan/data-portal-commons';
 import {
     getDefaultDataTableStyle,
     selectorToColumnName,
