@@ -596,6 +596,10 @@ function extractEntitiesFromSynapseData(
                     attributeToId['HTAN Parent Biospecimen ID'] =
                         'bts:HTANParentBiospecimenID';
                 }
+                // this is a workaround for missing AssayType for certain schema ids
+                if (synapseRecords.column_order.includes('Assay Type')) {
+                    attributeToId['Assay Type'] = 'bts:AssayType';
+                }
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<BaseSerializableEntity> = {};
@@ -629,7 +633,8 @@ function extractEntitiesFromSynapseData(
                     if (entity.Component) {
                         const parsedAssay = parseRawAssayType(
                             entity.Component,
-                            entity.ImagingAssayType
+                            entity.ImagingAssayType,
+                            entity.AssayType
                         );
                         //file.Component = parsed.name;
                         if (parsedAssay.level && parsedAssay.level.length > 1) {
@@ -672,7 +677,11 @@ function extractEntitiesFromSynapseData(
     return entities;
 }
 
-function parseRawAssayType(componentName: string, imagingAssayType?: string) {
+function parseRawAssayType(
+    componentName: string,
+    imagingAssayType?: string,
+    assayType?: string
+) {
     // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
     // We want to take that and spit out { name: "Camel Case-Name", level: "Level X" }
     //  (with the exception that the prefixes Sc and Sn are always treated as lower case)
@@ -685,6 +694,11 @@ function parseRawAssayType(componentName: string, imagingAssayType?: string) {
     if (imagingAssayType) {
         // do not parse imaging assay type, use as is
         return { name: imagingAssayType, level };
+    }
+
+    if (assayType) {
+        // do not parse assay type, use as is
+        return { name: assayType, level };
     }
 
     if (extractedName) {
