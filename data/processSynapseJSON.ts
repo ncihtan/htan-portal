@@ -33,10 +33,17 @@ import {
 // import idcAssets from '../packages/data-portal-explore/src/assets/idc-imaging-assets.json';
 // const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');
 
+interface ImagingMetadata {
+    HTAN_Data_File_ID: string;
+    Imaging_Assay_Type: string;
+}
+
 async function writeProcessedFile() {
     const synapseJson = getData();
     const schemaData = await fetchAndProcessSchemaData();
     const entitiesById = await getEntitiesById();
+    const imagingLevel1ById = await getImagingLevel1ById();
+    const imagingLevel2ById = await getImagingLevel2ById();
 
     const activeAtlases = atlasJson; //atlasJson.filter((a) => a.htan_id === 'hta7');
 
@@ -45,7 +52,9 @@ async function writeProcessedFile() {
         synapseJson,
         schemaData,
         activeAtlases as AtlasMeta[],
-        entitiesById
+        entitiesById,
+        imagingLevel1ById,
+        imagingLevel2ById
     );
     fs.writeFileSync(
         'public/processed_syn_data.json',
@@ -56,6 +65,20 @@ async function writeProcessedFile() {
 async function getEntitiesById() {
     const rows = await csvToJson().fromFile('data/entities_v4.csv');
     return _.keyBy(rows, (row) => row.entityId);
+}
+
+async function getImagingLevel1ById() {
+    const rows = await csvToJson().fromFile(
+        'data/imaging_assay_type_level1.csv'
+    );
+    return _.keyBy(rows, (row) => row.HTAN_Data_File_ID);
+}
+
+async function getImagingLevel2ById() {
+    const rows = await csvToJson().fromFile(
+        'data/imaging_assay_type_level2.csv'
+    );
+    return _.keyBy(rows, (row) => row.HTAN_Data_File_ID);
 }
 
 function addReleaseInfo(
@@ -147,13 +170,17 @@ function processSynapseJSON(
     synapseJson: SynapseData,
     schemaData: SchemaDataById,
     AtlasMetaData: AtlasMeta[],
-    entitiesById: { [entityId: string]: ReleaseEntity }
+    entitiesById: { [entityId: string]: ReleaseEntity },
+    imagingLevel1ById: { [fileId: string]: ImagingMetadata },
+    imagingLevel2ById: { [fileId: string]: ImagingMetadata }
 ) {
     const AtlasMetaMap = _.keyBy(AtlasMetaData, (a) => a.htan_id.toUpperCase());
     let flatData = extractEntitiesFromSynapseData(
         synapseJson,
         schemaData,
-        AtlasMetaMap
+        AtlasMetaMap,
+        imagingLevel1ById,
+        imagingLevel2ById
     );
 
     flatData.forEach((d) => {
@@ -565,7 +592,9 @@ function getCaseData(
 function extractEntitiesFromSynapseData(
     data: SynapseData,
     schemaDataById: SchemaDataById,
-    AtlasMetaMap: { [uppercase_htan_id: string]: AtlasMeta }
+    AtlasMetaMap: { [uppercase_htan_id: string]: AtlasMeta },
+    imagingLevel1ById: { [fileId: string]: ImagingMetadata },
+    imagingLevel2ById: { [fileId: string]: ImagingMetadata }
 ): BaseSerializableEntity[] {
     const entities: BaseSerializableEntity[] = [];
 
@@ -634,7 +663,15 @@ function extractEntitiesFromSynapseData(
                         const parsedAssay = parseRawAssayType(
                             entity.Component,
                             entity.ImagingAssayType,
-                            entity.AssayType
+                            entity.AssayType,
+                            extractParentImagingAssayTypes(
+                                entity.ParentDataFileID ||
+                                    (entity as any)[
+                                        HTANAttributeNames.HTANParentDataFileID
+                                    ],
+                                imagingLevel1ById,
+                                imagingLevel2ById
+                            )
                         );
                         //file.Component = parsed.name;
                         if (parsedAssay.level && parsedAssay.level.length > 1) {
@@ -677,10 +714,34 @@ function extractEntitiesFromSynapseData(
     return entities;
 }
 
+function extractParentImagingAssayTypes(
+    parentDataFileId?: string,
+    imagingLevel1ById?: { [fileId: string]: ImagingMetadata },
+    imagingLevel2ById?: { [fileId: string]: ImagingMetadata }
+) {
+    if (!parentDataFileId) {
+        return undefined;
+    }
+
+    const parentIds = parentDataFileId.split(/[,;]/).map((s) => s.trim());
+    const level1ParentAssayTypes = parentIds.map(
+        (id) => imagingLevel1ById?.[id]?.Imaging_Assay_Type
+    );
+    const level2ParentAssayTypes = parentIds.map(
+        (id) => imagingLevel2ById?.[id]?.Imaging_Assay_Type
+    );
+
+    return _([...level2ParentAssayTypes, ...level1ParentAssayTypes])
+        .uniq()
+        .compact()
+        .value();
+}
+
 function parseRawAssayType(
     componentName: string,
     imagingAssayType?: string,
-    assayType?: string
+    assayType?: string,
+    parentAssayTypes?: string[]
 ) {
     // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
     // We want to take that and spit out { name: "Camel Case-Name", level: "Level X" }
@@ -699,6 +760,11 @@ function parseRawAssayType(
     if (assayType) {
         // do not parse assay type, use as is
         return { name: assayType, level };
+    }
+
+    if (parentAssayTypes?.length) {
+        // TODO console.log warning if parentAssayTypes.length > 1
+        return { name: parentAssayTypes[0], level };
     }
 
     if (extractedName) {
