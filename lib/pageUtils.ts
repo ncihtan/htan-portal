@@ -1,6 +1,6 @@
 import matter from 'gray-matter';
 import fs from 'fs';
-const path = require('path');
+import path from 'path';
 
 const docsDirectory = path.join(process.cwd(), 'pages/static');
 

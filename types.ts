@@ -1,7 +1,7 @@
-import { DataSchemaData } from './lib/dataSchemaHelpers';
-import { Atlas } from './lib/helpers';
-import { GenericAttributeNames } from './lib/types';
-import { SelectedFilter } from './packages/data-portal-filter/src/libs/types';
+import { SelectedFilter } from '@htan/data-portal-filter';
+import { GenericAttributeNames } from '@htan/data-portal-utils';
+import { Atlas } from '@htan/data-portal-commons';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 export interface CmsData {
     slug: string;
@@ -30,13 +30,6 @@ export interface Attribute {
 
 export interface Category {
     [subcat: string]: SubCategory;
-}
-
-export interface AtlasMeta {
-    title: { rendered: string };
-    lead_institutions: string;
-    htan_id: string;
-    short_description?: string;
 }
 
 export interface Author {

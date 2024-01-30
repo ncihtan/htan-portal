@@ -1,0 +1,13 @@
+.fileTableViewDetailsModal {
+    max-width: 850px;
+
+    table {
+        td:first-child {
+            font-weight: bold;
+            background: rgb(240, 240, 240);
+        }
+        td:nth-child(2) {
+            word-break: break-word;
+        }
+    }
+}

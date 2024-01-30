@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
-import { getDataSchema, SchemaDataId } from '../../lib/dataSchemaHelpers';
 import React from 'react';
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
+import { getDataSchema, SchemaDataId } from '@htan/data-portal-schema';
 
 const SpatialTranscriptomics: React.FunctionComponent<DataStandardProps> = (
     props

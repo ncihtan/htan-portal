@@ -6,8 +6,6 @@ import PageWrapper from '../../components/PageWrapper';
 import {
     getAllPublicationIds,
     getPublicationData,
-    ImagingAssayName,
-    SequencingAssayName,
 } from '../../lib/publications';
 import { useRouter } from 'next/router';
 import PublicationTabs from '../../components/PublicationTabs';
@@ -15,23 +13,22 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
-import {
-    Entity,
-    fetchData,
-    fillInEntities,
-    LoadDataResult,
-} from '../../lib/helpers';
+import { fetchData } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
+    commonStyles,
+    Entity,
+    fillInEntities,
+    LoadDataResult,
     filterFiles,
     getFilteredCases,
     groupFilesByAttrNameAndValue,
-} from '../../lib/filterHelpers';
+} from '@htan/data-portal-commons';
 
 import {
     ISelectedFiltersByAttrName,
     SelectedFilter,
-} from '../../packages/data-portal-filter/src/libs/types';
+} from '@htan/data-portal-filter';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)
@@ -123,7 +120,7 @@ const PublicationPage = (props: { data: Publication }) => {
             <PreReleaseBanner />
             <PageWrapper>
                 {isLoading && (
-                    <div className={styles.loadingIndicator}>
+                    <div className={commonStyles.loadingIndicator}>
                         <ScaleLoader />
                     </div>
                 )}

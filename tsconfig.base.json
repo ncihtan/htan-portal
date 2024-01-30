@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@htan/data-portal-commons": [
+        "packages/data-portal-commons/src/index.ts"
+      ],
+      "@htan/data-portal-explore": [
+        "packages/data-portal-explore/src/index.ts"
+      ],
+      "@htan/data-portal-filter": [
+        "packages/data-portal-filter/src/index.ts"
+      ],
+      "@htan/data-portal-schema": [
+        "packages/data-portal-schema/src/index.ts"
+      ],
+      "@htan/data-portal-table": [
+        "packages/data-portal-table/src/index.ts"
+      ],
+      "@htan/data-portal-utils": [
+        "packages/data-portal-utils/src/index.ts"
+      ]
+    }
+  }
+}

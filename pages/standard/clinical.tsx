@@ -2,8 +2,7 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
-
-import { getDataSchema, SchemaDataId } from '../../lib/dataSchemaHelpers';
+import { getDataSchema, SchemaDataId } from '@htan/data-portal-schema';
 
 const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
     return (

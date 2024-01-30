@@ -13,11 +13,11 @@ import {
     resolveColumnVisibility,
     getColumnVisibilityMap,
     getColumnKey,
-} from '../libs/helpers';
+} from '../lib/helpers';
 import { ColumnVisibility } from './ColumnSelect';
 import DataTableControls from './DataTableControls';
 
-import DebouncedObservable from '../../../data-portal-utils/src/libs/DebouncedObservable';
+import { DebouncedObservable } from '@htan/data-portal-utils';
 
 export interface IEnhancedDataTableColumn<T> extends IDataTableColumn<T> {
     toggleable?: boolean; // defaults to true if not specified (see isColumnToggleable)
@@ -141,7 +141,7 @@ class _DataTable extends React.Component<IDataTableProps> {
 }
 
 @observer
-export default class EnhancedDataTable<T = any> extends React.Component<
+export class EnhancedDataTable<T = any> extends React.Component<
     IEnhancedDataTableProps<T>
 > {
     @observable filterText = DebouncedObservable('', 300);
@@ -324,3 +324,5 @@ export default class EnhancedDataTable<T = any> extends React.Component<
         );
     }
 }
+
+export default EnhancedDataTable;

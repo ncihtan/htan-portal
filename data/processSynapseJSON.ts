@@ -1,34 +1,36 @@
-import {
-    DownloadSourceCategory,
-    HTANAttributeNames,
-    HTANToGenericAttributeMap,
-    SynapseAtlas,
-    SynapseData,
-} from '../lib/types';
-import { AtlasMeta } from '../types';
 import _ from 'lodash';
 
+import getData from '../lib/getData';
+import fs from 'fs';
+import csvToJson from 'csvtojson';
+import atlasJson from './atlases.json';
 import {
     Atlas,
+    AtlasMeta,
     BaseSerializableEntity,
-    Entity,
     DataFileID,
-    isLowestLevel,
-    LoadDataResult,
+    DownloadSourceCategory,
+    Entity,
     ReleaseEntity,
     SerializableEntity,
-} from '../lib/helpers';
-import getData from '../lib/getData';
+} from '../packages/data-portal-commons/src/lib/entity';
+import {
+    HTANAttributeNames,
+    HTANToGenericAttributeMap,
+    LoadDataResult,
+} from '../packages/data-portal-commons/src/lib/types';
+import {
+    SynapseAtlas,
+    SynapseData,
+} from '../packages/data-portal-commons/src/lib/synapse';
+import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
 import {
     fetchAndProcessSchemaData,
     getAttributeToSchemaIdMap,
     SchemaDataById,
-} from '../lib/dataSchemaHelpers';
-import fs from 'fs';
-import csvToJson from 'csvtojson';
-import atlasJson from './atlases.json';
+} from '../packages/data-portal-schema/src/lib/dataSchemaHelpers';
 
-// import idcAssets from './idc-imaging-assets.json';
+// import idcAssets from '../packages/data-portal-explore/src/assets/idc-imaging-assets.json';
 // const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');
 
 async function writeProcessedFile() {

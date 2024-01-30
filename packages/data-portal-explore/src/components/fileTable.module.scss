@@ -1,0 +1,14 @@
+.dsaFullImage {
+    /* TODO: this is max 200px because rc-tooltip is max 250px. Might be nicer to
+   * show bigger image */
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding: 3px;
+}
+
+.dsaContainer {
+    /*border: 1px solid #999;*/
+    width: 150px;
+}

@@ -1,0 +1,19 @@
+.summary {
+    display: flex;
+    z-index: -1;
+    justify-content: flex-end;
+    margin-bottom: -17px;
+    position: relative;
+    font-size: 13px;
+    top: 12px;
+
+    > div {
+        padding: 0 10px;
+        border-right: 1px dashed #eee;
+
+        &:first-child {
+            padding-left: 0;
+            border-right: none;
+        }
+    }
+}

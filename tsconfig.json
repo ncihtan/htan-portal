@@ -1,7 +1,12 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
     "allowJs": true,
@@ -14,8 +19,22 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
-  "exclude": ["node_modules","public/processed_syn_data.json","public/processed_syn_data.json.gz","data/metadata_v4.csv","data/entities_v4.csv","public/syn_data.json","lib/getData.ts","data/processSynapseJSON.ts"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "exclude": [
+    "node_modules",
+    "public/processed_syn_data.json",
+    "public/processed_syn_data.json.gz",
+    "data/metadata_v4.csv",
+    "data/entities_v4.csv",
+    "public/syn_data.json",
+    "lib/getData.ts",
+    "data/processSynapseJSON.ts"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

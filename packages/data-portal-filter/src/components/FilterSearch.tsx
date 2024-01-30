@@ -2,14 +2,16 @@ import Select from 'react-select';
 import _ from 'lodash';
 import React from 'react';
 import { action } from 'mobx';
-import { FilterActionMeta, OptionType, SelectedFilter } from '../libs/types';
+import { FilterActionMeta, OptionType, SelectedFilter } from '../lib/types';
 
 interface IFilterSearchProps {
     setFilter: (actionMeta: any) => void;
     selectOptions: { label: string; options: OptionType[] }[];
 }
 
-const FilterSearch: React.FunctionComponent<IFilterSearchProps> = (props) => {
+export const FilterSearch: React.FunctionComponent<IFilterSearchProps> = (
+    props
+) => {
     const handleChange = action(
         (value: any, actionMeta: FilterActionMeta<SelectedFilter>) => {
             props.setFilter(actionMeta);

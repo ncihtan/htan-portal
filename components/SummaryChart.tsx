@@ -7,7 +7,7 @@ import { Popover, PopoverContent } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import * as ReactDOM from 'react-dom';
 import { VictoryBar, VictoryBarTTargetType } from 'victory-bar';
-import { VictoryChart, VictoryChartProps } from 'victory-chart';
+import { VictoryChart } from 'victory-chart';
 import { VictoryAxis } from 'victory-axis';
 import {
     D3Scale,
@@ -17,17 +17,20 @@ import {
 } from 'victory-core';
 import { VictoryStack } from 'victory-stack';
 
-import { urlEncodeSelectedFilters } from '../lib/helpers';
 import {
+    SelectedFilter,
+    urlEncodeSelectedFilters,
+} from '@htan/data-portal-filter';
+import { AttributeNames } from '@htan/data-portal-utils';
+import {
+    dataWithoutUnknownValues,
     DistributionByAttribute,
-    EntityReportByCenter,
     EntityReportByAttribute,
     entityReportByAttributeToByCenter,
-    dataWithoutUnknownValues,
-} from '../lib/entityReportHelpers';
-import { getDefaultDataTableStyle } from '../lib/dataTableHelpers';
-import { FileAttributeMap, AttributeNames } from '../lib/types';
-import { SelectedFilter } from '../packages/data-portal-filter/src/libs/types';
+    EntityReportByCenter,
+    FileAttributeMap,
+} from '@htan/data-portal-commons';
+import { getDefaultDataTableStyle } from '@htan/data-portal-table';
 
 export interface SummaryChartProps {
     data: EntityReportByAttribute[];

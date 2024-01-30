@@ -5,6 +5,8 @@ import Tooltip from 'rc-tooltip';
 import { Portal } from 'react-portal';
 import { Spinner } from 'react-bootstrap';
 
+import { commonStyles } from '@htan/data-portal-commons';
+
 type AtlasDataTableProps = {
     subcategoryData: SubCategory;
 };
@@ -55,7 +57,7 @@ function renderTableCellValue(
                 </a>
             );
         case 'dsaThumbnail':
-            return <img className={'dsa-thumb'} src={val} />;
+            return <img className={commonStyles.dsaThumb} src={val} />;
 
         default:
             return <span>{val}</span>;
