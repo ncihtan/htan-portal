@@ -553,7 +553,8 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 please contact the corresponding author(s) and
                                 the{' '}
                                 <a
-                                    href="mailto:htan@googlegroups.com"
+                                    href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1"
+                                    target="_blank"
                                     className="alert-link"
                                 >
                                     HTAN DCC
