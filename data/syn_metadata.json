@@ -1273,6 +1273,81 @@
             "component": "ScRNA-seqLevel4",
             "synapseId": "syn51425823",
             "numItems": 10
+        },
+        {
+            "component": "ScATAC-seqLevel1",
+            "synapseId": "syn51789623",
+            "numItems": 647
+        },
+        {
+            "component": "ScATAC-seqLevel3",
+            "synapseId": "syn51791727",
+            "numItems": 42
+        },
+        {
+            "component": "ScRNA-seqLevel1",
+            "synapseId": "syn52346908",
+            "numItems": 858
+        },
+        {
+            "component": "ScRNA-seqLevel2",
+            "synapseId": "syn52346918",
+            "numItems": 91
+        },
+        {
+            "component": "ScRNA-seqLevel3",
+            "synapseId": "syn52346923",
+            "numItems": 273
+        },
+        {
+            "component": "ScRNA-seqLevel4",
+            "synapseId": "syn52346928",
+            "numItems": 191
+        },
+        {
+            "component": "ScATAC-seqLevel2",
+            "synapseId": "syn52368570",
+            "numItems": 84
+        },
+        {
+            "component": "Biospecimen",
+            "synapseId": "syn53277789",
+            "numItems": 91
+        },
+        {
+            "component": "Demographics",
+            "synapseId": "syn53284493",
+            "numItems": 23
+        },
+        {
+            "component": "NeuroblastomaandGliomaTier3",
+            "synapseId": "syn53284698",
+            "numItems": 47
+        },
+        {
+            "component": "ScATAC-seqLevel4",
+            "synapseId": "syn53398038",
+            "numItems": 3
+        },
+        {
+            "component": "BulkDNALevel1",
+            "synapseId": "syn53462044",
+            "numItems": 312
+        },
+        {
+            "component": "BulkDNALevel2",
+            "synapseId": "syn53462156",
+            "numItems": 98
+        },
+        {
+            "component": "BulkDNALevel3",
+            "synapseId": "syn53462167",
+            "numItems": 15
+        },
+        {
+            "component": "Diagnosis",
+            "synapseId": "syn53486559",
+            "numItems": 23
         }
     ],
     "HTA8": [
@@ -1502,11 +1577,6 @@
         }
     ],
     "HTA10": [
-        {
-            "component": "BulkDNALevel1",
-            "synapseId": "syn39281852",
-            "numItems": 53
-        },
         {
             "component": "BulkRNA-seqLevel1",
             "synapseId": "syn39282161",
