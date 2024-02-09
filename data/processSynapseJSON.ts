@@ -344,7 +344,7 @@ function processSynapseJSON(
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
     const caseCountByAtlas = _.mapValues(filesByAtlas, (files) => {
         return _.chain(files)
-            .flatMapDeep((f) => f.diagnosisIds)
+            .flatMapDeep((f) => [...f.diagnosisIds, ...f.demographicsIds])
             .uniq()
             .value().length;
     });
