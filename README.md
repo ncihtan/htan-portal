@@ -88,7 +88,7 @@ You can start editing any page. The page auto-updates as you edit the file.
 Add `debugger;` somewhere in the code. Then run:
 
 ```bash
-./node_modules/.bin/ncc build --source-map --no-source-map-register data/processSynapseJSON.ts
+node --openssl-legacy-provider ./node_modules/.bin/ncc build --source-map --no-source-map-register  data/processSynapseJSON.ts
 ```
 
 Followed by:
