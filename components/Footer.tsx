@@ -5,7 +5,12 @@ const Footer = () => (
     <footer className={'pageFooter'}>
         Human Tumor Atlas Network (HTAN) | National Cancer Institute{' '}
         {new Date().getFullYear()} |{' '}
-        <a href="mailto:htan@googlegroups.com">htan@googlegroups.com</a>
+        <a
+            href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1"
+            target="_blank"
+        >
+            HTAN Help Desk
+        </a>
     </footer>
 );
 
