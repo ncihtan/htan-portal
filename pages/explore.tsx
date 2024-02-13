@@ -15,7 +15,6 @@ import {
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
 import getAtlasMetaData from '../lib/getAtlasMetaData';
-import { PublicationPageLink, PUBLICATIONS } from '../lib/publications';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import PageWrapper from '../components/PageWrapper';
 
@@ -44,8 +43,6 @@ const ExplorePage = (props: IExplorePageProps) => {
             <PageWrapper>
                 <Explore
                     getAtlasMetaData={getAtlasMetaData}
-                    publications={PUBLICATIONS}
-                    publicationPageLink={PublicationPageLink}
                     onFilterChange={onFilterChange}
                     getSelectedFilters={getSelectedFilters}
                     isReleaseQCEnabled={isReleaseQCEnabled}

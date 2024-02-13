@@ -32,6 +32,7 @@ import {
     groupFilesByAttrNameAndValue,
     HTANToGenericAttributeMap,
     LoadDataResult,
+    PublicationManifest,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
 import {
@@ -52,13 +53,12 @@ export interface IExploreState {
     filters: { [key: string]: string[] };
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     atlases: Atlas[];
+    publications: PublicationManifest[];
     atlasData?: any;
 }
 
 export interface IExploreProps {
     getAtlasMetaData: () => AtlasMetaData;
-    publications: { [id: string]: { cite: string } };
-    publicationPageLink: { [id: string]: { id: string; show: boolean } };
     onFilterChange?: (selectedFilters: SelectedFilter[]) => void;
     getSelectedFilters?: () => SelectedFilter[];
     isReleaseQCEnabled?: () => boolean;
@@ -84,6 +84,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             files: [],
             filters: {},
             atlases: [],
+            publications: [],
             schemaDataById: {},
         };
 
@@ -161,6 +162,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 this.setState({
                     files: fillInEntities(data),
                     atlases: data.atlases,
+                    publications: _.values(data.publicationManifestByPubMedID),
                 });
             });
 
@@ -367,8 +369,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={this.props.getAtlasMetaData}
-                        publications={this.props.publications}
-                        publicationPageLink={this.props.publicationPageLink}
+                        publications={this.state.publications}
                         genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
                     />
                 </div>

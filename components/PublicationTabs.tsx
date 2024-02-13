@@ -10,7 +10,12 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { groupEntitiesByAttrNameAndValue } from '@htan/data-portal-filter';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
-import { Atlas, Entity, FileAttributeMap } from '@htan/data-portal-commons';
+import {
+    Atlas,
+    Entity,
+    FileAttributeMap,
+    GeneralLink,
+} from '@htan/data-portal-commons';
 import { DataSchemaData } from '@htan/data-portal-schema';
 import {
     BiospecimenTable,
@@ -21,9 +26,10 @@ import {
 interface IPublicationTabsProps {
     router: NextRouter;
     abstract: string;
-    synapseAtlas: Atlas;
+    synapseAtlas?: Atlas;
     biospecimens: Entity[];
     cases: Entity[];
+    supportingLinks: GeneralLink[];
     assays: { [assayName: string]: Entity[] };
     schemaDataById: {
         [schemaDataId: string]: DataSchemaData;
@@ -42,7 +48,7 @@ export enum PublicationTab {
 }
 
 const toolsContent: { [id: string]: JSX.Element[] } = {
-    duke_brca_risom_2021: [
+    '35063072': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -63,7 +69,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    hms_ckcm_nirmal_2022: [
+    '35404441': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -84,7 +90,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    ohsu_brca_johnson_2022: [
+    '35243422': [
         <>
             <h3>{`Explore Case HTA9_1 in cBioPortal`}</h3>
             The <a href="https://www.cbioportal.org/">cBioPortal</a> for Cancer
@@ -131,7 +137,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    msk_sclc_chan_2021: [
+    '34653364': [
         <>
             <h3>{`Explore Cellxgene`}</h3>
             <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
@@ -154,7 +160,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    vanderbilt_crc_chen_2021: [
+    '34910928': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -199,7 +205,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </h3>
         </>,
     ],
-    chop_all_chen_2022: [
+    '34864916': [
         <>
             <h3>{`Explore Cellxgene`}</h3>
             <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
@@ -239,20 +245,21 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
     ],
 };
 
-const supportingLinks: { [id: string]: JSX.Element[] } = {
-    vanderbilt_crc_chen_2021: [
+const SupportingLinks: React.FunctionComponent<{
+    supportingLinks: GeneralLink[];
+}> = (props) => {
+    return (
         <ul>
-            <li>
-                <a
-                    href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE196256"
-                    target="_blank"
-                >
-                    Mouse Mist1 and Lrig1 apc tumors (GEO: GSE196256)&nbsp;
-                    <FontAwesomeIcon icon={faExternalLinkAlt} />
-                </a>
-            </li>
-        </ul>,
-    ],
+            {props.supportingLinks.map((supportingLink) => (
+                <li>
+                    <a href={supportingLink.link} target="_blank">
+                        {supportingLink.name}&nbsp;
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    </a>
+                </li>
+            ))}
+        </ul>
+    );
 };
 
 const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer(
@@ -389,7 +396,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 </a>
                             </li>
                         )}
-                        {pubId && pubId in supportingLinks && (
+                        {props.supportingLinks.length > 0 && (
                             <li className="nav-item">
                                 <a
                                     onClick={() =>
@@ -461,7 +468,11 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             Show all cases from filtered files
                         </label>*/}
                             <CaseTable
-                                synapseAtlases={[props.synapseAtlas]}
+                                synapseAtlases={
+                                    props.synapseAtlas
+                                        ? [props.synapseAtlas]
+                                        : []
+                                }
                                 cases={props.cases}
                                 schemaDataById={props.schemaDataById}
                                 excludedColumns={[
@@ -490,7 +501,11 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             Show all biospecimens from filtered files
                         </label>*/}
                             <BiospecimenTable
-                                synapseAtlases={[props.synapseAtlas]}
+                                synapseAtlases={
+                                    props.synapseAtlas
+                                        ? [props.synapseAtlas]
+                                        : []
+                                }
                                 samples={props.biospecimens}
                                 schemaDataById={props.schemaDataById}
                                 genericAttributeMap={props.genericAttributeMap}
@@ -561,14 +576,10 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 </a>
                                 .
                             </div>
-                            {props.router.query.id &&
-                            props.router.query.id.toString() in
-                                supportingLinks ? (
-                                supportingLinks[
-                                    props.router.query.id.toString()
-                                ]
-                            ) : (
-                                <div />
+                            {props.supportingLinks.length > 0 && (
+                                <SupportingLinks
+                                    supportingLinks={props.supportingLinks}
+                                />
                             )}
                         </div>
                     )}

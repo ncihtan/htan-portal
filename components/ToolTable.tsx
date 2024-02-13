@@ -5,7 +5,6 @@ import { Tool, Tools } from '../lib/tools';
 import React from 'react';
 import { action, makeObservable, observable } from 'mobx';
 import _ from 'lodash';
-import { GeneralLink } from '../types';
 import { ToolDetails } from './tool/toolDetails';
 
 import {
@@ -15,7 +14,7 @@ import {
 } from '@htan/data-portal-table';
 import { getDelimitedValues } from '@htan/data-portal-utils';
 import { truncatedTableCell } from '@htan/data-portal-explore';
-import { ViewDetailsModal } from '@htan/data-portal-commons';
+import { GeneralLink, ViewDetailsModal } from '@htan/data-portal-commons';
 
 interface IToolTableProps {
     tools: Tools;

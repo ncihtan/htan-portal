@@ -10,6 +10,7 @@ import {
     AtlasMetaData,
     Entity,
     getNormalizedOrgan,
+    PublicationManifest,
 } from '@htan/data-portal-commons';
 import { DataSchemaData } from '@htan/data-portal-schema';
 
@@ -52,8 +53,7 @@ interface IExploreTabsProps {
 
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
     getAtlasMetaData: () => AtlasMetaData;
-    publications: { [id: string]: { cite: string } };
-    publicationPageLink: { [id: string]: { id: string; show: boolean } };
+    publications: PublicationManifest[];
 }
 
 const metricTypes = [
@@ -272,7 +272,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     >
                         <AtlasTable
                             setTab={setTab}
-                            publicationPageLink={props.publicationPageLink}
                             publications={props.publications}
                             getAtlasMetaData={props.getAtlasMetaData}
                             synapseAtlasData={props.allSynapseAtlases}

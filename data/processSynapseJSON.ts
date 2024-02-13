@@ -19,6 +19,7 @@ import {
     Entity,
     FileViewerName,
     IdcImagingAsset,
+    PublicationManifest,
     ReleaseEntity,
     SerializableEntity,
 } from '../packages/data-portal-commons/src/lib/entity';
@@ -32,6 +33,11 @@ import {
     SynapseData,
 } from '../packages/data-portal-commons/src/lib/synapse';
 import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
+import {
+    fetchPublicationSummaries,
+    getPublicationAssociatedParentDataFileIDs,
+    getPublicationPubMedID,
+} from '../packages/data-portal-commons/src/lib/publicationHelpers';
 import {
     fetchAndProcessSchemaData,
     getAttributeToSchemaIdMap,
@@ -73,7 +79,6 @@ async function writeProcessedFile() {
 
     const activeAtlases = atlasJson; //atlasJson.filter((a) => a.htan_id === 'hta7');
 
-    /* @ts-ignore */
     const processed: LoadDataResult = processSynapseJSON(
         synapseJson,
         schemaData,
@@ -82,6 +87,12 @@ async function writeProcessedFile() {
         imagingLevel1ById,
         imagingLevel2ById
     );
+
+    // we need to fetch publication summaries after we process the json, because we need to know pubmed ids to query the external API
+    processed.publicationSummaryByPubMedID = await fetchPublicationSummaries(
+        _.keys(processed.publicationManifestByPubMedID)
+    );
+
     fs.writeFileSync(
         'public/processed_syn_data.json',
         JSON.stringify(processed)
@@ -267,7 +278,7 @@ function processSynapseJSON(
     entitiesById: { [entityId: string]: ReleaseEntity },
     imagingLevel1ById: { [fileId: string]: ImagingMetadata },
     imagingLevel2ById: { [fileId: string]: ImagingMetadata }
-) {
+): LoadDataResult {
     const AtlasMetaMap = _.keyBy(AtlasMetaData, (a) => a.htan_id.toUpperCase());
     let flatData = extractEntitiesFromSynapseData(
         synapseJson,
@@ -302,6 +313,28 @@ function processSynapseJSON(
             entity.ParentDataFileID =
                 accessory.AccessoryAssociatedParentDataFileID;
         });
+
+    const publications: PublicationManifest[] = (flatData.filter(
+        (obj) => obj.Component === 'PublicationManifest'
+    ) as unknown) as PublicationManifest[];
+
+    const publicationParentDataFileIdsByPubMedId = _(publications)
+        .keyBy(getPublicationPubMedID)
+        .mapValues((p) => new Set(getPublicationAssociatedParentDataFileIDs(p)))
+        .value();
+
+    // add publication id
+    flatData.forEach((f) => {
+        _.forEach(
+            publicationParentDataFileIdsByPubMedId,
+            (parentDataFileIDs, pubMedId) => {
+                if (parentDataFileIDs.has(f.DataFileID)) {
+                    f.publicationIds = f.publicationIds || [];
+                    f.publicationIds.push(pubMedId);
+                }
+            }
+        );
+    });
 
     //flatData = flatData.filter((f) => f.atlasid === 'HTA7');
 
@@ -394,7 +427,6 @@ function processSynapseJSON(
     const files = flatData.filter((obj) => {
         return !!obj.Filename;
     });
-
     const filesById = _.keyBy(files, (f) => f.DataFileID);
 
     addPrimaryParents(files, filesById);
@@ -484,10 +516,13 @@ function processSynapseJSON(
         }
     });
 
-    // filter out files without a diagnosis
-    const ret = {
+    return {
         files: returnFiles,
         atlases: returnAtlases,
+        publicationManifestByPubMedID: _.keyBy(
+            publications,
+            getPublicationPubMedID
+        ),
         biospecimenByBiospecimenID: biospecimenByBiospecimenID as {
             [BiospecimenID: string]: SerializableEntity;
         },
@@ -498,12 +533,6 @@ function processSynapseJSON(
             [ParticipantID: string]: SerializableEntity;
         },
     };
-
-    // TODO clean up
-    console.log(ret.files.length);
-    console.log(_.size(ret.demographicsByParticipantID));
-
-    return ret;
 }
 
 function addPrimaryParents(

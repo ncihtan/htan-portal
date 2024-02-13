@@ -3,7 +3,13 @@ import {
     GenericAttributeNames,
     IAttributeInfo,
 } from '@htan/data-portal-utils';
-import { Atlas, Entity, SerializableEntity } from './entity';
+import {
+    Atlas,
+    Entity,
+    PublicationManifest,
+    PublicationSummary,
+    SerializableEntity,
+} from './entity';
 import { getCaseValues, getNormalizedOrganCaseValues } from './getCaseValues';
 import { getViewerValues } from './getViewerValues';
 
@@ -15,7 +21,10 @@ export enum HTANAttributeNames {
     HTANParentBiospecimenID = 'HTANParentBiospecimenID',
     HTANParentDataFileID = 'HTANParentDataFileID',
     AccessoryAssociatedHTANParentDataFileID = 'Accessory-associatedHTANParentDataFileID',
+    PublicationAssociatedHTANParentDataFileID = 'Publication-associatedHTANParentDataFileID',
+    HTANGrantID = 'HTANGrantID',
     HTANCenterID = 'HTANCenterID',
+    PublicationContainsHTANID = 'PublicationcontainsHTANID',
 }
 
 export const HTANToGenericAttributeMap: {
@@ -31,7 +40,12 @@ export const HTANToGenericAttributeMap: {
         GenericAttributeNames.ParentDataFileID,
     [HTANAttributeNames.AccessoryAssociatedHTANParentDataFileID]:
         GenericAttributeNames.AccessoryAssociatedParentDataFileID,
+    [HTANAttributeNames.PublicationAssociatedHTANParentDataFileID]:
+        GenericAttributeNames.PublicationAssociatedParentDataFileID,
+    [HTANAttributeNames.HTANGrantID]: GenericAttributeNames.GrantID,
     [HTANAttributeNames.HTANCenterID]: GenericAttributeNames.CenterID,
+    [HTANAttributeNames.PublicationContainsHTANID]:
+        GenericAttributeNames.PublicationContainsID,
 };
 
 export const FileAttributeMap: {
@@ -101,6 +115,10 @@ export const FileAttributeMap: {
         path: 'assayName',
         displayName: 'Assay',
     },
+    [AttributeNames.publicationIds]: {
+        path: 'publicationIds',
+        displayName: 'Publication',
+    },
     [AttributeNames.downloadSource]: {
         path: 'downloadSource',
         displayName: 'Data Access',
@@ -118,6 +136,12 @@ export const FileAttributeMap: {
 export interface LoadDataResult {
     files: SerializableEntity[];
     atlases: Atlas[];
+    publicationManifestByPubMedID: {
+        [pubMedID: string]: PublicationManifest;
+    };
+    publicationSummaryByPubMedID?: {
+        [pubMedID: string]: PublicationSummary;
+    };
     biospecimenByBiospecimenID: {
         [BiospecimenID: string]: SerializableEntity;
     };
@@ -127,4 +151,9 @@ export interface LoadDataResult {
     demographicsByParticipantID: {
         [ParticipantID: string]: SerializableEntity;
     };
+}
+
+export interface GeneralLink {
+    name: string;
+    link: string;
 }
