@@ -21,7 +21,7 @@ import {
 interface IPublicationTabsProps {
     router: NextRouter;
     abstract: string;
-    synapseAtlas: Atlas;
+    synapseAtlas?: Atlas;
     biospecimens: Entity[];
     cases: Entity[];
     assays: { [assayName: string]: Entity[] };
@@ -42,7 +42,7 @@ export enum PublicationTab {
 }
 
 const toolsContent: { [id: string]: JSX.Element[] } = {
-    duke_brca_risom_2021: [
+    '35063072': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -63,7 +63,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    hms_ckcm_nirmal_2022: [
+    '35404441': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -84,7 +84,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    ohsu_brca_johnson_2022: [
+    '35243422': [
         <>
             <h3>{`Explore Case HTA9_1 in cBioPortal`}</h3>
             The <a href="https://www.cbioportal.org/">cBioPortal</a> for Cancer
@@ -131,7 +131,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    msk_sclc_chan_2021: [
+    '34653364': [
         <>
             <h3>{`Explore Cellxgene`}</h3>
             <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
@@ -154,7 +154,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    vanderbilt_crc_chen_2021: [
+    '34910928': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -199,7 +199,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </h3>
         </>,
     ],
-    chop_all_chen_2022: [
+    '34864916': [
         <>
             <h3>{`Explore Cellxgene`}</h3>
             <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
@@ -239,8 +239,9 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
     ],
 };
 
+// TODO get this info from synapse manifest if possible
 const supportingLinks: { [id: string]: JSX.Element[] } = {
-    vanderbilt_crc_chen_2021: [
+    '34910928': [
         <ul>
             <li>
                 <a
@@ -461,7 +462,11 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             Show all cases from filtered files
                         </label>*/}
                             <CaseTable
-                                synapseAtlases={[props.synapseAtlas]}
+                                synapseAtlases={
+                                    props.synapseAtlas
+                                        ? [props.synapseAtlas]
+                                        : []
+                                }
                                 cases={props.cases}
                                 schemaDataById={props.schemaDataById}
                                 excludedColumns={[
@@ -490,7 +495,11 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             Show all biospecimens from filtered files
                         </label>*/}
                             <BiospecimenTable
-                                synapseAtlases={[props.synapseAtlas]}
+                                synapseAtlases={
+                                    props.synapseAtlas
+                                        ? [props.synapseAtlas]
+                                        : []
+                                }
                                 samples={props.biospecimens}
                                 schemaDataById={props.schemaDataById}
                                 genericAttributeMap={props.genericAttributeMap}

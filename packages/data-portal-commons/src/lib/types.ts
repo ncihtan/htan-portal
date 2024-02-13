@@ -4,7 +4,13 @@ import {
     IAttributeInfo,
 } from '@htan/data-portal-utils';
 import { getCaseValues } from './getCaseValues';
-import { Atlas, Entity, SerializableEntity } from './entity';
+import {
+    Atlas,
+    Entity,
+    PublicationManifest,
+    PublicationSummary,
+    SerializableEntity,
+} from './entity';
 
 export enum HTANAttributeNames {
     HTANParentID = 'HTANParentID',
@@ -13,6 +19,10 @@ export enum HTANAttributeNames {
     HTANParticipantID = 'HTANParticipantID',
     HTANParentBiospecimenID = 'HTANParentBiospecimenID',
     HTANParentDataFileID = 'HTANParentDataFileID',
+    PublicationAssociatedHTANParentDataFileID = 'Publication-associatedHTANParentDataFileID',
+    HTANGrantID = 'HTANGrantID',
+    HTANCenterID = 'HTANCenterID',
+    PublicationContainsHTANID = 'PublicationcontainsHTANID',
 }
 
 export const HTANToGenericAttributeMap: {
@@ -26,6 +36,12 @@ export const HTANToGenericAttributeMap: {
         GenericAttributeNames.ParentBiospecimenID,
     [HTANAttributeNames.HTANParentDataFileID]:
         GenericAttributeNames.ParentDataFileID,
+    [HTANAttributeNames.PublicationAssociatedHTANParentDataFileID]:
+        GenericAttributeNames.PublicationAssociatedParentDataFileID,
+    [HTANAttributeNames.HTANGrantID]: GenericAttributeNames.GrantID,
+    [HTANAttributeNames.HTANCenterID]: GenericAttributeNames.CenterID,
+    [HTANAttributeNames.PublicationContainsHTANID]:
+        GenericAttributeNames.PublicationContainsID,
 };
 
 export const FileAttributeMap: {
@@ -90,6 +106,10 @@ export const FileAttributeMap: {
         path: 'assayName',
         displayName: 'Assay',
     },
+    [AttributeNames.publicationIds]: {
+        path: 'publicationIds',
+        displayName: 'Publication',
+    },
     [AttributeNames.downloadSource]: {
         path: 'downloadSource',
         displayName: 'Data Access',
@@ -103,6 +123,12 @@ export const FileAttributeMap: {
 export interface LoadDataResult {
     files: SerializableEntity[];
     atlases: Atlas[];
+    publicationManifestByPubMedID: {
+        [pubMedID: string]: PublicationManifest;
+    };
+    publicationSummaryByPubMedID?: {
+        [pubMedID: string]: PublicationSummary;
+    };
     biospecimenByBiospecimenID: {
         [BiospecimenID: string]: SerializableEntity;
     };

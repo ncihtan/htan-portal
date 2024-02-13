@@ -5,9 +5,11 @@ export * from './lib/fillInEntities';
 export * from './lib/filterHelpers';
 export * from './lib/getCaseValues';
 export * from './lib/isLowestLevel';
+export * from './lib/publicationHelpers';
 export * from './lib/synapse';
 export * from './lib/types';
 
+export * from './components/AtlasDescription';
 export * from './components/ExpandableText';
 export * from './components/ViewDetailsModal';
 
