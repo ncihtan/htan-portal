@@ -63,7 +63,7 @@ async function writeProcessedFile() {
 }
 
 async function getEntitiesById() {
-    const rows = await csvToJson().fromFile('data/entities_v4.csv');
+    const rows = await csvToJson().fromFile('data/entities_v5.csv');
     return _.keyBy(rows, (row) => row.entityId);
 }
 
