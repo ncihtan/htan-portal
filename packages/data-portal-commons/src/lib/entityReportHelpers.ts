@@ -117,11 +117,11 @@ export function computeEntityReportByAttribute(
 }
 
 export function getNormalizedOrgan(entity: Entity) {
-    return (
-        tissueOrOriginToOrganMap[
-            normalizeTissueOrOrganOrSite(entity.TissueorOrganofOrigin)
-        ] || entity.TissueorOrganofOrigin
-    );
+    return entity.TissueorOrganofOrigin
+        ? tissueOrOriginToOrganMap[
+              normalizeTissueOrOrganOrSite(entity.TissueorOrganofOrigin)
+          ] || entity.TissueorOrganofOrigin
+        : entity.TissueorOrganofOrigin;
 }
 
 export function getNormalizedAssay(entity: Entity) {
