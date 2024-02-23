@@ -76,7 +76,7 @@ function normalizeUnknownValues(
 ) {
     const val = accessor ? accessor(entity) || '' : '';
 
-    if (/^unknown|not reported|^NA/i.test(val.toString())) {
+    if (val === '' || /^unknown|not reported|^NA/i.test(val.toString())) {
         return 'NA';
     } else {
         return val;
