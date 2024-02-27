@@ -376,6 +376,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 
 type ImageViewerInfo = {
     minervaUrl?: string;
+    ucscXenaUrl?: string;
     hasCustomStory: boolean;
     hasImageViewer: boolean;
     thumbnailUrl?: string;
@@ -388,6 +389,9 @@ type ImageViewerInfo = {
 function getImageViewersAssociatedWithFile(
     file: Entity,
     idcMappings: { [key: string]: IdcImagingAsset } = IDC_MAPPINGS,
+    ucscxenaMappings: {
+        [key: string]: string;
+    } = UCSCXENA_MAPPINGS,
     customMinervaStoryMappings: {
         [key: string]: string;
     } = CUSTOM_MINERVA_STORY_MAPPINGS,
@@ -403,6 +407,11 @@ function getImageViewersAssociatedWithFile(
             idcMappings[file.DataFileID]['s5cmd_manifest_aws'];
         idcImageBucketGcpUrl =
             idcMappings[file.DataFileID]['s5cmd_manifest_gcp'];
+    }
+    // check if image is in UCSCXena
+    let ucscxenaUrl = undefined;
+    if (file.DataFileID in ucscxenaMappings) {
+        ucscxenaUrl = ucscxenaMappings[file.DataFileID];
     }
 
     // custom submitted minerva stories (w/o thumbnails)
@@ -666,11 +675,12 @@ export class FileTable extends React.Component<IFileTableProps> {
                     const imageViewers = getImageViewersAssociatedWithFile(
                         file,
                         this.props.idcMappings,
+                        this.props.ucscxenaMappings,
                         this.props.customMinervaStoryMappings,
                         this.props.thumbNailAndAutominervaMappings
                     );
 
-                    if (cellXGeneLink || bigQueryLink) {
+                    if (cellXGeneLink || bigQueryLink || ucscxenaLink) {
                         let cellViewers: JSX.Element[] = [];
 
                         if (cellXGeneLink) {
@@ -749,6 +759,27 @@ export class FileTable extends React.Component<IFileTableProps> {
                                                                 }
                                                             />
                                                         </a>
+                                                    ) && imageViewers.ucscXenaUrl && (
+                                                        <>
+                                                            or
+                                                            <a
+                                                                style={{
+                                                                    color: 'white',
+                                                                }}
+                                                                href={
+                                                                    imageViewers.ucscXenaUrl
+                                                                }
+                                                                target="_blank"
+                                                            >
+                                                                UCSC Xena{' '}
+                                                                <FontAwesomeIcon
+                                                                    icon={
+                                                                        faExternalLinkAlt
+                                                                    }
+                                                                />
+                                                            </a>
+                                                        </>
+
                                                     )}
                                                     {/*imageViewers.minervaUrl &&
                                                         imageViewers.idcImageUrl &&
