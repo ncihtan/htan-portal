@@ -4,7 +4,7 @@ import Mcmicro from './Mcmicro';
 import GoogleBigQuery from './GoogleBigQuery';
 import CellxGene from './CellxGene';
 import CytoCommunity from './CytoCommunity';
-import UCSCXena from './CytoCommunity';
+import UCSCXena from './UCSCXena';
 
 export const ToolDetails: { [toolID: string]: JSX.Element } = {
     HTA8_T0: <CBioPortal />,

@@ -19,3 +19,4 @@ const UCSCXena: React.FunctionComponent = () => {
         </div>
     );
 }
+export default UCSCXena;
