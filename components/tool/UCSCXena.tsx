@@ -5,11 +5,7 @@ const UCSCXena: React.FunctionComponent = () => {
         <div>
             <h3>UCSCXena</h3>
             <p>
-                <a href="https://xena.ucsc.edu/">UCSCXena</a> is an
-                interactive viewer for single-cell expression.
-            </p>
-            <p>
-                UCSC Xena is an online exploration tool for multiplexed imaging and multi-omic single-cell data. 
+                <a href="https://xena.ucsc.edu/">UCSCXena</a> is an online exploration tool for multiplexed imaging and multi-omic single-cell data.
                 <a href="https://xena.ucsc.edu/">
                     <img
                         width="600"
