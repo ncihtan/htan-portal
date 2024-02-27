@@ -42,6 +42,7 @@ import {
 import { ViewDetailsModal } from '@htan/data-portal-commons';
 
 import CELLXGENE_MAPPINGS from '../assets/cellxgene-mappings.json';
+import UCSCXENA_MAPPINGS from '../assets/ucscxena-mappings.json';
 import ISBCGC_MAPPINGS from '../assets/isbcgc-mappings.json';
 import CUSTOM_MINERVA_STORY_MAPPINGS from '../assets/minerva-story-mappings.json';
 import THUMBNAIL_AND_AUTOMINERVA_MAPPINGS from '../assets/htan-imaging-assets.json';
@@ -448,6 +449,7 @@ interface IFileTableProps {
     };
     patientCount: number;
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
+    ucscxenaMappings?: { [key: string]: string };
     cellxgeneMappings?: { [key: string]: string };
     isbcgcMappings?: { [key: string]: string };
     customMinervaStoryMappings?: { [key: string]: string };
@@ -458,6 +460,7 @@ interface IFileTableProps {
 @observer
 export class FileTable extends React.Component<IFileTableProps> {
     static defaultProps = {
+        ucscxenaMappings: UCSCXENA_MAPPINGS,
         cellxgeneMappings: CELLXGENE_MAPPINGS,
         isbcgcMappings: ISBCGC_MAPPINGS,
         customMinervaStoryMappings: CUSTOM_MINERVA_STORY_MAPPINGS,
@@ -654,6 +657,9 @@ export class FileTable extends React.Component<IFileTableProps> {
                     const cellXGeneLink = this.props.cellxgeneMappings![
                         getFileBase(file.Filename)
                     ];
+                    const ucscxenaLink = this.props.ucscxenaMappings![
+                        file.DataFileID
+                    ];
                     const bigQueryLink = this.props.isbcgcMappings![
                         file.synapseId || ''
                     ];
@@ -672,6 +678,18 @@ export class FileTable extends React.Component<IFileTableProps> {
                                 <span style={{ paddingRight: 5 }}>
                                     <a href={cellXGeneLink} target="_blank">
                                         CellxGene{' '}
+                                        <FontAwesomeIcon
+                                            icon={faExternalLinkAlt}
+                                        />
+                                    </a>
+                                </span>
+                            );
+                        }
+                        if (ucscxenaLink) {
+                            cellViewers.push(
+                                <span style={{ paddingRight: 5 }}>
+                                    <a href={ucscxenaLink} target="_blank">
+                                        UCSC Xena{' '}
                                         <FontAwesomeIcon
                                             icon={faExternalLinkAlt}
                                         />
