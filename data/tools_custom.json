@@ -1178,5 +1178,25 @@
     "Tool Input Data":  "Bulk DNA, Bulk RNA-seq",
     "Tool Output Data": "",
     "Tool Assay":  "Bulk DNA, Bulk RNA-seq"
+  },
+  {
+    "": "",
+    "Atlas Name": "N/A",
+    "Grant ID": "",
+    "Tool ID": "HTAX_T2",
+    "Parent ID": "",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/32444850/",
+    "Perspective": "",
+    "Tool Name": "UCSC Xena",
+    "Tool Alias": "",
+    "Tool Type": "Web application",
+    "Tool Language": "Clojure, JavaScript",
+    "Tool Homepage": "https://xena.ucsc.edu/",
+    "Tool Description": "UCSC Xena is an online exploration tool for multiplexed imaging and multi-omic single-cell data",
+    "Tool Topic": "analysis",
+    "Tool Operation": "analysis, annotation, visualisation",
+    "Tool Input Data":  "Imaging, single-cell",
+    "Tool Output Data": "",
+    "Tool Assay":  "Imaging, scATAC-seq, scRNA-seq"
   }
 ]
