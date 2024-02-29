@@ -54,7 +54,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     }}
                 >
                     <a style={{ color: 'white' }} href="/data-updates">
-                        Data Release V4.2 (Last updated 2024-02-09)
+                        Data Release V5 (Last updated 2024-02-29)
                     </a>
                 </div>
                 <Row className="justify-content-md-center">

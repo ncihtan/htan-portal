@@ -3,8 +3,15 @@ import Link from 'next/link';
 
 const PreReleaseBanner = () => (
     <Alert style={{ marginBottom: 0 }} variant={'success'}>
-        New data from CHOP is available as part of{' '}
-        <Link href="/data-updates">Release 4.2</Link>!
+        The <Link href="/data-updates">V5 data release</Link> is now finalized.
+        Please visit the{' '}
+        <a
+            href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1"
+            target="_blank"
+        >
+            HTAN Help Desk
+        </a>{' '}
+        for questions and feedback.
     </Alert>
 );
 
