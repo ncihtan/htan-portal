@@ -63,7 +63,7 @@ async function writeProcessedFile() {
 }
 
 async function getEntitiesById() {
-    const rows = await csvToJson().fromFile('data/entities_v4.csv');
+    const rows = await csvToJson().fromFile('data/entities_v5.csv');
     return _.keyBy(rows, (row) => row.entityId);
 }
 
@@ -488,6 +488,24 @@ function extractBiospecimensAndDiagnosisAndDemographics(
     };
 }
 
+function getParentBiospecimenIDs(file: BaseSerializableEntity) {
+    return file?.ParentBiospecimenID?.split(/[,;]/).map((s) => s.trim()) || [];
+}
+
+function getParentBiospecimens(
+    file: BaseSerializableEntity,
+    biospecimenByBiospecimenID: {
+        [biospecimenID: string]: BaseSerializableEntity;
+    }
+) {
+    return getParentBiospecimenIDs(file).map(
+        (ParentBiospecimenID) =>
+            biospecimenByBiospecimenID[ParentBiospecimenID] as
+                | Entity
+                | undefined
+    );
+}
+
 function getSampleAndPatientData(
     file: BaseSerializableEntity,
     filesByHTANId: { [DataFileID: string]: BaseSerializableEntity },
@@ -507,30 +525,23 @@ function getSampleAndPatientData(
             : [file.DataFileID];
 
     for (let p of primaryParents) {
-        const parentBiospecimenID = filesByHTANId[p].ParentBiospecimenID;
         if (
-            !parentBiospecimenID ||
-            !biospecimenByBiospecimenID[parentBiospecimenID]
+            getParentBiospecimens(filesByHTANId[p], biospecimenByBiospecimenID)
+                .length === 0
         ) {
             console.log('Missing ParentBiospecimenID: ', filesByHTANId[p]);
             return undefined;
         }
     }
 
-    let biospecimen = primaryParents
+    const biospecimen = _(primaryParents)
         .map((p) =>
-            filesByHTANId[p].ParentBiospecimenID.split(/[,;]/)
-                .map((s) => s.trim())
-                .map(
-                    (ParentBiospecimenID) =>
-                        biospecimenByBiospecimenID[ParentBiospecimenID] as
-                            | Entity
-                            | undefined
-                )
+            getParentBiospecimens(filesByHTANId[p], biospecimenByBiospecimenID)
         )
-        .flat()
-        .filter((f) => !!f) as BaseSerializableEntity[];
-    biospecimen = _.uniqBy(biospecimen, (b) => b.BiospecimenID);
+        .flatten()
+        .compact()
+        .uniqBy((b) => b.BiospecimenID)
+        .value();
 
     const diagnosis = _.uniqBy(
         getCaseData(
