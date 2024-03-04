@@ -97,7 +97,7 @@ export const PUBLICATIONS: any = {
     },
     htapp_mbc_klughammer_2023: {
         title: 'htapp_mbc_klughammer_2023',
-        htan_id: 'HTAXX',
+        htan_id: 'HTA1',
         htan_name: 'HTAN HTAPP',
         cite: 'Author 1, Author 2 ... ',
         abstract: 'This is the abstract for htapp_mbc_klughammer_2023',
@@ -350,7 +350,7 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
         },
         atlas: {
             name: 'Atlas Name',
-            link: 'https://humantumoratlas.org/htaxx',
+            link: 'https://humantumoratlas.org/hta1',
         },
     },
 };
@@ -377,7 +377,8 @@ const filtersById: { [id: string]: SelectedFilter[] } = {
         { group: 'AtlasName', value: 'HTAN CHOP', id: 'HTA4' },
     ],
     htapp_mbc_klughammer_2023: [
-        { group: 'AtlasName', value: 'HTAN HTAPP', id: 'HTAXX' },
+        { group: 'AtlasName', value: 'HTAN HTAPP', id: 'HTA1' },
+        { group: 'TissueorOrganofOrigin', value: 'Breast NOS' },
     ],
 };
 
