@@ -65,6 +65,7 @@ export interface IExploreProps {
     setTab?: (tab: ExploreTab) => void;
     getTab?: () => ExploreTab;
     fetchData?: () => Promise<LoadDataResult>;
+    cloudBaseUrl?: string;
 }
 
 @observer
@@ -364,6 +365,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                             this.toggleShowAllBiospecimens
                         }
                         toggleShowAllCases={this.toggleShowAllCases}
+                        cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={this.props.getAtlasMetaData}
                         publications={this.props.publications}
                         publicationPageLink={this.props.publicationPageLink}

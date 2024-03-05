@@ -43,6 +43,7 @@ interface IExploreTabsProps {
     selectedSynapseAtlases: Atlas[];
     allSynapseAtlases: Atlas[];
     onSelectAtlas?: (selected: Atlas[]) => void;
+    cloudBaseUrl?: string;
 
     toggleShowAllBiospecimens: () => void;
     showAllBiospecimens: boolean;
@@ -285,6 +286,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             }
                             files={props.files}
                             filteredFiles={props.filteredFiles}
+                            cloudBaseUrl={props.cloudBaseUrl || ''}
                         />
                     </div>
                 )}

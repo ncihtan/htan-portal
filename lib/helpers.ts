@@ -32,13 +32,17 @@ function doesFileHaveMultipleParents(file: Entity) {
     return /Level[456]/.test(file.Component);
 }
 
+export function getCloudBaseUrl() {
+    return 'https://d13ch66cwesneh.cloudfront.net';
+}
+
 export async function fetchData(): Promise<LoadDataResult> {
     // in development we use local processed syn data. In production we use
     // other URL (too large to serve thru next max 250MB limit)
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : 'https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20240228_1622.json';
+            : `${getCloudBaseUrl()}/processed_syn_data_20240228_1622.json`;
     return fetchSynData(processedSynURL);
 }
 

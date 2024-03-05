@@ -30,6 +30,7 @@ interface IAtlasTableProps {
     filteredBiospecimens: Entity[];
     files: Entity[];
     filteredFiles: Entity[];
+    cloudBaseUrl: string;
 }
 
 interface IAtlasMetadataLinkModalProps {
@@ -37,6 +38,7 @@ interface IAtlasMetadataLinkModalProps {
     onClose: () => void;
     atlas: Atlas | null;
     atlasMetaData: AtlasMetaData;
+    cloudBaseUrl: string;
 }
 
 const arePublicationPagesEnabled = () => {
@@ -59,11 +61,8 @@ const SynapseDataLink = (props: { id: string }) => (
     </a>
 );
 
-const MetaDataLink = (props: { id: string }) => (
-    <a
-        href={`https://htan-metadata-20230824.surge.sh/${props.id}.csv`}
-        download
-    >
+const MetaDataLink = (props: { id: string; baseUrl: string }) => (
+    <a href={`${props.baseUrl}/metadata/${props.id}.csv`} download>
         {props.id}
     </a>
 );
@@ -101,6 +100,9 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                                 <td>
                                                     <MetaDataLink
                                                         id={info.synapseId}
+                                                        baseUrl={
+                                                            props.cloudBaseUrl
+                                                        }
                                                     />
                                                 </td>
                                                 <td>{info.component}</td>
@@ -750,6 +752,8 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                     })}
                     atlas={this.metadataModalAtlas}
                     atlasMetaData={this.atlasMetaData}
+                    // TODO get this from a prop
+                    cloudBaseUrl={this.props.cloudBaseUrl}
                 />
             </>
         );
