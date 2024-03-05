@@ -90,6 +90,22 @@ function addReleaseInfo(
     }
 }
 
+function addImageChannelMetadata(
+    file: BaseSerializableEntity,
+    entitiesById: { [entityId: string]: ReleaseEntity }
+) {
+    const entity = file.synapseId ? entitiesById[file.synapseId] : undefined;
+    const synapseId = entity?.channel_metadata_synapseId;
+    const version = Number(entity?.channel_metadata_version);
+
+    if (synapseId && version) {
+        file.imageChannelMetadata = {
+            synapseId,
+            version,
+        };
+    }
+}
+
 function getDbgapSynapseIds(entitiesById: {
     [entityId: string]: ReleaseEntity;
 }) {
@@ -327,6 +343,7 @@ function processSynapseJSON(
 
         addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
+        addImageChannelMetadata(file, entitiesById);
         return file as SerializableEntity;
     });
     //  .filter((f): f is SerializableEntity => !!f); // file should be defined (typescript doesnt understand (f=>f)

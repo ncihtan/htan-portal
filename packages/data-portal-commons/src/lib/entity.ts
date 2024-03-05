@@ -52,7 +52,13 @@ export interface BaseSerializableEntity {
     synapseId?: string;
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
+    imageChannelMetadata?: ImageChannelMetadata;
     releaseVersion?: string;
+}
+
+export interface ImageChannelMetadata {
+    version: number;
+    synapseId: string;
 }
 
 export enum DownloadSourceCategory {
@@ -94,4 +100,6 @@ export interface ReleaseEntity {
     CDS_Release: string;
     IDC_Release: string;
     Component: string;
+    channel_metadata_version: string;
+    channel_metadata_synapseId: string;
 }
