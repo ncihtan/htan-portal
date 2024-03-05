@@ -1,14 +1,33 @@
+import { DownloadSourceCategory, Entity } from '@htan/data-portal-commons';
 import _ from 'lodash';
 import React from 'react';
 import { Table } from 'react-bootstrap';
 
-interface IDataAvailabilityTableProps {}
+interface IDataAvailabilityTableProps {
+    assays: { [assayName: string]: Entity[] };
+}
 
 export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTableProps> = (
     props
 ) => {
+    const tableRowGroups: { [rowName: string]: Entity[] } = _.reduce(
+        _.keys(props.assays),
+        (acc, assayId) => {
+            const entities = props.assays[assayId];
+            const entityGroupByLevel = _.groupBy(
+                entities,
+                (entity) => entity.level
+            );
+            for (const groupId in entityGroupByLevel) {
+                acc[`${assayId} ${groupId}`] = entityGroupByLevel[groupId];
+            }
+            return acc;
+        },
+        {} as { [rowName: string]: Entity[] }
+    );
+
     const table = (
-        <Table bordered hover responsive style={{ width: '40%' }}>
+        <Table bordered hover responsive style={{ width: '50%' }}>
             <thead>
                 <tr>
                     <th>Files</th>
@@ -19,39 +38,65 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                         <a href="/data-access">CDS/SB-CGC (Open Access)</a>
                     </th>
                     <th>
+                        <a href="/data-access">Synapse (Open Access)</a>
+                    </th>
+                    <th>
                         <a href="/data-access">Coming Soon</a>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>scRNASeqLevel3</td>
-                    <td>
-                        <a href="/htapp_mbc_klughammer_2023?tab=scrna-seq">
-                            10
-                        </a>
-                    </td>
-                    <td>
-                        <a href="/htapp_mbc_klughammer_2023?tab=scrna-seq">0</a>
-                    </td>
-                    <td>
-                        <a href="/htapp_mbc_klughammer_2023?tab=scrna-seq">0</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>scRNASeqLevel4</td>
-                    <td>
-                        <a href="/htapp_mbc_klughammer_2023?tab=scrna-seq">
-                            30
-                        </a>
-                    </td>
-                    <td>
-                        <a href="/htapp_mbc_klughammer_2023?tab=scrna-seq">0</a>
-                    </td>
-                    <td>
-                        <a href="/htapp_mbc_klughammer_2023?tab=scrna-seq">0</a>
-                    </td>
-                </tr>
+                {_.map(_.keys(tableRowGroups).sort(), (rowName) => {
+                    const entities = tableRowGroups[rowName];
+                    const tabId =
+                        entities.length > 0
+                            ? entities[0]?.assayName
+                            : undefined;
+                    const cdsDbgapCount = entities.filter(
+                        (entity) =>
+                            entity.downloadSource ===
+                            DownloadSourceCategory.dbgap
+                    ).length;
+                    const cdsOpenAccessCount = entities.filter(
+                        (entity) =>
+                            entity.downloadSource === DownloadSourceCategory.cds
+                    ).length;
+                    const synapseOpenAccessConut = entities.filter(
+                        (entity) =>
+                            entity.downloadSource ===
+                            DownloadSourceCategory.synapse
+                    ).length;
+                    const comingSoonCount = entities.filter(
+                        (entity) =>
+                            entity.downloadSource ===
+                            DownloadSourceCategory.comingSoon
+                    ).length;
+
+                    if (tabId) {
+                        const link = `/publications/htapp_mbc_klughammer_2023?tab=${_.replace(
+                            tabId.toLowerCase(),
+                            new RegExp(' ', 'g'),
+                            '-'
+                        )}`;
+                        return (
+                            <tr>
+                                <td>{rowName}</td>
+                                <td>
+                                    <a href={link}>{cdsDbgapCount}</a>
+                                </td>
+                                <td>
+                                    <a href={link}>{cdsOpenAccessCount}</a>
+                                </td>
+                                <td>
+                                    <a href={link}>{synapseOpenAccessConut}</a>
+                                </td>
+                                <td>
+                                    <a href={link}>{comingSoonCount}</a>
+                                </td>
+                            </tr>
+                        );
+                    }
+                })}
             </tbody>
         </Table>
     );
