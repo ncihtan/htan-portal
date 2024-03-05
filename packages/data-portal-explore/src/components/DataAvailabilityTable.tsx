@@ -2,9 +2,11 @@ import { DownloadSourceCategory, Entity } from '@htan/data-portal-commons';
 import _ from 'lodash';
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { generatePublicationPageTabUrl } from '../lib/dataTableHelpers';
 
 interface IDataAvailabilityTableProps {
     assays: { [assayName: string]: Entity[] };
+    publicationId: string;
 }
 
 export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTableProps> = (
@@ -73,11 +75,10 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                     ).length;
 
                     if (tabId) {
-                        const link = `/publications/htapp_mbc_klughammer_2023?tab=${_.replace(
-                            tabId.toLowerCase(),
-                            new RegExp(' ', 'g'),
-                            '-'
-                        )}`;
+                        const link = generatePublicationPageTabUrl(
+                            props.publicationId,
+                            tabId
+                        );
                         return (
                             <tr>
                                 <td>{rowName}</td>
