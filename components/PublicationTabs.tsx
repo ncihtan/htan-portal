@@ -238,7 +238,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    htapp_mbc_klughammer_2023: [<></>],
+    htapp_mbc_klughammer_2023: [],
 };
 
 const supportingLinks: { [id: string]: JSX.Element[] } = {
@@ -427,7 +427,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             <p>{props.abstract}</p>
                             <br />
                             <strong>Data Availability</strong>
-                            <DataAvailabilityTable />
+                            <DataAvailabilityTable assays={props.assays} />
                         </div>
                     )}
 
