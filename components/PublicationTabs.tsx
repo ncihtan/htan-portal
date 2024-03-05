@@ -268,7 +268,6 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
     (props) => {
         const activeTab = props.router.query.tab || PublicationTab.OVERVIEW;
         const pubId = props.router.query?.id?.toString();
-
         return (
             <>
                 <div className="subnav">
@@ -434,7 +433,10 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             <p>{props.abstract}</p>
                             <br />
                             <strong>Data Availability</strong>
-                            <DataAvailabilityTable assays={props.assays} />
+                            <DataAvailabilityTable
+                                assays={props.assays}
+                                publicationId={pubId || ''}
+                            />
                         </div>
                     )}
 
