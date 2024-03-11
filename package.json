@@ -11,7 +11,9 @@
   "scripts": {
     "dev": "yarn run next dev",
     "updateData": "yarn run findAndReplace && yarn run processSynapseJSON && yarn run gzip",
-    "gzip": "gzip < public/syn_data.json > public/syn_data.json.gz && gzip < public/processed_syn_data.json > public/processed_syn_data.json.gz",
+    "gzip": "yarn run gzipData && yarn run gzipMetadata",
+    "gzipData": "gzip < public/syn_data.json > public/syn_data.json.gz && gzip < public/processed_syn_data.json > public/processed_syn_data.json.gz",
+    "gzipMetadata": "rm -rf data/metadata_gzip/ && cp -r data/metadata data/metadata_gzip && find data/metadata_gzip -type f -exec gzip {} \\; -exec mv {}.gz {} \\;",
     "gunzip": "gunzip -c public/processed_syn_data.json.gz > public/processed_syn_data.json && gunzip -c public/syn_data.json.gz > public/syn_data.json",
     "findAndReplace": "bash data/findAndReplace.sh",
     "build": "yarn run gunzip && NODE_OPTIONS=--max_old_space_size=6144 next build",

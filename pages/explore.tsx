@@ -9,6 +9,7 @@ import {
 import {
     ExploreURLQuery,
     fetchData,
+    getCloudBaseUrl,
     isReleaseQCEnabled,
     setTab,
     updateSelectedFiltersInURL,
@@ -51,6 +52,7 @@ const ExplorePage = (props: IExplorePageProps) => {
                     setTab={setExploreTab}
                     getTab={getExploreTab}
                     fetchData={fetchData}
+                    cloudBaseUrl={getCloudBaseUrl()}
                 />
             </PageWrapper>
         </>

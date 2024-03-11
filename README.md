@@ -64,6 +64,7 @@ Or step 1-4 as command:
 ```bash
 MY_AWS_PROFILE=inodb
 aws s3 cp processed_syn_data.json.gz s3://htanfiles/processed_syn_data_$(date "+%Y%m%d_%H%M").json --profile=${MY_AWS_PROFILE} --content-encoding gzip --content-type=application/json --acl public-read
+aws s3 cp metadata_gzip s3://htanfiles/metadata --recursive --profile=${MY_AWS_PROFILE} --content-encoding gzip --content-type=text/csv --acl public-read
 ```
 
 ## Testing
