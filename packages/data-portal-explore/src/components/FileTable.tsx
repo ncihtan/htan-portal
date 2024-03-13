@@ -1,3 +1,4 @@
+import fileDownload from 'js-file-download';
 import { action, computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
@@ -46,6 +47,7 @@ import ISBCGC_MAPPINGS from '../assets/isbcgc-mappings.json';
 import CUSTOM_MINERVA_STORY_MAPPINGS from '../assets/minerva-story-mappings.json';
 import THUMBNAIL_AND_AUTOMINERVA_MAPPINGS from '../assets/htan-imaging-assets.json';
 import IDC_IMAGING_ASSETS from '../assets/idc-imaging-assets.json';
+import CDS_ASSETS from '../assets/cds_drs_mapping.json';
 
 interface ThumbnailAndAutominerva {
     synid: string;
@@ -60,21 +62,59 @@ interface IdcImagingAsset {
     viewer_url: string;
 }
 
+interface CdsAsset {
+    file_name: string;
+    file_size: string;
+    HTAN_Data_File_ID: string;
+    guid: string;
+    drs_uri: string;
+}
+
 const IDC_MAPPINGS: {
     [key: string]: IdcImagingAsset;
 } = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier') as any;
+
+const CDS_MAPPINGS: {
+    [key: string]: CdsAsset;
+} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID') as any;
+
+const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 
 interface IFileDownloadModalProps {
     files: Entity[];
     onClose: () => void;
     isOpen: boolean;
+    cdsMappings?: { [key: string]: CdsAsset };
 }
 
 const DETAILS_COLUMN_NAME = 'Metadata';
 
-const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
-    props
-) => {
+function generateCdsManifestFile(
+    files: Entity[],
+    cdsMappings?: { [key: string]: CdsAsset }
+): string | undefined {
+    if (cdsMappings) {
+        const columns = ['drs_uri', 'name'];
+        const data = _(files)
+            .map((f) => cdsMappings[f.DataFileID])
+            .compact()
+            .map((asset) => [asset.drs_uri, asset.file_name])
+            .value();
+        return [columns, ...data].map((row) => row.join(',')).join('\n');
+    } else {
+        return undefined;
+    }
+}
+
+const CDSInstructions: React.FunctionComponent<{
+    files: Entity[];
+    cdsMappings?: { [key: string]: CdsAsset };
+}> = (props) => {
+    const manifestFile = generateCdsManifestFile(
+        props.files,
+        props.cdsMappings
+    );
+
     return (
         <>
             <p>
@@ -86,16 +126,35 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 </code>
             </pre>
             <p>
-                These are currently only available through{' '}
+                To download Level 1/2 sequencing data you first need to request{' '}
                 <a
                     href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
                     target="_blank"
                 >
-                    {' '}
-                    dbGaP{' '}
+                    dbGaP
+                </a>{' '}
+                access. Afterwards you can import this manifest file into CGC
+                following the instructions{' '}
+                <a
+                    href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
+                    target="_blank"
+                >
+                    here
                 </a>
                 .
             </p>
+            {manifestFile?.length && (
+                <p>
+                    <button
+                        className="btn btn-light"
+                        onClick={() =>
+                            fileDownload(manifestFile, CDS_MANIFEST_FILENAME)
+                        }
+                    >
+                        <FontAwesomeIcon icon={faDownload} /> Download Manifest
+                    </button>
+                </p>
+            )}
         </>
     );
 };
@@ -355,7 +414,12 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
-                {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                {cdsFiles.length > 0 && (
+                    <CDSInstructions
+                        files={cdsFiles}
+                        cdsMappings={props.cdsMappings}
+                    />
+                )}
                 {lowerLevelImagingFiles.length > 0 && (
                     <ImagingInstructionsCDS files={lowerLevelImagingFiles} />
                 )}
@@ -453,6 +517,7 @@ interface IFileTableProps {
     customMinervaStoryMappings?: { [key: string]: string };
     thumbNailAndAutominervaMappings?: ThumbnailAndAutominerva[];
     idcMappings?: { [key: string]: IdcImagingAsset };
+    cdsMappings?: { [key: string]: CdsAsset };
 }
 
 @observer
@@ -463,6 +528,7 @@ export class FileTable extends React.Component<IFileTableProps> {
         customMinervaStoryMappings: CUSTOM_MINERVA_STORY_MAPPINGS,
         thumbNailAndAutominervaMappings: THUMBNAIL_AND_AUTOMINERVA_MAPPINGS,
         idcMappings: IDC_MAPPINGS,
+        cdsMappings: CDS_MAPPINGS,
     };
 
     @observable.ref selected: Entity[] = [];
@@ -1054,12 +1120,14 @@ export class FileTable extends React.Component<IFileTableProps> {
                     files={this.selected}
                     onClose={this.onDownloadModalClose}
                     isOpen={this.isDownloadModalOpen}
+                    cdsMappings={this.props.cdsMappings}
                 />
 
                 <FileDownloadModal
                     files={this.clicked ? [this.clicked] : []}
                     onClose={this.onLinkOutModalClose}
                     isOpen={this.isLinkOutModalOpen}
+                    cdsMappings={this.props.cdsMappings}
                 />
 
                 <ViewDetailsModal
