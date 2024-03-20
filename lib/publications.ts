@@ -28,6 +28,7 @@ export const PublicationPageLink: {
     HTA8: { id: 'msk_sclc_chan_2021', show: true },
     HTA9: { id: 'ohsu_brca_johnson_2022', show: true },
     HTA11: { id: 'vanderbilt_crc_chen_2021', show: true },
+    HTAXX: { id: 'htapp_mbc_klughammer_2023 ', show: false },
 };
 
 export const PUBLICATIONS: any = {
@@ -94,6 +95,15 @@ export const PUBLICATIONS: any = {
         abstract:
             'Colorectal cancers (CRCs) arise from precursor polyps whose cellular origins, molecular heterogeneity, and immunogenic potential may reveal diagnostic and therapeutic insights when analyzed at high resolution. We present a single-cell transcriptomic and imaging atlas of the two most common human colorectal polyps, conventional adenomas and serrated polyps, and their resulting CRC counterparts. Integrative analysis of 128 datasets from 62 participants reveals adenomas arise from WNT-driven expansion of stem cells, while serrated polyps derive from differentiated cells through gastric metaplasia. Metaplasia-associated damage is coupled to a cytotoxic immune microenvironment preceding hypermutation, driven partly by antigen-presentation differences associated with tumor cell-differentiation status. Microsatellite unstable CRCs contain distinct non-metaplastic regions where tumor cells acquire stem cell properties and cytotoxic immune cells are depleted. Our multi-omic atlas provides insights into malignant progression of colorectal polyps and their microenvironment, serving as a framework for precision surveillance and prevention of CRC.',
     },
+    htapp_mbc_klughammer_2023: {
+        title:
+            'A spatial map of breast cancer metastases across clinicopathological features and spatio-cellular assays',
+        htan_id: 'HTA1',
+        htan_name: 'HTAN HTAPP',
+        cite: 'Klughammer et al (2023) ',
+        abstract:
+            'Although metastatic disease is the leading cause of cancer-related death, its tumor microenvironment (TME) remains poorly understood due to technical and biospecimen limitations. Here, we assembled a multi-modal spatial and cellular map of 67 biopsies from 60 patients with metastatic breast cancer (MBC) across diverse clinicopathological features and 9 anatomic sites with detailed clinical annotations. We combined single-cell or single-nucleus RNA-seq (sc/snRNA-Seq) for all biopsies, with a panel of four spatio-molecular assays (Slide-seq, MERFISH, Ex-Seq, and CODEX) and H&E staining of consecutive serial sections from up to 15 of these biopsies. We leverage the coupled measurement to provide guidelines for the utility and integration of different experimental techniques. We then use this integrated atlas to assess variability in cell type composition and expression, and emerging spatio-molecular characteristics across clinicopathological and methodological diversity. Finally, we assess spatio-molecular features of epithelial-to-mesenchymal transition (EMT) and T-cell exclusion, showcasing the potential of clinically relevant discovery in these data. Our work provides guidelines for future efforts, insights into MBC, and a data resource for the development of machine learning algorithms in cancer discovery.',
+    },
 };
 
 const authorsById: { [id: string]: string[] } = {
@@ -104,6 +114,7 @@ const authorsById: { [id: string]: string[] } = {
     ohsu_brca_johnson_2022: ['Johnson BE', 'Creason AL', 'Stommel JM'],
     vanderbilt_crc_chen_2021: ['Chen B', 'Scurrah CR', 'McKinley ET'],
     chop_all_chen_2022: ['Chen C', 'Wenbao Y', 'Alikarami F'],
+    htapp_mbc_klughammer_2023: ['Klughammer J', 'Abravanel D', 'Segerstolpe Å'],
 };
 
 const correspondingAuthorsById: { [id: string]: Author[] } = {
@@ -175,6 +186,20 @@ const correspondingAuthorsById: { [id: string]: Author[] } = {
         {
             name: 'Ken S. Lau',
             email: 'ken.s.lau@vanderbilt.edu',
+        },
+    ],
+    htapp_mbc_klughammer_2023: [
+        {
+            name: 'Klughammer J',
+            email: 'email@email.org',
+        },
+        {
+            name: 'Abravanel D',
+            email: 'email@email.org',
+        },
+        {
+            name: 'Segerstolpe Å',
+            email: 'email@email.org',
         },
     ],
 };
@@ -312,6 +337,24 @@ const publicationInfoById: { [id: string]: PublicationInfo } = {
             link: 'https://humantumoratlas.org/hta11',
         },
     },
+    htapp_mbc_klughammer_2023: {
+        journal: {
+            name: 'Journal',
+            link: 'https://www.journallink.com/',
+        },
+        pubmed: {
+            name: '123456',
+            link: 'https://pubmed.ncbi.nlm.nih.gov/123456/',
+        },
+        DOI: {
+            name: '12.3456',
+            link: 'https://doi.org/12.3456',
+        },
+        atlas: {
+            name: 'Atlas Name',
+            link: 'https://humantumoratlas.org/hta1',
+        },
+    },
 };
 
 const filtersById: { [id: string]: SelectedFilter[] } = {
@@ -335,6 +378,10 @@ const filtersById: { [id: string]: SelectedFilter[] } = {
     chop_all_chen_2022: [
         { group: 'AtlasName', value: 'HTAN CHOP', id: 'HTA4' },
     ],
+    htapp_mbc_klughammer_2023: [
+        { group: 'AtlasName', value: 'HTAN HTAPP', id: 'HTA1' },
+        { group: 'TissueorOrganofOrigin', value: 'Breast NOS' },
+    ],
 };
 
 export async function getAllPublicationIds() {
@@ -346,6 +393,7 @@ export async function getAllPublicationIds() {
         'chop_all_chen_2022',
         'msk_sclc_chan_2021',
         'vanderbilt_crc_chen_2021',
+        'htapp_mbc_klughammer_2023',
     ];
     return ids.map((id) => {
         return {

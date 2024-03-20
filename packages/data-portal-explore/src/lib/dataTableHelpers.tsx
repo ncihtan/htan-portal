@@ -152,3 +152,19 @@ export function truncatedTableCell<T>(cellData: T) {
         <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />
     ) : null;
 }
+
+export function generatePublicationPageTabUrl(
+    publicationId: string,
+    tabId: string
+) {
+    if (tabId.includes('&')) {
+        // & is reserved charactor in url so cannot be encoded. We need to manually encode & for H&E tab
+        tabId = _.replace(tabId.toLowerCase(), new RegExp('&', 'g'), '%26');
+    }
+    const link = `/publications/${publicationId}?tab=${_.replace(
+        tabId.toLowerCase(),
+        new RegExp(' ', 'g'),
+        '-'
+    )}`;
+    return link;
+}

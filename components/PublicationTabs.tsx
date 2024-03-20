@@ -17,6 +17,7 @@ import {
     CaseTable,
     FileTable,
 } from '@htan/data-portal-explore';
+import DataAvailabilityTable from 'packages/data-portal-explore/src/components/DataAvailabilityTable';
 
 interface IPublicationTabsProps {
     router: NextRouter;
@@ -32,7 +33,7 @@ interface IPublicationTabsProps {
 }
 
 export enum PublicationTab {
-    ABSTRACT = 'abstract',
+    OVERVIEW = 'overview',
     DATASETS = 'datasets',
     PARTICIPANTS = 'participants',
     BIOSPECIMENS = 'biospecimens',
@@ -237,6 +238,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
+    htapp_mbc_klughammer_2023: [],
 };
 
 const supportingLinks: { [id: string]: JSX.Element[] } = {
@@ -257,9 +259,8 @@ const supportingLinks: { [id: string]: JSX.Element[] } = {
 
 const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer(
     (props) => {
-        const activeTab = props.router.query.tab || PublicationTab.ABSTRACT;
+        const activeTab = props.router.query.tab || PublicationTab.OVERVIEW;
         const pubId = props.router.query?.id?.toString();
-
         return (
             <>
                 <div className="subnav">
@@ -268,17 +269,17 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             <a
                                 onClick={() =>
                                     setTab(
-                                        PublicationTab.ABSTRACT,
+                                        PublicationTab.OVERVIEW,
                                         props.router
                                     )
                                 }
                                 className={`nav-link ${
-                                    activeTab === PublicationTab.ABSTRACT
+                                    activeTab === PublicationTab.OVERVIEW
                                         ? 'active'
                                         : ''
                                 }`}
                             >
-                                Abstract
+                                Overview
                             </a>
                         </li>
                         {/* <li className="nav-item">
@@ -413,15 +414,22 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                 </div>
 
                 <div className={styles.publicationTabContent}>
-                    {activeTab === PublicationTab.ABSTRACT && (
+                    {activeTab === PublicationTab.OVERVIEW && (
                         <div
                             className={`tab-content fileTab ${
-                                activeTab !== PublicationTab.ABSTRACT
+                                activeTab !== PublicationTab.OVERVIEW
                                     ? 'd-none'
                                     : ''
                             }`}
                         >
+                            <strong>Abstract</strong>
                             <p>{props.abstract}</p>
+                            <br />
+                            <strong>Data Availability</strong>
+                            <DataAvailabilityTable
+                                assays={props.assays}
+                                publicationId={pubId || ''}
+                            />
                         </div>
                     )}
 
