@@ -252,6 +252,27 @@ const CellxgeneViewerLink = (props: { url: string; count: number }) => (
     </Tooltip>
 );
 
+const UcscXenaLink = (props: { url: string; count: number }) => (
+    <Tooltip overlay="UCSC Xena">
+        <a
+            href={props.url}
+            style={{
+                paddingRight: 8,
+                fontFamily: 'monospace',
+                textDecoration: 'none',
+            }}
+        >
+            {props.count < 100 && '\u00A0'}
+            {props.count < 10 && '\u00A0'}
+            {props.count}{' '}
+            <img
+                width={20}
+                src="https://xena.ucsc.edu/icons-9ac0cb8372f662ad72d747b981120f73/favicon-48x48.png"
+            />
+        </a>
+    </Tooltip>
+);
+
 type AtlasTableData = Atlas & {
     isSelected: boolean;
     publicationPageLink: { id: string; show: boolean };
@@ -546,6 +567,12 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                                     }
                                     count={11}
                                 />
+                                <UcscXenaLink
+                                    url={
+                                        'https://beta.xenabrowser.net/singlecell/?hub=https://previewsinglecell.xenahubs.net:443&defaultTable=htan&study=msk_sclc_chan_2021'
+                                    }
+                                    count={1}
+                                />
                             </>
                         );
                     } else if (atlas.htan_name === 'HTAN Duke') {
@@ -584,12 +611,20 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         );
                     } else if (atlas.htan_name === 'HTAN HMS') {
                         return (
-                            <AutoMinervaViewerLink
-                                url={
-                                    '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'
-                                }
-                                count={659}
-                            />
+                            <>
+                                <AutoMinervaViewerLink
+                                    url={
+                                        '/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%5D&tab=file'
+                                    }
+                                    count={659}
+                                />
+                                <UcscXenaLink
+                                    url={
+                                        'https://beta.xenabrowser.net/singlecell/?hub=https://previewsinglecell.xenahubs.net:443&defaultTable=htan'
+                                    }
+                                    count={11}
+                                />
+                            </>
                         );
                     } else if (atlas.htan_name === 'HTAN BU') {
                         return (
