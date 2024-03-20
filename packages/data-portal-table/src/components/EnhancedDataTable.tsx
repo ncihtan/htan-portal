@@ -256,7 +256,9 @@ export class EnhancedDataTable<T = any> extends React.Component<
         // download text value for each column (visible or not)
         const columnNames = this.columns.map(getColumnName);
         const rows = this.props.data.map((d) =>
-            this.columns.map((c, index) => getDefaultTextValue(d, c, index))
+            this.columns.map((c, index) =>
+                getDefaultTextValue(d, c, index).trim()
+            )
         );
 
         const downloadText = `${columnNames.join('\t')}\n${rows
