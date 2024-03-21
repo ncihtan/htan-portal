@@ -191,7 +191,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 if age_column in manifest_df.columns and is_numeric_dtype(manifest_df[age_column]):
                     older_than_89 = manifest_df[age_column] > MAX_AGE_IN_DAYS
                     manifest_df.loc[older_than_89, [age_column, "Age Is Obfuscated"]] = [MAX_AGE_IN_DAYS, True]
-                    younger_than_18 = manifest_df[age_column] < MIN_AGE_IN_DAYS
+                    # Keep 0 as is:
+                    # For some cases e.g. precancers, this field is not applicable.
+                    # Centers use 0 as an opt-out value to get around the requirement.
+                    younger_than_18 = (manifest_df[age_column] > 0) & (manifest_df[age_column] < MIN_AGE_IN_DAYS)
                     manifest_df.loc[younger_than_18, [age_column, "Age Is Obfuscated"]] = [MIN_AGE_IN_DAYS, True]
 
             # manifest might not have all columns from the schema, so add
