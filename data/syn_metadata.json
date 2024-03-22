@@ -676,6 +676,11 @@
             "component": "BulkDNALevel3",
             "synapseId": "syn52607011",
             "numItems": 18
+        },
+        {
+            "component": "PublicationManifest",
+            "synapseId": "syn53085135",
+            "numItems": 1
         }
     ],
     "HTA14": [
@@ -1951,16 +1956,6 @@
             "component": "BulkRNA-seqLevel1",
             "synapseId": "syn39282161",
             "numItems": 348
-        },
-        {
-            "component": "OtherAssay",
-            "synapseId": "syn39283032",
-            "numItems": 176
-        },
-        {
-            "component": "OtherAssay",
-            "synapseId": "syn39283075",
-            "numItems": 84
         },
         {
             "component": "ScATAC-seqLevel1",
