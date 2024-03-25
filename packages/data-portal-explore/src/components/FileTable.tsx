@@ -939,13 +939,13 @@ export class FileTable extends React.Component<IFileTableProps> {
                                     )*/}
                                 </>
                             );
-                        } else if (cellViewers.length > 0) {
-                            return cellViewers;
-                        } else {
-                            return 'Image Viewer Coming Soon';
                         }
-                    } else if (cellViewers.length > 0) {
+                    }
+
+                    if (cellViewers.length > 0) {
                         return cellViewers;
+                    } else if (file.Component.startsWith('ImagingLevel2')) {
+                        return 'Image Viewer Coming Soon';
                     } else {
                         return '';
                     }
