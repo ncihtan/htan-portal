@@ -1953,16 +1953,6 @@
             "numItems": 348
         },
         {
-            "component": "OtherAssay",
-            "synapseId": "syn39283032",
-            "numItems": 176
-        },
-        {
-            "component": "OtherAssay",
-            "synapseId": "syn39283075",
-            "numItems": 84
-        },
-        {
             "component": "ScATAC-seqLevel1",
             "synapseId": "syn39283342",
             "numItems": 640

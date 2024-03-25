@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
    40kB  sourcemap-register.js
-45915kB  index.js
+45867kB  index.js
  1382kB  index.js.map
-45955kB  [93936ms] - ncc 0.28.6
+45907kB  [114645ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'ScRNA-seqLevel2',
   Filename: 'single_cell_RNAseq_level_2_ped_glioma/HGG_7316_1057_R2/possorted_genome_bam.bam',
@@ -25372,5 +25372,5 @@ Missing ParentBiospecimenID:  {
   ParentDataFileID: 'HTA10_05_92131716174070243030005087376361,HTA10_05_63122224365351110135262081126766',
   primaryParents: []
 }
-51335
+51075
 2341
