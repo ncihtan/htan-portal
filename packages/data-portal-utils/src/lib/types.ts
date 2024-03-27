@@ -36,6 +36,8 @@ export enum GenericAttributeNames {
     ParticipantID = 'ParticipantID',
     ParentBiospecimenID = 'ParentBiospecimenID',
     ParentDataFileID = 'ParentDataFileID',
+    AccessoryAssociatedParentDataFileID = 'AccessoryAssociatedParentDataFileID',
+    CenterID = 'CenterID',
 }
 
 export type AttributeMap<T, Attribute extends string> = {

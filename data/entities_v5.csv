@@ -1,4 +1,5 @@
 entityId,Data_Release,Id,type,CDS_Release,IDC_Release,Component,channel_metadata_version,channel_metadata_synapseId
+syn25485809,Release 5.1,b5f2d38c-7dcb-449a-9fef-f50d6501c5d5,Folder,,,AccessoryManifest,,
 syn25459682,Release 1.0,,file,,,,,
 syn23763993,Release 1.0,,file,,,OtherAssay,,
 syn23764187,Release 1.0,,file,,,OtherAssay,,
