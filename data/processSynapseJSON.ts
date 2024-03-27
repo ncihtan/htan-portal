@@ -5,6 +5,7 @@ import fs from 'fs';
 import csvToJson from 'csvtojson';
 import atlasJson from './atlases.json';
 import {
+    AccessoryManifest,
     Atlas,
     AtlasMeta,
     AutoMinerva,
@@ -220,7 +221,10 @@ function addDownloadSourcesInfo(
             } else {
                 file.downloadSource = DownloadSourceCategory.dbgap;
             }
-        } else if (file.Component === 'OtherAssay') {
+        } else if (
+            file.Component === 'OtherAssay' ||
+            file.Component === 'AccessoryManifest'
+        ) {
             if (file.AssayType?.toLowerCase() === '10x visium') {
                 // 10X Visium raw data will go to dbGap, but isn't available yet
                 file.downloadSource = DownloadSourceCategory.dbgap;
@@ -265,6 +269,16 @@ function processSynapseJSON(
         //     d.ParentID = d.HTANParentID;
         // }
     });
+
+    flatData
+        .filter((obj) => obj.Component === 'AccessoryManifest')
+        .forEach((entity) => {
+            const accessory = (entity as unknown) as AccessoryManifest;
+            entity.Filename = accessory.AccessoryName;
+            entity.synapseId = accessory.AccessorySynapseID;
+            entity.ParentDataFileID =
+                accessory.AccessoryAssociatedParentDataFileID;
+        });
 
     //flatData = flatData.filter((f) => f.atlasid === 'HTA7');
 
@@ -360,7 +374,7 @@ function processSynapseJSON(
 
     const filesById = _.keyBy(files, (f) => f.DataFileID);
 
-    addPrimaryParents(files);
+    addPrimaryParents(files, filesById);
 
     const {
         biospecimenByBiospecimenID,
@@ -469,11 +483,12 @@ function processSynapseJSON(
     return ret;
 }
 
-function addPrimaryParents(files: BaseSerializableEntity[]) {
-    const fileIdToFile = _.keyBy(files, (f) => f.DataFileID);
-
+function addPrimaryParents(
+    files: BaseSerializableEntity[],
+    filesByFileId: { [DataFileID: string]: BaseSerializableEntity }
+) {
     files.forEach((f) => {
-        findAndAddPrimaryParents(f, fileIdToFile);
+        findAndAddPrimaryParents(f, filesByFileId);
     });
 }
 
@@ -598,7 +613,10 @@ function getSampleAndPatientData(
             getParentBiospecimens(filesByHTANId[p], biospecimenByBiospecimenID)
                 .length === 0
         ) {
-            console.log('Missing ParentBiospecimenID: ', filesByHTANId[p]);
+            console.log(
+                'Missing ParentBiospecimenID: ',
+                _.pickBy(filesByHTANId[p], _.identity)
+            );
             return undefined;
         }
     }
@@ -744,6 +762,7 @@ function extractEntitiesFromSynapseData(
                             entity.Component,
                             entity.ImagingAssayType,
                             entity.AssayType,
+                            (entity as any).DataType,
                             extractParentImagingAssayTypes(
                                 entity.ParentDataFileID ||
                                     (entity as any)[
@@ -821,6 +840,7 @@ function parseRawAssayType(
     componentName: string,
     imagingAssayType?: string,
     assayType?: string,
+    dataType?: string,
     parentAssayTypes?: string[]
 ) {
     // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
@@ -832,14 +852,12 @@ function parseRawAssayType(
     const level = splitByLevel.length > 1 ? `Level ${splitByLevel[1]}` : null;
     const extractedName = splitByLevel[0];
 
-    if (imagingAssayType) {
-        // do not parse imaging assay type, use as is
-        return { name: imagingAssayType, level };
-    }
+    const type = imagingAssayType || assayType || dataType;
 
-    if (assayType) {
-        // do not parse assay type, use as is
-        return { name: assayType, level };
+    if (type) {
+        // do not parse imaging assay type or assay type or data type,
+        // use as is
+        return { name: type, level };
     }
 
     if (parentAssayTypes?.length) {

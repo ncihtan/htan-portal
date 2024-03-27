@@ -135,6 +135,16 @@ export interface AtlasMetaData {
     }[];
 }
 
+export interface AccessoryManifest {
+    AccessoryName: string;
+    AccessorySynapseID: string;
+    AccessoryType: string;
+    AccessoryDescription: string;
+    DataType: string;
+    CenterID: string;
+    AccessoryAssociatedParentDataFileID: string;
+}
+
 export interface ReleaseEntity {
     entityId: string;
     Data_Release: string;
