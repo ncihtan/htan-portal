@@ -42,65 +42,25 @@ import {
 } from '@htan/data-portal-table';
 import { ViewDetailsModal } from '@htan/data-portal-commons';
 
-import CELLXGENE_MAPPINGS from '../assets/cellxgene-mappings.json';
-import UCSCXENA_MAPPINGS from '../assets/ucscxena-mappings.json';
-import ISBCGC_MAPPINGS from '../assets/isbcgc-mappings.json';
-import CUSTOM_MINERVA_STORY_MAPPINGS from '../assets/minerva-story-mappings.json';
-import THUMBNAIL_AND_AUTOMINERVA_MAPPINGS from '../assets/htan-imaging-assets.json';
-import IDC_IMAGING_ASSETS from '../assets/idc-imaging-assets.json';
-import CDS_ASSETS from '../assets/cds_drs_mapping.json';
-
-interface ThumbnailAndAutominerva {
-    synid: string;
-    minerva?: string;
-    thumbnail?: string;
-}
-interface IdcImagingAsset {
-    collection_id: string;
-    ContainerIdentifier: string;
-    s5cmd_manifest_gcp: string;
-    s5cmd_manifest_aws: string;
-    viewer_url: string;
-}
-
-interface CdsAsset {
-    file_name: string;
-    file_size: string;
-    HTAN_Data_File_ID: string;
-    guid: string;
-    drs_uri: string;
-}
-
-const IDC_MAPPINGS: {
-    [key: string]: IdcImagingAsset;
-} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier') as any;
-
-const CDS_MAPPINGS: {
-    [key: string]: CdsAsset;
-} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID') as any;
-
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 
 interface IFileDownloadModalProps {
     files: Entity[];
     onClose: () => void;
     isOpen: boolean;
-    cdsMappings?: { [key: string]: CdsAsset };
 }
 
 const DETAILS_COLUMN_NAME = 'Metadata';
 
-function generateCdsManifestFile(
-    files: Entity[],
-    cdsMappings?: { [key: string]: CdsAsset }
-): string | undefined {
-    if (cdsMappings) {
-        const columns = ['drs_uri', 'name'];
-        const data = _(files)
-            .map((f) => cdsMappings[f.DataFileID])
-            .compact()
-            .map((asset) => [asset.drs_uri, asset.file_name])
-            .value();
+function generateCdsManifestFile(files: Entity[]): string | undefined {
+    const columns = ['drs_uri', 'name'];
+    const data = _(files)
+        .map((f) => f.viewers?.cds)
+        .compact()
+        .map((asset) => [asset.drs_uri, asset.file_name])
+        .value();
+
+    if (data.length > 0) {
         return [columns, ...data].map((row) => row.join(',')).join('\n');
     } else {
         return undefined;
@@ -109,12 +69,8 @@ function generateCdsManifestFile(
 
 const CDSInstructions: React.FunctionComponent<{
     files: Entity[];
-    cdsMappings?: { [key: string]: CdsAsset };
 }> = (props) => {
-    const manifestFile = generateCdsManifestFile(
-        props.files,
-        props.cdsMappings
-    );
+    const manifestFile = generateCdsManifestFile(props.files);
 
     return (
         <>
@@ -415,12 +371,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
-                {cdsFiles.length > 0 && (
-                    <CDSInstructions
-                        files={cdsFiles}
-                        cdsMappings={props.cdsMappings}
-                    />
-                )}
+                {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
                 {lowerLevelImagingFiles.length > 0 && (
                     <ImagingInstructionsCDS files={lowerLevelImagingFiles} />
                 )}
@@ -464,40 +415,24 @@ type ImageViewerInfo = {
     idcImageBucketGcpUrl: string | undefined;
 };
 
-function getImageViewersAssociatedWithFile(
-    file: Entity,
-    idcMappings: { [key: string]: IdcImagingAsset } = IDC_MAPPINGS,
-    ucscXenaMappings: {
-        [key: string]: string;
-    } = UCSCXENA_MAPPINGS,
-    customMinervaStoryMappings: {
-        [key: string]: string;
-    } = CUSTOM_MINERVA_STORY_MAPPINGS,
-    thumbnailAndAutominervaMappings: ThumbnailAndAutominerva[] = THUMBNAIL_AND_AUTOMINERVA_MAPPINGS
-): ImageViewerInfo {
+function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
     // check if image is in IDC
     let idcImageUrl = undefined;
     let idcImageBucketAwsUrl = undefined;
     let idcImageBucketGcpUrl = undefined;
-    if (file.DataFileID in idcMappings) {
-        idcImageUrl = idcMappings[file.DataFileID]['viewer_url'];
-        idcImageBucketAwsUrl =
-            idcMappings[file.DataFileID]['s5cmd_manifest_aws'];
-        idcImageBucketGcpUrl =
-            idcMappings[file.DataFileID]['s5cmd_manifest_gcp'];
+
+    if (file.viewers?.idc) {
+        idcImageUrl = file.viewers.idc.viewer_url;
+        idcImageBucketAwsUrl = file.viewers.idc.s5cmd_manifest_aws;
+        idcImageBucketGcpUrl = file.viewers.idc.s5cmd_manifest_gcp;
     }
 
-    const ucscXenaUrl = ucscXenaMappings[file.DataFileID];
+    const ucscXenaUrl = file.viewers?.ucscXena;
 
     // custom submitted minerva stories (w/o thumbnails)
-    const minervaCustomStoryLink =
-        customMinervaStoryMappings[getFileBase(file.Filename)];
+    const minervaCustomStoryLink = file.viewers?.customMinerva;
     // auto generated minerva stories and thumbnails
-    const autogeneratedImageInfo =
-        file.Filename &&
-        thumbnailAndAutominervaMappings.find(
-            (f: any) => f.synid === file.synapseId
-        );
+    const autogeneratedImageInfo = file.viewers?.autoMinerva;
     const thumbnailUrl =
         autogeneratedImageInfo && autogeneratedImageInfo.thumbnail;
     let minervaUrl;
@@ -534,27 +469,10 @@ interface IFileTableProps {
     };
     patientCount: number;
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
-    ucscXenaMappings?: { [key: string]: string };
-    cellxgeneMappings?: { [key: string]: string };
-    isbcgcMappings?: { [key: string]: string };
-    customMinervaStoryMappings?: { [key: string]: string };
-    thumbNailAndAutominervaMappings?: ThumbnailAndAutominerva[];
-    idcMappings?: { [key: string]: IdcImagingAsset };
-    cdsMappings?: { [key: string]: CdsAsset };
 }
 
 @observer
 export class FileTable extends React.Component<IFileTableProps> {
-    static defaultProps = {
-        ucscXenaMappings: UCSCXENA_MAPPINGS,
-        cellxgeneMappings: CELLXGENE_MAPPINGS,
-        isbcgcMappings: ISBCGC_MAPPINGS,
-        customMinervaStoryMappings: CUSTOM_MINERVA_STORY_MAPPINGS,
-        thumbNailAndAutominervaMappings: THUMBNAIL_AND_AUTOMINERVA_MAPPINGS,
-        idcMappings: IDC_MAPPINGS,
-        cdsMappings: CDS_MAPPINGS,
-    };
-
     @observable.ref selected: Entity[] = [];
     @observable clicked: Entity | undefined;
     @observable isDownloadModalOpen = false;
@@ -741,21 +659,11 @@ export class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'View',
                 cell: (file: Entity) => {
-                    const cellXGeneLink = this.props.cellxgeneMappings![
-                        getFileBase(file.Filename)
-                    ];
-                    const ucscXenaLink = this.props.ucscXenaMappings![
-                        file.DataFileID
-                    ];
-                    const bigQueryLink = this.props.isbcgcMappings![
-                        file.synapseId || ''
-                    ];
+                    const cellXGeneLink = file.viewers?.cellxgene;
+                    const ucscXenaLink = file.viewers?.ucscXena;
+                    const bigQueryLink = file.viewers?.isbcgc;
                     const imageViewers = getImageViewersAssociatedWithFile(
-                        file,
-                        this.props.idcMappings,
-                        this.props.ucscXenaMappings,
-                        this.props.customMinervaStoryMappings,
-                        this.props.thumbNailAndAutominervaMappings
+                        file
                     );
 
                     const cellViewers: JSX.Element[] = [];
@@ -951,15 +859,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                     }
                 },
                 selector: (file) =>
-                    _.values(
-                        getImageViewersAssociatedWithFile(
-                            file,
-                            this.props.idcMappings,
-                            this.props.ucscXenaMappings,
-                            this.props.customMinervaStoryMappings,
-                            this.props.thumbNailAndAutominervaMappings
-                        )
-                    ),
+                    _.values(getImageViewersAssociatedWithFile(file)),
                 wrap: true,
                 sortable: true,
             },
@@ -1121,14 +1021,12 @@ export class FileTable extends React.Component<IFileTableProps> {
                     files={this.selected}
                     onClose={this.onDownloadModalClose}
                     isOpen={this.isDownloadModalOpen}
-                    cdsMappings={this.props.cdsMappings}
                 />
 
                 <FileDownloadModal
                     files={this.clicked ? [this.clicked] : []}
                     onClose={this.onLinkOutModalClose}
                     isOpen={this.isLinkOutModalOpen}
-                    cdsMappings={this.props.cdsMappings}
                 />
 
                 <ViewDetailsModal

@@ -7,10 +7,13 @@ import atlasJson from './atlases.json';
 import {
     Atlas,
     AtlasMeta,
+    AutoMinerva,
     BaseSerializableEntity,
+    CdsAsset,
     DataFileID,
     DownloadSourceCategory,
     Entity,
+    IdcImagingAsset,
     ReleaseEntity,
     SerializableEntity,
 } from '../packages/data-portal-commons/src/lib/entity';
@@ -29,9 +32,27 @@ import {
     getAttributeToSchemaIdMap,
     SchemaDataById,
 } from '../packages/data-portal-schema/src/lib/dataSchemaHelpers';
+import { getFileBase } from '../packages/data-portal-utils/src/lib/file';
 
-// import idcAssets from '../packages/data-portal-explore/src/assets/idc-imaging-assets.json';
-// const idcIds = _.keyBy(idcAssets, 'ContainerIdentifier');
+import CELLXGENE_MAPPINGS from './cellxgene-mappings.json';
+import UCSCXENA_MAPPINGS from './ucscxena-mappings.json';
+import ISBCGC_MAPPINGS from './isbcgc-mappings.json';
+import CUSTOM_MINERVA_STORY_MAPPINGS from './minerva-story-mappings.json';
+import AUTOMINERVA_ASSETS from './htan-imaging-assets.json';
+import IDC_IMAGING_ASSETS from './idc-imaging-assets.json';
+import CDS_ASSETS from './cds_drs_mapping.json';
+
+const IDC_MAPPINGS: {
+    [fileId: string]: IdcImagingAsset;
+} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier') as any;
+
+const CDS_MAPPINGS: {
+    [fileId: string]: CdsAsset;
+} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID') as any;
+
+const AUTOMINERVA_MAPPINGS: {
+    [synapseId: string]: AutoMinerva;
+} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid') as any;
 
 interface ImagingMetadata {
     HTAN_Data_File_ID: string;
@@ -104,6 +125,34 @@ function addImageChannelMetadata(
             version,
         };
     }
+}
+
+function addViewers(
+    file: BaseSerializableEntity,
+    ucscXenaMappings: { [fileId: string]: string } = UCSCXENA_MAPPINGS,
+    cellxgeneMappings: { [filename: string]: string } = CELLXGENE_MAPPINGS,
+    isbcgcMappings: { [synapseId: string]: string } = ISBCGC_MAPPINGS,
+    customMinervaStoryMappings: {
+        [filename: string]: string;
+    } = CUSTOM_MINERVA_STORY_MAPPINGS,
+    thumbNailAndAutominervaMappings: {
+        [synapseId: string]: AutoMinerva;
+    } = AUTOMINERVA_MAPPINGS,
+    idcMappings: { [fileId: string]: IdcImagingAsset } = IDC_MAPPINGS,
+    cdsMappings: { [fileId: string]: CdsAsset } = CDS_MAPPINGS
+) {
+    const filename = getFileBase(file.Filename);
+    const synapseId = file.synapseId || '';
+
+    file.viewers = {
+        ucscXena: ucscXenaMappings[file.DataFileID],
+        cellxgene: cellxgeneMappings[filename],
+        isbcgc: isbcgcMappings[synapseId],
+        customMinerva: customMinervaStoryMappings[filename],
+        autoMinerva: thumbNailAndAutominervaMappings[synapseId],
+        idc: idcMappings[file.DataFileID],
+        cds: cdsMappings[file.DataFileID],
+    };
 }
 
 function getDbgapSynapseIds(entitiesById: {
@@ -344,6 +393,7 @@ function processSynapseJSON(
         addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
         addImageChannelMetadata(file, entitiesById);
+        addViewers(file);
         return file as SerializableEntity;
     });
     //  .filter((f): f is SerializableEntity => !!f); // file should be defined (typescript doesnt understand (f=>f)
