@@ -13,6 +13,7 @@ import {
     DataFileID,
     DownloadSourceCategory,
     Entity,
+    FileViewerName,
     IdcImagingAsset,
     ReleaseEntity,
     SerializableEntity,
@@ -145,13 +146,14 @@ function addViewers(
     const synapseId = file.synapseId || '';
 
     file.viewers = {
-        ucscXena: ucscXenaMappings[file.DataFileID],
-        cellxgene: cellxgeneMappings[filename],
-        isbcgc: isbcgcMappings[synapseId],
-        customMinerva: customMinervaStoryMappings[filename],
-        autoMinerva: thumbNailAndAutominervaMappings[synapseId],
-        idc: idcMappings[file.DataFileID],
-        cds: cdsMappings[file.DataFileID],
+        [FileViewerName.ucscXena]: ucscXenaMappings[file.DataFileID],
+        [FileViewerName.cellxgene]: cellxgeneMappings[filename],
+        [FileViewerName.isbcgc]: isbcgcMappings[synapseId],
+        [FileViewerName.customMinerva]: customMinervaStoryMappings[filename],
+        [FileViewerName.autoMinerva]:
+            thumbNailAndAutominervaMappings[synapseId],
+        [FileViewerName.idc]: idcMappings[file.DataFileID],
+        [FileViewerName.cds]: cdsMappings[file.DataFileID],
     };
 }
 

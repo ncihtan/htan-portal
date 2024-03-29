@@ -3,8 +3,9 @@ import {
     GenericAttributeNames,
     IAttributeInfo,
 } from '@htan/data-portal-utils';
-import { getCaseValues, getNormalizedOrganCaseValues } from './getCaseValues';
 import { Atlas, Entity, SerializableEntity } from './entity';
+import { getCaseValues, getNormalizedOrganCaseValues } from './getCaseValues';
+import { getViewerValues } from './getViewerValues';
 
 export enum HTANAttributeNames {
     HTANParentID = 'HTANParentID',
@@ -98,6 +99,10 @@ export const FileAttributeMap: {
     [AttributeNames.downloadSource]: {
         path: 'downloadSource',
         displayName: 'Data Access',
+    },
+    [AttributeNames.viewers]: {
+        getValues: getViewerValues,
+        displayName: 'Viewer',
     },
     [AttributeNames.releaseVersion]: {
         path: 'releaseVersion',

@@ -40,7 +40,7 @@ import {
     getDefaultDataTableStyle,
     selectorToColumnName,
 } from '@htan/data-portal-table';
-import { ViewDetailsModal } from '@htan/data-portal-commons';
+import { getViewerValues, ViewDetailsModal } from '@htan/data-portal-commons';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 
@@ -858,8 +858,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                         return '';
                     }
                 },
-                selector: (file) =>
-                    _.values(getImageViewersAssociatedWithFile(file)),
+                selector: (file) => getViewerValues(file),
                 wrap: true,
                 sortable: true,
             },
@@ -884,6 +883,8 @@ export class FileTable extends React.Component<IFileTableProps> {
             diagnosis: true,
             primaryParents: true,
             downloadSource: true,
+            viewers: true,
+            imageChannelMetadata: true,
 
             //others to exclude
             Component: true,

@@ -16,6 +16,7 @@ import {
     DownloadSourceCategory,
     Entity,
     FileAttributeMap,
+    FileViewerName,
 } from '@htan/data-portal-commons';
 
 import styles from './fileFilterControls.module.scss';
@@ -153,6 +154,29 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                     ];
                                 return e;
                             });
+                    }}
+                />
+                <FilterDropdown
+                    {...dropdownProps}
+                    attributes={[AttributeNames.viewers]}
+                    options={(attrName: AttributeNames) => {
+                        return options(attrName).map((e: OptionType) => {
+                            const viewerLabels = {
+                                [FileViewerName.autoMinerva]: 'Autominerva',
+                                [FileViewerName.customMinerva]: 'Minerva Story',
+                                [FileViewerName.ucscXena]: 'USCS Xena',
+                                [FileViewerName.cellxgene]: 'CellxGene',
+                                [FileViewerName.isbcgc]: 'BigQuery',
+
+                                // excluded values:
+                                // we are not supposed to see these as filter options
+                                [FileViewerName.cds]: 'CDS', // excluded (this only appears as a download source)
+                                [FileViewerName.idc]: 'IDC', // excluded (we do not show IDC links anymore)
+                            };
+
+                            e.label = viewerLabels[e.value as FileViewerName];
+                            return e;
+                        });
                     }}
                 />
                 {props.enableReleaseFilter && (

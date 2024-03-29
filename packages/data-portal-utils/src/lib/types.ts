@@ -25,6 +25,7 @@ export enum AttributeNames {
     assayName = 'assayName',
     downloadSource = 'downloadSource',
     releaseVersion = 'releaseVersion',
+    viewers = 'viewers',
 }
 
 // Normalized/Generic attribute names

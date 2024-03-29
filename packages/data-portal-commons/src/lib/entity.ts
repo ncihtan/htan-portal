@@ -57,14 +57,24 @@ export interface BaseSerializableEntity {
     releaseVersion?: string;
 }
 
+export enum FileViewerName {
+    autoMinerva = 'autoMinerva',
+    idc = 'idc',
+    cds = 'cds',
+    customMinerva = 'customMinerva',
+    ucscXena = 'ucscXena',
+    cellxgene = 'cellxgene',
+    isbcgc = 'isbcgc',
+}
+
 export interface FileViewers {
-    autoMinerva?: AutoMinerva;
-    idc?: IdcImagingAsset;
-    cds?: CdsAsset;
-    customMinerva?: string;
-    ucscXena?: string;
-    cellxgene?: string;
-    isbcgc?: string;
+    [FileViewerName.autoMinerva]?: AutoMinerva;
+    [FileViewerName.idc]?: IdcImagingAsset;
+    [FileViewerName.cds]?: CdsAsset;
+    [FileViewerName.customMinerva]?: string;
+    [FileViewerName.ucscXena]?: string;
+    [FileViewerName.cellxgene]?: string;
+    [FileViewerName.isbcgc]?: string;
 }
 
 export interface AutoMinerva {
