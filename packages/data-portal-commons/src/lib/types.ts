@@ -3,7 +3,7 @@ import {
     GenericAttributeNames,
     IAttributeInfo,
 } from '@htan/data-portal-utils';
-import { getCaseValues } from './getCaseValues';
+import { getCaseValues, getNormalizedOrganCaseValues } from './getCaseValues';
 import { Atlas, Entity, SerializableEntity } from './entity';
 
 export enum HTANAttributeNames {
@@ -31,9 +31,14 @@ export const HTANToGenericAttributeMap: {
 export const FileAttributeMap: {
     [attr in AttributeNames]: IAttributeInfo<Entity>;
 } = {
+    [AttributeNames.OrganType]: {
+        getValues: getNormalizedOrganCaseValues(),
+        displayName: 'Organ',
+        caseFilter: true,
+    },
     [AttributeNames.TissueorOrganofOrigin]: {
         getValues: getCaseValues('TissueorOrganofOrigin'),
-        displayName: 'Organ',
+        displayName: 'Organ Details',
         caseFilter: true,
     },
     [AttributeNames.PrimaryDiagnosis]: {

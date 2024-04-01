@@ -7,6 +7,7 @@ export interface IAttributeInfo<T> {
 
 export enum AttributeNames {
     // Synapse attribute names
+    OrganType = 'OrganType',
     TissueorOrganofOrigin = 'TissueorOrganofOrigin',
     PrimaryDiagnosis = 'PrimaryDiagnosis',
     Gender = 'Gender',
