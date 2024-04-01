@@ -38,7 +38,7 @@ export const FileAttributeMap: {
     },
     [AttributeNames.TissueorOrganofOrigin]: {
         getValues: getCaseValues('TissueorOrganofOrigin'),
-        displayName: 'Organ Details',
+        displayName: 'Organ Detailed',
         caseFilter: true,
     },
     [AttributeNames.PrimaryDiagnosis]: {
