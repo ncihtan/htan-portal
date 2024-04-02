@@ -31,8 +31,8 @@ export const HTANToGenericAttributeMap: {
 export const FileAttributeMap: {
     [attr in AttributeNames]: IAttributeInfo<Entity>;
 } = {
-    [AttributeNames.OrganType]: {
-        getValues: getNormalizedOrganCaseValues(),
+    [AttributeNames.organType]: {
+        getValues: getNormalizedOrganCaseValues,
         displayName: 'Organ',
         caseFilter: true,
     },

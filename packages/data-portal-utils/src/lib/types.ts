@@ -7,7 +7,6 @@ export interface IAttributeInfo<T> {
 
 export enum AttributeNames {
     // Synapse attribute names
-    OrganType = 'OrganType',
     TissueorOrganofOrigin = 'TissueorOrganofOrigin',
     PrimaryDiagnosis = 'PrimaryDiagnosis',
     Gender = 'Gender',
@@ -22,6 +21,7 @@ export enum AttributeNames {
     FileFormat = 'FileFormat',
 
     // Derived or attached in frontend
+    organType = 'organType',
     assayName = 'assayName',
     downloadSource = 'downloadSource',
     releaseVersion = 'releaseVersion',
