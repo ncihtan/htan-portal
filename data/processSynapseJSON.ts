@@ -1,7 +1,10 @@
 import _ from 'lodash';
 
-import getData from '../lib/getData';
-import fs from 'fs';
+// this import causes compiler to crash due to the size of syn_data.json
+// we need to use fs instead
+// import getData from '../lib/getData';
+
+import fs, { readFileSync } from 'fs';
 import csvToJson from 'csvtojson';
 import atlasJson from './atlases.json';
 import {
@@ -46,15 +49,15 @@ import CDS_ASSETS from './cds_drs_mapping.json';
 
 const IDC_MAPPINGS: {
     [fileId: string]: IdcImagingAsset;
-} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier') as any;
+} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier');
 
 const CDS_MAPPINGS: {
     [fileId: string]: CdsAsset;
-} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID') as any;
+} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID');
 
 const AUTOMINERVA_MAPPINGS: {
     [synapseId: string]: AutoMinerva;
-} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid') as any;
+} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid');
 
 interface ImagingMetadata {
     HTAN_Data_File_ID: string;
@@ -62,7 +65,7 @@ interface ImagingMetadata {
 }
 
 async function writeProcessedFile() {
-    const synapseJson = getData();
+    const synapseJson = getSynData();
     const schemaData = await fetchAndProcessSchemaData();
     const entitiesById = await getEntitiesById();
     const imagingLevel1ById = await getImagingLevel1ById();
@@ -83,6 +86,11 @@ async function writeProcessedFile() {
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
+}
+
+function getSynData(): SynapseData {
+    const data = readFileSync('public/syn_data.json', { encoding: 'utf8' });
+    return JSON.parse(data);
 }
 
 async function getEntitiesById() {
@@ -289,7 +297,7 @@ function processSynapseJSON(
         .filter((obj) => obj.Component === 'AccessoryManifest')
         .forEach((entity) => {
             const accessory = (entity as unknown) as AccessoryManifest;
-            entity.Filename = accessory.AccessoryName;
+            entity.Filename = accessory.DatasetName;
             entity.synapseId = accessory.AccessorySynapseID;
             entity.ParentDataFileID =
                 accessory.AccessoryAssociatedParentDataFileID;
@@ -741,6 +749,10 @@ function extractEntitiesFromSynapseData(
                 // this is a workaround for missing AssayType for certain schema ids
                 if (synapseRecords.column_order.includes('Assay Type')) {
                     attributeToId['Assay Type'] = 'bts:AssayType';
+                }
+                // this is a workaround for missing DatasetName for certain schema ids
+                if (synapseRecords.column_order.includes('Dataset Name')) {
+                    attributeToId['Dataset Name'] = 'bts:DatasetName';
                 }
 
                 synapseRecords.record_list.forEach((record) => {

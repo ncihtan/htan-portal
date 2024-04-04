@@ -92,10 +92,9 @@ export interface IdcImagingAsset {
 }
 
 export interface CdsAsset {
-    file_name: string;
-    file_size: string;
+    name: string;
+    entityId?: string;
     HTAN_Data_File_ID: string;
-    guid: string;
     drs_uri: string;
 }
 
@@ -136,12 +135,12 @@ export interface AtlasMetaData {
 }
 
 export interface AccessoryManifest {
-    AccessoryName: string;
+    DatasetName: string;
     AccessorySynapseID: string;
-    AccessoryType: string;
     AccessoryDescription: string;
     DataType: string;
     CenterID: string;
+    ParentBiospecimenID: string;
     AccessoryAssociatedParentDataFileID: string;
 }
 
