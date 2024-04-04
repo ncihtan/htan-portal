@@ -136,12 +136,12 @@ export interface AtlasMetaData {
 }
 
 export interface AccessoryManifest {
-    AccessoryName: string;
+    DatasetName: string;
     AccessorySynapseID: string;
-    AccessoryType: string;
     AccessoryDescription: string;
     DataType: string;
     CenterID: string;
+    ParentBiospecimenID: string;
     AccessoryAssociatedParentDataFileID: string;
 }
 
