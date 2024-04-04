@@ -55,7 +55,11 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                 />
                 <FilterDropdown
                     {...dropdownProps}
-                    attributes={[AttributeNames.TissueorOrganofOrigin]}
+                    attributes={[
+                        AttributeNames.organType,
+                        AttributeNames.TissueorOrganofOrigin,
+                    ]}
+                    className={styles.filterCheckboxListContainer}
                 />
                 <FilterDropdown
                     {...dropdownProps}

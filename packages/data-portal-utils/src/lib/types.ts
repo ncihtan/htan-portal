@@ -21,6 +21,7 @@ export enum AttributeNames {
     FileFormat = 'FileFormat',
 
     // Derived or attached in frontend
+    organType = 'organType',
     assayName = 'assayName',
     downloadSource = 'downloadSource',
     releaseVersion = 'releaseVersion',
