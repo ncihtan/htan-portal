@@ -164,7 +164,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                             const viewerLabels = {
                                 [FileViewerName.autoMinerva]: 'Autominerva',
                                 [FileViewerName.customMinerva]: 'Minerva Story',
-                                [FileViewerName.ucscXena]: 'USCS Xena',
+                                [FileViewerName.ucscXena]: 'UCSC Xena',
                                 [FileViewerName.cellxgene]: 'CellxGene',
                                 [FileViewerName.isbcgc]: 'BigQuery',
 
