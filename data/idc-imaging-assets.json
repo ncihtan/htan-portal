@@ -1,0 +1,1543 @@
+[{
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_931_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/24e6f04d-4ff9-46b3-89f7-e3f3e601a6ec/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/24e6f04d-4ff9-46b3-89f7-e3f3e601a6ec/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.63504200218356539417558724289824234398/series/1.3.6.1.4.1.5962.99.1.2336236735.1380885418.1655898678463.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_940_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/32fb01b9-d7af-4033-a8e9-924f1ff138f0/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/32fb01b9-d7af-4033-a8e9-924f1ff138f0/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.254901417575324832540235892437527774975/series/1.3.6.1.4.1.5962.99.1.2351537988.1691156399.1655913979716.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_927_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/faf450a7-fd10-40ee-9166-d3f0c6adcdb7/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/faf450a7-fd10-40ee-9166-d3f0c6adcdb7/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.252944744259825394775026913206036790581/series/1.3.6.1.4.1.5962.99.1.2341534466.1727676165.1655903976194.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_982_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0ab719e1-824e-4fd9-9987-3d0e023a7723/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0ab719e1-824e-4fd9-9987-3d0e023a7723/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.322763956086448848651654481429424487892/series/1.3.6.1.4.1.5962.99.1.2347249348.1148593387.1655909691076.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_926_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/969f7508-a387-4fae-bc8c-3b32b3304d6b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/969f7508-a387-4fae-bc8c-3b32b3304d6b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.93749216439228361118017742627453453196/series/1.3.6.1.4.1.5962.99.1.2344794501.795090168.1655907236229.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_989_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/29deb524-f3e7-4727-acad-d001b119d3cb/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/29deb524-f3e7-4727-acad-d001b119d3cb/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.67204616595610313210404611407915801307/series/1.3.6.1.4.1.5962.99.1.2338218239.733521778.1655900659967.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_920_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fc078201-b5c5-47d1-92da-3c81dd8cc2c5/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fc078201-b5c5-47d1-92da-3c81dd8cc2c5/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.219049900737444567890964056686598614067/series/1.3.6.1.4.1.5962.99.1.2343322182.1764456793.1655905763910.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_966_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/d4664fad-d4fb-4473-b9ed-0c52502fba29/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/d4664fad-d4fb-4473-b9ed-0c52502fba29/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.14542022415536418286893333022896470177/series/1.3.6.1.4.1.5962.99.1.2356610445.548875431.1655919052173.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_965_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4d4f4c0f-f56f-4003-a79e-735b9273444f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4d4f4c0f-f56f-4003-a79e-735b9273444f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.174442227011591161839224535127252003551/series/1.3.6.1.4.1.5962.99.1.2352175091.700331458.1655914616819.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_925_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2ef04eea-f6fe-4982-8f7f-774c0fbc7e78/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2ef04eea-f6fe-4982-8f7f-774c0fbc7e78/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.110940496032974123445604819863673717982/series/1.3.6.1.4.1.5962.99.1.2354479345.898820832.1655916921073.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_932_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9470d416-17e6-4630-9af6-53d346b7e104/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9470d416-17e6-4630-9af6-53d346b7e104/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.332948525917882045731716820411285694886/series/1.3.6.1.4.1.5962.99.1.2339926922.537408935.1655902368650.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_963_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/42d075f2-de7d-4bb6-9ae6-db1a6aa37116/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/42d075f2-de7d-4bb6-9ae6-db1a6aa37116/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.12616158998399217132499508662048718824/series/1.3.6.1.4.1.5962.99.1.2358547573.1319252942.1655920989301.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_922_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9ae8a7ba-20cf-48d4-81a0-7f9e58241479/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9ae8a7ba-20cf-48d4-81a0-7f9e58241479/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.6018351362280197054240452097367934352/series/1.3.6.1.4.1.5962.99.1.2349996087.1135814742.1655912437815.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_947_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7f8185e9-4ffb-4ae5-aa5b-f5b1789587e3/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7f8185e9-4ffb-4ae5-aa5b-f5b1789587e3/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.225599974078887472942035661647638662953/series/1.3.6.1.4.1.5962.99.1.2335350246.1827777996.1655897791974.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_972_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fc33e647-80fb-4feb-83ec-a1e8ec77ae62/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fc33e647-80fb-4feb-83ec-a1e8ec77ae62/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.183140175210739429826415953400233623278/series/1.3.6.1.4.1.5962.99.1.2333800755.566110932.1655896242483.4.0"
+}, {
+  "collection_id": "htan_hms",
+  "ContainerIdentifier": "HTA7_934_1000",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8804b3f9-be42-4741-96e3-533a6b9f3527/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8804b3f9-be42-4741-96e3-533a6b9f3527/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.117883364358159671221262672841070158229/series/1.3.6.1.4.1.5962.99.1.2349207558.1001768372.1655911649286.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19381",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/af58810a-88a3-492d-96c6-a80ab64e20a2/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/af58810a-88a3-492d-96c6-a80ab64e20a2/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004639876.655203702.1655567081604.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19354",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4ada40a0-b9da-4fde-89ff-401fd5ff1d57/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4ada40a0-b9da-4fde-89ff-401fd5ff1d57/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2010065184.1602976367.1655572506912.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19405",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8259b981-ce16-4977-b779-5f463699af04/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8259b981-ce16-4977-b779-5f463699af04/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.1999913606.1850799359.1655562355334.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19391",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c462db0f-ffaa-44bd-ac1e-35a31da50b3c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c462db0f-ffaa-44bd-ac1e-35a31da50b3c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2013254288.1372340956.1655575696016.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19382",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/674d553e-66db-4f11-99f9-4390b2289c7f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/674d553e-66db-4f11-99f9-4390b2289c7f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2003013508.1408274825.1655565455236.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19400",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/862602fb-7c11-41e7-9585-8e24e835d219/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/862602fb-7c11-41e7-9585-8e24e835d219/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004610689.105885394.1655567052417.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19364",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e057ec46-acd7-443e-88d5-a5a59f1d8b92/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e057ec46-acd7-443e-88d5-a5a59f1d8b92/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001260258.1174952924.1655563701986.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19392",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/bc5eb83b-9856-4d1a-aa15-d8edff7f0bdb/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/bc5eb83b-9856-4d1a-aa15-d8edff7f0bdb/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001461274.1543534697.1655563903002.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19351",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/592e82a3-577c-4570-8d8b-8675f5a5d44f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/592e82a3-577c-4570-8d8b-8675f5a5d44f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004408628.1447084552.1655566850356.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19395",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2b441701-0762-4379-b7af-820e1af2b7d7/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2b441701-0762-4379-b7af-820e1af2b7d7/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004599634.2031791059.1655567041362.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19372",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/09114388-963d-499c-bb2e-5ea68ec29d80/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/09114388-963d-499c-bb2e-5ea68ec29d80/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001408332.1308638284.1655563850060.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19388",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/56f02d12-24d1-4759-9739-3904d77e71a6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/56f02d12-24d1-4759-9739-3904d77e71a6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001304771.534333346.1655563746499.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19375",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8b69f25f-8e90-4410-9b07-05a3d0be086b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8b69f25f-8e90-4410-9b07-05a3d0be086b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.1999932010.1115442694.1655562373738.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19352",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7cb02fca-6b69-4e5b-aabf-3ef4c9ef509a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7cb02fca-6b69-4e5b-aabf-3ef4c9ef509a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2013779705.1546490180.1655576221433.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19398",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/97ce2abb-778d-4d15-b937-43d99ad128f5/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/97ce2abb-778d-4d15-b937-43d99ad128f5/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001421246.912751256.1655563862974.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19369",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e7b39f57-74bc-4b57-9702-99a6edda7cb2/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e7b39f57-74bc-4b57-9702-99a6edda7cb2/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001352215.222014479.1655563793943.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19394",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/333ed13f-1c0a-4b3a-875f-1d9eb7b11c25/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/333ed13f-1c0a-4b3a-875f-1d9eb7b11c25/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002871260.2000299587.1655565312988.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19347",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fae65243-f2f2-4697-8da5-7631fb08f0cf/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fae65243-f2f2-4697-8da5-7631fb08f0cf/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002989528.2002967284.1655565431256.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19368",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/f12eb70d-d775-457b-bafe-5eaa265f76d3/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/f12eb70d-d775-457b-bafe-5eaa265f76d3/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004433761.246900390.1655566875489.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19396",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/b67a9aee-2f12-4e9d-9e00-7130e5017545/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/b67a9aee-2f12-4e9d-9e00-7130e5017545/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.1999891937.339225835.1655562333665.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19385",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ca908952-a190-4e1b-983d-57f81d6b76aa/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ca908952-a190-4e1b-983d-57f81d6b76aa/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001565487.1105832235.1655564007215.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19384",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0e07cd5c-80d0-4672-8e27-8eedca13cb9a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0e07cd5c-80d0-4672-8e27-8eedca13cb9a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001594473.1087197892.1655564036201.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19402",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/b1038356-0050-49c9-8557-05a5df3fe799/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/b1038356-0050-49c9-8557-05a5df3fe799/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004627238.328821075.1655567068966.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19357",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6793033e-adb1-4906-900a-15a905d3fe75/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6793033e-adb1-4906-900a-15a905d3fe75/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001583726.295793321.1655564025454.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19353",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fa1187e2-eff6-47f0-b3ba-b87f5193a247/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fa1187e2-eff6-47f0-b3ba-b87f5193a247/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001622153.2085461331.1655564063881.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19361",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/34dee460-55c1-4dd1-ac20-877895f5b64a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/34dee460-55c1-4dd1-ac20-877895f5b64a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2012841855.2045985715.1655575283583.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19407",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/d2d6ed54-f3fc-4756-970a-8f3395bac18f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/d2d6ed54-f3fc-4756-970a-8f3395bac18f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001486518.637368694.1655563928246.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19360",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8a0e00cc-ea87-4e3d-8cca-5ccd20a9bef6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8a0e00cc-ea87-4e3d-8cca-5ccd20a9bef6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.1999961153.107570894.1655562402881.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19356",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0ff1c77e-1830-430c-b729-6b87a4a8d3ca/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0ff1c77e-1830-430c-b729-6b87a4a8d3ca/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004422372.256403475.1655566864100.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19404",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/21dee502-6b6c-486d-9213-f04c27ff79ff/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/21dee502-6b6c-486d-9213-f04c27ff79ff/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004658766.495663154.1655567100494.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19397",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/67332bcc-b237-4ea8-a1fc-c47e4b260d93/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/67332bcc-b237-4ea8-a1fc-c47e4b260d93/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004546385.282487461.1655566988113.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19403",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/5ed1fe3c-591a-4b73-a853-a0e29714cb25/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/5ed1fe3c-591a-4b73-a853-a0e29714cb25/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001320924.528507223.1655563762652.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19362",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e6834690-0515-468f-a4f2-32e8cab030c9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e6834690-0515-468f-a4f2-32e8cab030c9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002981582.653440744.1655565423310.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19401",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/060b6933-52ad-47aa-b6e2-54493a20149e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/060b6933-52ad-47aa-b6e2-54493a20149e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2003005515.495970520.1655565447243.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19348",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6eef15ef-c2fc-4afe-afd3-6c78ef1bbdd8/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6eef15ef-c2fc-4afe-afd3-6c78ef1bbdd8/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001435088.1627843431.1655563876816.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19365",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7ccd92b5-644e-4132-87f8-1676c2a3b04f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7ccd92b5-644e-4132-87f8-1676c2a3b04f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001633431.1891298710.1655564075159.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19383",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/eb230433-9de5-450b-8df2-c4a312caaf9b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/eb230433-9de5-450b-8df2-c4a312caaf9b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001397653.594712739.1655563839381.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19350",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/57921b30-9175-4683-b77b-04337c05a652/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/57921b30-9175-4683-b77b-04337c05a652/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001188575.1421064015.1655563630303.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19378",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/15434ccf-ceed-4bb5-a513-26008ee8ee2b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/15434ccf-ceed-4bb5-a513-26008ee8ee2b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001378817.1491085249.1655563820545.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19376",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8b7de07a-2093-4dbe-8f2f-17db74ebd8af/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8b7de07a-2093-4dbe-8f2f-17db74ebd8af/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004568860.1593818490.1655567010588.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19389",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0050d170-c3ec-49d3-9490-820de0f60f37/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0050d170-c3ec-49d3-9490-820de0f60f37/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004557074.1710276453.1655566998802.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19349",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fbbac979-f05f-4487-b4d7-7ef54b59caa9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fbbac979-f05f-4487-b4d7-7ef54b59caa9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002909629.79841001.1655565351357.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19370",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/cc70a57b-c42f-492d-bbfe-7c8009f520cc/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/cc70a57b-c42f-492d-bbfe-7c8009f520cc/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001474226.147199731.1655563915954.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19387",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/46813d84-ace4-423e-8f29-17c21cb5cbdf/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/46813d84-ace4-423e-8f29-17c21cb5cbdf/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001446759.658991852.1655563888487.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19367",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/f61ca20f-fd34-4590-99f5-4b434bf18ec9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/f61ca20f-fd34-4590-99f5-4b434bf18ec9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002859361.1606213659.1655565301089.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19366",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/94d3f8dd-fa8c-42a6-b421-70b70b7ac858/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/94d3f8dd-fa8c-42a6-b421-70b70b7ac858/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001153488.1991136547.1655563595216.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19390",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/1a0f9289-d085-4a0e-8e0f-40fd666a0810/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/1a0f9289-d085-4a0e-8e0f-40fd666a0810/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001333499.1161508071.1655563775227.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19380",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a76c1ecf-de91-4354-a84b-5172fe90cebb/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a76c1ecf-de91-4354-a84b-5172fe90cebb/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.1999899662.837389685.1655562341390.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19373",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4c2e786f-2d6c-4eda-8c27-9c336eceac47/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4c2e786f-2d6c-4eda-8c27-9c336eceac47/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2012220826.2112022973.1655574662554.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19377",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/d4d6ef6f-fbc3-4561-a660-f46996dbbb23/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/d4d6ef6f-fbc3-4561-a660-f46996dbbb23/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002797870.1841310410.1655565239598.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19363",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0c32fceb-15c7-47d1-ab50-ea7725d4ebd6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0c32fceb-15c7-47d1-ab50-ea7725d4ebd6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.1999877904.570862717.1655562319632.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19399",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/762a3b42-15be-4188-b942-b3bf8b0956ff/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/762a3b42-15be-4188-b942-b3bf8b0956ff/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001240782.287874634.1655563682510.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19355",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/989aaf8f-4ac1-4ea0-ae3e-f0446df1e045/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/989aaf8f-4ac1-4ea0-ae3e-f0446df1e045/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002779289.1558270501.1655565221017.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19386",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0c62787f-77f6-49dd-ad66-b65c5270d6bf/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0c62787f-77f6-49dd-ad66-b65c5270d6bf/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001610341.1224487917.1655564052069.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19359",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2122d2df-5f03-490c-96fb-e63f6b713dbb/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2122d2df-5f03-490c-96fb-e63f6b713dbb/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2003025013.374987231.1655565466741.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19406",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/aca9983c-76c4-4bb9-b87a-71d4bd8e96a1/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/aca9983c-76c4-4bb9-b87a-71d4bd8e96a1/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2004400158.1892580498.1655566841886.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19374",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/221eee0a-9ad6-4912-ad8d-e8329285f95e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/221eee0a-9ad6-4912-ad8d-e8329285f95e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2001499665.1264391492.1655563941393.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19358",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9b5f1772-f777-4af4-9db3-c2266b9374ca/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9b5f1772-f777-4af4-9db3-c2266b9374ca/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.1999943671.2106835689.1655562385399.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19379",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/3a1cc01d-ddf3-4374-a03a-7b188d128b8a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/3a1cc01d-ddf3-4374-a03a-7b188d128b8a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2000002781.2080371485.1655562444509.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19393",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/39cbeca6-64bd-4585-ba4a-26ce50563520/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/39cbeca6-64bd-4585-ba4a-26ce50563520/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2002970980.1844875609.1655565412708.4.0"
+}, {
+  "collection_id": "htan_ohsu",
+  "ContainerIdentifier": "HTA9_1_19371",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6765a04c-dd2f-46f4-b5e8-8a62ff89f85b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6765a04c-dd2f-46f4-b5e8-8a62ff89f85b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56219147941526607962658668060030231728/series/1.3.6.1.4.1.5962.99.1.2009575316.1796047989.1655572017044.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_5363_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/28c19794-ed82-46d1-b88f-7e240319ad97/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/28c19794-ed82-46d1-b88f-7e240319ad97/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.299152614250066146234842437094031628065/series/1.3.6.1.4.1.5962.99.1.2023588373.570156204.1655586030101.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_6310_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8ef1f905-d534-4c60-96f0-c88492108f9f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8ef1f905-d534-4c60-96f0-c88492108f9f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.56115345837513368503969053110363422975/series/1.3.6.1.4.1.5962.99.1.2029105063.292262247.1655591546791.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_83_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7de8369c-78ab-48ff-9849-48b3115d2894/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7de8369c-78ab-48ff-9849-48b3115d2894/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.141304034806899242283797762743914225437/series/1.3.6.1.4.1.5962.99.1.2028839529.1698300122.1655591281257.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_5212_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7fc7f716-88a1-4a78-84c0-3a0372f5b493/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7fc7f716-88a1-4a78-84c0-3a0372f5b493/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.130654039932749245205132084727013247774/series/1.3.6.1.4.1.5962.99.1.2028007392.112868735.1655590449120.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_4814_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/524f409e-89f8-40b0-b046-c421860a915e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/524f409e-89f8-40b0-b046-c421860a915e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.222772139355668438306287661917495394754/series/1.3.6.1.4.1.5962.99.1.2028800872.1256544387.1655591242600.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_347_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2c69ce64-9a00-4aa0-921f-609cdbb1cf2f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2c69ce64-9a00-4aa0-921f-609cdbb1cf2f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.136678376329199259039490655952038128147/series/1.3.6.1.4.1.5962.99.1.2015146741.124585992.1655577588469.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_6134_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/3c85fdf3-828e-4dc5-b9ac-1caff9f75a92/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/3c85fdf3-828e-4dc5-b9ac-1caff9f75a92/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.223819256077734341293314744424346843765/series/1.3.6.1.4.1.5962.99.1.2028022950.1406956756.1655590464678.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_1391_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/414982ac-811e-4767-a7db-e2c867ae8076/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/414982ac-811e-4767-a7db-e2c867ae8076/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.155118844294092675540800503483899863510/series/1.3.6.1.4.1.5962.99.1.2027525727.229099027.1655589967455.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_5216_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/464d0c4d-b573-438d-9544-e86d05cd1e23/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/464d0c4d-b573-438d-9544-e86d05cd1e23/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.280338837796970950798840375207165847449/series/1.3.6.1.4.1.5962.99.1.2015452375.470775083.1655577894103.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_1938_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fae688f0-4a61-4f14-9de0-c22f0c9a0e42/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fae688f0-4a61-4f14-9de0-c22f0c9a0e42/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.108866772478452337981181761486328908716/series/1.3.6.1.4.1.5962.99.1.2015457738.1342440824.1655577899466.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_377_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a1a1e797-a747-4c2b-acbb-4f746a6ecf03/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a1a1e797-a747-4c2b-acbb-4f746a6ecf03/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.74210888605856996534162977586716216682/series/1.3.6.1.4.1.5962.99.1.2028033330.19370385.1655590475058.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_2487_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fb74b639-f05f-47c5-910a-0557f71688b2/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fb74b639-f05f-47c5-910a-0557f71688b2/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.81644786926906880986748756544982937708/series/1.3.6.1.4.1.5962.99.1.2018131912.267964855.1655580573640.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_411_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/da41ed7c-63c6-4243-96a4-57b14e5b2e90/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/da41ed7c-63c6-4243-96a4-57b14e5b2e90/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.45917739253661896707624071772956858173/series/1.3.6.1.4.1.5962.99.1.2017690649.1540759700.1655580132377.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_2235_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6e831262-8440-4a24-83e8-c14ced1a8d95/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6e831262-8440-4a24-83e8-c14ced1a8d95/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.106707469196275252632882803931515445752/series/1.3.6.1.4.1.5962.99.1.2014846595.959454184.1655577288323.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_6147_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8e976a5d-82f6-4ac5-8e52-c31e4babef69/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8e976a5d-82f6-4ac5-8e52-c31e4babef69/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.121513904408392679872389003041516176144/series/1.3.6.1.4.1.5962.99.1.2014787298.818394176.1655577229026.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_3252_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4fa49a55-ae98-4f18-be59-2197aecab04b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4fa49a55-ae98-4f18-be59-2197aecab04b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.191164426657311491813359282795889341752/series/1.3.6.1.4.1.5962.99.1.2025997720.28843108.1655588439448.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_3077_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/baf1ea68-c88a-48c2-92c8-bd8a429ec2d3/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/baf1ea68-c88a-48c2-92c8-bd8a429ec2d3/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.55341963929698123367118110418162593323/series/1.3.6.1.4.1.5962.99.1.2021512443.667819356.1655583954171.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_6025_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e715bc3f-533b-408f-8a2c-76262b23d538/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e715bc3f-533b-408f-8a2c-76262b23d538/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.105977826127761824701741042836166976297/series/1.3.6.1.4.1.5962.99.1.2028036040.1471446101.1655590477768.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_5994_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c1b95d90-2cdb-4360-a724-3383f3849ddc/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c1b95d90-2cdb-4360-a724-3383f3849ddc/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.274667635380182812266266523682003693106/series/1.3.6.1.4.1.5962.99.1.2023595485.1175917282.1655586037213.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_3331_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/eb1a22d7-467a-49c0-9f35-3f958065e968/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/eb1a22d7-467a-49c0-9f35-3f958065e968/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.78571822748900300835756095601342553626/series/1.3.6.1.4.1.5962.99.1.2018578272.1959471782.1655581020000.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_866_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/f440bb63-c6f8-4c91-bab5-7bd9e30a619e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/f440bb63-c6f8-4c91-bab5-7bd9e30a619e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.290373112196293767121682316470713832864/series/1.3.6.1.4.1.5962.99.1.2025795855.1687783453.1655588237583.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_392_30000110116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/89adc6c7-4160-467e-b007-388f0abf31ca/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/89adc6c7-4160-467e-b007-388f0abf31ca/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.205180430460321101174711902121260552187/series/1.3.6.1.4.1.5962.99.1.2022303510.2054842762.1655584745238.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_696_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/df516c3e-0185-4ece-bf05-19c98934e76a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/df516c3e-0185-4ece-bf05-19c98934e76a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.198746461642842506260303140159169963149/series/1.3.6.1.4.1.5962.99.1.2027777118.231090366.1655590218846.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_2951_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4ce0c603-9e02-405c-9577-7babece78890/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4ce0c603-9e02-405c-9577-7babece78890/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.21737092635811272212460937846019577793/series/1.3.6.1.4.1.5962.99.1.2029433904.405073487.1655591875632.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_3361_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/95ca2efb-ef28-4118-b86b-f745f0e8899e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/95ca2efb-ef28-4118-b86b-f745f0e8899e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.50678475828284655278764614204781411443/series/1.3.6.1.4.1.5962.99.1.2016158703.1317520913.1655578600431.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_2112_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a0d19e2c-f97b-47c7-8b9d-62a7284a9b50/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a0d19e2c-f97b-47c7-8b9d-62a7284a9b50/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.14044170736034471630899250679249381145/series/1.3.6.1.4.1.5962.99.1.2023270013.1664986074.1655585711741.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_4255_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/999ea1f2-2e89-4e65-ba40-e4e412e6d4f3/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/999ea1f2-2e89-4e65-ba40-e4e412e6d4f3/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.191758974042842106845284866890880896225/series/1.3.6.1.4.1.5962.99.1.2027758821.1581289772.1655590200549.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_4781_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/da89a9b7-33c4-47e9-8014-3f42b5ead6b9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/da89a9b7-33c4-47e9-8014-3f42b5ead6b9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.42958612283539602527848639686052180724/series/1.3.6.1.4.1.5962.99.1.2028378565.1859220651.1655590820293.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_546_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4f23a80a-3054-4199-ad98-b6490838a1b6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4f23a80a-3054-4199-ad98-b6490838a1b6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.215244595345296939373838636406158345745/series/1.3.6.1.4.1.5962.99.1.2027811345.1425031706.1655590253073.4.0"
+}, {
+  "collection_id": "htan_vanderbilt",
+  "ContainerIdentifier": "HTA11_3410_20000010116110030010000009999",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ee7587a5-7fb6-44ce-aad0-25d91a245961/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ee7587a5-7fb6-44ce-aad0-25d91a245961/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.82640053169274498087101860920789686319/series/1.3.6.1.4.1.5962.99.1.2026407520.1918301490.1655588849248.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4f58d98a-a48c-4b9f-ac1f-facf5ac5bc57/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4f58d98a-a48c-4b9f-ac1f-facf5ac5bc57/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997697599.452296018.1655560139327.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/bfc534b1-656a-4879-857a-930ca0b02ffd/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/bfc534b1-656a-4879-857a-930ca0b02ffd/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997727476.1208864492.1655560169204.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1112",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/76cce1d6-61fa-4ced-bb8f-3695eb76758e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/76cce1d6-61fa-4ced-bb8f-3695eb76758e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997745066.816859639.1655560186794.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/424d651e-1126-4b0c-b9a0-4ace9d5ba310/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/424d651e-1126-4b0c-b9a0-4ace9d5ba310/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1999196562.16362628.1655561638290.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c703d070-b338-42c8-bb1e-4c597c2a2a9a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c703d070-b338-42c8-bb1e-4c597c2a2a9a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997887779.651722327.1655560329507.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1111",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/5044764e-1700-48af-af3d-36770e07470c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/5044764e-1700-48af-af3d-36770e07470c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997756030.2146517990.1655560197758.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7424aa12-93f2-42be-8080-c45807a6ee42/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7424aa12-93f2-42be-8080-c45807a6ee42/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1997718038.181734674.1655560159766.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e434d2e6-2371-4b68-866d-9f0634b8307e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e434d2e6-2371-4b68-866d-9f0634b8307e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1999328168.1633592703.1655561769896.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4929795c-a121-48f8-9df2-5f5f5c842462/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4929795c-a121-48f8-9df2-5f5f5c842462/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997817870.2039271606.1655560259598.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/602cd512-4004-4700-9275-10a79c90ec03/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/602cd512-4004-4700-9275-10a79c90ec03/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997875254.2033728410.1655560316982.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/90fe72c0-ed77-469a-8605-565763259a83/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/90fe72c0-ed77-469a-8605-565763259a83/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997837425.1645337755.1655560279153.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_13_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/94505781-0955-4331-9342-9389c3dcd6e2/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/94505781-0955-4331-9342-9389c3dcd6e2/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.164950726709745386952294216830048741508/series/1.3.6.1.4.1.5962.99.1.1999288152.2021006284.1655561729880.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1113",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/5acb7b1e-859b-4cf8-a557-0049aa199b44/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/5acb7b1e-859b-4cf8-a557-0049aa199b44/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997840939.1299918526.1655560282667.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/df592895-6a42-447c-9391-be86e4af8c37/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/df592895-6a42-447c-9391-be86e4af8c37/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1999006446.969563921.1655561448174.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1111",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/77f011d3-9887-45a2-aa64-af11a14737b5/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/77f011d3-9887-45a2-aa64-af11a14737b5/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1999234983.1657785494.1655561676711.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_6_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9b4bc8b0-6b79-43ca-8fde-012afb5b1f08/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9b4bc8b0-6b79-43ca-8fde-012afb5b1f08/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.229223319571424399843362588604034501556/series/1.3.6.1.4.1.5962.99.1.1999035593.296988802.1655561477321.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_12_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/69a41729-4feb-4e71-bb5d-dd2f8064b18e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/69a41729-4feb-4e71-bb5d-dd2f8064b18e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.280045632401847548852947444403955659589/series/1.3.6.1.4.1.5962.99.1.1999190702.1580436812.1655561632430.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/34868a0e-503d-4913-9715-c0d686b32261/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/34868a0e-503d-4913-9715-c0d686b32261/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1997709302.1599189923.1655560151030.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1114",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ee3b969f-4255-4d08-9eae-fefe1f86f9d4/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ee3b969f-4255-4d08-9eae-fefe1f86f9d4/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1999208208.1947030060.1655561649936.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/96440119-3e60-498d-990a-ef7f7aa8e313/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/96440119-3e60-498d-990a-ef7f7aa8e313/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1997834896.1182308017.1655560276624.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0528cc03-c07c-4443-b8b1-0bcea2cf3b3b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0528cc03-c07c-4443-b8b1-0bcea2cf3b3b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997802279.260954753.1655560244007.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/14be0c8f-7b65-42cb-9b92-b7bee3218d76/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/14be0c8f-7b65-42cb-9b92-b7bee3218d76/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997866370.1817541601.1655560308098.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/efeebb7d-6bea-446c-8b42-8ad073b4d7c3/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/efeebb7d-6bea-446c-8b42-8ad073b4d7c3/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997692069.2085034692.1655560133797.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/696b2a15-e873-481f-ab70-719349e5dedf/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/696b2a15-e873-481f-ab70-719349e5dedf/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997846291.1955434895.1655560288019.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_21_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/b581f3c3-7dd4-41ce-bfb3-785f006359f5/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/b581f3c3-7dd4-41ce-bfb3-785f006359f5/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.44531281469405659597743355372883303073/series/1.3.6.1.4.1.5962.99.1.1999313632.795439705.1655561755360.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ab33fc1a-403b-49ab-b7c4-b001390e8275/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ab33fc1a-403b-49ab-b7c4-b001390e8275/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1999309323.1907832782.1655561751051.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c80c0381-162c-4f3b-9391-13b62e8df37c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c80c0381-162c-4f3b-9391-13b62e8df37c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1999031089.1414068818.1655561472817.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1116",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/302f955e-627f-4930-a408-bc92a82c7bf9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/302f955e-627f-4930-a408-bc92a82c7bf9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997823667.1151243709.1655560265395.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_5_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/64aff51b-5049-4797-8290-53d39e042359/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/64aff51b-5049-4797-8290-53d39e042359/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.85040543657684885983094656323100483190/series/1.3.6.1.4.1.5962.99.1.1999357798.1162977147.1655561799526.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a10b37a5-cf57-4b90-9c3c-f842f5518cd7/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a10b37a5-cf57-4b90-9c3c-f842f5518cd7/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997862967.1879347002.1655560304695.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/d126b868-f4e5-4ae5-9e4e-ce34a274e48f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/d126b868-f4e5-4ae5-9e4e-ce34a274e48f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997902804.112578579.1655560344532.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_14_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/1b1dedee-d8fa-48cc-bdd5-572281932099/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/1b1dedee-d8fa-48cc-bdd5-572281932099/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.316550846234184863353464294309180675719/series/1.3.6.1.4.1.5962.99.1.1999273795.1295030685.1655561715523.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/378a48a0-de66-40a1-ab23-e34a6da29fc8/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/378a48a0-de66-40a1-ab23-e34a6da29fc8/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1999381991.737251387.1655561823719.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_17_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/cfeeda37-2316-4246-9201-6885c57681ce/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/cfeeda37-2316-4246-9201-6885c57681ce/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.264596477973868546274279386629906655885/series/1.3.6.1.4.1.5962.99.1.1999375640.1420520335.1655561817368.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_18_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2b6d1980-8919-4eb9-8172-343ab2fc0a10/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2b6d1980-8919-4eb9-8172-343ab2fc0a10/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.212541577495215667660720986410249744234/series/1.3.6.1.4.1.5962.99.1.1999056597.77734776.1655561498325.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_7_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/cf2a3dbb-84ed-40cb-bbd9-598fa7736b4e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/cf2a3dbb-84ed-40cb-bbd9-598fa7736b4e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.160315263266750153657679836583183725489/series/1.3.6.1.4.1.5962.99.1.1999225031.667572941.1655561666759.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1112",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/1852fb6c-3171-40f7-8b84-7af5856ae168/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/1852fb6c-3171-40f7-8b84-7af5856ae168/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997724232.153476328.1655560165960.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1111",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/51ab069b-923a-42d8-9649-5b27c1ddbf03/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/51ab069b-923a-42d8-9649-5b27c1ddbf03/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997905734.514527437.1655560347462.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1113",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/48f3fcd3-3025-47e1-8b41-075a08c92199/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/48f3fcd3-3025-47e1-8b41-075a08c92199/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1998989876.264619734.1655561431604.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1115",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/29dfb9d9-0ef1-4a2b-9787-82fa56bc4188/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/29dfb9d9-0ef1-4a2b-9787-82fa56bc4188/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997758741.1146613210.1655560200469.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4570c43a-db0a-4ed9-b97c-63ea8bc84394/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4570c43a-db0a-4ed9-b97c-63ea8bc84394/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997896823.1544728607.1655560338551.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6ee52794-6baf-4111-9b6a-698a81645e27/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6ee52794-6baf-4111-9b6a-698a81645e27/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997686681.513209892.1655560128409.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_13_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/22604d6a-bc1d-4d5a-afba-bd9506ddeffb/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/22604d6a-bc1d-4d5a-afba-bd9506ddeffb/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.164950726709745386952294216830048741508/series/1.3.6.1.4.1.5962.99.1.1998972131.1825921765.1655561413859.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1115",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a451636f-0455-46d6-830c-213334bec40d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a451636f-0455-46d6-830c-213334bec40d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997715167.198366244.1655560156895.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_20_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/3d900163-053a-4c32-9764-d17c5384c930/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/3d900163-053a-4c32-9764-d17c5384c930/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.196516039217758460458508012754245066949/series/1.3.6.1.4.1.5962.99.1.1999011652.905081559.1655561453380.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c8a03ffe-f732-49e2-af66-470de82e1981/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c8a03ffe-f732-49e2-af66-470de82e1981/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997747776.1984340555.1655560189504.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6617edfc-a481-4c17-a86a-ba13173580a0/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6617edfc-a481-4c17-a86a-ba13173580a0/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997857552.1611484338.1655560299280.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/dd94da88-6101-4e1a-b682-38151efc50d7/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/dd94da88-6101-4e1a-b682-38151efc50d7/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1997814647.1700812475.1655560256375.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_12_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/bda6a436-e34c-4a7a-bf9e-61ce31fad065/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/bda6a436-e34c-4a7a-bf9e-61ce31fad065/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.280045632401847548852947444403955659589/series/1.3.6.1.4.1.5962.99.1.1999104066.972911048.1655561545794.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_7_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/3dec93ac-0885-4a07-8d66-73310d6b0ba3/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/3dec93ac-0885-4a07-8d66-73310d6b0ba3/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.160315263266750153657679836583183725489/series/1.3.6.1.4.1.5962.99.1.1999172481.2075796183.1655561614209.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_5_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2df192be-2e95-4a2a-9efa-4ddc107dcf88/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2df192be-2e95-4a2a-9efa-4ddc107dcf88/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.85040543657684885983094656323100483190/series/1.3.6.1.4.1.5962.99.1.1999097321.787509745.1655561539049.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/203c3f7d-0130-4d9a-89fe-f5e643322887/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/203c3f7d-0130-4d9a-89fe-f5e643322887/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1997787254.2065943236.1655560228982.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/16a5b723-b3b6-4ef4-a08d-400fb25c29d8/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/16a5b723-b3b6-4ef4-a08d-400fb25c29d8/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1997773639.1983659767.1655560215367.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_5_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e71b4290-f023-4709-8fbc-d6486ad146c6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e71b4290-f023-4709-8fbc-d6486ad146c6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.85040543657684885983094656323100483190/series/1.3.6.1.4.1.5962.99.1.1999157894.2029986876.1655561599622.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1113",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/69851625-3956-4ae0-88e9-e5153fb83f8e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/69851625-3956-4ae0-88e9-e5153fb83f8e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997694794.1238856762.1655560136522.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_21_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/83bf176c-df44-4721-870d-e267c9e7946d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/83bf176c-df44-4721-870d-e267c9e7946d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.44531281469405659597743355372883303073/series/1.3.6.1.4.1.5962.99.1.1999202736.158555711.1655561644464.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7530934c-b64e-479d-b6cc-cf6225b83e20/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7530934c-b64e-479d-b6cc-cf6225b83e20/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997878446.1908316557.1655560320174.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/23bdcc95-0daa-4f23-819d-7074a2db1ad2/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/23bdcc95-0daa-4f23-819d-7074a2db1ad2/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1999304795.1116524939.1655561746523.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_21_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/22fddd71-2cd7-4b5d-851e-ab1e777bf085/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/22fddd71-2cd7-4b5d-851e-ab1e777bf085/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.44531281469405659597743355372883303073/series/1.3.6.1.4.1.5962.99.1.1998995917.1713616157.1655561437645.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_6_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/dfc5eee3-a6ea-4012-bccb-ddfaf96f80d8/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/dfc5eee3-a6ea-4012-bccb-ddfaf96f80d8/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.229223319571424399843362588604034501556/series/1.3.6.1.4.1.5962.99.1.1999332640.1748464418.1655561774368.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_18_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fd557d63-0b45-4963-b75c-f0384466c3f7/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fd557d63-0b45-4963-b75c-f0384466c3f7/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.212541577495215667660720986410249744234/series/1.3.6.1.4.1.5962.99.1.1999386638.239171522.1655561828366.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1114",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ae1f31c7-2275-49d9-9c3c-741730ced9a1/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ae1f31c7-2275-49d9-9c3c-741730ced9a1/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1999050914.805423360.1655561492642.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_19_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9d07fa3a-eb6b-4c9a-835b-2c2b3c4f140f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9d07fa3a-eb6b-4c9a-835b-2c2b3c4f140f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.170867967025366618829393577671864249403/series/1.3.6.1.4.1.5962.99.1.1999243359.1076683607.1655561685087.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/bc9dba5b-2ac5-479e-9667-9ba2f50dafb0/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/bc9dba5b-2ac5-479e-9667-9ba2f50dafb0/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1999143215.467462500.1655561584943.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2f3998d1-8a13-47b4-843b-ce90698bc0f1/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2f3998d1-8a13-47b4-843b-ce90698bc0f1/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1999343172.938286142.1655561784900.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_8_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6c4b5d7f-8f76-4d5e-b196-c85d44388133/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6c4b5d7f-8f76-4d5e-b196-c85d44388133/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282843653883190784679358651524716077278/series/1.3.6.1.4.1.5962.99.1.1999017526.956670581.1655561459254.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a4634a10-87e2-47ff-98ef-0d67e9ace2d9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a4634a10-87e2-47ff-98ef-0d67e9ace2d9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997680925.1023735958.1655560122653.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fc947761-bdbc-4586-98b3-816e78b7f4c1/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fc947761-bdbc-4586-98b3-816e78b7f4c1/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997899999.115628424.1655560341727.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1111",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ec3f2ef0-0398-4a4e-891e-4a6e842fb4b5/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ec3f2ef0-0398-4a4e-891e-4a6e842fb4b5/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997703046.175195634.1655560144774.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e345cfea-66d8-4fbd-be0d-27e95b0bd1da/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e345cfea-66d8-4fbd-be0d-27e95b0bd1da/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997860240.1201924347.1655560301968.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1115",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/3bd8ca3f-74db-4c7c-81eb-a65e31c3ad9e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/3bd8ca3f-74db-4c7c-81eb-a65e31c3ad9e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1999238990.1245876537.1655561680718.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1111",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/3b72ec4f-7895-4748-9b92-e8289fb87fd6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/3b72ec4f-7895-4748-9b92-e8289fb87fd6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1999249662.1573157942.1655561691390.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/690405b5-eaee-4af7-a0a9-3909b0d11a1a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/690405b5-eaee-4af7-a0a9-3909b0d11a1a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1999392897.2011611567.1655561834625.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/f34db413-0324-45cc-a3f9-bcd6c206b47e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/f34db413-0324-45cc-a3f9-bcd6c206b47e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997796787.617332291.1655560238515.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9734ec06-ec24-42d7-b0c6-b9b47a4b7948/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9734ec06-ec24-42d7-b0c6-b9b47a4b7948/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997793973.1652026745.1655560235701.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/00079fe1-10de-490c-bfb9-6bbb2603413e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/00079fe1-10de-490c-bfb9-6bbb2603413e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1997790554.1294118463.1655560232282.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/f10b89e4-5203-48eb-810e-dbcfd11a1f5c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/f10b89e4-5203-48eb-810e-dbcfd11a1f5c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1997884669.1521180659.1655560326397.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9fe149a1-64b7-4b85-9f5b-a12f02298a88/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9fe149a1-64b7-4b85-9f5b-a12f02298a88/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1997768243.1071906173.1655560209971.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4fe53bd0-afd9-4baa-aad5-6382536a3945/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4fe53bd0-afd9-4baa-aad5-6382536a3945/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1999320129.1046001429.1655561761857.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/06f0be35-eb4a-4f39-b16c-6d620051fba7/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/06f0be35-eb4a-4f39-b16c-6d620051fba7/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997804986.1917767148.1655560246714.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e7eefaae-51be-45e8-83b6-2ef2bc3a7b90/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e7eefaae-51be-45e8-83b6-2ef2bc3a7b90/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1999212197.1861330802.1655561653925.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_20_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a5df81bf-4781-4c42-845c-a2a682c7c3da/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a5df81bf-4781-4c42-845c-a2a682c7c3da/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.196516039217758460458508012754245066949/series/1.3.6.1.4.1.5962.99.1.1999044421.1833226881.1655561486149.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/34616184-9ca7-43f4-9e44-2f7059f40319/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/34616184-9ca7-43f4-9e44-2f7059f40319/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1999297350.1321129920.1655561739078.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/b58af29a-abf6-4bf2-a0db-f8f193fc254d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/b58af29a-abf6-4bf2-a0db-f8f193fc254d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997851507.1292528055.1655560293235.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/62f6b234-8cc1-4368-b04c-0b05e8522ef0/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/62f6b234-8cc1-4368-b04c-0b05e8522ef0/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1998983125.814642105.1655561424853.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/fcd2d2f0-bd4c-4a6f-9551-8552ae18c7bf/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/fcd2d2f0-bd4c-4a6f-9551-8552ae18c7bf/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1997893551.1544004391.1655560335279.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1111",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7b1b85e4-c80a-4c4f-a5a1-40e184902713/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7b1b85e4-c80a-4c4f-a5a1-40e184902713/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997750451.1573807493.1655560192179.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/75df4136-dec7-4a19-8b2d-1ec734b1ca9b/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/75df4136-dec7-4a19-8b2d-1ec734b1ca9b/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1997820502.340138908.1655560262230.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7c2ece62-f064-4eac-b08c-a6fc4836b846/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7c2ece62-f064-4eac-b08c-a6fc4836b846/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997753178.852058014.1655560194906.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/414b057c-67af-4d0e-adc6-d6ef66e40c1c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/414b057c-67af-4d0e-adc6-d6ef66e40c1c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1999371609.1477088357.1655561813337.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/18cb442d-356d-4dd3-9adf-59b7b8ba10b4/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/18cb442d-356d-4dd3-9adf-59b7b8ba10b4/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1997706203.1414823321.1655560147931.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_8_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e8adcc4d-2bb8-48a5-a2a8-99f40dc5686a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e8adcc4d-2bb8-48a5-a2a8-99f40dc5686a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282843653883190784679358651524716077278/series/1.3.6.1.4.1.5962.99.1.1999264125.2125833753.1655561705853.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_13_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/1972bdee-5a70-4e76-a3df-158d6d77db3d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/1972bdee-5a70-4e76-a3df-158d6d77db3d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.164950726709745386952294216830048741508/series/1.3.6.1.4.1.5962.99.1.1999068128.681419672.1655561509856.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c1185d01-6417-4cba-bd10-2c961d9db062/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c1185d01-6417-4cba-bd10-2c961d9db062/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1997738997.1719986385.1655560180725.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8d07dc76-0843-49ba-a8f3-17e385a45bc9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8d07dc76-0843-49ba-a8f3-17e385a45bc9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997730251.1381948079.1655560171979.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1112",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/43ef3e01-3895-4f9a-850b-e91301594cf9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/43ef3e01-3895-4f9a-850b-e91301594cf9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997700383.1713239412.1655560142111.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c1013e73-430c-4da8-ad97-33b21375e5c3/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c1013e73-430c-4da8-ad97-33b21375e5c3/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1997678231.1648864427.1655560119959.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0c5506ce-6f24-40d1-82a2-1aacd1c765af/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0c5506ce-6f24-40d1-82a2-1aacd1c765af/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997733054.896518751.1655560174782.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/199c6432-2bbe-463a-b81e-89cdb62aa8bb/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/199c6432-2bbe-463a-b81e-89cdb62aa8bb/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997721380.110060218.1655560163108.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_12_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9e1c9d80-b973-47e5-ad1c-b36771b62e56/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9e1c9d80-b973-47e5-ad1c-b36771b62e56/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.280045632401847548852947444403955659589/series/1.3.6.1.4.1.5962.99.1.1999337747.280723651.1655561779475.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_19_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/bcb94fea-1e11-4952-b779-00f490c95e3d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/bcb94fea-1e11-4952-b779-00f490c95e3d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.170867967025366618829393577671864249403/series/1.3.6.1.4.1.5962.99.1.1999364688.384986552.1655561806416.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/cab9745e-d9ff-4f10-bd6a-51550629ad92/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/cab9745e-d9ff-4f10-bd6a-51550629ad92/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1997764993.1354053575.1655560206721.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a8725dda-e0f9-4aac-8613-614dc035e85e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a8725dda-e0f9-4aac-8613-614dc035e85e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997742323.793474717.1655560184051.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_8_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/d7b45bcc-0bbc-49fe-b1a7-28bcc0694c06/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/d7b45bcc-0bbc-49fe-b1a7-28bcc0694c06/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282843653883190784679358651524716077278/series/1.3.6.1.4.1.5962.99.1.1999135627.1645312947.1655561577355.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ddd9054f-141e-4199-a118-3b272d9236df/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ddd9054f-141e-4199-a118-3b272d9236df/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1997890408.419108526.1655560332136.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/184b72a4-853e-4716-a0e4-f62069fdac9c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/184b72a4-853e-4716-a0e4-f62069fdac9c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997829609.1422655652.1655560271337.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/26bb1962-223d-4acf-b774-e0bac38871c6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/26bb1962-223d-4acf-b774-e0bac38871c6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997784055.936487294.1655560225783.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_17_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/37acfe6b-8417-4fe3-aab2-41871895c56d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/37acfe6b-8417-4fe3-aab2-41871895c56d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.264596477973868546274279386629906655885/series/1.3.6.1.4.1.5962.99.1.1999257738.307044353.1655561699466.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0b86e239-e924-454f-b29f-17967d2e502f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0b86e239-e924-454f-b29f-17967d2e502f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997854911.160458741.1655560296639.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/3454d5d6-e949-4a2b-a09a-7d750fddcbd9/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/3454d5d6-e949-4a2b-a09a-7d750fddcbd9/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1999040126.632533787.1655561481854.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1114",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c3cb5f22-52da-486a-96ae-a3bb255b3069/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c3cb5f22-52da-486a-96ae-a3bb255b3069/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997811694.15443184.1655560253422.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_11_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8f2cce8a-d850-4bdf-a79b-0155b9db04f4/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8f2cce8a-d850-4bdf-a79b-0155b9db04f4/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.66963730400918147916879305140687405342/series/1.3.6.1.4.1.5962.99.1.1999353523.605500266.1655561795251.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/36c35577-c45f-4931-82cc-e828aad3e1b5/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/36c35577-c45f-4931-82cc-e828aad3e1b5/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997869068.1438306593.1655560310796.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/7c532774-e249-49b0-b8c7-c13657cfe7f4/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/7c532774-e249-49b0-b8c7-c13657cfe7f4/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997826375.1645357792.1655560268103.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/34935fbb-c681-477c-86ee-0ecb8a6499de/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/34935fbb-c681-477c-86ee-0ecb8a6499de/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997799491.198859911.1655560241219.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_6_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/5c27d8f2-4b03-48c5-af84-0fe7c4e9729f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/5c27d8f2-4b03-48c5-af84-0fe7c4e9729f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.229223319571424399843362588604034501556/series/1.3.6.1.4.1.5962.99.1.1999022007.1973857266.1655561463735.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a61e7364-6b65-42b9-806e-feaf3704b81f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a61e7364-6b65-42b9-806e-feaf3704b81f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1999119684.1771072590.1655561561412.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1106",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/e2912011-fcf6-4159-8a4b-491901ac9ec4/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/e2912011-fcf6-4159-8a4b-491901ac9ec4/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1997712337.2106890774.1655560154065.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_12_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/173e4513-7e08-4f2b-ba16-2e81cb4a3860/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/173e4513-7e08-4f2b-ba16-2e81cb4a3860/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.280045632401847548852947444403955659589/series/1.3.6.1.4.1.5962.99.1.1999075402.1878287072.1655561517130.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_8_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/9dee65bc-cd93-4b13-8cd4-8a8aadafdeda/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/9dee65bc-cd93-4b13-8cd4-8a8aadafdeda/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282843653883190784679358651524716077278/series/1.3.6.1.4.1.5962.99.1.1999150560.209616726.1655561592288.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_13_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/6ae08e48-5af3-4331-909b-a823f7e2474c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/6ae08e48-5af3-4331-909b-a823f7e2474c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.164950726709745386952294216830048741508/series/1.3.6.1.4.1.5962.99.1.1999112158.418350929.1655561553886.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_17_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8fe60eba-2b45-4566-b57d-ec25348c556d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8fe60eba-2b45-4566-b57d-ec25348c556d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.264596477973868546274279386629906655885/series/1.3.6.1.4.1.5962.99.1.1999179576.1233562022.1655561621304.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a6a900b0-f8d6-449c-b249-5f9f2755052f/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a6a900b0-f8d6-449c-b249-5f9f2755052f/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1999128365.668469409.1655561570093.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8bf70bc6-5220-4c90-9ab9-735943d60072/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8bf70bc6-5220-4c90-9ab9-735943d60072/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1999217660.1509129655.1655561659388.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_14_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ef1e5bcf-0fe0-4c54-a6db-930b6930cbdb/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ef1e5bcf-0fe0-4c54-a6db-930b6930cbdb/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.316550846234184863353464294309180675719/series/1.3.6.1.4.1.5962.99.1.1999062777.1863936885.1655561504505.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/93053491-3e72-48fc-8725-03b971f53456/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/93053491-3e72-48fc-8725-03b971f53456/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1997777680.1172763747.1655560219408.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/267f563f-512c-4772-aa4a-f2fc20c6ff03/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/267f563f-512c-4772-aa4a-f2fc20c6ff03/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997832283.1744420450.1655560274011.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_6_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4c138bfb-6bc6-48f0-9fe9-ef5c39b3d6a0/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4c138bfb-6bc6-48f0-9fe9-ef5c39b3d6a0/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.229223319571424399843362588604034501556/series/1.3.6.1.4.1.5962.99.1.1999002766.1365649212.1655561444494.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/30a7a88b-404b-4f4c-b75d-137e269ea5b4/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/30a7a88b-404b-4f4c-b75d-137e269ea5b4/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1999026540.1153298056.1655561468268.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_19_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/ffad701d-ea42-4302-aec6-fcb94be0815d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/ffad701d-ea42-4302-aec6-fcb94be0815d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.170867967025366618829393577671864249403/series/1.3.6.1.4.1.5962.99.1.1999083711.500533334.1655561525439.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/60579b89-7539-400a-a571-8e1481057927/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/60579b89-7539-400a-a571-8e1481057927/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997683747.1173129499.1655560125475.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1107",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0596f56f-9178-4418-bd3e-710d156de4f0/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0596f56f-9178-4418-bd3e-710d156de4f0/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997780816.846619114.1655560222544.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/a9e8f0b0-71a1-4cf5-b96c-335a06623cd0/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/a9e8f0b0-71a1-4cf5-b96c-335a06623cd0/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997689403.216810103.1655560131131.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/4b2d2982-9283-4e58-9143-ee9f2287407d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/4b2d2982-9283-4e58-9143-ee9f2287407d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1999347372.1625709801.1655561789100.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/cae4893c-6d68-4e14-984b-819deb83d35e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/cae4893c-6d68-4e14-984b-819deb83d35e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1997871995.949266885.1655560313723.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/eec97f7c-4018-402f-9cca-eab09d319497/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/eec97f7c-4018-402f-9cca-eab09d319497/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1999166160.487302253.1655561607888.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1109",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/67bd8ee1-d41d-4c0c-a76c-5c9c749302c2/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/67bd8ee1-d41d-4c0c-a76c-5c9c749302c2/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1997910061.1833820890.1655560351789.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1108",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0cd8cec2-9fd7-4d33-bb9b-bed55c0e238d/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0cd8cec2-9fd7-4d33-bb9b-bed55c0e238d/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1997735619.103652927.1655560177347.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_3_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/c74a9898-8d82-4b10-b917-0290409466ca/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/c74a9898-8d82-4b10-b917-0290409466ca/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.289188443974026654725116153923555879592/series/1.3.6.1.4.1.5962.99.1.1997770814.475066168.1655560212542.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_16_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/5891ba27-c9dd-486a-93c7-58ff54023b3e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/5891ba27-c9dd-486a-93c7-58ff54023b3e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.253443077977640338251305809014416841249/series/1.3.6.1.4.1.5962.99.1.1999268320.1342041208.1655561710048.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_4_1112",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/2ccd53f7-a26e-4a49-9074-ba888d5cfb6c/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/2ccd53f7-a26e-4a49-9074-ba888d5cfb6c/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.305755249420617670925805518669597959172/series/1.3.6.1.4.1.5962.99.1.1997843575.185508460.1655560285303.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_7_1101",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/be2dc608-9570-406d-a3f6-6437a3512ead/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/be2dc608-9570-406d-a3f6-6437a3512ead/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.160315263266750153657679836583183725489/series/1.3.6.1.4.1.5962.99.1.1999292356.1182427220.1655561734084.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_14_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/8640ea0c-ce5c-4af8-8813-0b32e4d2702a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/8640ea0c-ce5c-4af8-8813-0b32e4d2702a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.316550846234184863353464294309180675719/series/1.3.6.1.4.1.5962.99.1.1999278654.2096806937.1655561720382.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_10_1104",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/14ed3897-37dd-4439-951a-de9033b16a9e/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/14ed3897-37dd-4439-951a-de9033b16a9e/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.207870400800238058337377267796843844207/series/1.3.6.1.4.1.5962.99.1.1999187233.270059801.1655561628961.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_2_1105",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/963b55fe-0c8d-4afb-be99-d214fbab5fb6/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/963b55fe-0c8d-4afb-be99-d214fbab5fb6/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.168515530826293760290828161861507472012/series/1.3.6.1.4.1.5962.99.1.1999323975.1816402981.1655561765703.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_5_1102",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/35a346c1-c9fc-41a3-9917-73bd210b0d0a/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/35a346c1-c9fc-41a3-9917-73bd210b0d0a/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.85040543657684885983094656323100483190/series/1.3.6.1.4.1.5962.99.1.1999230647.1056155430.1655561672375.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1103",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/0daa89a9-7d99-4d6f-9de5-1d7edcb355ea/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/0daa89a9-7d99-4d6f-9de5-1d7edcb355ea/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1997808338.1974394877.1655560250066.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_15_1110",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/b5bf70b3-e214-4287-be22-8389d79f0722/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/b5bf70b3-e214-4287-be22-8389d79f0722/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.282637067979823650115729450350003058980/series/1.3.6.1.4.1.5962.99.1.1997881535.558511009.1655560323263.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_9_1113",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/97493396-cdd7-475c-b1ca-3aa063542b14/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/97493396-cdd7-475c-b1ca-3aa063542b14/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.38649134330414220812979591492650088495/series/1.3.6.1.4.1.5962.99.1.1997761530.838334981.1655560203258.4.0"
+}, {
+  "collection_id": "htan_wustl",
+  "ContainerIdentifier": "HTA12_1_1112",
+  "s5cmd_manifest_gcp": "cp s3://public-datasets-idc/faf7d350-cc31-4ca4-907b-c5c61f3fabac/* .",
+  "s5cmd_manifest_aws": "cp s3://idc-open-data/faf7d350-cc31-4ca4-907b-c5c61f3fabac/* .",
+  "viewer_url": "https://viewer.imaging.datacommons.cancer.gov/slim/studies/2.25.162372274059988388010059723761949093273/series/1.3.6.1.4.1.5962.99.1.1999283983.60696816.1655561725711.4.0"
+}]

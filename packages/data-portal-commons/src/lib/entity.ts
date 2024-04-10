@@ -53,7 +53,50 @@ export interface BaseSerializableEntity {
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
     imageChannelMetadata?: ImageChannelMetadata;
+    viewers?: FileViewers;
     releaseVersion?: string;
+}
+
+export enum FileViewerName {
+    autoMinerva = 'autoMinerva',
+    idc = 'idc',
+    cds = 'cds',
+    customMinerva = 'customMinerva',
+    ucscXena = 'ucscXena',
+    cellxgene = 'cellxgene',
+    isbcgc = 'isbcgc',
+}
+
+export interface FileViewers {
+    [FileViewerName.autoMinerva]?: AutoMinerva;
+    [FileViewerName.idc]?: IdcImagingAsset;
+    [FileViewerName.cds]?: CdsAsset;
+    [FileViewerName.customMinerva]?: string;
+    [FileViewerName.ucscXena]?: string;
+    [FileViewerName.cellxgene]?: string;
+    [FileViewerName.isbcgc]?: string;
+}
+
+export interface AutoMinerva {
+    synid: string;
+    minerva?: string;
+    thumbnail?: string;
+}
+
+export interface IdcImagingAsset {
+    collection_id: string;
+    ContainerIdentifier: string;
+    s5cmd_manifest_gcp: string;
+    s5cmd_manifest_aws: string;
+    viewer_url: string;
+}
+
+export interface CdsAsset {
+    file_name: string;
+    file_size: string;
+    HTAN_Data_File_ID: string;
+    guid: string;
+    drs_uri: string;
 }
 
 export interface ImageChannelMetadata {
