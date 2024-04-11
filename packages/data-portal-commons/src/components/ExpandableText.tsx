@@ -41,9 +41,8 @@ export const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
     );
 
     useEffect(() => {
-            setTruncated(true);
-          }, [props.fullText]);
-
+        setTruncated(true);
+    }, [props.fullText]);
 
     // render full text if expanded, truncated otherwise
     return truncated ? (
@@ -64,4 +63,3 @@ export const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
 };
 
 export default ExpandableText;
-
