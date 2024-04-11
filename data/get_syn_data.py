@@ -221,6 +221,8 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 column_order += ['entityId']
             if 'Id' not in schema_columns and 'Id' in manifest_df.columns:
                 column_order += ['Id']
+            if 'Assay Type' not in schema_columns and 'Assay Type' in manifest_df.columns:
+                column_order += ['Assay Type']
             if 'HTAN Parent Biospecimen ID' not in schema_columns and 'HTAN Parent Biospecimen ID' in manifest_df.columns:
                 column_order += ['HTAN Parent Biospecimen ID']
 
