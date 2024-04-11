@@ -148,6 +148,6 @@ export function truncatedTableCell<T>(cellData: T) {
         ? selector(cellData)
         : cellData[selector as keyof T];
     return value ? (
-        <ExpandableText fullText={value} truncateProps={{ lines: 4 }} value={value}/>
+        <ExpandableText fullText={value} truncateProps={{ lines: 4 }}/>
     ) : null;
 }

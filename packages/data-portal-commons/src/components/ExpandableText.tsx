@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TruncateMarkup, { TruncateProps } from 'react-truncate-markup';
 
 import styles from './common.module.scss';
@@ -8,7 +8,6 @@ interface ExpandableTextProps {
     showMoreText?: string;
     showLessText?: string;
     truncateProps?: TruncateProps;
-    value?: string
 }
 
 const Toggle: React.FunctionComponent<{
@@ -26,17 +25,13 @@ export const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
     props
 ) => {
     // truncate text by default
-    const [truncated, setTruncated] = useState<{ [key: string]: boolean }>({});
+    const [truncated, setTruncated] = useState<boolean>(true);
 
     const showMoreText = props.showMoreText || 'show more';
     const showLessText = props.showLessText || 'show less';
-    const cellKey = `${props.value}`;
 
     const toggleTruncate = () => {
-        setTruncated((prevState) => ({
-            ...prevState,
-            [cellKey]: !prevState[cellKey],
-          }));
+        setTruncated(!truncated);
     };
 
     const showMore = (
@@ -45,37 +40,28 @@ export const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
         </span>
     );
 
+    useEffect(() => {
+            setTruncated(true);
+          }, [props.fullText]);
+
+
     // render full text if expanded, truncated otherwise
-    // return truncated  ? (
-    //     <TruncateMarkup
-    //         lines={10}
-    //         tokenize="words"
-    //         ellipsis={showMore}
-    //         {...props.truncateProps}
-    //     >
-    //         <span>{props.fullText}</span>
-    //     </TruncateMarkup>
-    // ) : (
-    //     <span>
-    //         {props.fullText}{' '}
-    //         <Toggle text={showLessText} onClick={toggleTruncate} />
-    //     </span>
-    // );
-    return truncated[cellKey] ? (
-        <span>
-          {props.fullText}{' '}
-          <Toggle text={showLessText} onClick={toggleTruncate} />
-        </span>
-      ) : (
+    return truncated ? (
         <TruncateMarkup
-          lines={10}
-          tokenize="words"
-          ellipsis={showMore}
-          {...props.truncateProps}
+            lines={10}
+            tokenize="words"
+            ellipsis={showMore}
+            {...props.truncateProps}
         >
-          <span>{props.fullText}</span>
+            <span>{props.fullText}</span>
         </TruncateMarkup>
-      );
+    ) : (
+        <span>
+            {props.fullText}{' '}
+            <Toggle text={showLessText} onClick={toggleTruncate} />
+        </span>
+    );
 };
 
 export default ExpandableText;
+
