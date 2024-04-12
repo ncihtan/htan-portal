@@ -147,7 +147,7 @@ export function truncatedTableCell<T>(cellData: T) {
     const value = _.isFunction(selector)
         ? selector(cellData)
         : cellData[selector as keyof T];
-        
+
     return value ? (
         <ExpandableText fullText={value} truncateProps={{ lines: 4 }} />
     ) : null;
