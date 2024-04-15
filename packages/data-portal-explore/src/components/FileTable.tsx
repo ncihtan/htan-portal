@@ -75,7 +75,8 @@ const CDSInstructions: React.FunctionComponent<{
     return (
         <>
             <p>
-                Your selection includes Level 1 and/or Level 2 sequencing data:
+                Your selection includes Level 1 and/or Level 2 sequencing and/or
+                imaging data:
             </p>
             <pre className="pre-scrollable">
                 <code>
@@ -83,7 +84,8 @@ const CDSInstructions: React.FunctionComponent<{
                 </code>
             </pre>
             <p>
-                To download Level 1/2 sequencing data you first need to request{' '}
+                To download Level 1/2 sequencing/imaging data you first need to
+                request{' '}
                 <a
                     href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
                     target="_blank"
@@ -142,49 +144,6 @@ const ImagingInstructionsNotDownloadable: React.FunctionComponent<{
             )}
         </div>
     ) : null;
-};
-
-const ImagingInstructionsCDS: React.FunctionComponent<{ files: Entity[] }> = (
-    props
-) => {
-    const downloadableFiles: Entity[] = props.files.filter(
-        (f) => !f.downloadSource?.includes('Coming Soon')
-    );
-    const filesNotDownloadableFromCDS: Entity[] = props.files.filter((f) =>
-        f.downloadSource?.includes('Coming Soon')
-    );
-
-    return (
-        <>
-            {downloadableFiles.length > 0 && (
-                <>
-                    <p>Your selection includes Level 2 imaging data:</p>
-                    <pre className="pre-scrollable">
-                        <code>
-                            {downloadableFiles
-                                .map((f) => getFileBase(f.Filename))
-                                .join('\n')}
-                        </code>
-                    </pre>
-                    <p>
-                        These are now available through the NCI SB-CGC Cancer
-                        Data Service (CDS). To download these files follow the
-                        instructions{' '}
-                        <a
-                            href="https://docs.humantumoratlas.org/open_access/cds_imaging/"
-                            target="_blank"
-                        >
-                            here
-                        </a>
-                        .
-                    </p>
-                </>
-            )}
-            <ImagingInstructionsNotDownloadable
-                files={filesNotDownloadableFromCDS}
-            />
-        </>
-    );
 };
 
 const ImagingInstructionsIDC: React.FunctionComponent<{ files: Entity[] }> = (
@@ -352,16 +311,15 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     props
 ) => {
-    const cdsFiles = props.files.filter(
-        doesFileIncludeLevel1OrLevel2SequencingData
-    );
+    const cdsFiles = props.files.filter((f) => f.viewers?.cds);
     const synapseFiles = props.files.filter(
         (f) => f.downloadSource === 'Synapse'
     );
-    const lowerLevelImagingFiles = props.files.filter(
+    const lowerLevelNotDownloadableImagingFiles = props.files.filter(
         (f) =>
             f.Component.startsWith('Imaging') &&
-            (f.level === 'Level 1' || f.level == 'Level 2')
+            (f.level === 'Level 1' || f.level == 'Level 2') &&
+            !f.viewers?.cds
     );
 
     return (
@@ -372,8 +330,10 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 
             <Modal.Body>
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
-                {lowerLevelImagingFiles.length > 0 && (
-                    <ImagingInstructionsCDS files={lowerLevelImagingFiles} />
+                {lowerLevelNotDownloadableImagingFiles.length > 0 && (
+                    <ImagingInstructionsNotDownloadable
+                        files={lowerLevelNotDownloadableImagingFiles}
+                    />
                 )}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
