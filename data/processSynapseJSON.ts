@@ -190,11 +190,13 @@ function addDownloadSourcesInfo(
     dbgapImgSynapseSet: Set<string>
 ) {
     if (
-        file.assayName &&
-        (file.assayName.toLowerCase().includes('bulk') ||
-            file.assayName.toLowerCase().includes('seq')) &&
+        _.some(['bulk', '-seq'], (assay) =>
+            file.assayName?.toLowerCase().includes(assay)
+        ) &&
         (file.level === 'Level 1' || file.level === 'Level 2')
     ) {
+        // BulkRNA, BulkWES, ScRNA, ScATAC, HI-C, BulkMethylation, 10xVisiumSpatialTranscriptomics-RNA-seq Levels 1 & 2
+        // as specified in released.entities table (CDS_Release) column
         file.isRawSequencing = true;
         if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
             file.downloadSource = DownloadSourceCategory.dbgap;
@@ -203,16 +205,9 @@ function addDownloadSourcesInfo(
         }
     } else {
         file.isRawSequencing = false;
-
-        if (
-            file.level === 'Level 3' ||
-            file.level === 'Level 4' ||
-            file.level === 'Auxiliary' ||
-            file.level === 'Other'
-        ) {
-            file.downloadSource = DownloadSourceCategory.synapse;
-        } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+        if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
+            // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
             if (
                 file.level === 'Level 2' &&
                 file.Component.startsWith('Imaging')
@@ -222,15 +217,35 @@ function addDownloadSourcesInfo(
                 file.downloadSource = DownloadSourceCategory.dbgap;
             }
         } else if (
-            file.Component === 'OtherAssay' ||
-            file.Component === 'AccessoryManifest'
+            file.Component === 'OtherAssay' &&
+            file.AssayType?.toLowerCase() === '10x visium'
         ) {
-            if (file.AssayType?.toLowerCase() === '10x visium') {
-                // 10X Visium raw data will go to dbGap, but isn't available yet
-                file.downloadSource = DownloadSourceCategory.dbgap;
-            } else {
-                file.downloadSource = DownloadSourceCategory.synapse;
-            }
+            // 10X Visium raw data will go to dbGap, but isn't available yet
+            file.downloadSource = DownloadSourceCategory.dbgap;
+        } else if (
+            // ElectronMicroscopy, RPPA, Slide-seq, MassSpectrometry, ExSeqMinimal (all levels)
+            _.some(
+                [
+                    'electron microscopy',
+                    'rppa',
+                    'slide-seq',
+                    'mass spectrometry',
+                    'exseq',
+                ],
+                (assay) => file.assayName?.toLowerCase().includes(assay)
+            ) ||
+            // Level 3 & 4 all assays
+            _.some(
+                ['Level 3', 'Level 4', 'Auxiliary', 'Other'],
+                (level) => file.level === level
+            ) ||
+            // Auxiliary & Accessory files/folders
+            _.some(
+                ['AccessoryManifest', 'OtherAssay'],
+                (component) => file.Component === component
+            )
+        ) {
+            file.downloadSource = DownloadSourceCategory.synapse;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
         }
