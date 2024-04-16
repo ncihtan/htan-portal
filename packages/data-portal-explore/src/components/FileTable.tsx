@@ -118,7 +118,7 @@ const CDSInstructions: React.FunctionComponent<{
     );
 };
 
-const ImagingInstructionsNotDownloadable: React.FunctionComponent<{
+const NotDownloadableInstructions: React.FunctionComponent<{
     files: Entity[];
 }> = (props) => {
     const hasAnyImageViewersForNonDownloadableFiles = props.files.some(
@@ -127,10 +127,7 @@ const ImagingInstructionsNotDownloadable: React.FunctionComponent<{
 
     return props.files.length > 0 ? (
         <div>
-            <p>
-                Your selection includes imaging data that is not downloadable
-                yet:
-            </p>
+            <p>Your selection includes data that is not downloadable yet:</p>
             <pre className="pre-scrollable">
                 <code>
                     {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
@@ -238,9 +235,7 @@ const ImagingInstructionsIDC: React.FunctionComponent<{ files: Entity[] }> = (
                     </pre>
                 </div>
             )}
-            <ImagingInstructionsNotDownloadable
-                files={filesNotDownloadableFromIDC}
-            />
+            <NotDownloadableInstructions files={filesNotDownloadableFromIDC} />
         </>
     );
 };
@@ -315,11 +310,12 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     const synapseFiles = props.files.filter(
         (f) => f.downloadSource === 'Synapse'
     );
-    const lowerLevelNotDownloadableImagingFiles = props.files.filter(
+    const notDownloadableFiles = props.files.filter(
         (f) =>
-            f.Component.startsWith('Imaging') &&
-            (f.level === 'Level 1' || f.level == 'Level 2') &&
-            !f.viewers?.cds
+            f.downloadSource?.includes('Coming Soon') ||
+            (f.Component.startsWith('Imaging') &&
+                (f.level === 'Level 1' || f.level == 'Level 2') &&
+                !f.viewers?.cds)
     );
 
     return (
@@ -330,10 +326,8 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 
             <Modal.Body>
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
-                {lowerLevelNotDownloadableImagingFiles.length > 0 && (
-                    <ImagingInstructionsNotDownloadable
-                        files={lowerLevelNotDownloadableImagingFiles}
-                    />
+                {notDownloadableFiles.length > 0 && (
+                    <NotDownloadableInstructions files={notDownloadableFiles} />
                 )}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
