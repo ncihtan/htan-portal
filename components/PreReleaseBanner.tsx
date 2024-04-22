@@ -2,8 +2,8 @@ import Alert from 'react-bootstrap/Alert';
 import Link from 'next/link';
 
 const PreReleaseBanner = () => (
-    <Alert style={{ marginBottom: 0 }} variant={'success'}>
-        The <Link href="/data-updates">V5 data release</Link> is now finalized.
+    <Alert style={{ marginBottom: 0 }} variant={'info'}>
+        Open access (Level 3 and 4) files are currently unavailable through Synapse.
         Please visit the{' '}
         <a
             href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1"
