@@ -2,16 +2,9 @@ import Alert from 'react-bootstrap/Alert';
 import Link from 'next/link';
 
 const PreReleaseBanner = () => (
-    <Alert style={{ marginBottom: 0 }} variant={'success'}>
-        The <Link href="/data-updates">V5 data release</Link> is now finalized.
-        Please visit the{' '}
-        <a
-            href="https://sagebionetworks.jira.com/servicedesk/customer/portal/1"
-            target="_blank"
-        >
-            HTAN Help Desk
-        </a>{' '}
-        for questions and feedback.
+    <Alert style={{ marginBottom: 0 }} variant={'warning'}>
+        Open access (Level 3 and 4) files are currently unavailable through Synapse.
+        The HTAN DCC will be resetting Synapse access controls on HTAN projects on Monday 22 April.
     </Alert>
 );
 
