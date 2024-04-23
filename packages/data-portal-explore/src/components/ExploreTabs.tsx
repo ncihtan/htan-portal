@@ -98,15 +98,19 @@ function getSamplesByValueMap(
 
 export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
-        let activeTab: string;
-        let setTab: (tab: ExploreTab) => void;
-        if (props.getTab && props.setTab) {
-            activeTab = props.getTab();
-            setTab = props.setTab;
-        } else {
-            [activeTab, setTab] = useState<ExploreTab>(ExploreTab.ATLAS);
-        }
+        // TODO ignoring setTab for now because it significantly slows down switching between tabs
+        // let activeTab: string;
+        // let setTab: (tab: ExploreTab) => void;
+        // if (props.getTab && props.setTab) {
+        //     activeTab = props.getTab();
+        //     setTab = props.setTab;
+        // } else {
+        //     [activeTab, setTab] = useState<ExploreTab>(ExploreTab.ATLAS);
+        // }
 
+        const [activeTab, setTab] = useState<ExploreTab>(
+            props.getTab?.() || ExploreTab.ATLAS
+        );
         const [logScale, setLogScale] = useState(false);
 
         // TODO harmonization is not functional yet

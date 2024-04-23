@@ -57,7 +57,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
     const data = _(files)
         .map((f) => f.viewers?.cds)
         .compact()
-        .map((asset) => [asset.drs_uri, asset.file_name])
+        .map((asset) => [asset.drs_uri, asset.name])
         .value();
 
     if (data.length > 0) {

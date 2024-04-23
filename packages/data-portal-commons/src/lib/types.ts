@@ -14,6 +14,8 @@ export enum HTANAttributeNames {
     HTANParticipantID = 'HTANParticipantID',
     HTANParentBiospecimenID = 'HTANParentBiospecimenID',
     HTANParentDataFileID = 'HTANParentDataFileID',
+    AccessoryAssociatedHTANParentDataFileID = 'Accessory-associatedHTANParentDataFileID',
+    HTANCenterID = 'HTANCenterID',
 }
 
 export const HTANToGenericAttributeMap: {
@@ -27,6 +29,9 @@ export const HTANToGenericAttributeMap: {
         GenericAttributeNames.ParentBiospecimenID,
     [HTANAttributeNames.HTANParentDataFileID]:
         GenericAttributeNames.ParentDataFileID,
+    [HTANAttributeNames.AccessoryAssociatedHTANParentDataFileID]:
+        GenericAttributeNames.AccessoryAssociatedParentDataFileID,
+    [HTANAttributeNames.HTANCenterID]: GenericAttributeNames.CenterID,
 };
 
 export const FileAttributeMap: {

@@ -1,10 +1,14 @@
 import _ from 'lodash';
 
-import getData from '../lib/getData';
-import fs from 'fs';
+// this import causes compiler to crash due to the size of syn_data.json
+// we need to use fs instead
+// import getData from '../lib/getData';
+
+import fs, { readFileSync } from 'fs';
 import csvToJson from 'csvtojson';
 import atlasJson from './atlases.json';
 import {
+    AccessoryManifest,
     Atlas,
     AtlasMeta,
     AutoMinerva,
@@ -45,15 +49,15 @@ import CDS_ASSETS from './cds_drs_mapping.json';
 
 const IDC_MAPPINGS: {
     [fileId: string]: IdcImagingAsset;
-} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier') as any;
+} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier');
 
 const CDS_MAPPINGS: {
     [fileId: string]: CdsAsset;
-} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID') as any;
+} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID');
 
 const AUTOMINERVA_MAPPINGS: {
     [synapseId: string]: AutoMinerva;
-} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid') as any;
+} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid');
 
 interface ImagingMetadata {
     HTAN_Data_File_ID: string;
@@ -61,7 +65,7 @@ interface ImagingMetadata {
 }
 
 async function writeProcessedFile() {
-    const synapseJson = getData();
+    const synapseJson = getSynData();
     const schemaData = await fetchAndProcessSchemaData();
     const entitiesById = await getEntitiesById();
     const imagingLevel1ById = await getImagingLevel1ById();
@@ -82,6 +86,11 @@ async function writeProcessedFile() {
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
+}
+
+function getSynData(): SynapseData {
+    const data = readFileSync('public/syn_data.json', { encoding: 'utf8' });
+    return JSON.parse(data);
 }
 
 async function getEntitiesById() {
@@ -189,11 +198,13 @@ function addDownloadSourcesInfo(
     dbgapImgSynapseSet: Set<string>
 ) {
     if (
-        file.assayName &&
-        (file.assayName.toLowerCase().includes('bulk') ||
-            file.assayName.toLowerCase().includes('seq')) &&
+        _.some(['bulk', '-seq'], (assay) =>
+            file.assayName?.toLowerCase().includes(assay)
+        ) &&
         (file.level === 'Level 1' || file.level === 'Level 2')
     ) {
+        // BulkRNA, BulkWES, ScRNA, ScATAC, HI-C, BulkMethylation, 10xVisiumSpatialTranscriptomics-RNA-seq Levels 1 & 2
+        // as specified in released.entities table (CDS_Release) column
         file.isRawSequencing = true;
         if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
             file.downloadSource = DownloadSourceCategory.dbgap;
@@ -202,16 +213,9 @@ function addDownloadSourcesInfo(
         }
     } else {
         file.isRawSequencing = false;
-
-        if (
-            file.level === 'Level 3' ||
-            file.level === 'Level 4' ||
-            file.level === 'Auxiliary' ||
-            file.level === 'Other'
-        ) {
-            file.downloadSource = DownloadSourceCategory.synapse;
-        } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+        if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
+            // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
             if (
                 file.level === 'Level 2' &&
                 file.Component.startsWith('Imaging')
@@ -220,13 +224,36 @@ function addDownloadSourcesInfo(
             } else {
                 file.downloadSource = DownloadSourceCategory.dbgap;
             }
-        } else if (file.Component === 'OtherAssay') {
-            if (file.AssayType?.toLowerCase() === '10x visium') {
-                // 10X Visium raw data will go to dbGap, but isn't available yet
-                file.downloadSource = DownloadSourceCategory.dbgap;
-            } else {
-                file.downloadSource = DownloadSourceCategory.synapse;
-            }
+        } else if (
+            file.Component === 'OtherAssay' &&
+            file.AssayType?.toLowerCase() === '10x visium'
+        ) {
+            // 10X Visium raw data will go to dbGap, but isn't available yet
+            file.downloadSource = DownloadSourceCategory.dbgap;
+        } else if (
+            // ElectronMicroscopy, RPPA, Slide-seq, MassSpectrometry, ExSeqMinimal (all levels)
+            _.some(
+                [
+                    'electron microscopy',
+                    'rppa',
+                    'slide-seq',
+                    'mass spectrometry',
+                    'exseq',
+                ],
+                (assay) => file.assayName?.toLowerCase().includes(assay)
+            ) ||
+            // Level 3 & 4 all assays
+            _.some(
+                ['Level 3', 'Level 4', 'Auxiliary', 'Other'],
+                (level) => file.level === level
+            ) ||
+            // Auxiliary & Accessory files/folders
+            _.some(
+                ['AccessoryManifest', 'OtherAssay'],
+                (component) => file.Component === component
+            )
+        ) {
+            file.downloadSource = DownloadSourceCategory.synapse;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
         }
@@ -265,6 +292,16 @@ function processSynapseJSON(
         //     d.ParentID = d.HTANParentID;
         // }
     });
+
+    flatData
+        .filter((obj) => obj.Component === 'AccessoryManifest')
+        .forEach((entity) => {
+            const accessory = (entity as unknown) as AccessoryManifest;
+            entity.Filename = accessory.DatasetName;
+            entity.synapseId = accessory.AccessorySynapseID;
+            entity.ParentDataFileID =
+                accessory.AccessoryAssociatedParentDataFileID;
+        });
 
     //flatData = flatData.filter((f) => f.atlasid === 'HTA7');
 
@@ -360,7 +397,7 @@ function processSynapseJSON(
 
     const filesById = _.keyBy(files, (f) => f.DataFileID);
 
-    addPrimaryParents(files);
+    addPrimaryParents(files, filesById);
 
     const {
         biospecimenByBiospecimenID,
@@ -469,11 +506,12 @@ function processSynapseJSON(
     return ret;
 }
 
-function addPrimaryParents(files: BaseSerializableEntity[]) {
-    const fileIdToFile = _.keyBy(files, (f) => f.DataFileID);
-
+function addPrimaryParents(
+    files: BaseSerializableEntity[],
+    filesByFileId: { [DataFileID: string]: BaseSerializableEntity }
+) {
     files.forEach((f) => {
-        findAndAddPrimaryParents(f, fileIdToFile);
+        findAndAddPrimaryParents(f, filesByFileId);
     });
 }
 
@@ -598,7 +636,10 @@ function getSampleAndPatientData(
             getParentBiospecimens(filesByHTANId[p], biospecimenByBiospecimenID)
                 .length === 0
         ) {
-            console.log('Missing ParentBiospecimenID: ', filesByHTANId[p]);
+            console.log(
+                'Missing ParentBiospecimenID: ',
+                _.pickBy(filesByHTANId[p], _.identity)
+            );
             return undefined;
         }
     }
@@ -709,6 +750,10 @@ function extractEntitiesFromSynapseData(
                 if (synapseRecords.column_order.includes('Assay Type')) {
                     attributeToId['Assay Type'] = 'bts:AssayType';
                 }
+                // this is a workaround for missing DatasetName for certain schema ids
+                if (synapseRecords.column_order.includes('Dataset Name')) {
+                    attributeToId['Dataset Name'] = 'bts:DatasetName';
+                }
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<BaseSerializableEntity> = {};
@@ -744,6 +789,7 @@ function extractEntitiesFromSynapseData(
                             entity.Component,
                             entity.ImagingAssayType,
                             entity.AssayType,
+                            (entity as any).DataType,
                             extractParentImagingAssayTypes(
                                 entity.ParentDataFileID ||
                                     (entity as any)[
@@ -821,6 +867,7 @@ function parseRawAssayType(
     componentName: string,
     imagingAssayType?: string,
     assayType?: string,
+    dataType?: string,
     parentAssayTypes?: string[]
 ) {
     // It comes in the form bts:CamelCase-NameLevelX (may or may not have that hyphen).
@@ -832,14 +879,12 @@ function parseRawAssayType(
     const level = splitByLevel.length > 1 ? `Level ${splitByLevel[1]}` : null;
     const extractedName = splitByLevel[0];
 
-    if (imagingAssayType) {
-        // do not parse imaging assay type, use as is
-        return { name: imagingAssayType, level };
-    }
+    const type = imagingAssayType || assayType || dataType;
 
-    if (assayType) {
-        // do not parse assay type, use as is
-        return { name: assayType, level };
+    if (type) {
+        // do not parse imaging assay type or assay type or data type,
+        // use as is
+        return { name: type, level };
     }
 
     if (parentAssayTypes?.length) {
