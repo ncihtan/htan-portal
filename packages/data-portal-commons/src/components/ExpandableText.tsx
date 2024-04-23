@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TruncateMarkup, { TruncateProps } from 'react-truncate-markup';
 
 import styles from './common.module.scss';
@@ -39,6 +39,10 @@ export const ExpandableText: React.FunctionComponent<ExpandableTextProps> = (
             ... <Toggle text={showMoreText} onClick={toggleTruncate} />
         </span>
     );
+
+    useEffect(() => {
+        setTruncated(true);
+    }, [props.fullText]);
 
     // render full text if expanded, truncated otherwise
     return truncated ? (
