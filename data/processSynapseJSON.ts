@@ -31,6 +31,7 @@ import {
 import {
     SynapseAtlas,
     SynapseData,
+    SynapseRecords,
 } from '../packages/data-portal-commons/src/lib/synapse';
 import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
 import {
@@ -70,6 +71,10 @@ interface ImagingMetadata {
     Imaging_Assay_Type: string;
 }
 
+interface SynapsePublication {
+    'HTAN Center ID': string;
+}
+
 async function writeProcessedFile() {
     const synapseJson = getSynData();
     const schemaData = await fetchAndProcessSchemaData();
@@ -78,6 +83,10 @@ async function writeProcessedFile() {
     const imagingLevel2ById = await getImagingLevel2ById();
 
     const activeAtlases = atlasJson; //atlasJson.filter((a) => a.htan_id === 'hta7');
+
+    // TODO this is a workaround until we actually fetch publication manifest data from Synapse,
+    //  for now we read it from a JSON file and append it to the synapse JSON we have
+    addPublicationsAsSynapseRecords(synapseJson, getPublicationData());
 
     const processed: LoadDataResult = processSynapseJSON(
         synapseJson,
@@ -102,6 +111,63 @@ async function writeProcessedFile() {
 function getSynData(): SynapseData {
     const data = readFileSync('public/syn_data.json', { encoding: 'utf8' });
     return JSON.parse(data);
+}
+
+function getPublicationData(): SynapsePublication[] {
+    const data = readFileSync('data/publications_manifest_all.json', {
+        encoding: 'utf8',
+    });
+    const publications = JSON.parse(data);
+    publications.forEach(
+        (publication: any) =>
+            (publication[
+                'Publication-associated HTAN Parent Data File ID'
+            ] = publication[
+                'Publication-associated HTAN Parent Data File ID'
+            ].join(','))
+    );
+    return publications;
+}
+
+function addPublicationsAsSynapseRecords(
+    synapseJson: SynapseData,
+    publicationData: SynapsePublication[]
+) {
+    const publicationsById = getPublicationsAsSynapseRecordsByAtlasId(
+        publicationData
+    );
+
+    debugger;
+    _.forEach(publicationsById, (synapseRecords, atlasId) => {
+        const atlas = synapseJson.atlases.find(
+            (atlas) => atlas.htan_id === atlasId
+        );
+        if (atlas) {
+            atlas[synapseRecords.data_schema] = synapseRecords;
+        }
+    });
+}
+
+function getPublicationsAsSynapseRecordsByAtlasId(
+    publicationData: SynapsePublication[]
+): { [htan_id: string]: SynapseRecords } {
+    const publicationsById: { [htan_id: string]: SynapseRecords } = {};
+
+    publicationData.forEach((publication) => {
+        const centerId = publication['HTAN Center ID'];
+
+        publicationsById[centerId] = publicationsById[centerId] || {
+            data_schema: 'bts:PublicationManifest',
+            column_order: _.keys(publication),
+            record_list: [],
+        };
+
+        publicationsById[centerId].record_list.push({
+            values: _.values(publication),
+        });
+    });
+
+    return publicationsById;
 }
 
 async function getEntitiesById() {
