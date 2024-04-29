@@ -524,11 +524,12 @@ function findAllAncestors(
 ) {
     const ancestors = [];
     const stack = [...schemaIds];
+    const alreadyProcessed = new Set();
 
     while (stack.length > 0) {
         const id = stack.pop();
 
-        if (id) {
+        if (id && !alreadyProcessed.has(id)) {
             // both the parentIds and other entities listing current id as a required dependency is considered a parent
             const parents = _.uniq([
                 ...(requiredDependenciesReverseLookup[id] || []),
@@ -538,6 +539,7 @@ function findAllAncestors(
                 ancestors.push(...parents);
                 stack.push(...parents);
             }
+            alreadyProcessed.add(id);
         }
     }
 
