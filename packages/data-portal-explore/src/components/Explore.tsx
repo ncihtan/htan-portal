@@ -162,7 +162,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 this.setState({
                     files: fillInEntities(data),
                     atlases: data.atlases,
-                    publications: _.values(data.publicationManifestByPubMedID),
+                    publications: _.values(data.publicationManifestByUid),
                 });
             });
 

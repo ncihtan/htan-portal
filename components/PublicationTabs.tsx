@@ -48,7 +48,7 @@ export enum PublicationTab {
 }
 
 const toolsContent: { [id: string]: JSX.Element[] } = {
-    '35063072': [
+    'hta6_2022_cell_tyler-risom': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -69,7 +69,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    '35404441': [
+    'hta7_2022_cancer-discovery_ajit-j-nirmal': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -90,7 +90,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    '35243422': [
+    'hta9_2022_cell-reports-medicine_brett-e-johnson': [
         <>
             <h3>{`Explore Case HTA9_1 in cBioPortal`}</h3>
             The <a href="https://www.cbioportal.org/">cBioPortal</a> for Cancer
@@ -137,7 +137,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    '34653364': [
+    'hta8_2021_cancer-cell_joseph-m-chan': [
         <>
             <h3>{`Explore Cellxgene`}</h3>
             <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
@@ -160,7 +160,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    '34910928': [
+    'hta11_2021_cell_bob-chen': [
         <>
             <h3>{`Explore Autominerva`}</h3>
             <br />
@@ -205,7 +205,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </h3>
         </>,
     ],
-    '34864916': [
+    'hta4_2022_blood_changya-chen': [
         <>
             <h3>{`Explore Cellxgene`}</h3>
             <a href="https://cellxgene.cziscience.com/">Cellxgene</a> is an
@@ -544,12 +544,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     : ''
                             }`}
                         >
-                            {props.router.query.id &&
-                            props.router.query.id.toString() in toolsContent ? (
-                                toolsContent[props.router.query.id.toString()]
-                            ) : (
-                                <div />
-                            )}
+                            {pubId && toolsContent[pubId.toString()]}
                         </div>
                     )}
                     {activeTab === PublicationTab.SUPPORTING_LINKS && (

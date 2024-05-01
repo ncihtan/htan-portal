@@ -19,7 +19,7 @@ import {
     AtlasMetaData,
     Entity,
     getCiteFromPublicationManifest,
-    getPublicationPubMedID,
+    getPublicationUid,
     PublicationManifest,
 } from '@htan/data-portal-commons';
 import { ExploreTab } from '../lib/types';
@@ -413,17 +413,15 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                                     overlay={getCiteFromPublicationManifest(
                                         publicationManifest
                                     )}
-                                    key={getPublicationPubMedID(
-                                        publicationManifest
-                                    )}
+                                    key={getPublicationUid(publicationManifest)}
                                 >
                                     <a
                                         href={`//${
                                             window.location.host
-                                        }/publications/${getPublicationPubMedID(
+                                        }/publications/${getPublicationUid(
                                             publicationManifest
                                         )}`}
-                                        key={getPublicationPubMedID(
+                                        key={getPublicationUid(
                                             publicationManifest
                                         )}
                                         style={{ paddingRight: 3 }}

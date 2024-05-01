@@ -4,6 +4,21 @@ import { SelectedFilter } from '@htan/data-portal-filter';
 import { PublicationManifest, PublicationSummary } from './entity';
 import { GeneralLink } from './types';
 
+export function getPublicationUid(publication: PublicationManifest): string {
+    const normalizeValue = (value: string) =>
+        value.trim().toLowerCase().replace(/\s/g, '-').replace(/\./g, '');
+
+    const center = publication.CenterID.toLowerCase();
+    const year = publication.YearofPublication;
+    const firstAuthor = normalizeValue(
+        getPublicationAuthorsFromPublicationManifest(publication)[0]
+    );
+    // const titleFirstFiveWords = normalizeValue(publication.Title.split(/[\s/,\\]+/).slice(0,5).join(' '));
+    const location = normalizeValue(publication.LocationofPublication);
+
+    return `${center}_${year}_${location}_${firstAuthor}`;
+}
+
 export function getPublicationPubMedID(
     publication: PublicationManifest
 ): string {
@@ -79,7 +94,7 @@ export function getPublicationFilters(
     return [
         {
             group: 'publicationIds',
-            value: getPublicationPubMedID(publication),
+            value: getPublicationUid(publication),
         },
     ];
 }

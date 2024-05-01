@@ -21,6 +21,7 @@ import {
     getPublicationDOI,
     getPublicationFilters,
     getPublicationJournal,
+    getPublicationPubMedID,
     getPublicationSupportingLinks,
     getPublicationTitle,
     groupFilesByAttrNameAndValue,
@@ -74,7 +75,7 @@ const getBiospecimensData = (
 };
 
 interface PublicationPageProps {
-    pubMedID: string;
+    publicationUid: string;
     schemaDataById: SchemaDataById;
     genericAttributeMap: { [attr: string]: GenericAttributeNames };
 }
@@ -99,10 +100,12 @@ const PublicationPage = (props: PublicationPageProps) => {
             await fetchData().then((data) => {
                 setData(data);
                 const publicationManifest =
-                    data.publicationManifestByPubMedID[props.pubMedID];
+                    data.publicationManifestByUid[props.publicationUid];
                 setPublicationManifest(publicationManifest);
                 const publicationSummary =
-                    data.publicationSummaryByPubMedID?.[props.pubMedID];
+                    data.publicationSummaryByPubMedID?.[
+                        getPublicationPubMedID(publicationManifest)
+                    ];
                 setPublicationSummary(publicationSummary);
 
                 if (publicationManifest) {
@@ -136,6 +139,9 @@ const PublicationPage = (props: PublicationPageProps) => {
 
     const isLoading = _.isEmpty(data);
     const doi = getPublicationDOI(publicationSummary, publicationManifest);
+    const pubmedId = publicationManifest
+        ? getPublicationPubMedID(publicationManifest)
+        : undefined;
 
     return (
         <>
@@ -220,12 +226,16 @@ const PublicationPage = (props: PublicationPageProps) => {
                                         publicationSummary,
                                         publicationManifest
                                     )}
-                                    &nbsp; Pubmed:{' '}
-                                    <a
-                                        href={`https://pubmed.ncbi.nlm.nih.gov/${props.pubMedID}`}
-                                    >
-                                        {props.pubMedID}
-                                    </a>{' '}
+                                    {pubmedId && (
+                                        <>
+                                            &nbsp; Pubmed:{' '}
+                                            <a
+                                                href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}`}
+                                            >
+                                                {pubmedId}
+                                            </a>{' '}
+                                        </>
+                                    )}
                                     &nbsp; DOI:{' '}
                                     <a href={`https://doi.org/${doi}`}>{doi}</a>
                                     <br />
@@ -269,7 +279,7 @@ export default PublicationPage;
 export const getStaticProps: GetStaticProps = async (context) => {
     return {
         props: {
-            pubMedID: context.params?.id,
+            publicationUid: context.params?.id,
             schemaDataById: await fetchAndProcessSchemaData(),
             genericAttributeMap: HTANToGenericAttributeMap, // TODO needs to be configurable
         },

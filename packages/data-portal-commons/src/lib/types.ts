@@ -136,8 +136,8 @@ export const FileAttributeMap: {
 export interface LoadDataResult {
     files: SerializableEntity[];
     atlases: Atlas[];
-    publicationManifestByPubMedID: {
-        [pubMedID: string]: PublicationManifest;
+    publicationManifestByUid: {
+        [uid: string]: PublicationManifest;
     };
     publicationSummaryByPubMedID?: {
         [pubMedID: string]: PublicationSummary;

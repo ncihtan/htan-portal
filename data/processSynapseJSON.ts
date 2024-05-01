@@ -38,6 +38,7 @@ import {
     fetchPublicationSummaries,
     getPublicationAssociatedParentDataFileIDs,
     getPublicationPubMedID,
+    getPublicationUid,
 } from '../packages/data-portal-commons/src/lib/publicationHelpers';
 import {
     fetchAndProcessSchemaData,
@@ -97,9 +98,10 @@ async function writeProcessedFile() {
         imagingLevel2ById
     );
 
-    // we need to fetch publication summaries after we process the json, because we need to know pubmed ids to query the external API
+    // we need to fetch publication summaries after we process the json,
+    // because we need to know pubmed ids to query the external API
     processed.publicationSummaryByPubMedID = await fetchPublicationSummaries(
-        _.keys(processed.publicationManifestByPubMedID)
+        _.values(processed.publicationManifestByUid).map(getPublicationPubMedID)
     );
 
     fs.writeFileSync(
@@ -384,19 +386,19 @@ function processSynapseJSON(
         (obj) => obj.Component === 'PublicationManifest'
     ) as unknown) as PublicationManifest[];
 
-    const publicationParentDataFileIdsByPubMedId = _(publications)
-        .keyBy(getPublicationPubMedID)
+    const publicationParentDataFileIdsByUid = _(publications)
+        .keyBy(getPublicationUid)
         .mapValues((p) => new Set(getPublicationAssociatedParentDataFileIDs(p)))
         .value();
 
     // add publication id
     flatData.forEach((f) => {
         _.forEach(
-            publicationParentDataFileIdsByPubMedId,
-            (parentDataFileIDs, pubMedId) => {
+            publicationParentDataFileIdsByUid,
+            (parentDataFileIDs, uid) => {
                 if (parentDataFileIDs.has(f.DataFileID)) {
                     f.publicationIds = f.publicationIds || [];
-                    f.publicationIds.push(pubMedId);
+                    f.publicationIds.push(uid);
                 }
             }
         );
@@ -585,10 +587,7 @@ function processSynapseJSON(
     return {
         files: returnFiles,
         atlases: returnAtlases,
-        publicationManifestByPubMedID: _.keyBy(
-            publications,
-            getPublicationPubMedID
-        ),
+        publicationManifestByUid: _.keyBy(publications, getPublicationUid),
         biospecimenByBiospecimenID: biospecimenByBiospecimenID as {
             [BiospecimenID: string]: SerializableEntity;
         },
