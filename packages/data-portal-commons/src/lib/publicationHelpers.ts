@@ -88,6 +88,48 @@ export function getPublicationAuthorsFromPublicationSummary(
     return publication.authors.map((a) => a.name);
 }
 
+function getComponentFilters() {
+    return [
+        '10xVisiumSpatialTranscriptomics-RNA-seqLevel1',
+        '10xVisiumSpatialTranscriptomics-RNA-seqLevel2',
+        '10xVisiumSpatialTranscriptomics-RNA-seqLevel3',
+        'BulkMethylation-seqLevel1',
+        'BulkMethylation-seqLevel2',
+        'BulkRNA-seqLevel1',
+        'BulkRNA-seqLevel2',
+        'BulkRNA-seqLevel3',
+        'BulkDNALevel1',
+        'BulkDNALevel2',
+        'BulkDNALevel3',
+        'ElectronMicroscopyLevel1',
+        'ElectronMicroscopyLevel2',
+        'ExSeqMinimal',
+        'HI-C-seqLevel1',
+        'HI-C-seqLevel2',
+        'HI-C-seqLevel3',
+        'ImagingLevel1',
+        'ImagingLevel2',
+        'ImagingLevel3Segmentation',
+        'MassSpectrometryLevel1',
+        'MassSpectrometryLevel3',
+        'RPPALevel2',
+        'RPPALevel3',
+        'SRRSImagingLevel2',
+        'ScATAC-seqLevel1',
+        'ScATAC-seqLevel2',
+        'ScATAC-seqLevel3',
+        'ScRNA-seqLevel1',
+        'ScRNA-seqLevel2',
+        'ScRNA-seqLevel3',
+        'Slide-seqLevel1',
+        'Slide-seqLevel2',
+        'Slide-seqLevel3',
+    ].map((component) => ({
+        group: 'Component',
+        value: component,
+    }));
+}
+
 export function getPublicationFilters(
     publication: PublicationManifest
 ): SelectedFilter[] {
@@ -96,6 +138,7 @@ export function getPublicationFilters(
             group: 'publicationIds',
             value: getPublicationUid(publication),
         },
+        ...getComponentFilters(),
     ];
 }
 
