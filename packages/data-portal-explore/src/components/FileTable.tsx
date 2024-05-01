@@ -12,7 +12,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { doesFileIncludeLevel1OrLevel2SequencingData } from '../lib/helpers';
 import { truncatedTableCell } from '../lib/dataTableHelpers';
 import SimpleScrollPane from './SimpleScrollPane';
 import { makeListColumn } from '../lib/fileTableHelpers';
@@ -22,7 +21,9 @@ import styles from './fileTable.module.scss';
 
 import {
     EnhancedDataTable,
+    getDefaultDataTableStyle,
     IEnhancedDataTableColumn,
+    selectorToColumnName,
 } from '@htan/data-portal-table';
 import {
     AttributeNames,
@@ -33,14 +34,12 @@ import {
 } from '@htan/data-portal-utils';
 import {
     commonStyles,
+    DownloadSourceCategory,
     Entity,
     FileAttributeMap,
+    getViewerValues,
+    ViewDetailsModal,
 } from '@htan/data-portal-commons';
-import {
-    getDefaultDataTableStyle,
-    selectorToColumnName,
-} from '@htan/data-portal-table';
-import { getViewerValues, ViewDetailsModal } from '@htan/data-portal-commons';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 
@@ -474,23 +473,21 @@ export class FileTable extends React.Component<IFileTableProps> {
                 cell: (file: Entity) => {
                     const truncatedFilename = truncateFilename(file.Filename);
                     const linkOut =
-                        doesFileIncludeLevel1OrLevel2SequencingData(file) ||
-                        (file.Component.startsWith('Imaging') &&
-                            (file.level === 'Level 1' ||
-                                file.level === 'Level 2')) ? (
-                            <span
-                                className={commonStyles.clickable}
-                                onClick={(e) => this.onClick(e, file)}
-                            >
-                                {truncatedFilename}
-                            </span>
-                        ) : (
+                        file.downloadSource ===
+                        DownloadSourceCategory.synapse ? (
                             <a
                                 target="_blank"
                                 href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
                             >
                                 {truncatedFilename}
                             </a>
+                        ) : (
+                            <span
+                                className={commonStyles.clickable}
+                                onClick={(e) => this.onClick(e, file)}
+                            >
+                                {truncatedFilename}
+                            </span>
                         );
 
                     return (
