@@ -381,6 +381,26 @@ const filtersById: { [id: string]: SelectedFilter[] } = {
     htapp_mbc_klughammer_2023: [
         { group: 'AtlasName', value: 'HTAN HTAPP', id: 'HTA1' },
         { group: 'TissueorOrganofOrigin', value: 'Breast NOS' },
+        {
+            group: 'TissueorOrganofOrigin',
+            value: 'Upper-outer quadrant of breast',
+        },
+        {
+            group: 'TissueorOrganofOrigin',
+            value: 'Upper-inner quadrant of breast',
+        },
+        {
+            group: 'TissueorOrganofOrigin',
+            value: 'Lower-outer quadrant of breast',
+        },
+        {
+            group: 'TissueorOrganofOrigin',
+            value: 'Lower-inner quadrant of breast',
+        },
+        {
+            group: 'TissueorOrganofOrigin',
+            value: 'Overlapping lesion of breast',
+        },
     ],
 };
 
