@@ -23,6 +23,7 @@ export enum AttributeNames {
     // Derived or attached in frontend
     organType = 'organType',
     assayName = 'assayName',
+    publicationIds = 'publicationIds',
     downloadSource = 'downloadSource',
     releaseVersion = 'releaseVersion',
     viewers = 'viewers',
@@ -37,7 +38,10 @@ export enum GenericAttributeNames {
     ParentBiospecimenID = 'ParentBiospecimenID',
     ParentDataFileID = 'ParentDataFileID',
     AccessoryAssociatedParentDataFileID = 'AccessoryAssociatedParentDataFileID',
+    PublicationAssociatedParentDataFileID = 'PublicationAssociatedParentDataFileID',
+    GrantID = 'GrantID',
     CenterID = 'CenterID',
+    PublicationContainsID = 'PublicationContainsID',
 }
 
 export type AttributeMap<T, Attribute extends string> = {

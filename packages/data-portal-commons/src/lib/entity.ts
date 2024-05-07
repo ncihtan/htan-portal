@@ -49,6 +49,7 @@ export interface BaseSerializableEntity {
     assayName?: string;
     AtlasMeta: AtlasMeta;
     primaryParents?: DataFileID[];
+    publicationIds?: string[];
     synapseId?: string;
     isRawSequencing?: boolean;
     downloadSource?: DownloadSourceCategory;
@@ -132,6 +133,95 @@ export interface AtlasMetaData {
         synapseId: string;
         numItems: number;
     }[];
+}
+
+export interface PublicationManifest {
+    PublicationAssociatedParentDataFileID: string;
+    GrantID: string;
+    CenterID: string;
+    PublicationContentType: string;
+    DOI: string;
+    Title: string;
+    Authors: string;
+    CorrespondingAuthor: string;
+    CorrespondingAuthorORCID: string;
+    YearofPublication: number;
+    LocationofPublication: string;
+    PublicationAbstract: string;
+    License?: string;
+    PMID: string;
+    PublicationContainsID: string;
+    DataType: string;
+    Tool: string;
+    SupportingLink?: string;
+    SupportingLinkDescription?: string;
+
+    // Derived or attached in frontend
+    atlasid: string;
+    atlas_name: string;
+    assayName?: string;
+    AtlasMeta: AtlasMeta;
+    synapseId?: string;
+}
+
+export interface PublicationSummary {
+    uid: string;
+    pubdate: string;
+    epubdate: string;
+    source: string;
+    authors: {
+        name: string;
+        authtype: string;
+        clusterid: string;
+    }[];
+    lastauthor: string;
+    title: string;
+    sorttitle: string;
+    volume: string;
+    issue: string;
+    pages: string;
+    lang: string[];
+    nlmuniqueid: string;
+    issn: string;
+    essn: string;
+    pubtype: string[];
+    recordstatus: string;
+    pubstatus: string;
+    articleids: {
+        idtype: string;
+        idtypen: number;
+        value: string;
+    }[];
+    history: {
+        pubstatus: string;
+        date: string;
+    }[];
+    references: {
+        refsource: string;
+        reftype: string;
+        pmid: string;
+        note: string;
+    }[];
+    attributes: string[];
+    pmcrefcount: number;
+    fulljournalname: string;
+    elocationid: string;
+    doctype: string;
+    booktitle: string;
+    medium: string;
+    edition: string;
+    publisherlocation: string;
+    publishername: string;
+    srcdate: string;
+    reportnumber: string;
+    availablefromurl: string;
+    locationlabel: string;
+    docdate: string;
+    bookname: string;
+    chapter: string;
+    sortpubdate: string;
+    sortfirstauthor: string;
+    vernaculartitle: string;
 }
 
 export interface AccessoryManifest {

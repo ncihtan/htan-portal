@@ -13,12 +13,19 @@ import {
     EnhancedDataTable,
     getDefaultDataTableStyle,
 } from '@htan/data-portal-table';
-import { Atlas, AtlasMetaData, Entity } from '@htan/data-portal-commons';
+import {
+    Atlas,
+    AtlasDescription,
+    AtlasMetaData,
+    Entity,
+    getCiteFromPublicationManifest,
+    getPublicationUid,
+    PublicationManifest,
+} from '@htan/data-portal-commons';
 import { ExploreTab } from '../lib/types';
 
 interface IAtlasTableProps {
-    publications: { [id: string]: { cite: string } };
-    publicationPageLink: { [id: string]: { id: string; show: boolean } };
+    publications: PublicationManifest[];
     getAtlasMetaData: () => AtlasMetaData;
     setTab: (tab: ExploreTab) => void;
     synapseAtlasData: Atlas[];
@@ -40,17 +47,6 @@ interface IAtlasMetadataLinkModalProps {
     atlasMetaData: AtlasMetaData;
     cloudBaseUrl: string;
 }
-
-const arePublicationPagesEnabled = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return (
-        urlParams.has('publication') ||
-        urlParams.has('publications') ||
-        urlParams.has('pub') ||
-        urlParams.has('qc') ||
-        urlParams.has('pubs')
-    );
-};
 
 const SynapseDataLink = (props: { id: string }) => (
     <a
@@ -275,7 +271,7 @@ const UcscXenaLink = (props: { url: string; count: number }) => (
 
 type AtlasTableData = Atlas & {
     isSelected: boolean;
-    publicationPageLink: { id: string; show: boolean };
+    publicationManifests: PublicationManifest[];
 };
 
 function filteredCount(
@@ -311,8 +307,10 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         return this.selectedAtlases[atlas.htan_id] !== undefined;
     };
 
-    getPublicationPageLink = (atlas: Atlas) => {
-        return this.props.publicationPageLink[atlas.htan_id];
+    getPublicationManifests = (atlas: Atlas) => {
+        return this.props.publications.filter(
+            (p) => p.atlasid === atlas.htan_id
+        );
     };
 
     // we need to update data every time the selection changes to rerender the table
@@ -323,7 +321,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 ({
                     ...a,
                     isSelected: this.isRowSelected(a),
-                    publicationPageLink: this.getPublicationPageLink(a),
+                    publicationManifests: this.getPublicationManifests(a),
                 } as AtlasTableData)
         );
     }
@@ -396,21 +394,8 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 name: 'Atlas Description',
                 selector: (atlas: Atlas) => atlas.AtlasMeta?.title?.rendered,
                 format: (atlas: Atlas) =>
-                    atlas.AtlasMeta &&
-                    !['hta13', 'hta14', 'hta15'].includes(
-                        atlas.htan_id?.toLowerCase()
-                    ) ? (
-                        <span>
-                            <a
-                                href={`//${
-                                    window.location.host
-                                }/${atlas.htan_id?.toLowerCase()}`}
-                            >
-                                {atlas.AtlasMeta?.title?.rendered}
-                            </a>
-                        </span>
-                    ) : (
-                        <span>{atlas.AtlasMeta?.short_description}</span>
+                    atlas.AtlasMeta && (
+                        <AtlasDescription atlasMeta={atlas.AtlasMeta} />
                     ),
                 grow: 2,
                 wrap: true,
@@ -419,27 +404,32 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
             {
                 name: 'Publications',
                 grow: 0.5,
-                selector: 'publicationPageLink', // dummy selector - you need to put something or else nothing will render
+                selector: 'publication', // dummy selector - you need to put something or else nothing will render
                 cell: (atlasTableData: AtlasTableData) => {
-                    if (
-                        atlasTableData.publicationPageLink &&
-                        (atlasTableData.publicationPageLink.show ||
-                            arePublicationPagesEnabled())
-                    ) {
-                        return (
-                            <Tooltip
-                                overlay={`${
-                                    this.props.publications[
-                                        atlasTableData.publicationPageLink.id
-                                    ].cite
-                                }`}
-                            >
-                                <a
-                                    href={`//${window.location.host}/publications/${atlasTableData.publicationPageLink.id}`}
+                    if (atlasTableData.publicationManifests.length > 0) {
+                        return atlasTableData.publicationManifests.map(
+                            (publicationManifest) => (
+                                <Tooltip
+                                    overlay={getCiteFromPublicationManifest(
+                                        publicationManifest
+                                    )}
+                                    key={getPublicationUid(publicationManifest)}
                                 >
-                                    <FontAwesomeIcon icon={faBook} />
-                                </a>
-                            </Tooltip>
+                                    <a
+                                        href={`//${
+                                            window.location.host
+                                        }/publications/${getPublicationUid(
+                                            publicationManifest
+                                        )}`}
+                                        key={getPublicationUid(
+                                            publicationManifest
+                                        )}
+                                        style={{ paddingRight: 3 }}
+                                    >
+                                        <FontAwesomeIcon icon={faBook} />
+                                    </a>
+                                </Tooltip>
+                            )
                         );
                     } else {
                         return (

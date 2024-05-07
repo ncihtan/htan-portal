@@ -19,6 +19,7 @@ import {
     Entity,
     FileViewerName,
     IdcImagingAsset,
+    PublicationManifest,
     ReleaseEntity,
     SerializableEntity,
 } from '../packages/data-portal-commons/src/lib/entity';
@@ -30,8 +31,15 @@ import {
 import {
     SynapseAtlas,
     SynapseData,
+    SynapseRecords,
 } from '../packages/data-portal-commons/src/lib/synapse';
 import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
+import {
+    fetchPublicationSummaries,
+    getPublicationAssociatedParentDataFileIDs,
+    getPublicationPubMedID,
+    getPublicationUid,
+} from '../packages/data-portal-commons/src/lib/publicationHelpers';
 import {
     fetchAndProcessSchemaData,
     getAttributeToSchemaIdMap,
@@ -64,6 +72,10 @@ interface ImagingMetadata {
     Imaging_Assay_Type: string;
 }
 
+interface SynapsePublication {
+    'HTAN Center ID': string;
+}
+
 async function writeProcessedFile() {
     const synapseJson = getSynData();
     const schemaData = await fetchAndProcessSchemaData();
@@ -73,7 +85,10 @@ async function writeProcessedFile() {
 
     const activeAtlases = atlasJson; //atlasJson.filter((a) => a.htan_id === 'hta7');
 
-    /* @ts-ignore */
+    // TODO this is a workaround until we actually fetch publication manifest data from Synapse,
+    //  for now we read it from a JSON file and append it to the synapse JSON we have
+    addPublicationsAsSynapseRecords(synapseJson, getPublicationData());
+
     const processed: LoadDataResult = processSynapseJSON(
         synapseJson,
         schemaData,
@@ -82,6 +97,13 @@ async function writeProcessedFile() {
         imagingLevel1ById,
         imagingLevel2ById
     );
+
+    // we need to fetch publication summaries after we process the json,
+    // because we need to know pubmed ids to query the external API
+    processed.publicationSummaryByPubMedID = await fetchPublicationSummaries(
+        _.values(processed.publicationManifestByUid).map(getPublicationPubMedID)
+    );
+
     fs.writeFileSync(
         'public/processed_syn_data.json',
         JSON.stringify(processed)
@@ -91,6 +113,63 @@ async function writeProcessedFile() {
 function getSynData(): SynapseData {
     const data = readFileSync('public/syn_data.json', { encoding: 'utf8' });
     return JSON.parse(data);
+}
+
+function getPublicationData(): SynapsePublication[] {
+    const data = readFileSync('data/publications_manifest_all.json', {
+        encoding: 'utf8',
+    });
+    const publications = JSON.parse(data);
+    publications.forEach(
+        (publication: any) =>
+            (publication[
+                'Publication-associated HTAN Parent Data File ID'
+            ] = publication[
+                'Publication-associated HTAN Parent Data File ID'
+            ].join(','))
+    );
+    return publications;
+}
+
+function addPublicationsAsSynapseRecords(
+    synapseJson: SynapseData,
+    publicationData: SynapsePublication[]
+) {
+    const publicationsById = getPublicationsAsSynapseRecordsByAtlasId(
+        publicationData
+    );
+
+    debugger;
+    _.forEach(publicationsById, (synapseRecords, atlasId) => {
+        const atlas = synapseJson.atlases.find(
+            (atlas) => atlas.htan_id === atlasId
+        );
+        if (atlas) {
+            atlas[synapseRecords.data_schema] = synapseRecords;
+        }
+    });
+}
+
+function getPublicationsAsSynapseRecordsByAtlasId(
+    publicationData: SynapsePublication[]
+): { [htan_id: string]: SynapseRecords } {
+    const publicationsById: { [htan_id: string]: SynapseRecords } = {};
+
+    publicationData.forEach((publication) => {
+        const centerId = publication['HTAN Center ID'];
+
+        publicationsById[centerId] = publicationsById[centerId] || {
+            data_schema: 'bts:PublicationManifest',
+            column_order: _.keys(publication),
+            record_list: [],
+        };
+
+        publicationsById[centerId].record_list.push({
+            values: _.values(publication),
+        });
+    });
+
+    return publicationsById;
 }
 
 async function getEntitiesById() {
@@ -267,7 +346,7 @@ function processSynapseJSON(
     entitiesById: { [entityId: string]: ReleaseEntity },
     imagingLevel1ById: { [fileId: string]: ImagingMetadata },
     imagingLevel2ById: { [fileId: string]: ImagingMetadata }
-) {
+): LoadDataResult {
     const AtlasMetaMap = _.keyBy(AtlasMetaData, (a) => a.htan_id.toUpperCase());
     let flatData = extractEntitiesFromSynapseData(
         synapseJson,
@@ -302,6 +381,28 @@ function processSynapseJSON(
             entity.ParentDataFileID =
                 accessory.AccessoryAssociatedParentDataFileID;
         });
+
+    const publications: PublicationManifest[] = (flatData.filter(
+        (obj) => obj.Component === 'PublicationManifest'
+    ) as unknown) as PublicationManifest[];
+
+    const publicationParentDataFileIdsByUid = _(publications)
+        .keyBy(getPublicationUid)
+        .mapValues((p) => new Set(getPublicationAssociatedParentDataFileIDs(p)))
+        .value();
+
+    // add publication id
+    flatData.forEach((f) => {
+        _.forEach(
+            publicationParentDataFileIdsByUid,
+            (parentDataFileIDs, uid) => {
+                if (parentDataFileIDs.has(f.DataFileID)) {
+                    f.publicationIds = f.publicationIds || [];
+                    f.publicationIds.push(uid);
+                }
+            }
+        );
+    });
 
     //flatData = flatData.filter((f) => f.atlasid === 'HTA7');
 
@@ -394,7 +495,6 @@ function processSynapseJSON(
     const files = flatData.filter((obj) => {
         return !!obj.Filename;
     });
-
     const filesById = _.keyBy(files, (f) => f.DataFileID);
 
     addPrimaryParents(files, filesById);
@@ -484,10 +584,10 @@ function processSynapseJSON(
         }
     });
 
-    // filter out files without a diagnosis
-    const ret = {
+    return {
         files: returnFiles,
         atlases: returnAtlases,
+        publicationManifestByUid: _.keyBy(publications, getPublicationUid),
         biospecimenByBiospecimenID: biospecimenByBiospecimenID as {
             [BiospecimenID: string]: SerializableEntity;
         },
@@ -498,12 +598,6 @@ function processSynapseJSON(
             [ParticipantID: string]: SerializableEntity;
         },
     };
-
-    // TODO clean up
-    console.log(ret.files.length);
-    console.log(_.size(ret.demographicsByParticipantID));
-
-    return ret;
 }
 
 function addPrimaryParents(

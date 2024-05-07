@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PreReleaseBanner from '../../components/PreReleaseBanner';
 import { GetStaticProps } from 'next';
-import { Publication } from '../../types';
 import PageWrapper from '../../components/PageWrapper';
-import {
-    getAllPublicationIds,
-    getPublicationData,
-} from '../../lib/publications';
 import { useRouter } from 'next/router';
 import PublicationTabs from '../../components/PublicationTabs';
 import styles from './styles.module.scss';
@@ -16,19 +11,35 @@ import _ from 'lodash';
 import { fetchData } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
+    AtlasDescription,
     commonStyles,
     Entity,
     fillInEntities,
-    LoadDataResult,
     filterFiles,
     getFilteredCases,
+    getPublicationAuthors,
+    getPublicationDOI,
+    getPublicationFilters,
+    getPublicationJournal,
+    getPublicationPubMedID,
+    getPublicationSupportingLinks,
+    getPublicationTitle,
     groupFilesByAttrNameAndValue,
+    HTANToGenericAttributeMap,
+    LoadDataResult,
+    PublicationManifest,
+    PublicationSummary,
 } from '@htan/data-portal-commons';
 
 import {
     ISelectedFiltersByAttrName,
     SelectedFilter,
 } from '@htan/data-portal-filter';
+import {
+    fetchAndProcessSchemaData,
+    SchemaDataById,
+} from '@htan/data-portal-schema';
+import { GenericAttributeNames } from '@htan/data-portal-utils';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)
@@ -44,18 +55,6 @@ const getFilteredFiles = (
     files: LoadDataResult
 ) => {
     return filterFiles(filterSelectionsByAttrName, fillInEntities(files));
-};
-
-const filterAssayData = (
-    groupedData: { [attrName: string]: { [attrValue: string]: Entity[] } },
-    filterAssayName: string[]
-) => {
-    const filteredData = _.chain(groupedData['assayName'])
-        .keys()
-        .filter((key) => filterAssayName.includes(key))
-        .flatMap((key) => groupedData['assayName'][key])
-        .value();
-    return filteredData;
 };
 
 const getBiospecimensData = (
@@ -75,7 +74,13 @@ const getBiospecimensData = (
     });
 };
 
-const PublicationPage = (props: { data: Publication }) => {
+interface PublicationPageProps {
+    publicationUid: string;
+    schemaDataById: SchemaDataById;
+    genericAttributeMap: { [attr: string]: GenericAttributeNames };
+}
+
+const PublicationPage = (props: PublicationPageProps) => {
     const router = useRouter();
     const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
     const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
@@ -83,37 +88,60 @@ const PublicationPage = (props: { data: Publication }) => {
     const [assayData, setAssayData] = useState<{
         [assayName: string]: Entity[];
     }>({});
+    const [publicationManifest, setPublicationManifest] = useState<
+        PublicationManifest | undefined
+    >(undefined);
+    const [publicationSummary, setPublicationSummary] = useState<
+        PublicationSummary | undefined
+    >(undefined);
 
     useEffect(() => {
         async function getData() {
             await fetchData().then((data) => {
                 setData(data);
-                const selectedFiltersByAttrName = filterByAttrName(
-                    props.data.publicationData.filters
-                );
-                const filteredFiles = getFilteredFiles(
-                    selectedFiltersByAttrName,
-                    data
-                );
-                const groupedData = groupFilesByAttrNameAndValue(filteredFiles);
-                setAssayData(groupedData['assayName']);
-                const biospecimensData = getBiospecimensData(
-                    selectedFiltersByAttrName,
-                    filteredFiles
-                );
-                setBiospecimensData(biospecimensData);
-                const casesData = getFilteredCases(
-                    filteredFiles,
-                    selectedFiltersByAttrName,
-                    false
-                );
-                setCasesData(casesData);
+                const publicationManifest =
+                    data.publicationManifestByUid[props.publicationUid];
+                setPublicationManifest(publicationManifest);
+                const publicationSummary =
+                    data.publicationSummaryByPubMedID?.[
+                        getPublicationPubMedID(publicationManifest)
+                    ];
+                setPublicationSummary(publicationSummary);
+
+                if (publicationManifest) {
+                    const selectedFiltersByAttrName = filterByAttrName(
+                        getPublicationFilters(publicationManifest)
+                    );
+                    const filteredFiles = getFilteredFiles(
+                        selectedFiltersByAttrName,
+                        data
+                    );
+                    const groupedData = groupFilesByAttrNameAndValue(
+                        filteredFiles
+                    );
+                    setAssayData(groupedData['assayName']);
+                    const biospecimensData = getBiospecimensData(
+                        selectedFiltersByAttrName,
+                        filteredFiles
+                    );
+                    setBiospecimensData(biospecimensData);
+                    const casesData = getFilteredCases(
+                        filteredFiles,
+                        selectedFiltersByAttrName,
+                        false
+                    );
+                    setCasesData(casesData);
+                }
             });
         }
         getData();
     }, []);
 
     const isLoading = _.isEmpty(data);
+    const doi = getPublicationDOI(publicationSummary, publicationManifest);
+    const pubmedId = publicationManifest
+        ? getPublicationPubMedID(publicationManifest)
+        : undefined;
 
     return (
         <>
@@ -124,7 +152,7 @@ const PublicationPage = (props: { data: Publication }) => {
                         <ScaleLoader />
                     </div>
                 )}
-                {!isLoading && (
+                {!isLoading && publicationManifest && (
                     <div className={styles.publicationPage}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                             <div
@@ -142,28 +170,30 @@ const PublicationPage = (props: { data: Publication }) => {
                                     Publication
                                 </span>
                                 <h2 style={{ marginTop: 0, padding: 0 }}>
-                                    {props.data.publicationData.title}
+                                    {getPublicationTitle(
+                                        publicationSummary,
+                                        publicationManifest
+                                    )}
                                 </h2>
                                 <p>
                                     Authors:{' '}
-                                    {props.data.publicationData.authors.map(
-                                        (author, index) => (
-                                            <>
-                                                <span
-                                                    style={{
-                                                        fontStyle: 'italic',
-                                                    }}
-                                                >
-                                                    {author}
-                                                </span>
-                                                {', '}
-                                                {index ===
-                                                    props.data.publicationData
-                                                        .authors.length -
-                                                        1 && <>{'et al.'}</>}
-                                            </>
-                                        )
-                                    )}{' '}
+                                    {getPublicationAuthors(
+                                        publicationSummary,
+                                        publicationManifest
+                                    ).map((author, index, authors) => (
+                                        <>
+                                            <span
+                                                style={{
+                                                    fontStyle: 'italic',
+                                                }}
+                                            >
+                                                {author}
+                                            </span>
+                                            {index !== authors.length - 1 && (
+                                                <>{', '}</>
+                                            )}
+                                        </>
+                                    ))}{' '}
                                     <br />
                                     {/*<span>Contact: </span>
                                     {props.data.publicationData.correspondingAuthors.map(
@@ -192,76 +222,50 @@ const PublicationPage = (props: { data: Publication }) => {
                                     )}
                                     <br />*/}
                                     Journal:{' '}
-                                    <span>
-                                        <a
-                                            href={
-                                                props.data.publicationData
-                                                    .publicationInfo.journal
-                                                    .link
-                                            }
-                                        >
-                                            {
-                                                props.data.publicationData
-                                                    .publicationInfo.journal
-                                                    .name
-                                            }
-                                        </a>
-                                    </span>{' '}
-                                    &nbsp; Pubmed:{' '}
-                                    <a
-                                        href={
-                                            props.data.publicationData
-                                                .publicationInfo.pubmed.link
-                                        }
-                                    >
-                                        {
-                                            props.data.publicationData
-                                                .publicationInfo.pubmed.name
-                                        }
-                                    </a>{' '}
+                                    {getPublicationJournal(
+                                        publicationSummary,
+                                        publicationManifest
+                                    )}
+                                    {pubmedId && (
+                                        <>
+                                            &nbsp; Pubmed:{' '}
+                                            <a
+                                                href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}`}
+                                            >
+                                                {pubmedId}
+                                            </a>{' '}
+                                        </>
+                                    )}
                                     &nbsp; DOI:{' '}
-                                    <a
-                                        href={
-                                            props.data.publicationData
-                                                .publicationInfo.DOI.link
-                                        }
-                                    >
-                                        {
-                                            props.data.publicationData
-                                                .publicationInfo.DOI.name
-                                        }
-                                    </a>
+                                    <a href={`https://doi.org/${doi}`}>{doi}</a>
                                     <br />
                                     Atlas:{' '}
-                                    <a
-                                        href={
-                                            props.data.publicationData
-                                                .publicationInfo.atlas.link
+                                    <AtlasDescription
+                                        atlasMeta={
+                                            publicationManifest.AtlasMeta
                                         }
-                                    >
-                                        {
-                                            props.data.publicationData
-                                                .publicationInfo.atlas.name
+                                        atlasName={
+                                            publicationManifest.AtlasMeta
+                                                .lead_institutions
                                         }
-                                    </a>
+                                    />
                                 </p>
                             </div>
                         </div>
                         <PublicationTabs
                             router={router}
-                            abstract={props.data.publicationData.abstract}
-                            synapseAtlas={
-                                props.data.publicationData.synapseAtlas
-                            }
+                            abstract={publicationManifest.PublicationAbstract}
+                            synapseAtlas={data.atlases.find(
+                                (a) => a.htan_id === publicationManifest.atlasid
+                            )}
                             biospecimens={biospecimensData}
                             cases={casesData}
                             assays={assayData}
-                            schemaDataById={
-                                props.data.publicationData.schemaDataById
-                            }
-                            genericAttributeMap={
-                                props.data.publicationData.genericAttributeMap
-                            }
+                            supportingLinks={getPublicationSupportingLinks(
+                                publicationManifest
+                            )}
+                            schemaDataById={props.schemaDataById}
+                            genericAttributeMap={props.genericAttributeMap}
                         />
                     </div>
                 )}
@@ -273,15 +277,19 @@ const PublicationPage = (props: { data: Publication }) => {
 export default PublicationPage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    // @ts-ignore
-    const data = await getPublicationData(context.params.id);
-    return { props: { data } };
+    return {
+        props: {
+            publicationUid: context.params?.id,
+            schemaDataById: await fetchAndProcessSchemaData(),
+            genericAttributeMap: HTANToGenericAttributeMap, // TODO needs to be configurable
+        },
+    };
 };
 
 export async function getStaticPaths() {
-    const paths = await getAllPublicationIds();
     return {
-        paths,
-        fallback: false,
+        paths: [], // indicates that no page needs be created at build time
+        // fallback: false,
+        fallback: 'blocking', // page will wait for the HTML to be generated
     };
 }
