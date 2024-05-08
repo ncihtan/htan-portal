@@ -10,7 +10,7 @@ import {
     PublicationSummary,
     SerializableEntity,
 } from './entity';
-import { getCaseValues, getNormalizedOrganCaseValues } from './getCaseValues';
+import { getCaseValues, getNormalizedOrganCaseValues, getNormalizedTreatmentTypeValues } from './getCaseValues';
 import { getViewerValues } from './getViewerValues';
 
 export enum HTANAttributeNames {
@@ -130,6 +130,11 @@ export const FileAttributeMap: {
     [AttributeNames.releaseVersion]: {
         path: 'releaseVersion',
         displayName: 'Release',
+    },
+    [AttributeNames.TreatmentType]: {
+        displayName: 'Treatment',
+        getValues: getNormalizedTreatmentTypeValues,
+        caseFilter: true,
     },
 };
 

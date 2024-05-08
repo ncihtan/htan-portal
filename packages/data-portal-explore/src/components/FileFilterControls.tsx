@@ -39,6 +39,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                 AttributeNames.assayName,
                 AttributeNames.Level,
                 AttributeNames.FileFormat,
+                AttributeNames.TreatmentType,
             ],
         };
 
@@ -155,6 +156,12 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                 return e;
                             });
                     }}
+                />
+                <FilterDropdown
+                    {...dropdownProps}
+                    attributes={[AttributeNames.TreatmentType]}
+                    className={styles.filterCheckboxListContainer}
+                    width={120}
                 />
                 <FilterDropdown
                     {...dropdownProps}

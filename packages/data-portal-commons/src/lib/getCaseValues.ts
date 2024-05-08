@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Entity } from './entity';
-import { getNormalizedOrgan } from './entityReportHelpers';
+import { getNormalizedOrgan, getNormalizedTreatment } from './entityReportHelpers';
 
 export function getCaseValues(propName: keyof Entity) {
     return (e: Entity) => {
@@ -19,3 +19,11 @@ export function getNormalizedOrganCaseValues(e: Entity) {
         return [getNormalizedOrgan(e)];
     }
 }
+
+export function getNormalizedTreatmentTypeValues(e: Entity) {
+    if (e.cases) {
+      return _.uniq(_.flatMap(e.cases, (c) => getNormalizedTreatment(c)));
+    } else {
+      return getNormalizedTreatment(e);
+    }
+  }

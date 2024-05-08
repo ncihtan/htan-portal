@@ -41,6 +41,7 @@ export interface BaseSerializableEntity {
     CountryofResidence: string;
     Gender: string;
     Islowestlevel?: string;
+    TreatmentType: string
 
     // Derived or attached in frontend
     atlasid: string;
