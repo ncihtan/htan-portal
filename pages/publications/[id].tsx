@@ -16,6 +16,7 @@ import {
     Entity,
     fillInEntities,
     filterFiles,
+    getAllPublicationPagePaths,
     getFilteredCases,
     getPublicationAuthors,
     getPublicationDOI,
@@ -40,6 +41,8 @@ import {
     SchemaDataById,
 } from '@htan/data-portal-schema';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
+
+import publicationIds from './static_page_ids.json';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)
@@ -288,8 +291,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 export async function getStaticPaths() {
     return {
-        paths: [], // indicates that no page needs be created at build time
-        // fallback: false,
-        fallback: 'blocking', // page will wait for the HTML to be generated
+        paths: getAllPublicationPagePaths(publicationIds), // indicates that no page needs be created at build time
+        fallback: false,
+        // TODO disabling dynamic pages for now
+        // paths: [], // indicates that no page needs be created at build time
+        // fallback: 'blocking', // page will wait for the HTML to be generated
     };
 }

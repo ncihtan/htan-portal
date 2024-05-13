@@ -108,6 +108,12 @@ async function writeProcessedFile() {
         'public/processed_syn_data.json',
         JSON.stringify(processed)
     );
+
+    // create a separate file to store static publication page ids
+    fs.writeFileSync(
+        'pages/publications/static_page_ids.json',
+        JSON.stringify(_.keys(processed.publicationManifestByUid), null, 2)
+    );
 }
 
 function getSynData(): SynapseData {
