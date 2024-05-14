@@ -1258,7 +1258,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn39147740",
-            "numItems": 1260
+            "numItems": 2321
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -2320,7 +2320,7 @@
         {
             "component": "HI-C-seqLevel2",
             "synapseId": "syn51702921",
-            "numItems": 36
+            "numItems": 34
         },
         {
             "component": "MassSpectrometryLevel1",
@@ -2401,6 +2401,11 @@
             "component": "MassSpectrometryLevel1",
             "synapseId": "syn53711588",
             "numItems": 214
+        },
+        {
+            "component": "HI-C-seqLevel3",
+            "synapseId": "syn58828438",
+            "numItems": 2
         }
     ],
     "HTA13": [
