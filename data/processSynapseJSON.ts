@@ -387,6 +387,22 @@ function processSynapseJSON(
                 accessory.AccessoryAssociatedParentDataFileID;
         });
 
+    const therapyByParticipantID: {
+        [ParticipantID: string]: SerializableEntity[];
+    } = {};
+
+    flatData
+        .filter((obj) => obj.Component === 'Therapy')
+        .forEach((therapyEntity) => {
+            const participantID = therapyEntity.ParticipantID;
+            if (!therapyByParticipantID[participantID]) {
+                therapyByParticipantID[participantID] = [];
+            }
+            therapyByParticipantID[participantID].push(
+                therapyEntity as SerializableEntity
+            );
+        });
+
     const publications: PublicationManifest[] = (flatData.filter(
         (obj) => obj.Component === 'PublicationManifest'
     ) as unknown) as PublicationManifest[];
@@ -533,6 +549,10 @@ function processSynapseJSON(
         (file as SerializableEntity).demographicsIds = (
             parentData?.demographics || []
         ).map((d) => d.ParticipantID);
+        (file as SerializableEntity).therapyIds =
+            therapyByParticipantID[file.ParticipantID]
+                ?.map((t) => t.synapseId)
+                .filter((id): id is string => id !== undefined) || [];
 
         addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
@@ -601,6 +621,9 @@ function processSynapseJSON(
         },
         demographicsByParticipantID: demographicsByParticipantID as {
             [ParticipantID: string]: SerializableEntity;
+        },
+        therapyByParticipantID: therapyByParticipantID as {
+            [ParticipantID: string]: SerializableEntity[];
         },
     };
 }
@@ -858,6 +881,36 @@ function extractEntitiesFromSynapseData(
                 // this is a workaround for missing DatasetName for certain schema ids
                 if (synapseRecords.column_order.includes('Dataset Name')) {
                     attributeToId['Dataset Name'] = 'bts:DatasetName';
+                }
+
+                if (synapseRecords.data_schema === 'bts:Therapy') {
+                    synapseRecords.record_list.forEach((record) => {
+                        const therapyEntity: Partial<SerializableEntity> = {
+                            biospecimenIds: [],
+                            diagnosisIds: [],
+                            demographicsIds: [],
+                            therapyIds: [],
+                        };
+
+                        synapseRecords.column_order.forEach((column, i) => {
+                            const id = attributeToId[column];
+
+                            if (id) {
+                                therapyEntity[id.replace(/^bts:/, '')] =
+                                    record.values[i];
+                            }
+                        });
+
+                        therapyEntity.atlasid = atlas.htan_id;
+                        therapyEntity.atlas_name = atlas.htan_name;
+                        therapyEntity.AtlasMeta =
+                            AtlasMetaMap[atlas.htan_id.toUpperCase()];
+                        therapyEntity.Component = 'Therapy';
+                        therapyEntity.assayName = 'Therapy';
+                        therapyEntity.level = 'Therapy';
+
+                        entities.push(therapyEntity as SerializableEntity);
+                    });
                 }
 
                 synapseRecords.record_list.forEach((record) => {
