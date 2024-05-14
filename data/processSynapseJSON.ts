@@ -430,7 +430,10 @@ function processSynapseJSON(
     // split entity into 2 separate entities, Diagnosis and Demographics, if component is 'SRRSClinicalDataTier2'
     flatData = _.flatten(
         flatData.map((d) => {
-            if (d.Component === 'SRRSClinicalDataTier2') {
+            if (
+                d.Component === 'SRRSClinicalDataTier2' ||
+                d.Component === 'Therapy'
+            ) {
                 // TODO figure out where these should go (demographics vs diagnosis)
                 //  we can't show these at this point because these are only defined in SRRSClinicalDataTier2 schema,
                 //  we don't have these in Diagnosis or Demographics schema.
@@ -896,8 +899,10 @@ function extractEntitiesFromSynapseData(
                             const id = attributeToId[column];
 
                             if (id) {
-                                therapyEntity[id.replace(/^bts:/, '')] =
-                                    record.values[i];
+                                // Ensure TypeScript recognizes therapyEntity properly when indexing
+                                (therapyEntity as any)[
+                                    id.replace(/^bts:/, '')
+                                ] = record.values[i];
                             }
                         });
 
@@ -908,8 +913,6 @@ function extractEntitiesFromSynapseData(
                         therapyEntity.Component = 'Therapy';
                         therapyEntity.assayName = 'Therapy';
                         therapyEntity.level = 'Therapy';
-
-                        entities.push(therapyEntity as SerializableEntity);
                     });
                 }
 

@@ -12,7 +12,7 @@ export interface SerializableEntity extends BaseSerializableEntity {
     biospecimenIds: BiospecimenID[];
     diagnosisIds: ParticipantID[];
     demographicsIds: ParticipantID[];
-    therapyIds: string[];
+    therapyIds: ParticipantID[];
 }
 
 export type DataFileID = string;
