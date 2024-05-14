@@ -233,3 +233,7 @@ export async function fetchPublicationSummaries(
 
     return undefined;
 }
+
+export function getAllPublicationPagePaths(ids: string[]) {
+    return ids.map((id) => ({ params: { id } }));
+}
