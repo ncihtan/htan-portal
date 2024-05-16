@@ -5,6 +5,7 @@ export interface Entity extends SerializableEntity {
     biospecimen: Entity[];
     diagnosis: Entity[];
     demographics: Entity[];
+    therapy: Entity[];
     cases: Entity[];
 }
 

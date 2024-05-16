@@ -387,22 +387,6 @@ function processSynapseJSON(
                 accessory.AccessoryAssociatedParentDataFileID;
         });
 
-    const therapyByParticipantID: {
-        [ParticipantID: string]: SerializableEntity[];
-    } = {};
-
-    flatData
-        .filter((obj) => obj.Component === 'Therapy')
-        .forEach((therapyEntity) => {
-            const participantID = therapyEntity.ParticipantID;
-            if (!therapyByParticipantID[participantID]) {
-                therapyByParticipantID[participantID] = [];
-            }
-            therapyByParticipantID[participantID].push(
-                therapyEntity as SerializableEntity
-            );
-        });
-
     const publications: PublicationManifest[] = (flatData.filter(
         (obj) => obj.Component === 'PublicationManifest'
     ) as unknown) as PublicationManifest[];
@@ -524,7 +508,8 @@ function processSynapseJSON(
         biospecimenByBiospecimenID,
         diagnosisByParticipantID,
         demographicsByParticipantID,
-    } = extractBiospecimensAndDiagnosisAndDemographics(flatData);
+        therapyByParticipantID,
+    } = extractBiospecimensAndDiagnosisAndDemographicsAndTherapy(flatData);
 
     const dbgapSynapseSet = new Set<string>(getDbgapSynapseIds(entitiesById));
     const dbgapImgSynapseSet = new Set<string>(
@@ -552,7 +537,7 @@ function processSynapseJSON(
         ).map((d) => d.ParticipantID);
         (file as SerializableEntity).therapyIds = (
             parentData?.therapy || []
-        ).map((t) => t.synapseId!);
+        ).map((d) => d.ParticipantID);
 
         addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
@@ -622,6 +607,9 @@ function processSynapseJSON(
         demographicsByParticipantID: demographicsByParticipantID as {
             [ParticipantID: string]: SerializableEntity;
         },
+        therapyByParticipantID: therapyByParticipantID as {
+            [ParticipantID: string]: SerializableEntity;
+        },
     };
 }
 
@@ -682,7 +670,7 @@ function findAndAddPrimaryParents(
     return primaryParents;
 }
 
-function extractBiospecimensAndDiagnosisAndDemographics(
+function extractBiospecimensAndDiagnosisAndDemographicsAndTherapy(
     data: BaseSerializableEntity[]
 ) {
     const biospecimenByBiospecimenID: {
@@ -692,6 +680,9 @@ function extractBiospecimensAndDiagnosisAndDemographics(
         [participantID: string]: BaseSerializableEntity;
     } = {};
     const demographicsByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
+    } = {};
+    const therapyByParticipantID: {
         [participantID: string]: BaseSerializableEntity;
     } = {};
 
@@ -705,12 +696,16 @@ function extractBiospecimensAndDiagnosisAndDemographics(
         if (entity.Component === 'Demographics') {
             demographicsByParticipantID[entity.ParticipantID] = entity;
         }
+        if (entity.Component === 'Therapy') {
+            therapyByParticipantID[entity.ParticipantID] = entity;
+        }
     });
 
     return {
         biospecimenByBiospecimenID,
         diagnosisByParticipantID,
         demographicsByParticipantID,
+        therapyByParticipantID,
     };
 }
 
@@ -744,7 +739,9 @@ function getSampleAndPatientData(
     demographicsByParticipantID: {
         [participantID: string]: BaseSerializableEntity;
     },
-    therapyByParticipantID: { [ParticipantID: string]: SerializableEntity[] }
+    therapyByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
+    }
 ) {
     const primaryParents =
         file.primaryParents && file.primaryParents.length
@@ -791,7 +788,14 @@ function getSampleAndPatientData(
         (d) => d.ParticipantID
     );
 
-    const therapy = therapyByParticipantID[file.ParticipantID] || [];
+    const therapy = _.uniqBy(
+        getCaseData(
+            biospecimen,
+            biospecimenByBiospecimenID,
+            therapyByParticipantID
+        ),
+        (d) => d.ParticipantID
+    );
 
     return { biospecimen, diagnosis, demographics, therapy };
 }

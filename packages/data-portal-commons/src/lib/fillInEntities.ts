@@ -6,6 +6,7 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
     const biospecimenMap = data.biospecimenByBiospecimenID;
     const diagnosisMap = data.diagnosisByParticipantID;
     const demoMap = data.demographicsByParticipantID;
+    const therapyMap = data.therapyByParticipantID;
 
     // give each biospecimen it's caseid (i.e "diagnosis" HTANParticipantID)
     // biospecimen have HTANParentID but that may or may not be it's caseid because
@@ -32,16 +33,21 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
         (file as Entity).demographics = file.demographicsIds.map(
             (id) => demoMap[id] as Entity
         );
+        (file as Entity).therapy = file.therapyIds.map(
+            (id) => therapyMap[id] as Entity
+        );
         (file as Entity).cases = _.uniqBy(
             mergeCaseData(
                 _.uniq(
                     [
                         ...(file as Entity).diagnosis,
                         ...(file as Entity).demographics,
+                        ...(file as Entity).therapy,
                     ].map((e) => e.ParticipantID)
                 ),
                 diagnosisMap as { [id: string]: Entity },
-                demoMap as { [id: string]: Entity }
+                demoMap as { [id: string]: Entity },
+                therapyMap as { [id: string]: Entity }
             ),
             (c) => c.ParticipantID
         );
@@ -53,10 +59,12 @@ export function fillInEntities(data: LoadDataResult): Entity[] {
 function mergeCaseData(
     participantIds: string[],
     diagnosisByParticipantID: { [participantID: string]: Entity },
-    demographicsByParticipantID: { [participantID: string]: Entity }
+    demographicsByParticipantID: { [participantID: string]: Entity },
+    therapyByParticipantID: { [participantID: string]: Entity }
 ) {
     return participantIds.map((id) => ({
         ...diagnosisByParticipantID[id],
         ...demographicsByParticipantID[id],
+        ...therapyByParticipantID[id],
     }));
 }
