@@ -430,10 +430,7 @@ function processSynapseJSON(
     // split entity into 2 separate entities, Diagnosis and Demographics, if component is 'SRRSClinicalDataTier2'
     flatData = _.flatten(
         flatData.map((d) => {
-            if (
-                d.Component === 'SRRSClinicalDataTier2' ||
-                d.Component === 'Therapy'
-            ) {
+            if (d.Component === 'SRRSClinicalDataTier2') {
                 // TODO figure out where these should go (demographics vs diagnosis)
                 //  we can't show these at this point because these are only defined in SRRSClinicalDataTier2 schema,
                 //  we don't have these in Diagnosis or Demographics schema.
@@ -540,7 +537,8 @@ function processSynapseJSON(
             filesById,
             biospecimenByBiospecimenID,
             diagnosisByParticipantID,
-            demographicsByParticipantID
+            demographicsByParticipantID,
+            therapyByParticipantID
         );
 
         (file as SerializableEntity).biospecimenIds = (
@@ -552,10 +550,9 @@ function processSynapseJSON(
         (file as SerializableEntity).demographicsIds = (
             parentData?.demographics || []
         ).map((d) => d.ParticipantID);
-        (file as SerializableEntity).therapyIds =
-            therapyByParticipantID[file.ParticipantID]
-                ?.map((t) => t.synapseId)
-                .filter((id): id is string => id !== undefined) || [];
+        (file as SerializableEntity).therapyIds = (
+            parentData?.therapy || []
+        ).map((t) => t.synapseId!);
 
         addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
@@ -624,9 +621,6 @@ function processSynapseJSON(
         },
         demographicsByParticipantID: demographicsByParticipantID as {
             [ParticipantID: string]: SerializableEntity;
-        },
-        therapyByParticipantID: therapyByParticipantID as {
-            [ParticipantID: string]: SerializableEntity[];
         },
     };
 }
@@ -749,7 +743,8 @@ function getSampleAndPatientData(
     },
     demographicsByParticipantID: {
         [participantID: string]: BaseSerializableEntity;
-    }
+    },
+    therapyByParticipantID: { [ParticipantID: string]: SerializableEntity[] }
 ) {
     const primaryParents =
         file.primaryParents && file.primaryParents.length
@@ -796,7 +791,9 @@ function getSampleAndPatientData(
         (d) => d.ParticipantID
     );
 
-    return { biospecimen, diagnosis, demographics };
+    const therapy = therapyByParticipantID[file.ParticipantID] || [];
+
+    return { biospecimen, diagnosis, demographics, therapy };
 }
 
 function getCaseData(
@@ -884,36 +881,6 @@ function extractEntitiesFromSynapseData(
                 // this is a workaround for missing DatasetName for certain schema ids
                 if (synapseRecords.column_order.includes('Dataset Name')) {
                     attributeToId['Dataset Name'] = 'bts:DatasetName';
-                }
-
-                if (synapseRecords.data_schema === 'bts:Therapy') {
-                    synapseRecords.record_list.forEach((record) => {
-                        const therapyEntity: Partial<SerializableEntity> = {
-                            biospecimenIds: [],
-                            diagnosisIds: [],
-                            demographicsIds: [],
-                            therapyIds: [],
-                        };
-
-                        synapseRecords.column_order.forEach((column, i) => {
-                            const id = attributeToId[column];
-
-                            if (id) {
-                                // Ensure TypeScript recognizes therapyEntity properly when indexing
-                                (therapyEntity as any)[
-                                    id.replace(/^bts:/, '')
-                                ] = record.values[i];
-                            }
-                        });
-
-                        therapyEntity.atlasid = atlas.htan_id;
-                        therapyEntity.atlas_name = atlas.htan_name;
-                        therapyEntity.AtlasMeta =
-                            AtlasMetaMap[atlas.htan_id.toUpperCase()];
-                        therapyEntity.Component = 'Therapy';
-                        therapyEntity.assayName = 'Therapy';
-                        therapyEntity.level = 'Therapy';
-                    });
                 }
 
                 synapseRecords.record_list.forEach((record) => {

@@ -160,7 +160,6 @@ export interface LoadDataResult {
     demographicsByParticipantID: {
         [ParticipantID: string]: SerializableEntity;
     };
-    therapyByParticipantID: { [ParticipantID: string]: SerializableEntity[] };
 }
 
 export interface GeneralLink {
