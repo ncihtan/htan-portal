@@ -621,7 +621,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                 name: 'Treatment',
                 selector: (file: Entity) => {
                     return _.uniq(
-                        file.diagnosis.map((d) => d.TreatmentType)
+                        file.therapy.map((d) => d.TreatmentType)
                     ).join(', ');
                 },
                 cell: truncatedTableCell,
