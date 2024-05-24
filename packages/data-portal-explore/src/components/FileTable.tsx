@@ -618,17 +618,6 @@ export class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
-                name: 'Treatment',
-                selector: (file: Entity) => {
-                    return _.uniq(
-                        file.therapy.map((d) => d.TreatmentType)
-                    ).join(', ');
-                },
-                cell: truncatedTableCell,
-                wrap: true,
-                sortable: true,
-            },
-            {
                 name: 'Diagnosis',
                 selector: (file: Entity) => {
                     return _.uniq(
@@ -923,12 +912,26 @@ export class FileTable extends React.Component<IFileTableProps> {
                             )
                         );
                     } else {
-                        columns.push({
-                            name: selectorToColumnName(selector),
-                            selector,
-                            wrap: true,
-                            sortable: true,
-                        });
+                        if (selector === 'therapy') {
+                            columns.push({
+                                name: 'Treatment Type',
+                                selector: (file: Entity) => {
+                                    return _.uniq(
+                                        file.therapy.map((d) => d.TreatmentType)
+                                    ).join(', ');
+                                },
+                                cell: truncatedTableCell,
+                                wrap: true,
+                                sortable: true,
+                            });
+                        } else {
+                            columns.push({
+                                name: selectorToColumnName(selector),
+                                selector,
+                                wrap: true,
+                                sortable: true,
+                            });
+                        }
                     }
                 }
                 return columns;
