@@ -504,7 +504,14 @@ export class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
-                name: 'Biospecimen',
+                name: (
+                    <>
+                        Biospecimens
+                        <br />
+                        <br />
+                        <br />
+                    </>
+                ),
                 selector: (file: Entity) => {
                     return _.uniq(
                         file.biospecimen.map((b) => b.BiospecimenID)

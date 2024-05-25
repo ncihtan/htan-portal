@@ -301,7 +301,7 @@ export class EnhancedDataTable<T = any> extends React.Component<
                     style={{
                         marginBottom: 10,
                     }}
-                    className={'d-flex justify-content-between'}
+                    className={'d-flex justify-content-between align-top'}
                 >
                     {this.props.customControls || <div />}
                     <DataTableControls
