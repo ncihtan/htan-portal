@@ -507,9 +507,6 @@ export class FileTable extends React.Component<IFileTableProps> {
                 name: (
                     <>
                         Biospecimens
-                        <br />
-                        <br />
-                        <br />
                     </>
                 ),
                 selector: (file: Entity) => {
