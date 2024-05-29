@@ -84,6 +84,12 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                 />
                 <FilterDropdown
                     {...dropdownProps}
+                    attributes={[AttributeNames.TreatmentType]}
+                    className={styles.filterCheckboxListContainer}
+                    width={120}
+                />
+                <FilterDropdown
+                    {...dropdownProps}
                     attributes={[AttributeNames.assayName]}
                 />
                 <FilterDropdown
@@ -100,7 +106,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                     {...dropdownProps}
                     attributes={[AttributeNames.downloadSource]}
                     className={styles.filterCheckboxListContainer}
-                    width={170}
+                    width={150}
                     options={(attrName: AttributeNames) => {
                         return options(attrName)
                             .sort((a: OptionType, b: OptionType) => {
@@ -156,12 +162,6 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                 return e;
                             });
                     }}
-                />
-                <FilterDropdown
-                    {...dropdownProps}
-                    attributes={[AttributeNames.TreatmentType]}
-                    className={styles.filterCheckboxListContainer}
-                    width={120}
                 />
                 <FilterDropdown
                     {...dropdownProps}
