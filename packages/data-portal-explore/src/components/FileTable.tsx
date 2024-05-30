@@ -627,6 +627,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                 cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
+                omit: true,
             },
             {
                 name: 'Diagnosis',
@@ -982,7 +983,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             ),
             (c) =>
                 typeof c !== 'number' &&
-                (c as IEnhancedDataTableColumn<Entity>).name !== 'Treatment'
+                !(c as IEnhancedDataTableColumn<Entity>).omit
         );
 
         this.columnVisibility = columnVisibilityMap;
