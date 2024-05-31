@@ -979,11 +979,9 @@ export class FileTable extends React.Component<IFileTableProps> {
         const columnVisibilityMap = _.mapValues(
             _.keyBy(
                 this.defaultColumns,
-                (c) => (c as IEnhancedDataTableColumn<Entity>).name
+                (c: IEnhancedDataTableColumn<Entity>) => c.name
             ),
-            (c) =>
-                typeof c !== 'number' &&
-                !(c as IEnhancedDataTableColumn<Entity>).omit
+            (c: IEnhancedDataTableColumn<Entity>) => !c.omit
         );
 
         this.columnVisibility = columnVisibilityMap;

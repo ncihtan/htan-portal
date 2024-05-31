@@ -16,7 +16,6 @@ import {
     sortByParticipantId,
 } from '../lib/dataTableHelpers';
 import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
-import { truncatedTableCell } from '../lib/dataTableHelpers';
 
 interface ICaseTableProps {
     cases: Entity[];
