@@ -145,7 +145,6 @@ function addPublicationsAsSynapseRecords(
         publicationData
     );
 
-    debugger;
     _.forEach(publicationsById, (synapseRecords, atlasId) => {
         const atlas = synapseJson.atlases.find(
             (atlas) => atlas.htan_id === atlasId
@@ -785,26 +784,32 @@ function getCaseData(
 ) {
     return biospecimen
         .map((s) => {
-            // ParentID can be both participant or biospecimen, so keep
+            // parentID can be both participant or biospecimen, so keep
             // going up the tree until participant is found.
-            let ParentID = s.ParentID;
+            let parentID = s.ParentID;
+            const alreadyProcessed = new Set();
 
-            while (ParentID in biospecimenByBiospecimenID) {
-                const parentBioSpecimen = biospecimenByBiospecimenID[ParentID];
-                if (parentBioSpecimen.ParentID) {
-                    ParentID = parentBioSpecimen.ParentID;
-                } else {
+            while (parentID in biospecimenByBiospecimenID) {
+                // this is to prevent infinite loop due to possible circular references
+                if (alreadyProcessed.has(parentID)) {
                     break;
+                } else {
+                    alreadyProcessed.add(parentID);
+                }
+
+                const parentBioSpecimen = biospecimenByBiospecimenID[parentID];
+                if (parentBioSpecimen.ParentID) {
+                    parentID = parentBioSpecimen.ParentID;
                 }
             }
 
-            if (!(ParentID in casesByParticipantID)) {
+            if (!(parentID in casesByParticipantID)) {
                 // console.error(
-                //     `${s.BiospecimenID} does not have a ParentID (${ParentID}) with diagnosis/demographics information`
+                //     `${s.BiospecimenID} does not have a parentID (${parentID}) with diagnosis/demographics information`
                 // );
                 return undefined;
             } else {
-                return casesByParticipantID[ParentID] as Entity;
+                return casesByParticipantID[parentID] as Entity;
             }
         })
         .filter((f) => !!f) as BaseSerializableEntity[];

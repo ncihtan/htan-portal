@@ -3,17 +3,18 @@ ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
   40kB  sourcemap-register.js
 8437kB  index.js
-1408kB  index.js.map
-8477kB  [26652ms] - ncc 0.28.6
+1409kB  index.js.map
+8477kB  [16864ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'ScATAC-seqLevel2',
   Filename: 'snATAC-Seq_level_2_atac_tumor/CE357E1-S1-atac_possorted_bam.bam',
   FileFormat: 'bam',
-  HTANParentDataFileID: 'HTA12_98_1020;HTA12_98_1021;HTA12_98_1022',
+  HTANParentDataFileID: 'HTA12_98_1030;HTA12_98_1031;HTA12_98_1032',
   HTANDataFileID: 'HTA12_98_2010',
   AlignmentWorkflowUrl: 'https://github.com/ding-lab/PanCan_snATAC_publication/blob/main/Processing_scripts/cellranger-arc.v.2.0.0.sh',
   AlignmentWorkflowType: 'BWA-mem',
   GenomicReference: 'refdata-cellranger-arc-GRCh38-2020-A-2.0.0',
+  GenomicReferenceURL: 'https://cf.10xgenomics.com/supp/cell-arc/refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz',
   IndexFileName: 'CE357E1-S1-atac_possorted_bam.bam',
   MedianPercentageofMitochondrialReadsperNucleus: 'Not Reported',
   synapseId: 'syn52175710',
@@ -29,7 +30,7 @@ Missing ParentBiospecimenID:  {
     lead_institutions: 'Washington University'
   },
   DataFileID: 'HTA12_98_2010',
-  ParentDataFileID: 'HTA12_98_1020;HTA12_98_1021;HTA12_98_1022',
+  ParentDataFileID: 'HTA12_98_1030;HTA12_98_1031;HTA12_98_1032',
   publicationIds: [ 'hta12_2023_nature_nadezhda-v-terekhanova' ],
   primaryParents: []
 }
@@ -37,11 +38,12 @@ Missing ParentBiospecimenID:  {
   Component: 'ScATAC-seqLevel2',
   Filename: 'snATAC-Seq_level_2_atac_tumor/CE507-C1A2-possorted_bam.bam',
   FileFormat: 'bam',
-  HTANParentDataFileID: 'HTA12_99_1020;HTA12_99_1021;HTA12_99_1022',
+  HTANParentDataFileID: 'HTA12_99_1030;HTA12_99_1031;HTA12_99_1032',
   HTANDataFileID: 'HTA12_99_2010',
   AlignmentWorkflowUrl: 'https://github.com/ding-lab/PanCan_snATAC_publication/blob/main/Processing_scripts/cellranger-atac.v.2.0.0.sh',
   AlignmentWorkflowType: 'BWA-mem',
   GenomicReference: 'refdata-cellranger-arc-GRCh38-2020-A-2.0.0',
+  GenomicReferenceURL: 'https://cf.10xgenomics.com/supp/cell-arc/refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz',
   IndexFileName: 'CE507-C1A2-possorted_bam.bam',
   MedianPercentageofMitochondrialReadsperNucleus: 'Not Reported',
   synapseId: 'syn52174641',
@@ -57,7 +59,7 @@ Missing ParentBiospecimenID:  {
     lead_institutions: 'Washington University'
   },
   DataFileID: 'HTA12_99_2010',
-  ParentDataFileID: 'HTA12_99_1020;HTA12_99_1021;HTA12_99_1022',
+  ParentDataFileID: 'HTA12_99_1030;HTA12_99_1031;HTA12_99_1032',
   publicationIds: [ 'hta12_2023_nature_nadezhda-v-terekhanova' ],
   primaryParents: []
 }
@@ -65,11 +67,12 @@ Missing ParentBiospecimenID:  {
   Component: 'ScATAC-seqLevel2',
   Filename: 'snATAC-Seq_level_2_atac_tumor/CE598-C1A2-possorted_bam.bam',
   FileFormat: 'bam',
-  HTANParentDataFileID: 'HTA12_100_1020;HTA12_100_1021;HTA12_100_1022',
+  HTANParentDataFileID: 'HTA12_100_1030;HTA12_100_1031;HTA12_100_1032',
   HTANDataFileID: 'HTA12_100_2010',
   AlignmentWorkflowUrl: 'https://github.com/ding-lab/PanCan_snATAC_publication/blob/main/Processing_scripts/cellranger-atac.v.2.0.0.sh',
   AlignmentWorkflowType: 'BWA-mem',
   GenomicReference: 'refdata-cellranger-arc-GRCh38-2020-A-2.0.0',
+  GenomicReferenceURL: 'https://cf.10xgenomics.com/supp/cell-arc/refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz',
   IndexFileName: 'CE598-C1A2-possorted_bam.bam',
   MedianPercentageofMitochondrialReadsperNucleus: 'Not Reported',
   synapseId: 'syn52175512',
@@ -85,7 +88,7 @@ Missing ParentBiospecimenID:  {
     lead_institutions: 'Washington University'
   },
   DataFileID: 'HTA12_100_2010',
-  ParentDataFileID: 'HTA12_100_1020;HTA12_100_1021;HTA12_100_1022',
+  ParentDataFileID: 'HTA12_100_1030;HTA12_100_1031;HTA12_100_1032',
   publicationIds: [ 'hta12_2023_nature_nadezhda-v-terekhanova' ],
   primaryParents: []
 }
