@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import {
     faDownload,
     faExternalLinkAlt,
+    faLockOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -66,41 +67,89 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
     }
 }
 
+const FilenameWithAccessIcon: React.FunctionComponent<{
+    file: Entity;
+}> = (props) => {
+    return (
+        <>
+            {props.file.downloadSource === DownloadSourceCategory.dbgap ? (
+                '🔒'
+            ) : (
+                <FontAwesomeIcon color="#1adb54" icon={faLockOpen} />
+            )}{' '}
+            {getFileBase(props.file.Filename)}
+            {'\n'}
+        </>
+    );
+};
+
+const CDSFileList: React.FunctionComponent<{
+    files: Entity[];
+}> = (props) => {
+    return (
+        <pre className="pre-scrollable">
+            <code>
+                {props.files.map((f) => (
+                    <FilenameWithAccessIcon file={f} />
+                ))}
+            </code>
+        </pre>
+    );
+};
+
 const CDSInstructions: React.FunctionComponent<{
     files: Entity[];
 }> = (props) => {
     const manifestFile = generateCdsManifestFile(props.files);
+    const dbgapFiles = props.files.filter(
+        (f) => f.downloadSource === DownloadSourceCategory.dbgap
+    );
 
-    return (
+    const manifestInstructions = (
+        <>
+            you can import this manifest file into CGC following the
+            instructions{' '}
+            <a
+                href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
+                target="_blank"
+            >
+                here
+            </a>
+            .
+        </>
+    );
+
+    const dbgapInstructions = (
         <>
             <p>
-                Your selection includes Level 1 and/or Level 2 sequencing and/or
-                imaging data:
+                Your selection includes Level 1 and/or Level 2 sequencing data
+                (🔒):
             </p>
-            <pre className="pre-scrollable">
-                <code>
-                    {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
-                </code>
-            </pre>
+            <CDSFileList files={props.files} />
             <p>
-                To download Level 1/2 sequencing/imaging data you first need to
-                request{' '}
+                To download Level 1/2 sequencing data you first need to request{' '}
                 <a
                     href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
                     target="_blank"
                 >
                     dbGaP
                 </a>{' '}
-                access. Afterwards you can import this manifest file into CGC
-                following the instructions{' '}
-                <a
-                    href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
-                    target="_blank"
-                >
-                    here
-                </a>
-                .
+                access. Afterwards {manifestInstructions}
             </p>
+        </>
+    );
+
+    const openAccessInstructions = (
+        <>
+            <CDSFileList files={props.files} />
+            <p>To download selected files {manifestInstructions}</p>
+        </>
+    );
+
+    return (
+        <>
+            {dbgapFiles.length > 0 && dbgapInstructions}
+            {dbgapFiles.length === 0 && openAccessInstructions}
             {manifestFile?.length && (
                 <p>
                     <button
@@ -307,11 +356,11 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 ) => {
     const cdsFiles = props.files.filter((f) => f.viewers?.cds);
     const synapseFiles = props.files.filter(
-        (f) => f.downloadSource === 'Synapse'
+        (f) => f.downloadSource === DownloadSourceCategory.synapse
     );
     const notDownloadableFiles = props.files.filter(
         (f) =>
-            f.downloadSource?.includes('Coming Soon') ||
+            f.downloadSource?.includes(DownloadSourceCategory.comingSoon) ||
             (f.Component.startsWith('Imaging') &&
                 (f.level === 'Level 1' || f.level == 'Level 2') &&
                 !f.viewers?.cds)
