@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
   40kB  sourcemap-register.js
-8437kB  index.js
-1409kB  index.js.map
-8477kB  [26994ms] - ncc 0.28.6
+8439kB  index.js
+1411kB  index.js.map
+8479kB  [24639ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'ScATAC-seqLevel2',
   Filename: 'snATAC-Seq_level_2_atac_tumor/CE357E1-S1-atac_possorted_bam.bam',
