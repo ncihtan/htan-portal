@@ -897,6 +897,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             downloadSource: true,
             viewers: true,
             imageChannelMetadata: true,
+            therapy: true,
 
             //others to exclude
             Component: true,
@@ -906,6 +907,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             demographics: true,
             demographicsIds: true,
             diagnosisIds: true,
+            therapyIds: true,
         };
 
         const listSelectors: any = {
