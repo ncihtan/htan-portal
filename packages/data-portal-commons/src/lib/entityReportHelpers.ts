@@ -47,6 +47,15 @@ export function normalizeTissueOrOrganOrSite(value: string) {
     return value.toLowerCase().replace(/,/g, '');
 }
 
+function normalizeTreatment(value: string): string[] {
+    value = value.trim().toLowerCase();
+    const treatments = value.split(/,|;/).map(t => {
+      const trimmedTreatment = t.trim();
+      return trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1);
+    });
+    return _.uniq(treatments);
+  }
+
 function initTissueOrOrganOrSiteToOrganMap(
     organMapping: OrganMapping
 ): { [tissueOrOrganOrSite: string]: string } {
@@ -124,6 +133,12 @@ export function getNormalizedOrgan(entity: Entity) {
         : entity.TissueorOrganofOrigin;
 }
 
+export function getNormalizedTreatment(entity: Entity) {
+    return entity.TreatmentType
+      ? normalizeTreatment(entity.TreatmentType)
+      : [];
+  }
+  
 export function getNormalizedAssay(entity: Entity) {
     return entity.assayName;
 }

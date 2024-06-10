@@ -618,6 +618,18 @@ export class FileTable extends React.Component<IFileTableProps> {
                 sortable: true,
             },
             {
+                name: 'Treatment',
+                selector: (file: Entity) => {
+                    return _.uniq(
+                        file.therapy.map((d) => d.TreatmentType)
+                    ).join(', ');
+                },
+                cell: truncatedTableCell,
+                wrap: true,
+                sortable: true,
+                omit: true,
+            },
+            {
                 name: 'Diagnosis',
                 selector: (file: Entity) => {
                     return _.uniq(
@@ -964,10 +976,15 @@ export class FileTable extends React.Component<IFileTableProps> {
         super(props);
         makeObservable(this);
 
-        this.columnVisibility = _.mapValues(
-            _.keyBy(this.defaultColumns, (c) => c.name),
-            () => true
+        const columnVisibilityMap = _.mapValues(
+            _.keyBy(
+                this.defaultColumns,
+                (c: IEnhancedDataTableColumn<Entity>) => c.name
+            ),
+            (c: IEnhancedDataTableColumn<Entity>) => !c.omit
         );
+
+        this.columnVisibility = columnVisibilityMap;
     }
 
     @action.bound

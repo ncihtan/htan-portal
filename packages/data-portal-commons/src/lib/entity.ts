@@ -5,6 +5,7 @@ export interface Entity extends SerializableEntity {
     biospecimen: Entity[];
     diagnosis: Entity[];
     demographics: Entity[];
+    therapy: Entity[];
     cases: Entity[];
 }
 
@@ -12,6 +13,7 @@ export interface SerializableEntity extends BaseSerializableEntity {
     biospecimenIds: BiospecimenID[];
     diagnosisIds: ParticipantID[];
     demographicsIds: ParticipantID[];
+    therapyIds: ParticipantID[];
 }
 
 export type DataFileID = string;
@@ -41,6 +43,7 @@ export interface BaseSerializableEntity {
     CountryofResidence: string;
     Gender: string;
     Islowestlevel?: string;
+    TreatmentType: string;
 
     // Derived or attached in frontend
     atlasid: string;

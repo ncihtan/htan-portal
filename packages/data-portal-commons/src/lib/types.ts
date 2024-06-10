@@ -10,7 +10,11 @@ import {
     PublicationSummary,
     SerializableEntity,
 } from './entity';
-import { getCaseValues, getNormalizedOrganCaseValues } from './getCaseValues';
+import {
+    getCaseValues,
+    getNormalizedOrganCaseValues,
+    getNormalizedTreatmentTypeValues,
+} from './getCaseValues';
 import { getViewerValues } from './getViewerValues';
 
 export enum HTANAttributeNames {
@@ -131,6 +135,11 @@ export const FileAttributeMap: {
         path: 'releaseVersion',
         displayName: 'Release',
     },
+    [AttributeNames.TreatmentType]: {
+        displayName: 'Treatment',
+        getValues: getNormalizedTreatmentTypeValues,
+        caseFilter: true,
+    },
 };
 
 export interface LoadDataResult {
@@ -151,6 +160,7 @@ export interface LoadDataResult {
     demographicsByParticipantID: {
         [ParticipantID: string]: SerializableEntity;
     };
+    therapyByParticipantID: { [ParticipantID: string]: SerializableEntity };
 }
 
 export interface GeneralLink {

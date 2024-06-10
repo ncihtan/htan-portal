@@ -27,7 +27,11 @@ interface ICaseTableProps {
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     const columns = generateColumnsForDataSchema(
-        [SchemaDataId.Diagnosis, SchemaDataId.Demographics],
+        [
+            SchemaDataId.Diagnosis,
+            SchemaDataId.Demographics,
+            SchemaDataId.Therapy,
+        ],
         props.schemaDataById,
         props.genericAttributeMap,
         // need to add a custom sort function for the id
@@ -47,6 +51,9 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
                         {convertAgeInDaysToYears(sample.AgeatDiagnosis)}
                     </span>
                 ),
+            },
+            TreatmentType: {
+                omit: false,
             },
         },
         // Component seems to be always "Diagnosis", no need to have a column for it

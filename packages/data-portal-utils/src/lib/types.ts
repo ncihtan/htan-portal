@@ -19,6 +19,7 @@ export enum AttributeNames {
     Stage = 'Stage',
     Level = 'Level',
     FileFormat = 'FileFormat',
+    TreatmentType = 'TreatmentType',
 
     // Derived or attached in frontend
     organType = 'organType',
