@@ -1,6 +1,7 @@
-import _ from 'lodash';
 import React from 'react';
+import { observer } from 'mobx-react';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
+import _ from 'lodash';
 
 import {
     DataSchemaData,
@@ -10,6 +11,8 @@ import {
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import ValidValues from './ValidValues';
+import { FilterSearch, OptionType } from '@htan/data-portal-filter';
+import { DataStandardFilterControl } from 'packages/data-portal-filter/src/components/DataStandardFilterControl';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -30,10 +33,15 @@ const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
     'Imaging Level 3 Segmentation': 'Imaging Level 3',
 };
 
-const ExpandableComponent: React.FunctionComponent<{
+interface ExpandableComponentProps {
     data?: DataSchemaData;
     dataSchemaMap?: { [id: string]: DataSchemaData };
-}> = (props) => {
+    filterControl: DataStandardFilterControl;
+}
+
+const ExpandableComponent: React.FunctionComponent<ExpandableComponentProps> = (
+    props
+) => {
     let component = null;
 
     if (props.data) {
@@ -43,11 +51,13 @@ const ExpandableComponent: React.FunctionComponent<{
         );
 
         if (!_.isEmpty(dependencies)) {
+            console.log(dependencies);
             component = (
                 <div className="m-3">
                     <DataSchemaTable
                         schemaData={dependencies}
                         dataSchemaMap={props.dataSchemaMap}
+                        filterControl={props.filterControl}
                     />
                 </div>
             );
@@ -106,8 +116,6 @@ function getColumnDef(dataSchemaMap?: {
             selector: ColumnSelector.Required,
             wrap: true,
             sortable: true,
-            // TODO it may not be accurate to use the `required` field because an attribute may be listed as a
-            //  required dependency for the parent attribute even if `required` field is false
             format: (schemaData: DataSchemaData) =>
                 schemaData.required ? 'Yes' : 'No',
         },
@@ -134,63 +142,125 @@ function getColumnDef(dataSchemaMap?: {
     };
 }
 
-const DataSchemaTable: React.FunctionComponent<{
+interface DataSchemaTableProps {
     schemaData: DataSchemaData[];
     dataSchemaMap?: { [id: string]: DataSchemaData };
     title?: string;
     columns?: ColumnName[];
-}> = (props) => {
-    // include Attribute and Description columns by default
-    // (exclude Label and Required columns by default)
-    const availableColumns = props.columns || [
-        ColumnName.Attribute,
-        ColumnName.Description,
-    ];
-    // include Valid Values column only if there is data
-    if (
-        !availableColumns.includes(ColumnName.ValidValues) &&
-        hasNonEmptyValidValues(props.schemaData)
-    ) {
-        availableColumns.push(ColumnName.ValidValues);
+    filterControl: DataStandardFilterControl;
+}
+
+const DataSchemaTable: React.FunctionComponent<DataSchemaTableProps> = observer(
+    (props) => {
+        const availableColumns = props.columns || [
+            ColumnName.Attribute,
+            ColumnName.Description,
+            ColumnName.ValidValues,
+        ];
+
+        const columnDef = getColumnDef(props.dataSchemaMap);
+        const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
+            (name) => columnDef[name]
+        );
+        console.log(props);
+
+        const filteredSchemaDataById =
+            props.filterControl.selectedAttributes.length > 0
+                ? Object.fromEntries(
+                      Object.entries(props.dataSchemaMap || {}).filter(
+                          ([key, value]) => {
+                              const attribute = value.attribute;
+                              const isMatching = props.filterControl.selectedAttributes.some(
+                                  (filter) => {
+                                      const modifiedValue =
+                                          'bts:' + filter.replace(/\s+/g, '');
+                                      return modifiedValue === key;
+                                  }
+                              );
+                              return isMatching;
+                          }
+                      )
+                  )
+                : Object.fromEntries(
+                      Object.entries(props.dataSchemaMap || {}).filter(
+                          ([key, value]) => {
+                              const attribute = value.attribute;
+                              return props.schemaData.some(
+                                  (data) => data.attribute === attribute
+                              );
+                          }
+                      )
+                  );
+
+        const isFiltered = props.filterControl.selectedAttributes.length > 0;
+
+        return (
+            <>
+                <DataTable
+                    columns={columns}
+                    data={Object.values(filteredSchemaDataById)}
+                    striped={true}
+                    dense={false}
+                    pagination={false}
+                    noHeader={!props.title}
+                    title={
+                        props.title ? <strong>{props.title}</strong> : undefined
+                    }
+                    customStyles={getDataSchemaDataTableStyle()}
+                    expandableRowDisabled={(schema) =>
+                        _.isEmpty(
+                            getDataSchemaDependencies(
+                                schema,
+                                props.dataSchemaMap
+                            )
+                        )
+                    }
+                    expandableRows={!isFiltered}
+                    expandableRowsComponent={
+                        <ExpandableComponent
+                            dataSchemaMap={props.dataSchemaMap}
+                            filterControl={props.filterControl}
+                        />
+                    }
+                />
+            </>
+        );
     }
+);
 
-    const columnDef = getColumnDef(props.dataSchemaMap);
-    const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
-        (name) => columnDef[name]
-    );
+const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
+    (props) => {
+        const filterControl = new DataStandardFilterControl(
+            props.schemaData,
+            props.dataSchemaMap
+        );
 
-    return (
-        <DataTable
-            columns={columns}
-            data={props.schemaData}
-            striped={true}
-            dense={false}
-            pagination={false}
-            noHeader={!props.title}
-            title={props.title ? <strong>{props.title}</strong> : undefined}
-            customStyles={getDataSchemaDataTableStyle()}
-            expandableRowDisabled={(schema) => {
-                // disable expandable row toggle if schema does not have any dependencies
-                return _.isEmpty(
-                    getDataSchemaDependencies(schema, props.dataSchemaMap)
-                );
-            }}
-            expandableRows={true}
-            expandableRowsComponent={
-                <ExpandableComponent dataSchemaMap={props.dataSchemaMap} />
-            }
-        />
-    );
-};
-
-const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
-    return (
-        <DataSchemaTable
-            schemaData={props.schemaData}
-            dataSchemaMap={props.dataSchemaMap}
-            title="Data Schema:"
-        />
-    );
-};
+        return (
+            <>
+                <FilterSearch
+                    selectOptions={[
+                        {
+                            label: 'Attributes',
+                            options: filterControl.allAttributeNames.map(
+                                (attribute: string) => ({
+                                    label: attribute,
+                                    value: attribute,
+                                    group: 'Attributes',
+                                })
+                            ),
+                        },
+                    ]}
+                    setFilter={filterControl.handleFilterChange}
+                />
+                <DataSchemaTable
+                    schemaData={props.schemaData}
+                    dataSchemaMap={props.dataSchemaMap}
+                    title="Data Schema:"
+                    filterControl={filterControl}
+                />
+            </>
+        );
+    }
+);
 
 export default DataSchema;
