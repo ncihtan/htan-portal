@@ -96,6 +96,11 @@ export class DataStandardFilterControl {
         );
     };
 
+    @action.bound
+    updateSelectedAttributesDirectly = (attributes: string[]) => {
+        this.selectedAttributes = attributes;
+    };
+
     getSelectedFilters = () => this._selectedFilters;
 
     get selectedFilters(): SelectedFilter[] {
