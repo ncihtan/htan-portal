@@ -74,7 +74,7 @@ export const ViewDetailsModal = <CellData extends object>(
             show={props.cellData !== undefined}
             onHide={props.onClose}
         >
-            <Modal.Header closeButton>
+            <Modal.Header closebutton>
                 <Modal.Title>Details</Modal.Title>
             </Modal.Header>
 

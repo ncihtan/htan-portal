@@ -3,10 +3,9 @@ import * as React from 'react';
 export function getColumnKey(col: {
     id?: string | number;
     name: string | number | React.ReactNode;
-    dropdownName?: string;
 }): string {
     // if no id exists, just use name for key
-    return (col.id || col.dropdownName || col.name || '').toString();
+    return (col.id || col.name || '').toString();
 }
 
 export function getColumnVisibilityMap(

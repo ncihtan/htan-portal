@@ -416,7 +416,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         </Tooltip>
                     </>
                 ),
-                dropdownName: 'Autominerva',
+                id: 'Autominerva',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 grow: 0.5,
                 right: true,
@@ -517,7 +517,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         </Tooltip>
                     </>
                 ),
-                dropdownName: 'Minerva Story',
+                id: 'Minerva Story',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 grow: 0.1,
                 right: true,
@@ -554,7 +554,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         </Tooltip>
                     </>
                 ),
-                dropdownName: 'CellxGene',
+                id: 'CellxGene',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 grow: 0.1,
                 right: true,
@@ -562,7 +562,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 cell: (atlas: Atlas) => (
                     <>
                         <Tooltip overlay="CellxGene: explore single cell data">
-                            <span className="ml-auto">
+                            <span className="ml-auto" style={{wordBreak:"normal"}}>
                                 {(atlas.htan_name === 'HTAN MSK' && (
                                     <a
                                         href='/explore?tab=file&selectedFilters=%5B%7B"value"%3A"HTAN+MSK"%2C"label"%3A"HTAN+MSK"%2C"group"%3A"AtlasName"%2C"count"%3A1086%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A12%2C"isSelected"%3Afalse%7D%5D'
@@ -616,7 +616,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         </Tooltip>
                     </>
                 ),
-                dropdownName: 'ISB-CGC BigQuery',
+                id: 'ISB-CGC BigQuery',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 grow: 0.1,
                 right: true,
@@ -669,7 +669,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         </Tooltip>
                     </>
                 ),
-                dropdownName: 'UCSC Xena',
+                id: 'UCSC Xena',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 grow: 0.1,
                 right: true,
@@ -716,7 +716,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         </Tooltip>
                     </>
                 ),
-                dropdownName: 'cBioPortal: explore multimodal cancer data',
+                id: 'cBioPortal: explore multimodal cancer data',
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 grow: 0.1,
                 right: true,
