@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import {
     DataSchemaData,
@@ -51,7 +53,6 @@ const ExpandableComponent: React.FunctionComponent<ExpandableComponentProps> = (
         );
 
         if (!_.isEmpty(dependencies)) {
-            console.log(dependencies);
             component = (
                 <div className="m-3">
                     <DataSchemaTable
@@ -162,7 +163,6 @@ const DataSchemaTable: React.FunctionComponent<DataSchemaTableProps> = observer(
         const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
             (name) => columnDef[name]
         );
-        console.log(props);
 
         const filteredSchemaDataById =
             props.filterControl.selectedAttributes.length > 0
@@ -230,28 +230,69 @@ const DataSchemaTable: React.FunctionComponent<DataSchemaTableProps> = observer(
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
+        const [searchText, setSearchText] = useState('');
         const filterControl = new DataStandardFilterControl(
             props.schemaData,
             props.dataSchemaMap
         );
 
+        const handleSearch = () => {
+            const matchingFilters = filterControl.allAttributeNames.filter(
+                (attribute) =>
+                    attribute.toLowerCase().includes(searchText.toLowerCase())
+            );
+            filterControl.updateSelectedAttributesDirectly(matchingFilters);
+        };
+
+        const handleKeyDown = (
+            event: React.KeyboardEvent<HTMLInputElement>
+        ) => {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        };
+
         return (
             <>
-                <FilterSearch
-                    selectOptions={[
-                        {
-                            label: 'Attributes',
-                            options: filterControl.allAttributeNames.map(
-                                (attribute: string) => ({
-                                    label: attribute,
-                                    value: attribute,
-                                    group: 'Attributes',
-                                })
-                            ),
-                        },
-                    ]}
-                    setFilter={filterControl.handleFilterChange}
-                />
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <FilterSearch
+                        selectOptions={[
+                            {
+                                label: 'Attributes',
+                                options: filterControl.allAttributeNames.map(
+                                    (attribute: string) => ({
+                                        label: attribute,
+                                        value: attribute,
+                                        group: 'Attributes',
+                                    })
+                                ),
+                            },
+                        ]}
+                        setFilter={filterControl.handleFilterChange}
+                    />
+                    <div
+                        className="input-group"
+                        style={{ width: 400, marginLeft: '10px' }}
+                    >
+                        <input
+                            className="form-control py-2 border-right-0 border"
+                            type="search"
+                            onChange={(e) => setSearchText(e.target.value)}
+                            value={searchText}
+                            placeholder="Search"
+                            onKeyDown={handleKeyDown}
+                            id="datatable-filter-text-input"
+                        />
+                        <div className="input-group-append">
+                            <button
+                                className="input-group-text bg-transparent"
+                                onClick={handleSearch}
+                            >
+                                <FontAwesomeIcon icon={faSearch} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <DataSchemaTable
                     schemaData={props.schemaData}
                     dataSchemaMap={props.dataSchemaMap}
