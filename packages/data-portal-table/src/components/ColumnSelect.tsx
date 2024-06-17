@@ -58,10 +58,10 @@ export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
     @computed
     public get options(): Option[] {
         return (this.props.columnVisibility || [])
-            .filter((c: ColumnVisibility) => c.toggleable)
-            .map((c: ColumnVisibility) => ({
-                value: getColumnKey(c), // Update the type of the argument to ColumnVisibility
-                label: <span>{getColumnKey(c)}</span>, // Update the type of the argument to ColumnVisibility
+            .filter((c) => c.toggleable)
+            .map((c) => ({
+                value: getColumnKey(c),
+                label: <span>{getColumnKey(c)}</span>,
             }));
     }
 
