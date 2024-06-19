@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 const PreReleaseBanner = () => (
     <Alert style={{ marginBottom: 0 }} variant={'success'}>
-        New data from BU, and Stanford is available as part of{' '}
-        <Link href="/data-updates">Release 5.2</Link>!
+        Join the in-person <Link href="/jamboree">Data Jamboree</Link> Nov 6th -
+        8th at the NIH Campus in Bethesda, MD
     </Alert>
 );
 
