@@ -13,8 +13,7 @@ import {
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import ValidValues from './ValidValues';
-import { FilterSearch, OptionType } from '@htan/data-portal-filter';
-import { DataStandardFilterControl } from 'packages/data-portal-filter/src/components/DataStandardFilterControl';
+import { DataStandardFilterStore } from '../lib/dataStandardFilterUtils';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -38,7 +37,7 @@ const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
 interface ExpandableComponentProps {
     data?: DataSchemaData;
     dataSchemaMap?: { [id: string]: DataSchemaData };
-    filterControl: DataStandardFilterControl;
+    filterControl: DataStandardFilterStore;
 }
 
 const ExpandableComponent: React.FunctionComponent<ExpandableComponentProps> = (
@@ -143,95 +142,94 @@ function getColumnDef(dataSchemaMap?: {
     };
 }
 
-interface DataSchemaTableProps {
+const DataSchemaTable: React.FunctionComponent<{
     schemaData: DataSchemaData[];
     dataSchemaMap?: { [id: string]: DataSchemaData };
     title?: string;
     columns?: ColumnName[];
-    filterControl: DataStandardFilterControl;
-}
-
-const DataSchemaTable: React.FunctionComponent<DataSchemaTableProps> = observer(
-    (props) => {
-        const availableColumns = props.columns || [
-            ColumnName.Attribute,
-            ColumnName.Description,
-            ColumnName.ValidValues,
-        ];
-
-        const columnDef = getColumnDef(props.dataSchemaMap);
-        const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
-            (name) => columnDef[name]
-        );
-
-        const filteredSchemaDataById =
-            props.filterControl.selectedAttributes.length > 0
-                ? Object.fromEntries(
-                      Object.entries(props.dataSchemaMap || {}).filter(
-                          ([key, value]) => {
-                              const attribute = value.attribute;
-                              const isMatching = props.filterControl.selectedAttributes.some(
-                                  (filter) => {
-                                      const modifiedValue =
-                                          'bts:' + filter.replace(/\s+/g, '');
-                                      return modifiedValue === key;
-                                  }
-                              );
-                              return isMatching;
-                          }
-                      )
-                  )
-                : Object.fromEntries(
-                      Object.entries(props.dataSchemaMap || {}).filter(
-                          ([key, value]) => {
-                              const attribute = value.attribute;
-                              return props.schemaData.some(
-                                  (data) => data.attribute === attribute
-                              );
-                          }
-                      )
-                  );
-
-        const isFiltered = props.filterControl.selectedAttributes.length > 0;
-
-        return (
-            <>
-                <DataTable
-                    columns={columns}
-                    data={Object.values(filteredSchemaDataById)}
-                    striped={true}
-                    dense={false}
-                    pagination={false}
-                    noHeader={!props.title}
-                    title={
-                        props.title ? <strong>{props.title}</strong> : undefined
-                    }
-                    customStyles={getDataSchemaDataTableStyle()}
-                    expandableRowDisabled={(schema) =>
-                        _.isEmpty(
-                            getDataSchemaDependencies(
-                                schema,
-                                props.dataSchemaMap
-                            )
-                        )
-                    }
-                    expandableRows={!isFiltered}
-                    expandableRowsComponent={
-                        <ExpandableComponent
-                            dataSchemaMap={props.dataSchemaMap}
-                            filterControl={props.filterControl}
-                        />
-                    }
-                />
-            </>
-        );
+    filterControl: DataStandardFilterStore;
+}> = observer((props) => {
+    // include Attribute and Description columns by default
+    // (exclude Label and Required columns by default)
+    const availableColumns = props.columns || [
+        ColumnName.Attribute,
+        ColumnName.Description,
+    ];
+    // include Valid Values column only if there is data
+    if (
+        !availableColumns.includes(ColumnName.ValidValues) &&
+        hasNonEmptyValidValues(props.schemaData)
+    ) {
+        availableColumns.push(ColumnName.ValidValues);
     }
-);
+
+    const columnDef = getColumnDef(props.dataSchemaMap);
+    const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
+        (name) => columnDef[name]
+    );
+
+    const filteredSchemaDataById =
+        props.filterControl.selectedAttributes.length > 0
+            ? Object.fromEntries(
+                  Object.entries(props.dataSchemaMap || {}).filter(
+                      ([key, value]) => {
+                          const attribute = value.attribute;
+                          const isMatching = props.filterControl.selectedAttributes.some(
+                              (filter) => {
+                                  const modifiedValue =
+                                      'bts:' + filter.replace(/\s+/g, '');
+                                  return modifiedValue === key;
+                              }
+                          );
+                          return isMatching;
+                      }
+                  )
+              )
+            : Object.fromEntries(
+                  Object.entries(props.dataSchemaMap || {}).filter(
+                      ([key, value]) => {
+                          const attribute = value.attribute;
+                          return props.schemaData.some(
+                              (data) => data.attribute === attribute
+                          );
+                      }
+                  )
+              );
+
+    const isFiltered = props.filterControl.selectedAttributes.length > 0;
+
+    return (
+        <>
+            <DataTable
+                columns={columns}
+                data={Object.values(filteredSchemaDataById)}
+                striped={true}
+                dense={false}
+                pagination={false}
+                noHeader={!props.title}
+                title={props.title ? <strong>{props.title}</strong> : undefined}
+                customStyles={getDataSchemaDataTableStyle()}
+                expandableRowDisabled={(schema) =>
+                    _.isEmpty(
+                        getDataSchemaDependencies(schema, props.dataSchemaMap)
+                    )
+                }
+                expandableRows={!isFiltered}
+                expandableRowsComponent={
+                    <ExpandableComponent
+                        dataSchemaMap={props.dataSchemaMap}
+                        filterControl={props.filterControl}
+                    />
+                }
+            />
+        </>
+    );
+});
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
         const [searchText, setSearchText] = useState('');
-        const filterControl = new DataStandardFilterControl(
+        const filterControl = new DataStandardFilterStore(
             props.schemaData,
             props.dataSchemaMap
         );
@@ -255,21 +253,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
         return (
             <>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <FilterSearch
-                        selectOptions={[
-                            {
-                                label: 'Attributes',
-                                options: filterControl.allAttributeNames.map(
-                                    (attribute: string) => ({
-                                        label: attribute,
-                                        value: attribute,
-                                        group: 'Attributes',
-                                    })
-                                ),
-                            },
-                        ]}
-                        setFilter={filterControl.handleFilterChange}
-                    />
                     <div
                         className="input-group"
                         style={{ width: 400, marginLeft: '10px' }}

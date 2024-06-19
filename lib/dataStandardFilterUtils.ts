@@ -9,7 +9,7 @@ import {
     getDataSchemaDependencies,
 } from '@htan/data-portal-schema';
 
-export class DataStandardFilterControl {
+export class DataStandardFilterStore {
     @observable allAttributeNames: string[] = [];
     @observable selectedAttributes: string[] = [];
     @observable private _selectedFilters: SelectedFilter[] = [];
