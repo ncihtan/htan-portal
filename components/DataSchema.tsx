@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { observer } from 'mobx-react';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
@@ -37,7 +37,7 @@ const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
 interface ExpandableComponentProps {
     data?: DataSchemaData;
     dataSchemaMap?: { [id: string]: DataSchemaData };
-    filterControl: DataStandardFilterStore;
+    filterStore: DataStandardFilterStore;
 }
 
 const ExpandableComponent: React.FunctionComponent<ExpandableComponentProps> = (
@@ -57,7 +57,7 @@ const ExpandableComponent: React.FunctionComponent<ExpandableComponentProps> = (
                     <DataSchemaTable
                         schemaData={dependencies}
                         dataSchemaMap={props.dataSchemaMap}
-                        filterControl={props.filterControl}
+                        filterStore={props.filterStore}
                     />
                 </div>
             );
@@ -147,7 +147,7 @@ const DataSchemaTable: React.FunctionComponent<{
     dataSchemaMap?: { [id: string]: DataSchemaData };
     title?: string;
     columns?: ColumnName[];
-    filterControl: DataStandardFilterStore;
+    filterStore: DataStandardFilterStore;
 }> = observer((props) => {
     // include Attribute and Description columns by default
     // (exclude Label and Required columns by default)
@@ -168,87 +168,46 @@ const DataSchemaTable: React.FunctionComponent<{
         (name) => columnDef[name]
     );
 
-    const filteredSchemaDataById =
-        props.filterControl.selectedAttributes.length > 0
-            ? Object.fromEntries(
-                  Object.entries(props.dataSchemaMap || {}).filter(
-                      ([key, value]) => {
-                          const attribute = value.attribute;
-                          const isMatching = props.filterControl.selectedAttributes.some(
-                              (filter) => {
-                                  const modifiedValue =
-                                      'bts:' + filter.replace(/\s+/g, '');
-                                  return modifiedValue === key;
-                              }
-                          );
-                          return isMatching;
-                      }
-                  )
-              )
-            : Object.fromEntries(
-                  Object.entries(props.dataSchemaMap || {}).filter(
-                      ([key, value]) => {
-                          const attribute = value.attribute;
-                          return props.schemaData.some(
-                              (data) => data.attribute === attribute
-                          );
-                      }
-                  )
-              );
-
-    const isFiltered = props.filterControl.selectedAttributes.length > 0;
+    const filteredData = props.filterStore.isFiltered
+        ? Object.values(props.filterStore.filteredSchemaDataById)
+        : props.schemaData;
 
     return (
-        <>
-            <DataTable
-                columns={columns}
-                data={Object.values(filteredSchemaDataById)}
-                striped={true}
-                dense={false}
-                pagination={false}
-                noHeader={!props.title}
-                title={props.title ? <strong>{props.title}</strong> : undefined}
-                customStyles={getDataSchemaDataTableStyle()}
-                expandableRowDisabled={(schema) =>
-                    _.isEmpty(
-                        getDataSchemaDependencies(schema, props.dataSchemaMap)
-                    )
-                }
-                expandableRows={!isFiltered}
-                expandableRowsComponent={
-                    <ExpandableComponent
-                        dataSchemaMap={props.dataSchemaMap}
-                        filterControl={props.filterControl}
-                    />
-                }
-            />
-        </>
+        <DataTable
+            columns={columns}
+            data={filteredData}
+            striped={true}
+            dense={false}
+            pagination={false}
+            noHeader={!props.title}
+            title={props.title ? <strong>{props.title}</strong> : undefined}
+            customStyles={getDataSchemaDataTableStyle()}
+            expandableRowDisabled={(schema) =>
+                _.isEmpty(
+                    getDataSchemaDependencies(schema, props.dataSchemaMap)
+                )
+            }
+            expandableRows={!props.filterStore.isFiltered} // Only show expandable rows when not filtered
+            expandableRowsComponent={
+                <ExpandableComponent
+                    dataSchemaMap={props.dataSchemaMap}
+                    filterStore={props.filterStore}
+                />
+            }
+        />
     );
 });
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
-        const [searchText, setSearchText] = useState('');
-        const filterControl = new DataStandardFilterStore(
-            props.schemaData,
-            props.dataSchemaMap
+        const filterStore = useMemo(
+            () =>
+                new DataStandardFilterStore(
+                    props.schemaData,
+                    props.dataSchemaMap
+                ),
+            [props.schemaData, props.dataSchemaMap]
         );
-
-        const handleSearch = () => {
-            const matchingFilters = filterControl.allAttributeNames.filter(
-                (attribute) =>
-                    attribute.toLowerCase().includes(searchText.toLowerCase())
-            );
-            filterControl.updateSelectedAttributesDirectly(matchingFilters);
-        };
-
-        const handleKeyDown = (
-            event: React.KeyboardEvent<HTMLInputElement>
-        ) => {
-            if (event.key === 'Enter') {
-                handleSearch();
-            }
-        };
 
         return (
             <>
@@ -260,17 +219,15 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                         <input
                             className="form-control py-2 border-right-0 border"
                             type="search"
-                            onChange={(e) => setSearchText(e.target.value)}
-                            value={searchText}
+                            onChange={(e) =>
+                                filterStore.setSearchText(e.target.value)
+                            }
+                            value={filterStore.searchText}
                             placeholder="Search"
-                            onKeyDown={handleKeyDown}
                             id="datatable-filter-text-input"
                         />
                         <div className="input-group-append">
-                            <button
-                                className="input-group-text bg-transparent"
-                                onClick={handleSearch}
-                            >
+                            <button className="input-group-text bg-transparent">
                                 <FontAwesomeIcon icon={faSearch} />
                             </button>
                         </div>
@@ -280,7 +237,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                     schemaData={props.schemaData}
                     dataSchemaMap={props.dataSchemaMap}
                     title="Data Schema:"
-                    filterControl={filterControl}
+                    filterStore={filterStore}
                 />
             </>
         );
