@@ -12,6 +12,11 @@ module.exports = withMDX({
                 destination: '/authors',
                 permanent: true,
             },
+            {
+                source: '/publications/htapp_mbc_klughammer_2024',
+                destination: '/',
+                permanent: false,
+            },
         ];
     },
 });
