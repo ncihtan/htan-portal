@@ -3,6 +3,8 @@ import _ from 'lodash';
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { generatePublicationPageTabUrl } from '../lib/dataTableHelpers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 interface IDataAvailabilityTableProps {
     assays: { [assayName: string]: Entity[] };
@@ -21,7 +23,8 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                 (entity) => entity.level
             );
             for (const groupId in entityGroupByLevel) {
-                acc[`${assayId} ${groupId}`] = entityGroupByLevel[groupId];
+                acc[`${assayId} ${groupId === 'Unknown' ? '' : groupId}`] =
+                    entityGroupByLevel[groupId];
             }
             return acc;
         },
@@ -29,7 +32,7 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
     );
 
     const table = (
-        <Table bordered hover responsive style={{ width: '50%' }}>
+        <Table bordered hover responsive style={{ width: '55%' }}>
             <thead>
                 <tr>
                     <th>Files</th>
@@ -37,10 +40,24 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                         <a href="/data-access">CDS/SB-CGC (dbGaP 🔒)</a>
                     </th>
                     <th>
-                        <a href="/data-access">CDS/SB-CGC (Open Access)</a>
+                        <a href="/data-access">
+                            CDS/SB-CGC (Open Access{` `}
+                            <FontAwesomeIcon
+                                color="#1adb54"
+                                icon={faLockOpen}
+                            />
+                            )
+                        </a>
                     </th>
                     <th>
-                        <a href="/data-access">Synapse (Open Access)</a>
+                        <a href="/data-access">
+                            Synapse (Open Access{` `}
+                            <FontAwesomeIcon
+                                color="#1adb54"
+                                icon={faLockOpen}
+                            />
+                            )
+                        </a>
                     </th>
                     <th>
                         <a href="/data-access">Coming Soon</a>

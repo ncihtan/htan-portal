@@ -23,7 +23,7 @@ export function getPublicationPubMedID(
     publication: PublicationManifest
 ): string {
     // we only need the numerical id, not the entire URL
-    return publication.PMID.replace(/[^0-9]/g, '');
+    return publication ? publication.PMID.replace(/[^0-9]/g, '') : '';
 }
 
 export function getCite(
@@ -138,7 +138,8 @@ export function getPublicationFilters(
             group: 'publicationIds',
             value: getPublicationUid(publication),
         },
-        ...getComponentFilters(),
+        // Remove this filter for now
+        // ...getComponentFilters(),
     ];
 }
 
@@ -197,7 +198,9 @@ export function getPublicationTitle(
 export function getPublicationSupportingLinks(
     publicationManifest?: PublicationManifest
 ): GeneralLink[] {
-    const urls = publicationManifest?.SupportingLink?.split(',');
+    const urls = publicationManifest?.SupportingLink
+        ? publicationManifest.SupportingLink.split(',')
+        : undefined;
     const descriptions = publicationManifest?.SupportingLinkDescription?.split(
         '^^^'
     );
