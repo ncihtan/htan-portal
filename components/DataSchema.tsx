@@ -7,9 +7,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import {
     DataSchemaData,
-    getDataSchemaDependencies,
     getDataSchemaValidValues,
-    hasNonEmptyValidValues,
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import ValidValues from './ValidValues';
@@ -34,44 +32,14 @@ const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
     'Imaging Level 3 Segmentation': 'Imaging Level 3',
 };
 
-interface ExpandableComponentProps {
-    data?: DataSchemaData;
-    dataSchemaMap?: { [id: string]: DataSchemaData };
-    filterStore: DataStandardFilterStore;
-}
-
-const ExpandableComponent: React.FunctionComponent<ExpandableComponentProps> = (
-    props
-) => {
-    let component = null;
-
-    if (props.data) {
-        const dependencies = getDataSchemaDependencies(
-            props.data,
-            props.dataSchemaMap
-        );
-
-        if (!_.isEmpty(dependencies)) {
-            component = (
-                <div className="m-3">
-                    <DataSchemaTable
-                        schemaData={dependencies}
-                        dataSchemaMap={props.dataSchemaMap}
-                        filterStore={props.filterStore}
-                    />
-                </div>
-            );
-        }
-    }
-
-    return component;
-};
-
 enum ColumnName {
     Attribute = 'Attribute',
     Label = 'Label',
     Description = 'Description',
     Required = 'Required',
+    RequiredIf = 'RequiredIf',
+    ManifestName = 'ManifestName',
+    DataType = 'DataType',
     ValidValues = 'Valid Values',
 }
 
@@ -80,6 +48,9 @@ enum ColumnSelector {
     Label = 'label',
     Description = 'description',
     Required = 'required',
+    RequiredIf = 'requiredIf',
+    ManifestName = 'manifestName',
+    DataType = 'dataType',
     ValidValues = 'validValues',
 }
 
@@ -117,7 +88,123 @@ function getColumnDef(dataSchemaMap?: {
             wrap: true,
             sortable: true,
             format: (schemaData: DataSchemaData) =>
-                schemaData.required ? 'Yes' : 'No',
+                schemaData.required ? 'True' : 'False',
+        },
+        [ColumnName.RequiredIf]: {
+            name: ColumnName.RequiredIf,
+            selector: ColumnSelector.RequiredIf,
+            wrap: true,
+            sortable: true,
+            format: (schemaData: DataSchemaData) => {
+                const requiredIfList = [];
+
+                // Check if this schema is a dependency of any other schema
+                if (dataSchemaMap) {
+                    for (const [key, value] of Object.entries(dataSchemaMap)) {
+                        if (
+                            value.requiredDependencies &&
+                            Array.isArray(value.requiredDependencies)
+                        ) {
+                            const isDependency = value.requiredDependencies.some(
+                                (dep) =>
+                                    (typeof dep === 'string'
+                                        ? dep
+                                        : dep['@id']) === schemaData.id
+                            );
+                            if (isDependency && value.attribute) {
+                                requiredIfList.push(value.attribute);
+                            }
+                        }
+                    }
+                }
+
+                // Add original requiredDependencies logic
+                if (
+                    schemaData.requiredDependencies &&
+                    Array.isArray(schemaData.requiredDependencies)
+                ) {
+                    const originalDependencies = schemaData.requiredDependencies
+                        .map((dep: string | { '@id': string }) => {
+                            if (typeof dep === 'string') {
+                                return dep.replace('bts:', '');
+                            } else if (dep['@id']) {
+                                return dep['@id'].replace('bts:', '');
+                            }
+                            return '';
+                        })
+                        .filter(Boolean);
+                    requiredIfList.push(...originalDependencies);
+                }
+
+                return requiredIfList.join(', ');
+            },
+            minWidth: '300px',
+        },
+        [ColumnName.ManifestName]: {
+            name: ColumnName.ManifestName,
+            selector: ColumnSelector.ManifestName,
+            wrap: true,
+            sortable: true,
+            format: (schemaData: DataSchemaData) => {
+                if (
+                    schemaData.parentIds &&
+                    Array.isArray(schemaData.parentIds)
+                ) {
+                    return schemaData.parentIds
+                        .map((dep: string | { '@id': string }) => {
+                            if (typeof dep === 'string') {
+                                return dep.replace('bts:', '');
+                            } else if (dep['@id']) {
+                                return dep['@id'].replace('bts:', '');
+                            }
+                            return '';
+                        })
+                        .filter(Boolean)
+                        .join(', ');
+                }
+                return '';
+            },
+        },
+        [ColumnName.DataType]: {
+            name: ColumnName.DataType,
+            selector: ColumnSelector.DataType,
+            wrap: true,
+            sortable: true,
+            format: (schemaData: DataSchemaData) => {
+                if (
+                    schemaData.validationRules &&
+                    Array.isArray(schemaData.validationRules)
+                ) {
+                    const dataType = schemaData.validationRules.find(
+                        (rule) => typeof rule === 'object' && 'type' in rule
+                    );
+
+                    if (
+                        dataType &&
+                        typeof dataType === 'object' &&
+                        'type' in dataType
+                    ) {
+                        switch (dataType) {
+                            case 'int':
+                                return 'Integer';
+                            default:
+                                return 'String';
+                        }
+                    }
+
+                    // If no specific type is found, check if it's an enum (array of allowed values)
+                    if (
+                        schemaData.validationRules.some((rule) =>
+                            Array.isArray(rule)
+                        )
+                    ) {
+                        return 'Enum';
+                    }
+                }
+
+                // Default to String if no validation rules or unrecognized type
+                return 'String';
+            },
         },
         [ColumnName.ValidValues]: {
             name: ColumnName.ValidValues,
@@ -127,7 +214,6 @@ function getColumnDef(dataSchemaMap?: {
                     schemaData,
                     dataSchemaMap
                 ).map((s) => s.attribute);
-
                 return (
                     <ValidValues
                         attribute={schemaData.attribute}
@@ -149,19 +235,16 @@ const DataSchemaTable: React.FunctionComponent<{
     columns?: ColumnName[];
     filterStore: DataStandardFilterStore;
 }> = observer((props) => {
-    // include Attribute and Description columns by default
-    // (exclude Label and Required columns by default)
+    // include Attribute, Description, and Valid Values columns by default
     const availableColumns = props.columns || [
         ColumnName.Attribute,
         ColumnName.Description,
+        ColumnName.Required,
+        ColumnName.RequiredIf,
+        ColumnName.ManifestName,
+        ColumnName.DataType,
+        ColumnName.ValidValues,
     ];
-    // include Valid Values column only if there is data
-    if (
-        !availableColumns.includes(ColumnName.ValidValues) &&
-        hasNonEmptyValidValues(props.schemaData)
-    ) {
-        availableColumns.push(ColumnName.ValidValues);
-    }
 
     const columnDef = getColumnDef(props.dataSchemaMap);
     const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
@@ -182,18 +265,6 @@ const DataSchemaTable: React.FunctionComponent<{
             noHeader={!props.title}
             title={props.title ? <strong>{props.title}</strong> : undefined}
             customStyles={getDataSchemaDataTableStyle()}
-            expandableRowDisabled={(schema) =>
-                _.isEmpty(
-                    getDataSchemaDependencies(schema, props.dataSchemaMap)
-                )
-            }
-            expandableRows={!props.filterStore.isFiltered} // Only show expandable rows when not filtered
-            expandableRowsComponent={
-                <ExpandableComponent
-                    dataSchemaMap={props.dataSchemaMap}
-                    filterStore={props.filterStore}
-                />
-            }
         />
     );
 });
