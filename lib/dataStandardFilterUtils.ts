@@ -23,37 +23,61 @@ export class DataStandardFilterStore {
     @computed
     get filteredSchemaDataById(): { [id: string]: DataSchemaData } {
         const searchTextLower = this.searchText.toLowerCase();
-        const schemaDataIds = new Set(this.schemaData.map((data) => data.id));
 
         if (searchTextLower.length === 0) {
             // Default logic when nothing is searched for
-            const entries = Object.entries(
-                this.dataSchemaMap
-            ).filter(([key, value]) =>
-                this.schemaData.some((data) => data.id === value.id)
-            );
-            return Object.fromEntries(entries);
+            return this.dataSchemaMap;
         }
 
-        const filteredEntries = Object.entries(this.dataSchemaMap).filter(
-            ([key, value]) => {
-                const attributeMatches = value.attribute
-                    .toLowerCase()
-                    .includes(searchTextLower);
-                const descriptionMatches = value.description
-                    .toLowerCase()
-                    .includes(searchTextLower);
-                const parentIdMatches = value.parentIds.some((parentId) =>
-                    schemaDataIds.has(parentId)
-                );
-
-                return (
-                    (attributeMatches || descriptionMatches) && parentIdMatches
-                );
-            }
+        // Finding the schema data entry for the searched text
+        const matchingSchemaData = this.schemaData.find(
+            (data) =>
+                data.id.toLowerCase().includes(searchTextLower) ||
+                data.attribute.toLowerCase().includes(searchTextLower)
         );
 
-        return Object.fromEntries(filteredEntries);
+        console.log('Matching schemaData:', matchingSchemaData);
+
+        if (!matchingSchemaData) {
+            const matchInDependencies = this.schemaData.find((data) =>
+                data.requiredDependencies.some(
+                    (dep) =>
+                        dep.toLowerCase().includes(searchTextLower) ||
+                        this.dataSchemaMap[dep]?.attribute
+                            .toLowerCase()
+                            .includes(searchTextLower)
+                )
+            );
+
+            if (matchInDependencies) {
+                // Find the matching dependency
+                const matchingDep = matchInDependencies.requiredDependencies.find(
+                    (dep) =>
+                        dep.toLowerCase().includes(searchTextLower) ||
+                        this.dataSchemaMap[dep]?.attribute
+                            .toLowerCase()
+                            .includes(searchTextLower)
+                );
+
+                if (matchingDep && this.dataSchemaMap[matchingDep]) {
+                    console.log('Matching dependency:', matchingDep);
+                    return { [matchingDep]: this.dataSchemaMap[matchingDep] };
+                }
+            }
+
+            return {};
+        }
+
+        // Get the matching entry from the dataSchemaMap
+        const matchingEntry = this.dataSchemaMap[matchingSchemaData.id];
+
+        if (!matchingEntry) {
+            return {};
+        }
+
+        // Create an object with just the matching entry
+        const result = { [matchingEntry.id]: matchingEntry };
+        return result;
     }
 
     @computed
