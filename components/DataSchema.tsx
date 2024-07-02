@@ -12,6 +12,7 @@ import {
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import ValidValues from './ValidValues';
 import { DataStandardFilterStore } from '../lib/dataStandardFilterUtils';
+import Link from 'next/link';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -61,9 +62,14 @@ function getColumnDef(dataSchemaMap?: {
         [ColumnName.Attribute]: {
             name: ColumnName.Attribute,
             selector: ColumnSelector.Attribute,
-            format: (schemaData: DataSchemaData) =>
-                ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
-                schemaData.attribute,
+            cell: (schemaData: DataSchemaData) => (
+                <Link href={`/standard/${schemaData.id}`}>
+                    <a>
+                        {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
+                            schemaData.attribute}
+                    </a>
+                </Link>
+            ),
             wrap: true,
             sortable: true,
         },
