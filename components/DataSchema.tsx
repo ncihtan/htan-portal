@@ -39,7 +39,6 @@ enum ColumnName {
     Description = 'Description',
     Required = 'Required',
     RequiredIf = 'RequiredIf',
-    ManifestName = 'ManifestName',
     DataType = 'DataType',
     ValidValues = 'Valid Values',
 }
@@ -50,7 +49,6 @@ enum ColumnSelector {
     Description = 'description',
     Required = 'required',
     RequiredIf = 'requiredIf',
-    ManifestName = 'manifestName',
     DataType = 'dataType',
     ValidValues = 'validValues',
 }
@@ -124,52 +122,9 @@ function getColumnDef(dataSchemaMap?: {
                     }
                 }
 
-                // Add original requiredDependencies logic
-                if (
-                    schemaData.requiredDependencies &&
-                    Array.isArray(schemaData.requiredDependencies)
-                ) {
-                    const originalDependencies = schemaData.requiredDependencies
-                        .map((dep: string | { '@id': string }) => {
-                            if (typeof dep === 'string') {
-                                return dep.replace('bts:', '');
-                            } else if (dep['@id']) {
-                                return dep['@id'].replace('bts:', '');
-                            }
-                            return '';
-                        })
-                        .filter(Boolean);
-                    requiredIfList.push(...originalDependencies);
-                }
-
                 return requiredIfList.join(', ');
             },
             minWidth: '300px',
-        },
-        [ColumnName.ManifestName]: {
-            name: ColumnName.ManifestName,
-            selector: ColumnSelector.ManifestName,
-            wrap: true,
-            sortable: true,
-            format: (schemaData: DataSchemaData) => {
-                if (
-                    schemaData.parentIds &&
-                    Array.isArray(schemaData.parentIds)
-                ) {
-                    return schemaData.parentIds
-                        .map((dep: string | { '@id': string }) => {
-                            if (typeof dep === 'string') {
-                                return dep.replace('bts:', '');
-                            } else if (dep['@id']) {
-                                return dep['@id'].replace('bts:', '');
-                            }
-                            return '';
-                        })
-                        .filter(Boolean)
-                        .join(', ');
-                }
-                return '';
-            },
         },
         [ColumnName.DataType]: {
             name: ColumnName.DataType,
@@ -247,7 +202,6 @@ const DataSchemaTable: React.FunctionComponent<{
         ColumnName.Description,
         ColumnName.Required,
         ColumnName.RequiredIf,
-        ColumnName.ManifestName,
         ColumnName.DataType,
         ColumnName.ValidValues,
     ];
