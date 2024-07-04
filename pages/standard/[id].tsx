@@ -18,11 +18,13 @@ import Footer from '../../components/Footer';
 interface ManifestProps {
     schemaData: DataSchemaData;
     requiredDependencies: DataSchemaData[];
+    schemaDataById: { [id: string]: DataSchemaData };
 }
 
 const Manifest: React.FC<ManifestProps> = ({
     schemaData,
     requiredDependencies,
+    schemaDataById,
 }) => {
     return (
         <>
@@ -47,10 +49,7 @@ const Manifest: React.FC<ManifestProps> = ({
                     <Col>
                         <DataSchema
                             schemaData={requiredDependencies}
-                            dataSchemaMap={requiredDependencies.reduce(
-                                (acc, dep) => ({ ...acc, [dep.id]: dep }),
-                                {}
-                            )}
+                            dataSchemaMap={schemaDataById}
                         />
                     </Col>
                 </Row>
@@ -65,20 +64,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { schemaDataById } = await getDataSchema([id as SchemaDataId]);
     const schemaData = schemaDataById[id];
 
-    const requiredDependencies = await Promise.all(
-        (schemaData.requiredDependencies || []).map(
-            async (depId: string | { '@id': string }) => {
-                const depSchemaId =
-                    typeof depId === 'string' ? depId : depId['@id'];
-                const { schemaDataById } = await getDataSchema([
-                    depSchemaId as SchemaDataId,
-                ]);
-                return schemaDataById[depSchemaId];
-            }
-        )
+    const requiredDependencies = (schemaData.requiredDependencies || []).map(
+        (depId: string | { '@id': string }) => {
+            const depSchemaId =
+                typeof depId === 'string' ? depId : depId['@id'];
+            return schemaDataById[depSchemaId];
+        }
     );
 
-    return { props: { schemaData, requiredDependencies } };
+    return { props: { schemaData, requiredDependencies, schemaDataById } };
 };
 
 export default Manifest;
