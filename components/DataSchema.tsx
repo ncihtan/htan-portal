@@ -1,9 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
-import DataTable, { IDataTableColumn } from 'react-data-table-component';
+import { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import {
     DataSchemaData,
@@ -11,8 +9,9 @@ import {
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import ValidValues from './ValidValues';
-import { DataStandardFilterStore } from '../lib/dataStandardFilterUtils';
 import Link from 'next/link';
+import { EnhancedDataTable } from '@htan/data-portal-table';
+import ConditionalIfValues from './ConditionalIf';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -38,8 +37,8 @@ enum ColumnName {
     Label = 'Label',
     Description = 'Description',
     Required = 'Required',
-    RequiredIf = 'RequiredIf',
-    DataType = 'DataType',
+    ConditionalIf = 'Conditional If',
+    DataType = 'Data Type',
     ValidValues = 'Valid Values',
 }
 
@@ -48,7 +47,7 @@ enum ColumnSelector {
     Label = 'label',
     Description = 'description',
     Required = 'required',
-    RequiredIf = 'requiredIf',
+    ConditionalIf = 'conditionalIf',
     DataType = 'dataType',
     ValidValues = 'validValues',
 }
@@ -94,13 +93,11 @@ function getColumnDef(dataSchemaMap?: {
             format: (schemaData: DataSchemaData) =>
                 schemaData.required ? 'True' : 'False',
         },
-        [ColumnName.RequiredIf]: {
-            name: ColumnName.RequiredIf,
-            selector: ColumnSelector.RequiredIf,
-            wrap: true,
-            sortable: true,
-            format: (schemaData: DataSchemaData) => {
-                const requiredIfList = [];
+        [ColumnName.ConditionalIf]: {
+            name: ColumnName.ConditionalIf,
+            selector: ColumnSelector.ConditionalIf,
+            cell: (schemaData: DataSchemaData) => {
+                const conditionalIfList = [];
 
                 // Check if this schema is a dependency of any other schema
                 if (dataSchemaMap) {
@@ -116,15 +113,22 @@ function getColumnDef(dataSchemaMap?: {
                                         : dep['@id']) === schemaData.id
                             );
                             if (isDependency && value.attribute) {
-                                requiredIfList.push(value.attribute);
+                                conditionalIfList.push(value.attribute);
                             }
                         }
                     }
                 }
 
-                return requiredIfList.join(', ');
+                return (
+                    <ConditionalIfValues
+                        attribute={schemaData.attribute}
+                        attributes={conditionalIfList}
+                    />
+                );
             },
-            minWidth: '300px',
+            wrap: true,
+            minWidth: '250px',
+            sortable: true,
         },
         [ColumnName.DataType]: {
             name: ColumnName.DataType,
@@ -183,7 +187,7 @@ function getColumnDef(dataSchemaMap?: {
                 );
             },
             wrap: true,
-            minWidth: '400px',
+            minWidth: '300px',
             sortable: true,
         },
     };
@@ -194,14 +198,13 @@ const DataSchemaTable: React.FunctionComponent<{
     dataSchemaMap?: { [id: string]: DataSchemaData };
     title?: string;
     columns?: ColumnName[];
-    filterStore: DataStandardFilterStore;
 }> = observer((props) => {
     // include Attribute, Description, and Valid Values columns by default
     const availableColumns = props.columns || [
         ColumnName.Attribute,
         ColumnName.Description,
         ColumnName.Required,
-        ColumnName.RequiredIf,
+        ColumnName.ConditionalIf,
         ColumnName.DataType,
         ColumnName.ValidValues,
     ];
@@ -211,14 +214,10 @@ const DataSchemaTable: React.FunctionComponent<{
         (name) => columnDef[name]
     );
 
-    const filteredData = props.filterStore.isFiltered
-        ? Object.values(props.filterStore.filteredSchemaDataById)
-        : props.schemaData;
-
     return (
-        <DataTable
+        <EnhancedDataTable
             columns={columns}
-            data={filteredData}
+            data={props.schemaData}
             striped={true}
             dense={false}
             pagination={false}
@@ -231,44 +230,12 @@ const DataSchemaTable: React.FunctionComponent<{
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
-        const filterStore = useMemo(
-            () =>
-                new DataStandardFilterStore(
-                    props.schemaData,
-                    props.dataSchemaMap
-                ),
-            [props.schemaData, props.dataSchemaMap]
-        );
-
         return (
             <>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div
-                        className="input-group"
-                        style={{ width: 400, marginLeft: '10px' }}
-                    >
-                        <input
-                            className="form-control py-2 border-right-0 border"
-                            type="search"
-                            onChange={(e) =>
-                                filterStore.setSearchText(e.target.value)
-                            }
-                            value={filterStore.searchText}
-                            placeholder="Search"
-                            id="datatable-filter-text-input"
-                        />
-                        <div className="input-group-append">
-                            <button className="input-group-text bg-transparent">
-                                <FontAwesomeIcon icon={faSearch} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <DataSchemaTable
                     schemaData={props.schemaData}
                     dataSchemaMap={props.dataSchemaMap}
                     title="Data Schema:"
-                    filterStore={filterStore}
                 />
             </>
         );
