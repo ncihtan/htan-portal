@@ -61,8 +61,9 @@ const Manifest: React.FC<ManifestProps> = ({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { id } = context.params as { id: string };
-    const { schemaDataById } = await getDataSchema([id as SchemaDataId]);
-    const schemaData = schemaDataById[id];
+    const fullId = `bts:${id}` as SchemaDataId;
+    const { schemaDataById } = await getDataSchema([fullId]);
+    const schemaData = schemaDataById[fullId];
 
     const requiredDependencies = (schemaData.requiredDependencies || []).map(
         (depId: string | { '@id': string }) => {

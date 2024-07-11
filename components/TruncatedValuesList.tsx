@@ -3,10 +3,12 @@ import TruncateMarkup, { TruncateProps } from 'react-truncate-markup';
 import { Modal } from 'react-bootstrap';
 import { commonStyles } from '@htan/data-portal-commons';
 
-interface ConditionalIfValuesProps {
+interface TruncatedValuesListProps {
     attribute: string;
     attributes: string[];
     truncateProps?: TruncateProps;
+    modalTitle: string;
+    countLabel: string;
 }
 
 interface ViewAllValuesModalProps {
@@ -14,6 +16,7 @@ interface ViewAllValuesModalProps {
     options: JSX.Element[];
     show: boolean;
     onClose: () => void;
+    modalTitle: string;
 }
 
 const ViewAllValuesModal: React.FunctionComponent<ViewAllValuesModalProps> = (
@@ -22,14 +25,14 @@ const ViewAllValuesModal: React.FunctionComponent<ViewAllValuesModalProps> = (
     return (
         <Modal show={props.show} onHide={props.onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{props.attribute} required if</Modal.Title>
+                <Modal.Title>{props.modalTitle}</Modal.Title>
             </Modal.Header>
             <Modal.Body>{props.options}</Modal.Body>
         </Modal>
     );
 };
 
-const ConditionalIfValues: React.FunctionComponent<ConditionalIfValuesProps> = (
+const TruncatedValuesList: React.FunctionComponent<TruncatedValuesListProps> = (
     props
 ) => {
     const [showModal, setShowModal] = useState(false);
@@ -38,8 +41,8 @@ const ConditionalIfValues: React.FunctionComponent<ConditionalIfValuesProps> = (
 
     const options = props.attributes
         .filter((attribute) => attribute.length > 0)
-        .map((attribute) => (
-            <div key={attribute}>- {attribute.toLowerCase()}</div>
+        .map((attribute, index) => (
+            <div key={index}>- {attribute.toLowerCase()}</div>
         ));
 
     const ellipsis = (
@@ -49,8 +52,13 @@ const ConditionalIfValues: React.FunctionComponent<ConditionalIfValuesProps> = (
                 options={options}
                 show={showModal}
                 onClose={onModalClose}
+                modalTitle={`${props.attribute} ${props.modalTitle}`}
             />
-            ... <i>Number of required if options: {options.length}</i> (
+            ...{' '}
+            <i>
+                {props.countLabel}: {options.length}
+            </i>{' '}
+            (
             <span className={commonStyles.clickable} onClick={onClick}>
                 Show all
             </span>
@@ -70,4 +78,4 @@ const ConditionalIfValues: React.FunctionComponent<ConditionalIfValuesProps> = (
     );
 };
 
-export default ConditionalIfValues;
+export default TruncatedValuesList;
