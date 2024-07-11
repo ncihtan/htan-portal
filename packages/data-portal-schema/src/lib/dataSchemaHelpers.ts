@@ -27,6 +27,12 @@ export interface SchemaData extends BaseEntity {
     'sms:requiresComponent'?: BaseEntity | BaseEntity[];
 }
 
+export enum SchemaDataType {
+    Integer = 'Integer',
+    String = 'String',
+    Enum = 'Enum',
+}
+
 export interface DataSchemaData {
     //@id
     id: string;
@@ -607,4 +613,55 @@ function normalizeEntity(
     entity: string | string[] | BaseEntity | BaseEntity[] | undefined
 ): (string | BaseEntity)[] {
     return !entity ? [] : !Array.isArray(entity) ? Array(entity) : entity;
+}
+
+export function findConditionalAttributes(
+    schemaData: DataSchemaData,
+    dataSchemaMap: { [id: string]: DataSchemaData }
+): string[] {
+    const conditionalAttributes: string[] = [];
+
+    for (const [, value] of Object.entries(dataSchemaMap)) {
+        if (
+            value.requiredDependencies &&
+            Array.isArray(value.requiredDependencies)
+        ) {
+            const isDependency = value.requiredDependencies.some(
+                (dep) =>
+                    (typeof dep === 'string' ? dep : dep['@id']) ===
+                    schemaData.id
+            );
+            if (isDependency && value.attribute) {
+                conditionalAttributes.push(value.attribute);
+            }
+        }
+    }
+
+    return conditionalAttributes;
+}
+
+export function getDataType(schemaData: DataSchemaData): SchemaDataType {
+    if (
+        schemaData.validationRules &&
+        Array.isArray(schemaData.validationRules)
+    ) {
+        const dataType = schemaData.validationRules.find(
+            (rule) => typeof rule === 'object' && 'type' in rule
+        );
+
+        if (dataType && typeof dataType === 'object' && 'type' in dataType) {
+            switch (dataType) {
+                case 'int':
+                    return SchemaDataType.Integer;
+                default:
+                    return SchemaDataType.String;
+            }
+        }
+        // If no specific type is found, check if it's an enum (array of allowed values)
+        if (schemaData.validationRules.some((rule) => Array.isArray(rule))) {
+            return SchemaDataType.Enum;
+        }
+    }
+    // Default to String if no validation rules or unrecognized type
+    return SchemaDataType.String;
 }

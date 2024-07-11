@@ -2,16 +2,22 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
+import Tooltip from 'rc-tooltip';
+import { useRouter } from 'next/router';
 
 import {
     DataSchemaData,
     getDataSchemaValidValues,
+    getDataType,
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
-import ValidValues from './ValidValues';
 import Link from 'next/link';
-import { EnhancedDataTable } from '@htan/data-portal-table';
-import ConditionalIfValues from './ConditionalIf';
+import {
+    EnhancedDataTable,
+    IEnhancedDataTableColumn,
+} from '@htan/data-portal-table';
+import { findConditionalAttributes } from '@htan/data-portal-schema';
+import TruncatedValuesList from './TruncatedValuesList';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -33,6 +39,7 @@ const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
 };
 
 enum ColumnName {
+    Manifest = 'Manifest',
     Attribute = 'Attribute',
     Label = 'Label',
     Description = 'Description',
@@ -43,7 +50,7 @@ enum ColumnName {
 }
 
 enum ColumnSelector {
-    Attribute = 'attribute',
+    Manifest = 'attribute',
     Label = 'label',
     Description = 'description',
     Required = 'required',
@@ -52,15 +59,70 @@ enum ColumnSelector {
     ValidValues = 'validValues',
 }
 
-function getColumnDef(dataSchemaMap?: {
-    [id: string]: DataSchemaData;
-}): { [name in ColumnName]: IDataTableColumn } {
-    return {
-        [ColumnName.Attribute]: {
-            name: ColumnName.Attribute,
-            selector: ColumnSelector.Attribute,
+function getColumnDef(
+    dataSchemaMap?: { [id: string]: DataSchemaData },
+    isAttributeView: boolean = false
+): { [name in ColumnName]: IDataTableColumn } {
+    const columnDef: {
+        [name in ColumnName]: IEnhancedDataTableColumn<DataSchemaData>;
+    } = {
+        [ColumnName.Manifest]: {
+            name: (
+                <Tooltip
+                    overlay={`This is the ${
+                        isAttributeView ? 'attribute' : 'manifest'
+                    } column`}
+                    placement="top"
+                >
+                    <span>
+                        {isAttributeView
+                            ? ColumnName.Attribute
+                            : ColumnName.Manifest}
+                    </span>
+                </Tooltip>
+            ),
+            selector: ColumnSelector.Manifest,
             cell: (schemaData: DataSchemaData) => (
-                <Link href={`/standard/${schemaData.id}`}>
+                <Link
+                    href={
+                        isAttributeView
+                            ? '#'
+                            : `/standard/${schemaData.label}?view=attribute`
+                    }
+                >
+                    <a>
+                        {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
+                            schemaData.attribute}
+                    </a>
+                </Link>
+            ),
+            wrap: true,
+            sortable: true,
+        },
+        [ColumnName.Attribute]: {
+            name: (
+                <Tooltip
+                    overlay={`This is the ${
+                        isAttributeView ? 'attribute' : 'manifest'
+                    } column`}
+                    placement="top"
+                >
+                    <span>
+                        {isAttributeView
+                            ? ColumnName.Attribute
+                            : ColumnName.Manifest}
+                    </span>
+                </Tooltip>
+            ),
+            selector: ColumnSelector.Manifest,
+            cell: (schemaData: DataSchemaData) => (
+                <Link
+                    href={
+                        isAttributeView
+                            ? '#'
+                            : `/standard/${schemaData.label}?view=attribute`
+                    }
+                >
                     <a>
                         {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
                             schemaData.attribute}
@@ -71,7 +133,11 @@ function getColumnDef(dataSchemaMap?: {
             sortable: true,
         },
         [ColumnName.Label]: {
-            name: ColumnName.Label,
+            name: (
+                <Tooltip overlay="This is the label column" placement="top">
+                    <span>{ColumnName.Label}</span>
+                </Tooltip>
+            ),
             selector: ColumnSelector.Label,
             format: (schemaData: DataSchemaData) =>
                 LABEL_OVERRIDES[schemaData.label] || schemaData.label,
@@ -79,14 +145,25 @@ function getColumnDef(dataSchemaMap?: {
             sortable: true,
         },
         [ColumnName.Description]: {
-            name: ColumnName.Description,
+            name: (
+                <Tooltip
+                    overlay="This is the description column"
+                    placement="top"
+                >
+                    <span>{ColumnName.Description}</span>
+                </Tooltip>
+            ),
             selector: ColumnSelector.Description,
             grow: 2,
             wrap: true,
             sortable: true,
         },
         [ColumnName.Required]: {
-            name: ColumnName.Required,
+            name: (
+                <Tooltip overlay="This is the required column" placement="top">
+                    <span>{ColumnName.Required}</span>
+                </Tooltip>
+            ),
             selector: ColumnSelector.Required,
             wrap: true,
             sortable: true,
@@ -94,85 +171,59 @@ function getColumnDef(dataSchemaMap?: {
                 schemaData.required ? 'True' : 'False',
         },
         [ColumnName.ConditionalIf]: {
-            name: ColumnName.ConditionalIf,
+            name: (
+                <Tooltip
+                    overlay="This attribute becomes mandatory if you have submitted data for any attributes listed within the column"
+                    placement="top"
+                >
+                    <span>{ColumnName.ConditionalIf}</span>
+                </Tooltip>
+            ),
             selector: ColumnSelector.ConditionalIf,
             cell: (schemaData: DataSchemaData) => {
-                const conditionalIfList = [];
-
-                // Check if this schema is a dependency of any other schema
-                if (dataSchemaMap) {
-                    for (const [key, value] of Object.entries(dataSchemaMap)) {
-                        if (
-                            value.requiredDependencies &&
-                            Array.isArray(value.requiredDependencies)
-                        ) {
-                            const isDependency = value.requiredDependencies.some(
-                                (dep) =>
-                                    (typeof dep === 'string'
-                                        ? dep
-                                        : dep['@id']) === schemaData.id
-                            );
-                            if (isDependency && value.attribute) {
-                                conditionalIfList.push(value.attribute);
-                            }
-                        }
-                    }
-                }
+                const conditionalAttributes = dataSchemaMap
+                    ? findConditionalAttributes(schemaData, dataSchemaMap)
+                    : [];
 
                 return (
-                    <ConditionalIfValues
+                    <TruncatedValuesList
                         attribute={schemaData.attribute}
-                        attributes={conditionalIfList}
+                        attributes={conditionalAttributes}
+                        modalTitle="valid values"
+                        countLabel="Number of valid options"
                     />
                 );
             },
             wrap: true,
             minWidth: '250px',
             sortable: true,
+            getSearchValue: (schemaData: DataSchemaData) => {
+                const conditionalAttributes = dataSchemaMap
+                    ? findConditionalAttributes(schemaData, dataSchemaMap)
+                    : [];
+                return conditionalAttributes.join(' ');
+            },
         },
         [ColumnName.DataType]: {
-            name: ColumnName.DataType,
+            name: (
+                <Tooltip overlay="This is the data type column" placement="top">
+                    <span>{ColumnName.DataType}</span>
+                </Tooltip>
+            ),
             selector: ColumnSelector.DataType,
             wrap: true,
             sortable: true,
-            format: (schemaData: DataSchemaData) => {
-                if (
-                    schemaData.validationRules &&
-                    Array.isArray(schemaData.validationRules)
-                ) {
-                    const dataType = schemaData.validationRules.find(
-                        (rule) => typeof rule === 'object' && 'type' in rule
-                    );
-
-                    if (
-                        dataType &&
-                        typeof dataType === 'object' &&
-                        'type' in dataType
-                    ) {
-                        switch (dataType) {
-                            case 'int':
-                                return 'Integer';
-                            default:
-                                return 'String';
-                        }
-                    }
-
-                    // If no specific type is found, check if it's an enum (array of allowed values)
-                    if (
-                        schemaData.validationRules.some((rule) =>
-                            Array.isArray(rule)
-                        )
-                    ) {
-                        return 'Enum';
-                    }
-                }
-
-                // Default to String if no validation rules or unrecognized type
-                return 'String';
-            },
+            format: (schemaData: DataSchemaData) => getDataType(schemaData),
         },
         [ColumnName.ValidValues]: {
-            name: ColumnName.ValidValues,
+            name: (
+                <Tooltip
+                    overlay="This is the valid values column"
+                    placement="top"
+                >
+                    <span>{ColumnName.ValidValues}</span>
+                </Tooltip>
+            ),
             selector: ColumnSelector.ValidValues,
             cell: (schemaData: DataSchemaData) => {
                 const attributes = getDataSchemaValidValues(
@@ -180,17 +231,28 @@ function getColumnDef(dataSchemaMap?: {
                     dataSchemaMap
                 ).map((s) => s.attribute);
                 return (
-                    <ValidValues
+                    <TruncatedValuesList
                         attribute={schemaData.attribute}
                         attributes={attributes}
+                        modalTitle="valid values"
+                        countLabel="Number of valid options"
                     />
                 );
             },
             wrap: true,
             minWidth: '300px',
             sortable: true,
+            getSearchValue: (schemaData: DataSchemaData) => {
+                const attributes = getDataSchemaValidValues(
+                    schemaData,
+                    dataSchemaMap
+                ).map((s) => s.attribute);
+                return attributes.join(' ');
+            },
         },
     };
+
+    return columnDef;
 }
 
 const DataSchemaTable: React.FunctionComponent<{
@@ -198,10 +260,12 @@ const DataSchemaTable: React.FunctionComponent<{
     dataSchemaMap?: { [id: string]: DataSchemaData };
     title?: string;
     columns?: ColumnName[];
+    isAttributeView?: boolean;
 }> = observer((props) => {
-    // include Attribute, Description, and Valid Values columns by default
+    const { isAttributeView = false } = props;
+
     const availableColumns = props.columns || [
-        ColumnName.Attribute,
+        isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
         ColumnName.Description,
         ColumnName.Required,
         ColumnName.ConditionalIf,
@@ -209,10 +273,15 @@ const DataSchemaTable: React.FunctionComponent<{
         ColumnName.ValidValues,
     ];
 
-    const columnDef = getColumnDef(props.dataSchemaMap);
-    const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
-        (name) => columnDef[name]
-    );
+    const columnDef = getColumnDef(props.dataSchemaMap, isAttributeView);
+    const columns: IDataTableColumn[] = _.uniq(availableColumns).map((name) => {
+        if (name === ColumnName.Manifest || name === ColumnName.Attribute) {
+            return columnDef[
+                isAttributeView ? ColumnName.Attribute : ColumnName.Manifest
+            ];
+        }
+        return columnDef[name];
+    });
 
     return (
         <EnhancedDataTable
@@ -230,12 +299,16 @@ const DataSchemaTable: React.FunctionComponent<{
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
+        const router = useRouter();
+        const isAttributeView = router.query.view === 'attribute';
+
         return (
             <>
                 <DataSchemaTable
                     schemaData={props.schemaData}
                     dataSchemaMap={props.dataSchemaMap}
                     title="Data Schema:"
+                    isAttributeView={isAttributeView}
                 />
             </>
         );
