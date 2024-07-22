@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
@@ -18,6 +18,7 @@ import {
 } from '@htan/data-portal-table';
 import { findConditionalAttributes } from '@htan/data-portal-schema';
 import TruncatedValuesList from './TruncatedValuesList';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -47,6 +48,7 @@ enum ColumnName {
     ConditionalIf = 'Conditional If',
     DataType = 'Data Type',
     ValidValues = 'Valid Values',
+    ManifestName = 'Manifest Name',
 }
 
 enum ColumnSelector {
@@ -61,7 +63,8 @@ enum ColumnSelector {
 
 function getColumnDef(
     dataSchemaMap?: { [id: string]: DataSchemaData },
-    isAttributeView: boolean = false
+    isAttributeView: boolean = false,
+    currentUrl: string = ''
 ): { [name in ColumnName]: IDataTableColumn } {
     const columnDef: {
         [name in ColumnName]: IEnhancedDataTableColumn<DataSchemaData>;
@@ -84,11 +87,13 @@ function getColumnDef(
             selector: ColumnSelector.Manifest,
             cell: (schemaData: DataSchemaData) => (
                 <Link
-                    href={
-                        isAttributeView
-                            ? '#'
-                            : `/standard/${schemaData.label}?view=attribute`
-                    }
+                    href={{
+                        pathname: `/standard/${schemaData.label}`,
+                        query: {
+                            view: 'attribute',
+                            referer: currentUrl,
+                        },
+                    }}
                 >
                     <a>
                         {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
@@ -169,6 +174,19 @@ function getColumnDef(
             sortable: true,
             format: (schemaData: DataSchemaData) =>
                 schemaData.required ? 'True' : 'False',
+        },
+        [ColumnName.ManifestName]: {
+            name: (
+                <Tooltip
+                    overlay="This is the manifest name column"
+                    placement="top"
+                >
+                    <span>{ColumnName.ManifestName}</span>
+                </Tooltip>
+            ),
+            selector: 'manifestName',
+            wrap: true,
+            sortable: true,
         },
         [ColumnName.ConditionalIf]: {
             name: (
@@ -263,6 +281,13 @@ const DataSchemaTable: React.FunctionComponent<{
     isAttributeView?: boolean;
 }> = observer((props) => {
     const { isAttributeView = false } = props;
+    const [currentUrl, setCurrentUrl] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setCurrentUrl(window.location.href);
+        }
+    }, []);
 
     const availableColumns = props.columns || [
         isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
@@ -273,7 +298,11 @@ const DataSchemaTable: React.FunctionComponent<{
         ColumnName.ValidValues,
     ];
 
-    const columnDef = getColumnDef(props.dataSchemaMap, isAttributeView);
+    const columnDef = getColumnDef(
+        props.dataSchemaMap,
+        isAttributeView,
+        currentUrl
+    );
     const columns: IDataTableColumn[] = _.uniq(availableColumns).map((name) => {
         if (name === ColumnName.Manifest || name === ColumnName.Attribute) {
             return columnDef[
@@ -297,20 +326,241 @@ const DataSchemaTable: React.FunctionComponent<{
     );
 });
 
+// function getAllAttributes(schemaData: DataSchemaData[], dataSchemaMap: { [id: string]: DataSchemaData }): DataSchemaData[] {
+//     const allAttributes = new Set<DataSchemaData>();
+
+//     function addAttributeAndDependencies(attribute: DataSchemaData) {
+//         if (!allAttributes.has(attribute)) {
+//             allAttributes.add(attribute);
+
+//             // Add required dependencies
+//             attribute.requiredDependencies.forEach(depId => {
+//                 if (dataSchemaMap[depId]) {
+//                     addAttributeAndDependencies(dataSchemaMap[depId]);
+//                 }
+//             });
+
+//             // Add conditional dependencies
+//             attribute.conditionalDependencies.forEach(depId => {
+//                 if (dataSchemaMap[depId]) {
+//                     addAttributeAndDependencies(dataSchemaMap[depId]);
+//                 }
+//             });
+
+//             // Add exclusive conditional dependencies
+//             attribute.exclusiveConditionalDependencies.forEach(depId => {
+//                 if (dataSchemaMap[depId]) {
+//                     addAttributeAndDependencies(dataSchemaMap[depId]);
+//                 }
+//             });
+
+//             // Add dependencies from validValues
+//             //getDataSchemaValidValues(attribute, dataSchemaMap).forEach(dep =>
+//             //     addAttributeAndDependencies(dep)
+//             // );
+
+//             // Add conditional attributes
+//             findConditionalAttributes(attribute, dataSchemaMap).forEach(condAttrId => {
+//                 if (dataSchemaMap[condAttrId]) {
+//                     addAttributeAndDependencies(dataSchemaMap[condAttrId]);
+//                 }
+//             });
+//         }
+//     }
+
+//     schemaData.forEach(attr => addAttributeAndDependencies(attr));
+//     console.log(Array.from(allAttributes))
+
+//     return Array.from(allAttributes);
+// }
+
+function getAllAttributes(
+    schemaData: DataSchemaData[],
+    dataSchemaMap: { [id: string]: DataSchemaData }
+): (DataSchemaData & { manifestName: string })[] {
+    const allAttributes = new Set<DataSchemaData & { manifestName: string }>();
+
+    function addAttributeAndDependencies(
+        attribute: DataSchemaData,
+        manifestName: string
+    ) {
+        const attributeWithManifest = { ...attribute, manifestName };
+        if (
+            !Array.from(allAttributes).some(
+                (attr) => attr.attribute === attribute.attribute
+            )
+        ) {
+            allAttributes.add(attributeWithManifest);
+
+            // Add required dependencies
+            attribute.requiredDependencies.forEach((depId) => {
+                if (dataSchemaMap[depId]) {
+                    addAttributeAndDependencies(
+                        dataSchemaMap[depId],
+                        manifestName
+                    );
+                }
+            });
+
+            // Add conditional dependencies
+            attribute.conditionalDependencies.forEach((depId) => {
+                if (dataSchemaMap[depId]) {
+                    addAttributeAndDependencies(
+                        dataSchemaMap[depId],
+                        manifestName
+                    );
+                }
+            });
+
+            // Add exclusive conditional dependencies
+            attribute.exclusiveConditionalDependencies.forEach((depId) => {
+                if (dataSchemaMap[depId]) {
+                    addAttributeAndDependencies(
+                        dataSchemaMap[depId],
+                        manifestName
+                    );
+                }
+            });
+
+            // Add dependencies from validValues
+            getDataSchemaValidValues(attribute, dataSchemaMap).forEach((dep) =>
+                addAttributeAndDependencies(dep, manifestName)
+            );
+
+            // Add conditional attributes
+            findConditionalAttributes(attribute, dataSchemaMap).forEach(
+                (condAttrId) => {
+                    if (dataSchemaMap[condAttrId]) {
+                        addAttributeAndDependencies(
+                            dataSchemaMap[condAttrId],
+                            manifestName
+                        );
+                    }
+                }
+            );
+        }
+    }
+
+    schemaData.forEach((attr) => addAttributeAndDependencies(attr, attr.label));
+    console.log(Array.from(allAttributes));
+
+    return Array.from(allAttributes);
+}
+
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
         const router = useRouter();
+        const [activeTab, setActiveTab] = useState('manifest');
+        const [allAttributes, setAllAttributes] = useState<DataSchemaData[]>(
+            []
+        );
         const isAttributeView = router.query.view === 'attribute';
 
+        useEffect(() => {
+            setAllAttributes(
+                getAllAttributes(props.schemaData, props.dataSchemaMap)
+            );
+        }, [props.schemaData, props.dataSchemaMap]);
+
+        const handleTabChange = (tab: string) => {
+            setActiveTab(tab);
+        };
+
+        const manifestColumns = [
+            ColumnName.Manifest,
+            ColumnName.Description,
+            ColumnName.Required,
+            ColumnName.ConditionalIf,
+            ColumnName.DataType,
+            ColumnName.ValidValues,
+        ];
+
+        const allAttributesColumns = [
+            ColumnName.Attribute,
+            ColumnName.ManifestName,
+            ColumnName.Description,
+            ColumnName.Required,
+            ColumnName.ConditionalIf,
+            ColumnName.DataType,
+            ColumnName.ValidValues,
+        ];
+
         return (
-            <>
-                <DataSchemaTable
-                    schemaData={props.schemaData}
-                    dataSchemaMap={props.dataSchemaMap}
-                    title="Data Schema:"
-                    isAttributeView={isAttributeView}
-                />
-            </>
+            <div>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <a
+                            className={`nav-link ${
+                                activeTab === 'manifest' ? 'active' : ''
+                            }`}
+                            onClick={() => handleTabChange('manifest')}
+                            role="tab"
+                        >
+                            Manifest
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            className={`nav-link ${
+                                activeTab === 'attributes' ? 'active' : ''
+                            }`}
+                            onClick={() => handleTabChange('attributes')}
+                            role="tab"
+                        >
+                            All Attributes
+                        </a>
+                    </li>
+                </ul>
+
+                {/* <div className="tab-content mt-3">
+                <div className={`tab-pane fade ${activeTab === 'manifest' ? 'show active' : ''}`} role="tabpanel">
+                    <DataSchemaTable
+                        schemaData={props.schemaData}
+                        dataSchemaMap={props.dataSchemaMap}
+                        title="Data Schema:"
+                        isAttributeView={isAttributeView}
+                    />
+                </div>
+                <div className={`tab-pane fade ${activeTab === 'attributes' ? 'show active' : ''}`} role="tabpanel">
+                    <DataSchemaTable
+                        schemaData={allAttributes}
+                        dataSchemaMap={props.dataSchemaMap}
+                        title="All Attributes:"
+                        isAttributeView={true}
+                    />
+                </div>
+            </div> */}
+                <div className="tab-content mt-3">
+                    <div
+                        className={`tab-pane fade ${
+                            activeTab === 'manifest' ? 'show active' : ''
+                        }`}
+                        role="tabpanel"
+                    >
+                        <DataSchemaTable
+                            schemaData={props.schemaData}
+                            dataSchemaMap={props.dataSchemaMap}
+                            title="Data Schema:"
+                            isAttributeView={isAttributeView}
+                            columns={manifestColumns}
+                        />
+                    </div>
+                    <div
+                        className={`tab-pane fade ${
+                            activeTab === 'attributes' ? 'show active' : ''
+                        }`}
+                        role="tabpanel"
+                    >
+                        <DataSchemaTable
+                            schemaData={allAttributes}
+                            dataSchemaMap={props.dataSchemaMap}
+                            title="All Attributes:"
+                            isAttributeView={true}
+                            columns={allAttributesColumns}
+                        />
+                    </div>
+                </div>
+            </div>
         );
     }
 );
