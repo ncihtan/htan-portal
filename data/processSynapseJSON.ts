@@ -178,7 +178,7 @@ function getPublicationsAsSynapseRecordsByAtlasId(
 }
 
 async function getEntitiesById() {
-    const rows = await csvToJson().fromFile('data/entities_v5.csv');
+    const rows = await csvToJson().fromFile('data/entities_v6_0.csv');
     return _.keyBy(rows, (row) => row.entityId);
 }
 
@@ -587,10 +587,21 @@ function processSynapseJSON(
         }
     }
 
-    // unify all 10x Visium assays under the same assay name
+    // unify certain assays under the same assay name
     _.forEach(returnFiles, (file) => {
-        if (file.assayName?.toLowerCase().startsWith('10x visium')) {
-            file.assayName = '10x Visium';
+        const assayNameLowerVase = file.assayName?.toLowerCase();
+        // unify "10X Visium" assays
+        if (assayNameLowerVase?.startsWith('10x visium')) {
+            file.assayName = '10X Visium';
+        }
+        // unify "NanoString GeoMX DSP" assays
+        else if (
+            assayNameLowerVase
+                ?.replace(/\s/g, '')
+                .replace(/-/g, '')
+                .includes('geomxdsp')
+        ) {
+            file.assayName = 'NanoString GeoMX DSP';
         }
     });
 

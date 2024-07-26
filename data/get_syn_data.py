@@ -103,13 +103,13 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
     }
 
     if include_released_only:
-        released_entities_df = pd.read_csv("entities_v5.csv")
+        released_entities_df = pd.read_csv("entities_v6_0.csv")
         include_release_ids = set(released_entities_df['entityId'])
 
     # store all metadata synapse ids for downloading submitted metadata directly
     portal_metadata = {}
 
-    released_metadata_df = pd.read_csv("metadata_v5.csv")
+    released_metadata_df = pd.read_csv("metadata_v6_0.csv")
     released_synapse_metadata_ids = set(released_metadata_df['Manifest_Id'])
 
     # iterate over projects; map to HTAN ID, inspect metadata and add to portal JSON dump

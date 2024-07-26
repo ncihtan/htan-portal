@@ -26,8 +26,8 @@
     "node_modules",
     "public/processed_syn_data.json",
     "public/processed_syn_data.json.gz",
-    "data/metadata_v5.csv",
-    "data/entities_v5.csv",
+    "data/metadata_v6_0.csv",
+    "data/entities_v6_0.csv",
     "public/syn_data.json",
     "lib/getData.ts",
     "data/processSynapseJSON.ts"
