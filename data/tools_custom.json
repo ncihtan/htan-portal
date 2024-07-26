@@ -1253,7 +1253,7 @@
     "Tool Language": "Python",
     "Tool Homepage": "https://github.com/dpeerlab/spectra/",
     "Tool Description": "Spectra is an algorithm that combines user-provided gene programs with the detection of novel programs that together best explain expression covariation. Spectra incorporates existing gene sets and cell-type labels as prior biological information, explicitly models cell type and represents input gene sets as a gene–gene knowledge graph using a penalty function to guide factorization toward the input graph.",
-    "Tool Topic": "analysis, annotation",
+    "Tool Topic": "analysis",
     "Tool Operation": "analysis",
     "Tool Input Data": "scRNA-seq, snRNA-seq",
     "Tool Output Data": "",
