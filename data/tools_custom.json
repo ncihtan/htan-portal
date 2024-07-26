@@ -1238,5 +1238,25 @@
     "Tool Input Data": "Imaging",
     "Tool Output Data": "",
     "Tool Assay":  "Imaging"
+  },
+  {
+    "": "",
+    "Atlas Name": "HTAN MSK",
+    "Grant ID": "",
+    "Tool ID": "",
+    "Parent ID": "",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/37735262/",
+    "Perspective": "",
+    "Tool Name": "Spectra",
+    "Tool Alias": "Supervised Pathway DEConvolution of InTerpretable Gene ProgRAms",
+    "Tool Type": "Library",
+    "Tool Language": "Python",
+    "Tool Homepage": "https://github.com/dpeerlab/spectra/",
+    "Tool Description": "Spectra is an algorithm that combines user-provided gene programs with the detection of novel programs that together best explain expression covariation. Spectra incorporates existing gene sets and cell-type labels as prior biological information, explicitly models cell type and represents input gene sets as a gene–gene knowledge graph using a penalty function to guide factorization toward the input graph.",
+    "Tool Topic": "analysis, annotation",
+    "Tool Operation": "analysis",
+    "Tool Input Data": "scRNA-seq, snRNA-seq",
+    "Tool Output Data": "",
+    "Tool Assay":  "scRNA-seq, snRNA-seq"
   }
 ]
