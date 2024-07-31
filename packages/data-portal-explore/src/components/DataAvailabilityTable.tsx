@@ -14,6 +14,10 @@ interface IDataAvailabilityTableProps {
 export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTableProps> = (
     props
 ) => {
+    // In Coming Soon column, show 'TBD' if the level is unknown (the "unknown" is removed in the row name)
+    // unknownLevelGroups is used to keep track of the unknown level group name
+    const unknownLevelGroups = new Set();
+
     const tableRowGroups: { [rowName: string]: Entity[] } = _.reduce(
         _.keys(props.assays),
         (acc, assayId) => {
@@ -23,16 +27,35 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                 (entity) => entity.level
             );
             for (const groupId in entityGroupByLevel) {
-                acc[`${assayId} ${groupId === 'Unknown' ? '' : groupId}`] =
-                    entityGroupByLevel[groupId];
+                if (groupId === 'Unknown') {
+                    unknownLevelGroups.add(assayId);
+                    acc[`${assayId}`] = entityGroupByLevel[groupId];
+                } else {
+                    acc[`${assayId} ${groupId}`] = entityGroupByLevel[groupId];
+                }
             }
             return acc;
         },
         {} as { [rowName: string]: Entity[] }
     );
 
+    // If all groups have 0 in Coming Soon column, don't show the column
+    let showComingSoonColumn = false;
+    // Check if there is any entity has non-zero value in Coming Soon column
+    _.forEach(tableRowGroups, (entities) => {
+        const comingSoonCount = _.filter(
+            entities,
+            (entity) =>
+                entity.downloadSource === DownloadSourceCategory.comingSoon
+        ).length;
+        if (comingSoonCount > 0) {
+            showComingSoonColumn = true;
+            return false;
+        }
+    });
+
     const table = (
-        <Table bordered hover responsive style={{ width: '55%' }}>
+        <Table bordered hover responsive style={{ width: '50%' }}>
             <thead>
                 <tr>
                     <th>Files</th>
@@ -59,9 +82,11 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                             )
                         </a>
                     </th>
-                    <th>
-                        <a href="/data-access">Coming Soon</a>
-                    </th>
+                    {showComingSoonColumn && (
+                        <th>
+                            <a href="/data-access">Coming Soon</a>
+                        </th>
+                    )}
                 </tr>
             </thead>
             <tbody>
@@ -85,11 +110,13 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                             entity.downloadSource ===
                             DownloadSourceCategory.synapse
                     ).length;
-                    const comingSoonCount = entities.filter(
-                        (entity) =>
-                            entity.downloadSource ===
-                            DownloadSourceCategory.comingSoon
-                    ).length;
+                    const comingSoonCount = unknownLevelGroups.has(rowName)
+                        ? 'TBD'
+                        : entities.filter(
+                              (entity) =>
+                                  entity.downloadSource ===
+                                  DownloadSourceCategory.comingSoon
+                          ).length;
 
                     if (tabId) {
                         const link = generatePublicationPageTabUrl(
@@ -98,19 +125,21 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                         );
                         return (
                             <tr>
-                                <td>{rowName}</td>
-                                <td>
+                                <td style={{ textAlign: 'left' }}>{rowName}</td>
+                                <td style={{ textAlign: 'right' }}>
                                     <a href={link}>{cdsDbgapCount}</a>
                                 </td>
-                                <td>
+                                <td style={{ textAlign: 'right' }}>
                                     <a href={link}>{cdsOpenAccessCount}</a>
                                 </td>
-                                <td>
+                                <td style={{ textAlign: 'right' }}>
                                     <a href={link}>{synapseOpenAccessConut}</a>
                                 </td>
-                                <td>
-                                    <a href={link}>{comingSoonCount}</a>
-                                </td>
+                                {showComingSoonColumn && (
+                                    <td style={{ textAlign: 'right' }}>
+                                        <a href={link}>{comingSoonCount}</a>
+                                    </td>
+                                )}
                             </tr>
                         );
                     }
