@@ -11,6 +11,19 @@ interface IDataAvailabilityTableProps {
     publicationId: string;
 }
 
+export const LinkComponent: React.FunctionComponent<{
+    link: string;
+    count: string;
+}> = (props) => {
+    return props.count === '0' || props.count === 'TBD' ? (
+        <td style={{ textAlign: 'right' }}>{props.count}</td>
+    ) : (
+        <td style={{ textAlign: 'right' }}>
+            <a href={props.link}>{props.count}</a>
+        </td>
+    );
+};
+
 export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTableProps> = (
     props
 ) => {
@@ -55,7 +68,7 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
     });
 
     const table = (
-        <Table bordered hover responsive style={{ width: '50%' }}>
+        <Table bordered hover responsive style={{ width: '60%' }}>
             <thead>
                 <tr>
                     <th>Files</th>
@@ -126,19 +139,23 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                         return (
                             <tr>
                                 <td style={{ textAlign: 'left' }}>{rowName}</td>
-                                <td style={{ textAlign: 'right' }}>
-                                    <a href={link}>{cdsDbgapCount}</a>
-                                </td>
-                                <td style={{ textAlign: 'right' }}>
-                                    <a href={link}>{cdsOpenAccessCount}</a>
-                                </td>
-                                <td style={{ textAlign: 'right' }}>
-                                    <a href={link}>{synapseOpenAccessConut}</a>
-                                </td>
+                                <LinkComponent
+                                    link={link}
+                                    count={cdsDbgapCount.toString()}
+                                />
+                                <LinkComponent
+                                    link={link}
+                                    count={cdsOpenAccessCount.toString()}
+                                />
+                                <LinkComponent
+                                    link={link}
+                                    count={synapseOpenAccessConut.toString()}
+                                />
                                 {showComingSoonColumn && (
-                                    <td style={{ textAlign: 'right' }}>
-                                        <a href={link}>{comingSoonCount}</a>
-                                    </td>
+                                    <LinkComponent
+                                        link={link}
+                                        count={comingSoonCount.toString()}
+                                    />
                                 )}
                             </tr>
                         );
