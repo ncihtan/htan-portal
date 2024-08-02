@@ -244,7 +244,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             </Tooltip>
         </>,
     ],
-    htapp_mbc_klughammer_2023: [],
+    'hta1_2024_pdf_johanna-klughammer': [],
 };
 
 const SupportingLinks: React.FunctionComponent<{
