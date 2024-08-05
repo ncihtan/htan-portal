@@ -9,6 +9,8 @@ import {
     DataSchemaData,
     getDataSchemaValidValues,
     getDataType,
+    getDataSchema,
+    SchemaDataId,
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import Link from 'next/link';
@@ -19,10 +21,19 @@ import {
 import { findConditionalAttributes } from '@htan/data-portal-schema';
 import TruncatedValuesList from './TruncatedValuesList';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
     dataSchemaMap: { [id: string]: DataSchemaData };
+}
+
+interface ManifestTabProps {
+    schemaData: DataSchemaData;
+    requiredDependencies: DataSchemaData[];
+    schemaDataById: { [id: string]: DataSchemaData };
 }
 
 const LABEL_OVERRIDES: { [text: string]: string } = {
@@ -64,7 +75,8 @@ enum ColumnSelector {
 function getColumnDef(
     dataSchemaMap?: { [id: string]: DataSchemaData },
     isAttributeView: boolean = false,
-    currentUrl: string = ''
+    currentUrl: string = '',
+    onManifestClick?: (manifestName: string) => void
 ): { [name in ColumnName]: IDataTableColumn } {
     const columnDef: {
         [name in ColumnName]: IEnhancedDataTableColumn<DataSchemaData>;
@@ -86,20 +98,16 @@ function getColumnDef(
             ),
             selector: ColumnSelector.Manifest,
             cell: (schemaData: DataSchemaData) => (
-                <Link
-                    href={{
-                        pathname: `/standard/${schemaData.label}`,
-                        query: {
-                            view: 'attribute',
-                            referer: currentUrl,
-                        },
+                <a
+                    href="#"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onManifestClick && onManifestClick(schemaData.label);
                     }}
                 >
-                    <a>
-                        {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
-                            schemaData.attribute}
-                    </a>
-                </Link>
+                    {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
+                        schemaData.attribute}
+                </a>
             ),
             wrap: true,
             sortable: true,
@@ -279,6 +287,7 @@ const DataSchemaTable: React.FunctionComponent<{
     title?: string;
     columns?: ColumnName[];
     isAttributeView?: boolean;
+    onManifestClick?: (manifestName: string) => void;
 }> = observer((props) => {
     const { isAttributeView = false } = props;
     const [currentUrl, setCurrentUrl] = useState('');
@@ -301,7 +310,8 @@ const DataSchemaTable: React.FunctionComponent<{
     const columnDef = getColumnDef(
         props.dataSchemaMap,
         isAttributeView,
-        currentUrl
+        currentUrl,
+        props.onManifestClick
     );
     const columns: IDataTableColumn[] = _.uniq(availableColumns).map((name) => {
         if (name === ColumnName.Manifest || name === ColumnName.Attribute) {
@@ -322,57 +332,11 @@ const DataSchemaTable: React.FunctionComponent<{
             noHeader={!props.title}
             title={props.title ? <strong>{props.title}</strong> : undefined}
             customStyles={getDataSchemaDataTableStyle()}
+            downloadButtonLabel="Download Data Summary"
+            showColumnSelect={false}
         />
     );
 });
-
-// function getAllAttributes(schemaData: DataSchemaData[], dataSchemaMap: { [id: string]: DataSchemaData }): DataSchemaData[] {
-//     const allAttributes = new Set<DataSchemaData>();
-
-//     function addAttributeAndDependencies(attribute: DataSchemaData) {
-//         if (!allAttributes.has(attribute)) {
-//             allAttributes.add(attribute);
-
-//             // Add required dependencies
-//             attribute.requiredDependencies.forEach(depId => {
-//                 if (dataSchemaMap[depId]) {
-//                     addAttributeAndDependencies(dataSchemaMap[depId]);
-//                 }
-//             });
-
-//             // Add conditional dependencies
-//             attribute.conditionalDependencies.forEach(depId => {
-//                 if (dataSchemaMap[depId]) {
-//                     addAttributeAndDependencies(dataSchemaMap[depId]);
-//                 }
-//             });
-
-//             // Add exclusive conditional dependencies
-//             attribute.exclusiveConditionalDependencies.forEach(depId => {
-//                 if (dataSchemaMap[depId]) {
-//                     addAttributeAndDependencies(dataSchemaMap[depId]);
-//                 }
-//             });
-
-//             // Add dependencies from validValues
-//             //getDataSchemaValidValues(attribute, dataSchemaMap).forEach(dep =>
-//             //     addAttributeAndDependencies(dep)
-//             // );
-
-//             // Add conditional attributes
-//             findConditionalAttributes(attribute, dataSchemaMap).forEach(condAttrId => {
-//                 if (dataSchemaMap[condAttrId]) {
-//                     addAttributeAndDependencies(dataSchemaMap[condAttrId]);
-//                 }
-//             });
-//         }
-//     }
-
-//     schemaData.forEach(attr => addAttributeAndDependencies(attr));
-//     console.log(Array.from(allAttributes))
-
-//     return Array.from(allAttributes);
-// }
 
 function getAllAttributes(
     schemaData: DataSchemaData[],
@@ -454,6 +418,10 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
         const [allAttributes, setAllAttributes] = useState<DataSchemaData[]>(
             []
         );
+        const [openTabs, setOpenTabs] = useState<string[]>([]);
+        const [manifestData, setManifestData] = useState<{
+            [key: string]: any;
+        }>({});
         const isAttributeView = router.query.view === 'attribute';
 
         useEffect(() => {
@@ -464,6 +432,39 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
 
         const handleTabChange = (tab: string) => {
             setActiveTab(tab);
+        };
+
+        const openNewTab = async (manifestName: string) => {
+            if (!openTabs.includes(manifestName)) {
+                setOpenTabs([...openTabs, manifestName]);
+
+                const fullId = `bts:${manifestName}` as SchemaDataId;
+                const { schemaDataById } = await getDataSchema([fullId]);
+                const schemaData = schemaDataById[fullId];
+
+                const requiredDependencies = (
+                    schemaData.requiredDependencies || []
+                ).map((depId: string | { '@id': string }) => {
+                    const depSchemaId =
+                        typeof depId === 'string' ? depId : depId['@id'];
+                    return schemaDataById[depSchemaId];
+                });
+
+                setManifestData({
+                    ...manifestData,
+                    [manifestName]: {
+                        schemaData,
+                        requiredDependencies,
+                        schemaDataById,
+                    },
+                });
+            }
+            setActiveTab(manifestName);
+        };
+
+        const closeTab = (manifestName: string) => {
+            setOpenTabs(openTabs.filter((tab) => tab !== manifestName));
+            setActiveTab('manifest');
         };
 
         const manifestColumns = [
@@ -510,26 +511,29 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                             All Attributes
                         </a>
                     </li>
+                    {openTabs.map((tab) => (
+                        <li className="nav-item" key={tab}>
+                            <a
+                                className={`nav-link ${
+                                    activeTab === tab ? 'active' : ''
+                                }`}
+                                onClick={() => handleTabChange(tab)}
+                                role="tab"
+                            >
+                                {tab}
+                                <button
+                                    className="close ml-2"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        closeTab(tab);
+                                    }}
+                                >
+                                    &times;
+                                </button>
+                            </a>
+                        </li>
+                    ))}
                 </ul>
-
-                {/* <div className="tab-content mt-3">
-                <div className={`tab-pane fade ${activeTab === 'manifest' ? 'show active' : ''}`} role="tabpanel">
-                    <DataSchemaTable
-                        schemaData={props.schemaData}
-                        dataSchemaMap={props.dataSchemaMap}
-                        title="Data Schema:"
-                        isAttributeView={isAttributeView}
-                    />
-                </div>
-                <div className={`tab-pane fade ${activeTab === 'attributes' ? 'show active' : ''}`} role="tabpanel">
-                    <DataSchemaTable
-                        schemaData={allAttributes}
-                        dataSchemaMap={props.dataSchemaMap}
-                        title="All Attributes:"
-                        isAttributeView={true}
-                    />
-                </div>
-            </div> */}
                 <div className="tab-content mt-3">
                     <div
                         className={`tab-pane fade ${
@@ -543,6 +547,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                             title="Data Schema:"
                             isAttributeView={isAttributeView}
                             columns={manifestColumns}
+                            onManifestClick={openNewTab}
                         />
                     </div>
                     <div
@@ -559,10 +564,55 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                             columns={allAttributesColumns}
                         />
                     </div>
+                    {openTabs.map((tab) => (
+                        <div
+                            key={tab}
+                            className={`tab-pane fade ${
+                                activeTab === tab ? 'show active' : ''
+                            }`}
+                            role="tabpanel"
+                        >
+                            {manifestData[tab] && (
+                                <ManifestTab
+                                    schemaData={manifestData[tab].schemaData}
+                                    requiredDependencies={
+                                        manifestData[tab].requiredDependencies
+                                    }
+                                    schemaDataById={
+                                        manifestData[tab].schemaDataById
+                                    }
+                                />
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
         );
     }
 );
+
+const ManifestTab: React.FC<ManifestTabProps> = ({
+    schemaData,
+    requiredDependencies,
+    schemaDataById,
+}) => {
+    return (
+        <Container>
+            <Row>
+                <Col>
+                    <h1>{schemaData.attribute} Manifest</h1>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <DataSchemaTable
+                        schemaData={requiredDependencies}
+                        dataSchemaMap={schemaDataById}
+                    />
+                </Col>
+            </Row>
+        </Container>
+    );
+};
 
 export default DataSchema;
