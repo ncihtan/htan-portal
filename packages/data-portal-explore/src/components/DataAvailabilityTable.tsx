@@ -11,11 +11,31 @@ interface IDataAvailabilityTableProps {
     publicationId: string;
 }
 
+// In Coming Soon column, show 'TBD' if the assay is in customTBDGroup
+// TODO: need to double check if we should update/remove any assay out of the list after a new data release
+const customizedTBDGroup: { [group: string]: string[] } = {
+    'hta1_2024_pdf_johanna-klughammer': [
+        'CODEX',
+        'ExSEQ',
+        'Slide-seq V2',
+        'MERFISH',
+    ],
+};
+
+function isInCustomizedTBDGroup(
+    group: string,
+    customizedTBDGroup: { [group: string]: string[] },
+    publicationId: string
+) {
+    return customizedTBDGroup[publicationId]?.includes(group);
+}
+
 export const LinkComponent: React.FunctionComponent<{
     link: string;
-    count: string;
+    count: string | number;
 }> = (props) => {
-    return props.count === '0' || props.count === 'TBD' ? (
+    return props.count.toString() === '0' ||
+        props.count.toString() === 'TBD' ? (
         <td style={{ textAlign: 'right' }}>{props.count}</td>
     ) : (
         <td style={{ textAlign: 'right' }}>
@@ -27,10 +47,6 @@ export const LinkComponent: React.FunctionComponent<{
 export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTableProps> = (
     props
 ) => {
-    // In Coming Soon column, show 'TBD' if the level is unknown (the "unknown" is removed in the row name)
-    // unknownLevelGroups is used to keep track of the unknown level group name
-    const unknownLevelGroups = new Set();
-
     const tableRowGroups: { [rowName: string]: Entity[] } = _.reduce(
         _.keys(props.assays),
         (acc, assayId) => {
@@ -41,7 +57,6 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
             );
             for (const groupId in entityGroupByLevel) {
                 if (groupId === 'Unknown') {
-                    unknownLevelGroups.add(assayId);
                     acc[`${assayId}`] = entityGroupByLevel[groupId];
                 } else {
                     acc[`${assayId} ${groupId}`] = entityGroupByLevel[groupId];
@@ -123,13 +138,21 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                             entity.downloadSource ===
                             DownloadSourceCategory.synapse
                     ).length;
-                    const comingSoonCount = unknownLevelGroups.has(rowName)
-                        ? 'TBD'
-                        : entities.filter(
-                              (entity) =>
-                                  entity.downloadSource ===
-                                  DownloadSourceCategory.comingSoon
-                          ).length;
+                    const comingSoonCount = entities.filter(
+                        (entity) =>
+                            entity.downloadSource ===
+                            DownloadSourceCategory.comingSoon
+                    ).length;
+                    // If the assay has 0 in Coming Soon column AND is in the customized TBD group, show 'TBD' instead of 0
+                    const comingSoonText =
+                        comingSoonCount === 0 &&
+                        isInCustomizedTBDGroup(
+                            rowName,
+                            customizedTBDGroup,
+                            props.publicationId
+                        )
+                            ? 'TBD'
+                            : comingSoonCount;
 
                     if (tabId) {
                         const link = generatePublicationPageTabUrl(
@@ -141,20 +164,20 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                                 <td style={{ textAlign: 'left' }}>{rowName}</td>
                                 <LinkComponent
                                     link={link}
-                                    count={cdsDbgapCount.toString()}
+                                    count={cdsDbgapCount}
                                 />
                                 <LinkComponent
                                     link={link}
-                                    count={cdsOpenAccessCount.toString()}
+                                    count={cdsOpenAccessCount}
                                 />
                                 <LinkComponent
                                     link={link}
-                                    count={synapseOpenAccessConut.toString()}
+                                    count={synapseOpenAccessConut}
                                 />
                                 {showComingSoonColumn && (
                                     <LinkComponent
                                         link={link}
-                                        count={comingSoonCount.toString()}
+                                        count={comingSoonText}
                                     />
                                 )}
                             </tr>
