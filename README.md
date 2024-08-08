@@ -19,10 +19,10 @@ track of this information in Google BigQuery. One can get the latest dump of
 that using these commands (requires access to the htan-dcc google project):
 
 ```bash
-bq extract --destination_format CSV released.entities_v5 gs://htan-release-files/entities_v5.csv
-bq extract --destination_format CSV released.metadata_v5 gs://htan-release-files/metadata_v5.csv
-gsutil cp gs://htan-release-files/entities_v5.csv entities_v5.csv
-gsutil cp gs://htan-release-files/metadata_v5.csv metadata_v5.csv
+bq extract --destination_format CSV released.entities_v6_0 gs://htan-release-files/entities_v6_0.csv
+bq extract --destination_format CSV released.metadata_v6_0 gs://htan-release-files/metadata_v6_0.csv
+gsutil cp gs://htan-release-files/entities_v6_0.csv entities_v6_0.csv
+gsutil cp gs://htan-release-files/metadata_v6_0.csv metadata_v6_0.csv
 
 ```
 

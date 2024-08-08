@@ -4,6 +4,7 @@ const withMDX = require('@next/mdx')({
 module.exports = withMDX({
     swcMinify: true,
     pageExtensions: ['js', 'jsx', 'mdx', 'tsx'],
+    staticPageGenerationTimeout: 120,
     redirects: async () => {
         // Note: don't put trailing slash in the redirect URLs
         return [
