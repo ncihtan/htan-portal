@@ -21,6 +21,8 @@ interface IDataTableControlsProps {
     searchBoxPlaceHolder?: string;
     filterText?: string;
     extraControls?: JSX.Element;
+    downloadButtonLabel?: string;
+    showColumnSelect?: boolean;
 }
 
 export class DataTableControls extends React.Component<IDataTableControlsProps> {
@@ -33,6 +35,8 @@ export class DataTableControls extends React.Component<IDataTableControlsProps> 
     };
 
     render() {
+        const downloadButtonLabel =
+            this.props.downloadButtonLabel || 'Download Metadata';
         return (
             <div className={styles.dataTableControls}>
                 <Tooltip
@@ -49,15 +53,18 @@ export class DataTableControls extends React.Component<IDataTableControlsProps> 
                         onClick={this.props.onDownload}
                         style={{ marginRight: 10 }}
                     >
-                        <FontAwesomeIcon icon={faDownload} /> Download Metadata
+                        <FontAwesomeIcon icon={faDownload} />{' '}
+                        {downloadButtonLabel}
                     </button>
                 </Tooltip>
                 {this.props.extraControls}
-                <ColumnSelect
-                    columnVisibility={this.props.columnVisibility}
-                    onColumnToggled={this.props.onVisibilityToggle}
-                    {...this.props.columnSelectProps}
-                />
+                {this.props.showColumnSelect !== false && (
+                    <ColumnSelect
+                        columnVisibility={this.props.columnVisibility}
+                        onColumnToggled={this.props.onVisibilityToggle}
+                        {...this.props.columnSelectProps}
+                    />
+                )}
                 <div className="input-group" style={{ width: 400 }}>
                     <input
                         className="form-control py-2 border-right-0 border"
