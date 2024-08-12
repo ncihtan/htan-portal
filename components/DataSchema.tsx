@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react';
 import { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
 import { useRouter } from 'next/router';
+import { memoize } from 'lodash';
 
 import {
     DataSchemaData,
@@ -24,6 +25,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -71,6 +73,64 @@ enum ColumnSelector {
     DataType = 'dataType',
     ValidValues = 'validValues',
 }
+
+class DataSchemaStore {
+    schemaData: DataSchemaData[] = [];
+    dataSchemaMap: { [id: string]: DataSchemaData } = {};
+    manifestData: { [key: string]: any } = {};
+    activeTab: string = 'manifest';
+    openTabs: string[] = [];
+    currentUrl: string = '';
+
+    constructor() {
+        makeAutoObservable(this);
+    }
+
+    setSchemaData(data: DataSchemaData[]) {
+        this.schemaData = data;
+    }
+
+    setDataSchemaMap(map: { [id: string]: DataSchemaData }) {
+        this.dataSchemaMap = map;
+    }
+
+    setManifestData(data: { [key: string]: any }) {
+        this.manifestData = data;
+    }
+
+    setActiveTab(tab: string) {
+        this.activeTab = tab;
+    }
+
+    setOpenTabs(tabs: string[]) {
+        this.openTabs = tabs;
+    }
+
+    setCurrentUrl(url: string) {
+        this.currentUrl = url;
+    }
+
+    async fetchManifestData() {
+        const preFetchedData = await preFetchManifestData(this.schemaData);
+        runInAction(() => {
+            this.setManifestData(preFetchedData);
+        });
+    }
+
+    openNewTab(manifestName: string) {
+        if (!this.openTabs.includes(manifestName)) {
+            this.setOpenTabs([...this.openTabs, manifestName]);
+        }
+        this.setActiveTab(manifestName);
+    }
+
+    closeTab(manifestName: string) {
+        this.setOpenTabs(this.openTabs.filter((tab) => tab !== manifestName));
+        this.setActiveTab('manifest');
+    }
+}
+
+const dataSchemaStore = new DataSchemaStore();
 
 function getColumnDef(
     dataSchemaMap?: { [id: string]: DataSchemaData },
@@ -333,90 +393,113 @@ const DataSchemaTable: React.FunctionComponent<{
             title={props.title ? <strong>{props.title}</strong> : undefined}
             customStyles={getDataSchemaDataTableStyle()}
             downloadButtonLabel="Download Data Summary"
-            showColumnSelect={false}
+            hideColumnSelect={false}
         />
     );
 });
 
-function getAllAttributes(
+const memoizedGetDataSchemaValidValues = memoize(getDataSchemaValidValues);
+const memoizedFindConditionalAttributes = memoize(findConditionalAttributes);
+
+export function getAllAttributes(
     schemaData: DataSchemaData[],
     dataSchemaMap: { [id: string]: DataSchemaData }
 ): (DataSchemaData & { manifestName: string })[] {
-    const allAttributes = new Set<DataSchemaData & { manifestName: string }>();
+    const allAttributes = new Map<
+        string,
+        DataSchemaData & { manifestName: string }
+    >();
+    const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
 
-    function addAttributeAndDependencies(
-        attribute: DataSchemaData,
-        manifestName: string
-    ) {
-        const attributeWithManifest = { ...attribute, manifestName };
-        if (
-            !Array.from(allAttributes).some(
-                (attr) => attr.attribute === attribute.attribute
-            )
-        ) {
-            allAttributes.add(attributeWithManifest);
+    function queueAttribute(attribute: DataSchemaData, manifestName: string) {
+        if (!allAttributes.has(attribute.attribute)) {
+            queue.push({ attribute, manifestName });
+        }
+    }
+
+    schemaData.forEach((attr) => queueAttribute(attr, attr.label));
+
+    while (queue.length > 0) {
+        const { attribute, manifestName } = queue.shift()!;
+
+        if (!allAttributes.has(attribute.attribute)) {
+            const attributeWithManifest = { ...attribute, manifestName };
+            allAttributes.set(attribute.attribute, attributeWithManifest);
 
             // Add required dependencies
             attribute.requiredDependencies.forEach((depId) => {
-                if (dataSchemaMap[depId]) {
-                    addAttributeAndDependencies(
-                        dataSchemaMap[depId],
-                        manifestName
-                    );
-                }
+                const dep = dataSchemaMap[depId];
+                if (dep) queueAttribute(dep, manifestName);
             });
 
             // Add conditional dependencies
             attribute.conditionalDependencies.forEach((depId) => {
-                if (dataSchemaMap[depId]) {
-                    addAttributeAndDependencies(
-                        dataSchemaMap[depId],
-                        manifestName
-                    );
-                }
+                const dep = dataSchemaMap[depId];
+                if (dep) queueAttribute(dep, manifestName);
             });
 
             // Add exclusive conditional dependencies
             attribute.exclusiveConditionalDependencies.forEach((depId) => {
-                if (dataSchemaMap[depId]) {
-                    addAttributeAndDependencies(
-                        dataSchemaMap[depId],
-                        manifestName
-                    );
-                }
+                const dep = dataSchemaMap[depId];
+                if (dep) queueAttribute(dep, manifestName);
             });
 
             // Add dependencies from validValues
-            getDataSchemaValidValues(attribute, dataSchemaMap).forEach((dep) =>
-                addAttributeAndDependencies(dep, manifestName)
-            );
+            memoizedGetDataSchemaValidValues(
+                attribute,
+                dataSchemaMap
+            ).forEach((dep) => queueAttribute(dep, manifestName));
 
             // Add conditional attributes
-            findConditionalAttributes(attribute, dataSchemaMap).forEach(
+            memoizedFindConditionalAttributes(attribute, dataSchemaMap).forEach(
                 (condAttrId) => {
-                    if (dataSchemaMap[condAttrId]) {
-                        addAttributeAndDependencies(
-                            dataSchemaMap[condAttrId],
-                            manifestName
-                        );
-                    }
+                    const dep = dataSchemaMap[condAttrId];
+                    if (dep) queueAttribute(dep, manifestName);
                 }
             );
         }
     }
 
-    schemaData.forEach((attr) => addAttributeAndDependencies(attr, attr.label));
-    console.log(Array.from(allAttributes));
-
-    return Array.from(allAttributes);
+    return Array.from(allAttributes.values());
 }
+
+const memoizedGetAllAttributes = memoize(getAllAttributes);
+
+export const preFetchManifestData = async (schemaData: DataSchemaData[]) => {
+    const manifestPromises = schemaData.map(async (schema) => {
+        const fullId = `bts:${schema.label}` as SchemaDataId;
+        const { schemaDataById } = await getDataSchema([fullId]);
+        const schemaData = schemaDataById[fullId];
+
+        const requiredDependencies = (
+            schemaData.requiredDependencies || []
+        ).map((depId: string | { '@id': string }) => {
+            const depSchemaId =
+                typeof depId === 'string' ? depId : depId['@id'];
+            return schemaDataById[depSchemaId];
+        });
+
+        return {
+            [schema.label]: {
+                schemaData,
+                requiredDependencies,
+                schemaDataById,
+            },
+        };
+    });
+
+    const manifestDataArray = await Promise.all(manifestPromises);
+    return Object.assign({}, ...manifestDataArray);
+};
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
         const router = useRouter();
         const [activeTab, setActiveTab] = useState('manifest');
-        const [allAttributes, setAllAttributes] = useState<DataSchemaData[]>(
-            []
+        const memoizedAllAttributes = useMemo(
+            () =>
+                memoizedGetAllAttributes(props.schemaData, props.dataSchemaMap),
+            [props.schemaData, props.dataSchemaMap]
         );
         const [openTabs, setOpenTabs] = useState<string[]>([]);
         const [manifestData, setManifestData] = useState<{
@@ -425,39 +508,23 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
         const isAttributeView = router.query.view === 'attribute';
 
         useEffect(() => {
-            setAllAttributes(
-                getAllAttributes(props.schemaData, props.dataSchemaMap)
-            );
+            const fetchData = async () => {
+                const preFetchedData = await preFetchManifestData(
+                    props.schemaData
+                );
+                setManifestData(preFetchedData);
+            };
+
+            fetchData();
         }, [props.schemaData, props.dataSchemaMap]);
 
         const handleTabChange = (tab: string) => {
             setActiveTab(tab);
         };
 
-        const openNewTab = async (manifestName: string) => {
+        const openNewTab = (manifestName: string) => {
             if (!openTabs.includes(manifestName)) {
-                setOpenTabs([...openTabs, manifestName]);
-
-                const fullId = `bts:${manifestName}` as SchemaDataId;
-                const { schemaDataById } = await getDataSchema([fullId]);
-                const schemaData = schemaDataById[fullId];
-
-                const requiredDependencies = (
-                    schemaData.requiredDependencies || []
-                ).map((depId: string | { '@id': string }) => {
-                    const depSchemaId =
-                        typeof depId === 'string' ? depId : depId['@id'];
-                    return schemaDataById[depSchemaId];
-                });
-
-                setManifestData({
-                    ...manifestData,
-                    [manifestName]: {
-                        schemaData,
-                        requiredDependencies,
-                        schemaDataById,
-                    },
-                });
+                setOpenTabs((prevTabs) => [...prevTabs, manifestName]);
             }
             setActiveTab(manifestName);
         };
@@ -557,7 +624,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                         role="tabpanel"
                     >
                         <DataSchemaTable
-                            schemaData={allAttributes}
+                            schemaData={memoizedAllAttributes}
                             dataSchemaMap={props.dataSchemaMap}
                             title="All Attributes:"
                             isAttributeView={true}
