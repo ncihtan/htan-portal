@@ -22,7 +22,7 @@ interface IDataTableControlsProps {
     filterText?: string;
     extraControls?: JSX.Element;
     downloadButtonLabel?: string;
-    showColumnSelect?: boolean;
+    hideColumnSelect?: boolean;
 }
 
 export class DataTableControls extends React.Component<IDataTableControlsProps> {
@@ -58,7 +58,7 @@ export class DataTableControls extends React.Component<IDataTableControlsProps> 
                     </button>
                 </Tooltip>
                 {this.props.extraControls}
-                {this.props.showColumnSelect !== false && (
+                {this.props.hideColumnSelect !== false && (
                     <ColumnSelect
                         columnVisibility={this.props.columnVisibility}
                         onColumnToggled={this.props.onVisibilityToggle}
