@@ -1,9 +1,17 @@
 // content copied (and adapted) from https://github.com/Sage-Bionetworks/Synapse-React-Client
 import _ from 'lodash';
 import fetch from 'node-fetch';
-import { getLatestReleaseSchemaUrl } from './vcsHelpers';
+import { getDependenciesUrl, getLatestReleaseSchemaUrl } from './vcsHelpers';
+import csvToJsonLib from 'csvtojson';
 
 // import * as defaultSchema from '../data/schema.json'
+import { Attribute } from '../../../../types';
+
+interface ConditionalIfRow {
+    Attribute: string;
+    ConditionalIf: string;
+    [key: string]: any;
+}
 
 export interface BaseEntity {
     '@id': string;
@@ -346,6 +354,48 @@ export async function getDataSchema(
     return { dataSchemaData, schemaDataById };
 }
 
+let conditionalIfCache: { [key: string]: string[] } | null = null;
+
+export async function findConditionalIfAttributes(
+    schemaData: DataSchemaData,
+    dataSchemaMap?: { [id: string]: DataSchemaData }
+): Promise<string[]> {
+    console.log('schemaData', schemaData);
+    if (!conditionalIfCache) {
+        conditionalIfCache = await getConditionalIfData();
+    }
+
+    const attribute = schemaData.attribute;
+    const conditionalAttributes = conditionalIfCache[attribute] || [];
+
+    return conditionalAttributes;
+}
+
+async function getConditionalIfData(): Promise<{ [key: string]: string[] }> {
+    try {
+        const csvUrl = getDependenciesUrl();
+        const response = await fetch(csvUrl);
+        const csvContent = await response.text();
+
+        const rows: ConditionalIfRow[] = await csvToJsonLib().fromString(
+            csvContent
+        );
+
+        return rows.reduce((acc, row) => {
+            if (row['Conditional Requirements']) {
+                const conditionalAttributes = row['Conditional Requirements']
+                    .split(',')
+                    .map((attr: string) => attr.trim());
+                acc[row.Attribute] = conditionalAttributes;
+            }
+            return acc;
+        }, {} as { [key: string]: string[] });
+    } catch (error) {
+        console.error('Error fetching or processing CSV:', error);
+        throw error;
+    }
+}
+
 export async function fetchAndProcessSchemaData(
     dataUri?: string
 ): Promise<SchemaDataById> {
@@ -632,4 +682,11 @@ export function getDataType(schemaData: DataSchemaData): SchemaDataType {
     }
     // Default to String if no validation rules or unrecognized type
     return SchemaDataType.String;
+}
+function csvToJson() {
+    throw new Error('Function not implemented.');
+}
+
+function csv() {
+    throw new Error('Function not implemented.');
 }
