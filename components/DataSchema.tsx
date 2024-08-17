@@ -131,9 +131,15 @@ class DataSchemaStore {
     }
 }
 
+function filterOutComponentAttribute(data: DataSchemaData[]): DataSchemaData[] {
+    return data.filter((item) => item.attribute !== 'Component');
+}
+
 const dataSchemaStore = new DataSchemaStore();
 
 function getColumnDef(
+    conditionalAttributes: { [key: string]: string[] },
+    searchValues: { [key: string]: string },
     dataSchemaMap?: { [id: string]: DataSchemaData },
     isAttributeView: boolean = false,
     currentUrl: string = '',
@@ -267,41 +273,21 @@ function getColumnDef(
                 </Tooltip>
             ),
             selector: ColumnSelector.ConditionalIf,
-            cell: (schemaData: DataSchemaData) => {
-                const [
-                    conditionalAttributes,
-                    setConditionalAttributes,
-                ] = useState<string[]>([]);
-
-                useEffect(() => {
-                    findConditionalIfAttributes(schemaData, dataSchemaMap)
-                        .then(setConditionalAttributes)
-                        .catch(console.error);
-                }, [schemaData, dataSchemaMap]);
-
-                return (
-                    <TruncatedValuesList
-                        attribute={schemaData.attribute}
-                        attributes={conditionalAttributes}
-                        modalTitle="Conditional Attributes"
-                        countLabel="Number of conditional attributes"
-                    />
-                );
-            },
+            cell: (schemaData: DataSchemaData) => (
+                <TruncatedValuesList
+                    attribute={schemaData.attribute}
+                    attributes={
+                        conditionalAttributes[schemaData.attribute] || []
+                    }
+                    modalTitle="Conditional Attributes"
+                    countLabel="Number of conditional attributes"
+                />
+            ),
             wrap: true,
             minWidth: '250px',
             sortable: true,
-            getSearchValue: (schemaData: DataSchemaData) => {
-                const [searchValue, setSearchValue] = useState('');
-
-                useEffect(() => {
-                    findConditionalIfAttributes(schemaData, dataSchemaMap)
-                        .then((attrs) => setSearchValue(attrs.join(' ')))
-                        .catch(console.error);
-                }, [schemaData, dataSchemaMap]);
-
-                return searchValue;
-            },
+            getSearchValue: (schemaData: DataSchemaData) =>
+                searchValues[schemaData.attribute] || '',
         },
         [ColumnName.DataType]: {
             name: (
@@ -365,6 +351,38 @@ const DataSchemaTable: React.FunctionComponent<{
     const { isAttributeView = false } = props;
     const [currentUrl, setCurrentUrl] = useState('');
 
+    const [conditionalAttributes, setConditionalAttributes] = useState<{
+        [key: string]: string[];
+    }>({});
+    const [searchValues, setSearchValues] = useState<{ [key: string]: string }>(
+        {}
+    );
+
+    useEffect(() => {
+        const fetchAttributes = async () => {
+            const results: { [key: string]: string[] } = {};
+            const searches: { [key: string]: string } = {};
+
+            for (const schema of props.schemaData) {
+                try {
+                    const attrs = await findConditionalIfAttributes(
+                        schema,
+                        props.dataSchemaMap
+                    );
+                    results[schema.attribute] = attrs;
+                    searches[schema.attribute] = attrs.join(' ');
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            setConditionalAttributes(results);
+            setSearchValues(searches);
+        };
+
+        fetchAttributes();
+    }, [props.schemaData, props.dataSchemaMap]);
+
     useEffect(() => {
         if (typeof window !== 'undefined') {
             setCurrentUrl(window.location.href);
@@ -381,6 +399,8 @@ const DataSchemaTable: React.FunctionComponent<{
     ];
 
     const columnDef = getColumnDef(
+        conditionalAttributes,
+        searchValues,
         props.dataSchemaMap,
         isAttributeView,
         currentUrl,
@@ -414,68 +434,6 @@ const DataSchemaTable: React.FunctionComponent<{
 const memoizedGetDataSchemaValidValues = memoize(getDataSchemaValidValues);
 const memoizedFindConditionalAttributes = memoize(findConditionalAttributes);
 
-// export function getAllAttributes(
-//     schemaData: DataSchemaData[],
-//     dataSchemaMap: { [id: string]: DataSchemaData }
-// ): (DataSchemaData & { manifestName: string })[] {
-//     const allAttributes = new Map<
-//         string,
-//         DataSchemaData & { manifestName: string }
-//     >();
-//     const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
-
-//     function queueAttribute(attribute: DataSchemaData, manifestName: string) {
-//         if (!allAttributes.has(attribute.attribute)) {
-//             queue.push({ attribute, manifestName });
-//         }
-//     }
-
-//     schemaData.forEach((attr) => queueAttribute(attr, attr.label));
-
-//     while (queue.length > 0) {
-//         const { attribute, manifestName } = queue.shift()!;
-
-//         if (!allAttributes.has(attribute.attribute)) {
-//             const attributeWithManifest = { ...attribute, manifestName };
-//             allAttributes.set(attribute.attribute, attributeWithManifest);
-
-//             // Add required dependencies
-//             attribute.requiredDependencies.forEach((depId) => {
-//                 const dep = dataSchemaMap[depId];
-//                 if (dep) queueAttribute(dep, manifestName);
-//             });
-
-//             // Add conditional dependencies
-//             attribute.conditionalDependencies.forEach((depId) => {
-//                 const dep = dataSchemaMap[depId];
-//                 if (dep) queueAttribute(dep, manifestName);
-//             });
-
-//             // Add exclusive conditional dependencies
-//             attribute.exclusiveConditionalDependencies.forEach((depId) => {
-//                 const dep = dataSchemaMap[depId];
-//                 if (dep) queueAttribute(dep, manifestName);
-//             });
-
-//             // Add dependencies from validValues
-//             memoizedGetDataSchemaValidValues(
-//                 attribute,
-//                 dataSchemaMap
-//             ).forEach((dep) => queueAttribute(dep, manifestName));
-
-//             // Add conditional attributes
-//             memoizedFindConditionalAttributes(attribute, dataSchemaMap).forEach(
-//                 (condAttrId) => {
-//                     const dep = dataSchemaMap[condAttrId];
-//                     if (dep) queueAttribute(dep, manifestName);
-//                 }
-//             );
-//         }
-//     }
-
-//     return Array.from(allAttributes.values());
-// }
-
 function queueAttribute(
     attribute: DataSchemaData,
     manifestName: string,
@@ -491,15 +449,41 @@ export function getAllAttributes(
     schemaData: DataSchemaData[],
     dataSchemaMap: { [id: string]: DataSchemaData }
 ): (DataSchemaData & { manifestName: string })[] {
+    schemaData = filterOutComponentAttribute(schemaData);
     const allAttributes = new Map<
         string,
         DataSchemaData & { manifestName: string }
     >();
     const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
 
-    schemaData.forEach((attr) =>
-        queueAttribute(attr, attr.label, allAttributes, queue)
-    );
+    schemaData.forEach((attr) => {
+        attr.requiredDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+        });
+
+        attr.conditionalDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+        });
+
+        attr.exclusiveConditionalDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+        });
+
+        memoizedGetDataSchemaValidValues(attr, dataSchemaMap).forEach((dep) =>
+            queue.push({ attribute: dep, manifestName: attr.label })
+        );
+
+        memoizedFindConditionalAttributes(attr, dataSchemaMap).forEach(
+            (condAttrId) => {
+                const dep = dataSchemaMap[condAttrId];
+                if (dep)
+                    queue.push({ attribute: dep, manifestName: attr.label });
+            }
+        );
+    });
 
     while (queue.length > 0) {
         const { attribute, manifestName } = queue.shift()!;
@@ -512,21 +496,30 @@ export function getAllAttributes(
             attribute.requiredDependencies.forEach((depId) => {
                 const dep = dataSchemaMap[depId];
                 if (dep)
-                    queueAttribute(dep, manifestName, allAttributes, queue);
+                    queue.push({
+                        attribute: dep,
+                        manifestName: attributeWithManifest.manifestName,
+                    });
             });
 
             // Add conditional dependencies
             attribute.conditionalDependencies.forEach((depId) => {
                 const dep = dataSchemaMap[depId];
                 if (dep)
-                    queueAttribute(dep, manifestName, allAttributes, queue);
+                    queue.push({
+                        attribute: dep,
+                        manifestName: attributeWithManifest.manifestName,
+                    });
             });
 
             // Add exclusive conditional dependencies
             attribute.exclusiveConditionalDependencies.forEach((depId) => {
                 const dep = dataSchemaMap[depId];
                 if (dep)
-                    queueAttribute(dep, manifestName, allAttributes, queue);
+                    queue.push({
+                        attribute: dep,
+                        manifestName: attributeWithManifest.manifestName,
+                    });
             });
 
             // Add dependencies from validValues
@@ -534,7 +527,10 @@ export function getAllAttributes(
                 attribute,
                 dataSchemaMap
             ).forEach((dep) =>
-                queueAttribute(dep, manifestName, allAttributes, queue)
+                queue.push({
+                    attribute: dep,
+                    manifestName: attributeWithManifest.manifestName,
+                })
             );
 
             // Add conditional attributes
@@ -542,7 +538,10 @@ export function getAllAttributes(
                 (condAttrId) => {
                     const dep = dataSchemaMap[condAttrId];
                     if (dep)
-                        queueAttribute(dep, manifestName, allAttributes, queue);
+                        queue.push({
+                            attribute: dep,
+                            manifestName: attributeWithManifest.manifestName,
+                        });
                 }
             );
         }
@@ -554,6 +553,7 @@ export function getAllAttributes(
 const memoizedGetAllAttributes = memoize(getAllAttributes);
 
 export const preFetchManifestData = async (schemaData: DataSchemaData[]) => {
+    schemaData = filterOutComponentAttribute(schemaData);
     const manifestPromises = schemaData.map(async (schema) => {
         const fullId = `bts:${schema.label}` as SchemaDataId;
         const { schemaDataById } = await getDataSchema([fullId]);
@@ -586,7 +586,12 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
         const [activeTab, setActiveTab] = useState('manifest');
         const memoizedAllAttributes = useMemo(
             () =>
-                memoizedGetAllAttributes(props.schemaData, props.dataSchemaMap),
+                filterOutComponentAttribute(
+                    memoizedGetAllAttributes(
+                        props.schemaData,
+                        props.dataSchemaMap
+                    )
+                ),
             [props.schemaData, props.dataSchemaMap]
         );
         const [openTabs, setOpenTabs] = useState<string[]>([]);
@@ -690,7 +695,9 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                         role="tabpanel"
                     >
                         <DataSchemaTable
-                            schemaData={props.schemaData}
+                            schemaData={filterOutComponentAttribute(
+                                props.schemaData
+                            )}
                             dataSchemaMap={props.dataSchemaMap}
                             title="Data Schema:"
                             isAttributeView={isAttributeView}
@@ -705,7 +712,9 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                         role="tabpanel"
                     >
                         <DataSchemaTable
-                            schemaData={memoizedAllAttributes}
+                            schemaData={filterOutComponentAttribute(
+                                memoizedAllAttributes
+                            )}
                             dataSchemaMap={props.dataSchemaMap}
                             title="All Attributes:"
                             isAttributeView={true}
@@ -754,7 +763,9 @@ const ManifestTab: React.FC<ManifestTabProps> = ({
             <Row>
                 <Col>
                     <DataSchemaTable
-                        schemaData={requiredDependencies}
+                        schemaData={filterOutComponentAttribute(
+                            requiredDependencies
+                        )}
                         dataSchemaMap={schemaDataById}
                     />
                 </Col>
