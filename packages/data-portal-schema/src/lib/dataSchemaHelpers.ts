@@ -354,13 +354,129 @@ export async function getDataSchema(
     return { dataSchemaData, schemaDataById };
 }
 
+export function getAllAttributes(
+    schemaData: DataSchemaData[],
+    dataSchemaMap: { [id: string]: DataSchemaData }
+): (DataSchemaData & { manifestName: string })[] {
+    schemaData = filterOutComponentAttribute(schemaData);
+    const allAttributes = new Map<
+        string,
+        DataSchemaData & { manifestName: string }
+    >();
+    const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
+
+    schemaData.forEach((attr) => {
+        attr.requiredDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+        });
+
+        attr.conditionalDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+        });
+
+        attr.exclusiveConditionalDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+        });
+
+        getDataSchemaValidValues(attr, dataSchemaMap).forEach((dep) =>
+            queue.push({ attribute: dep, manifestName: attr.label })
+        );
+
+        findConditionalAttributes(attr, dataSchemaMap).forEach((condAttrId) => {
+            const dep = dataSchemaMap[condAttrId];
+            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+        });
+    });
+
+    while (queue.length > 0) {
+        const { attribute, manifestName } = queue.shift()!;
+
+        if (!allAttributes.has(attribute.attribute)) {
+            const attributeWithManifest = { ...attribute, manifestName };
+            allAttributes.set(attribute.attribute, attributeWithManifest);
+
+            // Add required dependencies
+            attribute.requiredDependencies.forEach((depId) => {
+                const dep = dataSchemaMap[depId];
+                if (dep)
+                    queue.push({
+                        attribute: dep,
+                        manifestName: attributeWithManifest.manifestName,
+                    });
+            });
+
+            // Add conditional dependencies
+            attribute.conditionalDependencies.forEach((depId) => {
+                const dep = dataSchemaMap[depId];
+                if (dep)
+                    queue.push({
+                        attribute: dep,
+                        manifestName: attributeWithManifest.manifestName,
+                    });
+            });
+
+            // Add exclusive conditional dependencies
+            attribute.exclusiveConditionalDependencies.forEach((depId) => {
+                const dep = dataSchemaMap[depId];
+                if (dep)
+                    queue.push({
+                        attribute: dep,
+                        manifestName: attributeWithManifest.manifestName,
+                    });
+            });
+
+            // Add dependencies from validValues
+            getDataSchemaValidValues(attribute, dataSchemaMap).forEach((dep) =>
+                queue.push({
+                    attribute: dep,
+                    manifestName: attributeWithManifest.manifestName,
+                })
+            );
+
+            // Add conditional attributes
+            findConditionalAttributes(attribute, dataSchemaMap).forEach(
+                (condAttrId) => {
+                    const dep = dataSchemaMap[condAttrId];
+                    if (dep)
+                        queue.push({
+                            attribute: dep,
+                            manifestName: attributeWithManifest.manifestName,
+                        });
+                }
+            );
+        }
+    }
+
+    return Array.from(allAttributes.values());
+}
+
+// Add this helper function if it's not already in the file
+function filterOutComponentAttribute(data: DataSchemaData[]): DataSchemaData[] {
+    return data.filter((item) => item.attribute !== 'Component');
+}
+
+// You can keep the memoized version if needed
+export const memoizedGetAllAttributes = _.memoize(getAllAttributes);
+
+export async function getAllAttributesData(schemaDataIds: SchemaDataId[]) {
+    const { dataSchemaData, schemaDataById } = await getDataSchema(
+        schemaDataIds
+    );
+
+    const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
+
+    return { allAttributes, schemaDataById };
+}
+
 let conditionalIfCache: { [key: string]: string[] } | null = null;
 
 export async function findConditionalIfAttributes(
     schemaData: DataSchemaData,
     dataSchemaMap?: { [id: string]: DataSchemaData }
 ): Promise<string[]> {
-    console.log('schemaData', schemaData);
     if (!conditionalIfCache) {
         conditionalIfCache = await getConditionalIfData();
     }
@@ -385,7 +501,9 @@ async function getConditionalIfData(): Promise<{ [key: string]: string[] }> {
             if (row['Conditional Requirements']) {
                 const conditionalAttributes = row['Conditional Requirements']
                     .split(',')
-                    .map((attr: string) => attr.trim());
+                    .map((attr: string) =>
+                        attr.trim().replace(/^\['|'\]$/g, '')
+                    );
                 acc[row.Attribute] = conditionalAttributes;
             }
             return acc;

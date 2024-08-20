@@ -31,6 +31,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
     dataSchemaMap: { [id: string]: DataSchemaData };
+    allAttributes?: (DataSchemaData & { manifestName: string })[];
 }
 
 interface ManifestTabProps {
@@ -431,127 +432,6 @@ const DataSchemaTable: React.FunctionComponent<{
     );
 });
 
-const memoizedGetDataSchemaValidValues = memoize(getDataSchemaValidValues);
-const memoizedFindConditionalAttributes = memoize(findConditionalAttributes);
-
-function queueAttribute(
-    attribute: DataSchemaData,
-    manifestName: string,
-    allAttributes: Map<string, DataSchemaData & { manifestName: string }>,
-    queue: { attribute: DataSchemaData; manifestName: string }[]
-) {
-    if (!allAttributes.has(attribute.attribute)) {
-        queue.push({ attribute, manifestName });
-    }
-}
-
-export function getAllAttributes(
-    schemaData: DataSchemaData[],
-    dataSchemaMap: { [id: string]: DataSchemaData }
-): (DataSchemaData & { manifestName: string })[] {
-    schemaData = filterOutComponentAttribute(schemaData);
-    const allAttributes = new Map<
-        string,
-        DataSchemaData & { manifestName: string }
-    >();
-    const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
-
-    schemaData.forEach((attr) => {
-        attr.requiredDependencies.forEach((depId) => {
-            const dep = dataSchemaMap[depId];
-            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
-        });
-
-        attr.conditionalDependencies.forEach((depId) => {
-            const dep = dataSchemaMap[depId];
-            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
-        });
-
-        attr.exclusiveConditionalDependencies.forEach((depId) => {
-            const dep = dataSchemaMap[depId];
-            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
-        });
-
-        memoizedGetDataSchemaValidValues(attr, dataSchemaMap).forEach((dep) =>
-            queue.push({ attribute: dep, manifestName: attr.label })
-        );
-
-        memoizedFindConditionalAttributes(attr, dataSchemaMap).forEach(
-            (condAttrId) => {
-                const dep = dataSchemaMap[condAttrId];
-                if (dep)
-                    queue.push({ attribute: dep, manifestName: attr.label });
-            }
-        );
-    });
-
-    while (queue.length > 0) {
-        const { attribute, manifestName } = queue.shift()!;
-
-        if (!allAttributes.has(attribute.attribute)) {
-            const attributeWithManifest = { ...attribute, manifestName };
-            allAttributes.set(attribute.attribute, attributeWithManifest);
-
-            // Add required dependencies
-            attribute.requiredDependencies.forEach((depId) => {
-                const dep = dataSchemaMap[depId];
-                if (dep)
-                    queue.push({
-                        attribute: dep,
-                        manifestName: attributeWithManifest.manifestName,
-                    });
-            });
-
-            // Add conditional dependencies
-            attribute.conditionalDependencies.forEach((depId) => {
-                const dep = dataSchemaMap[depId];
-                if (dep)
-                    queue.push({
-                        attribute: dep,
-                        manifestName: attributeWithManifest.manifestName,
-                    });
-            });
-
-            // Add exclusive conditional dependencies
-            attribute.exclusiveConditionalDependencies.forEach((depId) => {
-                const dep = dataSchemaMap[depId];
-                if (dep)
-                    queue.push({
-                        attribute: dep,
-                        manifestName: attributeWithManifest.manifestName,
-                    });
-            });
-
-            // Add dependencies from validValues
-            memoizedGetDataSchemaValidValues(
-                attribute,
-                dataSchemaMap
-            ).forEach((dep) =>
-                queue.push({
-                    attribute: dep,
-                    manifestName: attributeWithManifest.manifestName,
-                })
-            );
-
-            // Add conditional attributes
-            memoizedFindConditionalAttributes(attribute, dataSchemaMap).forEach(
-                (condAttrId) => {
-                    const dep = dataSchemaMap[condAttrId];
-                    if (dep)
-                        queue.push({
-                            attribute: dep,
-                            manifestName: attributeWithManifest.manifestName,
-                        });
-                }
-            );
-        }
-    }
-
-    return Array.from(allAttributes.values());
-}
-
-const memoizedGetAllAttributes = memoize(getAllAttributes);
-
 export const preFetchManifestData = async (schemaData: DataSchemaData[]) => {
     schemaData = filterOutComponentAttribute(schemaData);
     const manifestPromises = schemaData.map(async (schema) => {
@@ -584,16 +464,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
         const router = useRouter();
         const [activeTab, setActiveTab] = useState('manifest');
-        const memoizedAllAttributes = useMemo(
-            () =>
-                filterOutComponentAttribute(
-                    memoizedGetAllAttributes(
-                        props.schemaData,
-                        props.dataSchemaMap
-                    )
-                ),
-            [props.schemaData, props.dataSchemaMap]
-        );
         const [openTabs, setOpenTabs] = useState<string[]>([]);
         const [manifestData, setManifestData] = useState<{
             [key: string]: any;
@@ -628,6 +498,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
         };
 
         const manifestColumns = [ColumnName.Manifest, ColumnName.Description];
+        const allAttributes = props.allAttributes || [];
 
         const allAttributesColumns = [
             ColumnName.Attribute,
@@ -638,7 +509,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
             ColumnName.DataType,
             ColumnName.ValidValues,
         ];
-
         return (
             <div>
                 <ul className="nav nav-tabs">
@@ -713,7 +583,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                     >
                         <DataSchemaTable
                             schemaData={filterOutComponentAttribute(
-                                memoizedAllAttributes
+                                allAttributes
                             )}
                             dataSchemaMap={props.dataSchemaMap}
                             title="All Attributes:"

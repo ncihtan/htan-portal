@@ -2,7 +2,11 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
-import { getDataSchema, SchemaDataId } from '@htan/data-portal-schema';
+import {
+    getAllAttributesData,
+    getDataSchema,
+    SchemaDataId,
+} from '@htan/data-portal-schema';
 
 const Imaging: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
@@ -104,7 +108,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.BulkRNASeqLevel3,
     ]);
 
-    return { props: { dataSchemaData, schemaDataById } };
+    const { allAttributes } = await getAllAttributesData([
+        SchemaDataId.scRNASeqLevel1,
+        SchemaDataId.scRNASeqLevel2,
+        SchemaDataId.scRNASeqLevel3,
+        SchemaDataId.scRNASeqLevel4,
+        SchemaDataId.scATACSeqLevel1,
+        SchemaDataId.BulkWESLevel1,
+        SchemaDataId.BulkWESLevel2,
+        SchemaDataId.BulkWESLevel3,
+        SchemaDataId.BulkRNASeqLevel1,
+        SchemaDataId.BulkRNASeqLevel2,
+        SchemaDataId.BulkRNASeqLevel3,
+    ]);
+
+    return { props: { dataSchemaData, schemaDataById, allAttributes } };
 };
 
 export default Imaging;
