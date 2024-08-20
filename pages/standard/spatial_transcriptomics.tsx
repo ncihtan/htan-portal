@@ -1,7 +1,11 @@
 import { GetStaticProps } from 'next';
 import React from 'react';
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
-import { getDataSchema, SchemaDataId } from '@htan/data-portal-schema';
+import {
+    getAllAttributesData,
+    getDataSchema,
+    SchemaDataId,
+} from '@htan/data-portal-schema';
 
 const SpatialTranscriptomics: React.FunctionComponent<DataStandardProps> = (
     props
@@ -78,7 +82,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.VisiumSpatialTranscriptomicsAuxiliaryFiles,
     ]);
 
-    return { props: { dataSchemaData, schemaDataById } };
+    const { allAttributes } = await getAllAttributesData([
+        SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel1,
+        SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel2,
+        SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel3,
+        SchemaDataId.VisiumSpatialTranscriptomicsAuxiliaryFiles,
+    ]);
+
+    return { props: { dataSchemaData, schemaDataById, allAttributes } };
 };
 
 export default SpatialTranscriptomics;

@@ -2,7 +2,11 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
-import { getDataSchema, SchemaDataId } from '@htan/data-portal-schema';
+import {
+    getDataSchema,
+    SchemaDataId,
+    getAllAttributesData,
+} from '@htan/data-portal-schema';
 
 const Cds: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
@@ -162,7 +166,28 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.SarcomaTier3,
     ]);
 
-    return { props: { dataSchemaData, schemaDataById } };
+    const { allAttributes } = await getAllAttributesData([
+        SchemaDataId.Demographics,
+        SchemaDataId.Diagnosis,
+        SchemaDataId.Exposure,
+        SchemaDataId.FamilyHistory,
+        SchemaDataId.FollowUp,
+        SchemaDataId.MolecularTest,
+        SchemaDataId.Therapy,
+        SchemaDataId.ClinicalDataTier2,
+        SchemaDataId.AcuteLymphoblasticLeukemiaTier3,
+        SchemaDataId.BrainCancerTier3,
+        SchemaDataId.BreastCancerTier3,
+        SchemaDataId.ColorectalCancerTier3,
+        SchemaDataId.LungCancerTier3,
+        SchemaDataId.MelanomaTier3,
+        SchemaDataId.OvarianCancerTier3,
+        SchemaDataId.PancreaticCancerTier3,
+        SchemaDataId.ProstateCancerTier3,
+        SchemaDataId.SarcomaTier3,
+    ]);
+
+    return { props: { dataSchemaData, schemaDataById, allAttributes } };
 };
 
 export default Cds;
