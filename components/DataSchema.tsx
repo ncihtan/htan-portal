@@ -31,7 +31,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
     dataSchemaMap: { [id: string]: DataSchemaData };
-    allAttributes?: (DataSchemaData & { manifestName: string })[];
+    allAttributes?: (DataSchemaData & { manifestName: string[] })[];
 }
 
 interface ManifestTabProps {
@@ -144,6 +144,7 @@ function getColumnDef(
     dataSchemaMap?: { [id: string]: DataSchemaData },
     isAttributeView: boolean = false,
     currentUrl: string = '',
+    isManifestTab: boolean = false,
     onManifestClick?: (manifestName: string) => void
 ): { [name in ColumnName]: IDataTableColumn } {
     const columnDef: {
@@ -158,7 +159,7 @@ function getColumnDef(
                     placement="top"
                 >
                     <span>
-                        {isAttributeView
+                        {isAttributeView || isManifestTab
                             ? ColumnName.Attribute
                             : ColumnName.Manifest}
                     </span>
@@ -166,8 +167,7 @@ function getColumnDef(
             ),
             selector: ColumnSelector.Manifest,
             cell: (schemaData: DataSchemaData) => (
-                <a
-                    href="#"
+                <span
                     onClick={(e) => {
                         e.preventDefault();
                         onManifestClick && onManifestClick(schemaData.label);
@@ -175,7 +175,7 @@ function getColumnDef(
                 >
                     {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
                         schemaData.attribute}
-                </a>
+                </span>
             ),
             wrap: true,
             sortable: true,
@@ -254,15 +254,30 @@ function getColumnDef(
         [ColumnName.ManifestName]: {
             name: (
                 <Tooltip
-                    overlay="This is the manifest name column"
+                    overlay="This shows all manifests containing this attribute"
                     placement="top"
                 >
                     <span>{ColumnName.ManifestName}</span>
                 </Tooltip>
             ),
-            selector: 'manifestName',
+            selector: 'manifestNames',
+            cell: (row: DataSchemaData) => {
+                // Cast the row to include manifestNames
+                const extendedRow = row as DataSchemaData & {
+                    manifestNames: string[];
+                };
+                return (
+                    <TruncatedValuesList
+                        attribute={extendedRow.attribute}
+                        attributes={extendedRow.manifestNames}
+                        modalTitle="Manifests"
+                        countLabel="Number of manifests"
+                    />
+                );
+            },
             wrap: true,
             sortable: true,
+            minWidth: '250px',
         },
         [ColumnName.ConditionalIf]: {
             name: (
@@ -347,9 +362,10 @@ const DataSchemaTable: React.FunctionComponent<{
     title?: string;
     columns?: ColumnName[];
     isAttributeView?: boolean;
+    isManifestTab?: boolean;
     onManifestClick?: (manifestName: string) => void;
 }> = observer((props) => {
-    const { isAttributeView = false } = props;
+    const { isAttributeView = false, isManifestTab = false } = props;
     const [currentUrl, setCurrentUrl] = useState('');
 
     const [conditionalAttributes, setConditionalAttributes] = useState<{
@@ -405,6 +421,7 @@ const DataSchemaTable: React.FunctionComponent<{
         props.dataSchemaMap,
         isAttributeView,
         currentUrl,
+        isManifestTab,
         props.onManifestClick
     );
     const columns: IDataTableColumn[] = _.uniq(availableColumns).map((name) => {
@@ -452,6 +469,7 @@ export const preFetchManifestData = async (schemaData: DataSchemaData[]) => {
                 schemaData,
                 requiredDependencies,
                 schemaDataById,
+                manifestNames: requiredDependencies.map((dep) => dep.label),
             },
         };
     });
@@ -637,6 +655,7 @@ const ManifestTab: React.FC<ManifestTabProps> = ({
                             requiredDependencies
                         )}
                         dataSchemaMap={schemaDataById}
+                        isManifestTab={true}
                     />
                 </Col>
             </Row>

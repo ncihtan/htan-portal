@@ -357,11 +357,11 @@ export async function getDataSchema(
 export function getAllAttributes(
     schemaData: DataSchemaData[],
     dataSchemaMap: { [id: string]: DataSchemaData }
-): (DataSchemaData & { manifestName: string })[] {
+): (DataSchemaData & { manifestNames: string[] })[] {
     schemaData = filterOutComponentAttribute(schemaData);
     const allAttributes = new Map<
         string,
-        DataSchemaData & { manifestName: string }
+        DataSchemaData & { manifestNames: string[] }
     >();
     const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
 
@@ -394,8 +394,16 @@ export function getAllAttributes(
     while (queue.length > 0) {
         const { attribute, manifestName } = queue.shift()!;
 
-        if (!allAttributes.has(attribute.attribute)) {
-            const attributeWithManifest = { ...attribute, manifestName };
+        if (allAttributes.has(attribute.attribute)) {
+            const existingAttribute = allAttributes.get(attribute.attribute)!;
+            if (!existingAttribute.manifestNames.includes(manifestName)) {
+                existingAttribute.manifestNames.push(manifestName);
+            }
+        } else {
+            const attributeWithManifest = {
+                ...attribute,
+                manifestNames: [manifestName],
+            };
             allAttributes.set(attribute.attribute, attributeWithManifest);
 
             // Add required dependencies
@@ -404,7 +412,7 @@ export function getAllAttributes(
                 if (dep)
                     queue.push({
                         attribute: dep,
-                        manifestName: attributeWithManifest.manifestName,
+                        manifestName: attributeWithManifest.manifestNames[0],
                     });
             });
 
@@ -414,7 +422,7 @@ export function getAllAttributes(
                 if (dep)
                     queue.push({
                         attribute: dep,
-                        manifestName: attributeWithManifest.manifestName,
+                        manifestName: attributeWithManifest.manifestNames[0],
                     });
             });
 
@@ -424,7 +432,7 @@ export function getAllAttributes(
                 if (dep)
                     queue.push({
                         attribute: dep,
-                        manifestName: attributeWithManifest.manifestName,
+                        manifestName: attributeWithManifest.manifestNames[0],
                     });
             });
 
@@ -432,7 +440,7 @@ export function getAllAttributes(
             getDataSchemaValidValues(attribute, dataSchemaMap).forEach((dep) =>
                 queue.push({
                     attribute: dep,
-                    manifestName: attributeWithManifest.manifestName,
+                    manifestName: attributeWithManifest.manifestNames[0],
                 })
             );
 
@@ -443,7 +451,8 @@ export function getAllAttributes(
                     if (dep)
                         queue.push({
                             attribute: dep,
-                            manifestName: attributeWithManifest.manifestName,
+                            manifestName:
+                                attributeWithManifest.manifestNames[0],
                         });
                 }
             );
