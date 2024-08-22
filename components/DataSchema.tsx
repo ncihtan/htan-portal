@@ -163,16 +163,26 @@ class DataSchemaStore {
         }
         return [];
     }
-
     hasRelatedAttributes(attributeName: string): boolean {
         const targetSchema = Object.values(this.dataSchemaMap).find(
             (schema) => schema.attribute === attributeName
         );
-        return !!(
-            targetSchema &&
-            targetSchema.exclusiveConditionalDependencies &&
-            targetSchema.exclusiveConditionalDependencies.length > 0
-        );
+        if (targetSchema && targetSchema.exclusiveConditionalDependencies) {
+            return targetSchema.exclusiveConditionalDependencies.some(
+                (dependencyAttribute) => {
+                    const dependencySchema = Object.values(
+                        this.dataSchemaMap
+                    ).find((schema) => schema.id === dependencyAttribute);
+                    return (
+                        dependencySchema &&
+                        dependencySchema.parentIds.some((parentId) =>
+                            targetSchema.parentIds.includes(parentId)
+                        )
+                    );
+                }
+            );
+        }
+        return false;
     }
 }
 
