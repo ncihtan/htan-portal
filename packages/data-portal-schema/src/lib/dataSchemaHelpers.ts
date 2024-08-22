@@ -764,25 +764,19 @@ export function findConditionalAttributes(
     schemaData: DataSchemaData,
     dataSchemaMap: { [id: string]: DataSchemaData }
 ): string[] {
-    const conditionalAttributes: string[] = [];
-
-    for (const [, value] of Object.entries(dataSchemaMap)) {
-        if (
-            value.requiredDependencies &&
-            Array.isArray(value.requiredDependencies)
-        ) {
-            const isDependency = value.requiredDependencies.some(
-                (dep) =>
-                    (typeof dep === 'string' ? dep : dep['@id']) ===
-                    schemaData.id
-            );
-            if (isDependency && value.attribute) {
-                conditionalAttributes.push(value.attribute);
-            }
-        }
-    }
-
-    return conditionalAttributes;
+    return Object.values(dataSchemaMap)
+        .filter(
+            (value) =>
+                value.requiredDependencies &&
+                Array.isArray(value.requiredDependencies) &&
+                value.requiredDependencies.some(
+                    (dep) =>
+                        (typeof dep === 'string' ? dep : dep['@id']) ===
+                        schemaData.id
+                ) &&
+                value.attribute
+        )
+        .map((value) => value.attribute);
 }
 
 export function getDataType(schemaData: DataSchemaData): SchemaDataType {
