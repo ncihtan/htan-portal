@@ -29,7 +29,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
     dataSchemaMap: { [id: string]: DataSchemaData };
-    allAttributes?: (DataSchemaData & { manifestName: string[] })[];
+    allAttributes?: (DataSchemaData & { manifestName: string })[];
 }
 
 interface ManifestTabProps {
@@ -499,14 +499,10 @@ const DataSchemaTable: React.FunctionComponent<{
         props.onManifestClick,
         props.onAttributeClick
     );
-    const columns: IDataTableColumn[] = _.uniq(availableColumns).map((name) => {
-        if (name === ColumnName.Manifest || name === ColumnName.Attribute) {
-            return columnDef[
-                isAttributeView ? ColumnName.Attribute : ColumnName.Manifest
-            ];
-        }
-        return columnDef[name];
-    });
+
+    const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
+        (name) => columnDef[name]
+    );
 
     return (
         <EnhancedDataTable
