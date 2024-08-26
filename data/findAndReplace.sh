@@ -12,4 +12,6 @@ gsed -i 's/"SRRSImagingLevel2"/"ImagingLevel2"/g' public/syn_data.json &&
 gsed -i 's/"scRNA-Seq"/"scRNA-seq"/g' public/syn_data.json &&
 gsed -i 's/"RPPA level2"/"RPPA"/g' public/syn_data.json &&
 gsed -i 's/"exseq"/"ExSEQ"/g' public/syn_data.json &&
-gsed -i 's/"ExSeq"/"ExSEQ"/g' public/syn_data.json
+gsed -i 's/"ExSeq"/"ExSEQ"/g' public/syn_data.json &&
+gsed -i 's/"10XGenomicsXeniumISSExperiment"/"10XXeniumISS"/g' public/syn_data.json &&
+gsed -i 's/"10XGenomicsXeniumISSExperiment"/"10XXeniumISS"/g' data/syn_metadata.json
