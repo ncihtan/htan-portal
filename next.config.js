@@ -18,6 +18,11 @@ module.exports = withMDX({
                 destination: '/publications/hta1_2024_pdf_johanna-klughammer',
                 permanent: false,
             },
+            {
+                source: '/publications/hta8_crc_moorman_2024',
+                destination: '/',
+                permanent: false,
+            },
         ];
     },
 });
