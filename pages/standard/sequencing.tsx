@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
 import {
-    getAllAttributesData,
+    getAllAttributes,
     getDataSchema,
     SchemaDataId,
 } from '@htan/data-portal-schema';
@@ -108,19 +108,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.BulkRNASeqLevel3,
     ]);
 
-    const { allAttributes } = await getAllAttributesData([
-        SchemaDataId.scRNASeqLevel1,
-        SchemaDataId.scRNASeqLevel2,
-        SchemaDataId.scRNASeqLevel3,
-        SchemaDataId.scRNASeqLevel4,
-        SchemaDataId.scATACSeqLevel1,
-        SchemaDataId.BulkWESLevel1,
-        SchemaDataId.BulkWESLevel2,
-        SchemaDataId.BulkWESLevel3,
-        SchemaDataId.BulkRNASeqLevel1,
-        SchemaDataId.BulkRNASeqLevel2,
-        SchemaDataId.BulkRNASeqLevel3,
-    ]);
+    const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
 
     return { props: { dataSchemaData, schemaDataById, allAttributes } };
 };

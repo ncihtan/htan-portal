@@ -1,17 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
-import { useRouter } from 'next/router';
 
 import {
     DataSchemaData,
     getDataSchemaValidValues,
     getDataType,
-    getDataSchema,
     SchemaDataId,
-    findConditionalIfAttributes,
+    SchemaDataById,
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import Link from 'next/link';
@@ -20,15 +18,14 @@ import {
     IEnhancedDataTableColumn,
 } from '@htan/data-portal-table';
 import TruncatedValuesList from './TruncatedValuesList';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
-    dataSchemaMap: { [id: string]: DataSchemaData };
+    dataSchemaMap: SchemaDataById;
     allAttributes?: (DataSchemaData & { manifestName: string })[];
 }
 
@@ -36,7 +33,7 @@ interface ManifestTabProps {
     schemaData: DataSchemaData;
     requiredDependencies: DataSchemaData[];
     schemaDataById: { [id: string]: DataSchemaData };
-    onAttributeClick: (attribute: string) => void;
+    onAttributeClick: (schemaData: DataSchemaData) => void;
 }
 
 interface AttributeTabProps {
@@ -87,7 +84,6 @@ class DataSchemaStore {
     manifestData: { [key: string]: any } = {};
     activeTab: string = 'manifest';
     openTabs: string[] = [];
-    currentUrl: string = '';
 
     constructor() {
         makeAutoObservable(this);
@@ -113,17 +109,6 @@ class DataSchemaStore {
         this.openTabs = tabs;
     }
 
-    setCurrentUrl(url: string) {
-        this.currentUrl = url;
-    }
-
-    async fetchManifestData() {
-        const preFetchedData = await preFetchManifestData(this.schemaData);
-        runInAction(() => {
-            this.setManifestData(preFetchedData);
-        });
-    }
-
     openNewTab(manifestName: string) {
         if (!this.openTabs.includes(manifestName)) {
             this.setOpenTabs([...this.openTabs, manifestName]);
@@ -136,14 +121,9 @@ class DataSchemaStore {
         this.setActiveTab('manifest');
     }
 
-    async fetchRelatedAttributes(
-        attributeName: string
-    ): Promise<DataSchemaData[]> {
-        const targetSchema = Object.values(this.dataSchemaMap).find(
-            (schema) => schema.attribute === attributeName
-        );
-        if (targetSchema && targetSchema.exclusiveConditionalDependencies) {
-            const relatedAttributes = targetSchema.exclusiveConditionalDependencies
+    findRelatedAttributes(schemaData?: DataSchemaData): DataSchemaData[] {
+        if (schemaData && schemaData.exclusiveConditionalDependencies) {
+            return schemaData.exclusiveConditionalDependencies
                 .map((dependencyAttribute) => {
                     const dependencySchema = Object.values(
                         this.dataSchemaMap
@@ -151,7 +131,7 @@ class DataSchemaStore {
                     if (
                         dependencySchema &&
                         dependencySchema.parentIds.some((parentId) =>
-                            targetSchema.parentIds.includes(parentId)
+                            schemaData.parentIds.includes(parentId)
                         )
                     ) {
                         return dependencySchema;
@@ -159,16 +139,13 @@ class DataSchemaStore {
                     return null;
                 })
                 .filter((schema): schema is DataSchemaData => schema !== null);
-            return relatedAttributes;
         }
         return [];
     }
-    hasRelatedAttributes(attributeName: string): boolean {
-        const targetSchema = Object.values(this.dataSchemaMap).find(
-            (schema) => schema.attribute === attributeName
-        );
-        if (targetSchema && targetSchema.exclusiveConditionalDependencies) {
-            return targetSchema.exclusiveConditionalDependencies.some(
+
+    hasRelatedAttributes(schemaData?: DataSchemaData): boolean {
+        if (schemaData && schemaData.exclusiveConditionalDependencies) {
+            return schemaData.exclusiveConditionalDependencies.some(
                 (dependencyAttribute) => {
                     const dependencySchema = Object.values(
                         this.dataSchemaMap
@@ -176,7 +153,7 @@ class DataSchemaStore {
                     return (
                         dependencySchema &&
                         dependencySchema.parentIds.some((parentId) =>
-                            targetSchema.parentIds.includes(parentId)
+                            schemaData.parentIds.includes(parentId)
                         )
                     );
                 }
@@ -193,18 +170,13 @@ function filterOutComponentAttribute(data: DataSchemaData[]): DataSchemaData[] {
 const dataSchemaStore = new DataSchemaStore();
 
 function getColumnDef(
-    conditionalAttributes: { [key: string]: string[] },
-    searchValues: { [key: string]: string },
     dataSchemaMap?: { [id: string]: DataSchemaData },
     isAttributeView: boolean = false,
-    currentUrl: string = '',
     isManifestTab: boolean = false,
-    onManifestClick?: (manifestName: string) => void,
-    onAttributeClick?: (attributeName: string) => void
+    onManifestClick?: (schemaData: DataSchemaData) => void,
+    onAttributeClick?: (schemaData: DataSchemaData) => void
 ): { [name in ColumnName]: IDataTableColumn } {
-    const columnDef: {
-        [name in ColumnName]: IEnhancedDataTableColumn<DataSchemaData>;
-    } = {
+    return {
         [ColumnName.Manifest]: {
             name: (
                 <Tooltip
@@ -223,7 +195,7 @@ function getColumnDef(
             selector: ColumnSelector.Manifest,
             cell: (schemaData) => {
                 const hasRelatedAttributes = isManifestTab
-                    ? dataSchemaStore.hasRelatedAttributes(schemaData.attribute)
+                    ? dataSchemaStore.hasRelatedAttributes(schemaData)
                     : false;
                 const isClickable = isManifestTab
                     ? !!onAttributeClick && hasRelatedAttributes
@@ -248,9 +220,9 @@ function getColumnDef(
                             if (isClickable) {
                                 e.preventDefault();
                                 if (isManifestTab && onAttributeClick) {
-                                    onAttributeClick(schemaData.attribute);
+                                    onAttributeClick(schemaData);
                                 } else if (onManifestClick) {
-                                    onManifestClick(schemaData.label);
+                                    onManifestClick(schemaData);
                                 }
                             }
                         }}
@@ -375,9 +347,7 @@ function getColumnDef(
             cell: (schemaData: DataSchemaData) => (
                 <TruncatedValuesList
                     attribute={schemaData.attribute}
-                    attributes={
-                        conditionalAttributes[schemaData.attribute] || []
-                    }
+                    attributes={schemaData.conditionalIfValues}
                     modalTitle="Conditional Attributes"
                     countLabel="Number of conditional attributes"
                 />
@@ -386,7 +356,7 @@ function getColumnDef(
             minWidth: '250px',
             sortable: true,
             getSearchValue: (schemaData: DataSchemaData) =>
-                searchValues[schemaData.attribute] || '',
+                schemaData.conditionalIfValues.join(' '),
         },
         [ColumnName.DataType]: {
             name: (
@@ -434,9 +404,7 @@ function getColumnDef(
                 return attributes.join(' ');
             },
         },
-    };
-
-    return columnDef;
+    } as { [name in ColumnName]: IEnhancedDataTableColumn<DataSchemaData> };
 }
 
 const DataSchemaTable: React.FunctionComponent<{
@@ -446,49 +414,10 @@ const DataSchemaTable: React.FunctionComponent<{
     columns?: ColumnName[];
     isAttributeView?: boolean;
     isManifestTab?: boolean;
-    onManifestClick?: (manifestName: string) => void;
-    onAttributeClick?: (attributeName: string) => void;
+    onManifestClick?: (schemaData: DataSchemaData) => void;
+    onAttributeClick?: (schemaData: DataSchemaData) => void;
 }> = observer((props) => {
     const { isAttributeView = false, isManifestTab = false } = props;
-    const [currentUrl, setCurrentUrl] = useState('');
-
-    const [conditionalAttributes, setConditionalAttributes] = useState<{
-        [key: string]: string[];
-    }>({});
-    const [searchValues, setSearchValues] = useState<{ [key: string]: string }>(
-        {}
-    );
-
-    useEffect(() => {
-        const fetchAttributes = async () => {
-            const results: { [key: string]: string[] } = {};
-            const searches: { [key: string]: string } = {};
-
-            for (const schema of props.schemaData) {
-                try {
-                    const attrs = await findConditionalIfAttributes(
-                        schema,
-                        props.dataSchemaMap
-                    );
-                    results[schema.attribute] = attrs;
-                    searches[schema.attribute] = attrs.join(' ');
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-
-            setConditionalAttributes(results);
-            setSearchValues(searches);
-        };
-
-        fetchAttributes();
-    }, [props.schemaData, props.dataSchemaMap]);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setCurrentUrl(window.location.href);
-        }
-    }, []);
 
     const availableColumns = props.columns || [
         isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
@@ -500,11 +429,8 @@ const DataSchemaTable: React.FunctionComponent<{
     ];
 
     const columnDef = getColumnDef(
-        conditionalAttributes,
-        searchValues,
         props.dataSchemaMap,
         isAttributeView,
-        currentUrl,
         isManifestTab,
         props.onManifestClick,
         props.onAttributeClick
@@ -531,11 +457,13 @@ const DataSchemaTable: React.FunctionComponent<{
     );
 });
 
-export const preFetchManifestData = async (schemaData: DataSchemaData[]) => {
+export function preloadManifestData(
+    schemaData: DataSchemaData[],
+    schemaDataById: SchemaDataById
+) {
     schemaData = filterOutComponentAttribute(schemaData);
-    const manifestPromises = schemaData.map(async (schema) => {
+    const manifestDataArray = schemaData.map((schema) => {
         const fullId = `bts:${schema.label}` as SchemaDataId;
-        const { schemaDataById } = await getDataSchema([fullId]);
         const schemaData = schemaDataById[fullId];
 
         const requiredDependencies = (
@@ -556,19 +484,17 @@ export const preFetchManifestData = async (schemaData: DataSchemaData[]) => {
         };
     });
 
-    const manifestDataArray = await Promise.all(manifestPromises);
     return Object.assign({}, ...manifestDataArray);
-};
+}
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
-        const router = useRouter();
+        const manifestData = preloadManifestData(
+            props.schemaData,
+            props.dataSchemaMap
+        );
         const [activeTab, setActiveTab] = useState('manifest');
         const [openTabs, setOpenTabs] = useState<string[]>([]);
-        const [manifestData, setManifestData] = useState<{
-            [key: string]: any;
-        }>({});
-        const isAttributeView = router.query.view === 'attribute';
         const [openAttributeTabs, setOpenAttributeTabs] = useState<string[]>(
             []
         );
@@ -578,28 +504,19 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
 
         useEffect(() => {
             dataSchemaStore.setDataSchemaMap(props.dataSchemaMap);
+            dataSchemaStore.setManifestData(manifestData);
         }, [props.dataSchemaMap]);
 
-        const fetchRelatedAttributes = async (attributeName: string) => {
-            return await dataSchemaStore.fetchRelatedAttributes(attributeName);
+        const findRelatedAttributes = (schemaData: DataSchemaData) => {
+            return dataSchemaStore.findRelatedAttributes(schemaData);
         };
-
-        useEffect(() => {
-            const fetchData = async () => {
-                const preFetchedData = await preFetchManifestData(
-                    props.schemaData
-                );
-                setManifestData(preFetchedData);
-            };
-
-            fetchData();
-        }, [props.schemaData, props.dataSchemaMap]);
 
         const handleTabChange = (tab: string) => {
             setActiveTab(tab);
         };
 
-        const openNewTab = (manifestName: string) => {
+        const openNewTab = (schemaData: DataSchemaData) => {
+            const manifestName = schemaData.label;
             if (!openTabs.includes(manifestName)) {
                 setOpenTabs((prevTabs) => [...prevTabs, manifestName]);
             }
@@ -610,15 +527,15 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
             setOpenTabs(openTabs.filter((tab) => tab !== manifestName));
             setActiveTab('manifest');
         };
-        const openNewAttributeTab = async (attributeName: string) => {
+
+        const openNewAttributeTab = (schemaData: DataSchemaData) => {
+            const attributeName = schemaData.attribute;
             if (!openAttributeTabs.includes(attributeName)) {
                 setOpenAttributeTabs((prevTabs) => [
                     ...prevTabs,
                     attributeName,
                 ]);
-                const relatedAttributes = await fetchRelatedAttributes(
-                    attributeName
-                );
+                const relatedAttributes = findRelatedAttributes(schemaData);
 
                 setAttributeData((prevData) => ({
                     ...prevData,
@@ -647,6 +564,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
             ColumnName.DataType,
             ColumnName.ValidValues,
         ];
+
         return (
             <div>
                 <ul className="nav nav-tabs">
@@ -730,7 +648,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                             )}
                             dataSchemaMap={props.dataSchemaMap}
                             title="Data Schema:"
-                            isAttributeView={isAttributeView}
+                            isAttributeView={false}
                             columns={manifestColumns}
                             onManifestClick={openNewTab}
                         />

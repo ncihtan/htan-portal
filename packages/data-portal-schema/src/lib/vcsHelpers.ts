@@ -20,7 +20,7 @@ export const DEFAULT_SCHEMA_REPO_API = 'https://api.github.com/repos';
 export const DEFAULT_SCHEMA_CONTENT_HOST = 'https://raw.githubusercontent.com';
 export const DEFAULT_SCHEMA_RELEASE_TAG = 'main';
 export const DEFAULT_SCHEMA_FILENAME = 'HTAN.model.jsonld';
-export const DEFAULT_SCHEMA_CONDITIONALFILE = 'HTAN.dependencies.csv';
+export const DEFAULT_SCHEMA_CONDITIONAL_FILE = 'HTAN.dependencies.csv';
 export const DEFAULT_SCHEMA_API_URI = getSchemaApiUri();
 
 export function getSchemaApiUri(
@@ -82,7 +82,8 @@ export function getDependenciesUrl(
     tag: string = DEFAULT_SCHEMA_RELEASE_TAG,
     repoName: string = DEFAULT_SCHEMA_REPO_NAME,
     contentHost: string = DEFAULT_SCHEMA_CONTENT_HOST,
-    dependenciesFilename: string = DEFAULT_SCHEMA_CONDITIONALFILE
+    dependenciesFilename: string = DEFAULT_SCHEMA_CONDITIONAL_FILE
 ) {
-    return `${contentHost}/${repoName}/${tag}/${dependenciesFilename}`;
+    // return `${contentHost}/${repoName}/${tag}/${dependenciesFilename}`;
+    return getSchemaUrl(tag, repoName, contentHost, dependenciesFilename);
 }

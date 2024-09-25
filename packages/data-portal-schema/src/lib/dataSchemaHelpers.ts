@@ -5,7 +5,6 @@ import { getDependenciesUrl, getLatestReleaseSchemaUrl } from './vcsHelpers';
 import csvToJsonLib from 'csvtojson';
 
 // import * as defaultSchema from '../data/schema.json'
-import { Attribute } from '../../../../types';
 
 interface ConditionalIfRow {
     Attribute: string;
@@ -71,6 +70,9 @@ export interface DataSchemaData {
 
     // Conditional dependencies not listed anywhere else as a required dependency
     exclusiveConditionalDependencies: string[];
+
+    // Conditional If values
+    conditionalIfValues: string[];
 
     // Built from the context and the id.
     source: string;
@@ -375,20 +377,6 @@ export function getAllAttributes(
             const dep = dataSchemaMap[depId];
             if (dep) queue.push({ attribute: dep, manifestName: attr.label });
         });
-
-        attr.exclusiveConditionalDependencies.forEach((depId) => {
-            const dep = dataSchemaMap[depId];
-            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
-        });
-
-        getDataSchemaValidValues(attr, dataSchemaMap).forEach((dep) =>
-            queue.push({ attribute: dep, manifestName: attr.label })
-        );
-
-        findConditionalAttributes(attr, dataSchemaMap).forEach((condAttrId) => {
-            const dep = dataSchemaMap[condAttrId];
-            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
-        });
     });
 
     while (queue.length > 0) {
@@ -425,37 +413,6 @@ export function getAllAttributes(
                         manifestName: attributeWithManifest.manifestNames[0],
                     });
             });
-
-            // Add exclusive conditional dependencies
-            attribute.exclusiveConditionalDependencies.forEach((depId) => {
-                const dep = dataSchemaMap[depId];
-                if (dep)
-                    queue.push({
-                        attribute: dep,
-                        manifestName: attributeWithManifest.manifestNames[0],
-                    });
-            });
-
-            // Add dependencies from validValues
-            getDataSchemaValidValues(attribute, dataSchemaMap).forEach((dep) =>
-                queue.push({
-                    attribute: dep,
-                    manifestName: attributeWithManifest.manifestNames[0],
-                })
-            );
-
-            // Add conditional attributes
-            findConditionalAttributes(attribute, dataSchemaMap).forEach(
-                (condAttrId) => {
-                    const dep = dataSchemaMap[condAttrId];
-                    if (dep)
-                        queue.push({
-                            attribute: dep,
-                            manifestName:
-                                attributeWithManifest.manifestNames[0],
-                        });
-                }
-            );
         }
     }
 
@@ -467,36 +424,9 @@ function filterOutComponentAttribute(data: DataSchemaData[]): DataSchemaData[] {
     return data.filter((item) => item.attribute !== 'Component');
 }
 
-// You can keep the memoized version if needed
-export const memoizedGetAllAttributes = _.memoize(getAllAttributes);
-
-export async function getAllAttributesData(schemaDataIds: SchemaDataId[]) {
-    const { dataSchemaData, schemaDataById } = await getDataSchema(
-        schemaDataIds
-    );
-
-    const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
-
-    return { allAttributes, schemaDataById };
-}
-
-let conditionalIfCache: { [key: string]: string[] } | null = null;
-
-export async function findConditionalIfAttributes(
-    schemaData: DataSchemaData,
-    dataSchemaMap?: { [id: string]: DataSchemaData }
-): Promise<string[]> {
-    if (!conditionalIfCache) {
-        conditionalIfCache = await getConditionalIfData();
-    }
-
-    const attribute = schemaData.attribute;
-    const conditionalAttributes = conditionalIfCache[attribute] || [];
-
-    return conditionalAttributes;
-}
-
-async function getConditionalIfData(): Promise<{ [key: string]: string[] }> {
+async function getConditionalIfData(): Promise<{
+    [attribute: string]: string[];
+}> {
     try {
         const csvUrl = getDependenciesUrl();
         const response = await fetch(csvUrl);
@@ -506,17 +436,16 @@ async function getConditionalIfData(): Promise<{ [key: string]: string[] }> {
             csvContent
         );
 
-        return rows.reduce((acc, row) => {
+        return rows.reduce((acc: { [attribute: string]: string[] }, row) => {
             if (row['Conditional Requirements']) {
-                const conditionalAttributes = row['Conditional Requirements']
+                acc[row.Attribute] = row['Conditional Requirements']
                     .split(',')
                     .map((attr: string) =>
                         attr.trim().replace(/^\['|'\]$/g, '')
                     );
-                acc[row.Attribute] = conditionalAttributes;
             }
             return acc;
-        }, {} as { [key: string]: string[] });
+        }, {});
     } catch (error) {
         console.error('Error fetching or processing CSV:', error);
         throw error;
@@ -529,7 +458,9 @@ export async function fetchAndProcessSchemaData(
     const schemaDataUri = dataUri || (await getLatestReleaseSchemaUrl());
     const schemaData = getDataSchemaData(await fetchSchemaData(schemaDataUri));
     const schemaDataKeyedById = _.keyBy(schemaData, (d) => d.id);
+    const conditionalIfData = await getConditionalIfData();
     resolveConditionalDependencies(schemaData, schemaDataKeyedById);
+    resolveConditionalIfValues(schemaData, conditionalIfData);
     addAliases(schemaDataKeyedById);
     return schemaDataKeyedById;
 }
@@ -612,6 +543,7 @@ export function mapSchemaDataToDataSchemaData(
             requiredDependencies,
             conditionalDependencies: [], // taken care of later with a full schema traversal
             exclusiveConditionalDependencies: [], // taken care of later with a full schema traversal
+            conditionalIfValues: [], // taken care of later with a full schema traversal
             validationRules: nd['sms:validationRules'] || [],
             validValues,
             domainIncludes,
@@ -674,6 +606,15 @@ export function resolveConditionalDependencies(
             }
         })
     );
+}
+
+export function resolveConditionalIfValues(
+    schemaData: DataSchemaData[],
+    conditionalIfData: { [attribute: string]: string[] }
+) {
+    schemaData.forEach((schema) => {
+        schema.conditionalIfValues = conditionalIfData[schema.attribute] || [];
+    });
 }
 
 /**
@@ -760,25 +701,6 @@ function normalizeEntity(
     return !entity ? [] : !Array.isArray(entity) ? Array(entity) : entity;
 }
 
-export function findConditionalAttributes(
-    schemaData: DataSchemaData,
-    dataSchemaMap: { [id: string]: DataSchemaData }
-): string[] {
-    return Object.values(dataSchemaMap)
-        .filter(
-            (value) =>
-                value.requiredDependencies &&
-                Array.isArray(value.requiredDependencies) &&
-                value.requiredDependencies.some(
-                    (dep) =>
-                        (typeof dep === 'string' ? dep : dep['@id']) ===
-                        schemaData.id
-                ) &&
-                value.attribute
-        )
-        .map((value) => value.attribute);
-}
-
 export function getDataType(schemaData: DataSchemaData): SchemaDataType {
     if (
         schemaData.validationRules &&
@@ -803,11 +725,4 @@ export function getDataType(schemaData: DataSchemaData): SchemaDataType {
     }
     // Default to String if no validation rules or unrecognized type
     return SchemaDataType.String;
-}
-function csvToJson() {
-    throw new Error('Function not implemented.');
-}
-
-function csv() {
-    throw new Error('Function not implemented.');
 }

@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next';
 import React from 'react';
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
 import {
-    getAllAttributesData,
+    getAllAttributes,
     getDataSchema,
     SchemaDataId,
 } from '@htan/data-portal-schema';
@@ -82,12 +82,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.VisiumSpatialTranscriptomicsAuxiliaryFiles,
     ]);
 
-    const { allAttributes } = await getAllAttributesData([
-        SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel1,
-        SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel2,
-        SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel3,
-        SchemaDataId.VisiumSpatialTranscriptomicsAuxiliaryFiles,
-    ]);
+    const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
 
     return { props: { dataSchemaData, schemaDataById, allAttributes } };
 };
