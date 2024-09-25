@@ -269,6 +269,12 @@ function getColumnDef(
     } as { [name in ColumnName]: IEnhancedDataTableColumn<DataSchemaData> };
 }
 
+function getTabName(id: string, dataSchemaMap: SchemaDataById) {
+    const attribute = dataSchemaMap[id]?.attribute;
+
+    return ATTRIBUTE_OVERRIDES[attribute] || attribute;
+}
+
 const DataSchemaTable: React.FunctionComponent<{
     schemaData: DataSchemaData[];
     dataSchemaMap?: { [id: string]: DataSchemaData };
@@ -413,7 +419,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                                 onClick={() => handleTabChange(manifestId)}
                                 role="tab"
                             >
-                                {props.dataSchemaMap[manifestId]?.label}
+                                {getTabName(manifestId, props.dataSchemaMap)}
                                 <button
                                     className="close ml-2"
                                     onClick={(e) => {
@@ -435,7 +441,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                                 onClick={() => handleTabChange(attributeId)}
                                 role="tab"
                             >
-                                {props.dataSchemaMap[attributeId]?.attribute}
+                                {getTabName(attributeId, props.dataSchemaMap)}
                                 <button
                                     className="close ml-2"
                                     onClick={(e) => {
