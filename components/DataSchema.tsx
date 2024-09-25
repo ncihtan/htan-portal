@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
@@ -6,9 +6,12 @@ import Tooltip from 'rc-tooltip';
 
 import {
     DataSchemaData,
+    filterOutComponentAttribute,
+    findRelatedAttributes,
     getDataSchemaValidValues,
     getDataType,
-    SchemaDataId,
+    hasRelatedAttributes,
+    preloadManifestData,
     SchemaDataById,
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
@@ -21,7 +24,6 @@ import TruncatedValuesList from './TruncatedValuesList';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { makeAutoObservable } from 'mobx';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -78,99 +80,8 @@ enum ColumnSelector {
     ValidValues = 'validValues',
 }
 
-class DataSchemaStore {
-    schemaData: DataSchemaData[] = [];
-    dataSchemaMap: { [id: string]: DataSchemaData } = {};
-    manifestData: { [key: string]: any } = {};
-    activeTab: string = 'manifest';
-    openTabs: string[] = [];
-
-    constructor() {
-        makeAutoObservable(this);
-    }
-
-    setSchemaData(data: DataSchemaData[]) {
-        this.schemaData = data;
-    }
-
-    setDataSchemaMap(map: { [id: string]: DataSchemaData }) {
-        this.dataSchemaMap = map;
-    }
-
-    setManifestData(data: { [key: string]: any }) {
-        this.manifestData = data;
-    }
-
-    setActiveTab(tab: string) {
-        this.activeTab = tab;
-    }
-
-    setOpenTabs(tabs: string[]) {
-        this.openTabs = tabs;
-    }
-
-    openNewTab(manifestName: string) {
-        if (!this.openTabs.includes(manifestName)) {
-            this.setOpenTabs([...this.openTabs, manifestName]);
-        }
-        this.setActiveTab(manifestName);
-    }
-
-    closeTab(manifestName: string) {
-        this.setOpenTabs(this.openTabs.filter((tab) => tab !== manifestName));
-        this.setActiveTab('manifest');
-    }
-
-    findRelatedAttributes(schemaData?: DataSchemaData): DataSchemaData[] {
-        if (schemaData && schemaData.exclusiveConditionalDependencies) {
-            return schemaData.exclusiveConditionalDependencies
-                .map((dependencyAttribute) => {
-                    const dependencySchema = Object.values(
-                        this.dataSchemaMap
-                    ).find((schema) => schema.id === dependencyAttribute);
-                    if (
-                        dependencySchema &&
-                        dependencySchema.parentIds.some((parentId) =>
-                            schemaData.parentIds.includes(parentId)
-                        )
-                    ) {
-                        return dependencySchema;
-                    }
-                    return null;
-                })
-                .filter((schema): schema is DataSchemaData => schema !== null);
-        }
-        return [];
-    }
-
-    hasRelatedAttributes(schemaData?: DataSchemaData): boolean {
-        if (schemaData && schemaData.exclusiveConditionalDependencies) {
-            return schemaData.exclusiveConditionalDependencies.some(
-                (dependencyAttribute) => {
-                    const dependencySchema = Object.values(
-                        this.dataSchemaMap
-                    ).find((schema) => schema.id === dependencyAttribute);
-                    return (
-                        dependencySchema &&
-                        dependencySchema.parentIds.some((parentId) =>
-                            schemaData.parentIds.includes(parentId)
-                        )
-                    );
-                }
-            );
-        }
-        return false;
-    }
-}
-
-function filterOutComponentAttribute(data: DataSchemaData[]): DataSchemaData[] {
-    return data.filter((item) => item.attribute !== 'Component');
-}
-
-const dataSchemaStore = new DataSchemaStore();
-
 function getColumnDef(
-    dataSchemaMap?: { [id: string]: DataSchemaData },
+    dataSchemaMap?: SchemaDataById,
     isAttributeView: boolean = false,
     isManifestTab: boolean = false,
     onManifestClick?: (schemaData: DataSchemaData) => void,
@@ -184,11 +95,9 @@ function getColumnDef(
                     : ColumnName.Manifest,
             selector: ColumnSelector.Manifest,
             cell: (schemaData) => {
-                const hasRelatedAttributes = isManifestTab
-                    ? dataSchemaStore.hasRelatedAttributes(schemaData)
-                    : false;
                 const isClickable = isManifestTab
-                    ? !!onAttributeClick && hasRelatedAttributes
+                    ? !!onAttributeClick &&
+                      hasRelatedAttributes(schemaData, dataSchemaMap)
                     : !!onManifestClick;
 
                 const style = isClickable
@@ -408,36 +317,6 @@ const DataSchemaTable: React.FunctionComponent<{
     );
 });
 
-export function preloadManifestData(
-    schemaData: DataSchemaData[],
-    schemaDataById: SchemaDataById
-) {
-    schemaData = filterOutComponentAttribute(schemaData);
-    const manifestDataArray = schemaData.map((schema) => {
-        const fullId = `bts:${schema.label}` as SchemaDataId;
-        const schemaData = schemaDataById[fullId];
-
-        const requiredDependencies = (
-            schemaData.requiredDependencies || []
-        ).map((depId: string | { '@id': string }) => {
-            const depSchemaId =
-                typeof depId === 'string' ? depId : depId['@id'];
-            return schemaDataById[depSchemaId];
-        });
-
-        return {
-            [schema.label]: {
-                schemaData,
-                requiredDependencies,
-                schemaDataById,
-                manifestNames: requiredDependencies.map((dep) => dep.label),
-            },
-        };
-    });
-
-    return Object.assign({}, ...manifestDataArray);
-}
-
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
     (props) => {
         const manifestData = preloadManifestData(
@@ -452,15 +331,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
         const [attributeData, setAttributeData] = useState<{
             [key: string]: DataSchemaData[];
         }>({});
-
-        useEffect(() => {
-            dataSchemaStore.setDataSchemaMap(props.dataSchemaMap);
-            dataSchemaStore.setManifestData(manifestData);
-        }, [props.dataSchemaMap]);
-
-        const findRelatedAttributes = (schemaData: DataSchemaData) => {
-            return dataSchemaStore.findRelatedAttributes(schemaData);
-        };
 
         const handleTabChange = (tab: string) => {
             setActiveTab(tab);
@@ -486,7 +356,10 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                     ...prevTabs,
                     attributeName,
                 ]);
-                const relatedAttributes = findRelatedAttributes(schemaData);
+                const relatedAttributes = findRelatedAttributes(
+                    schemaData,
+                    props.dataSchemaMap
+                );
 
                 setAttributeData((prevData) => ({
                     ...prevData,
