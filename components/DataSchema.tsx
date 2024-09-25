@@ -38,7 +38,7 @@ interface ManifestTabProps {
 }
 
 interface AttributeTabProps {
-    attributeName: string;
+    schemaData: DataSchemaData;
     relatedAttributes: DataSchemaData[];
     dataSchemaMap: { [id: string]: DataSchemaData };
 }
@@ -517,7 +517,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                             role="tabpanel"
                         >
                             <AttributeTab
-                                attributeName={attributeId}
+                                schemaData={props.dataSchemaMap[attributeId]}
                                 relatedAttributes={findRelatedAttributes(
                                     props.dataSchemaMap[attributeId],
                                     props.dataSchemaMap
@@ -562,7 +562,7 @@ const ManifestTab: React.FC<ManifestTabProps> = ({
 };
 
 const AttributeTab: React.FC<AttributeTabProps> = ({
-    attributeName,
+    schemaData,
     relatedAttributes,
     dataSchemaMap,
 }) => {
@@ -570,7 +570,7 @@ const AttributeTab: React.FC<AttributeTabProps> = ({
         <Container>
             <Row>
                 <Col>
-                    <h1>{attributeName} Attribute</h1>
+                    <h1>{schemaData.attribute} Attribute</h1>
                 </Col>
             </Row>
             <Row>
