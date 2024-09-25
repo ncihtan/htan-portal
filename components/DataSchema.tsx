@@ -178,20 +178,10 @@ function getColumnDef(
 ): { [name in ColumnName]: IDataTableColumn } {
     return {
         [ColumnName.Manifest]: {
-            name: (
-                <Tooltip
-                    overlay={`This is the ${
-                        isAttributeView ? 'attribute' : 'manifest'
-                    } column`}
-                    placement="top"
-                >
-                    <span>
-                        {isAttributeView || isManifestTab
-                            ? ColumnName.Attribute
-                            : ColumnName.Manifest}
-                    </span>
-                </Tooltip>
-            ),
+            name:
+                isAttributeView || isManifestTab
+                    ? ColumnName.Attribute
+                    : ColumnName.Manifest,
             selector: ColumnSelector.Manifest,
             cell: (schemaData) => {
                 const hasRelatedAttributes = isManifestTab
@@ -237,20 +227,7 @@ function getColumnDef(
             sortable: true,
         },
         [ColumnName.Attribute]: {
-            name: (
-                <Tooltip
-                    overlay={`This is the ${
-                        isAttributeView ? 'attribute' : 'manifest'
-                    } column`}
-                    placement="top"
-                >
-                    <span>
-                        {isAttributeView
-                            ? ColumnName.Attribute
-                            : ColumnName.Manifest}
-                    </span>
-                </Tooltip>
-            ),
+            name: isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
             selector: ColumnSelector.Manifest,
             cell: (schemaData: DataSchemaData) => (
                 <Link
@@ -270,11 +247,7 @@ function getColumnDef(
             sortable: true,
         },
         [ColumnName.Label]: {
-            name: (
-                <Tooltip overlay="This is the label column" placement="top">
-                    <span>{ColumnName.Label}</span>
-                </Tooltip>
-            ),
+            name: ColumnName.Label,
             selector: ColumnSelector.Label,
             format: (schemaData: DataSchemaData) =>
                 LABEL_OVERRIDES[schemaData.label] || schemaData.label,
@@ -282,25 +255,14 @@ function getColumnDef(
             sortable: true,
         },
         [ColumnName.Description]: {
-            name: (
-                <Tooltip
-                    overlay="This is the description column"
-                    placement="top"
-                >
-                    <span>{ColumnName.Description}</span>
-                </Tooltip>
-            ),
+            name: ColumnName.Description,
             selector: ColumnSelector.Description,
             grow: 2,
             wrap: true,
             sortable: true,
         },
         [ColumnName.Required]: {
-            name: (
-                <Tooltip overlay="This is the required column" placement="top">
-                    <span>{ColumnName.Required}</span>
-                </Tooltip>
-            ),
+            name: ColumnName.Required,
             selector: ColumnSelector.Required,
             wrap: true,
             sortable: true,
@@ -310,7 +272,7 @@ function getColumnDef(
         [ColumnName.ManifestName]: {
             name: (
                 <Tooltip
-                    overlay="This shows all manifests containing this attribute"
+                    overlay="All manifests containing this attribute"
                     placement="top"
                 >
                     <span>{ColumnName.ManifestName}</span>
@@ -359,25 +321,14 @@ function getColumnDef(
                 schemaData.conditionalIfValues.join(' '),
         },
         [ColumnName.DataType]: {
-            name: (
-                <Tooltip overlay="This is the data type column" placement="top">
-                    <span>{ColumnName.DataType}</span>
-                </Tooltip>
-            ),
+            name: ColumnName.DataType,
             selector: ColumnSelector.DataType,
             wrap: true,
             sortable: true,
             format: (schemaData: DataSchemaData) => getDataType(schemaData),
         },
         [ColumnName.ValidValues]: {
-            name: (
-                <Tooltip
-                    overlay="This is the valid values column"
-                    placement="top"
-                >
-                    <span>{ColumnName.ValidValues}</span>
-                </Tooltip>
-            ),
+            name: ColumnName.ValidValues,
             selector: ColumnSelector.ValidValues,
             cell: (schemaData: DataSchemaData) => {
                 const attributes = getDataSchemaValidValues(
