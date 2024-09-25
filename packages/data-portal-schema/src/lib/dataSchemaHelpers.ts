@@ -425,36 +425,6 @@ export function filterOutComponentAttribute(
     return data.filter((item) => item.attribute !== 'Component');
 }
 
-export function preloadManifestData(
-    schemaData: DataSchemaData[],
-    schemaDataById: SchemaDataById
-) {
-    schemaData = filterOutComponentAttribute(schemaData);
-    const manifestDataArray = schemaData.map((schema) => {
-        const fullId = `bts:${schema.label}` as SchemaDataId;
-        const schemaData = schemaDataById[fullId];
-
-        const requiredDependencies = (
-            schemaData.requiredDependencies || []
-        ).map((depId: string | { '@id': string }) => {
-            const depSchemaId =
-                typeof depId === 'string' ? depId : depId['@id'];
-            return schemaDataById[depSchemaId];
-        });
-
-        return {
-            [schema.label]: {
-                schemaData,
-                requiredDependencies,
-                schemaDataById,
-                manifestNames: requiredDependencies.map((dep) => dep.label),
-            },
-        };
-    });
-
-    return Object.assign({}, ...manifestDataArray);
-}
-
 export function findRelatedAttributes(
     schemaData?: DataSchemaData,
     dataSchemaMap?: SchemaDataById
