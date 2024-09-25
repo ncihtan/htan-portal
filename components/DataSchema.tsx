@@ -308,6 +308,7 @@ const DataSchemaTable: React.FunctionComponent<{
             dense={false}
             pagination={true}
             paginationPerPage={50}
+            paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
             noHeader={!props.title}
             title={props.title ? <strong>{props.title}</strong> : undefined}
             customStyles={getDataSchemaDataTableStyle()}
@@ -471,7 +472,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                                 props.schemaData
                             )}
                             dataSchemaMap={props.dataSchemaMap}
-                            title="Data Schema:"
                             isAttributeView={false}
                             columns={manifestColumns}
                             onManifestClick={openNewTab}
@@ -488,7 +488,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                                 allAttributes
                             )}
                             dataSchemaMap={props.dataSchemaMap}
-                            title="All Attributes:"
                             isAttributeView={true}
                             columns={allAttributesColumns}
                         />
