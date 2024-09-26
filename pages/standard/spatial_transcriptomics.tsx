@@ -80,6 +80,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel2,
         SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel3,
         SchemaDataId.VisiumSpatialTranscriptomicsAuxiliaryFiles,
+        SchemaDataId.NanoStringGeoMxDSPSpatialTranscriptomicsLevel1,
+        SchemaDataId.NanoStringGeoMxDSPSpatialTranscriptomicsLevel2,
+        SchemaDataId.NanoStringGeoMxDSPSpatialTranscriptomicsLevel3,
+        SchemaDataId.XeniumISSExperiment,
+        SchemaDataId.NanostringCosMxSMIExperiment,
     ]);
 
     const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
