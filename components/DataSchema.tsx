@@ -14,7 +14,6 @@ import {
     SchemaDataById,
 } from '@htan/data-portal-schema';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
-import Link from 'next/link';
 import {
     EnhancedDataTable,
     IEnhancedDataTableColumn,
@@ -32,7 +31,7 @@ export interface IDataSchemaProps {
 
 interface ManifestTabProps {
     schemaData: DataSchemaData;
-    requiredDependencies: DataSchemaData[];
+    dependencies: DataSchemaData[];
     schemaDataById: { [id: string]: DataSchemaData };
     onAttributeClick: (schemaData: DataSchemaData) => void;
 }
@@ -41,6 +40,7 @@ interface AttributeTabProps {
     schemaData: DataSchemaData;
     relatedAttributes: DataSchemaData[];
     dataSchemaMap: { [id: string]: DataSchemaData };
+    onAttributeClick: (schemaData: DataSchemaData) => void;
 }
 
 const LABEL_OVERRIDES: { [text: string]: string } = {
@@ -89,74 +89,51 @@ function getColumnDef(
     onManifestClick?: (schemaData: DataSchemaData) => void,
     onAttributeClick?: (schemaData: DataSchemaData) => void
 ): { [name in ColumnName]: IDataTableColumn } {
-    return {
-        [ColumnName.Manifest]: {
-            name:
-                isAttributeView || isManifestTab
-                    ? ColumnName.Attribute
-                    : ColumnName.Manifest,
-            selector: ColumnSelector.Manifest,
-            cell: (schemaData) => {
-                const isClickable = isManifestTab
-                    ? !!onAttributeClick &&
-                      hasRelatedAttributes(schemaData, dataSchemaMap)
-                    : !!onManifestClick;
+    const attributeColumn = {
+        name:
+            isAttributeView || isManifestTab
+                ? ColumnName.Attribute
+                : ColumnName.Manifest,
+        selector: ColumnSelector.Manifest,
+        cell: (schemaData: DataSchemaData) => {
+            const isClickable =
+                (!!onAttributeClick &&
+                    hasRelatedAttributes(schemaData, dataSchemaMap)) ||
+                !!onManifestClick;
+            const attribute =
+                ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
+                schemaData.attribute;
 
-                const style = isClickable
-                    ? {
-                          cursor: 'pointer',
-                          color: 'blue',
-                          textDecoration: 'underline',
-                      }
-                    : {
-                          cursor: 'default',
-                          color: 'black',
-                          textDecoration: 'none',
-                      };
-
-                return (
-                    <a
-                        href="#"
-                        onClick={(e) => {
-                            if (isClickable) {
-                                e.preventDefault();
-                                if (isManifestTab && onAttributeClick) {
-                                    onAttributeClick(schemaData);
-                                } else if (onManifestClick) {
-                                    onManifestClick(schemaData);
-                                }
-                            }
-                        }}
-                        style={style}
-                    >
-                        {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
-                            schemaData.attribute}
-                    </a>
-                );
-            },
-            wrap: true,
-            sortable: true,
-        },
-        [ColumnName.Attribute]: {
-            name: isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
-            selector: ColumnSelector.Manifest,
-            cell: (schemaData: DataSchemaData) => (
-                <Link
-                    href={
-                        isAttributeView
-                            ? '#'
-                            : `/standard/${schemaData.label}?view=attribute`
-                    }
+            return isClickable ? (
+                <a
+                    href="#"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        if (onAttributeClick) {
+                            onAttributeClick(schemaData);
+                        } else if (onManifestClick) {
+                            onManifestClick(schemaData);
+                        }
+                    }}
+                    style={{
+                        cursor: 'pointer',
+                        color: 'blue',
+                        textDecoration: 'underline',
+                    }}
                 >
-                    <a>
-                        {ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
-                            schemaData.attribute}
-                    </a>
-                </Link>
-            ),
-            wrap: true,
-            sortable: true,
+                    {attribute}
+                </a>
+            ) : (
+                attribute
+            );
         },
+        wrap: true,
+        sortable: true,
+    };
+
+    return {
+        [ColumnName.Manifest]: attributeColumn,
+        [ColumnName.Attribute]: attributeColumn,
         [ColumnName.Label]: {
             name: ColumnName.Label,
             selector: ColumnSelector.Label,
@@ -487,6 +464,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                             dataSchemaMap={props.dataSchemaMap}
                             isAttributeView={true}
                             columns={allAttributesColumns}
+                            onAttributeClick={openNewAttributeTab}
                         />
                     </div>
                     {openManifestTabs.map((manifestId) => (
@@ -499,7 +477,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                         >
                             <ManifestTab
                                 schemaData={props.dataSchemaMap[manifestId]}
-                                requiredDependencies={(
+                                dependencies={(
                                     props.dataSchemaMap[manifestId]
                                         ?.requiredDependencies || []
                                 ).map((id) => props.dataSchemaMap[id])}
@@ -523,6 +501,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
                                     props.dataSchemaMap
                                 )}
                                 dataSchemaMap={props.dataSchemaMap}
+                                onAttributeClick={openNewAttributeTab}
                             />
                         </div>
                     ))}
@@ -534,7 +513,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
 
 const ManifestTab: React.FC<ManifestTabProps> = ({
     schemaData,
-    requiredDependencies,
+    dependencies,
     schemaDataById,
     onAttributeClick,
 }) => {
@@ -548,9 +527,7 @@ const ManifestTab: React.FC<ManifestTabProps> = ({
             <Row>
                 <Col>
                     <DataSchemaTable
-                        schemaData={filterOutComponentAttribute(
-                            requiredDependencies
-                        )}
+                        schemaData={filterOutComponentAttribute(dependencies)}
                         dataSchemaMap={schemaDataById}
                         isManifestTab={true}
                         onAttributeClick={onAttributeClick}
@@ -565,6 +542,7 @@ const AttributeTab: React.FC<AttributeTabProps> = ({
     schemaData,
     relatedAttributes,
     dataSchemaMap,
+    onAttributeClick,
 }) => {
     return (
         <Container>
@@ -579,6 +557,7 @@ const AttributeTab: React.FC<AttributeTabProps> = ({
                         schemaData={relatedAttributes}
                         dataSchemaMap={dataSchemaMap}
                         isAttributeView={true}
+                        onAttributeClick={onAttributeClick}
                     />
                 </Col>
             </Row>

@@ -425,16 +425,25 @@ export function filterOutComponentAttribute(
     return data.filter((item) => item.attribute !== 'Component');
 }
 
+export function getRequiredAndExclusiveConditionalDependencies(
+    schemaData?: DataSchemaData
+) {
+    return [
+        ...(schemaData?.requiredDependencies || []),
+        ...(schemaData?.exclusiveConditionalDependencies || []),
+    ];
+}
+
 export function findRelatedAttributes(
     schemaData?: DataSchemaData,
     dataSchemaMap?: SchemaDataById
 ): DataSchemaData[] {
-    if (
-        dataSchemaMap &&
-        schemaData &&
-        schemaData.exclusiveConditionalDependencies
-    ) {
-        return schemaData.exclusiveConditionalDependencies
+    const dependencies = getRequiredAndExclusiveConditionalDependencies(
+        schemaData
+    );
+
+    if (dataSchemaMap && schemaData) {
+        return dependencies
             .map((dependencyAttribute) => {
                 const dependencySchema = dataSchemaMap[dependencyAttribute];
                 if (
@@ -449,6 +458,7 @@ export function findRelatedAttributes(
             })
             .filter((schema): schema is DataSchemaData => schema !== null);
     }
+
     return [];
 }
 
@@ -456,23 +466,22 @@ export function hasRelatedAttributes(
     schemaData?: DataSchemaData,
     dataSchemaMap?: SchemaDataById
 ): boolean {
-    if (
-        dataSchemaMap &&
-        schemaData &&
-        schemaData.exclusiveConditionalDependencies
-    ) {
-        return schemaData.exclusiveConditionalDependencies.some(
-            (dependencyAttribute) => {
-                const dependencySchema = dataSchemaMap[dependencyAttribute];
-                return (
-                    dependencySchema &&
-                    dependencySchema.parentIds.some((parentId) =>
-                        schemaData.parentIds.includes(parentId)
-                    )
-                );
-            }
-        );
+    const dependencies = getRequiredAndExclusiveConditionalDependencies(
+        schemaData
+    );
+
+    if (dataSchemaMap && schemaData) {
+        return dependencies.some((dependencyAttribute) => {
+            const dependencySchema = dataSchemaMap[dependencyAttribute];
+            return (
+                dependencySchema &&
+                dependencySchema.parentIds.some((parentId) =>
+                    schemaData.parentIds.includes(parentId)
+                )
+            );
+        });
     }
+
     return false;
 }
 
