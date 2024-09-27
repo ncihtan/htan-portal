@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { observer } from 'mobx-react';
-import { IDataTableColumn } from 'react-data-table-component';
 import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
+import React, { useState } from 'react';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import { IDataTableColumn } from 'react-data-table-component';
 
 import {
     DataSchemaData,
@@ -13,15 +15,12 @@ import {
     hasRelatedAttributes,
     SchemaDataById,
 } from '@htan/data-portal-schema';
-import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import {
     EnhancedDataTable,
     IEnhancedDataTableColumn,
 } from '@htan/data-portal-table';
+import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
 import TruncatedValuesList from './TruncatedValuesList';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
@@ -261,7 +260,7 @@ const DataSchemaTable: React.FunctionComponent<{
     isManifestTab?: boolean;
     onManifestClick?: (schemaData: DataSchemaData) => void;
     onAttributeClick?: (schemaData: DataSchemaData) => void;
-}> = observer((props) => {
+}> = (props) => {
     const { isAttributeView = false, isManifestTab = false } = props;
 
     const availableColumns = props.columns || [
@@ -301,215 +300,203 @@ const DataSchemaTable: React.FunctionComponent<{
             hideColumnSelect={false}
         />
     );
-});
+};
 
-const DataSchema: React.FunctionComponent<IDataSchemaProps> = observer(
-    (props) => {
-        const [activeTab, setActiveTab] = useState(MANIFEST_TAB_ID);
-        const [openManifestTabs, setOpenManifestTabs] = useState<string[]>([]);
-        const [openAttributeTabs, setOpenAttributeTabs] = useState<string[]>(
-            []
+const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
+    const [activeTab, setActiveTab] = useState(MANIFEST_TAB_ID);
+    const [openManifestTabs, setOpenManifestTabs] = useState<string[]>([]);
+    const [openAttributeTabs, setOpenAttributeTabs] = useState<string[]>([]);
+
+    const handleTabChange = (tab: string) => {
+        setActiveTab(tab);
+    };
+
+    const openNewManifestTab = (schemaData: DataSchemaData) => {
+        const manifestId = schemaData.id;
+        if (!openManifestTabs.includes(manifestId)) {
+            setOpenManifestTabs((prevTabs) => [...prevTabs, manifestId]);
+        }
+        setActiveTab(manifestId);
+    };
+
+    const closeManifestTab = (manifestId: string) => {
+        setOpenManifestTabs(
+            openManifestTabs.filter((tabId) => tabId !== manifestId)
         );
+        setActiveTab(MANIFEST_TAB_ID);
+    };
 
-        const handleTabChange = (tab: string) => {
-            setActiveTab(tab);
-        };
+    const openNewAttributeTab = (schemaData: DataSchemaData) => {
+        const attributeId = schemaData.id;
+        if (!openAttributeTabs.includes(attributeId)) {
+            setOpenAttributeTabs((prevTabs) => [...prevTabs, attributeId]);
+        }
+        setActiveTab(attributeId);
+    };
 
-        const openNewManifestTab = (schemaData: DataSchemaData) => {
-            const manifestId = schemaData.id;
-            if (!openManifestTabs.includes(manifestId)) {
-                setOpenManifestTabs((prevTabs) => [...prevTabs, manifestId]);
-            }
-            setActiveTab(manifestId);
-        };
+    const closeAttributeTab = (attributeId: string) => {
+        setOpenAttributeTabs(
+            openAttributeTabs.filter((tabId) => tabId !== attributeId)
+        );
+        setActiveTab(MANIFEST_TAB_ID);
+    };
 
-        const closeManifestTab = (manifestId: string) => {
-            setOpenManifestTabs(
-                openManifestTabs.filter((tabId) => tabId !== manifestId)
-            );
-            setActiveTab(MANIFEST_TAB_ID);
-        };
+    const manifestColumns = [ColumnName.Manifest, ColumnName.Description];
+    const allAttributes = props.allAttributes || [];
 
-        const openNewAttributeTab = (schemaData: DataSchemaData) => {
-            const attributeId = schemaData.id;
-            if (!openAttributeTabs.includes(attributeId)) {
-                setOpenAttributeTabs((prevTabs) => [...prevTabs, attributeId]);
-            }
-            setActiveTab(attributeId);
-        };
+    const allAttributesColumns = [
+        ColumnName.Attribute,
+        ColumnName.ManifestName,
+        ColumnName.Description,
+        ColumnName.Required,
+        ColumnName.ConditionalIf,
+        ColumnName.DataType,
+        ColumnName.ValidValues,
+    ];
 
-        const closeAttributeTab = (attributeId: string) => {
-            setOpenAttributeTabs(
-                openAttributeTabs.filter((tabId) => tabId !== attributeId)
-            );
-            setActiveTab(MANIFEST_TAB_ID);
-        };
-
-        const manifestColumns = [ColumnName.Manifest, ColumnName.Description];
-        const allAttributes = props.allAttributes || [];
-
-        const allAttributesColumns = [
-            ColumnName.Attribute,
-            ColumnName.ManifestName,
-            ColumnName.Description,
-            ColumnName.Required,
-            ColumnName.ConditionalIf,
-            ColumnName.DataType,
-            ColumnName.ValidValues,
-        ];
-
-        return (
-            <div>
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
+    return (
+        <div>
+            <ul className="nav nav-tabs">
+                <li className="nav-item">
+                    <a
+                        className={`nav-link ${
+                            activeTab === MANIFEST_TAB_ID ? 'active' : ''
+                        }`}
+                        onClick={() => handleTabChange(MANIFEST_TAB_ID)}
+                        role="tab"
+                    >
+                        Manifest
+                    </a>
+                </li>
+                <li className="nav-item">
+                    <a
+                        className={`nav-link ${
+                            activeTab === ALL_ATTRIBUTES_TAB_ID ? 'active' : ''
+                        }`}
+                        onClick={() => handleTabChange(ALL_ATTRIBUTES_TAB_ID)}
+                        role="tab"
+                    >
+                        All Attributes
+                    </a>
+                </li>
+                {openManifestTabs.map((manifestId) => (
+                    <li className="nav-item" key={manifestId}>
                         <a
                             className={`nav-link ${
-                                activeTab === MANIFEST_TAB_ID ? 'active' : ''
+                                activeTab === manifestId ? 'active' : ''
                             }`}
-                            onClick={() => handleTabChange(MANIFEST_TAB_ID)}
+                            onClick={() => handleTabChange(manifestId)}
                             role="tab"
                         >
-                            Manifest
+                            {getTabName(manifestId, props.dataSchemaMap)}
+                            <button
+                                className="close ml-2"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    closeManifestTab(manifestId);
+                                }}
+                            >
+                                &times;
+                            </button>
                         </a>
                     </li>
-                    <li className="nav-item">
+                ))}
+                {openAttributeTabs.map((attributeId) => (
+                    <li className="nav-item" key={attributeId}>
                         <a
                             className={`nav-link ${
-                                activeTab === ALL_ATTRIBUTES_TAB_ID
-                                    ? 'active'
-                                    : ''
+                                activeTab === attributeId ? 'active' : ''
                             }`}
-                            onClick={() =>
-                                handleTabChange(ALL_ATTRIBUTES_TAB_ID)
-                            }
+                            onClick={() => handleTabChange(attributeId)}
                             role="tab"
                         >
-                            All Attributes
+                            {getTabName(attributeId, props.dataSchemaMap)}
+                            <button
+                                className="close ml-2"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    closeAttributeTab(attributeId);
+                                }}
+                            >
+                                &times;
+                            </button>
                         </a>
                     </li>
-                    {openManifestTabs.map((manifestId) => (
-                        <li className="nav-item" key={manifestId}>
-                            <a
-                                className={`nav-link ${
-                                    activeTab === manifestId ? 'active' : ''
-                                }`}
-                                onClick={() => handleTabChange(manifestId)}
-                                role="tab"
-                            >
-                                {getTabName(manifestId, props.dataSchemaMap)}
-                                <button
-                                    className="close ml-2"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        closeManifestTab(manifestId);
-                                    }}
-                                >
-                                    &times;
-                                </button>
-                            </a>
-                        </li>
-                    ))}
-                    {openAttributeTabs.map((attributeId) => (
-                        <li className="nav-item" key={attributeId}>
-                            <a
-                                className={`nav-link ${
-                                    activeTab === attributeId ? 'active' : ''
-                                }`}
-                                onClick={() => handleTabChange(attributeId)}
-                                role="tab"
-                            >
-                                {getTabName(attributeId, props.dataSchemaMap)}
-                                <button
-                                    className="close ml-2"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        closeAttributeTab(attributeId);
-                                    }}
-                                >
-                                    &times;
-                                </button>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-                <div className="tab-content mt-3">
+                ))}
+            </ul>
+            <div className="tab-content mt-3">
+                <div
+                    className={`tab-pane fade ${
+                        activeTab === MANIFEST_TAB_ID ? 'show active' : ''
+                    }`}
+                    role="tabpanel"
+                >
+                    <DataSchemaTable
+                        schemaData={filterOutComponentAttribute(
+                            props.schemaData
+                        )}
+                        dataSchemaMap={props.dataSchemaMap}
+                        isAttributeView={false}
+                        columns={manifestColumns}
+                        onManifestClick={openNewManifestTab}
+                    />
+                </div>
+                <div
+                    className={`tab-pane fade ${
+                        activeTab === ALL_ATTRIBUTES_TAB_ID ? 'show active' : ''
+                    }`}
+                    role="tabpanel"
+                >
+                    <DataSchemaTable
+                        schemaData={filterOutComponentAttribute(allAttributes)}
+                        dataSchemaMap={props.dataSchemaMap}
+                        isAttributeView={true}
+                        columns={allAttributesColumns}
+                        onAttributeClick={openNewAttributeTab}
+                    />
+                </div>
+                {openManifestTabs.map((manifestId) => (
                     <div
+                        key={manifestId}
                         className={`tab-pane fade ${
-                            activeTab === MANIFEST_TAB_ID ? 'show active' : ''
+                            activeTab === manifestId ? 'show active' : ''
                         }`}
                         role="tabpanel"
                     >
-                        <DataSchemaTable
-                            schemaData={filterOutComponentAttribute(
-                                props.schemaData
-                            )}
-                            dataSchemaMap={props.dataSchemaMap}
-                            isAttributeView={false}
-                            columns={manifestColumns}
-                            onManifestClick={openNewManifestTab}
-                        />
-                    </div>
-                    <div
-                        className={`tab-pane fade ${
-                            activeTab === ALL_ATTRIBUTES_TAB_ID
-                                ? 'show active'
-                                : ''
-                        }`}
-                        role="tabpanel"
-                    >
-                        <DataSchemaTable
-                            schemaData={filterOutComponentAttribute(
-                                allAttributes
-                            )}
-                            dataSchemaMap={props.dataSchemaMap}
-                            isAttributeView={true}
-                            columns={allAttributesColumns}
+                        <ManifestTab
+                            schemaData={props.dataSchemaMap[manifestId]}
+                            dependencies={(
+                                props.dataSchemaMap[manifestId]
+                                    ?.requiredDependencies || []
+                            ).map((id) => props.dataSchemaMap[id])}
+                            schemaDataById={props.dataSchemaMap}
                             onAttributeClick={openNewAttributeTab}
                         />
                     </div>
-                    {openManifestTabs.map((manifestId) => (
-                        <div
-                            key={manifestId}
-                            className={`tab-pane fade ${
-                                activeTab === manifestId ? 'show active' : ''
-                            }`}
-                            role="tabpanel"
-                        >
-                            <ManifestTab
-                                schemaData={props.dataSchemaMap[manifestId]}
-                                dependencies={(
-                                    props.dataSchemaMap[manifestId]
-                                        ?.requiredDependencies || []
-                                ).map((id) => props.dataSchemaMap[id])}
-                                schemaDataById={props.dataSchemaMap}
-                                onAttributeClick={openNewAttributeTab}
-                            />
-                        </div>
-                    ))}
-                    {openAttributeTabs.map((attributeId) => (
-                        <div
-                            key={attributeId}
-                            className={`tab-pane fade ${
-                                activeTab === attributeId ? 'show active' : ''
-                            }`}
-                            role="tabpanel"
-                        >
-                            <AttributeTab
-                                schemaData={props.dataSchemaMap[attributeId]}
-                                relatedAttributes={findRelatedAttributes(
-                                    props.dataSchemaMap[attributeId],
-                                    props.dataSchemaMap
-                                )}
-                                dataSchemaMap={props.dataSchemaMap}
-                                onAttributeClick={openNewAttributeTab}
-                            />
-                        </div>
-                    ))}
-                </div>
+                ))}
+                {openAttributeTabs.map((attributeId) => (
+                    <div
+                        key={attributeId}
+                        className={`tab-pane fade ${
+                            activeTab === attributeId ? 'show active' : ''
+                        }`}
+                        role="tabpanel"
+                    >
+                        <AttributeTab
+                            schemaData={props.dataSchemaMap[attributeId]}
+                            relatedAttributes={findRelatedAttributes(
+                                props.dataSchemaMap[attributeId],
+                                props.dataSchemaMap
+                            )}
+                            dataSchemaMap={props.dataSchemaMap}
+                            onAttributeClick={openNewAttributeTab}
+                        />
+                    </div>
+                ))}
             </div>
-        );
-    }
-);
+        </div>
+    );
+};
 
 const ManifestTab: React.FC<ManifestTabProps> = ({
     schemaData,
