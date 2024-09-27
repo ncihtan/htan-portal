@@ -6,9 +6,10 @@ import { IDataTableColumn } from 'react-data-table-component';
 import {
     ATTRIBUTE_OVERRIDES,
     DataSchemaData,
-    getAllAttributes,
+    DataSchemaDataWithManifest,
     getDataSchemaValidValues,
     getDataType,
+    getManifestAttributes,
     LABEL_OVERRIDES,
     SchemaDataById,
 } from '@htan/data-portal-schema';
@@ -22,7 +23,7 @@ import TruncatedValuesList from './TruncatedValuesList';
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
     dataSchemaMap: SchemaDataById;
-    allAttributes?: (DataSchemaData & { manifestName: string })[];
+    allAttributes?: DataSchemaDataWithManifest[];
 }
 
 enum ColumnName {
@@ -45,6 +46,7 @@ enum ColumnSelector {
     ConditionalIf = 'conditionalIfValues',
     DataType = 'dataType',
     ValidValues = 'validValues',
+    ManifestName = 'manifestNames',
 }
 
 const MANIFEST_TAB_ID = '_manifest_';
@@ -121,11 +123,9 @@ function getColumnDef(
                     <span>{ColumnName.ManifestName}</span>
                 </Tooltip>
             ),
-            selector: 'manifestNames',
+            selector: ColumnSelector.ManifestName,
             cell: (row: DataSchemaData) => {
-                const extendedRow = row as DataSchemaData & {
-                    manifestNames: string[];
-                };
+                const extendedRow = row as DataSchemaDataWithManifest;
                 return (
                     <TruncatedValuesList
                         attribute={extendedRow.attribute}
@@ -372,9 +372,9 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
                         role="tabpanel"
                     >
                         <DataSchemaTable
-                            schemaData={getAllAttributes(
-                                [props.dataSchemaMap[manifestId]],
-                                props.dataSchemaMap
+                            schemaData={getManifestAttributes(
+                                props.dataSchemaMap[manifestId],
+                                props.allAttributes || []
                             )}
                             dataSchemaMap={props.dataSchemaMap}
                             isAttributeView={true}

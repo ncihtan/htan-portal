@@ -99,6 +99,10 @@ export interface SchemaDataById {
     [schemaDataId: string]: DataSchemaData;
 }
 
+export interface DataSchemaDataWithManifest extends DataSchemaData {
+    manifestNames: string[];
+}
+
 export enum SchemaDataId {
     Biospecimen = 'bts:Biospecimen',
     BulkRNASeqLevel1 = 'bts:BulkRNA-seqLevel1',
@@ -370,14 +374,20 @@ export async function getDataSchema(
     return { dataSchemaData, schemaDataById };
 }
 
+export function getManifestAttributes(
+    manifest: DataSchemaData,
+    allAttributes: DataSchemaDataWithManifest[]
+) {
+    return allAttributes.filter((schema) =>
+        schema.manifestNames.includes(manifest.attribute)
+    );
+}
+
 export function getAllAttributes(
     schemaData: DataSchemaData[],
     dataSchemaMap: { [id: string]: DataSchemaData }
-): (DataSchemaData & { manifestNames: string[] })[] {
-    const allAttributes = new Map<
-        string,
-        DataSchemaData & { manifestNames: string[] }
-    >();
+): DataSchemaDataWithManifest[] {
+    const allAttributes = new Map<string, DataSchemaDataWithManifest>();
     const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
 
     schemaData.forEach((attr) => {
@@ -442,66 +452,6 @@ export function componentAttributeFilter(schema: DataSchemaData): boolean {
 
 export function tbdDescriptionFilter(schema: DataSchemaData): boolean {
     return schema.description !== TBD;
-}
-
-export function getRequiredAndExclusiveConditionalDependencies(
-    schemaData?: DataSchemaData
-) {
-    return [
-        ...(schemaData?.requiredDependencies || []),
-        ...(schemaData?.exclusiveConditionalDependencies || []),
-    ];
-}
-
-export function findRelatedAttributes(
-    schemaData?: DataSchemaData,
-    dataSchemaMap?: SchemaDataById
-): DataSchemaData[] {
-    const dependencies = getRequiredAndExclusiveConditionalDependencies(
-        schemaData
-    );
-
-    if (dataSchemaMap && schemaData) {
-        return dependencies
-            .map((dependencyAttribute) => {
-                const dependencySchema = dataSchemaMap[dependencyAttribute];
-                if (
-                    dependencySchema &&
-                    dependencySchema.parentIds.some((parentId) =>
-                        schemaData.parentIds.includes(parentId)
-                    )
-                ) {
-                    return dependencySchema;
-                }
-                return null;
-            })
-            .filter((schema): schema is DataSchemaData => schema !== null);
-    }
-
-    return [];
-}
-
-export function hasRelatedAttributes(
-    schemaData?: DataSchemaData,
-    dataSchemaMap?: SchemaDataById
-): boolean {
-    const dependencies = getRequiredAndExclusiveConditionalDependencies(
-        schemaData
-    );
-
-    if (dataSchemaMap && schemaData) {
-        return dependencies.some((dependencyAttribute) => {
-            const dependencySchema = dataSchemaMap[dependencyAttribute];
-            return (
-                dependencySchema &&
-                dependencySchema.parentIds.some((parentId) =>
-                    schemaData.parentIds.includes(parentId)
-                )
-            );
-        });
-    }
-
-    return false;
 }
 
 async function getConditionalIfData(): Promise<{
