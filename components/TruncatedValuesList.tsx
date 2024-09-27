@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import TruncateMarkup, { TruncateProps } from 'react-truncate-markup';
 import { Modal } from 'react-bootstrap';
+import TruncateMarkup, { TruncateProps } from 'react-truncate-markup';
 import { commonStyles } from '@htan/data-portal-commons';
+import { ATTRIBUTE_OVERRIDES } from '@htan/data-portal-schema';
 
 interface TruncatedValuesListProps {
     attribute: string;
@@ -9,6 +10,7 @@ interface TruncatedValuesListProps {
     truncateProps?: TruncateProps;
     modalTitle: string;
     countLabel: string;
+    formatValue?: (value: string) => string;
 }
 
 interface ViewAllValuesModalProps {
@@ -41,18 +43,22 @@ const TruncatedValuesList: React.FunctionComponent<TruncatedValuesListProps> = (
 
     const options = props.attributes
         .filter((attribute) => attribute.length > 0)
+        .map((attribute) => ATTRIBUTE_OVERRIDES[attribute] || attribute)
         .map((attribute, index) => (
-            <div key={index}>- {attribute.toLowerCase()}</div>
+            <div key={index}>
+                - {props.formatValue ? props.formatValue(attribute) : attribute}
+            </div>
         ));
 
+    const attribute = ATTRIBUTE_OVERRIDES[props.attribute] || props.attribute;
     const ellipsis = (
         <div>
             <ViewAllValuesModal
-                attribute={props.attribute}
+                attribute={attribute}
                 options={options}
                 show={showModal}
                 onClose={onModalClose}
-                modalTitle={`${props.attribute} ${props.modalTitle}`}
+                modalTitle={`${attribute} ${props.modalTitle}`}
             />
             ...{' '}
             <i>

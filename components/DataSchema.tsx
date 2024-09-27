@@ -1,18 +1,15 @@
 import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
 import React, { useState } from 'react';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import { IDataTableColumn } from 'react-data-table-component';
 
 import {
+    ATTRIBUTE_OVERRIDES,
     DataSchemaData,
-    filterOutComponentAttribute,
-    findRelatedAttributes,
+    getAllAttributes,
     getDataSchemaValidValues,
     getDataType,
-    hasRelatedAttributes,
+    LABEL_OVERRIDES,
     SchemaDataById,
 } from '@htan/data-portal-schema';
 import {
@@ -27,34 +24,6 @@ export interface IDataSchemaProps {
     dataSchemaMap: SchemaDataById;
     allAttributes?: (DataSchemaData & { manifestName: string })[];
 }
-
-interface ManifestTabProps {
-    schemaData: DataSchemaData;
-    dependencies: DataSchemaData[];
-    schemaDataById: { [id: string]: DataSchemaData };
-    onAttributeClick: (schemaData: DataSchemaData) => void;
-}
-
-interface AttributeTabProps {
-    schemaData: DataSchemaData;
-    relatedAttributes: DataSchemaData[];
-    dataSchemaMap: { [id: string]: DataSchemaData };
-    onAttributeClick: (schemaData: DataSchemaData) => void;
-}
-
-const LABEL_OVERRIDES: { [text: string]: string } = {
-    BulkWESLevel1: 'BulkDNALevel1',
-    BulkWESLevel2: 'BulkDNALevel2',
-    BulkWESLevel3: 'BulkDNALevel3',
-    ImagingLevel3Segmentation: 'ImagingLevel3',
-};
-
-const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
-    'Bulk WES Level 1': 'Bulk DNA Level 1',
-    'Bulk WES Level 2': 'Bulk DNA Level 2',
-    'Bulk WES Level 3': 'Bulk DNA Level 3',
-    'Imaging Level 3 Segmentation': 'Imaging Level 3',
-};
 
 enum ColumnName {
     Manifest = 'Manifest',
@@ -73,7 +42,7 @@ enum ColumnSelector {
     Label = 'label',
     Description = 'description',
     Required = 'required',
-    ConditionalIf = 'conditionalIf',
+    ConditionalIf = 'conditionalIfValues',
     DataType = 'dataType',
     ValidValues = 'validValues',
 }
@@ -84,35 +53,22 @@ const ALL_ATTRIBUTES_TAB_ID = '_attributes_';
 function getColumnDef(
     dataSchemaMap?: SchemaDataById,
     isAttributeView: boolean = false,
-    isManifestTab: boolean = false,
-    onManifestClick?: (schemaData: DataSchemaData) => void,
-    onAttributeClick?: (schemaData: DataSchemaData) => void
+    onManifestClick?: (schemaData: DataSchemaData) => void
 ): { [name in ColumnName]: IDataTableColumn } {
     const attributeColumn = {
-        name:
-            isAttributeView || isManifestTab
-                ? ColumnName.Attribute
-                : ColumnName.Manifest,
+        name: isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
         selector: ColumnSelector.Manifest,
         cell: (schemaData: DataSchemaData) => {
-            const isClickable =
-                (!!onAttributeClick &&
-                    hasRelatedAttributes(schemaData, dataSchemaMap)) ||
-                !!onManifestClick;
             const attribute =
                 ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
                 schemaData.attribute;
 
-            return isClickable ? (
+            return onManifestClick ? (
                 <a
                     href="#"
                     onClick={(e) => {
                         e.preventDefault();
-                        if (onAttributeClick) {
-                            onAttributeClick(schemaData);
-                        } else if (onManifestClick) {
-                            onManifestClick(schemaData);
-                        }
+                        onManifestClick(schemaData);
                     }}
                     style={{
                         cursor: 'pointer',
@@ -228,6 +184,7 @@ function getColumnDef(
                         attributes={attributes}
                         modalTitle="valid values"
                         countLabel="Number of valid options"
+                        formatValue={(value) => value.toLowerCase()}
                     />
                 );
             },
@@ -257,11 +214,9 @@ const DataSchemaTable: React.FunctionComponent<{
     title?: string;
     columns?: ColumnName[];
     isAttributeView?: boolean;
-    isManifestTab?: boolean;
     onManifestClick?: (schemaData: DataSchemaData) => void;
-    onAttributeClick?: (schemaData: DataSchemaData) => void;
 }> = (props) => {
-    const { isAttributeView = false, isManifestTab = false } = props;
+    const { isAttributeView = false } = props;
 
     const availableColumns = props.columns || [
         isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
@@ -275,9 +230,7 @@ const DataSchemaTable: React.FunctionComponent<{
     const columnDef = getColumnDef(
         props.dataSchemaMap,
         isAttributeView,
-        isManifestTab,
-        props.onManifestClick,
-        props.onAttributeClick
+        props.onManifestClick
     );
 
     const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
@@ -305,7 +258,6 @@ const DataSchemaTable: React.FunctionComponent<{
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
     const [activeTab, setActiveTab] = useState(MANIFEST_TAB_ID);
     const [openManifestTabs, setOpenManifestTabs] = useState<string[]>([]);
-    const [openAttributeTabs, setOpenAttributeTabs] = useState<string[]>([]);
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -320,39 +272,12 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
     };
 
     const closeManifestTab = (manifestId: string) => {
-        setOpenManifestTabs(
-            openManifestTabs.filter((tabId) => tabId !== manifestId)
+        const openTabs = openManifestTabs.filter(
+            (tabId) => tabId !== manifestId
         );
-        setActiveTab(MANIFEST_TAB_ID);
+        setOpenManifestTabs(openTabs);
+        setActiveTab(_.last(openTabs) || MANIFEST_TAB_ID);
     };
-
-    const openNewAttributeTab = (schemaData: DataSchemaData) => {
-        const attributeId = schemaData.id;
-        if (!openAttributeTabs.includes(attributeId)) {
-            setOpenAttributeTabs((prevTabs) => [...prevTabs, attributeId]);
-        }
-        setActiveTab(attributeId);
-    };
-
-    const closeAttributeTab = (attributeId: string) => {
-        setOpenAttributeTabs(
-            openAttributeTabs.filter((tabId) => tabId !== attributeId)
-        );
-        setActiveTab(MANIFEST_TAB_ID);
-    };
-
-    const manifestColumns = [ColumnName.Manifest, ColumnName.Description];
-    const allAttributes = props.allAttributes || [];
-
-    const allAttributesColumns = [
-        ColumnName.Attribute,
-        ColumnName.ManifestName,
-        ColumnName.Description,
-        ColumnName.Required,
-        ColumnName.ConditionalIf,
-        ColumnName.DataType,
-        ColumnName.ValidValues,
-    ];
 
     return (
         <div>
@@ -401,28 +326,6 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
                         </a>
                     </li>
                 ))}
-                {openAttributeTabs.map((attributeId) => (
-                    <li className="nav-item" key={attributeId}>
-                        <a
-                            className={`nav-link ${
-                                activeTab === attributeId ? 'active' : ''
-                            }`}
-                            onClick={() => handleTabChange(attributeId)}
-                            role="tab"
-                        >
-                            {getTabName(attributeId, props.dataSchemaMap)}
-                            <button
-                                className="close ml-2"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    closeAttributeTab(attributeId);
-                                }}
-                            >
-                                &times;
-                            </button>
-                        </a>
-                    </li>
-                ))}
             </ul>
             <div className="tab-content mt-3">
                 <div
@@ -432,12 +335,10 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
                     role="tabpanel"
                 >
                     <DataSchemaTable
-                        schemaData={filterOutComponentAttribute(
-                            props.schemaData
-                        )}
+                        schemaData={props.schemaData}
                         dataSchemaMap={props.dataSchemaMap}
                         isAttributeView={false}
-                        columns={manifestColumns}
+                        columns={[ColumnName.Manifest, ColumnName.Description]}
                         onManifestClick={openNewManifestTab}
                     />
                 </div>
@@ -448,11 +349,18 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
                     role="tabpanel"
                 >
                     <DataSchemaTable
-                        schemaData={filterOutComponentAttribute(allAttributes)}
+                        schemaData={props.allAttributes || []}
                         dataSchemaMap={props.dataSchemaMap}
                         isAttributeView={true}
-                        columns={allAttributesColumns}
-                        onAttributeClick={openNewAttributeTab}
+                        columns={[
+                            ColumnName.Attribute,
+                            ColumnName.ManifestName,
+                            ColumnName.Description,
+                            ColumnName.Required,
+                            ColumnName.ConditionalIf,
+                            ColumnName.DataType,
+                            ColumnName.ValidValues,
+                        ]}
                     />
                 </div>
                 {openManifestTabs.map((manifestId) => (
@@ -463,92 +371,18 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
                         }`}
                         role="tabpanel"
                     >
-                        <ManifestTab
-                            schemaData={props.dataSchemaMap[manifestId]}
-                            dependencies={(
-                                props.dataSchemaMap[manifestId]
-                                    ?.requiredDependencies || []
-                            ).map((id) => props.dataSchemaMap[id])}
-                            schemaDataById={props.dataSchemaMap}
-                            onAttributeClick={openNewAttributeTab}
-                        />
-                    </div>
-                ))}
-                {openAttributeTabs.map((attributeId) => (
-                    <div
-                        key={attributeId}
-                        className={`tab-pane fade ${
-                            activeTab === attributeId ? 'show active' : ''
-                        }`}
-                        role="tabpanel"
-                    >
-                        <AttributeTab
-                            schemaData={props.dataSchemaMap[attributeId]}
-                            relatedAttributes={findRelatedAttributes(
-                                props.dataSchemaMap[attributeId],
+                        <DataSchemaTable
+                            schemaData={getAllAttributes(
+                                [props.dataSchemaMap[manifestId]],
                                 props.dataSchemaMap
                             )}
                             dataSchemaMap={props.dataSchemaMap}
-                            onAttributeClick={openNewAttributeTab}
+                            isAttributeView={true}
                         />
                     </div>
                 ))}
             </div>
         </div>
-    );
-};
-
-const ManifestTab: React.FC<ManifestTabProps> = ({
-    schemaData,
-    dependencies,
-    schemaDataById,
-    onAttributeClick,
-}) => {
-    return (
-        <Container>
-            <Row>
-                <Col>
-                    <h1>{schemaData.attribute} Manifest</h1>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <DataSchemaTable
-                        schemaData={filterOutComponentAttribute(dependencies)}
-                        dataSchemaMap={schemaDataById}
-                        isManifestTab={true}
-                        onAttributeClick={onAttributeClick}
-                    />
-                </Col>
-            </Row>
-        </Container>
-    );
-};
-
-const AttributeTab: React.FC<AttributeTabProps> = ({
-    schemaData,
-    relatedAttributes,
-    dataSchemaMap,
-    onAttributeClick,
-}) => {
-    return (
-        <Container>
-            <Row>
-                <Col>
-                    <h1>{schemaData.attribute} Attribute</h1>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <DataSchemaTable
-                        schemaData={relatedAttributes}
-                        dataSchemaMap={dataSchemaMap}
-                        isAttributeView={true}
-                        onAttributeClick={onAttributeClick}
-                    />
-                </Col>
-            </Row>
-        </Container>
     );
 };
 

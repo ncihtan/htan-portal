@@ -171,6 +171,20 @@ export enum SchemaDataId {
     VisiumSpatialTranscriptomicsAuxiliaryFiles = 'bts:10xVisiumSpatialTranscriptomics-AuxiliaryFiles',
 }
 
+export const LABEL_OVERRIDES: { [text: string]: string } = {
+    BulkWESLevel1: 'BulkDNALevel1',
+    BulkWESLevel2: 'BulkDNALevel2',
+    BulkWESLevel3: 'BulkDNALevel3',
+    ImagingLevel3Segmentation: 'ImagingLevel3',
+};
+
+export const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
+    'Bulk WES Level 1': 'Bulk DNA Level 1',
+    'Bulk WES Level 2': 'Bulk DNA Level 2',
+    'Bulk WES Level 3': 'Bulk DNA Level 3',
+    'Imaging Level 3 Segmentation': 'Imaging Level 3',
+};
+
 const NUMERICAL_SCHEMA_DATA_LOOKUP: { [schemaDataId: string]: boolean } = {
     [SchemaDataId.AgeAtDiagnosis]: true,
     [SchemaDataId.YearOfDiagnosis]: true,
@@ -223,7 +237,7 @@ export function getDataSchemaDependencies(
         dependencyIds.map((id) => schemaDataById[id])
     );
     return excludeDependenciesWithTbdValues
-        ? dependencies.filter((d) => d.description !== TBD)
+        ? dependencies.filter(tbdDescriptionFilter)
         : dependencies;
 }
 
@@ -360,7 +374,6 @@ export function getAllAttributes(
     schemaData: DataSchemaData[],
     dataSchemaMap: { [id: string]: DataSchemaData }
 ): (DataSchemaData & { manifestNames: string[] })[] {
-    schemaData = filterOutComponentAttribute(schemaData);
     const allAttributes = new Map<
         string,
         DataSchemaData & { manifestNames: string[] }
@@ -370,12 +383,14 @@ export function getAllAttributes(
     schemaData.forEach((attr) => {
         attr.requiredDependencies.forEach((depId) => {
             const dep = dataSchemaMap[depId];
-            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+            if (dep)
+                queue.push({ attribute: dep, manifestName: attr.attribute });
         });
 
         attr.conditionalDependencies.forEach((depId) => {
             const dep = dataSchemaMap[depId];
-            if (dep) queue.push({ attribute: dep, manifestName: attr.label });
+            if (dep)
+                queue.push({ attribute: dep, manifestName: attr.attribute });
         });
     });
 
@@ -400,7 +415,7 @@ export function getAllAttributes(
                 if (dep)
                     queue.push({
                         attribute: dep,
-                        manifestName: attributeWithManifest.manifestNames[0],
+                        manifestName: manifestName,
                     });
             });
 
@@ -410,19 +425,23 @@ export function getAllAttributes(
                 if (dep)
                     queue.push({
                         attribute: dep,
-                        manifestName: attributeWithManifest.manifestNames[0],
+                        manifestName: manifestName,
                     });
             });
         }
     }
 
-    return Array.from(allAttributes.values());
+    return Array.from(allAttributes.values())
+        .filter(componentAttributeFilter)
+        .filter(tbdDescriptionFilter);
 }
 
-export function filterOutComponentAttribute(
-    data: DataSchemaData[]
-): DataSchemaData[] {
-    return data.filter((item) => item.attribute !== 'Component');
+export function componentAttributeFilter(schema: DataSchemaData): boolean {
+    return schema.attribute !== 'Component';
+}
+
+export function tbdDescriptionFilter(schema: DataSchemaData): boolean {
+    return schema.description !== TBD;
 }
 
 export function getRequiredAndExclusiveConditionalDependencies(
