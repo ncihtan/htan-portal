@@ -1,91 +1,96 @@
 import _ from 'lodash';
-import React from 'react';
-import DataTable, { IDataTableColumn } from 'react-data-table-component';
+import Tooltip from 'rc-tooltip';
+import React, { useState } from 'react';
+import { IDataTableColumn } from 'react-data-table-component';
 
 import {
+    ATTRIBUTE_OVERRIDES,
     DataSchemaData,
-    getDataSchemaDependencies,
+    DataSchemaDataWithManifest,
     getDataSchemaValidValues,
-    hasNonEmptyValidValues,
+    getDataType,
+    getManifestAttributes,
+    LABEL_OVERRIDES,
+    SchemaDataById,
 } from '@htan/data-portal-schema';
+import {
+    EnhancedDataTable,
+    IEnhancedDataTableColumn,
+} from '@htan/data-portal-table';
 import { getDataSchemaDataTableStyle } from '../lib/dataTableHelpers';
-import ValidValues from './ValidValues';
+import TruncatedValuesList from './TruncatedValuesList';
 
 export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
-    dataSchemaMap: { [id: string]: DataSchemaData };
+    dataSchemaMap: SchemaDataById;
+    allAttributes?: DataSchemaDataWithManifest[];
 }
 
-const LABEL_OVERRIDES: { [text: string]: string } = {
-    BulkWESLevel1: 'BulkDNALevel1',
-    BulkWESLevel2: 'BulkDNALevel2',
-    BulkWESLevel3: 'BulkDNALevel3',
-    ImagingLevel3Segmentation: 'ImagingLevel3',
-};
-
-const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
-    'Bulk WES Level 1': 'Bulk DNA Level 1',
-    'Bulk WES Level 2': 'Bulk DNA Level 2',
-    'Bulk WES Level 3': 'Bulk DNA Level 3',
-    'Imaging Level 3 Segmentation': 'Imaging Level 3',
-};
-
-const ExpandableComponent: React.FunctionComponent<{
-    data?: DataSchemaData;
-    dataSchemaMap?: { [id: string]: DataSchemaData };
-}> = (props) => {
-    let component = null;
-
-    if (props.data) {
-        const dependencies = getDataSchemaDependencies(
-            props.data,
-            props.dataSchemaMap
-        );
-
-        if (!_.isEmpty(dependencies)) {
-            component = (
-                <div className="m-3">
-                    <DataSchemaTable
-                        schemaData={dependencies}
-                        dataSchemaMap={props.dataSchemaMap}
-                    />
-                </div>
-            );
-        }
-    }
-
-    return component;
-};
-
 enum ColumnName {
+    Manifest = 'Manifest',
     Attribute = 'Attribute',
     Label = 'Label',
     Description = 'Description',
     Required = 'Required',
+    ConditionalIf = 'Conditional If',
+    DataType = 'Data Type',
     ValidValues = 'Valid Values',
+    ManifestName = 'Manifest Name',
 }
 
 enum ColumnSelector {
-    Attribute = 'attribute',
+    Manifest = 'attribute',
     Label = 'label',
     Description = 'description',
     Required = 'required',
+    ConditionalIf = 'conditionalIfValues',
+    DataType = 'dataType',
     ValidValues = 'validValues',
+    ManifestName = 'manifestNames',
 }
 
-function getColumnDef(dataSchemaMap?: {
-    [id: string]: DataSchemaData;
-}): { [name in ColumnName]: IDataTableColumn } {
-    return {
-        [ColumnName.Attribute]: {
-            name: ColumnName.Attribute,
-            selector: ColumnSelector.Attribute,
-            format: (schemaData: DataSchemaData) =>
+const MANIFEST_TAB_ID = '_manifest_';
+const ALL_ATTRIBUTES_TAB_ID = '_attributes_';
+
+function getColumnDef(
+    dataSchemaMap?: SchemaDataById,
+    isAttributeView: boolean = false,
+    onManifestClick?: (schemaData: DataSchemaData) => void
+): { [name in ColumnName]: IDataTableColumn } {
+    const attributeColumn = {
+        name: isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
+        selector: ColumnSelector.Manifest,
+        cell: (schemaData: DataSchemaData) => {
+            const attribute =
                 ATTRIBUTE_OVERRIDES[schemaData.attribute] ||
-                schemaData.attribute,
-            wrap: true,
-            sortable: true,
+                schemaData.attribute;
+
+            return onManifestClick ? (
+                <a
+                    href="#"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onManifestClick(schemaData);
+                    }}
+                    style={{
+                        cursor: 'pointer',
+                        color: 'blue',
+                        textDecoration: 'underline',
+                    }}
+                >
+                    {attribute}
+                </a>
+            ) : (
+                attribute
+            );
         },
+        wrap: true,
+        sortable: true,
+    };
+
+    return {
+        [ColumnName.Manifest]: attributeColumn,
+        [ColumnName.Attribute]: attributeColumn,
         [ColumnName.Label]: {
             name: ColumnName.Label,
             selector: ColumnSelector.Label,
@@ -106,10 +111,64 @@ function getColumnDef(dataSchemaMap?: {
             selector: ColumnSelector.Required,
             wrap: true,
             sortable: true,
-            // TODO it may not be accurate to use the `required` field because an attribute may be listed as a
-            //  required dependency for the parent attribute even if `required` field is false
             format: (schemaData: DataSchemaData) =>
-                schemaData.required ? 'Yes' : 'No',
+                schemaData.required ? 'True' : 'False',
+        },
+        [ColumnName.ManifestName]: {
+            name: (
+                <Tooltip
+                    overlay="All manifests containing this attribute"
+                    placement="top"
+                >
+                    <span>{ColumnName.ManifestName}</span>
+                </Tooltip>
+            ),
+            selector: ColumnSelector.ManifestName,
+            cell: (row: DataSchemaData) => {
+                const extendedRow = row as DataSchemaDataWithManifest;
+                return (
+                    <TruncatedValuesList
+                        attribute={extendedRow.attribute}
+                        attributes={extendedRow.manifestNames}
+                        modalTitle="Manifests"
+                        countLabel="Number of manifests"
+                    />
+                );
+            },
+            wrap: true,
+            sortable: true,
+            minWidth: '250px',
+        },
+        [ColumnName.ConditionalIf]: {
+            name: (
+                <Tooltip
+                    overlay="This attribute becomes mandatory if you have submitted data for any attributes listed within the column"
+                    placement="top"
+                >
+                    <span>{ColumnName.ConditionalIf}</span>
+                </Tooltip>
+            ),
+            selector: ColumnSelector.ConditionalIf,
+            cell: (schemaData: DataSchemaData) => (
+                <TruncatedValuesList
+                    attribute={schemaData.attribute}
+                    attributes={schemaData.conditionalIfValues}
+                    modalTitle="Conditional Attributes"
+                    countLabel="Number of conditional attributes"
+                />
+            ),
+            wrap: true,
+            minWidth: '250px',
+            sortable: true,
+            getSearchValue: (schemaData: DataSchemaData) =>
+                schemaData.conditionalIfValues.join(' '),
+        },
+        [ColumnName.DataType]: {
+            name: ColumnName.DataType,
+            selector: ColumnSelector.DataType,
+            wrap: true,
+            sortable: true,
+            format: (schemaData: DataSchemaData) => getDataType(schemaData),
         },
         [ColumnName.ValidValues]: {
             name: ColumnName.ValidValues,
@@ -119,19 +178,34 @@ function getColumnDef(dataSchemaMap?: {
                     schemaData,
                     dataSchemaMap
                 ).map((s) => s.attribute);
-
                 return (
-                    <ValidValues
+                    <TruncatedValuesList
                         attribute={schemaData.attribute}
                         attributes={attributes}
+                        modalTitle="valid values"
+                        countLabel="Number of valid options"
+                        formatValue={(value) => value.toLowerCase()}
                     />
                 );
             },
             wrap: true,
-            minWidth: '400px',
+            minWidth: '300px',
             sortable: true,
+            getSearchValue: (schemaData: DataSchemaData) => {
+                const attributes = getDataSchemaValidValues(
+                    schemaData,
+                    dataSchemaMap
+                ).map((s) => s.attribute);
+                return attributes.join(' ');
+            },
         },
-    };
+    } as { [name in ColumnName]: IEnhancedDataTableColumn<DataSchemaData> };
+}
+
+function getTabName(id: string, dataSchemaMap: SchemaDataById) {
+    const attribute = dataSchemaMap[id]?.attribute;
+
+    return ATTRIBUTE_OVERRIDES[attribute] || attribute;
 }
 
 const DataSchemaTable: React.FunctionComponent<{
@@ -139,57 +213,176 @@ const DataSchemaTable: React.FunctionComponent<{
     dataSchemaMap?: { [id: string]: DataSchemaData };
     title?: string;
     columns?: ColumnName[];
+    isAttributeView?: boolean;
+    onManifestClick?: (schemaData: DataSchemaData) => void;
 }> = (props) => {
-    // include Attribute and Description columns by default
-    // (exclude Label and Required columns by default)
-    const availableColumns = props.columns || [
-        ColumnName.Attribute,
-        ColumnName.Description,
-    ];
-    // include Valid Values column only if there is data
-    if (
-        !availableColumns.includes(ColumnName.ValidValues) &&
-        hasNonEmptyValidValues(props.schemaData)
-    ) {
-        availableColumns.push(ColumnName.ValidValues);
-    }
+    const { isAttributeView = false } = props;
 
-    const columnDef = getColumnDef(props.dataSchemaMap);
+    const availableColumns = props.columns || [
+        isAttributeView ? ColumnName.Attribute : ColumnName.Manifest,
+        ColumnName.Description,
+        ColumnName.Required,
+        ColumnName.ConditionalIf,
+        ColumnName.DataType,
+        ColumnName.ValidValues,
+    ];
+
+    const columnDef = getColumnDef(
+        props.dataSchemaMap,
+        isAttributeView,
+        props.onManifestClick
+    );
+
     const columns: IDataTableColumn[] = _.uniq(availableColumns).map(
         (name) => columnDef[name]
     );
 
     return (
-        <DataTable
+        <EnhancedDataTable
             columns={columns}
             data={props.schemaData}
             striped={true}
             dense={false}
-            pagination={false}
+            pagination={true}
+            paginationPerPage={50}
+            paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
             noHeader={!props.title}
             title={props.title ? <strong>{props.title}</strong> : undefined}
             customStyles={getDataSchemaDataTableStyle()}
-            expandableRowDisabled={(schema) => {
-                // disable expandable row toggle if schema does not have any dependencies
-                return _.isEmpty(
-                    getDataSchemaDependencies(schema, props.dataSchemaMap)
-                );
-            }}
-            expandableRows={true}
-            expandableRowsComponent={
-                <ExpandableComponent dataSchemaMap={props.dataSchemaMap} />
-            }
+            downloadButtonLabel="Download Data Summary"
+            hideColumnSelect={false}
         />
     );
 };
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
+    const [activeTab, setActiveTab] = useState(MANIFEST_TAB_ID);
+    const [openManifestTabs, setOpenManifestTabs] = useState<string[]>([]);
+
+    const handleTabChange = (tab: string) => {
+        setActiveTab(tab);
+    };
+
+    const openNewManifestTab = (schemaData: DataSchemaData) => {
+        const manifestId = schemaData.id;
+        if (!openManifestTabs.includes(manifestId)) {
+            setOpenManifestTabs((prevTabs) => [...prevTabs, manifestId]);
+        }
+        setActiveTab(manifestId);
+    };
+
+    const closeManifestTab = (manifestId: string) => {
+        const openTabs = openManifestTabs.filter(
+            (tabId) => tabId !== manifestId
+        );
+        setOpenManifestTabs(openTabs);
+        setActiveTab(_.last(openTabs) || MANIFEST_TAB_ID);
+    };
+
     return (
-        <DataSchemaTable
-            schemaData={props.schemaData}
-            dataSchemaMap={props.dataSchemaMap}
-            title="Data Schema:"
-        />
+        <div>
+            <ul className="nav nav-tabs">
+                <li className="nav-item">
+                    <a
+                        className={`nav-link ${
+                            activeTab === MANIFEST_TAB_ID ? 'active' : ''
+                        }`}
+                        onClick={() => handleTabChange(MANIFEST_TAB_ID)}
+                        role="tab"
+                    >
+                        Manifest
+                    </a>
+                </li>
+                <li className="nav-item">
+                    <a
+                        className={`nav-link ${
+                            activeTab === ALL_ATTRIBUTES_TAB_ID ? 'active' : ''
+                        }`}
+                        onClick={() => handleTabChange(ALL_ATTRIBUTES_TAB_ID)}
+                        role="tab"
+                    >
+                        All Attributes
+                    </a>
+                </li>
+                {openManifestTabs.map((manifestId) => (
+                    <li className="nav-item" key={manifestId}>
+                        <a
+                            className={`nav-link ${
+                                activeTab === manifestId ? 'active' : ''
+                            }`}
+                            onClick={() => handleTabChange(manifestId)}
+                            role="tab"
+                        >
+                            {getTabName(manifestId, props.dataSchemaMap)}
+                            <button
+                                className="close ml-2"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    closeManifestTab(manifestId);
+                                }}
+                            >
+                                &times;
+                            </button>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+            <div className="tab-content mt-3">
+                <div
+                    className={`tab-pane fade ${
+                        activeTab === MANIFEST_TAB_ID ? 'show active' : ''
+                    }`}
+                    role="tabpanel"
+                >
+                    <DataSchemaTable
+                        schemaData={props.schemaData}
+                        dataSchemaMap={props.dataSchemaMap}
+                        isAttributeView={false}
+                        columns={[ColumnName.Manifest, ColumnName.Description]}
+                        onManifestClick={openNewManifestTab}
+                    />
+                </div>
+                <div
+                    className={`tab-pane fade ${
+                        activeTab === ALL_ATTRIBUTES_TAB_ID ? 'show active' : ''
+                    }`}
+                    role="tabpanel"
+                >
+                    <DataSchemaTable
+                        schemaData={props.allAttributes || []}
+                        dataSchemaMap={props.dataSchemaMap}
+                        isAttributeView={true}
+                        columns={[
+                            ColumnName.Attribute,
+                            ColumnName.ManifestName,
+                            ColumnName.Description,
+                            ColumnName.Required,
+                            ColumnName.ConditionalIf,
+                            ColumnName.DataType,
+                            ColumnName.ValidValues,
+                        ]}
+                    />
+                </div>
+                {openManifestTabs.map((manifestId) => (
+                    <div
+                        key={manifestId}
+                        className={`tab-pane fade ${
+                            activeTab === manifestId ? 'show active' : ''
+                        }`}
+                        role="tabpanel"
+                    >
+                        <DataSchemaTable
+                            schemaData={getManifestAttributes(
+                                props.dataSchemaMap[manifestId],
+                                props.allAttributes || []
+                            )}
+                            dataSchemaMap={props.dataSchemaMap}
+                            isAttributeView={true}
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 };
 

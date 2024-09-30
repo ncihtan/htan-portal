@@ -2,7 +2,11 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 import DataStandard, { DataStandardProps } from '../../components/DataStandard';
-import { getDataSchema, SchemaDataId } from '@htan/data-portal-schema';
+import {
+    getAllAttributes,
+    getDataSchema,
+    SchemaDataId,
+} from '@htan/data-portal-schema';
 
 const Imaging: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
@@ -95,16 +99,31 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.scRNASeqLevel2,
         SchemaDataId.scRNASeqLevel3,
         SchemaDataId.scRNASeqLevel4,
+        SchemaDataId.scDNASeqLevel1,
+        SchemaDataId.scDNASeqLevel2,
         SchemaDataId.scATACSeqLevel1,
+        SchemaDataId.scATACSeqLevel2,
+        SchemaDataId.scATACSeqLevel3,
+        SchemaDataId.scATACSeqLevel4,
+        SchemaDataId.scmCSeqLevel1,
+        SchemaDataId.scmCSeqLevel2,
         SchemaDataId.BulkWESLevel1,
         SchemaDataId.BulkWESLevel2,
         SchemaDataId.BulkWESLevel3,
+        SchemaDataId.BulkMethylationSeqLevel1,
+        SchemaDataId.BulkMethylationSeqLevel2,
+        SchemaDataId.BulkMethylationSeqLevel3,
         SchemaDataId.BulkRNASeqLevel1,
         SchemaDataId.BulkRNASeqLevel2,
         SchemaDataId.BulkRNASeqLevel3,
+        SchemaDataId.HICSeqLevel1,
+        SchemaDataId.HICSeqLevel2,
+        SchemaDataId.HICSeqLevel3,
     ]);
 
-    return { props: { dataSchemaData, schemaDataById } };
+    const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
+
+    return { props: { dataSchemaData, schemaDataById, allAttributes } };
 };
 
 export default Imaging;

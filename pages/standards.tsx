@@ -134,6 +134,11 @@ const Standards = (props: StandardsProps) => {
                                         Spatial Transcriptomics
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link href="/standard/proteomics">
+                                        Proteomics
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </Row>

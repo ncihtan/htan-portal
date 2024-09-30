@@ -10,13 +10,18 @@ import { Col } from 'react-bootstrap';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
-import { DataSchemaData } from '@htan/data-portal-schema';
+import {
+    DataSchemaData,
+    DataSchemaDataWithManifest,
+    SchemaDataById,
+} from '@htan/data-portal-schema';
 
 export interface DataStandardProps {
     title: string;
     data: CmsData[];
     dataSchemaData?: DataSchemaData[];
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
+    schemaDataById?: SchemaDataById;
+    allAttributes?: DataSchemaDataWithManifest[];
 }
 
 const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
@@ -39,6 +44,7 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
                         <DataSchema
                             schemaData={props.dataSchemaData}
                             dataSchemaMap={props.schemaDataById}
+                            allAttributes={props.allAttributes}
                         />
                     </Row>
                 )}

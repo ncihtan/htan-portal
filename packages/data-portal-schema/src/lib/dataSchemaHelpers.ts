@@ -1,9 +1,16 @@
 // content copied (and adapted) from https://github.com/Sage-Bionetworks/Synapse-React-Client
 import _ from 'lodash';
 import fetch from 'node-fetch';
-import { getLatestReleaseSchemaUrl } from './vcsHelpers';
+import { getDependenciesUrl, getLatestReleaseSchemaUrl } from './vcsHelpers';
+import csvToJsonLib from 'csvtojson';
 
 // import * as defaultSchema from '../data/schema.json'
+
+interface ConditionalIfRow {
+    Attribute: string;
+    ConditionalIf: string;
+    [key: string]: any;
+}
 
 export interface BaseEntity {
     '@id': string;
@@ -25,6 +32,12 @@ export interface SchemaData extends BaseEntity {
     'schema:rangeIncludes'?: BaseEntity | BaseEntity[];
     'schema:domainIncludes'?: BaseEntity | BaseEntity[];
     'sms:requiresComponent'?: BaseEntity | BaseEntity[];
+}
+
+export enum SchemaDataType {
+    Integer = 'Integer',
+    String = 'String',
+    Enum = 'Enum',
 }
 
 export interface DataSchemaData {
@@ -58,6 +71,9 @@ export interface DataSchemaData {
     // Conditional dependencies not listed anywhere else as a required dependency
     exclusiveConditionalDependencies: string[];
 
+    // Conditional If values
+    conditionalIfValues: string[];
+
     // Built from the context and the id.
     source: string;
 
@@ -83,6 +99,10 @@ export interface SchemaDataById {
     [schemaDataId: string]: DataSchemaData;
 }
 
+export interface DataSchemaDataWithManifest extends DataSchemaData {
+    manifestNames: string[];
+}
+
 export enum SchemaDataId {
     Biospecimen = 'bts:Biospecimen',
     BulkRNASeqLevel1 = 'bts:BulkRNA-seqLevel1',
@@ -91,6 +111,9 @@ export enum SchemaDataId {
     BulkWESLevel1 = 'bts:BulkWESLevel1',
     BulkWESLevel2 = 'bts:BulkWESLevel2',
     BulkWESLevel3 = 'bts:BulkWESLevel3',
+    BulkMethylationSeqLevel1 = 'bts:BulkMethylation-seqLevel1',
+    BulkMethylationSeqLevel2 = 'bts:BulkMethylation-seqLevel2',
+    BulkMethylationSeqLevel3 = 'bts:BulkMethylation-seqLevel3',
     ClinicalDataTier2 = 'bts:ClinicalDataTier2',
     Demographics = 'bts:Demographics',
     Diagnosis = 'bts:Diagnosis',
@@ -104,10 +127,24 @@ export enum SchemaDataId {
     ImagingLevel4 = 'bts:ImagingLevel4',
     MolecularTest = 'bts:MolecularTest',
     scATACSeqLevel1 = 'bts:ScATAC-seqLevel1',
+    scATACSeqLevel2 = 'bts:ScATAC-seqLevel2',
+    scATACSeqLevel3 = 'bts:ScATAC-seqLevel3',
+    scATACSeqLevel4 = 'bts:ScATAC-seqLevel4',
+    scDNASeqLevel1 = 'bts:ScDNA-seqLevel1',
+    scDNASeqLevel2 = 'bts:ScDNA-seqLevel2',
     scRNASeqLevel1 = 'bts:ScRNA-seqLevel1',
     scRNASeqLevel2 = 'bts:ScRNA-seqLevel2',
     scRNASeqLevel3 = 'bts:ScRNA-seqLevel3',
     scRNASeqLevel4 = 'bts:ScRNA-seqLevel4',
+    scmCSeqLevel1 = 'bts:ScmC-seqLevel1',
+    scmCSeqLevel2 = 'bts:ScmC-seqLevel2',
+    HICSeqLevel1 = 'bts:HI-C-seqLevel1',
+    HICSeqLevel2 = 'bts:HI-C-seqLevel2',
+    HICSeqLevel3 = 'bts:HI-C-seqLevel3',
+    RPPALevel2 = 'bts:RPPALevel2',
+    RPPALevel3 = 'bts:RPPALevel3',
+    RPPALevel4 = 'bts:RPPALevel4',
+
     Therapy = 'bts:Therapy',
     AcuteLymphoblasticLeukemiaTier3 = 'bts:AcuteLymphoblasticLeukemiaTier3',
     BrainCancerTier3 = 'bts:BrainCancerTier3',
@@ -153,7 +190,26 @@ export enum SchemaDataId {
     VisiumSpatialTranscriptomicsRNASeqLevel2 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel2',
     VisiumSpatialTranscriptomicsRNASeqLevel3 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel3',
     VisiumSpatialTranscriptomicsAuxiliaryFiles = 'bts:10xVisiumSpatialTranscriptomics-AuxiliaryFiles',
+    NanoStringGeoMxDSPSpatialTranscriptomicsLevel1 = 'bts:NanoStringGeoMxDSPSpatialTranscriptomicsLevel1',
+    NanoStringGeoMxDSPSpatialTranscriptomicsLevel2 = 'bts:NanoStringGeoMxDSPSpatialTranscriptomicsLevel2',
+    NanoStringGeoMxDSPSpatialTranscriptomicsLevel3 = 'bts:NanoStringGeoMxDSPSpatialTranscriptomicsLevel3',
+    NanostringCosMxSMIExperiment = 'bts:NanostringCosMxSMIExperiment',
+    XeniumISSExperiment = 'bts:10XGenomicsXeniumISSExperiment',
 }
+
+export const LABEL_OVERRIDES: { [text: string]: string } = {
+    BulkWESLevel1: 'BulkDNALevel1',
+    BulkWESLevel2: 'BulkDNALevel2',
+    BulkWESLevel3: 'BulkDNALevel3',
+    ImagingLevel3Segmentation: 'ImagingLevel3',
+};
+
+export const ATTRIBUTE_OVERRIDES: { [text: string]: string } = {
+    'Bulk WES Level 1': 'Bulk DNA Level 1',
+    'Bulk WES Level 2': 'Bulk DNA Level 2',
+    'Bulk WES Level 3': 'Bulk DNA Level 3',
+    'Imaging Level 3 Segmentation': 'Imaging Level 3',
+};
 
 const NUMERICAL_SCHEMA_DATA_LOOKUP: { [schemaDataId: string]: boolean } = {
     [SchemaDataId.AgeAtDiagnosis]: true,
@@ -207,7 +263,7 @@ export function getDataSchemaDependencies(
         dependencyIds.map((id) => schemaDataById[id])
     );
     return excludeDependenciesWithTbdValues
-        ? dependencies.filter((d) => d.description !== TBD)
+        ? dependencies.filter(tbdDescriptionFilter)
         : dependencies;
 }
 
@@ -340,13 +396,123 @@ export async function getDataSchema(
     return { dataSchemaData, schemaDataById };
 }
 
+export function getManifestAttributes(
+    manifest: DataSchemaData,
+    allAttributes: DataSchemaDataWithManifest[]
+) {
+    return allAttributes.filter((schema) =>
+        schema.manifestNames.includes(manifest.attribute)
+    );
+}
+
+export function getAllAttributes(
+    schemaData: DataSchemaData[],
+    dataSchemaMap: { [id: string]: DataSchemaData }
+): DataSchemaDataWithManifest[] {
+    const allAttributes = new Map<string, DataSchemaDataWithManifest>();
+    const queue: { attribute: DataSchemaData; manifestName: string }[] = [];
+
+    schemaData.forEach((attr) => {
+        attr.requiredDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep)
+                queue.push({ attribute: dep, manifestName: attr.attribute });
+        });
+
+        attr.conditionalDependencies.forEach((depId) => {
+            const dep = dataSchemaMap[depId];
+            if (dep)
+                queue.push({ attribute: dep, manifestName: attr.attribute });
+        });
+    });
+
+    while (queue.length > 0) {
+        const { attribute, manifestName } = queue.shift()!;
+
+        if (allAttributes.has(attribute.attribute)) {
+            const existingAttribute = allAttributes.get(attribute.attribute)!;
+            if (!existingAttribute.manifestNames.includes(manifestName)) {
+                existingAttribute.manifestNames.push(manifestName);
+            }
+        } else {
+            const attributeWithManifest = {
+                ...attribute,
+                manifestNames: [manifestName],
+            };
+            allAttributes.set(attribute.attribute, attributeWithManifest);
+
+            // Add required dependencies
+            attribute.requiredDependencies.forEach((depId) => {
+                const dep = dataSchemaMap[depId];
+                if (dep)
+                    queue.push({
+                        attribute: dep,
+                        manifestName: manifestName,
+                    });
+            });
+
+            // Add conditional dependencies
+            attribute.conditionalDependencies.forEach((depId) => {
+                const dep = dataSchemaMap[depId];
+                if (dep)
+                    queue.push({
+                        attribute: dep,
+                        manifestName: manifestName,
+                    });
+            });
+        }
+    }
+
+    return Array.from(allAttributes.values())
+        .filter(componentAttributeFilter)
+        .filter(tbdDescriptionFilter);
+}
+
+export function componentAttributeFilter(schema: DataSchemaData): boolean {
+    return schema.attribute !== 'Component';
+}
+
+export function tbdDescriptionFilter(schema: DataSchemaData): boolean {
+    return schema.description !== TBD;
+}
+
+async function getConditionalIfData(): Promise<{
+    [attribute: string]: string[];
+}> {
+    try {
+        const csvUrl = getDependenciesUrl();
+        const response = await fetch(csvUrl);
+        const csvContent = await response.text();
+
+        const rows: ConditionalIfRow[] = await csvToJsonLib().fromString(
+            csvContent
+        );
+
+        return rows.reduce((acc: { [attribute: string]: string[] }, row) => {
+            if (row['Conditional Requirements']) {
+                acc[row.Attribute] = row['Conditional Requirements']
+                    .split(',')
+                    .map((attr: string) =>
+                        attr.trim().replace(/^\['|'\]$/g, '')
+                    );
+            }
+            return acc;
+        }, {});
+    } catch (error) {
+        console.error('Error fetching or processing CSV:', error);
+        throw error;
+    }
+}
+
 export async function fetchAndProcessSchemaData(
     dataUri?: string
 ): Promise<SchemaDataById> {
     const schemaDataUri = dataUri || (await getLatestReleaseSchemaUrl());
     const schemaData = getDataSchemaData(await fetchSchemaData(schemaDataUri));
     const schemaDataKeyedById = _.keyBy(schemaData, (d) => d.id);
+    const conditionalIfData = await getConditionalIfData();
     resolveConditionalDependencies(schemaData, schemaDataKeyedById);
+    resolveConditionalIfValues(schemaData, conditionalIfData);
     addAliases(schemaDataKeyedById);
     return schemaDataKeyedById;
 }
@@ -429,6 +595,7 @@ export function mapSchemaDataToDataSchemaData(
             requiredDependencies,
             conditionalDependencies: [], // taken care of later with a full schema traversal
             exclusiveConditionalDependencies: [], // taken care of later with a full schema traversal
+            conditionalIfValues: [], // taken care of later with a full schema traversal
             validationRules: nd['sms:validationRules'] || [],
             validValues,
             domainIncludes,
@@ -491,6 +658,15 @@ export function resolveConditionalDependencies(
             }
         })
     );
+}
+
+export function resolveConditionalIfValues(
+    schemaData: DataSchemaData[],
+    conditionalIfData: { [attribute: string]: string[] }
+) {
+    schemaData.forEach((schema) => {
+        schema.conditionalIfValues = conditionalIfData[schema.attribute] || [];
+    });
 }
 
 /**
@@ -575,4 +751,30 @@ function normalizeEntity(
     entity: string | string[] | BaseEntity | BaseEntity[] | undefined
 ): (string | BaseEntity)[] {
     return !entity ? [] : !Array.isArray(entity) ? Array(entity) : entity;
+}
+
+export function getDataType(schemaData: DataSchemaData): SchemaDataType {
+    if (
+        schemaData.validationRules &&
+        Array.isArray(schemaData.validationRules)
+    ) {
+        const dataType = schemaData.validationRules.find(
+            (rule) => typeof rule === 'object' && 'type' in rule
+        );
+
+        if (dataType && typeof dataType === 'object' && 'type' in dataType) {
+            switch (dataType) {
+                case 'int':
+                    return SchemaDataType.Integer;
+                default:
+                    return SchemaDataType.String;
+            }
+        }
+        // If no specific type is found, check if it's an enum (array of allowed values)
+        if (schemaData.validationRules.some((rule) => Array.isArray(rule))) {
+            return SchemaDataType.Enum;
+        }
+    }
+    // Default to String if no validation rules or unrecognized type
+    return SchemaDataType.String;
 }

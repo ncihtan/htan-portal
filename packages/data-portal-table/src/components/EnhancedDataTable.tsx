@@ -41,6 +41,8 @@ interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
     searchBoxPlaceHolder?: string;
     customControls?: JSX.Element;
     extraControlsInsideDataTableControls?: JSX.Element;
+    downloadButtonLabel?: string;
+    hideColumnSelect?: boolean;
 }
 
 const DEFAULT_DOWNLOAD_FILENAME = 'table_data.tsv';
@@ -314,6 +316,8 @@ export class EnhancedDataTable<T = any> extends React.Component<
                         extraControls={
                             this.props.extraControlsInsideDataTableControls
                         }
+                        downloadButtonLabel={this.props.downloadButtonLabel}
+                        hideColumnSelect={this.props.hideColumnSelect}
                     />
                 </div>
 
