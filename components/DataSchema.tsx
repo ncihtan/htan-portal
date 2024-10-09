@@ -84,6 +84,7 @@ function getColumnDef(
                 attribute
             );
         },
+        grow: 1.5,
         wrap: true,
         sortable: true,
     };
@@ -135,9 +136,9 @@ function getColumnDef(
                     />
                 );
             },
+            grow: 2,
             wrap: true,
             sortable: true,
-            minWidth: '250px',
         },
         [ColumnName.ConditionalIf]: {
             name: (
@@ -157,8 +158,8 @@ function getColumnDef(
                     countLabel="Number of conditional attributes"
                 />
             ),
+            grow: 2,
             wrap: true,
-            minWidth: '250px',
             sortable: true,
             getSearchValue: (schemaData: DataSchemaData) =>
                 schemaData.conditionalIfValues.join(' '),
@@ -188,8 +189,8 @@ function getColumnDef(
                     />
                 );
             },
+            grow: 2.5,
             wrap: true,
-            minWidth: '300px',
             sortable: true,
             getSearchValue: (schemaData: DataSchemaData) => {
                 const attributes = getDataSchemaValidValues(
