@@ -8,7 +8,9 @@ import {
 import {
     Entity,
     fetchSynData,
+    getNormalizedOrgan,
     LoadDataResult,
+    NOT_REPORTED,
 } from '@htan/data-portal-commons';
 import { ExploreTab } from '@htan/data-portal-explore';
 
@@ -143,18 +145,26 @@ export function computeDashboardData(files: Entity[]): EntityReport[] {
     const uniqueOrgans = new Set();
     const uniqueBiospecs = new Set();
     const uniqueCases = new Set();
+
     for (const file of files) {
         if (file.atlasid) {
             uniqueAtlases.add(file.atlasid);
         }
-        for (const biospec of file.biospecimen) {
-            uniqueBiospecs.add(biospec.BiospecimenID);
+        for (const biospecimen of file.biospecimen) {
+            uniqueBiospecs.add(biospecimen.BiospecimenID);
         }
-        for (const diag of file.diagnosis) {
-            uniqueCases.add(diag.ParticipantID);
-            uniqueOrgans.add(diag.TissueorOrganofOrigin);
+        for (const diagnosis of file.diagnosis) {
+            uniqueCases.add(diagnosis.ParticipantID);
+            uniqueOrgans.add(getNormalizedOrgan(diagnosis));
+        }
+        for (const demographics of file.demographics) {
+            uniqueCases.add(demographics.ParticipantID);
         }
     }
+
+    // remove "Not Reported" from the organ list
+    uniqueOrgans.delete(NOT_REPORTED);
+
     return [
         { description: 'Atlases', text: uniqueAtlases.size.toString() },
         { description: 'Organs', text: uniqueOrgans.size.toString() },
