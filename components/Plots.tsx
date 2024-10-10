@@ -52,7 +52,7 @@ const Plots: React.FunctionComponent<IPlotsProps> = ({
                     <strong>
                         {computeUniqueAttributeValueCount(organSummary)}
                     </strong>{' '}
-                    primary tumor sites:
+                    tumor sites:
                 </p>
             </Row>
             <Row className="pr-5 pl-5">

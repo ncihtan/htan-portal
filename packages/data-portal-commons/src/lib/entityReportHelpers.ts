@@ -5,6 +5,8 @@ import humanOrganMappings from '../assets/human-organ-mappings.json';
 
 const organMapping: OrganMapping = humanOrganMappings;
 
+export const NOT_REPORTED = 'Not Reported';
+
 export type OrganMapping = {
     [organ: string]: {
         byPrimarySite: string[];
@@ -49,12 +51,14 @@ export function normalizeTissueOrOrganOrSite(value: string) {
 
 function normalizeTreatment(value: string): string[] {
     value = value.trim().toLowerCase();
-    const treatments = value.split(/,|;/).map(t => {
-      const trimmedTreatment = t.trim();
-      return trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1);
+    const treatments = value.split(/,|;/).map((t) => {
+        const trimmedTreatment = t.trim();
+        return (
+            trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1)
+        );
     });
     return _.uniq(treatments);
-  }
+}
 
 function initTissueOrOrganOrSiteToOrganMap(
     organMapping: OrganMapping
@@ -134,11 +138,9 @@ export function getNormalizedOrgan(entity: Entity) {
 }
 
 export function getNormalizedTreatment(entity: Entity) {
-    return entity.TreatmentType
-      ? normalizeTreatment(entity.TreatmentType)
-      : [];
-  }
-  
+    return entity.TreatmentType ? normalizeTreatment(entity.TreatmentType) : [];
+}
+
 export function getNormalizedAssay(entity: Entity) {
     return entity.assayName;
 }
@@ -363,7 +365,7 @@ export function computeAssayDistributionByCenter(
 
 export function dataWithoutUnknownValues(data: EntityReportByAttribute[]) {
     return data.filter(
-        (r) => r.attributeValue && r.attributeValue !== 'Not Reported'
+        (r) => r.attributeValue && r.attributeValue !== NOT_REPORTED
     );
 }
 
