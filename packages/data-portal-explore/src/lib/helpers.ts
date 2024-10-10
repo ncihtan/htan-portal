@@ -17,7 +17,7 @@ export function getDefaultSummaryData<T>(
         },
         {
             displayName: 'Organ',
-            attributeName: AttributeNames.TissueorOrganofOrigin,
+            attributeName: AttributeNames.organType,
         },
         {
             displayName: 'Cancer Type',
