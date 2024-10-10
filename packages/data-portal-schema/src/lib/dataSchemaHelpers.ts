@@ -141,9 +141,16 @@ export enum SchemaDataId {
     HICSeqLevel1 = 'bts:HI-C-seqLevel1',
     HICSeqLevel2 = 'bts:HI-C-seqLevel2',
     HICSeqLevel3 = 'bts:HI-C-seqLevel3',
+
     RPPALevel2 = 'bts:RPPALevel2',
     RPPALevel3 = 'bts:RPPALevel3',
     RPPALevel4 = 'bts:RPPALevel4',
+
+    MassSpectrometryLevel1 = 'bts:MassSpectrometryLevel1',
+    MassSpectrometryLevel2 = 'bts:MassSpectrometryLevel2',
+    MassSpectrometryLevel3 = 'bts:MassSpectrometryLevel3',
+    MassSpectrometryLevel4 = 'bts:MassSpectrometryLevel4',
+    MassSpectrometryAuxiliaryFile = 'bts:MassSpectrometryAuxiliaryFile',
 
     Therapy = 'bts:Therapy',
     AcuteLymphoblasticLeukemiaTier3 = 'bts:AcuteLymphoblasticLeukemiaTier3',
