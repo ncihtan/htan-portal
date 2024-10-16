@@ -1,12 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-
-import { CmsData } from '../types';
-import DataSchema from './DataSchema';
-import Footer from './Footer';
-import { HtanNavbar } from './HtanNavbar';
-import { Col } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
@@ -15,6 +10,9 @@ import {
     DataSchemaDataWithManifest,
     SchemaDataById,
 } from '@htan/data-portal-schema';
+import { CmsData } from '../types';
+import DataSchema from './DataSchema';
+import PageWrapper from './PageWrapper';
 
 export interface DataStandardProps {
     title: string;
@@ -26,8 +24,7 @@ export interface DataStandardProps {
 
 const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
-        <>
-            <HtanNavbar />
+        <PageWrapper>
             <Container>
                 <Row style={{ marginBottom: 10 }}>
                     <Col>
@@ -49,8 +46,7 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
                     </Row>
                 )}
             </Container>
-            <Footer />
-        </>
+        </PageWrapper>
     );
 };
 
