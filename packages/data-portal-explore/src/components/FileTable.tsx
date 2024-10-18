@@ -53,11 +53,30 @@ interface IFileDownloadModalProps {
 const DETAILS_COLUMN_NAME = 'Metadata';
 
 function generateCdsManifestFile(files: Entity[]): string | undefined {
-    const columns = ['drs_uri', 'name'];
+    const columns = [
+        'drs_uri',
+        'name',
+        'data_file_id',
+        'atlas_name',
+        'biospecimen',
+        'assay_name',
+        'level',
+        'parent_data_file_id',
+        'parent_biospecimen_id',
+    ];
     const data = _(files)
-        .map((f) => f.viewers?.cds)
-        .compact()
-        .map((asset) => [asset.drs_uri, asset.name])
+        .filter((f) => !!f.viewers?.cds)
+        .map((f) => [
+            f.viewers?.cds?.drs_uri,
+            f.viewers?.cds?.name,
+            f.DataFileID,
+            f.atlas_name,
+            _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join('|'),
+            f.assayName,
+            f.level,
+            f.ParentDataFileID,
+            f.ParentBiospecimenID,
+        ])
         .value();
 
     if (data.length > 0) {
