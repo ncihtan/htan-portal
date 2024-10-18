@@ -53,11 +53,31 @@ interface IFileDownloadModalProps {
 const DETAILS_COLUMN_NAME = 'Metadata';
 
 function generateCdsManifestFile(files: Entity[]): string | undefined {
-    const columns = ['drs_uri', 'name'];
+    const columns = [
+        'drs_uri',
+        'name',
+        'atlas_name',
+        'biospecimen',
+        'assay_name',
+        'level',
+        'data_file_id',
+        'parent_biospecimen_id',
+        'parent_data_file_id',
+    ];
     const data = _(files)
-        .map((f) => f.viewers?.cds)
-        .compact()
-        .map((asset) => [asset.drs_uri, asset.name])
+        .filter((f) => !!f.viewers?.cds)
+        .map((f) => [
+            f.viewers?.cds?.drs_uri,
+            f.viewers?.cds?.name,
+            f.atlas_name,
+            _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join(' '),
+            f.assayName,
+            f.level,
+            // make sure to replace all possible commas since we are generating a CSV file
+            f.DataFileID?.replace(/,/g, ' ').trim(),
+            f.ParentBiospecimenID?.replace(/,/g, ' ').trim(),
+            f.ParentDataFileID?.replace(/,/g, ' ').trim(),
+        ])
         .value();
 
     if (data.length > 0) {
