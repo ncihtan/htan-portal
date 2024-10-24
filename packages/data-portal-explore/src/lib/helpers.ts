@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { AttributeNames } from '@htan/data-portal-utils';
-import { Entity } from '@htan/data-portal-commons';
+import { Entity, NOT_REPORTED } from '@htan/data-portal-commons';
 
 export function getDefaultSummaryData<T>(
     filteredCases: T[],
@@ -41,14 +41,23 @@ export function getDefaultSummaryData<T>(
         },
     ];
 
-    return summary.map((s) => ({
-        displayName: s.displayName,
-        values: getSummaryData(
+    return summary.map((s) => {
+        let values = getSummaryData(
             s.attributeName,
             s.entities,
             groupsByPropertyFiltered
-        ),
-    }));
+        );
+
+        // special case ORGAN: remove NOT_REPORTED from the values
+        if (s.attributeName === AttributeNames.organType) {
+            values = values.filter((v) => v !== NOT_REPORTED);
+        }
+
+        return {
+            displayName: s.displayName,
+            values,
+        };
+    });
 }
 
 export function getSummaryData<T>(
