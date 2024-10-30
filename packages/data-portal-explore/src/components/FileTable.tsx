@@ -193,7 +193,7 @@ const CDSInstructions: React.FunctionComponent<{
                     </button>
                 </p>
             )}
-            {gen3Commands.length > 0 && (
+            {gen3Commands && gen3Commands.length > 0 && (
                 <div>
                     <p>To download these files using the gen3 client:</p>
                     <pre className="pre-scrollable">
