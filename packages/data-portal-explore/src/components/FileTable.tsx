@@ -88,14 +88,13 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
 }
 
 function generateGen3Commands(files: Entity[]): string {
-    return files
+    const guids = files
         .filter((f) => !!f.viewers?.cds?.drs_uri)
-        .map((f) => {
-            const drsUri = f.viewers.cds.drs_uri;
-            const drsId = drsUri.replace('drs://nci-crdc.datacommons.io/', '');
-            return `gen3 --endpoint=nci-crdc.datacommons.io/ drs-pull object ${drsId}`;
-        })
-        .join('\n');
+        .map((f) => f.viewers.cds.drs_uri.replace('drs://nci-crdc.datacommons.io/', ''))
+        .join(' ');
+
+    // Return a single command that pulls all objects at once
+    return guids ? `gen3 --endpoint=nci-crdc.datacommons.io/ drs-pull objects ${guids}` : '';
 }
 
 const FilenameWithAccessIcon: React.FunctionComponent<{
