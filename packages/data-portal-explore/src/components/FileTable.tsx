@@ -87,6 +87,17 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
     }
 }
 
+function generateGen3Commands(files: Entity[]): string {
+    return files
+        .filter((f) => !!f.viewers?.cds?.drs_uri)
+        .map((f) => {
+            const drsUri = f.viewers.cds.drs_uri;
+            const drsId = drsUri.replace('drs://nci-crdc.datacommons.io/', '');
+            return `gen3 --endpoint=nci-crdc.datacommons.io/ drs-pull object ${drsId}`;
+        })
+        .join('\n');
+}
+
 const FilenameWithAccessIcon: React.FunctionComponent<{
     file: Entity;
 }> = (props) => {
@@ -121,6 +132,7 @@ const CDSInstructions: React.FunctionComponent<{
     files: Entity[];
 }> = (props) => {
     const manifestFile = generateCdsManifestFile(props.files);
+    const gen3Commands = generateGen3Commands(props.files);
     const dbgapFiles = props.files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
     );
@@ -181,6 +193,14 @@ const CDSInstructions: React.FunctionComponent<{
                         <FontAwesomeIcon icon={faDownload} /> Download Manifest
                     </button>
                 </p>
+            )}
+            {gen3Commands.length > 0 && (
+                <div>
+                    <p>To download these files using the gen3 client:</p>
+                    <pre className="pre-scrollable">
+                        <code>{gen3Commands}</code>
+                    </pre>
+                </div>
             )}
         </>
     );
