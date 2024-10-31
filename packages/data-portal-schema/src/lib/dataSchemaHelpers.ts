@@ -202,6 +202,11 @@ export enum SchemaDataId {
     NanoStringGeoMxDSPSpatialTranscriptomicsLevel3 = 'bts:NanoStringGeoMxDSPSpatialTranscriptomicsLevel3',
     NanostringCosMxSMIExperiment = 'bts:NanostringCosMxSMIExperiment',
     XeniumISSExperiment = 'bts:10XGenomicsXeniumISSExperiment',
+    SlideSeqLevel1 = 'bts:Slide-seqLevel1',
+    SlideSeqLevel2 = 'bts:Slide-seqLevel2',
+    SlideSeqLevel3 = 'bts:Slide-seqLevel3',
+    NanoStringGeoMxDSPROIDCCSegmentAnnotationMetadata = 'bts:NanoStringGeoMxDSPROIDCCSegmentAnnotationMetadata',
+    NanoStringGeoMxDSPROIRCCSegmentAnnotationMetadata = 'bts:NanoStringGeoMxDSPROIRCCSegmentAnnotationMetadata',
 }
 
 export const LABEL_OVERRIDES: { [text: string]: string } = {

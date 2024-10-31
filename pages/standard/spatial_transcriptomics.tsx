@@ -85,6 +85,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
         SchemaDataId.NanoStringGeoMxDSPSpatialTranscriptomicsLevel3,
         SchemaDataId.XeniumISSExperiment,
         SchemaDataId.NanostringCosMxSMIExperiment,
+        SchemaDataId.SlideSeqLevel1,
+        SchemaDataId.SlideSeqLevel2,
+        SchemaDataId.SlideSeqLevel3,
+        SchemaDataId.NanoStringGeoMxDSPROIDCCSegmentAnnotationMetadata,
+        SchemaDataId.NanoStringGeoMxDSPROIRCCSegmentAnnotationMetadata,
     ]);
 
     const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
