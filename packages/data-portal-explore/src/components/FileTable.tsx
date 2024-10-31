@@ -90,7 +90,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
 function generateGen3Commands(files: Entity[]): string {
     const guids = files
         .filter((f) => !!f.viewers?.cds?.drs_uri)
-        .map((f) => f.viewers.cds.drs_uri.replace('drs://nci-crdc.datacommons.io/', ''))
+        .map((f) => f.viewers?.cds?.drs_uri?.replace('drs://nci-crdc.datacommons.io/', '') || '')
         .join(' ');
 
     // Return a single command that pulls all objects at once
