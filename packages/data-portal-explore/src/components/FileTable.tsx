@@ -176,7 +176,6 @@ const CDSInstructions: React.FunctionComponent<{
     const openAccessInstructions = (
         <>
             <CDSFileList files={props.files} />
-            <p>To download selected files {manifestInstructions}</p>
         </>
     );
 
@@ -253,9 +252,9 @@ const CDSInstructions: React.FunctionComponent<{
 
     return (
         <>
-            <h4>Access files avaliable in CDS</h4>
+            <h4>Access files available in CDS</h4>
             <p>
-                The files below are avaliable through the
+                The files below are available through the
                 <a
                     href="https://datacommons.cancer.gov/repository/cancer-data-service"
                     target="_blank"
@@ -414,9 +413,9 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 
     return (
         <>
-            <h4>Access files avaliable in Synapse</h4>
+            <h4>Access files available in Synapse</h4>
             <p>
-                The files below are avaliable through{''}
+                The files below are available through{''}
                 <a
                     href="synapse.org"
                     target="_blank"
@@ -437,7 +436,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
             <pre className="pre-scrollable">
                 <code>{script}</code>
             </pre>
-            <button onClick={() => copyToClipboard({script})}>Copy</button>
+            <button onClick={() => copyToClipboard(script)}>Copy</button>
             <p>
                 It is required to{' '}
                 <a
