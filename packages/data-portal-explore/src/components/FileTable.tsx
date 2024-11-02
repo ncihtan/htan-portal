@@ -112,6 +112,12 @@ function generateGen3Commands(files: Entity[]): string {
     return guids ? `gen3 --endpoint=nci-crdc.datacommons.io/ drs-pull objects ${guids}` : '';
 }
 
+function copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Copied to clipboard!");
+    });
+}
+
 const FilenameWithAccessIcon: React.FunctionComponent<{
     file: Entity;
 }> = (props) => {
@@ -214,10 +220,12 @@ const CDSInstructions: React.FunctionComponent<{
                     <p>To download these files using the gen3 client:</p>
                     <pre className="pre-scrollable">
                         <code>{gen3Commands}</code>
+                        <button onClick={() => copyToClipboard(gen3Commands)}>Copy</button>
                     </pre>
                     <p>Alternatively download the Gen3 manifest.json file and run:</p>
                     <pre className="pre-scrollable">
-                        <code>gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json</code> 
+                        <code>gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir</code> 
+                    <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
                     </pre>
                 </div>
             )}
