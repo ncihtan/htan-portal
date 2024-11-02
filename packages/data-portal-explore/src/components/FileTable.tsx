@@ -169,12 +169,12 @@ const CDSInstructions: React.FunctionComponent<{
                     HTAN dbGaP Study, Accession: phs002371
                 </a>.
             </p>
+            <CDSFileList files={props.files} />
         </>
     );
 
     const openAccessInstructions = (
         <>
-            < You
             <CDSFileList files={props.files} />
             <p>To download selected files {manifestInstructions}</p>
         </>
@@ -183,9 +183,14 @@ const CDSInstructions: React.FunctionComponent<{
 
     const cdsManifestInstructions = (
         <>
-            <h4>Loading files into SevenBridges CGC</h4>
-            You can import this manifest file into SevenBridges Cancer Genomics Cloud (SB-CGC) following the
-            instructions{' '}
+            <h4>Load files into SevenBridges CGC</h4>
+            You can import this manifest file into{''}
+            <a
+                href="https://docs.cancergenomicscloud.org"
+            >
+                SevenBridges Cancer Genomics Cloud (SB-CGC)
+            </a>{' '}
+            following the instructions{' '}
             <a
                 href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
                 target="_blank"
@@ -219,9 +224,9 @@ const CDSInstructions: React.FunctionComponent<{
                         <code>pip install gen3</code>
                     </pre>
                     <p>
-                        Generate your 
+                        Generate your{' '}
                         <a href="https://nci-crdc.datacommons.io/identity" target="_blank">
-                            NCI Data Commons Framework Services API Key</a></n>
+                            NCI Data Commons Framework Services API Key</a>{' '}
                             and download the generated <code>credentials.json</code> file.
                     </p>
                     <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
