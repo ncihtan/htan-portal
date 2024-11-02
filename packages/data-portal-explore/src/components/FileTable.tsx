@@ -89,18 +89,17 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
 }
 
 function generateGen3ManifestFile(files: Entity[]): string | undefined {
-    // make a json file that is a list of dicts where the key object_id is the drs_uri
-    // Strip 'drs://nci-crdc.datacommons.io/' from the drs_uri
-    
     const data = _(files)
         .filter((f) => !!f.viewers?.cds)
-        .map((f) => [{
+        .map((f) => ({
             object_id: f.viewers?.cds?.drs_uri?.replace(
                 'drs://nci-crdc.datacommons.io/',
                 ''
             ),
-        }])
+        }))
         .value();
+
+    return data.length > 0 ? JSON.stringify(data, null, 2) : undefined;
 }
 
 function generateGen3Commands(files: Entity[]): string {
