@@ -153,14 +153,38 @@ const CDSInstructions: React.FunctionComponent<{
 }> = (props) => {
     const manifestFile = generateCdsManifestFile(props.files);
     const gen3manifestFile= generateGen3ManifestFile(props.files);
-    const gen3Commands = generateGen3Commands(props.files);
     const dbgapFiles = props.files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
     );
 
-    const manifestInstructions = (
+    const dbgapInstructions = (
         <>
-            you can import this manifest file into CGC following the
+            <p>
+                Your selection includes controlleed-access Level 1 and/or Level 2 sequencing data
+                (🔒).To download Level 1/2 sequencing data you first need to have been granted access to the{' '}
+                <a
+                    href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
+                    target="_blank"
+                >
+                    HTAN dbGaP Study, Accession: phs002371
+                </a>.
+            </p>
+        </>
+    );
+
+    const openAccessInstructions = (
+        <>
+            < You
+            <CDSFileList files={props.files} />
+            <p>To download selected files {manifestInstructions}</p>
+        </>
+    );
+
+
+    const cdsManifestInstructions = (
+        <>
+            <h4>Loading files into SevenBridges CGC</h4>
+            You can import this manifest file into SevenBridges Cancer Genomics Cloud (SB-CGC) following the
             instructions{' '}
             <a
                 href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
@@ -169,40 +193,6 @@ const CDSInstructions: React.FunctionComponent<{
                 here
             </a>
             .
-        </>
-    );
-
-    const dbgapInstructions = (
-        <>
-            <p>
-                Your selection includes Level 1 and/or Level 2 sequencing data
-                (🔒):
-            </p>
-            <CDSFileList files={props.files} />
-            <p>
-                To download Level 1/2 sequencing data you first need to request{' '}
-                <a
-                    href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
-                    target="_blank"
-                >
-                    dbGaP
-                </a>{' '}
-                access. Afterwards {manifestInstructions}
-            </p>
-        </>
-    );
-
-    const openAccessInstructions = (
-        <>
-            <CDSFileList files={props.files} />
-            <p>To download selected files {manifestInstructions}</p>
-        </>
-    );
-
-    return (
-        <>
-            {dbgapFiles.length > 0 && dbgapInstructions}
-            {dbgapFiles.length === 0 && openAccessInstructions}
             {manifestFile?.length && (
                 <p>
                     <button
@@ -215,15 +205,24 @@ const CDSInstructions: React.FunctionComponent<{
                     </button>
                 </p>
             )}
+        </>
+    );
+
+
+    const gen3ManifestInstructions = (
+        <>
             {gen3manifestFile?.length && (
                 <div>
-                    <h2>Download using the Gen3 SDK for Python</h2>
-                    <p>Ensure you have the Gen3 SDK for Python installed (Python 3.11 recomended):</p>
+                    <h4>Download files using the Gen3 SDK for Python</h2>
+                    <p>Ensure you have the Gen3 SDK for Python installed:</p>
                     <pre className="pre-scrollable">
                         <code>pip install gen3</code>
                     </pre>
                     <p>
-                        Generate your <a href="https://nci-crdc.datacommons.io/user/profile" target="_blank">RDC API key</a> and download <code>credentials.json</code>
+                        Generate your 
+                        <a href="https://nci-crdc.datacommons.io/identity" target="_blank">
+                            NCI Data Commons Framework Services API Key</a></n>
+                            and download the generated <code>credentials.json</code> file.
                     </p>
                     <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
                     <p>Download the files using the following command:</p>
@@ -231,7 +230,6 @@ const CDSInstructions: React.FunctionComponent<{
                         <code>gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir</code> 
                     </pre>
                     <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
-
                     <p>
                         <button
                             className="btn btn-light"
@@ -244,6 +242,16 @@ const CDSInstructions: React.FunctionComponent<{
                     </p>
                 </div>
             )}
+        </>
+
+    )
+
+    return (
+        <>
+            {dbgapFiles.length > 0 && dbgapInstructions}
+            {dbgapFiles.length === 0 && openAccessInstructions}
+            {cdsManifestInstructions}
+            {gen3ManifestInstructions} 
         </>
     );
 };
