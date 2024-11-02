@@ -224,7 +224,7 @@ const CDSInstructions: React.FunctionComponent<{
             )}
             {gen3manifestFile?.length && (
                 // In a heading level 2 add a title for the gen3 instructions
-                <p><h2>Download using the Gen3 SDK for Python</h2></p>
+                <h2>Download using the Gen3 SDK for Python</h2>
 
                 <p>Ensure you have the Gen3 SDK for Python installed:</p>
                 <pre className="pre-scrollable">
