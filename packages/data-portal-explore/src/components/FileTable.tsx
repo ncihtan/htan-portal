@@ -43,6 +43,7 @@ import {
 } from '@htan/data-portal-commons';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
+const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -85,6 +86,21 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
     } else {
         return undefined;
     }
+}
+
+function generateGen3ManifestFile(files: Entity[]): string | undefined {
+    // make a json file that is a list of dicts where the key object_id is the drs_uri
+    // Strip 'drs://nci-crdc.datacommons.io/' from the drs_uri
+    
+    const data = _(files)
+        .filter((f) => !!f.viewers?.cds)
+        .map((f) => [{
+            object_id: f.viewers?.cds?.drs_uri?.replace(
+                'drs://nci-crdc.datacommons.io/',
+                ''
+            ),
+        }])
+        .value();
 }
 
 function generateGen3Commands(files: Entity[]): string {
@@ -131,6 +147,7 @@ const CDSInstructions: React.FunctionComponent<{
     files: Entity[];
 }> = (props) => {
     const manifestFile = generateCdsManifestFile(props.files);
+    const gen3manifestFile= generateGen3ManifestFile(props.files);
     const gen3Commands = generateGen3Commands(props.files);
     const dbgapFiles = props.files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
@@ -199,7 +216,23 @@ const CDSInstructions: React.FunctionComponent<{
                     <pre className="pre-scrollable">
                         <code>{gen3Commands}</code>
                     </pre>
+                    <p>Alternatively download the Gen3 manifest.json file and run:</p>
+                    <pre className="pre-scrollable">
+                        <code>gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json</code> 
+                    </pre>
                 </div>
+            )}
+            {gen3manifestFile?.length && (
+                <p>
+                    <button
+                        className="btn btn-light"
+                        onClick={() =>
+                            fileDownload(manifestFile, GEN3_MANIFEST_FILENAME)
+                        }
+                    >
+                        <FontAwesomeIcon icon={faDownload} /> Download Manifest
+                    </button>
+                </p>
             )}
         </>
     );
