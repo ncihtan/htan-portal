@@ -148,131 +148,124 @@ const CDSFileList: React.FunctionComponent<{
     );
 };
 
-const CDSInstructions: React.FunctionComponent<{
-    files: Entity[];
-}> = (props) => {
-    const manifestFile = generateCdsManifestFile(props.files);
-    const gen3manifestFile= generateGen3ManifestFile(props.files);
-    const dbgapFiles = props.files.filter(
+
+
+const dbgapInstructions = (files: Entity[]) => {
+    const dbgapFiles = files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
     );
+    if (dbgapFiles.length === 0) return null;
 
-    const dbgapInstructions = (files: Entity[]) => {
-        const dbgapFiles = files.filter(
-            (f) => f.downloadSource === DownloadSourceCategory.dbgap
-        );
-        if (dbgapFiles.length === 0) return null;
-    
-        return (
-            <div>
-                <CDSFileList files={files} />
-                <p>
-                    Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒). 
-                    To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
-                    <a
-                        href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
-                        target="_blank"
-                    >
-                        HTAN dbGaP Study, Accession: phs002371
-                    </a>.
-                </p>
-            </div>
-        );
-    };
-    
-    const openAccessInstructions = (files: Entity[]) => {
-        return (
-            <div>
-                <CDSFileList files={files} />
-            </div>
-        );
-    };
-    
-    const cdsManifestInstructions = (manifestFile: string | undefined) => {
-        if (!manifestFile) return null;
-    
-        return (
-            <div>
-                <h5>Load Files into SevenBridges CGC</h5>
-                <p>
-                    You can import this manifest file into the{' '}
-                    <a href="https://docs.cancergenomicscloud.org" target="_blank">
-                        SevenBridges Cancer Genomics Cloud (SB-CGC)
-                    </a>{' '}
-                    by downloading the manifest file below and following the instructions{' '}
-                    <a
-                        href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
-                        target="_blank"
-                    >
-                        here
-                    </a>.
-                </p>
+    return (
+        <div>
+            <CDSFileList files={files} />
+            <p>
+                Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒). 
+                To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
+                <a
+                    href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
+                    target="_blank"
+                >
+                    HTAN dbGaP Study, Accession: phs002371
+                </a>.
+            </p>
+        </div>
+    );
+};
+
+const openAccessInstructions = (files: Entity[]) => {
+    return (
+        <div>
+            <CDSFileList files={files} />
+        </div>
+    );
+};
+
+const cdsManifestInstructions = (manifestFile: string | undefined) => {
+    if (!manifestFile) return null;
+
+    return (
+        <div>
+            <h5>Load Files into SevenBridges CGC</h5>
+            <p>
+                You can import this manifest file into the{' '}
+                <a href="https://docs.cancergenomicscloud.org" target="_blank">
+                    SevenBridges Cancer Genomics Cloud (SB-CGC)
+                </a>{' '}
+                by downloading the manifest file below and following the instructions{' '}
+                <a
+                    href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
+                    target="_blank"
+                >
+                    here
+                </a>.
+            </p>
+            <button
+                className="btn btn-light"
+                onClick={() => fileDownload(manifestFile, CDS_MANIFEST_FILENAME)}
+            >
+                <FontAwesomeIcon icon={faDownload} /> Download Manifest
+            </button>
+        </div>
+    );
+};
+
+const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
+    if (!gen3manifestFile) return null;
+
+    return (
+        <div>
+            <h5>Download Files using the Gen3 SDK for Python</h5>
+            <p>Ensure you have the Gen3 SDK for Python installed:</p>
+            <pre className="pre-scrollable">
+                <code>pip install gen3</code>
+            </pre>
+            <p>
+                Generate your{' '}
+                <a href="https://nci-crdc.datacommons.io/identity" target="_blank">
+                    NCI Data Commons Framework Services API Key
+                </a>{' '}
+                and download the generated <code>credentials.json</code> file.
+            </p>
+            <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
+            <p>Download the files using the following command:</p>
+            <pre className="pre-scrollable">
+                <code>
+                    gen3 \
+                    --endpoint=nci-crdc.datacommons.io \
+                    drs-pull \
+                    manifest gen3_manifest.json \
+                    my_htan_dir
+                </code>
+            </pre>
+            <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
+            <p>
                 <button
                     className="btn btn-light"
-                    onClick={() => fileDownload(manifestFile, CDS_MANIFEST_FILENAME)}
+                    onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
                 >
-                    <FontAwesomeIcon icon={faDownload} /> Download Manifest
+                    <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
                 </button>
-            </div>
-        );
-    };
-    
-    const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
-        if (!gen3manifestFile) return null;
-    
-        return (
-            <div>
-                <h5>Download Files using the Gen3 SDK for Python</h5>
-                <p>Ensure you have the Gen3 SDK for Python installed:</p>
-                <pre className="pre-scrollable">
-                    <code>pip install gen3</code>
-                </pre>
-                <p>
-                    Generate your{' '}
-                    <a href="https://nci-crdc.datacommons.io/identity" target="_blank">
-                        NCI Data Commons Framework Services API Key
-                    </a>{' '}
-                    and download the generated <code>credentials.json</code> file.
-                </p>
-                <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
-                <p>Download the files using the following command:</p>
-                <pre className="pre-scrollable">
-                    <code>
-                        gen3 \
-                        --endpoint=nci-crdc.datacommons.io \
-                        drs-pull \
-                        manifest gen3_manifest.json \
-                        my_htan_dir
-                    </code>
-                </pre>
-                <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
-                <p>
-                    <button
-                        className="btn btn-light"
-                        onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
-                    >
-                        <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
-                    </button>
-                </p>
-            </div>
-        );
-    };
-    
-    const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (props) => {
-        const manifestFile = generateCdsManifestFile(props.files);
-        const gen3manifestFile = generateGen3ManifestFile(props.files);
-    
-        return (
-            <div>
-                <h4>Files Available through NCI CRDC Cancer Data Service (CDS)</h4>
-                {dbgapInstructions(props.files)}
-                {openAccessInstructions(props.files)}
-                {cdsManifestInstructions(manifestFile)}
-                {gen3ManifestInstructions(gen3manifestFile)}
-            </div>
-        );
-    };
-);
+            </p>
+        </div>
+    );
+};
+
+const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (props) => {
+    const manifestFile = generateCdsManifestFile(props.files);
+    const gen3manifestFile = generateGen3ManifestFile(props.files);
+
+    return (
+        <div>
+            <h4>Files Available through NCI CRDC Cancer Data Service (CDS)</h4>
+            {dbgapInstructions(props.files)}
+            {openAccessInstructions(props.files)}
+            {cdsManifestInstructions(manifestFile)}
+            {gen3ManifestInstructions(gen3manifestFile)}
+        </div>
+    );
+};
+
 
 const NotDownloadableInstructions: React.FunctionComponent<{
     files: Entity[];
