@@ -157,118 +157,122 @@ const CDSInstructions: React.FunctionComponent<{
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
     );
 
-    const dbgapInstructions = (
-        <>
-            <p>
-                Your selection includes controlled-access Level 1 and/or Level 2 sequencing data
-                (🔒).To download Level 1/2 sequencing data you first need to have been granted access to the{' '}
-                <a
-                    href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
-                    target="_blank"
+    const dbgapInstructions = (files: Entity[]) => {
+        const dbgapFiles = files.filter(
+            (f) => f.downloadSource === DownloadSourceCategory.dbgap
+        );
+        if (dbgapFiles.length === 0) return null;
+    
+        return (
+            <div>
+                <CDSFileList files={files} />
+                <p>
+                    Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒). 
+                    To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
+                    <a
+                        href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
+                        target="_blank"
+                    >
+                        HTAN dbGaP Study, Accession: phs002371
+                    </a>.
+                </p>
+            </div>
+        );
+    };
+    
+    const openAccessInstructions = (files: Entity[]) => {
+        return (
+            <div>
+                <CDSFileList files={files} />
+            </div>
+        );
+    };
+    
+    const cdsManifestInstructions = (manifestFile: string | undefined) => {
+        if (!manifestFile) return null;
+    
+        return (
+            <div>
+                <h5>Load Files into SevenBridges CGC</h5>
+                <p>
+                    You can import this manifest file into the{' '}
+                    <a href="https://docs.cancergenomicscloud.org" target="_blank">
+                        SevenBridges Cancer Genomics Cloud (SB-CGC)
+                    </a>{' '}
+                    by downloading the manifest file below and following the instructions{' '}
+                    <a
+                        href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
+                        target="_blank"
+                    >
+                        here
+                    </a>.
+                </p>
+                <button
+                    className="btn btn-light"
+                    onClick={() => fileDownload(manifestFile, CDS_MANIFEST_FILENAME)}
                 >
-                    HTAN dbGaP Study, Accession: phs002371
-                </a>.
-            </p>
-            <CDSFileList files={props.files} />
-        </>
-    );
-
-    const openAccessInstructions = (
-        <>
-            <CDSFileList files={props.files} />
-        </>
-    );
-
-
-    const cdsManifestInstructions = (
-        <>
-            <strong>Load files into SevenBridges CGC:</strong>
-            You can import this manifest file into{''}
-            <a
-                href="https://docs.cancergenomicscloud.org"
-            >
-                SevenBridges Cancer Genomics Cloud (SB-CGC)
-            </a>{' '}
-            by downloading the manifest file below and following the instructions{' '}
-            <a
-                href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
-                target="_blank"
-            >
-                here
-            </a>
-            .
-            {manifestFile?.length && (
+                    <FontAwesomeIcon icon={faDownload} /> Download Manifest
+                </button>
+            </div>
+        );
+    };
+    
+    const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
+        if (!gen3manifestFile) return null;
+    
+        return (
+            <div>
+                <h5>Download Files using the Gen3 SDK for Python</h5>
+                <p>Ensure you have the Gen3 SDK for Python installed:</p>
+                <pre className="pre-scrollable">
+                    <code>pip install gen3</code>
+                </pre>
+                <p>
+                    Generate your{' '}
+                    <a href="https://nci-crdc.datacommons.io/identity" target="_blank">
+                        NCI Data Commons Framework Services API Key
+                    </a>{' '}
+                    and download the generated <code>credentials.json</code> file.
+                </p>
+                <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
+                <p>Download the files using the following command:</p>
+                <pre className="pre-scrollable">
+                    <code>
+                        gen3 \
+                        --endpoint=nci-crdc.datacommons.io \
+                        drs-pull \
+                        manifest gen3_manifest.json \
+                        my_htan_dir
+                    </code>
+                </pre>
+                <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
                 <p>
                     <button
                         className="btn btn-light"
-                        onClick={() =>
-                            fileDownload(manifestFile, CDS_MANIFEST_FILENAME)
-                        }
+                        onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
                     >
-                        <FontAwesomeIcon icon={faDownload} /> Download Manifest
+                        <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
                     </button>
                 </p>
-            )}
-        </>
-    );
-
-
-    const gen3ManifestInstructions = (
-        <>
-            {gen3manifestFile?.length && (
-                <div>
-                    <strong>Download files using the Gen3 SDK for Python:</strong>
-                    <p>Ensure you have the Gen3 SDK for Python installed</p>
-                    <pre className="pre-scrollable">
-                        <code>pip install gen3</code>
-                    </pre>
-                    <p>
-                        Generate your{' '}
-                        <a href="https://nci-crdc.datacommons.io/identity" target="_blank">
-                            NCI Data Commons Framework Services API Key</a>{' '}
-                            and download the generated <code>credentials.json</code> file.
-                    </p>
-                    <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
-                    <p>Download the files using the following command:</p>
-                    <pre className="pre-scrollable">
-                        <code>gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir</code> 
-                    </pre>
-                    <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
-                    <p>
-                        <button
-                            className="btn btn-light"
-                            onClick={() =>
-                                fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)
-                            }
-                        >
-                            <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
-                        </button>
-                    </p>
-                </div>
-            )}
-        </>
-
-    )
-
-    return (
-        <>
-            <h4>Access files available in CDS</h4>
-            <p>
-                The files below are available through the
-                <a
-                    href="https://datacommons.cancer.gov/repository/cancer-data-service"
-                    target="_blank"
-                >
-                    NCI CRDC Cancer Data Service (CDS)
-                </a>
-            </p>
-            {dbgapFiles.length > 0 && dbgapInstructions}
-            {dbgapFiles.length === 0 && openAccessInstructions}
-            {cdsManifestInstructions}
-            {gen3ManifestInstructions} 
-        </>
-    );
-};
+            </div>
+        );
+    };
+    
+    const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (props) => {
+        const manifestFile = generateCdsManifestFile(props.files);
+        const gen3manifestFile = generateGen3ManifestFile(props.files);
+    
+        return (
+            <div>
+                <h4>Files Available through NCI CRDC Cancer Data Service (CDS)</h4>
+                {dbgapInstructions(props.files)}
+                {openAccessInstructions(props.files)}
+                {cdsManifestInstructions(manifestFile)}
+                {gen3ManifestInstructions(gen3manifestFile)}
+            </div>
+        );
+    };
+);
 
 const NotDownloadableInstructions: React.FunctionComponent<{
     files: Entity[];
@@ -279,17 +283,25 @@ const NotDownloadableInstructions: React.FunctionComponent<{
 
     return props.files.length > 0 ? (
         <div>
+            <h4>Coming Soon</h4>
             <p>Your selection includes data that is not downloadable yet:</p>
+            
+            {/* List the files */}
             <pre className="pre-scrollable">
                 <code>
                     {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
                 </code>
             </pre>
-            {hasAnyImageViewersForNonDownloadableFiles && (
-                <span>
-                    Note however that you can explore them in one of the viewers
-                    in the right most column.
-                </span>
+
+            {/* Additional message if files have preview viewers */}
+            {hasAnyImageViewersForNonDownloadableFiles ? (
+                <p>
+                    These files are in preview. You can view metadata or explore them in one of the viewers in the rightmost column while they are prepared for public access.
+                </p>
+            ) : (
+                <p>
+                    These files are in preview. Metadata is available for review while the files are prepared for public access.
+                </p>
             )}
         </div>
     ) : null;
@@ -481,6 +493,20 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 !f.viewers?.cds)
     );
 
+    const availabilityMessage = () => {
+        const messages = [];
+        if (cdsFiles.length > 0) {
+            messages.push("Available through NCI CRDC Cancer Data Service (CDS)");
+        }
+        if (synapseFiles.length > 0) {
+            messages.push("Available through Synapse");
+        }
+        if (notDownloadableFiles.length > 0) {
+            messages.push("Coming soon (not downloadable yet)");
+        }
+        return messages;
+    };
+
     return (
         <Modal show={props.isOpen} onHide={props.onClose}>
             <Modal.Header closeButton>
@@ -488,10 +514,23 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
+                {/* Summary Section */}
+                <p><strong>Your selected files include files that are:</strong></p>
+                <ul>
+                    {availabilityMessage().map((message, index) => (
+                        <li key={index}>{message}</li>
+                    ))}
+                </ul>
+
+                {/* CDS Section */}
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                
+                {/* Not Downloadable Section */}
                 {notDownloadableFiles.length > 0 && (
                     <NotDownloadableInstructions files={notDownloadableFiles} />
                 )}
+
+                {/* Synapse Section */}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
                 )}
