@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
-import { fetchData } from '../../lib/helpers';
+import { fetchData, isReleaseQCEnabled } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
     AtlasDescription,
@@ -134,6 +134,22 @@ const PublicationPage = (props: PublicationPageProps) => {
                         false
                     );
                     setCasesData(casesData);
+
+                    if (isReleaseQCEnabled()) {
+                        const missingPublicationFiles = _.difference(
+                            publicationManifest?.PublicationAssociatedParentDataFileID.split(
+                                ','
+                            ),
+                            filteredFiles.map((f) => f.DataFileID)
+                        );
+
+                        if (!_.isEmpty(missingPublicationFiles)) {
+                            console.log(
+                                `Missing publication files for ${props.publicationUid}: `
+                            );
+                            console.log(missingPublicationFiles);
+                        }
+                    }
                 }
             });
         }

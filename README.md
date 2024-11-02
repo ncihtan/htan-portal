@@ -19,6 +19,7 @@ track of this information in Google BigQuery. One can get the latest dump of
 that using these commands (requires access to the htan-dcc google project):
 
 ```bash
+cd data
 bq extract --destination_format CSV released.entities_v6_0 gs://htan-release-files/entities_v6_0.csv
 bq extract --destination_format CSV released.metadata_v6_0 gs://htan-release-files/metadata_v6_0.csv
 gsutil cp gs://htan-release-files/entities_v6_0.csv entities_v6_0.csv
@@ -29,23 +30,12 @@ gsutil cp gs://htan-release-files/metadata_v6_0.csv metadata_v6_0.csv
 #### Pull files from Synapse and Process for ingestion
 
 ```bash
-cd data
 # Run the script that pulls all the HTAN metadata
 # It outputs a JSON in public/syn_data.json and a JSON with links to metadata in data/syn_metadata.json
 python get_syn_data.py
 cd ..
-# Find and replace certain values (this is a temp fix)
-yarn findAndReplace
-# we store the result of this in gzipped format
-gzip -c public/syn_data.json > public/syn_data.json.gz
-# Convert the resulting  JSON to a more efficient structure for visualization
-# Note: we output stdout and stderr to files to share these with others for
-# data qc debugging purposes
-# TODO: there is a ssl legacy provider is hack for
-# https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
-yarn processSynapseJSON > data/processSynapseJSON.log 2> data/processSynapseJSON.error.log
-# we also store the processed data in gzipped format
-gzip -c public/processed_syn_data.json > public/processed_syn_data.json.gz
+# Do additional data transformations and generated the processed JSON
+yarn run updateData
 ```
 
 ### Export to bucket

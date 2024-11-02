@@ -3,8 +3,10 @@ import Link from 'next/link';
 
 const PreReleaseBanner = () => (
     <Alert style={{ marginBottom: 0 }} variant={'success'}>
-        Join the in-person <Link href="/jamboree">Data Jamboree</Link> Nov 6th -
-        8th at the NIH Campus in Bethesda, MD
+        <a href="https://www.nature.com/immersive/d42859-024-00059-y/index.html" target="_blank">
+            Read the new collection of HTAN publications
+        </a>
+        !
     </Alert>
 );
 
