@@ -216,20 +216,30 @@ const CDSInstructions: React.FunctionComponent<{
                 </p>
             )}
             {gen3Commands && gen3Commands.length > 0 && (
-                <div>
-                    <p>To download these files using the gen3 client:</p>
-                    <pre className="pre-scrollable">
-                        <code>{gen3Commands}</code>
-                        <button onClick={() => copyToClipboard(gen3Commands)}>Copy</button>
-                    </pre>
-                    <p>Alternatively download the Gen3 manifest.json file and run:</p>
-                    <pre className="pre-scrollable">
-                        <code>gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir</code> 
-                    <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
-                    </pre>
-                </div>
+                // <p>To download these files using the gen3 client:</p>
+                // <pre className="pre-scrollable">
+                //     <code>{gen3Commands}</code>
+                // </pre>
+                // <button onClick={() => copyToClipboard(gen3Commands)}>Copy</button>
             )}
             {gen3manifestFile?.length && (
+                // In a heading level 2 add a title for the gen3 instructions
+                <p><h2>Download using the Gen3 SDK for Python</h2></p>
+
+                <p>Ensure you have the Gen3 SDK for Python installed:</p>
+                <pre className="pre-scrollable">
+                    <code>pip install gen3</code>
+                </pre>
+                <p>
+                    Generate your <a href="https://nci-crdc.datacommons.io/user/profile" target="_blank">RDC API key</a> and download <code>credentials.json</code>
+                </p>
+                <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
+                <p>Download the files using the following command:</p>
+                <pre className="pre-scrollable">
+                    <code>gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir</code> 
+                </pre>
+                <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
+
                 <p>
                     <button
                         className="btn btn-light"
@@ -237,7 +247,7 @@ const CDSInstructions: React.FunctionComponent<{
                             fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)
                         }
                     >
-                        <FontAwesomeIcon icon={faDownload} /> Download Manifest
+                        <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
                     </button>
                 </p>
             )}
