@@ -160,7 +160,7 @@ const CDSInstructions: React.FunctionComponent<{
     const dbgapInstructions = (
         <>
             <p>
-                Your selection includes controlleed-access Level 1 and/or Level 2 sequencing data
+                Your selection includes controlled-access Level 1 and/or Level 2 sequencing data
                 (🔒).To download Level 1/2 sequencing data you first need to have been granted access to the{' '}
                 <a
                     href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
@@ -183,14 +183,14 @@ const CDSInstructions: React.FunctionComponent<{
 
     const cdsManifestInstructions = (
         <>
-            <h4>Load files into SevenBridges CGC</h4>
+            <strong>Load files into SevenBridges CGC:</strong>
             You can import this manifest file into{''}
             <a
                 href="https://docs.cancergenomicscloud.org"
             >
                 SevenBridges Cancer Genomics Cloud (SB-CGC)
             </a>{' '}
-            following the instructions{' '}
+            by downloading the manifest file below and following the instructions{' '}
             <a
                 href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
                 target="_blank"
@@ -218,8 +218,8 @@ const CDSInstructions: React.FunctionComponent<{
         <>
             {gen3manifestFile?.length && (
                 <div>
-                    <h4>Download files using the Gen3 SDK for Python</h2>
-                    <p>Ensure you have the Gen3 SDK for Python installed:</p>
+                    <strong>Download files using the Gen3 SDK for Python:</strong>
+                    <p>Ensure you have the Gen3 SDK for Python installed</p>
                     <pre className="pre-scrollable">
                         <code>pip install gen3</code>
                     </pre>
@@ -253,6 +253,16 @@ const CDSInstructions: React.FunctionComponent<{
 
     return (
         <>
+            <h4>Access files avaliable in CDS</h4>
+            <p>
+                The files below are avaliable through the
+                <a
+                    href="https://datacommons.cancer.gov/repository/cancer-data-service"
+                    target="_blank"
+                >
+                    NCI CRDC Cancer Data Service (CDS)
+                </a>
+            </p>
             {dbgapFiles.length > 0 && dbgapInstructions}
             {dbgapFiles.length === 0 && openAccessInstructions}
             {cdsManifestInstructions}
@@ -404,6 +414,16 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 
     return (
         <>
+            <h4>Access files avaliable in Synapse</h4>
+            <p>
+                The files below are avaliable through{''}
+                <a
+                    href="synapse.org"
+                    target="_blank"
+                >
+                    Synapse
+                </a>.
+            </p>
             <p>
                 Use the{' '}
                 <a
@@ -417,6 +437,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
             <pre className="pre-scrollable">
                 <code>{script}</code>
             </pre>
+            <button onClick={() => copyToClipboard({script})}>Copy</button>
             <p>
                 It is required to{' '}
                 <a
