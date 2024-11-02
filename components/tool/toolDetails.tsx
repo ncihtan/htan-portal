@@ -2,6 +2,7 @@ import CBioPortal from './cBioPortal';
 import Minerva from './Minerva';
 import Mcmicro from './Mcmicro';
 import GoogleBigQuery from './GoogleBigQuery';
+import CelloType from './CelloType';
 import CellxGene from './CellxGene';
 import CytoCommunity from './CytoCommunity';
 import UCSCXena from './UCSCXena';
@@ -16,6 +17,7 @@ export const ToolDetails: { [toolID: string]: JSX.Element } = {
     HTAX_T1: <CellxGene />,
     HTAX_T2: <UCSCXena />,
     HTA4_T0: <CytoCommunity />,
+    HTA4_T1: <CelloType />,
     HTA12_T0: <CalicoST />,
     HTA9_T0: <MIMCyCIF />,
 };
