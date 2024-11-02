@@ -226,7 +226,7 @@ const CDSInstructions: React.FunctionComponent<{
                     <button
                         className="btn btn-light"
                         onClick={() =>
-                            fileDownload(manifestFile, GEN3_MANIFEST_FILENAME)
+                            fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)
                         }
                     >
                         <FontAwesomeIcon icon={faDownload} /> Download Manifest
