@@ -215,13 +215,6 @@ const CDSInstructions: React.FunctionComponent<{
                     </button>
                 </p>
             )}
-            {gen3Commands && gen3Commands.length > 0 && (
-                // <p>To download these files using the gen3 client:</p>
-                // <pre className="pre-scrollable">
-                //     <code>{gen3Commands}</code>
-                // </pre>
-                // <button onClick={() => copyToClipboard(gen3Commands)}>Copy</button>
-            )}
             {gen3manifestFile?.length && (
                 <div>
                     <h2>Download using the Gen3 SDK for Python</h2>
