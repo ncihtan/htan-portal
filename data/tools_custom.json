@@ -1298,6 +1298,9 @@
     "Tool Input Data": "Imaging",
     "Tool Output Data": "Annotations",
     "Tool Assay": "Imaging"
+  },
+  {
+    "": "",
     "Atlas Name": "HTAN WUSTL",
     "Grant ID": "",
     "Tool ID": "HTA12_T0",
