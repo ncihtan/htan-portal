@@ -279,7 +279,8 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
             {dbgapFiles.length > 0 && (
                 <div>
                     <p>
-                        Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒).
+                        <FontAwesomeIcon color="#FF8C00" icon={faLock}/>{' '}
+                        Your selection includes controlled-access Level 1 and/or Level 2 sequencing data.{' '}
                         To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
                         <a
                             href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
@@ -296,7 +297,10 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
             {/* Render open access instructions if open access files exist */}
             {openAccessFiles.length > 0 && (
                 <div>
-                    <p>These files are available without additional access requirements.</p>
+                    <p>
+                        <FontAwesomeIcon color="#00796B" icon={faLockOpen}/>{' '}
+                        The files listed below are available without additional access requirements.
+                    </p>
                     <CDSFileList files={openAccessFiles} />
                 </div>
             )}
