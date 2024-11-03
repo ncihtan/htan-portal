@@ -129,13 +129,20 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                             .map((e: OptionType) => {
                                 const downloadLabels = {
                                     [DownloadSourceCategory.dbgap]:
-                                        'CDS/SB-CGC (dbGaP 🔒)',
+                                        <span>
+                                            CDS/SB-CGC (dbGaP{' '}
+                                            <FontAwesomeIcon
+                                                color="#FF8C00"
+                                                icon={faLock}
+                                            />
+                                            )
+                                        </span>
                                     // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
                                     [DownloadSourceCategory.cds]: (
                                         <span>
                                             CDS/SB-CGC (Open Access{' '}
                                             <FontAwesomeIcon
-                                                color="#1adb54"
+                                                color="#00796B"
                                                 icon={faLockOpen}
                                             />
                                             )
@@ -145,7 +152,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                         <span>
                                             Synapse (Open Access{' '}
                                             <FontAwesomeIcon
-                                                color="#1adb54"
+                                                color="#00796B"
                                                 icon={faLockOpen}
                                             />
                                             )
