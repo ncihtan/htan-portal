@@ -188,8 +188,8 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
 
     return (
         <div>
-            <strong>Load Files into SevenBridges CGC:</strong>
             <p>
+                <strong>Load Files into SevenBridges CGC:</strong>{' '}
                 You can import these files into the{' '}
                 <a href="https://docs.cancergenomicscloud.org" target="_blank">
                     SevenBridges Cancer Genomics Cloud (SB-CGC)
@@ -219,7 +219,7 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
         <div>
             <p></p>
             <p>
-                <strong>Download Files using the Gen3 SDK for Python:</strong>
+                <strong>Download Files using the Gen3 SDK for Python:</strong>{' '}
                 You can download these files using the{' '}
                 <a href="https://pypi.org/project/gen3/">Gen3 SDK for Python</a>{' '}
                 (<code>pip install gen3</code>). Ensure that your{' '}
@@ -397,7 +397,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     return (
         <>
             <hr></hr>
-            <h4><strong>Access files available in Synapse:</strong></h4>
+            <h4><strong>Files available in Synapse</strong></h4>
             <p>
                 The files listed below are available through{' '}
                 <a
