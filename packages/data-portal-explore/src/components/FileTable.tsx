@@ -243,11 +243,11 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                     <p>Run the following <code>gen3</code> command.</p>
                     <pre className="pre-scrollable">
                         <code>
-                            gen3 \{'\n'}
-                            {'    '}--endpoint=nci-crdc.datacommons.io \{'\n'}
-                            {'    '}drs-pull \{'\n'}
-                            {'    '}manifest gen3_manifest.json \{'\n'}
-                            {'    '}my_htan_dir{'\n'}
+                        {`gen3 \\
+    --endpoint=nci-crdc.datacommons.io \\
+    drs-pull \\
+    manifest gen3_manifest.json \\
+    my_htan_dir`}
                         </code>
                     </pre>
                 </li>
