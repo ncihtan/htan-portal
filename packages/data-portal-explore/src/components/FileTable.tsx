@@ -218,11 +218,11 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
     return (
         <div>
             <p></p>
-            <p><strong>Download Files using the Gen3 SDK for Python:</strong></p>
             <p>
-                Ensure you have the{' '}
+                <strong>Download Files using the Gen3 SDK for Python:</strong>
+                You can download these files using the{' '}
                 <a href="https://pypi.org/project/gen3/">Gen3 SDK for Python</a>{' '}
-                installed (<code>pip install gen3</code>) and that your{' '}
+                (<code>pip install gen3</code>). Ensure that your{' '}
                 <a
                     href="https://nci-crdc.datacommons.io/identity"
                     target="_blank"
@@ -247,10 +247,10 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                     <pre style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '5px' }}>
                         <code>
                         {`gen3 \\
-                    --endpoint=nci-crdc.datacommons.io \\
-                    drs-pull \\
-                    manifest gen3_manifest.json \\
-                    my_htan_dir`}
+    --endpoint=nci-crdc.datacommons.io \\
+    drs-pull \\
+    manifest gen3_manifest.json \\
+    my_htan_dir`}
                         </code>
                     </pre>
                 </pre>
