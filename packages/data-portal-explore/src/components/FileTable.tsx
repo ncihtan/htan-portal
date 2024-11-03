@@ -188,11 +188,11 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
         <div>
             <strong>Load Files into SevenBridges CGC:</strong>
             <p>
-                You can import this manifest file into the{' '}
+                You can import these files into the{' '}
                 <a href="https://docs.cancergenomicscloud.org" target="_blank">
                     SevenBridges Cancer Genomics Cloud (SB-CGC)
                 </a>{' '}
-                by downloading the manifest file below and following the instructions{' '}
+                by downloading the CDS manifest file below and following the instructions{' '}
                 <a
                     href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
                     target="_blank"
@@ -204,14 +204,23 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
                 className="btn btn-light"
                 onClick={() => fileDownload(manifestFile, CDS_MANIFEST_FILENAME)}
             >
-                <FontAwesomeIcon icon={faDownload} /> Download Manifest
+                <FontAwesomeIcon icon={faDownload} /> Download <code>cds_manifest.csv</code>
             </button>
-        </div>
+        </div
     );
 };
 
 const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
     if (!gen3manifestFile) return null;
+
+    const [icon, setIcon] = useState(faCopy);
+
+    const handleCopyClick = () => {
+        copyToClipboard(
+            'gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir'
+        );
+        setIcon(faCheck);
+    };
 
     return (
         <div>
@@ -231,35 +240,27 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                     stored in <code>~/.gen3/credentials.json</code>.
                 </li>
                 <li>
-                    <p>Download the Gen3 manifest file below.</p>
-                    <p>
-                        <button
-                            className="btn btn-light"
-                            onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
-                        >
-                            <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
-                        </button>
-                    </p>
+                    <p>Download the Gen3 manifest file.</p>
+                    <button
+                        className="btn btn-light"
+                        onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
+                    >
+                        <FontAwesomeIcon icon={faDownload} /> Download <code>gen3_manifest.json</code>
+                    </button>
                 </li>
                 <li>
                     <p>Run the following <code>gen3</code> command.</p>
                     <pre className="pre-scrollable">
                         <code>
-                            gen3 \
-                            --endpoint=nci-crdc.datacommons.io \
-                            drs-pull \
-                            manifest gen3_manifest.json \
-                            my_htan_dir
+                            gen3 \{'\n'}
+                            {'    '}--endpoint=nci-crdc.datacommons.io \{'\n'}
+                            {'    '}drs-pull \{'\n'}
+                            {'    '}manifest gen3_manifest.json \{'\n'}
+                            {'    '}my_htan_dir{'\n'}
                         </code>
                     </pre>
-                    <button
-                        onClick={() =>
-                            copyToClipboard(
-                                'gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir'
-                            )
-                        }
-                    >
-                        Copy
+                    <button onClick={handleCopyClick}>
+                        <FontAwesomeIcon icon={icon} />
                     </button>
                 </li>
             </ol>
