@@ -230,7 +230,7 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                 >
                     NCI Data Commons Framework Services API Key
                 </a>{' '}
-                is stored in <code>~/.gen3/credentials.json</code>.{''}
+                is stored in <code>~/.gen3/credentials.json</code>.{' '}
                 (Note that Python 3.12 is not supported by the Gen3 SDK at this time.)
             </p>
             <p>
