@@ -213,6 +213,7 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
 
     return (
         <div>
+            <p></p>
             <p><strong>Download Files using the Gen3 SDK for Python:</strong></p>
             <ol>
                 <li>
@@ -254,16 +255,49 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
     );
 };
 
-const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (props) => {
-    const manifestFile = generateCdsManifestFile(props.files);
-    const gen3manifestFile = generateGen3ManifestFile(props.files);
+const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }) => {
+    const dbgapFiles = files.filter(
+        (f) => f.downloadSource === DownloadSourceCategory.dbgap
+    );
+    const openAccessFiles = files.filter(
+        (f) => f.downloadSource !== DownloadSourceCategory.dbgap
+    );
+
+    const manifestFile = generateCdsManifestFile(files);
+    const gen3manifestFile = generateGen3ManifestFile(files);
 
     return (
         <div>
-            <hr></hr>
+            <hr />
             <h4><strong>Files Available through NCI CRDC Cancer Data Service (CDS)</strong></h4>
-            {dbgapInstructions(props.files)}
-            {openAccessInstructions(props.files)}
+
+            {/* Render dbGaP instructions if dbGaP files exist */}
+            {dbgapFiles.length > 0 ? (
+                <div>
+                    <CDSFileList files={dbgapFiles} />
+                    <p>
+                        Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒).
+                        To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
+                        <a
+                            href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            HTAN dbGaP Study, Accession: phs002371
+                        </a>.
+                    </p>
+                </div>
+            ) : (
+                // Render open access instructions only if no dbGaP files and open access files exist
+                openAccessFiles.length > 0 && (
+                    <div>
+                        <CDSFileList files={openAccessFiles} />
+                        <p>These files are available without additional access requirements.</p>
+                    </div>
+                )
+            )}
+
+            {/* CDS and Gen3 manifest instructions */}
             {cdsManifestInstructions(manifestFile)}
             {gen3ManifestInstructions(gen3manifestFile)}
         </div>
@@ -320,15 +354,22 @@ function generateDownloadScript(files: Entity[]) {
 
 const SynapseFileList: React.FunctionComponent<{
     files: Entity[];
-}> = (props) => {
+}> = ({ files }) => {
     return (
         <pre className="pre-scrollable">
             <code>
-                {props.files.map((f) => (
-                    <div key={f.synapseId}>
-                        <a href={`https://www.synapse.org/#!Synapse:${f.synapseId}`} target="_blank" rel="noopener noreferrer">
-                            {getFileBase(f.Filename)}
-                        </a> - Synapse ID: {f.synapseId}
+                {files.map((file) => (
+                    <div key={file.synapseId}>
+                        <FontAwesomeIcon color="#1adb54" icon={faLockOpen} />{' '}
+                        {getFileBase(file.Filename)} (
+                        <a
+                            href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {file.synapseId}
+                        </a>
+                        )
                     </div>
                 ))}
             </code>
@@ -346,7 +387,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
             <hr></hr>
             <h4><strong>Access files available in Synapse:</strong></h4>
             <p>
-                The files below are available through{' '}
+                The files listed below are available through{' '}
                 <a
                     href="https://synapse.org"
                     target="_blank"
@@ -356,14 +397,14 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
             </p>
             <SynapseFileList files={props.files} />
             <p>
-                Use the{' '}
+                You can use the{' '}
                 <a
                     href="https://docs.synapse.org/articles/getting_started_clients.html"
                     target="_blank"
                 >
-                    Synapse command line client
+                    Synapse CLI
                 </a>{' '}
-                to download the selected files:
+                command below to download the selected files.
             </p>
             <pre className="pre-scrollable">
                 <code>{script}</code>
