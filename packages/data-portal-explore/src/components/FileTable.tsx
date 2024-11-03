@@ -215,7 +215,7 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
 
     return (
         <div>
-            <strong>Download Files using the Gen3 SDK for Python:</strong>
+            <p><strong>Download Files using the Gen3 SDK for Python:</strong></p>
             <ol>
                 <li>
                     Ensure you have the{' '}
@@ -262,6 +262,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (props) =>
 
     return (
         <div>
+            <hr>
             <h4>Files Available through NCI CRDC Cancer Data Service (CDS)</h4>
             {dbgapInstructions(props.files)}
             {openAccessInstructions(props.files)}
@@ -326,6 +327,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 
     return (
         <>
+            <hr>
             <h4>Access files available in Synapse</h4>
             <p>
                 The files below are available through{''}
@@ -350,7 +352,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 <code>{script}</code>
             </pre>
             <p>
-                It is required to{' '}
+                You'll need to register for {' '}
                 <a
                     href="https://www.synapse.org/#!RegisterAccount:0"
                     target="_blank"
@@ -368,10 +370,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 >
                     Synapse documentation
                 </a>
-                .
-            </p>
-            <p>
-                Note that the files can also be downloaded manually through the
+                . These can also be downloaded individually through the
                 Synapse web interface by clicking on the file name.
             </p>
         </>
@@ -421,8 +420,8 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                         <li key={index}>{message}</li>
                     ))}
                 </ul>
-                <p>Follow the instructions below on how to access data from each of these sources.</p>
-                <p>Further derails are avaliable in the <a href='docs.humantumoratlas.org'>HTAN Manual</a>.</p>
+                <p>Follow the instructions below on how to access data from each of these sources.{' '}
+                Further details are avaliable in the <a href='docs.humantumoratlas.org'>HTAN Manual</a>.</p>
 
                 {/* CDS Section */}
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
