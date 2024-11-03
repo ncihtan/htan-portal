@@ -206,7 +206,7 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
             >
                 <FontAwesomeIcon icon={faDownload} /> Download <code>cds_manifest.csv</code>
             </button>
-        </div
+        </div>
     );
 };
 
