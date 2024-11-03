@@ -10,6 +10,8 @@ import {
     faDownload,
     faExternalLinkAlt,
     faLockOpen,
+    faLock,
+    faHourglassStart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -120,15 +122,17 @@ function copyToClipboard(text: string) {
 
 const FilenameWithAccessIcon: React.FunctionComponent<{
     file: Entity;
-}> = (props) => {
+}> = ({ file }) => {
+    const isControlledAccess = file.downloadSource === DownloadSourceCategory.dbgap;
+    const iconColor = isControlledAccess ? '#FF8C00' : '#00796B'; // Amber for controlled, Dark Teal for open
+
     return (
         <>
-            {props.file.downloadSource === DownloadSourceCategory.dbgap ? (
-                '🔒'
-            ) : (
-                <FontAwesomeIcon color="#1adb54" icon={faLockOpen} />
-            )}{' '}
-            {getFileBase(props.file.Filename)}
+            <FontAwesomeIcon
+                icon={isControlledAccess ? faLock : faLockOpen}
+                color={iconColor}
+            />{' '}
+            {getFileBase(file.Filename)}
             {'\n'}
         </>
     );
@@ -320,7 +324,11 @@ const NotDownloadableInstructions: React.FunctionComponent<{
             {/* List the files */}
             <pre className="pre-scrollable">
                 <code>
-                    {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
+                    {props.files.map((f) => (
+                        <div key={f.Filename}>
+                            <FontAwesomeIcon icon={faHourglassStart} /> {getFileBase(f.Filename)}
+                        </div>
+                    ))}
                 </code>
             </pre>
 
@@ -360,7 +368,7 @@ const SynapseFileList: React.FunctionComponent<{
             <code>
                 {files.map((file) => (
                     <div key={file.synapseId}>
-                        <FontAwesomeIcon color="#1adb54" icon={faLockOpen} />{' '}
+                        <FontAwesomeIcon color="#00796B" icon={faLockOpen} />{' '}
                         {getFileBase(file.Filename)} (
                         <a
                             href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
