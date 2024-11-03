@@ -464,7 +464,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     };
 
     return (
-        <Modal show={props.isOpen} onHide={props.onClose} style={{ width: '80%', maxWidth: '800px' }}>
+        <Modal show={props.isOpen} onHide={props.onClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Download Selected Files</Modal.Title>
             </Modal.Header>
