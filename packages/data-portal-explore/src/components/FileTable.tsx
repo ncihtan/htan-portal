@@ -213,15 +213,6 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
 const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
     if (!gen3manifestFile) return null;
 
-    const [icon, setIcon] = useState(faCopy);
-
-    const handleCopyClick = () => {
-        copyToClipboard(
-            'gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir'
-        );
-        setIcon(faCheck);
-    };
-
     return (
         <div>
             <strong>Download Files using the Gen3 SDK for Python:</strong>
@@ -259,9 +250,6 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                             {'    '}my_htan_dir{'\n'}
                         </code>
                     </pre>
-                    <button onClick={handleCopyClick}>
-                        <FontAwesomeIcon icon={icon} />
-                    </button>
                 </li>
             </ol>
         </div>
@@ -361,7 +349,6 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
             <pre className="pre-scrollable">
                 <code>{script}</code>
             </pre>
-            <button onClick={() => copyToClipboard(script)}>Copy</button>
             <p>
                 It is required to{' '}
                 <a
