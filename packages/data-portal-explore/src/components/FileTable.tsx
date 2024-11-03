@@ -148,20 +148,6 @@ const CDSFileList: React.FunctionComponent<{
     );
 };
 
-const SynapseFileList: React.FunctionComponent<{
-    files: Entity[];
-}> = (props) => {
-    return (
-        <pre className="pre-scrollable">
-            <code>
-                {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
-            </code>
-        </pre>
-    );
-};
-
-
-
 const dbgapInstructions = (files: Entity[]) => {
     const dbgapFiles = files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
