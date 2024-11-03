@@ -125,6 +125,8 @@ function getColumnDef(
                 </Tooltip>
             ),
             selector: ColumnSelector.ManifestName,
+            format: (row: DataSchemaData) =>
+                (row as DataSchemaDataWithManifest).manifestNames.join(','),
             cell: (row: DataSchemaData) => {
                 const extendedRow = row as DataSchemaDataWithManifest;
                 return (

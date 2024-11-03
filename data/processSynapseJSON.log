@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
   40kB  sourcemap-register.js
-8467kB  index.js
-1411kB  index.js.map
-8507kB  [19268ms] - ncc 0.28.6
+8475kB  index.js
+1420kB  index.js.map
+8515kB  [43853ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'BulkDNALevel3',
   Filename: 'WGS_level_3_ped_glioma/HTAN_pHGG_1057/7316_1057_reg1_Unpaired_withPon.manta.PASS.vcf.gz',
