@@ -128,7 +128,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                             })
                             .map((e: OptionType) => {
                                 const downloadLabels = {
-                                    [DownloadSourceCategory.dbgap]:
+                                    [DownloadSourceCategory.dbgap]: (
                                         <span>
                                             CDS/SB-CGC (dbGaP{' '}
                                             <FontAwesomeIcon
@@ -137,6 +137,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                             />
                                             )
                                         </span>
+                                    ),
                                     // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
                                     [DownloadSourceCategory.cds]: (
                                         <span>
