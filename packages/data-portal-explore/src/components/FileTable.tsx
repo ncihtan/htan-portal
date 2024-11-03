@@ -276,9 +276,8 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
             <h4><strong>Files Available through NCI CRDC Cancer Data Service (CDS)</strong></h4>
 
             {/* Render dbGaP instructions if dbGaP files exist */}
-            {dbgapFiles.length > 0 ? (
+            {dbgapFiles.length > 0 && (
                 <div>
-                    <CDSFileList files={dbgapFiles} />
                     <p>
                         Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒).
                         To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
@@ -290,15 +289,16 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
                             HTAN dbGaP Study, Accession: phs002371
                         </a>.
                     </p>
+                    <CDSFileList files={dbgapFiles} />
                 </div>
-            ) : (
-                // Render open access instructions only if no dbGaP files and open access files exist
-                openAccessFiles.length > 0 && (
-                    <div>
-                        <CDSFileList files={openAccessFiles} />
-                        <p>These files are available without additional access requirements.</p>
-                    </div>
-                )
+            )}
+            
+            {/* Render open access instructions if open access files exist */}
+            {openAccessFiles.length > 0 && (
+                <div>
+                    <p>These files are available without additional access requirements.</p>
+                    <CDSFileList files={openAccessFiles} />
+                </div>
             )}
 
             {/* CDS and Gen3 manifest instructions */}
@@ -490,15 +490,15 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 
                 {/* CDS Section */}
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
-                
-                {/* Not Downloadable Section */}
-                {notDownloadableFiles.length > 0 && (
-                    <NotDownloadableInstructions files={notDownloadableFiles} />
-                )}
 
                 {/* Synapse Section */}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
+                )}
+
+                {/* Not Downloadable Section */}
+                {notDownloadableFiles.length > 0 && (
+                    <NotDownloadableInstructions files={notDownloadableFiles} />
                 )}
             </Modal.Body>
 

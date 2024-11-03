@@ -4,7 +4,7 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 import { generatePublicationPageTabUrl } from '../lib/dataTableHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 interface IDataAvailabilityTableProps {
     assays: { [assayName: string]: Entity[] };
@@ -88,13 +88,20 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                 <tr>
                     <th>Files</th>
                     <th>
-                        <a href="/data-access">CDS/SB-CGC (dbGaP 🔒)</a>
+                        <a href="/data-access">
+                            CDS/SB-CGC (dbGaP{' '}
+                            <FontAwesomeIcon
+                                color="#FF8C00"
+                                icon={faLock}
+                            />
+                            )
+                        </a>
                     </th>
                     <th>
                         <a href="/data-access">
                             CDS/SB-CGC (Open Access{` `}
                             <FontAwesomeIcon
-                                color="#1adb54"
+                                color="#00796B"
                                 icon={faLockOpen}
                             />
                             )
@@ -104,7 +111,7 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                         <a href="/data-access">
                             Synapse (Open Access{` `}
                             <FontAwesomeIcon
-                                color="#1adb54"
+                                color="#00796B"
                                 icon={faLockOpen}
                             />
                             )
