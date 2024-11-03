@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 import {
     FilterControls,
