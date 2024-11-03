@@ -262,7 +262,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = (props) =>
 
     return (
         <div>
-            <hr>
+            <hr></hr>
             <h4>Files Available through NCI CRDC Cancer Data Service (CDS)</h4>
             {dbgapInstructions(props.files)}
             {openAccessInstructions(props.files)}
@@ -327,7 +327,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 
     return (
         <>
-            <hr>
+            <hr></hr>
             <h4>Access files available in Synapse</h4>
             <p>
                 The files below are available through{''}
@@ -352,7 +352,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 <code>{script}</code>
             </pre>
             <p>
-                You'll need to register for {' '}
+                You'll need to{' '}
                 <a
                     href="https://www.synapse.org/#!RegisterAccount:0"
                     target="_blank"
