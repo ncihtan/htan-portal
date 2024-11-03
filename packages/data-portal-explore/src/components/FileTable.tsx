@@ -219,42 +219,42 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
         <div>
             <p></p>
             <p><strong>Download Files using the Gen3 SDK for Python:</strong></p>
-            <ol>
-                <li>
-                    Ensure you have the{' '}
-                    <a href="https://pypi.org/project/gen3/">Gen3 SDK for Python</a>{' '}
-                    installed and your{' '}
-                    <a
-                        href="https://nci-crdc.datacommons.io/identity"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        NCI Data Commons Framework Services API Key
-                    </a>{' '}
-                    stored in <code>~/.gen3/credentials.json</code>.
-                </li>
-                <li>
-                    <p>Download the Gen3 manifest file.</p>
-                    <button
-                        className="btn btn-light"
-                        onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
-                    >
-                        <FontAwesomeIcon icon={faDownload} /> Download <code>gen3_manifest.json</code>
-                    </button>
-                </li>
-                <li>
-                    <p>Run the following <code>gen3</code> command.</p>
-                    <pre className="pre-scrollable">
+            <p>
+                Ensure you have the{' '}
+                <a href="https://pypi.org/project/gen3/">Gen3 SDK for Python</a>{' '}
+                installed (<code>pip install gen3</code>) and that your{' '}
+                <a
+                    href="https://nci-crdc.datacommons.io/identity"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    NCI Data Commons Framework Services API Key
+                </a>{' '}
+                is stored in <code>~/.gen3/credentials.json</code>.{''}
+                (Note that Python 3.12 is not supported by the Gen3 SDK at this time.)
+            </p>
+            <p>
+                <button
+                    className="btn btn-light"
+                    onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
+                >
+                    <FontAwesomeIcon icon={faDownload} /> Download <code>gen3_manifest.json</code>
+                </button>
+            </p>
+            <p>
+                Run the following <code>gen3</code> command.
+                <pre className="pre-scrollable">
+                    <pre style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '5px' }}>
                         <code>
                         {`gen3 \\
-    --endpoint=nci-crdc.datacommons.io \\
-    drs-pull \\
-    manifest gen3_manifest.json \\
-    my_htan_dir`}
+                    --endpoint=nci-crdc.datacommons.io \\
+                    drs-pull \\
+                    manifest gen3_manifest.json \\
+                    my_htan_dir`}
                         </code>
                     </pre>
-                </li>
-            </ol>
+                </pre>
+            </p>
         </div>
     );
 };
