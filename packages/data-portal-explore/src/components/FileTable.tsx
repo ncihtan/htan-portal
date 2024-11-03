@@ -148,6 +148,18 @@ const CDSFileList: React.FunctionComponent<{
     );
 };
 
+const SynapseFileList: React.FunctionComponent<{
+    files: Entity[];
+}> = (props) => {
+    return (
+        <pre className="pre-scrollable">
+            <code>
+                {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
+            </code>
+        </pre>
+    );
+};
+
 
 
 const dbgapInstructions = (files: Entity[]) => {
@@ -282,7 +294,7 @@ const NotDownloadableInstructions: React.FunctionComponent<{
 
     return props.files.length > 0 ? (
         <div>
-            <h4>Coming Soon</h4>
+            <h4><strong>>Files coming soon</strong</h4>
             <p>Your selection includes data that is not downloadable yet:</p>
             
             {/* List the files */}
@@ -320,6 +332,24 @@ function generateDownloadScript(files: Entity[]) {
         .join('\n');
 }
 
+const SynapseFileList: React.FunctionComponent<{
+    files: Entity[];
+}> = (props) => {
+    return (
+        <pre className="pre-scrollable">
+            <code>
+                {props.files.map((f) => (
+                    <div key={f.synapseId}>
+                        <a href={`https://www.synapse.org/#!Synapse:${f.synapseId}`} target="_blank" rel="noopener noreferrer">
+                            {getFileBase(f.Filename)}
+                        </a> - Synapse ID: {f.synapseId}
+                    </div>
+                ))}
+            </code>
+        </pre>
+    );
+};
+
 const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
@@ -328,16 +358,17 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     return (
         <>
             <hr></hr>
-            <h4>Access files available in Synapse</h4>
+            <h4><strong>Access files available in Synapse:</strong></h4>
             <p>
-                The files below are available through{''}
+                The files below are available through{' '}
                 <a
-                    href="synapse.org"
+                    href="https://synapse.org"
                     target="_blank"
                 >
                     Synapse
                 </a>.
             </p>
+            <SynapseFileList files={props.files} />
             <p>
                 Use the{' '}
                 <a
@@ -370,8 +401,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 >
                     Synapse documentation
                 </a>
-                . These can also be downloaded individually through the
-                Synapse web interface by clicking on the file name.
+                . Files can also be downloaded manually through the Synapse web interface by clicking on the file name.
             </p>
         </>
     );
