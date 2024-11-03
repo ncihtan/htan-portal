@@ -186,7 +186,7 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
 
     return (
         <div>
-            <h5>Load Files into SevenBridges CGC</h5>
+            <strong>Load Files into SevenBridges CGC:</strong>
             <p>
                 You can import this manifest file into the{' '}
                 <a href="https://docs.cancergenomicscloud.org" target="_blank">
@@ -215,38 +215,54 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
 
     return (
         <div>
-            <h5>Download Files using the Gen3 SDK for Python</h5>
-            <p>Ensure you have the Gen3 SDK for Python installed:</p>
-            <pre className="pre-scrollable">
-                <code>pip install gen3</code>
-            </pre>
-            <p>
-                Generate your{' '}
-                <a href="https://nci-crdc.datacommons.io/identity" target="_blank">
-                    NCI Data Commons Framework Services API Key
-                </a>{' '}
-                and download the generated <code>credentials.json</code> file.
-            </p>
-            <p>Store your credentials in <code>~/.gen3/credentials.json</code></p>
-            <p>Download the files using the following command:</p>
-            <pre className="pre-scrollable">
-                <code>
-                    gen3 \
-                    --endpoint=nci-crdc.datacommons.io \
-                    drs-pull \
-                    manifest gen3_manifest.json \
-                    my_htan_dir
-                </code>
-            </pre>
-            <button onClick={() => copyToClipboard('gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir')}>Copy</button>
-            <p>
-                <button
-                    className="btn btn-light"
-                    onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
-                >
-                    <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
-                </button>
-            </p>
+            <strong>Download Files using the Gen3 SDK for Python:</strong>
+            <ol>
+                <li>
+                    Ensure you have the{' '}
+                    <a href="https://pypi.org/project/gen3/">Gen3 SDK for Python</a>{' '}
+                    installed and your{' '}
+                    <a
+                        href="https://nci-crdc.datacommons.io/identity"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        NCI Data Commons Framework Services API Key
+                    </a>{' '}
+                    stored in <code>~/.gen3/credentials.json</code>.
+                </li>
+                <li>
+                    <p>Download the Gen3 manifest file below.</p>
+                    <p>
+                        <button
+                            className="btn btn-light"
+                            onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
+                        >
+                            <FontAwesomeIcon icon={faDownload} /> Download Gen3 Manifest
+                        </button>
+                    </p>
+                </li>
+                <li>
+                    <p>Run the following <code>gen3</code> command.</p>
+                    <pre className="pre-scrollable">
+                        <code>
+                            gen3 \
+                            --endpoint=nci-crdc.datacommons.io \
+                            drs-pull \
+                            manifest gen3_manifest.json \
+                            my_htan_dir
+                        </code>
+                    </pre>
+                    <button
+                        onClick={() =>
+                            copyToClipboard(
+                                'gen3 --endpoint=nci-crdc.datacommons.io drs-pull manifest gen3_manifest.json my_htan_dir'
+                            )
+                        }
+                    >
+                        Copy
+                    </button>
+                </li>
+            </ol>
         </div>
     );
 };
@@ -298,103 +314,6 @@ const NotDownloadableInstructions: React.FunctionComponent<{
             )}
         </div>
     ) : null;
-};
-
-const ImagingInstructionsIDC: React.FunctionComponent<{ files: Entity[] }> = (
-    props
-) => {
-    const [cloudSource, setCloudSource] = useState<'gcp' | 'aws'>('gcp');
-    const getImageBucketUrl = (info: ImageViewerInfo) => {
-        return cloudSource === 'gcp'
-            ? info.idcImageBucketGcpUrl
-            : info.idcImageBucketAwsUrl;
-    };
-
-    const idcImageBucketUrls: string[] = props.files
-        .map(
-            (f) => getImageBucketUrl(getImageViewersAssociatedWithFile(f)) || []
-        )
-        .flat();
-    const filesNotDownloadableFromIDC: Entity[] = props.files.filter(
-        (f) =>
-            getImageBucketUrl(getImageViewersAssociatedWithFile(f)) ===
-            undefined
-    );
-
-    return (
-        <>
-            {idcImageBucketUrls.length > 0 && (
-                <div>
-                    <p>
-                        Imaging data is available in{' '}
-                        <a
-                            href="https://learn.canceridc.dev/dicom/dicom-tiff-dual-personality-files"
-                            target="_blank"
-                        >
-                            DICOM-TIFF format
-                        </a>{' '}
-                        from the{' '}
-                        <a
-                            href="https://imaging.datacommons.cancer.gov/explore/"
-                            target="_blank"
-                        >
-                            Imaging Data Commons (IDC)
-                        </a>
-                    </p>
-                    <p>
-                        Cloud source:{' '}
-                        <Form>
-                            <Form.Group>
-                                <Form.Check
-                                    onChange={() => setCloudSource('gcp')}
-                                    type="radio"
-                                    label={
-                                        'GCP - sponsored by Google Public Data Program'
-                                    }
-                                    checked={cloudSource === 'gcp'}
-                                />
-                                <Form.Check
-                                    onChange={() => setCloudSource('aws')}
-                                    type="radio"
-                                    label={
-                                        'AWS - sponsored by AWS Open Data Sponsorship Program'
-                                    }
-                                    checked={cloudSource === 'aws'}
-                                />
-                            </Form.Group>
-                        </Form>
-                    </p>
-                    <p>
-                        To download the images in this manifest,{' '}
-                        <a
-                            href={'https://github.com/peak/s5cmd#installation'}
-                            target="_blank"
-                        >
-                            install s5cmd
-                        </a>
-                        , then run the following command:
-                    </p>
-                    <p>
-                        <strong>
-                            s5cmd --no-sign-request --endpoint-url{' '}
-                            {cloudSource === 'gcp'
-                                ? 'https://storage.googleapis.com'
-                                : 'https://s3.amazonaws.com'}{' '}
-                            run manifest.txt
-                        </strong>
-                    </p>
-                    <p>
-                        You can use the below bucket URLs for the{' '}
-                        <code>manifest.txt</code> file:
-                    </p>
-                    <pre className="pre-scrollable">
-                        <code>{idcImageBucketUrls.join('\n')}</code>
-                    </pre>
-                </div>
-            )}
-            <NotDownloadableInstructions files={filesNotDownloadableFromIDC} />
-        </>
-    );
 };
 
 function generateDownloadScript(files: Entity[]) {
@@ -508,12 +427,14 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
 
             <Modal.Body>
                 {/* Summary Section */}
-                <p><strong>Your selected files include files that are:</strong></p>
+                <p>Your selection include files that are:</p>
                 <ul>
                     {availabilityMessage().map((message, index) => (
                         <li key={index}>{message}</li>
                     ))}
                 </ul>
+                <p>Follow the instructions below on how to access data from each of these sources.</p>
+                <p>Further derails are avaliable in the <a href='docs.humantumoratlas.org'>HTAN Manual</a>.</p>
 
                 {/* CDS Section */}
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
