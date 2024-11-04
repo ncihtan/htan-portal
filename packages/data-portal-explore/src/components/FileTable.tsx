@@ -104,21 +104,6 @@ function generateGen3ManifestFile(files: Entity[]): string | undefined {
     return data.length > 0 ? JSON.stringify(data, null, 2) : undefined;
 }
 
-function generateGen3Commands(files: Entity[]): string {
-    const guids = files
-        .filter((f) => !!f.viewers?.cds?.drs_uri)
-        .map((f) => f.viewers?.cds?.drs_uri?.replace('drs://nci-crdc.datacommons.io/', '') || '')
-        .join(' ');
-
-    // Return a single command that pulls all objects at once
-    return guids ? `gen3 --endpoint=nci-crdc.datacommons.io/ drs-pull objects ${guids}` : '';
-}
-
-function copyToClipboard(text: string) {
-    navigator.clipboard.writeText(text).then(() => {
-        alert("Copied to clipboard!");
-    });
-}
 
 const FilenameWithAccessIcon: React.FunctionComponent<{
     file: Entity;
