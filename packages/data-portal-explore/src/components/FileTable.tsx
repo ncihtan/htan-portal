@@ -10,6 +10,8 @@ import {
     faDownload,
     faExternalLinkAlt,
     faLockOpen,
+    faLock,
+    faHourglassStart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -43,6 +45,7 @@ import {
 } from '@htan/data-portal-commons';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
+const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -87,17 +90,34 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
     }
 }
 
+function generateGen3ManifestFile(files: Entity[]): string | undefined {
+    const data = _(files)
+        .filter((f) => !!f.viewers?.cds)
+        .map((f) => ({
+            object_id: f.viewers?.cds?.drs_uri?.replace(
+                'drs://nci-crdc.datacommons.io/',
+                ''
+            ),
+        }))
+        .value();
+
+    return data.length > 0 ? JSON.stringify(data, null, 2) : undefined;
+}
+
+
 const FilenameWithAccessIcon: React.FunctionComponent<{
     file: Entity;
-}> = (props) => {
+}> = ({ file }) => {
+    const isControlledAccess = file.downloadSource === DownloadSourceCategory.dbgap;
+    const iconColor = isControlledAccess ? '#FF8C00' : '#00796B'; // Amber for controlled, Dark Teal for open
+
     return (
         <>
-            {props.file.downloadSource === DownloadSourceCategory.dbgap ? (
-                '🔒'
-            ) : (
-                <FontAwesomeIcon color="#1adb54" icon={faLockOpen} />
-            )}{' '}
-            {getFileBase(props.file.Filename)}
+            <FontAwesomeIcon
+                icon={isControlledAccess ? faLock : faLockOpen}
+                color={iconColor}
+            />{' '}
+            {getFileBase(file.Filename)}
             {'\n'}
         </>
     );
@@ -117,74 +137,166 @@ const CDSFileList: React.FunctionComponent<{
     );
 };
 
-const CDSInstructions: React.FunctionComponent<{
-    files: Entity[];
-}> = (props) => {
-    const manifestFile = generateCdsManifestFile(props.files);
-    const dbgapFiles = props.files.filter(
+const dbgapInstructions = (files: Entity[]) => {
+    const dbgapFiles = files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
     );
+    if (dbgapFiles.length === 0) return null;
 
-    const manifestInstructions = (
-        <>
-            you can import this manifest file into CGC following the
-            instructions{' '}
-            <a
-                href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
-                target="_blank"
-            >
-                here
-            </a>
-            .
-        </>
-    );
-
-    const dbgapInstructions = (
-        <>
+    return (
+        <div>
+            <CDSFileList files={files} />
             <p>
-                Your selection includes Level 1 and/or Level 2 sequencing data
-                (🔒):
-            </p>
-            <CDSFileList files={props.files} />
-            <p>
-                To download Level 1/2 sequencing data you first need to request{' '}
+                Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒). 
+                To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
                 <a
                     href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
                     target="_blank"
                 >
-                    dbGaP
-                </a>{' '}
-                access. Afterwards {manifestInstructions}
+                    HTAN dbGaP Study, Accession: phs002371
+                </a>.
             </p>
-        </>
-    );
-
-    const openAccessInstructions = (
-        <>
-            <CDSFileList files={props.files} />
-            <p>To download selected files {manifestInstructions}</p>
-        </>
-    );
-
-    return (
-        <>
-            {dbgapFiles.length > 0 && dbgapInstructions}
-            {dbgapFiles.length === 0 && openAccessInstructions}
-            {manifestFile?.length && (
-                <p>
-                    <button
-                        className="btn btn-light"
-                        onClick={() =>
-                            fileDownload(manifestFile, CDS_MANIFEST_FILENAME)
-                        }
-                    >
-                        <FontAwesomeIcon icon={faDownload} /> Download Manifest
-                    </button>
-                </p>
-            )}
-        </>
+        </div>
     );
 };
+
+const openAccessInstructions = (files: Entity[]) => {
+    return (
+        <div>
+            <CDSFileList files={files} />
+        </div>
+    );
+};
+
+const cdsManifestInstructions = (manifestFile: string | undefined) => {
+    if (!manifestFile) return null;
+
+    return (
+        <div>
+            <p>
+                <strong>Load Files into SevenBridges CGC:</strong>{' '}
+                You can import these files into the{' '}
+                <a href="https://docs.cancergenomicscloud.org" target="_blank">
+                    SevenBridges Cancer Genomics Cloud (SB-CGC)
+                </a>{' '}
+                by downloading the CDS manifest file below and following the instructions{' '}
+                <a
+                    href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
+                    target="_blank"
+                >
+                    here
+                </a>.
+            </p>
+            <button
+                className="btn btn-light"
+                onClick={() => fileDownload(manifestFile, CDS_MANIFEST_FILENAME)}
+            >
+                <FontAwesomeIcon icon={faDownload} /> Download <code>cds_manifest.csv</code>
+            </button>
+        </div>
+    );
+};
+
+const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
+    if (!gen3manifestFile) return null;
+
+    return (
+        <div>
+            <p></p>
+            <p>
+                <strong>Download Files using the Gen3 SDK for Python:</strong>{' '}
+                You can download these files using the{' '}
+                <a href="https://pypi.org/project/gen3/">Gen3 SDK for Python</a>{' '}
+                (<code>pip install gen3</code>). Ensure that your{' '}
+                <a
+                    href="https://nci-crdc.datacommons.io/identity"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    NCI Data Commons Framework Services API Key
+                </a>{' '}
+                is stored in <code>~/.gen3/credentials.json</code>.{' '}
+                (Note that Python 3.12 is not supported by the Gen3 SDK at this time.)
+            </p>
+            <p>
+                <button
+                    className="btn btn-light"
+                    onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
+                >
+                    <FontAwesomeIcon icon={faDownload} /> Download <code>gen3_manifest.json</code>
+                </button>
+            </p>
+            <p>
+                Run the following <code>gen3</code> command.
+                <pre className="pre-scrollable">
+                    <pre style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '5px' }}>
+                        <code>
+                        {`gen3 \\
+    --endpoint=nci-crdc.datacommons.io \\
+    drs-pull \\
+    manifest gen3_manifest.json \\
+    my_htan_dir`}
+                        </code>
+                    </pre>
+                </pre>
+            </p>
+        </div>
+    );
+};
+
+const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }) => {
+    const dbgapFiles = files.filter(
+        (f) => f.downloadSource === DownloadSourceCategory.dbgap
+    );
+    const openAccessFiles = files.filter(
+        (f) => f.downloadSource !== DownloadSourceCategory.dbgap
+    );
+
+    const manifestFile = generateCdsManifestFile(files);
+    const gen3manifestFile = generateGen3ManifestFile(files);
+
+    return (
+        <div>
+            <hr />
+            <h4><strong>Files Available through NCI CRDC Cancer Data Service (CDS)</strong></h4>
+
+            {/* Render dbGaP instructions if dbGaP files exist */}
+            {dbgapFiles.length > 0 && (
+                <div>
+                    <p>
+                        <FontAwesomeIcon color="#FF8C00" icon={faLock}/>{' '}
+                        Your selection includes controlled-access Level 1 and/or Level 2 sequencing data.{' '}
+                        To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
+                        <a
+                            href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            HTAN dbGaP Study, Accession: phs002371
+                        </a>.
+                    </p>
+                    <CDSFileList files={dbgapFiles} />
+                </div>
+            )}
+            
+            {/* Render open access instructions if open access files exist */}
+            {openAccessFiles.length > 0 && (
+                <div>
+                    <p>
+                        <FontAwesomeIcon color="#00796B" icon={faLockOpen}/>{' '}
+                        The files listed below are available without additional access requirements.
+                    </p>
+                    <CDSFileList files={openAccessFiles} />
+                </div>
+            )}
+
+            {/* CDS and Gen3 manifest instructions */}
+            {cdsManifestInstructions(manifestFile)}
+            {gen3ManifestInstructions(gen3manifestFile)}
+        </div>
+    );
+};
+
 
 const NotDownloadableInstructions: React.FunctionComponent<{
     files: Entity[];
@@ -195,117 +307,32 @@ const NotDownloadableInstructions: React.FunctionComponent<{
 
     return props.files.length > 0 ? (
         <div>
+            <h4><strong>Files coming soon</strong></h4>
             <p>Your selection includes data that is not downloadable yet:</p>
+            
+            {/* List the files */}
             <pre className="pre-scrollable">
                 <code>
-                    {props.files.map((f) => getFileBase(f.Filename)).join('\n')}
+                    {props.files.map((f) => (
+                        <div key={f.Filename}>
+                            <FontAwesomeIcon icon={faHourglassStart} /> {getFileBase(f.Filename)}
+                        </div>
+                    ))}
                 </code>
             </pre>
-            {hasAnyImageViewersForNonDownloadableFiles && (
-                <span>
-                    Note however that you can explore them in one of the viewers
-                    in the right most column.
-                </span>
+
+            {/* Additional message if files have preview viewers */}
+            {hasAnyImageViewersForNonDownloadableFiles ? (
+                <p>
+                    These files are in preview. You can view metadata or explore them in one of the viewers in the rightmost column while they are prepared for public access.
+                </p>
+            ) : (
+                <p>
+                    These files are in preview. Metadata is available for review while the files are prepared for public access.
+                </p>
             )}
         </div>
     ) : null;
-};
-
-const ImagingInstructionsIDC: React.FunctionComponent<{ files: Entity[] }> = (
-    props
-) => {
-    const [cloudSource, setCloudSource] = useState<'gcp' | 'aws'>('gcp');
-    const getImageBucketUrl = (info: ImageViewerInfo) => {
-        return cloudSource === 'gcp'
-            ? info.idcImageBucketGcpUrl
-            : info.idcImageBucketAwsUrl;
-    };
-
-    const idcImageBucketUrls: string[] = props.files
-        .map(
-            (f) => getImageBucketUrl(getImageViewersAssociatedWithFile(f)) || []
-        )
-        .flat();
-    const filesNotDownloadableFromIDC: Entity[] = props.files.filter(
-        (f) =>
-            getImageBucketUrl(getImageViewersAssociatedWithFile(f)) ===
-            undefined
-    );
-
-    return (
-        <>
-            {idcImageBucketUrls.length > 0 && (
-                <div>
-                    <p>
-                        Imaging data is available in{' '}
-                        <a
-                            href="https://learn.canceridc.dev/dicom/dicom-tiff-dual-personality-files"
-                            target="_blank"
-                        >
-                            DICOM-TIFF format
-                        </a>{' '}
-                        from the{' '}
-                        <a
-                            href="https://imaging.datacommons.cancer.gov/explore/"
-                            target="_blank"
-                        >
-                            Imaging Data Commons (IDC)
-                        </a>
-                    </p>
-                    <p>
-                        Cloud source:{' '}
-                        <Form>
-                            <Form.Group>
-                                <Form.Check
-                                    onChange={() => setCloudSource('gcp')}
-                                    type="radio"
-                                    label={
-                                        'GCP - sponsored by Google Public Data Program'
-                                    }
-                                    checked={cloudSource === 'gcp'}
-                                />
-                                <Form.Check
-                                    onChange={() => setCloudSource('aws')}
-                                    type="radio"
-                                    label={
-                                        'AWS - sponsored by AWS Open Data Sponsorship Program'
-                                    }
-                                    checked={cloudSource === 'aws'}
-                                />
-                            </Form.Group>
-                        </Form>
-                    </p>
-                    <p>
-                        To download the images in this manifest,{' '}
-                        <a
-                            href={'https://github.com/peak/s5cmd#installation'}
-                            target="_blank"
-                        >
-                            install s5cmd
-                        </a>
-                        , then run the following command:
-                    </p>
-                    <p>
-                        <strong>
-                            s5cmd --no-sign-request --endpoint-url{' '}
-                            {cloudSource === 'gcp'
-                                ? 'https://storage.googleapis.com'
-                                : 'https://s3.amazonaws.com'}{' '}
-                            run manifest.txt
-                        </strong>
-                    </p>
-                    <p>
-                        You can use the below bucket URLs for the{' '}
-                        <code>manifest.txt</code> file:
-                    </p>
-                    <pre className="pre-scrollable">
-                        <code>{idcImageBucketUrls.join('\n')}</code>
-                    </pre>
-                </div>
-            )}
-            <NotDownloadableInstructions files={filesNotDownloadableFromIDC} />
-        </>
-    );
 };
 
 function generateDownloadScript(files: Entity[]) {
@@ -322,6 +349,31 @@ function generateDownloadScript(files: Entity[]) {
         .join('\n');
 }
 
+const SynapseFileList: React.FunctionComponent<{
+    files: Entity[];
+}> = ({ files }) => {
+    return (
+        <pre className="pre-scrollable">
+            <code>
+                {files.map((file) => (
+                    <div key={file.synapseId}>
+                        <FontAwesomeIcon color="#00796B" icon={faLockOpen} />{' '}
+                        {getFileBase(file.Filename)} (
+                        <a
+                            href={`https://www.synapse.org/#!Synapse:${file.synapseId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {file.synapseId}
+                        </a>
+                        )
+                    </div>
+                ))}
+            </code>
+        </pre>
+    );
+};
+
 const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     props
 ) => {
@@ -329,21 +381,33 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 
     return (
         <>
+            <hr></hr>
+            <h4><strong>Files available in Synapse</strong></h4>
             <p>
-                Use the{' '}
+                The files listed below are available through{' '}
+                <a
+                    href="https://synapse.org"
+                    target="_blank"
+                >
+                    Synapse
+                </a>.
+            </p>
+            <SynapseFileList files={props.files} />
+            <p>
+                You can use the{' '}
                 <a
                     href="https://docs.synapse.org/articles/getting_started_clients.html"
                     target="_blank"
                 >
-                    Synapse command line client
+                    Synapse CLI
                 </a>{' '}
-                to download the selected files:
+                command below to download the selected files.
             </p>
             <pre className="pre-scrollable">
                 <code>{script}</code>
             </pre>
             <p>
-                It is required to{' '}
+                You'll need to{' '}
                 <a
                     href="https://www.synapse.org/#!RegisterAccount:0"
                     target="_blank"
@@ -361,11 +425,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 >
                     Synapse documentation
                 </a>
-                .
-            </p>
-            <p>
-                Note that the files can also be downloaded manually through the
-                Synapse web interface by clicking on the file name.
+                . Files can also be downloaded manually through the Synapse web interface by clicking on the file name.
             </p>
         </>
     );
@@ -386,6 +446,20 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 !f.viewers?.cds)
     );
 
+    const availabilityMessage = () => {
+        const messages = [];
+        if (cdsFiles.length > 0) {
+            messages.push("Available through NCI CRDC Cancer Data Service (CDS)");
+        }
+        if (synapseFiles.length > 0) {
+            messages.push("Available through Synapse");
+        }
+        if (notDownloadableFiles.length > 0) {
+            messages.push("Coming soon (not downloadable yet)");
+        }
+        return messages;
+    };
+
     return (
         <Modal show={props.isOpen} onHide={props.onClose}>
             <Modal.Header closeButton>
@@ -393,12 +467,27 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
+                {/* Summary Section */}
+                <p>Your selection include files that are:</p>
+                <ul>
+                    {availabilityMessage().map((message, index) => (
+                        <li key={index}>{message}</li>
+                    ))}
+                </ul>
+                <p>Follow the instructions below on how to access data from each of these sources.{' '}
+                Further details are avaliable in the <a href='docs.humantumoratlas.org'>HTAN Manual</a>.</p>
+
+                {/* CDS Section */}
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
-                {notDownloadableFiles.length > 0 && (
-                    <NotDownloadableInstructions files={notDownloadableFiles} />
-                )}
+
+                {/* Synapse Section */}
                 {synapseFiles.length > 0 && (
                     <SynapseInstructions files={synapseFiles} />
+                )}
+
+                {/* Not Downloadable Section */}
+                {notDownloadableFiles.length > 0 && (
+                    <NotDownloadableInstructions files={notDownloadableFiles} />
                 )}
             </Modal.Body>
 

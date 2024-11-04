@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 import {
     FilterControls,
@@ -128,14 +128,22 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                             })
                             .map((e: OptionType) => {
                                 const downloadLabels = {
-                                    [DownloadSourceCategory.dbgap]:
-                                        'CDS/SB-CGC (dbGaP 🔒)',
+                                    [DownloadSourceCategory.dbgap]: (
+                                        <span>
+                                            CDS/SB-CGC (dbGaP{' '}
+                                            <FontAwesomeIcon
+                                                color="#FF8C00"
+                                                icon={faLock}
+                                            />
+                                            )
+                                        </span>
+                                    ),
                                     // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
                                     [DownloadSourceCategory.cds]: (
                                         <span>
                                             CDS/SB-CGC (Open Access{' '}
                                             <FontAwesomeIcon
-                                                color="#1adb54"
+                                                color="#00796B"
                                                 icon={faLockOpen}
                                             />
                                             )
@@ -145,7 +153,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                         <span>
                                             Synapse (Open Access{' '}
                                             <FontAwesomeIcon
-                                                color="#1adb54"
+                                                color="#00796B"
                                                 icon={faLockOpen}
                                             />
                                             )
