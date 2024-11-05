@@ -20,7 +20,7 @@ module.exports = withMDX({
             },
             {
                 source: '/publications/hta8_crc_moorman_2024',
-                destination: '/',
+                destination: '/publications/hta8_2024_nature_a-r-moorman',
                 permanent: false,
             },
         ];

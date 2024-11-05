@@ -4,7 +4,127 @@ ncc: Using typescript@5.3.3 (local user-provided)
   40kB  sourcemap-register.js
 8475kB  index.js
 1420kB  index.js.map
-8515kB  [43853ms] - ncc 0.28.6
+8515kB  [8818ms] - ncc 0.28.6
+Missing ParentBiospecimenID:  {
+  Component: 'ScRNA-seqLevel3',
+  Filename: 'single_cell_RNAseq_level_3_ped_glioma/HTAN_pHGG_161_New_Reg1_snRNA/barcodes.tsv.gz',
+  FileFormat: 'tsv',
+  HTANParentDataFileID: 'HTA4_2005_26707',
+  HTANDataFileID: 'HTA4_2005_36724',
+  DataCategory: 'Gene Expression Quantification',
+  MatrixType: 'Raw Counts',
+  CellMedianNumberReads: 1000,
+  CellMedianNumberGenes: 1000,
+  CellTotal: 1000,
+  ScRNAseqWorkflowType: 'CellRanger',
+  ScRNAseqWorkflowParametersDescription: 'Default',
+  WorkflowLink: 'https://support.10xgenomics.com/single-cell-gene-expression/software/overview/welcome',
+  WorkflowVersion: 'CellRanger v3.1',
+  synapseId: 'syn51390802',
+  atlasid: 'HTA4',
+  atlas_name: 'HTAN CHOP',
+  level: 'Level 3',
+  assayName: 'scRNA-seq',
+  AtlasMeta: {
+    title: { rendered: 'Center for Pediatric Tumor Cell Atlas' },
+    htan_id: 'hta4',
+    lead_institutions: 'Children’s Hospital of Philadelphia'
+  },
+  DataFileID: 'HTA4_2005_36724',
+  ParentDataFileID: 'HTA4_2005_26707',
+  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  primaryParents: []
+}
+Missing ParentBiospecimenID:  {
+  Component: 'ScRNA-seqLevel3',
+  Filename: 'single_cell_RNAseq_level_3_ped_glioma/HTAN_pHGG_161_New_Reg1_snRNA_bak/barcodes.tsv.gz',
+  FileFormat: 'tsv',
+  HTANParentDataFileID: 'HTA4_2005_26707',
+  HTANDataFileID: 'HTA4_2005_36727',
+  DataCategory: 'Gene Expression Quantification',
+  MatrixType: 'Raw Counts',
+  CellMedianNumberReads: 1000,
+  CellMedianNumberGenes: 1000,
+  CellTotal: 1000,
+  ScRNAseqWorkflowType: 'CellRanger',
+  ScRNAseqWorkflowParametersDescription: 'Default',
+  WorkflowLink: 'https://support.10xgenomics.com/single-cell-gene-expression/software/overview/welcome',
+  WorkflowVersion: 'CellRanger v3.1',
+  synapseId: 'syn51390809',
+  atlasid: 'HTA4',
+  atlas_name: 'HTAN CHOP',
+  level: 'Level 3',
+  assayName: 'scRNA-seq',
+  AtlasMeta: {
+    title: { rendered: 'Center for Pediatric Tumor Cell Atlas' },
+    htan_id: 'hta4',
+    lead_institutions: 'Children’s Hospital of Philadelphia'
+  },
+  DataFileID: 'HTA4_2005_36727',
+  ParentDataFileID: 'HTA4_2005_26707',
+  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  primaryParents: []
+}
+Missing ParentBiospecimenID:  {
+  Component: 'ScRNA-seqLevel3',
+  Filename: 'single_cell_RNAseq_level_3_ped_glioma/HTAN_pHGG_161_New_Reg1_snRNA_bak/features.tsv.gz',
+  FileFormat: 'tsv',
+  HTANParentDataFileID: 'HTA4_2005_26707',
+  HTANDataFileID: 'HTA4_2005_36728',
+  DataCategory: 'Gene Expression Quantification',
+  MatrixType: 'Raw Counts',
+  CellMedianNumberReads: 1000,
+  CellMedianNumberGenes: 1000,
+  CellTotal: 1000,
+  ScRNAseqWorkflowType: 'CellRanger',
+  ScRNAseqWorkflowParametersDescription: 'Default',
+  WorkflowLink: 'https://support.10xgenomics.com/single-cell-gene-expression/software/overview/welcome',
+  WorkflowVersion: 'CellRanger v3.1',
+  synapseId: 'syn51390948',
+  atlasid: 'HTA4',
+  atlas_name: 'HTAN CHOP',
+  level: 'Level 3',
+  assayName: 'scRNA-seq',
+  AtlasMeta: {
+    title: { rendered: 'Center for Pediatric Tumor Cell Atlas' },
+    htan_id: 'hta4',
+    lead_institutions: 'Children’s Hospital of Philadelphia'
+  },
+  DataFileID: 'HTA4_2005_36728',
+  ParentDataFileID: 'HTA4_2005_26707',
+  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  primaryParents: []
+}
+Missing ParentBiospecimenID:  {
+  Component: 'ScRNA-seqLevel3',
+  Filename: 'single_cell_RNAseq_level_3_ped_glioma/HTAN_pHGG_161_New_Reg1_snRNA_bak/matrix.mtx.gz',
+  FileFormat: 'mtx',
+  HTANParentDataFileID: 'HTA4_2005_26707',
+  HTANDataFileID: 'HTA4_2005_36729',
+  DataCategory: 'Gene Expression Quantification',
+  MatrixType: 'Raw Counts',
+  CellMedianNumberReads: 1000,
+  CellMedianNumberGenes: 1000,
+  CellTotal: 1000,
+  ScRNAseqWorkflowType: 'CellRanger',
+  ScRNAseqWorkflowParametersDescription: 'Default',
+  WorkflowLink: 'https://support.10xgenomics.com/single-cell-gene-expression/software/overview/welcome',
+  WorkflowVersion: 'CellRanger v3.1',
+  synapseId: 'syn51391093',
+  atlasid: 'HTA4',
+  atlas_name: 'HTAN CHOP',
+  level: 'Level 3',
+  assayName: 'scRNA-seq',
+  AtlasMeta: {
+    title: { rendered: 'Center for Pediatric Tumor Cell Atlas' },
+    htan_id: 'hta4',
+    lead_institutions: 'Children’s Hospital of Philadelphia'
+  },
+  DataFileID: 'HTA4_2005_36729',
+  ParentDataFileID: 'HTA4_2005_26707',
+  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  primaryParents: []
+}
 Missing ParentBiospecimenID:  {
   Component: 'BulkDNALevel3',
   Filename: 'WGS_level_3_ped_glioma/HTAN_pHGG_1057/7316_1057_reg1_Unpaired_withPon.manta.PASS.vcf.gz',
