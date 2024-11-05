@@ -20,10 +20,10 @@ that using these commands (requires access to the htan-dcc google project):
 
 ```bash
 cd data
-bq extract --destination_format CSV released.entities_v6_0 gs://htan-release-files/entities_v6_0.csv
-bq extract --destination_format CSV released.metadata_v6_0 gs://htan-release-files/metadata_v6_0.csv
-gsutil cp gs://htan-release-files/entities_v6_0.csv entities_v6_0.csv
-gsutil cp gs://htan-release-files/metadata_v6_0.csv metadata_v6_0.csv
+bq extract --destination_format CSV released.entities_v6_1 gs://htan-release-files/entities_v6_1.csv
+bq extract --destination_format CSV released.metadata_v6_1 gs://htan-release-files/metadata_v6_1.csv
+gsutil cp gs://htan-release-files/entities_v6_1.csv entities_v6_1.csv
+gsutil cp gs://htan-release-files/metadata_v6_1.csv metadata_v6_1.csv
 
 ```
 
