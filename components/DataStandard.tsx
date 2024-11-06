@@ -12,6 +12,7 @@ import {
 } from '@htan/data-portal-schema';
 import { CmsData } from '../types';
 import DataSchema from './DataSchema';
+import DataStandardsDirections from './DataStandardsDirections';
 import PageWrapper from './PageWrapper';
 
 export interface DataStandardProps {
@@ -35,6 +36,11 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
                 </Row>
                 <Row>
                     <Col>{props.children}</Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <DataStandardsDirections />
+                    </Col>
                 </Row>
                 {props.schemaDataById && props.dataSchemaData && (
                     <Row>

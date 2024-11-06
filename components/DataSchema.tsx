@@ -293,7 +293,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
                         onClick={() => handleTabChange(MANIFEST_TAB_ID)}
                         role="tab"
                     >
-                        Manifest
+                        Manifests
                     </a>
                 </li>
                 <li className="nav-item">

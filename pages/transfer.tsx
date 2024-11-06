@@ -14,9 +14,18 @@ const Transfer = () => {
                     <Row className={'contentWrapper'}>
                         <h1>Data Transfer</h1>
                         <p>
-                            We currently only accept data submissions of <a href="/research-network">atlas
-                            teams that are part of HTAN</a>. If you would like to
-                            submit data, please see the <a href="https://dca-docs.scrollhelp.site/DCA/Working-version/HTAN/" target="_blank">HTAN Data Ingress docs</a>.
+                            We currently only accept data submissions of{' '}
+                            <a href="/research-network">
+                                atlas teams that are part of HTAN
+                            </a>
+                            . If you would like to submit data, please see the{' '}
+                            <a
+                                href="https://docs.humantumoratlas.org/data_submission/overview/"
+                                target="_blank"
+                            >
+                                HTAN Manual Data Submission Overview
+                            </a>
+                            .
                         </p>
                     </Row>
                 </Container>
