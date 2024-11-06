@@ -107,7 +107,7 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                             You can also explore the metadata in{' '}
                             <a
                                 target="_blank"
-                                href="https://isb-cgc.appspot.com/bq_meta_search/isb-cgc-bq.HTAN/"
+                                href="https://bq-search.isb-cgc.org/search?datasetId=%22htan%22&projectId=isb-cgc-bq"
                             >
                                 Google BigQuery
                             </a>
@@ -562,7 +562,10 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 cell: (atlas: Atlas) => (
                     <>
                         <Tooltip overlay="CellxGene: explore single cell data">
-                            <span className="ml-auto" style={{wordBreak:"normal"}}>
+                            <span
+                                className="ml-auto"
+                                style={{ wordBreak: 'normal' }}
+                            >
                                 {(atlas.htan_name === 'HTAN MSK' && (
                                     <a
                                         href='/explore?tab=file&selectedFilters=%5B%7B"value"%3A"HTAN+MSK"%2C"label"%3A"HTAN+MSK"%2C"group"%3A"AtlasName"%2C"count"%3A1086%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A12%2C"isSelected"%3Afalse%7D%5D'
