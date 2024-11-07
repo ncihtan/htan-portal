@@ -174,18 +174,24 @@ function getPublicationsAsSynapseRecordsByAtlasId(
     publicationData: SynapsePublication[]
 ): { [htan_id: string]: SynapseRecords } {
     const publicationsById: { [htan_id: string]: SynapseRecords } = {};
+    // make sure we have all the possible keys sorted
+    const keySet = _(publicationData)
+        .flatMap((publication) => _.keys(publication))
+        .uniq()
+        .value()
+        .sort();
 
     publicationData.forEach((publication) => {
         const centerId = publication['HTAN Center ID'];
 
         publicationsById[centerId] = publicationsById[centerId] || {
             data_schema: 'bts:PublicationManifest',
-            column_order: _.keys(publication),
+            column_order: keySet,
             record_list: [],
         };
 
         publicationsById[centerId].record_list.push({
-            values: _.values(publication),
+            values: keySet.map((key) => (publication as any)[key] || ''),
         });
     });
 
