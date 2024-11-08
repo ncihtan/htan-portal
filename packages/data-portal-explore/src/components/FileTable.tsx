@@ -274,7 +274,11 @@ const terra3ManifestInstructions = (terra3manifestFile: string | undefined) => {
             <p></p>
             <p>
                 <strong>Access files in Terra:</strong>{' '}
-                You can add these files to Terra using the following manifest file.
+                First link your Terra account to NCI CRDC Framework Services from your{' '}
+                <a href="https://app.terra.bio/#profile?tab=externalIdentities" target="_blank" rel="noopener noreferrer">
+                Terra profile External Identities
+                </a> page.{' '}
+                You can then add these files to Terra using the following manifest file.
             </p>
             <p>
                 <button
