@@ -104,6 +104,28 @@ function generateGen3ManifestFile(files: Entity[]): string | undefined {
     return data.length > 0 ? JSON.stringify(data, null, 2) : undefined;
 }
 
+function generateTerraManifestFile(files: Entity[]): string | undefined {
+    const columns = [
+        'entity:drs_id',
+        'drs_uri',
+        'filename',
+    ];
+    const data = _(files)
+        .filter((f) => !!f.viewers?.cds)
+        .map((f) => [
+            f.viewers?.cds?.drs_id, // Assuming drs_id is a property in viewers.cds
+            f.viewers?.cds?.drs_uri,
+            f.name // Use `name` property for the filename
+        ])
+        .value();
+
+    if (data.length > 0) {
+        return [columns, ...data].map((row) => row.join('\t')).join('\n'); // Join with tabs for TSV format
+    } else {
+        return undefined;
+    }
+}
+
 
 const FilenameWithAccessIcon: React.FunctionComponent<{
     file: Entity;
@@ -244,6 +266,28 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
     );
 };
 
+const terra3ManifestInstructions = (terra3manifestFile: string | undefined) => {
+    if (!terra3manifestFile) return null;
+
+    return (
+        <div>
+            <p></p>
+            <p>
+                <strong>Access files in Terra:</strong>{' '}
+                You can add these files to Terra using the following manifest file.
+            </p>
+            <p>
+                <button
+                    className="btn btn-light"
+                    onClick={() => fileDownload(terra3manifestFile, TERRA_MANIFEST_FILENAME)}
+                >
+                    <FontAwesomeIcon icon={faDownload} /> Download <code>terra_manifest.tsv</code>
+                </button>
+            </p>
+        </div>
+    );
+};
+
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }) => {
     const dbgapFiles = files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
@@ -254,6 +298,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
 
     const manifestFile = generateCdsManifestFile(files);
     const gen3manifestFile = generateGen3ManifestFile(files);
+    const terra3manifestFile = generateTerraManifestFile(files);
 
     return (
         <div>
@@ -292,6 +337,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
 
             {/* CDS and Gen3 manifest instructions */}
             {cdsManifestInstructions(manifestFile)}
+            {terra3ManifestInstructions(terra3manifestFile)}
             {gen3ManifestInstructions(gen3manifestFile)}
         </div>
     );
