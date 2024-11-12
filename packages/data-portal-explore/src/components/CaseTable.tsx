@@ -26,7 +26,7 @@ interface ICaseTableProps {
 }
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
-    const columns = generateColumnsForDataSchema(
+    const generatedColumns = generateColumnsForDataSchema(
         [
             SchemaDataId.Diagnosis,
             SchemaDataId.Demographics,
@@ -59,6 +59,31 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         // Component seems to be always "Diagnosis", no need to have a column for it
         ['Component', ...(props.excludedColumns ? props.excludedColumns : [])]
     );
+
+    // we need to add ancestry columns manually because they are attached externally and not part of any schema
+    const customColumns = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS'].map((name) => ({
+        id: name,
+        selector: name,
+        omit: true,
+        wrap: true,
+        sortable: true,
+        searchable: false,
+        cell: (sample: Entity) => {
+            const value = sample[name as keyof Entity] as number;
+
+            if (value === undefined) {
+                return value;
+            } else if (value < 0.001) {
+                return value.toExponential(4);
+            } else {
+                return value.toFixed(6);
+            }
+        },
+        name: `${name} Genomic Ancestry`,
+    }));
+
+    const columns = [...generatedColumns, ...customColumns];
+
     const indexOfParticipantId = _.findIndex(
         columns,
         (c) => c.selector === GenericAttributeNames.ParticipantID

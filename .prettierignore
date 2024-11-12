@@ -34,4 +34,5 @@ node_modules/**
 *.gz
 *.log
 *.csv
+*.tsv
 *.sql
