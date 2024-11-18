@@ -107,16 +107,14 @@ function generateGen3ManifestFile(files: Entity[]): string | undefined {
 
 function generateTerraManifestFile(files: Entity[]): string | undefined {
     const columns = [
-        'entity:drs_id',
-        'drs_uri',
-        'filename',
+        'entity:filename',
+        'drs_uri'
     ];
     const data = _(files)
         .filter((f) => !!f.viewers?.cds)
         .map((f) => [
-            f.viewers?.cds?.drs_id, // Assuming drs_id is a property in viewers.cds
-            f.viewers?.cds?.drs_uri,
-            f.name // Use `name` property for the filename
+            f.name, // Use `name` property for the filename
+            f.viewers?.cds?.drs_uri
         ])
         .value();
 
