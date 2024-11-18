@@ -46,6 +46,7 @@ import {
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';
+const TERRA_MANIFEST_FILENAME = 'terra_manifest.tsv';
 
 interface IFileDownloadModalProps {
     files: Entity[];
