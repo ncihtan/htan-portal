@@ -76,12 +76,24 @@ interface SynapsePublication {
     'HTAN Center ID': string;
 }
 
+interface AncestryData {
+    SampleNames: string;
+    ParticipantID: string;
+    AFR: Number;
+    AMR: Number;
+    EAS: Number;
+    EUR: Number;
+    SAS: Number;
+    SelfReportedAncestry: string;
+}
+
 async function writeProcessedFile() {
     const synapseJson = getSynData();
     const schemaData = await fetchAndProcessSchemaData();
     const entitiesById = await getEntitiesById();
     const imagingLevel1ById = await getImagingLevel1ById();
     const imagingLevel2ById = await getImagingLevel2ById();
+    const ancestryById = await getAncestryById();
 
     const activeAtlases = atlasJson; //atlasJson.filter((a) => a.htan_id === 'hta7');
 
@@ -95,7 +107,10 @@ async function writeProcessedFile() {
         activeAtlases as AtlasMeta[],
         entitiesById,
         imagingLevel1ById,
-        imagingLevel2ById
+        imagingLevel2ById,
+        (ancestryById as unknown) as {
+            [participantId: string]: BaseSerializableEntity;
+        }
     );
 
     // we need to fetch publication summaries after we process the json,
@@ -180,6 +195,81 @@ function getPublicationsAsSynapseRecordsByAtlasId(
 async function getEntitiesById() {
     const rows = await csvToJson().fromFile('data/entities_v6_1.csv');
     return _.keyBy(rows, (row) => row.entityId);
+}
+
+async function getAncestryById() {
+    const parserParams = {
+        delimiter: ['\t'],
+    };
+
+    const bu = await csvToJson(parserParams).fromFile(
+        'data/BU_GlobAns_Prob_PCA_12_ID.tsv'
+    );
+    const msk = await csvToJson(parserParams).fromFile(
+        'data/MSK_GlobAns_Prob_PCA_12_ID.tsv'
+    );
+    const vumc = await csvToJson(parserParams).fromFile(
+        'data/VUMC_GlobAns_Prob_PCA_12_ID.tsv'
+    );
+    const wustl = await csvToJson(parserParams).fromFile(
+        'data/WUSTL_GlobAns_Prob_PCA_12_ID.tsv'
+    );
+
+    // combine data and convert string to numerical
+    const combined: AncestryData[] = [...bu, ...msk, ...vumc, ...wustl].map(
+        (a) => ({
+            ...a,
+            AFR: Number(a.AFR),
+            AMR: Number(a.AMR),
+            EAS: Number(a.EAS),
+            EUR: Number(a.EUR),
+            SAS: Number(a.SAS),
+        })
+    );
+
+    return _(combined)
+        .groupBy((ancestry) => ancestry.ParticipantID)
+        .map(
+            (ancestryList) =>
+                ({
+                    ParticipantID: ancestryList[0].ParticipantID,
+                    // combining all samples into a comma separated single value
+                    SampleNames: _.uniq(
+                        ancestryList.map((a) => a.SampleNames)
+                    ).join(','),
+                    // averaging the ancestry calls per participant
+                    AFR: _.mean(ancestryList.map((a) => a.AFR)),
+                    AMR: _.mean(ancestryList.map((a) => a.AMR)),
+                    EAS: _.mean(ancestryList.map((a) => a.EAS)),
+                    EUR: _.mean(ancestryList.map((a) => a.EUR)),
+                    SAS: _.mean(ancestryList.map((a) => a.SAS)),
+                    // combining all unique self reported ancestry values (ideally there should only be one value)
+                    SelfReportedAncestry: getSelfReportedAncestry(ancestryList),
+                } as AncestryData)
+        )
+        .keyBy((ancestry) => ancestry.ParticipantID)
+        .value();
+}
+
+function getSelfReportedAncestry(ancestryList: AncestryData[]) {
+    const normalizedAncestryData: { [key: string]: string } = {
+        htan_white: 'white',
+        white: 'white',
+        htan_black: 'black or african american',
+        black: 'black or african american',
+        other: 'Other',
+        not_reported: 'Not Reported',
+    };
+
+    return _(ancestryList)
+        .map(
+            (a) =>
+                normalizedAncestryData[a.SelfReportedAncestry.toLowerCase()] ||
+                a.SelfReportedAncestry
+        )
+        .uniq()
+        .value()
+        .join(',');
 }
 
 async function getImagingLevel1ById() {
@@ -350,7 +440,8 @@ function processSynapseJSON(
     AtlasMetaData: AtlasMeta[],
     entitiesById: { [entityId: string]: ReleaseEntity },
     imagingLevel1ById: { [fileId: string]: ImagingMetadata },
-    imagingLevel2ById: { [fileId: string]: ImagingMetadata }
+    imagingLevel2ById: { [fileId: string]: ImagingMetadata },
+    ancestryByParticipantID: { [participantId: string]: BaseSerializableEntity }
 ): LoadDataResult {
     const AtlasMetaMap = _.keyBy(AtlasMetaData, (a) => a.htan_id.toUpperCase());
     let flatData = extractEntitiesFromSynapseData(
@@ -509,7 +600,10 @@ function processSynapseJSON(
         diagnosisByParticipantID,
         demographicsByParticipantID,
         therapyByParticipantID,
-    } = extractBiospecimensAndDiagnosisAndDemographicsAndTherapy(flatData);
+    } = extractBiospecimensAndDiagnosisAndDemographicsAndTherapy(
+        flatData,
+        ancestryByParticipantID
+    );
 
     const dbgapSynapseSet = new Set<string>(getDbgapSynapseIds(entitiesById));
     const dbgapImgSynapseSet = new Set<string>(
@@ -682,7 +776,8 @@ function findAndAddPrimaryParents(
 }
 
 function extractBiospecimensAndDiagnosisAndDemographicsAndTherapy(
-    data: BaseSerializableEntity[]
+    data: BaseSerializableEntity[],
+    ancestryByParticipantID: { [participantId: string]: BaseSerializableEntity }
 ) {
     const biospecimenByBiospecimenID: {
         [biospecimenID: string]: BaseSerializableEntity;
@@ -709,6 +804,32 @@ function extractBiospecimensAndDiagnosisAndDemographicsAndTherapy(
         }
         if (entity.Component === 'Therapy') {
             therapyByParticipantID[entity.ParticipantID] = entity;
+        }
+    });
+
+    // add ancestry data into demographics
+    _.keys(ancestryByParticipantID).forEach((participantId) => {
+        const demographics = demographicsByParticipantID[participantId];
+        const genomicAncestry = _.pick(ancestryByParticipantID[participantId], [
+            'AFR',
+            'AMR',
+            'EAS',
+            'EUR',
+            'SAS',
+        ]);
+
+        if (demographics) {
+            demographicsByParticipantID[participantId] = {
+                ...demographicsByParticipantID[participantId],
+                ...genomicAncestry,
+            };
+        } else {
+            demographicsByParticipantID[participantId] = {
+                ParticipantID: participantId,
+                Race:
+                    ancestryByParticipantID[participantId].SelfReportedAncestry,
+                ...genomicAncestry,
+            } as BaseSerializableEntity;
         }
     });
 

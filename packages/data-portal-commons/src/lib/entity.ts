@@ -45,6 +45,14 @@ export interface BaseSerializableEntity {
     Islowestlevel?: string;
     TreatmentType: string;
 
+    // Ancestry data attached in frontend
+    AFR: Number;
+    AMR: Number;
+    EAS: Number;
+    EUR: Number;
+    SAS: Number;
+    SelfReportedAncestry: string;
+
     // Derived or attached in frontend
     atlasid: string;
     atlas_name: string;

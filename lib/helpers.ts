@@ -44,7 +44,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : `${getCloudBaseUrl()}/processed_syn_data_20241104_1913.json`;
+            : `${getCloudBaseUrl()}/processed_syn_data_20241105_1945.json`;
     return fetchSynData(processedSynURL);
 }
 
