@@ -24,7 +24,7 @@ interface ITableRowData {
 // In Coming Soon column, show 'TBD' if the assay is in customTBDGroup
 // TODO: need to double check if we should update/remove any assay out of the list after a new data release
 const customizedTBDGroup: { [group: string]: string[] } = {
-    'hta1_2024_pdf_johanna-klughammer': [
+    'hta1_2024_nature-medicine_johanna-klughammer': [
         'CODEX',
         'ExSEQ',
         'Slide-seq V2',
