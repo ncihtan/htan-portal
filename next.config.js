@@ -15,7 +15,8 @@ module.exports = withMDX({
             },
             {
                 source: '/publications/htapp_mbc_klughammer_2024',
-                destination: '/publications/hta1_2024_pdf_johanna-klughammer',
+                destination:
+                    '/publications/hta1_2024_nature-medicine_johanna-klughammer',
                 permanent: false,
             },
             {
