@@ -385,8 +385,14 @@ function addDownloadSourcesInfo(
     ) {
         // BulkRNA, BulkWES, ScRNA, ScATAC, HI-C, BulkMethylation, 10xVisiumSpatialTranscriptomics-RNA-seq Levels 1 & 2
         // as specified in released.entities table (CDS_Release) column
+        // TODO: bai files are actually not on CDS, but we might want to remove
+        // them from the portal listing entirely so assume they are there
         file.isRawSequencing = true;
-        if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
+        if (
+            file.synapseId &&
+            (dbgapSynapseSet.has(file.synapseId) ||
+                file.Filename.endsWith('bai'))
+        ) {
             file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
