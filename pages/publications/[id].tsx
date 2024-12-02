@@ -27,6 +27,7 @@ import {
     getPublicationTitle,
     groupFilesByAttrNameAndValue,
     HTANToGenericAttributeMap,
+    isManuscriptInReview,
     LoadDataResult,
     PublicationManifest,
     PublicationSummary,
@@ -186,7 +187,19 @@ const PublicationPage = (props: PublicationPageProps) => {
                             </div>
                             <div style={{ width: '100%' }}>
                                 <span style={{ fontStyle: 'italic' }}>
-                                    Publication
+                                    {isManuscriptInReview(
+                                        publicationManifest
+                                    ) ? (
+                                        <>
+                                            Manuscript (
+                                            <strong className="text-danger">
+                                                in review
+                                            </strong>
+                                            )
+                                        </>
+                                    ) : (
+                                        'Publication'
+                                    )}
                                 </span>
                                 <h2 style={{ marginTop: 0, padding: 0 }}>
                                     {getPublicationTitle(

@@ -1,8 +1,19 @@
 import fetch from 'node-fetch';
 import _ from 'lodash';
 import { SelectedFilter } from '@htan/data-portal-filter';
-import { PublicationManifest, PublicationSummary } from './entity';
+import {
+    PublicationContentType,
+    PublicationManifest,
+    PublicationSummary,
+} from './entity';
 import { GeneralLink } from './types';
+
+export function isManuscriptInReview(publication: PublicationManifest) {
+    return (
+        publication.PublicationContentType?.toLowerCase() ===
+        PublicationContentType.Prepublication
+    );
+}
 
 export function getPublicationUid(publication: PublicationManifest): string {
     const normalizeValue = (value: string) =>

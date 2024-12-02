@@ -20,6 +20,7 @@ import {
     Entity,
     getCiteFromPublicationManifest,
     getPublicationUid,
+    isManuscriptInReview,
     PublicationManifest,
 } from '@htan/data-portal-commons';
 import { ExploreTab } from '../lib/types';
@@ -166,7 +167,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
 
     getPublicationManifests = (atlas: Atlas) => {
         return this.props.publications.filter(
-            (p) => p.atlasid === atlas.htan_id
+            (p) => !isManuscriptInReview(p) && p.atlasid === atlas.htan_id
         );
     };
 
