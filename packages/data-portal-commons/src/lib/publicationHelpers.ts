@@ -8,9 +8,9 @@ import {
 } from './entity';
 import { GeneralLink } from './types';
 
-export function isManuscriptInReview(publication: PublicationManifest) {
+export function isManuscriptInReview(publication?: PublicationManifest) {
     return (
-        publication.PublicationContentType?.toLowerCase() ===
+        publication?.PublicationContentType?.toLowerCase() ===
         PublicationContentType.Prepublication
     );
 }
@@ -193,10 +193,10 @@ export function getPublicationJournal(
     publicationSummary?: PublicationSummary,
     publicationManifest?: PublicationManifest
 ): string | undefined {
-    return (
-        _.upperFirst(publicationSummary?.fulljournalname?.toLowerCase()) ||
-        publicationManifest?.LocationofPublication
-    );
+    return isManuscriptInReview(publicationManifest)
+        ? 'TBD'
+        : _.upperFirst(publicationSummary?.fulljournalname?.toLowerCase()) ||
+              publicationManifest?.LocationofPublication;
 }
 
 export function getPublicationTitle(
