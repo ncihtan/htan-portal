@@ -268,8 +268,14 @@ const PublicationPage = (props: PublicationPageProps) => {
                                             </a>{' '}
                                         </>
                                     )}
-                                    &nbsp; DOI:{' '}
-                                    <a href={`https://doi.org/${doi}`}>{doi}</a>
+                                    {doi && (
+                                        <>
+                                            &nbsp; DOI:{' '}
+                                            <a href={`https://doi.org/${doi}`}>
+                                                {doi}
+                                            </a>
+                                        </>
+                                    )}
                                     <br />
                                     Atlas:{' '}
                                     <AtlasDescription
