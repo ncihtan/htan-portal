@@ -22,9 +22,10 @@ that using these commands (requires access to the htan-dcc google project):
 cd data
 bq extract --destination_format CSV released.entities_v6_1 gs://htan-release-files/entities_v6_1.csv
 bq extract --destination_format CSV released.metadata_v6_1 gs://htan-release-files/metadata_v6_1.csv
+bq extract --destination_format NEWLINE_DELIMITED_JSON released.cds_drs_mapping gs://htan-release-files/cds_drs_mapping.json
 gsutil cp gs://htan-release-files/entities_v6_1.csv entities_v6_1.csv
 gsutil cp gs://htan-release-files/metadata_v6_1.csv metadata_v6_1.csv
-
+gsutil cp gs://htan-release-files/cds_drs_mapping.json cds_drs_mapping.json
 ```
 
 #### Pull files from Synapse and Process for ingestion
