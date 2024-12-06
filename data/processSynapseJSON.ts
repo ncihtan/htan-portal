@@ -374,7 +374,6 @@ function getReleaseSynapseIds(
 
 function addDownloadSourcesInfo(
     file: BaseSerializableEntity,
-    dbgapSynapseSet: Set<string>,
     dbgapImgSynapseSet: Set<string>
 ) {
     if (
@@ -389,9 +388,8 @@ function addDownloadSourcesInfo(
         // them from the portal listing entirely so assume they are there
         file.isRawSequencing = true;
         if (
-            file.synapseId &&
-            (dbgapSynapseSet.has(file.synapseId) ||
-                file.Filename.endsWith('bai'))
+            (file.synapseId && file.viewers?.cds?.drs_uri) ||
+            file.Filename.endsWith('bai')
         ) {
             file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
@@ -617,7 +615,6 @@ function processSynapseJSON(
         ancestryByParticipantID
     );
 
-    const dbgapSynapseSet = new Set<string>(getDbgapSynapseIds(entitiesById));
     const dbgapImgSynapseSet = new Set<string>(
         getDbgapImgSynapseIds(entitiesById)
     );
@@ -645,10 +642,10 @@ function processSynapseJSON(
             parentData?.therapy || []
         ).map((d) => d.ParticipantID);
 
-        addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
+        addViewers(file);
+        addDownloadSourcesInfo(file, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
         addImageChannelMetadata(file, entitiesById);
-        addViewers(file);
         return file as SerializableEntity;
     });
     //  .filter((f): f is SerializableEntity => !!f); // file should be defined (typescript doesnt understand (f=>f)
