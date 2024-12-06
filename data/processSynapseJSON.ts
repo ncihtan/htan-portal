@@ -400,13 +400,10 @@ function addDownloadSourcesInfo(
         if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
             // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
-            if (
-                file.level === 'Level 2' &&
-                file.Component.startsWith('Imaging')
-            ) {
+            if (file.viewers?.cds?.drs_uri) {
                 file.downloadSource = DownloadSourceCategory.cds;
             } else {
-                file.downloadSource = DownloadSourceCategory.dbgap;
+                file.downloadSource = DownloadSourceCategory.comingSoon;
             }
         } else if (
             file.Component === 'OtherAssay' &&
