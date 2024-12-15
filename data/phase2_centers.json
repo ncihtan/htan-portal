@@ -1,0 +1,117 @@
+{
+  "hta200": {
+    "navText": "Pre-Cancer Atlas of Skin Cancer",
+    "title": "Pre-Cancer Atlas of Skin Cancer",
+    "grantNumber": "CA294536",
+    "principalInvestigators": [
+      "Hunter Shain, UCSF (Contact PI)",
+      "Boris Bastian, UCSF",
+      "Iweh Yeh, UCSF"
+    ],
+    "description": "This project aims to develop an atlas that maps the early phases of skin cancer, focusing on the transition from pre-cancerous lesions to melanoma and squamous cell carcinoma. The research will integrate genetic and immunological data to understand how the immune system interacts with tumors during these early stages. The goal is to identify biomarkers and therapeutic targets that could improve early diagnosis and treatment of skin cancers, potentially leading to better patient outcomes."
+  },
+  "hta201": {
+    "navText": "An Atlas of Pancreatic Tumorigenesis in the Context of Altered DNA Repair Occurring in High-Risk Individuals",
+    "title": "An Atlas of Pancreatic Tumorigenesis in the Context of Altered DNA Repair Occurring in High-Risk Individuals",
+    "grantNumber": "CA294548",
+    "principalInvestigators": [
+      "Rosalie Sears, OHSU (Contact PI)",
+      "Jonathan Brody, OHSU",
+      "Elana Fertig, Johns Hopkins University",
+      "Laura Wood, Johns Hopkins University"
+    ],
+    "description": "This project focuses on creating a 3D atlas of pancreatic cancer development, particularly in individuals with genetic mutations that increase cancer risk. By mapping the progression of pre-cancerous lesions to invasive cancer, the researchers aim to uncover the molecular mechanisms behind early cancer development. The atlas will provide critical insights for early detection and intervention strategies, potentially improving outcomes for high-risk individuals."
+  },
+  "hta202": {
+    "navText": "Understanding the Role of Tumor Microenvironment in Low-Grade Glioma Progression to Malignancy",
+    "title": "Understanding the Role of Tumor Microenvironment in Low-Grade Glioma Progression to Malignancy",
+    "grantNumber": "CA294551",
+    "principalInvestigators": [
+      "Long Cai, CalTech (Contact PI)",
+      "Richard Everson, UCLA",
+      "Matthew Thomson, CalTech",
+      "Barbara Wold, CalTech"
+    ],
+    "description": "This project focuses on creating a spatial atlas of low-grade gliomas to understand how they progress to more aggressive forms of cancer. By comparing tumors that remain indolent with those that become malignant, the team aims to identify early molecular and cellular changes that predict this progression. Advanced imaging and molecular techniques will be used to map these changes, providing insights into potential therapeutic interventions to prevent malignancy."
+  },
+  "hta203": {
+    "navText": "Center for Gastric Pre-Cancer Atlas of Multidimensional Evolution in 3D (GAME3D)",
+    "title": "Center for Gastric Pre-Cancer Atlas of Multidimensional Evolution in 3D (GAME3D)",
+    "grantNumber": "CA294518",
+    "principalInvestigators": [
+      "Linghua Wang, MD Anderson (Contact PI)",
+      "Paul Mansfield, MD Anderson",
+      "Tae Hyun Hwang, Mayo Clinic",
+      "Mingyao Li, University of Pennsylvania"
+    ],
+    "description": "This center aims to map the progression of hereditary diffuse gastric cancer (HDGC), focusing on the transition from early pre-cancerous lesions to advanced gastric cancer. Using advanced 2D and 3D spatial techniques, the research will track cellular and molecular changes in patients with CDH1 mutations to identify early markers of cancer development. The findings will guide more personalized approaches to cancer prevention and treatment, potentially reducing the need for invasive surgeries like prophylactic gastrectomies."
+  },
+  "hta204": {
+    "navText": "Myeloma Multidimensional Precancer Atlas",
+    "title": "Myeloma Multidimensional Precancer Atlas",
+    "grantNumber": "CA294507",
+    "principalInvestigators": [
+      "Irene Ghobrial, Dana-Farber Cancer Institute (Contact PI)",
+      "David Cordas Dos Santos, Dana-Farber Cancer Institute"
+    ],
+    "description": "This project will build a multidimensional atlas of multiple myeloma, focusing on the early stages of the disease when precancerous cells begin to evolve into malignant forms. By mapping the genetic, molecular, and spatial characteristics of these early changes, the research aims to identify targets for early intervention. This work could improve early diagnosis and lead to therapies that prevent the progression of multiple myeloma in high-risk individuals."
+  },
+  "hta205": {
+    "navText": "Pediatric Solid Tumor Microenvironment Atlas",
+    "title": "Pediatric Solid Tumor Microenvironment Atlas",
+    "grantNumber": "CA294552",
+    "principalInvestigators": [
+      "Shahab Asgharzadeh, USC (Contact PI)",
+      "James Amatruda, USC",
+      "Long Cai, CalTech"
+    ],
+    "description": "This atlas will explore the unique tumor microenvironment of pediatric solid tumors, such as rhabdomyosarcoma and neuroblastoma, to uncover how these environments influence treatment resistance and cancer progression. By studying tumors at different stages, the team hopes to discover how cells within the microenvironment interact to promote cancer growth. This research aims to find new therapeutic targets to improve treatment and survival outcomes for children with solid tumors."
+  },
+  "hta206": {
+    "navText": "Human Prostate Tumor Atlas Center",
+    "title": "Human Prostate Tumor Atlas Center",
+    "grantNumber": "CA294532",
+    "principalInvestigators": [
+      "Li Ding, Washington University in St. Louis (Contact PI)",
+      "Feng Chen, Washington University in St. Louis",
+      "Ryan Fields, Washington University in St. Louis",
+      "Russel Pachynski, Washington University in St. Louis"
+    ],
+    "description": "The Human Prostate Tumor Atlas Center will map the cellular and molecular architecture of prostate cancer, particularly focusing on African American men, who are disproportionately affected by aggressive forms of the disease. Using advanced spatial and molecular profiling techniques, this project will generate a high-resolution atlas to understand tumor dynamics, treatment resistance, and health disparities. The findings will help improve early diagnosis and treatment strategies, especially for underserved populations."
+  },
+  "hta207": {
+    "navText": "A Multimodal 3D Atlas of Colorectal Cancer Across Ages of Onset",
+    "title": "A Multimodal 3D Atlas of Colorectal Cancer Across Ages of Onset",
+    "grantNumber": "CA294527",
+    "principalInvestigators": [
+      "Ken Lau, Vanderbilt University (Contact PI)",
+      "Jeffrey Spraggins, Vanderbilt University",
+      "Robert Coffey, Vanderbilt University",
+      "Martha Shrubsole, Vanderbilt University"
+    ],
+    "description": "This project aims to create a 3D atlas of colorectal cancer to investigate differences between early-onset and late-onset cases of the disease. By analyzing the spatial organization of tumors and surrounding tissues, the research will reveal how interactions between cancer cells, microbes, and the immune system contribute to cancer progression. The findings could lead to new strategies for early detection and targeted treatments, particularly for younger patients who face increasing rates of colorectal cancer."
+  },
+  "hta208": {
+    "navText": "3D Spatial Multi-Omics Profiling of Ovarian Cancer",
+    "title": "3D Spatial Multi-Omics Profiling of Ovarian Cancer",
+    "grantNumber": "CA294459",
+    "principalInvestigators": [
+      "Sam Mok, MD Anderson (Contact PI)",
+      "Sammy Ferri-Borgogno, MD Anderson",
+      "Michael Birrer, University of Arkansas"
+    ],
+    "description": "This project aims to understand how high-grade serous ovarian cancer (HGSOC) metastasizes and develops resistance to chemotherapy, focusing on late-stage diagnosis. A 3D cancer atlas will be created using molecular and cellular profiling to map tumor progression in patients. The data will help identify key molecular changes responsible for resistance and could lead to more effective treatments and improved survival rates. The multi-disciplinary team will integrate various technologies to produce a comprehensive spatial map of ovarian cancer."
+  },
+  "hta209": {
+    "navText": "Center for Human Lymphoma Spatiotemporal Atlas (HuLymSTA)",
+    "title": "Center for Human Lymphoma Spatiotemporal Atlas (HuLymSTA)",
+    "grantNumber": "CA294514",
+    "principalInvestigators": [
+      "Rong Fan, Yale University (Contact PI)",
+      "Mina Xu, Yale University",
+      "Stephanie Halene, Yale University",
+      "Zongming Ma, Yale University"
+    ],
+    "description": "This project will develop a comprehensive spatiotemporal atlas of lymphoma, focusing on the transformation of indolent follicular lymphoma into aggressive diffuse large B-cell lymphoma (DLBCL) and the evolution of angioimmunoblastic T-cell lymphoma (AITL). The atlas will map the genetic and spatial changes in tumor cells and their microenvironments over time, helping researchers understand the key factors driving cancer progression and resistance to treatment. The insights gained could lead to the identification of biomarkers for earlier intervention and more effective therapies."
+  }
+}

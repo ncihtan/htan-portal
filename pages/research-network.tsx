@@ -1,0 +1,89 @@
+import React from 'react';
+import htaData from '../data/phase2_centers.json';
+import PageWrapper from '../components/PageWrapper';
+import PreReleaseBanner from 'components/PreReleaseBanner';
+import { Container, Row } from 'react-bootstrap';
+import styles from './centercard.module.css';
+
+const ResearchNetwork = () => {
+    return (
+        <>
+            <PreReleaseBanner />
+            <PageWrapper>
+                <Container>
+                    <Row className={'contentWrapper'}>
+                        <div className="col">
+                            <h1>Research Network</h1>
+                            <h2>Phase 2 Centers</h2>
+                            <div className={styles.cardcontainer}>
+                                {Object.entries(htaData).map(([key, value]) => (
+                                    <a href={`/phase2/${key}`}>
+                                        <div className={styles.card} key={key}>
+                                            <img src={`/phase2/${key}.png`} />
+                                            <div className={styles.text}>
+                                                <h2>{value.title}</h2>
+                                                <hr />
+                                                {value.principalInvestigators.map(
+                                                    (pi, index) => (
+                                                        <p key={index}>
+                                                            {pi.split(',')[0]}
+                                                        </p>
+                                                    )
+                                                )}
+                                            </div>
+                                        </div>
+                                    </a>
+                                ))}
+                            </div>
+
+                            <h2>Phase 1 Centers</h2>
+                            <div className="atlas-array">
+                                <a href="/hta1">
+                                    <img src="/HTA1_HTAPP-1.jpeg" />
+                                </a>
+                                <a
+                                    href="https://mcl.nci.nih.gov/"
+                                    target="_blank"
+                                >
+                                    <img src="/hta2_PCAPP.jpeg" />
+                                </a>
+                                <a href="/hta3">
+                                    <img src="/HTA3_BU.jpeg" />
+                                </a>
+                                <a href="/hta4">
+                                    <img src="/HTA4_CHOP.jpeg" />
+                                </a>
+                                <a href="/hta5">
+                                    <img src="/HTA5_DFCI.jpeg" />
+                                </a>
+                                <a href="/hta6">
+                                    <img src="/HTA6_Duke-1.jpeg" />
+                                </a>
+                                <a href="/hta7">
+                                    <img src="/HTA7_HMS.jpeg" />
+                                </a>
+                                <a href="/hta8">
+                                    <img src="/HTA8_MSKCC.jpeg" />
+                                </a>
+                                <a href="/hta9">
+                                    <img src="/HTAN_OHSU_Research_Card_Update_1_.jpeg" />
+                                </a>
+                                <a href="/hta10">
+                                    <img src="/HTA10_Stanford-1.jpeg" />
+                                </a>
+                                <a href="/hta11">
+                                    <img src="/HTA11_VUMC.jpeg" />
+                                </a>
+                                <a href="/hta12">
+                                    <img src="/HTA12_Wash-U-1.jpeg" />
+                                </a>
+                            </div>
+                        </div>
+                    </Row>
+                </Container>
+            </PageWrapper>
+        </>
+    );
+};
+
+export default ResearchNetwork;
