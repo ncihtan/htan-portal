@@ -1,8 +1,9 @@
 import React from 'react';
-import htaData from '../data/phase2_centers.json';
-import PageWrapper from '../components/PageWrapper';
-import PreReleaseBanner from 'components/PreReleaseBanner';
 import { Container, Row } from 'react-bootstrap';
+
+import PageWrapper from '../components/PageWrapper';
+import PreReleaseBanner from '../components/PreReleaseBanner';
+import htaData from '../data/phase2_centers.json';
 import styles from './centercard.module.css';
 
 const ResearchNetwork = () => {
@@ -19,14 +20,17 @@ const ResearchNetwork = () => {
                                 {Object.entries(htaData).map(([key, value]) => (
                                     <a href={`/phase2/${key}`}>
                                         <div className={styles.card} key={key}>
-                                            <img src={`/phase2/${key}.png`} />
+                                            <img
+                                                src={`/phase2/${key}.png`}
+                                                alt={key}
+                                            />
                                             <div className={styles.text}>
                                                 <h2>{value.title}</h2>
                                                 <hr />
                                                 {value.principalInvestigators.map(
                                                     (pi, index) => (
                                                         <p key={index}>
-                                                            {pi.split(',')[0]}
+                                                            {pi.name}
                                                         </p>
                                                     )
                                                 )}
@@ -39,43 +43,52 @@ const ResearchNetwork = () => {
                             <h2>Phase 1 Centers</h2>
                             <div className="atlas-array">
                                 <a href="/hta1">
-                                    <img src="/HTA1_HTAPP-1.jpeg" />
+                                    <img src="/HTA1_HTAPP-1.jpeg" alt="hta1" />
                                 </a>
                                 <a
                                     href="https://mcl.nci.nih.gov/"
                                     target="_blank"
                                 >
-                                    <img src="/hta2_PCAPP.jpeg" />
+                                    <img src="/hta2_PCAPP.jpeg" alt="hta2" />
                                 </a>
                                 <a href="/hta3">
-                                    <img src="/HTA3_BU.jpeg" />
+                                    <img src="/HTA3_BU.jpeg" alt="hta3" />
                                 </a>
                                 <a href="/hta4">
-                                    <img src="/HTA4_CHOP.jpeg" />
+                                    <img src="/HTA4_CHOP.jpeg" alt="hta4" />
                                 </a>
                                 <a href="/hta5">
-                                    <img src="/HTA5_DFCI.jpeg" />
+                                    <img src="/HTA5_DFCI.jpeg" alt="hta5" />
                                 </a>
                                 <a href="/hta6">
-                                    <img src="/HTA6_Duke-1.jpeg" />
+                                    <img src="/HTA6_Duke-1.jpeg" alt="hta6" />
                                 </a>
                                 <a href="/hta7">
-                                    <img src="/HTA7_HMS.jpeg" />
+                                    <img src="/HTA7_HMS.jpeg" alt="hta7" />
                                 </a>
                                 <a href="/hta8">
-                                    <img src="/HTA8_MSKCC.jpeg" />
+                                    <img src="/HTA8_MSKCC.jpeg" alt="hta8" />
                                 </a>
                                 <a href="/hta9">
-                                    <img src="/HTAN_OHSU_Research_Card_Update_1_.jpeg" />
+                                    <img
+                                        src="/HTAN_OHSU_Research_Card_Update_1_.jpeg"
+                                        alt="hta9"
+                                    />
                                 </a>
                                 <a href="/hta10">
-                                    <img src="/HTA10_Stanford-1.jpeg" />
+                                    <img
+                                        src="/HTA10_Stanford-1.jpeg"
+                                        alt="hta10"
+                                    />
                                 </a>
                                 <a href="/hta11">
-                                    <img src="/HTA11_VUMC.jpeg" />
+                                    <img src="/HTA11_VUMC.jpeg" alt="hta11" />
                                 </a>
                                 <a href="/hta12">
-                                    <img src="/HTA12_Wash-U-1.jpeg" />
+                                    <img
+                                        src="/HTA12_Wash-U-1.jpeg"
+                                        alt="hta12"
+                                    />
                                 </a>
                             </div>
                         </div>

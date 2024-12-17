@@ -4,9 +4,22 @@
     "title": "Pre-Cancer Atlas of Skin Cancer",
     "grantNumber": "CA294536",
     "principalInvestigators": [
-      "Hunter Shain, UCSF (Contact PI)",
-      "Boris Bastian, UCSF",
-      "Iweh Yeh, UCSF"
+      {
+        "name": "Hunter Shain",
+        "center": "UCSF",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Boris Bastian",
+        "center": "UCSF",
+        "description": ""
+      },
+      {
+        "name": "Iweh Yeh",
+        "center": "UCSF",
+        "description": ""
+      }
     ],
     "description": "This project aims to develop an atlas that maps the early phases of skin cancer, focusing on the transition from pre-cancerous lesions to melanoma and squamous cell carcinoma. The research will integrate genetic and immunological data to understand how the immune system interacts with tumors during these early stages. The goal is to identify biomarkers and therapeutic targets that could improve early diagnosis and treatment of skin cancers, potentially leading to better patient outcomes."
   },
@@ -15,10 +28,27 @@
     "title": "An Atlas of Pancreatic Tumorigenesis in the Context of Altered DNA Repair Occurring in High-Risk Individuals",
     "grantNumber": "CA294548",
     "principalInvestigators": [
-      "Rosalie Sears, OHSU (Contact PI)",
-      "Jonathan Brody, OHSU",
-      "Elana Fertig, Johns Hopkins University",
-      "Laura Wood, Johns Hopkins University"
+      {
+        "name": "Rosalie Sears",
+        "center": "OHSU",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Jonathan Brody",
+        "center": "OHSU",
+        "description": ""
+      },
+      {
+        "name": "Elana Fertig",
+        "center": "Johns Hopkins University",
+        "description": ""
+      },
+      {
+        "name": "Laura Wood",
+        "center": "Johns Hopkins University",
+        "description": ""
+      }
     ],
     "description": "This project focuses on creating a 3D atlas of pancreatic cancer development, particularly in individuals with genetic mutations that increase cancer risk. By mapping the progression of pre-cancerous lesions to invasive cancer, the researchers aim to uncover the molecular mechanisms behind early cancer development. The atlas will provide critical insights for early detection and intervention strategies, potentially improving outcomes for high-risk individuals."
   },
@@ -27,10 +57,27 @@
     "title": "Understanding the Role of Tumor Microenvironment in Low-Grade Glioma Progression to Malignancy",
     "grantNumber": "CA294551",
     "principalInvestigators": [
-      "Long Cai, Caltech (Contact PI)",
-      "Richard Everson, UCLA",
-      "Matthew Thomson, Caltech",
-      "Barbara Wold, Caltech"
+      {
+        "name": "Long Cai",
+        "center": "Caltech",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Richard Everson",
+        "center": "UCLA",
+        "description": ""
+      },
+      {
+        "name": "Matthew Thomson",
+        "center": "Caltech",
+        "description": ""
+      },
+      {
+        "name": "Barbara Wold",
+        "center": "Caltech",
+        "description": ""
+      }
     ],
     "description": "Our PCA research center brings together the UCLA Neurosurgery team with the Caltech spatial single cell team to construct a comparative spatial atlas of low-grade gliomas. The collaboration between the three components of the PCA research center has already generated preliminary data in several glioma samples. We will expand this effort to generate a comparative atlas of gliomas with distinct progression outcomes using integrated spatial transcriptomics, proteomics, and chromosome profiling. By comparing the low-grade gliomas that eventually transform with ones that stay indolent or do not recur, and with IDH-mutant high-grade gliomas, we aim to understand the molecular and cellular mechanisms at the low-grade stage that are predictive of malignant transformation (MT) and to suggest intervention strategies to prevent MT. The comparative analysis will examine three types of changes in low-grade gliomas with different outcomes: cell type composition, tumor microenvironment, and pathway specific gene expression. From UCLA’s Brain Tumor Translation Resource (BTTR) center, we have already collected 99 fresh-frozen low-grade glioma samples and will collect approximately an additional 100 samples of low-grade glioma with different outcomes (MT, indolent, and no- recurrence). 38% of the current cohort of patients are from under-represented minority groups; we will continue to recruit from a diverse patient pool in order to better understand which patients may be at higher risk for malignant transformation and therefore need more frequent surveillance or earlier intervention. We will then generate an integrated multi-modal spatial atlas targeting 2500 mRNAs, 10 proteins and 10 DNA CNVs and translocations. From the high sensitivity and multiplexed RNA seqFISH assays, we will be able to capture not only cell type and microenvironment information, but also genes and pathways that could be causal for progression to malignancy. Lastly, we will use the data to 1) predict tumor progression based on the cell type compositions and microenvironments; 2) design intervention strategies based on the spatial data, using counterfactual inference models to affect immune infiltrating and other predictors of progression; and 3) build a model of tumor progression dynamics based on gene expression and mechanics of the tissue. Our comprehensive low-grade glioma tissue collection, the integrated spatial dataset with transcriptomics, proteomics and chromosomal abnormalities, and the models built using advanced machine-learning tools will extend the existing capabilities of the HTAN consortium and be interoperable. The atlas and the computational tools will be used by us and the wider scientific community to further understand the mechanisms leading to malignant transformation."
   },
@@ -39,19 +86,41 @@
     "title": "Center for Gastric Pre-Cancer Atlas of Multidimensional Evolution in 3D (GAME3D)",
     "grantNumber": "CA294518",
     "principalInvestigators": [
-      "Linghua Wang, MD Anderson (Contact PI)",
-      "Paul Mansfield, MD Anderson",
-      "Tae Hyun Hwang, Mayo Clinic",
-      "Mingyao Li, University of Pennsylvania"
+      {
+        "name": "Linghua Wang, MD, PhD",
+        "center": "MD Anderson",
+        "description": "Dr. Wang is an Associate Professor in the Department of Genomic Medicine at MD Anderson Cancer Center. She has significant expertise in computational biology, cancer genomics, and immuno-informatics. Her group focuses on comprehensive profiling of the tumor ecosystem, exploring its cellular and molecular heterogeneity, phenotypic plasticity, and the dynamic interactions between cancer cells and the tumor microenvironment throughout tumor initiation, progression, metastasis, and therapeutic response or resistance. By integrating advanced single-cell and spatial multi-omics technologies with high-resolution cellular imaging, Dr. Wang’s lab develops and applies innovative bioinformatic tools and computational frameworks to drive novel discoveries. Her work has built single-cell, spatial, transcriptional, and clonotypic atlases across many early-stage cancers and precursor diseases.",
+        "isContact": true
+      },
+      {
+        "name": "Paul Mansfield, MD, FACS",
+        "center": "MD Anderson",
+        "description": "Dr. Mansfield is a Professor in the Department of Surgical Oncology at MD Anderson Cancer Center. He is a surgical oncologist with more than 30 years of experience in the clinical care and research of patients with gastric cancer. He has extensive expertise in patient recruitment and evaluation of the clinical implications of laboratory findings. He serves as the PI of the MD Anderson CDH1 gene registry, comprising more than 100 hereditary diffuse gastric cancer patients with demographic, clinical data and multiple tissue specimens collected from each patient."
+      },
+      {
+        "name": "Tae Hyun Hwang, PhD",
+        "center": "Mayo Clinic",
+        "description": "Dr. Hwang is the Florida Department of Health Cancer Chair, Departments of Artificial Intelligence & Informatics, Cancer Biology, and Immunology at the Mayo Clinic Comprehensive Cancer Center in Jacksonville, FL. He is a computational scientist focused on cancer biology, with primary expertise in developing and applying novel machine learning (ML) and artificial intelligence (AI) algorithms to unravel the complexities of human cancer mechanisms, including gastric cancer. In addition, he is pioneering 3D tumor modeling and AI-driven analysis of the tumor immune microenvironment. His lab conducts in-depth investigations using data derived from single-cell DNA/RNA/protein sequencing, spatial genomics, genetics, and advanced tissue imaging."
+      },
+      {
+        "name": "Mingyao Li, PhD",
+        "center": "University of Pennsylvania",
+        "description": "Dr. Li is a Professor of Biostatistics in the Department of Biostatistics and Epidemiology, with secondary appointments in Digital Pathology, Department of Pathology and Laboratory Medicine, and Statistics, Department of Statistics and Data Science, at the University of Pennsylvania School of Medicine. She is a computational researcher with a focus on identifying genes that contribute to human variation and diseases. Her research program consists of both a methodological component focused on developing novel statistical methods for statistical genetics and genomics, and an applied component focused on using these methods in clinical and biological studies. Dr. Li uses a multidisciplinary approach that integrates methods from statistics, machine learning, bioinformatics, and computational biology. Her lab has published papers on single-cell RNA-seq and its applications in human diseases as well as methods papers on spatial transcriptomics data anaylsis."
+      }
     ],
-    "description": "This center aims to map the progression of hereditary diffuse gastric cancer (HDGC), focusing on the transition from early pre-cancerous lesions to advanced gastric cancer. Using advanced 2D and 3D spatial techniques, the research will track cellular and molecular changes in patients with CDH1 mutations to identify early markers of cancer development. The findings will guide more personalized approaches to cancer prevention and treatment, potentially reducing the need for invasive surgeries like prophylactic gastrectomies."
+    "description": "The GAME3D Center aims to address the critical need for precision cancer interception in hereditary diffuse gastric cancer (HDGC) caused by pathogenic CDH1 germline mutations. Patients with such mutations carry an elevated lifetime risk of advanced diffuse gastric cancer up to 80%. Prophylactic total gastrectomy (PTG) is often advised but may not be necessary for all CDH1 mutation carriers. PTG is a\n\nmajor procedure associated with chronic physical and psychosocial disabilities, yet prior attempts to risk stratify patients based on specific variants or family cancer history have not been successful and tools to identify patients at high risk are currently lacking. This is largely due to our limited understanding of the earliest events that drive T1a lesion development and progression. GAME3D integrates cutting-edge multimodal, single-cell, and 3D spatial technologies to construct a comprehensive atlas of the N-T1a-AGC continuum. Through longitudinal samples, the Center will: (1) create a dynamic 2D spatial atlas; (2) build a 3D spatiotemporal atlas at single-cell resolution; and (3) develop computational models of tumor initiation and progression. This work will uncover key mechanisms driving AGC development, offering new targets for early interception."
   },
   "hta204": {
     "navText": "Myeloma Multidimensional Precancer Atlas",
     "title": "Myeloma Multidimensional Precancer Atlas",
     "grantNumber": "CA294507",
     "principalInvestigators": [
-      "Irene Ghobrial, Dana-Farber Cancer Institute (Contact PI)"
+      {
+        "name": "Irene Ghobrial",
+        "center": "Dana-Farber Cancer Institute",
+        "description": "",
+        "isContact": true
+      }
     ],
     "description": "This project will build a multidimensional atlas of multiple myeloma, focusing on the early stages of the disease when precancerous cells begin to evolve into malignant forms. By mapping the genetic, molecular, and spatial characteristics of these early changes, the research aims to identify targets for early intervention. This work could improve early diagnosis and lead to therapies that prevent the progression of multiple myeloma in high-risk individuals."
   },
@@ -60,9 +129,22 @@
     "title": "Pediatric Solid Tumor Microenvironment Atlas",
     "grantNumber": "CA294552",
     "principalInvestigators": [
-      "Shahab Asgharzadeh, CHLA (Contact PI)",
-      "James Amatruda, CHLA",
-      "Long Cai, Caltech"
+      {
+        "name": "Shahab Asgharzadeh",
+        "center": "CHLA",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "James Amatruda",
+        "center": "CHLA",
+        "description": ""
+      },
+      {
+        "name": "Long Cai",
+        "center": "Caltech",
+        "description": ""
+      }
     ],
     "description": "The majority of solid tumors in children have a unique origin compared to those in adults, stemming from their rise from embryonic cells. Despite this distinction, there is still limited understanding of the differences in the microenvironments of these pediatric tumors compared to adult cancers, and how these differences might contribute to lineage plasticity and treatment resistance. To address this knowledge gap, we propose a comprehensive investigation into the spatial biology of these tumors. Our goal is to shed light on the specific cells and mechanisms within the tumor microenvironment that play a role in inducing therapy resistance in pediatric solid tumors. This research will focus on prominent pediatric cancers such as rhabdomyosarcoma, neuroblastoma, and Wilms tumors. The primary goal of this multi-disciplinary Program is to establish a comprehensive Pediatric Solid Tumor Microenvironment (PSTME) Atlas that would lead to discovering basic mechanisms of de novo and acquired resistance to modern therapies, and uncovering tumor microenvironment (TME) targetable vulnerabilities driven by resistance. The motivation for creating the PSTME atlas is the urgent need to improve survival of patients with high-risk subtypes of the proposed cancers, and to decrease treatment- related morbidities. By delving into the intricacies of the tumor microenvironment and its impact on treatment response, we aim to advance our understanding of pediatric solid tumors and pave the way for more effective therapeutic strategies. The Project will be supported by collaboration among two institutions with distinct and unique resources and technologies, and complementary expertise: A) Children’s Hospital Los Angeles (CHLA) group will provide well annotated tumor specimens with clinical information in an ethnically diverse patient population, and lead in generating spatial proteomics data using pediatric and TME specific antibody panels. B) California Institute of Technology (Caltech) group will provide innovative spatial omics technologies including spatial transcriptomics and copy number, and novel data science approaches for integrative analysis of the generated data. The samples will be selected to represent solid tumor diversity based on established clinical risk stratifications, and critical points of transition (post chemotherapy response, relapse) to ensure capture of the diversity of PSTME. The PSTME atlas will impact the community through generation of easily accessible TME atlas providing a user friendly, searchable database of multiomics spatial analyses of common extracranial solid tumors with clinical and outcome data. It will also provide novel computational pipelines for integration and analysis of spatial data. These opensource tools will be made available to the community. In summary, the significance of the proposed project is the establishment of an atlas that will allow discovery of fundamental mechanisms of extrinsic cancer therapy resistance with the goal of leading to substantively improved probability of cure coupled with reduced therapy-related morbidity for children afflicted with solid tumors."
   },
@@ -71,10 +153,27 @@
     "title": "Human Prostate Tumor Atlas Center",
     "grantNumber": "CA294532",
     "principalInvestigators": [
-      "Li Ding, Washington University in St. Louis (Contact PI)",
-      "Feng Chen, Washington University in St. Louis",
-      "Ryan Fields, Washington University in St. Louis",
-      "Russel Pachynski, Washington University in St. Louis"
+      {
+        "name": "Li Ding",
+        "center": "Washington University in St. Louis",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Feng Chen",
+        "center": "Washington University in St. Louis",
+        "description": ""
+      },
+      {
+        "name": "Ryan Fields",
+        "center": "Washington University in St. Louis",
+        "description": ""
+      },
+      {
+        "name": "Russel Pachynski",
+        "center": "Washington University in St. Louis",
+        "description": ""
+      }
     ],
     "description": "The Human Prostate Tumor Atlas Center will map the cellular and molecular architecture of prostate cancer, particularly focusing on African American men, who are disproportionately affected by aggressive forms of the disease. Using advanced spatial and molecular profiling techniques, this project will generate a high-resolution atlas to understand tumor dynamics, treatment resistance, and health disparities. The findings will help improve early diagnosis and treatment strategies, especially for underserved populations."
   },
@@ -83,10 +182,27 @@
     "title": "A Multimodal 3D Atlas of Colorectal Cancer Across Ages of Onset",
     "grantNumber": "CA294527",
     "principalInvestigators": [
-      "Ken Lau, Vanderbilt University (Contact PI)",
-      "Jeffrey Spraggins, Vanderbilt University",
-      "Robert Coffey, Vanderbilt University",
-      "Martha Shrubsole, Vanderbilt University"
+      {
+        "name": "Ken Lau",
+        "center": "Vanderbilt University",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Jeffrey Spraggins",
+        "center": "Vanderbilt University",
+        "description": ""
+      },
+      {
+        "name": "Robert Coffey",
+        "center": "Vanderbilt University",
+        "description": ""
+      },
+      {
+        "name": "Martha Shrubsole",
+        "center": "Vanderbilt University",
+        "description": ""
+      }
     ],
     "description": "This project aims to create a 3D atlas of colorectal cancer to investigate differences between early-onset and late-onset cases of the disease. By analyzing the spatial organization of tumors and surrounding tissues, the research will reveal how interactions between cancer cells, microbes, and the immune system contribute to cancer progression. The findings could lead to new strategies for early detection and targeted treatments, particularly for younger patients who face increasing rates of colorectal cancer."
   },
@@ -95,9 +211,22 @@
     "title": "3D Spatial Multi-Omics Profiling of Ovarian Cancer",
     "grantNumber": "CA294459",
     "principalInvestigators": [
-      "Sam Mok, MD Anderson (Contact PI)",
-      "Sammy Ferri-Borgogno, MD Anderson",
-      "Michael Birrer, University of Arkansas"
+      {
+        "name": "Sam Mok",
+        "center": "MD Anderson",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Sammy Ferri-Borgogno",
+        "center": "MD Anderson",
+        "description": ""
+      },
+      {
+        "name": "Michael Birrer",
+        "center": "University of Arkansas",
+        "description": ""
+      }
     ],
     "description": "This project aims to understand how high-grade serous ovarian cancer (HGSOC) metastasizes and develops resistance to chemotherapy, focusing on late-stage diagnosis. A 3D cancer atlas will be created using molecular and cellular profiling to map tumor progression in patients. The data will help identify key molecular changes responsible for resistance and could lead to more effective treatments and improved survival rates. The multi-disciplinary team will integrate various technologies to produce a comprehensive spatial map of ovarian cancer."
   },
@@ -106,10 +235,27 @@
     "title": "Center for Human Lymphoma Spatiotemporal Atlas (HuLymSTA)",
     "grantNumber": "CA294514",
     "principalInvestigators": [
-      "Rong Fan, Yale University (Contact PI)",
-      "Mina Xu, Yale University",
-      "Stephanie Halene, Yale University",
-      "Zongming Ma, Yale University"
+      {
+        "name": "Rong Fan",
+        "center": "Yale University",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Mina Xu",
+        "center": "Yale University",
+        "description": ""
+      },
+      {
+        "name": "Stephanie Halene",
+        "center": "Yale University",
+        "description": ""
+      },
+      {
+        "name": "Zongming Ma",
+        "center": "Yale University",
+        "description": ""
+      }
     ],
     "description": "This project will develop a comprehensive spatiotemporal atlas of lymphoma, focusing on the transformation of indolent follicular lymphoma into aggressive diffuse large B-cell lymphoma (DLBCL) and the evolution of angioimmunoblastic T-cell lymphoma (AITL). The atlas will map the genetic and spatial changes in tumor cells and their microenvironments over time, helping researchers understand the key factors driving cancer progression and resistance to treatment. The insights gained could lead to the identification of biomarkers for earlier intervention and more effective therapies."
   }
