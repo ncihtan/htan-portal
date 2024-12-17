@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import fetch from 'node-fetch';
 
 // this import causes compiler to crash due to the size of syn_data.json
 // we need to use fs instead
@@ -51,9 +52,25 @@ import CELLXGENE_MAPPINGS from './cellxgene-mappings.json';
 import UCSCXENA_MAPPINGS from './ucscxena-mappings.json';
 import ISBCGC_MAPPINGS from './isbcgc-mappings.json';
 import CUSTOM_MINERVA_STORY_MAPPINGS from './minerva-story-mappings.json';
-import AUTOMINERVA_ASSETS from './htan-imaging-assets.json';
+// import AUTOMINERVA_ASSETS from './htan-imaging-assets.json';
 import IDC_IMAGING_ASSETS from './idc-imaging-assets.json';
 import CDS_ASSETS from './cds_drs_mapping.json';
+
+const AUTOMINERVA_ASSETS_URL = 'https://d3p249wtgzkn5u.cloudfront.net/final-output/htan-imaging-assets-latest.json
+
+async function fetchAutoMinervaAssets(): Promise<AutoMinerva[]> {
+    const response = await fetch(AUTOMINERVA_ASSETS_URL);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch AUTOMINERVA_ASSETS: ${response.statusText}`);
+    }
+    return response.json();
+}
+
+const AUTOMINERVA_ASSETS = await fetchAutoMinervaAssets();
+
+const AUTOMINERVA_MAPPINGS: {
+    [synapseId: string]: AutoMinerva;
+} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid');
 
 const IDC_MAPPINGS: {
     [fileId: string]: IdcImagingAsset;
@@ -62,10 +79,6 @@ const IDC_MAPPINGS: {
 const CDS_MAPPINGS: {
     [fileId: string]: CdsAsset;
 } = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID');
-
-const AUTOMINERVA_MAPPINGS: {
-    [synapseId: string]: AutoMinerva;
-} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid');
 
 interface ImagingMetadata {
     HTAN_Data_File_ID: string;
