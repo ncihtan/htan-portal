@@ -56,7 +56,7 @@ import CUSTOM_MINERVA_STORY_MAPPINGS from './minerva-story-mappings.json';
 import IDC_IMAGING_ASSETS from './idc-imaging-assets.json';
 import CDS_ASSETS from './cds_drs_mapping.json';
 
-const AUTOMINERVA_ASSETS_URL = 'https://d3p249wtgzkn5u.cloudfront.net/final-output/htan-imaging-assets-latest.json
+const AUTOMINERVA_ASSETS_URL = 'https://d3p249wtgzkn5u.cloudfront.net/final-output/htan-imaging-assets-latest.json'
 
 async function fetchAutoMinervaAssets(): Promise<AutoMinerva[]> {
     const response = await fetch(AUTOMINERVA_ASSETS_URL);
