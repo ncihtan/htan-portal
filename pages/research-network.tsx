@@ -3,8 +3,35 @@ import { Container, Row } from 'react-bootstrap';
 
 import PageWrapper from '../components/PageWrapper';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import htaData from '../data/phase2_centers.json';
+import htaPhase2Data from '../data/phase2_centers.json';
 import styles from './centercard.module.css';
+import { HtaCenters } from '../types';
+
+const Cards = (props: { data: HtaCenters; phase: string }) => {
+    return (
+        <div className={styles.cardcontainer}>
+            {Object.entries(props.data).map(([centerId, htaCenter]) => (
+                <a href={`/center/${centerId}`}>
+                    <div className={styles.card} key={centerId}>
+                        <img
+                            src={`/${props.phase}/${centerId}.png`}
+                            alt={centerId}
+                        />
+                        <div className={styles.text}>
+                            <h2>{htaCenter.title}</h2>
+                            <hr />
+                            {htaCenter.principalInvestigators.map(
+                                (pi, index) => (
+                                    <p key={index}>{pi.name}</p>
+                                )
+                            )}
+                        </div>
+                    </div>
+                </a>
+            ))}
+        </div>
+    );
+};
 
 const ResearchNetwork = () => {
     return (
@@ -16,29 +43,7 @@ const ResearchNetwork = () => {
                         <div className="col">
                             <h1>Research Network</h1>
                             <h2>Phase 2 Centers</h2>
-                            <div className={styles.cardcontainer}>
-                                {Object.entries(htaData).map(([key, value]) => (
-                                    <a href={`/phase2/${key}`}>
-                                        <div className={styles.card} key={key}>
-                                            <img
-                                                src={`/phase2/${key}.png`}
-                                                alt={key}
-                                            />
-                                            <div className={styles.text}>
-                                                <h2>{value.title}</h2>
-                                                <hr />
-                                                {value.principalInvestigators.map(
-                                                    (pi, index) => (
-                                                        <p key={index}>
-                                                            {pi.name}
-                                                        </p>
-                                                    )
-                                                )}
-                                            </div>
-                                        </div>
-                                    </a>
-                                ))}
-                            </div>
+                            <Cards data={htaPhase2Data} phase="phase2" />
 
                             <h2>Phase 1 Centers</h2>
                             <div className="atlas-array">
