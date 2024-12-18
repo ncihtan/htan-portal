@@ -7,7 +7,7 @@
       {
         "name": "Hunter Shain",
         "center": "UCSF",
-        "description": "",
+        "description": "Dr. Shain is an Associate Professor in the Department of Dermatology at the University of California San Francisco (UCSF). He is also affiliated with the Institute of Human Genetics and the Helen Diller Family Comprehensive Cancer Center. He has a B.S. in Biochemistry from the University of Illinois, a Ph.D. in Cancer Biology from Stanford University, and postdoctoral training in Cancer Genomics from UCSF. His laboratory harnesses a wide range of -omic technologies to better understand skin biology. Historically, they have utilized microarray and bulk-cell sequencing technologies, and nowadays they have shifted focus towards single-cell DNA-sequencing, single-cell RNA-sequencing, and spatial transcriptomic technologies.",
         "isContact": true
       },
       {
@@ -16,9 +16,9 @@
         "description": ""
       },
       {
-        "name": "Iweh Yeh",
+        "name": "Iwei Yeh",
         "center": "UCSF",
-        "description": ""
+        "description": "I’m a dermatologist and dermatopathologist with a background in biochemistry, genetics and bioinformatics. I currently practice diagnostic dermatopathology and perform basic and translational research in the field of cutaneous neoplasia. My work has been focused on uncovering the genetics and biology of cutaneous neoplasms and translating our knowledge into clinical practice."
       }
     ],
     "description": "This project aims to develop an atlas that maps the early phases of skin cancer, focusing on the transition from pre-cancerous lesions to melanoma and squamous cell carcinoma. The research will integrate genetic and immunological data to understand how the immune system interacts with tumors during these early stages. The goal is to identify biomarkers and therapeutic targets that could improve early diagnosis and treatment of skin cancers, potentially leading to better patient outcomes."
