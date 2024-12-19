@@ -1,0 +1,268 @@
+{
+  "hta1": {
+    "title": "Human Tumor Atlas Pilot Project (HTAPP)",
+    "principalInvestigators": [
+      {
+        "name": "Aviv Regev, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Orit Rosenblatt-Rosen, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Bruce Johnson, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Mario Suvà, MD, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta1",
+    "phase": "phase1"
+  },
+  "hta2": {
+    "title": "Pre-Cancer Atlas Pilot Program",
+    "principalInvestigators": [
+      {
+        "name": "Avrum Spira, MD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "https://mcl.nci.nih.gov/",
+    "phase": "phase1"
+  },
+  "hta3": {
+    "title": "The Lung PCA: A Multi-Dimensional Atlas of Pulmonary Premalignancy",
+    "principalInvestigators": [
+      {
+        "name": "Avrum Spira, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Steven Dubinett, MD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta3",
+    "phase": "phase1"
+  },
+  "hta4": {
+    "title": "Center for Pediatric Tumor Cell Atlas",
+    "principalInvestigators": [
+      {
+        "name": "Kai Tan, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Steven P. Hunger, MD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta4",
+    "phase": "phase1"
+  },
+  "hta5": {
+    "title": "The Cellular Geography of Therapeutic Resistance in Cancer",
+    "principalInvestigators": [
+      {
+        "name": "Bruce Johnson, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Aviv Regev, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta5",
+    "phase": "phase1"
+  },
+  "hta6": {
+    "title": "Breast Pre-Cancer Atlas",
+    "principalInvestigators": [
+      {
+        "name": "E. Shelley Hwang, MD, MPH",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Rob West, MD, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Carlo Maley, MD, MSc",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta6",
+    "phase": "phase1"
+  },
+  "hta7": {
+    "title": "Pre-Cancer Atlases Of Cutaneous & Hematologic Origin (Patch) Center",
+    "principalInvestigators": [
+      {
+        "name": "Peter Sorger, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Sandor Santagata, MD, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "John Aster, MD, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta7",
+    "phase": "phase1"
+  },
+  "hta8": {
+    "title": "Transition to Metastatic State: Lung Cancer, Pancreatic Cancer, and Brain Metastasis",
+    "principalInvestigators": [
+      {
+        "name": "Dana Pe’er, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Christine Iacobuzio-Donahue, MD, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta8",
+    "phase": "phase1"
+  },
+  "hta9": {
+    "title": "Omic and Multidimensional Spatial Atlas Of Metastatic Breast Cancers",
+    "principalInvestigators": [
+      {
+        "name": "Joe Gray, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Gordon B. Mills, MD, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "George V. Thomas, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Jeremy Goecks, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta9",
+    "phase": "phase1"
+  },
+  "hta10": {
+    "title": "Pre-Cancer Atlas: Familial Adenomatous Polyposis",
+    "principalInvestigators": [
+      {
+        "name": "Michael Snyder, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "James Ford, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Christina Curtis, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "William Greenleaf, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta10",
+    "phase": "phase1"
+  },
+  "hta11": {
+    "title": "Integrative Single-Cell Atlas Of Host And Microenvironment In Colorectal Neoplastic Transformation",
+    "principalInvestigators": [
+      {
+        "name": "Robert Coffey, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Ken Lau, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Martha J. Shrubsole, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta11",
+    "phase": "phase1"
+  },
+  "hta12": {
+    "title": "Washington University Human Tumor Atlas Research Center",
+    "principalInvestigators": [
+      {
+        "name": "Li Ding, PhD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Ryan Fields, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "William Gillanders, MD",
+        "center": "",
+        "description": ""
+      },
+      {
+        "name": "Samuel Achilefu, PhD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "/hta12",
+    "phase": "phase1"
+  }
+}
