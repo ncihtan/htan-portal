@@ -27,7 +27,6 @@
       "To diagnose, study, monitor, and treat human cancer, there is an enormous need to define and characterize the cells that comprise tumors, chart their spatial organization, and decipher their functional connections. The generation of tumor atlases poses substantial challenges, including development and dissemination of robust SOPs for tissue collection, development of experimental design strategies, establishment of strategies to integrate across cellular and spatial data, and development of effective data sharing approaches.",
       "To address these challenges and lay a foundation for HTAN, HTAPP was initiated in partnership with the National Cancer Institute (NCI) and the Frederick National Laboratory for Cancer Research (FNLCR). HTAPP aims to: (1) gain an understanding of the number of cells, tumors, and spatial methods required to describe tumor heterogeneity; (2) develop, validate, and transfer knowledge of SOPs for tissue procurement, sampling parameters, and data generation and analysis from seven tumor types; (3) generate pilot-scale, spatially resolved tumor atlases of metastatic breast cancer and pediatric neuroblastoma; (4) provide data and resources generated to the HTAN and broader community; and (5) assess the feasibility of applying single-cell genomics to FFPE tissues. Our team is composed of clinical, single-cell genomics, spatial genomics and proteomics, and computation experts, who have pioneered the development and application of these approaches to tumors."
     ],
-    "customURL": "/hta1",
     "phase": "phase1"
   },
   "hta2": {
@@ -58,7 +57,6 @@
       }
     ],
     "description": "The Lung PCA: A Multi-Dimensional Atlas of Pulmonary Premalignancy is one of five research centers developing Pre-Cancer Atlases focused on unraveling the molecular underpinnings enabling the progression of pre-cancerous lesions to cancer. The Lung PCA is led by Dr. Avrum Spira (Boston University) and co-led by Dr. Steven Dubinett (University of California, Los Angeles), and Dr. Sarah Mazzilli (Boston University) in addition to collaborators across 10 institutions including: University of California Los Angeles; Stanford University; University of Colorado, Denver; MD Anderson Cancer Center; University College London; DFCI/Harvard University; Broad Institute; Roswell Park Comprehensive Cancer Center; University of Pennsylvania; and Vanderbilt University. The Lung PCA aims to build a high-resolution atlas characterizing the earliest cellular and molecular alterations in pre-cancerous lesions of the airway and lung, providing new opportunities for early cancer detection and novel targets to intercept the development of lung cancer. The atlas leverages unique retrospective and prospective cohorts assembled at multiple medical centers via our Biospecimen Unit, led by Daniel Merrick of the University of Colorado, to collect, annotate, and process premalignant lesion biospecimens of the lung and airway. Our Characterization Unit, led by Steven Dubinett of UCLA, will apply existing and emerging molecular profiling tools to characterize the genomic, transcriptomic, and proteomic landscape of these lesions. Our Data Analysis Unit, led by Marc Lenburg of Boston University, will develop pipelines for standardized multidimensional data processing, quality control, analysis and integration, leading to creation of a web-based portal for data dissemination and online integrative analysis to benefit the greater research community.",
-    "customURL": "/hta3",
     "phase": "phase1"
   },
   "hta4": {
@@ -76,7 +74,6 @@
       }
     ],
     "description": "Dr. Kai Tan is a systems biologist and Associate Professor in the Department of Pediatrics, The Children’s Hospital of Philadelphia and University of Pennsylvania. He has extensive experience studying transcriptional and epigenetic regulation in normal development and oncogenesis through a combination of experimental genomics and computational models. Dr. Tan’s laboratory has developed a number of approaches for modeling transcriptional regulatory networks, which have been used to dissect the gene regulatory networks controlling embryonic hematopoiesis, T cell differentiation, and leukemogenesis. In addition, his group has pioneered a number of popular computational algorithms for constructing models of transcriptional regulatory networks by integrating multi-dimensional genomic, epigenomic, and transcriptomic datasets. The ultimate goal of his work is to understand dynamic molecular networks, the role of combinatorial epigenetic modifications and transcriptional regulation, and the role of 3-D genomic organization in gene regulation to improve the diagnosis and treatment of cancer patients.",
-    "customURL": "/hta4",
     "phase": "phase1"
   },
   "hta5": {
@@ -94,7 +91,6 @@
       }
     ],
     "description": "The majority of patients die from cancer because their tumors either do not respond to therapy or eventually develop resistance to the treatments. The Boston Human Tumor Atlas Network Research Center includes research institutions in Boston, Stanford, and Princeton that are mapping the cell types in breast cancer, melanoma, and colon cancer. The resulting tumor atlases will generate spatial and single-cell resolution information to provide an unprecedented understanding of the malignant, immune, and stromal cellular and tissue compartments that drive intrinsic and acquired resistance to existing and emerging therapeutics. These compartments then can be used to inform patient stratification and new treatment strategies and to make precision cancer medicine a reality. This detailed information is essential for the targeted therapies (e.g., CDK4/6 inhibition) and immunotherapies (e.g., anti-PD-1 therapies) we are examining, because these therapies typically benefit only a subset of patients treated with them for a limited period of time, and mechanisms of resistance to them are thus far poorly understood. Our studies will help develop both new insights to identify patients at risk of resistance to their cancer therapies and new treatment strategies to overcome both de novo and acquired resistance, ultimately improving the outcome for patients with cancer.",
-    "customURL": "/hta5",
     "phase": "phase1"
   },
   "hta6": {
@@ -120,7 +116,6 @@
       "The Breast Pre-Cancer Atlas Center is designed to construct an atlas that can be used to better understand ductal carcinoma in situ (DCIS), a preinvasive breast cancer precursor. DCIS is an extremely common clinical diagnosis that is essentially a disease of screening triggered by the detection of abnormal breast calcifications on mammography. Before the advent of mammography, DCIS was an incidental and relatively uncommon finding. Over 60,000 women in the United States will be presented with this diagnosis each year with relatively weak evidence-based guidance for disease management, which ranges from active surveillance to bilateral mastectomy. We propose to compile multi-dimensional and multi-scale information on DCIS to construct a Pre-Cancer Atlas that can be used to better understand the disease but also to better stratify risk of progression, a useful translational endpoint.",
       "To do this, we have assembled a team of investigators with deep and complementary clinical, experimental, and quantitative expertise and experience with DCIS and breast cancer in general. Further, we conduct these studies with full consideration of tumor evolution and ecology as it pertains to precancer development and progression. Specific aspects of the proposed atlas construction include: 1) several types of DCIS cohorts that will capture spatial and longitudinal information including a prospective clinical trial cohort undergoing active surveillance; 2) analyses designed to maintain relevant spatial organization of the disease for evolutionary and atlas building considerations based on 3) radiologic-histologic-cellular-molecular registration approaches; 4) characterization at multiple scales including whole-tumor, single-duct, and single-cell levels; 5) characterization of relevant parameters including mutations, copy number changes, methylation, gene expression, and microenvironmental elements including inflammatory cell profiles; 6) incorporation of the breast cancer-intrinsic subtype paradigm into the analytic phase; and 7) layered, spatial, and longitudinal data visualization. Overall, this work will provide a comprehensive platform to guide the next generation of studies on DCIS and other precancers."
     ],
-    "customURL": "/hta6",
     "phase": "phase1"
   },
   "hta7": {
@@ -143,7 +138,6 @@
       }
     ],
     "description": "We are constructing a multi-dimensional atlas of pre-melanoma focused on understanding genetic and epigenetic events that transform melanocytes into invasive tumors. Melanoma is a cancer of increasing prevalence that is curable with minor surgery if detected early but life-threatening when it metastasizes. Melanomas metastasize when still small, making early detection essential but challenging. Our atlas will delineate the precise sequence of events leading up to pre-melanoma through detailed spatial analysis of cell-autonomous events such as oncogene mutation and non-autonomous events such as escape from immune surveillance. The atlas is based on highly-multiplexed tissue imaging and single cell sequencing and focused on samples in which the full sequence of events from atypia to invasive melanoma can be visualized in a single specimen. The atlas will serve as a publicly accessible resource for research scientists, physicians, and patients and improve our ability to (i) highlight lesions likely to progress to cancer, (ii) identify high-risk patients to inform decisions on surgery, (iii) identify low-risk patients to reduce unnecessary procedures, (iv) design improved procedures for routine screening of all individuals, and (v) inform treatment options when surgery is insufficient. Complementary studies with similar goals (but not supported by HTAN) are studying later stage melanomas.",
-    "customURL": "/hta7",
     "phase": "phase1"
   },
   "hta8": {
@@ -161,7 +155,6 @@
       }
     ],
     "description": "Metastasis embodies the whole-organism pathophysiology of cancer. The spread of cancer cells beyond the primary tumor site is responsible for the majority of cancer deaths and is the most overt expression of cancer’s complex evolutionary dynamics. Intimately related to the intricate processes of development and immunity, the transition from locally invasive to metastatic cancer also poses a major scientific hurdle. Recent technological and computational advancements enable dynamic, multidimensional, multiplanar analysis of multiple tissues. We are applying these advances to clinical samples with the aim of generating a high-resolution spatiotemporal tissue atlas of the most lethal cancers in the United States: lung cancer, pancreatic cancer, and metastases of the central nervous system. Our approach is to obtain high-quality human biospecimens from surgical resections, biopsy, or autopsy of primary and disseminated tumors. Samples are interrogated using single-cell and single-nucleus RNA sequencing as well as spatially informative multiplexed molecular profiling using protein and RNA in situ hybridization–based technologies. Integration, analysis, and presentation of these datasets will be undertaken with the goal of generating human tumor atlases of value to the entire cancer research community.",
-    "customURL": "/hta8",
     "phase": "phase1"
   },
   "hta9": {
@@ -189,7 +182,6 @@
       }
     ],
     "description": "The overall goal of the HTAN OMS Atlas Center is to elucidate mechanisms by which metastatic breast cancers become resistant to current generation pathway- and immune checkpoint-targeted treatments. The OMS Atlas is motivated by the appreciation that these treatments are often effective in primary tumors but only transiently effective in the metastatic setting. Possible resistance mechanisms include tumor-intrinsic genomic instability and epigenomic plasticity, as well as events extrinsic to the cancer cells, including chemical and mechanical signals from the microenvironments, production of mechanical extracellular matrix barriers and/or changes in vasculature that reduce drug and/or immune cell access, nanoscale cancer cell-microenvironment interactions that reduce drug efficacy, and a plethora of immune resistance mechanisms, such as loss of HLA expression and antigen presentation, and immune exhaustion. These mechanisms likely vary between patients and within individual patients and change with time as tumors respond to therapeutic attack. The OMS Atlas will focus on elucidating resistance mechanisms in two specific current generation clinical trial scenarios: (a) hormone receptor-positive breast cancer (HRBC) undergoing treatment with a CDK4/6 inhibitor in combination with endocrine therapy and (b) triple negative breast cancer (TNBC) undergoing treatment with a PARP inhibitor and an immunomodulatory agent.",
-    "customURL": "/hta9",
     "phase": "phase1"
   },
   "hta10": {
@@ -217,7 +209,6 @@
       }
     ],
     "description": "We have established a state-of-the-art PreCancer Altas (PCA) for colorectal cancer (CRC) using Familial Adenomatous Polyposis (FAP) as a model system. CRC is one of the leading causes of death in the United States with 140,000 new cases arising each year. Mutations in the adenomatous polyposis coli (APC) gene are thought to be one of the early events in sporadic colorectal cancer. FAP families have inherited mutations in APC, and affected individuals classically develop hundreds of polyps, which often progress to invasive colon cancer by the third decade of life. Due to the extraordinarily high number of polyps that can be obtained from a single individual, FAP is an ideal disease system to study the host factors driving molecular heterogeneity in precancerous lesions. We expect these studies to inform diagnostic, preventative, and therapeutic measures for sporadic CRC. In order to obtain a comprehensive understanding of the early events that lead to and drive CRC, we will construct a PreCancer Atlas of the pre-cancerous polyps, early adenocarcinoma, and nearby normal tissue isolated from FAP patients. To build this atlas and execute this project, we have assembled an expert team of investigators with extensive experience working in large consortia. Together, we have already developed pipelines for multi-omics and imaging characterization, biospecimen collection, and analysis that we have leveraged for FAP samples.",
-    "customURL": "/hta10",
     "phase": "phase1"
   },
   "hta11": {
@@ -244,7 +235,6 @@
       "We believe that the ability to provide the most effective precision diagnostics and preventive strategies can only be achieved with single-cell analysis. As such, we will map spatial relationships across the spectrum of normal colon, early polyps, and late adenomas, including their unique stromal and microbial microenvironments to identify unique molecular phenotypes.",
       "Our goal will be accomplished through prospective, standardized collection and analysis of colorectal tissue, associated biospecimens, and related clinical and epidemiological data from participants undergoing colonoscopy or surgical resection. The biospecimens from these participants will be used for single-cell RNA sequencing, whole exome sequencing, multiplex immunofluorescence, species-specific bacterial fluorescence in situ hybridization, and other approaches. Finally, the information from these approaches will be integrated to develop a single-cell pre-cancer atlas with defined molecular phenotypes for dissemination to the broader scientific community."
     ],
-    "customURL": "/hta11",
     "phase": "phase1"
   },
   "hta12": {
@@ -272,7 +262,6 @@
       }
     ],
     "description": "",
-    "customURL": "/hta12",
     "phase": "phase1"
   }
 }
