@@ -10,7 +10,7 @@ import { HtaCenters } from '../types';
 
 const Cards = (props: { data: HtaCenters }) => {
     return (
-        <div className={styles.cardcontainer}>
+        <div className={styles.cardContainer}>
             {Object.entries(props.data).map(([centerId, htaCenter]) => (
                 <a href={htaCenter.customURL || `/center/${centerId}`}>
                     <div className={styles.card} key={centerId}>
@@ -19,7 +19,9 @@ const Cards = (props: { data: HtaCenters }) => {
                             alt={centerId}
                         />
                         <div className={styles.text}>
-                            <h2>{htaCenter.title}</h2>
+                            <h2 className={styles.cardTitle}>
+                                {htaCenter.title}
+                            </h2>
                             <hr />
                             {htaCenter.principalInvestigators.map(
                                 (pi, index) => (

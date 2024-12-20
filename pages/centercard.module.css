@@ -1,4 +1,4 @@
-.cardcontainer {
+.cardContainer {
     display: flex;
     justify-content: left;
     flex-wrap: wrap;
@@ -15,6 +15,10 @@
     margin: 0px 15px 15px 0px;
     box-sizing: border-box;
     border: 3px solid black;
+}
+
+.cardTitle {
+    height: 125px;
 }
 
 .card img {
