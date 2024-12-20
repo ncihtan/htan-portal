@@ -32,7 +32,7 @@ export interface HtaCenter {
     title: string;
     grantNumber?: string;
     principalInvestigators: PrincipalInvestigator[];
-    description: string;
+    description: string | string[];
     customURL?: string;
 }
 

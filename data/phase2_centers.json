@@ -4,20 +4,20 @@
     "grantNumber": "CA294536",
     "principalInvestigators": [
       {
-        "name": "Hunter Shain",
+        "name": "Hunter Shain, PhD",
         "center": "UCSF",
         "description": "Dr. Shain is an Associate Professor in the Department of Dermatology at the University of California San Francisco (UCSF). He is also affiliated with the Institute of Human Genetics and the Helen Diller Family Comprehensive Cancer Center. He has a B.S. in Biochemistry from the University of Illinois, a Ph.D. in Cancer Biology from Stanford University, and postdoctoral training in Cancer Genomics from UCSF. His laboratory harnesses a wide range of -omic technologies to better understand skin biology. Historically, they have utilized microarray and bulk-cell sequencing technologies, and nowadays they have shifted focus towards single-cell DNA-sequencing, single-cell RNA-sequencing, and spatial transcriptomic technologies.",
         "isContact": true
       },
       {
-        "name": "Boris Bastian",
+        "name": "Boris Bastian, MD",
         "center": "UCSF",
-        "description": ""
+        "description": "Dr. Boris Bastian received his MD degree and Dr. Med degree from the Ludwig-Maximilian University of Munich. After completing a residency in dermatology at the University of Wurzburg, he received additional training in dermatopathology and completed a postdoctoral fellowship at the University of California, San Francisco before joining the institution's faculty and starting his research laboratory at UCSF’s Helen Diller Family Comprehensive Cancer Center. In 2010 he moved to the Memorial Sloan-Kettering Cancer Center to become Chairman of the Department of Pathology. He served as the President of the Society of Melanoma Research from 2010 to 2013. In 2011 he returned to UCSF where he holds the title of Gerson and Barbara Bakar Distinguished Professor of Cancer Biology. He founded and directs the Clinical Cancer Genomics Laboratory at UCSF, which performs molecular diagnostics for patients of the Helen Diller Family Comprehensive Cancer Center. He has clinical responsibilities in the Dermatopathology Section of the Departments of Dermatology and Pathology, where he also oversees the molecular diagnostic laboratory.\n\nDr. Bastian’s research laboratory focuses on the molecular genetics of cutaneous neoplasms, with a particular emphasis on the discovery of genetic alterations useful for diagnosis, classification, and therapy. His laboratory has contributed to the discovery of multiple genetic alterations in melanocytic neoplasia that are relevant for therapeutic and diagnostic purposes and he has established a taxonomy of melanocytic neoplasia that integrates molecular and clinical disease aspects. He has received numerous awards for his work."
       },
       {
-        "name": "Iwei Yeh",
+        "name": "Iwei Yeh, MD, PhD",
         "center": "UCSF",
-        "description": "I’m a dermatologist and dermatopathologist with a background in biochemistry, genetics and bioinformatics. I currently practice diagnostic dermatopathology and perform basic and translational research in the field of cutaneous neoplasia. My work has been focused on uncovering the genetics and biology of cutaneous neoplasms and translating our knowledge into clinical practice."
+        "description": "Dr. Yeh is a dermatologist and dermatopathologist with a background in biochemistry, genetics and bioinformatics. She currently practices diagnostic dermatopathology and performs basic and translational research in the field of cutaneous neoplasia. Her work has been focused on uncovering the genetics and biology of cutaneous neoplasms and translating our knowledge into clinical practice."
       }
     ],
     "description": "This project aims to develop an atlas that maps the early phases of skin cancer, focusing on the transition from pre-cancerous lesions to melanoma and squamous cell carcinoma. The research will integrate genetic and immunological data to understand how the immune system interacts with tumors during these early stages. The goal is to identify biomarkers and therapeutic targets that could improve early diagnosis and treatment of skin cancers, potentially leading to better patient outcomes.",

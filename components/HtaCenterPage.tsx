@@ -6,6 +6,7 @@ import styles from './HtaCenterPage.module.scss';
 
 export interface HtaCenterPageProps {
     hta: HtaCenter;
+    showGrantNumber?: boolean;
 }
 
 const PrincipalInvestigators = (props: {
@@ -13,11 +14,15 @@ const PrincipalInvestigators = (props: {
     phase: string;
 }) => {
     const getImgSrc = (name: string, phase: string) => {
-        // TODO image file extension could be different (not just jpg)
-        return `/${phase}/${getKey(name)}.jpg`;
+        return `/${phase}/${getKey(name)}.png`;
     };
     const getKey = (name: string) => {
-        return name.toLowerCase().split(',')[0].replace(/\s/g, '_');
+        return name
+            .toLowerCase()
+            .split(',')[0]
+            .replace(/\s/g, '_')
+            .replace('à', 'a')
+            .replace(/[.’]/g, '');
     };
 
     if (_.some(props.principalInvestigators, (pi) => pi.description?.length)) {
@@ -57,7 +62,20 @@ const PrincipalInvestigators = (props: {
     }
 };
 
-const HtaCenterPage = ({ hta }: HtaCenterPageProps) => {
+const Overview = (props: { description: string | string[] }) => {
+    const description = [...[props.description]].flat();
+
+    return (
+        <>
+            <h2>Overview</h2>
+            {description.map((d, index) => (
+                <p key={index}>{d}</p>
+            ))}
+        </>
+    );
+};
+
+const HtaCenterPage = ({ hta, showGrantNumber }: HtaCenterPageProps) => {
     if (!hta) {
         return <div>Loading...</div>;
     }
@@ -67,11 +85,12 @@ const HtaCenterPage = ({ hta }: HtaCenterPageProps) => {
             <Row className={'contentWrapper'}>
                 <div className="col">
                     <h1>{hta.title}</h1>
-                    <h2>Overview</h2>
-                    <p>{hta.description}</p>
-                    <p>
-                        <b>Grant Number</b>: {hta.grantNumber}
-                    </p>
+                    <Overview description={hta.description} />
+                    {showGrantNumber && hta.grantNumber && (
+                        <p>
+                            <b>Grant Number</b>: {hta.grantNumber}
+                        </p>
+                    )}
                     <h2>Principal Investigators</h2>
                     <PrincipalInvestigators
                         principalInvestigators={hta.principalInvestigators}
