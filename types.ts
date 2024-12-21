@@ -26,3 +26,23 @@ export interface Attribute {
 export interface Category {
     [subcat: string]: SubCategory;
 }
+
+export interface HtaCenter {
+    phase: string;
+    title: string;
+    grantNumber?: string;
+    principalInvestigators: PrincipalInvestigator[];
+    description: string | string[];
+    customURL?: string;
+}
+
+export interface HtaCenters {
+    [key: string]: HtaCenter;
+}
+
+export interface PrincipalInvestigator {
+    name: string;
+    center: string;
+    description?: string;
+    isContact?: boolean;
+}
