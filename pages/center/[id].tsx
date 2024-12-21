@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         getCenter(phase1Centers, params?.id) ||
         getCenter(phase2Centers, params?.id);
 
-    return { props: { hta } };
+    return { props: { hta, id: params?.id } };
 };
 
 export default HTAPage;

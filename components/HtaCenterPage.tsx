@@ -1,10 +1,12 @@
 import _ from 'lodash';
+import { useEffect, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 
 import { HtaCenter, PrincipalInvestigator } from '../types';
 import styles from './HtaCenterPage.module.scss';
 
 export interface HtaCenterPageProps {
+    id: string;
     hta: HtaCenter;
     showGrantNumber?: boolean;
 }
@@ -62,8 +64,22 @@ const PrincipalInvestigators = (props: {
     }
 };
 
-const Overview = (props: { description: string | string[] }) => {
-    const description = [...[props.description]].flat();
+const Overview = (props: { hta: HtaCenter; id: string }) => {
+    const description = [...[props.hta.description]].flat();
+    const [hasOverviewImg, setHasOverviewImg] = useState<boolean>(false);
+    const imgSrc = `/${props.hta.phase}/${props.id}_overview.png`;
+
+    // overview image may not exist for all centers
+    // we need to hide the section in case no image found
+    useEffect(() => {
+        fetch(imgSrc)
+            .then((response) => {
+                if (response.status === 200) {
+                    setHasOverviewImg(true);
+                }
+            })
+            .catch(() => setHasOverviewImg(false));
+    }, []);
 
     return (
         <>
@@ -71,11 +87,20 @@ const Overview = (props: { description: string | string[] }) => {
             {description.map((d, index) => (
                 <p key={index}>{d}</p>
             ))}
+            {hasOverviewImg && (
+                <div className="text-center">
+                    <img
+                        className={styles.overviewImg}
+                        src={imgSrc}
+                        alt={`${props.id}_overview`}
+                    />
+                </div>
+            )}
         </>
     );
 };
 
-const HtaCenterPage = ({ hta, showGrantNumber }: HtaCenterPageProps) => {
+const HtaCenterPage = ({ id, hta, showGrantNumber }: HtaCenterPageProps) => {
     if (!hta) {
         return <div>Loading...</div>;
     }
@@ -85,7 +110,7 @@ const HtaCenterPage = ({ hta, showGrantNumber }: HtaCenterPageProps) => {
             <Row className={'contentWrapper'}>
                 <div className="col">
                     <h1>{hta.title}</h1>
-                    <Overview description={hta.description} />
+                    <Overview hta={hta} id={id} />
                     {showGrantNumber && hta.grantNumber && (
                         <p>
                             <b>Grant Number</b>: {hta.grantNumber}
