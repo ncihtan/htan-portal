@@ -11,6 +11,128 @@ export interface HtaCenterPageProps {
     showGrantNumber?: boolean;
 }
 
+const HeaderLogos = (props: {
+    imgSources: string[];
+    headerImgClassname?: string;
+}) => {
+    return (
+        <div className={styles.header}>
+            {props.imgSources.map((src, index) => (
+                <img
+                    src={src}
+                    key={index}
+                    alt={src
+                        .toLowerCase()
+                        .split('.')[0]
+                        .replace(/\//g, '')
+                        .replace(/_/g, '-')}
+                    className={props.headerImgClassname || styles.headerImg30}
+                />
+            ))}
+        </div>
+    );
+};
+
+const customHeaderContent: { [centerId: string]: JSX.Element } = {
+    hta1: (
+        <>
+            <HeaderLogos
+                imgSources={[
+                    '/phase1/Broad-Inst-Logo.webp',
+                    '/phase1/DFCI-Logo-with-Flag.webp',
+                    '/phase1/HMS_Logo.webp',
+                ]}
+            />
+            <br />
+            <a href="https://humantumoratlas.org/htapp-webinar-series/">
+                View the HTAPP Webinar Series
+            </a>
+        </>
+    ),
+    hta3: (
+        <HeaderLogos
+            imgSources={[
+                '/phase1/BU-Logo.webp',
+                '/phase1/Janseen-Logo.webp',
+                '/phase1/UCLA-Logo.webp',
+            ]}
+        />
+    ),
+    hta4: (
+        <HeaderLogos
+            imgSources={[
+                "/phase1/children's-hospital-of-philadelphia-logo.webp",
+                '/phase1/university-of-pennsylvania-penn-vector-logo.webp',
+            ]}
+        />
+    ),
+    hta5: (
+        <HeaderLogos
+            imgSources={[
+                '/phase1/DFCI-logo.webp',
+                '/phase1/BroadInstLogoforDigitalRGB.webp',
+            ]}
+        />
+    ),
+    hta6: (
+        <HeaderLogos
+            imgSources={[
+                '/phase1/Duke-SOM-logo.webp',
+                '/phase1/ASU-full_logo.webp',
+                '/phase1/Stanford-Logo.webp',
+            ]}
+        />
+    ),
+    hta7: (
+        <HeaderLogos
+            imgSources={['/phase1/HMS_Logo.webp', '/phase1/BWH-logo.webp']}
+        />
+    ),
+    hta8: (
+        <HeaderLogos
+            imgSources={['/phase1/MSK_logo.webp']}
+            headerImgClassname={styles.headerImg50}
+        />
+    ),
+    hta9: (
+        <HeaderLogos
+            imgSources={['/phase1/OHSU_logo.webp']}
+            headerImgClassname={styles.headerImg100}
+        />
+    ),
+    hta10: (
+        <HeaderLogos
+            imgSources={['/phase1/Stanford-Logo.webp']}
+            headerImgClassname={styles.headerImg100}
+        />
+    ),
+    hta11: (
+        <HeaderLogos
+            imgSources={[
+                '/phase1/VUMC-logo.webp',
+                '/phase1/vanderbilt-university-logo.webp',
+            ]}
+        />
+    ),
+    hta12: (
+        <HeaderLogos
+            imgSources={['/phase1/WUSM-logo.webp']}
+            headerImgClassname={styles.headerImg100}
+        />
+    ),
+    'htan-dcc': (
+        <HeaderLogos
+            imgSources={[
+                '/phase1/DFCI-Logo-with-Flag.webp',
+                '/phase1/sage_bionetworks_logo.webp',
+                '/phase1/MSK_logo.webp',
+                '/phase1/isb_color_logo1.webp',
+            ]}
+            headerImgClassname={styles.headerImg20}
+        />
+    ),
+};
+
 const PrincipalInvestigators = (props: {
     principalInvestigators: PrincipalInvestigator[];
     phase: string;
@@ -24,6 +146,7 @@ const PrincipalInvestigators = (props: {
             .split(',')[0]
             .replace(/\s/g, '_')
             .replace('à', 'a')
+            .replace('é', 'e')
             .replace(/[.’]/g, '');
     };
 
@@ -110,7 +233,10 @@ const HtaCenterPage = ({ id, hta, showGrantNumber }: HtaCenterPageProps) => {
             <Row className={'contentWrapper'}>
                 <div className="col">
                     <h1>{hta.title}</h1>
-                    <Overview hta={hta} id={id} />
+                    {customHeaderContent[id]}
+                    {!_.isEmpty(hta.description) && (
+                        <Overview hta={hta} id={id} />
+                    )}
                     {showGrantNumber && hta.grantNumber && (
                         <p>
                             <b>Grant Number</b>: {hta.grantNumber}
