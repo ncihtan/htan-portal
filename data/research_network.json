@@ -1,0 +1,565 @@
+{
+  "htan-dcc": {
+    "title": "HTAN Data Coordinating Center",
+    "principalInvestigators": [
+      {
+        "name": "Ethan Cerami, PhD",
+        "center": "",
+        "description": "Dr. Ethan Cerami is Director of the Knowledge Systems Group and Principal Scientist in the Department of Data Sciences at Dana-Farber Cancer Institute (DFCI). He has an M.S. in Computer Science from New York University and a Ph.D. in Computational Biology from Cornell University. Prior to joining Dana-Farber, Dr. Cerami was Director of Computational Biology at Blueprint Medicines and Director of Cancer Informatics Development at Memorial Sloan Kettering Cancer Center (MSKCC). While at MSKCC, Dr. Cerami co-founded the cBioPortal for Cancer Genomics, and his current group at DFCI remains active in its continued development while also being central contributors to other major consortium efforts such as the NCI-funded Cancer Immunologic Data Commons and AACR Project GENIE."
+      },
+      {
+        "name": "Adam Taylor, PhD",
+        "center": "",
+        "description": "Dr. Adam Taylor is the Director of Cancer Biology at Sage Bionetworks, where he leads a team of data and community managers, along with bioinformatics engineers, working on cancer biology efforts like AACR Project GENIE and the MC2 Center. He holds an MEng in Biochemical Engineering from the University of Bath and a Ph.D. in Pharmacy from the University of Nottingham. Before joining Sage, Adam was a postdoctoral fellow at the University of Washington and later a Senior Scientist at the National Physical Laboratory, where he led work advancing mass spectrometry imaging to track cancer metabolism as part of the Cancer Grand Challenges Rosetta Team. His interests include developing effective data-sharing mechanisms for multiplexed tissue imaging, spatial transcriptomics, and digital pathology, with a focus on data quality and AI-readiness."
+      },
+      {
+        "name": "Nikolaus Schultz, PhD",
+        "center": "",
+        "description": "Dr. Niki Schultz is Associate Attending in the Computational Oncology Service of the Department of Epidemiology and Biostatistics and Affiliate Member of the Human Oncology and Pathogenesis Program at Memorial Sloan Kettering Cancer Center (MSKCC). As head of the Knowledge Systems Group in the Marie-Josée and Henry R. Kravis Center for Molecular Oncology, he leads development of the cBioPortal for Cancer Genomics, a web-based resource for analysis of complex cancer genomics data, and of OncoKB, a precision oncology knowledge base. His research focuses on identifying the genomic alterations that underlie cancer, their mechanisms of action, and novel therapeutic approaches. Dr. Schultz has made significant contributions to several projects of TCGA and AACR Project GENIE, and he is an investigator in the Stand Up to Cancer Prostate Cancer Dream Team. He has a particular interest in enabling discoveries by developing novel computational methods and databases that help bridge the divide between computer scientists on one side and clinicians and researchers on the other."
+      },
+      {
+        "name": "Vésteinn Thorsson, PhD",
+        "center": "",
+        "description": "Dr. Vésteinn Thorsson is a Senior Research Scientist at the Institute for Systems Biology. His research encompasses cancer genomics and immuno-oncology, and he has extensive experience working with data analysis and data coordination in collaborative cancer genomics projects. As part of The Cancer Genome Atlas (TCGA) Research Network, Dr. Thorsson contributed substantially to published studies on gastrointestinal tumors, including serving as both Data and Analysis Coordinator and playing a key role in determining gastric molecular subtypes. Dr. Thorsson also served as Co-Chair of a working group that recently completed a comprehensive analysis of all TCGA gastrointestinal tumor samples and of a working group dedicated to characterizing immune response in the more than 10,000 TCGA tumor samples. In addition, he serves as a project lead for the CRI iAtlas project (cri-iatlas.org), an interactive web resource for immuno-oncology research."
+      }
+    ],
+    "description": [
+      "The HTAN Data Coordinating Center (DCC) proudly supports each of the HTAN atlas teams and pilot programs as well as the broader Network by coordinating Network activities; providing centralized resources for data and resource storage and access within HTAN as well as dissemination to the wider scientific community; developing powerful data analysis and visualization tools to enable researchers to make novel discoveries using HTAN data; and conducting outreach to the community. Within HTAN, the DCC also leads various efforts to develop an extensible data model as well as clinical data and metadata standards that will ensure the accessibility and interoperability of HTAN data with the wider cancer research data ecosystem.",
+      "Comprised of individuals from four institutions, the DCC team brings to HTAN extensive experience participating in major research consortia, including TCGA, AACR Project GENIE, and the Cancer Systems Biology Consortium, as well as leading open-source software development projects such as cBioPortal for Cancer Genomics, Synapse, and the ISB Cancer Genomics Cloud (ISB-CGC) and community engagement projects such as DREAM Challenges. The DCC team draws upon this collective experience and deep technical expertise in biomedical science and data science to support the goals of HTAN and to promote a collaborative research and discovery environment within HTAN and the wider cancer research community."
+    ],
+    "phase": "dcc"
+  },
+  "hta1": {
+    "title": "Human Tumor Atlas Pilot Project (HTAPP)",
+    "principalInvestigators": [
+      {
+        "name": "Aviv Regev, PhD",
+        "center": "",
+        "description": "Dr. Aviv Regev’s research centers on understanding how complex molecular circuits function in cells and between cells in tissues. She is a professor in the Department of Biology at MIT, Chair of the Faculty and founding director of the Klarman Cell Observatory and Cell Circuits Program at the Broad Institute of MIT and Harvard, where she is a core member, and an Investigator at the Howard Hughes Medical Institute. Her lab has been a single-cell genomics pioneer – inventing key experimental methods and computational algorithms in the field, demonstrating their application, and inferring the molecular and cellular circuits that control cellular and tissue function in health and disease. She is Founding Co-Chair of the international initiative to build a Human Cell Atlas (HCA), whose mission is to create comprehensive reference maps of all human cells – the fundamental units of life – as a basis for understanding human health and diagnosing, monitoring, and treating disease."
+      },
+      {
+        "name": "Orit Rozenblatt-Rosen, PhD",
+        "center": "",
+        "description": "Dr. Orit Rozenblatt-Rosen is Scientific Director of the Klarman Cell Observatory at the Broad Institute of MIT and Harvard and the lead scientist at the Broad for the international Human Cell Atlas Initiative. Dr. Rozenblatt-Rosen has a background in cancer research, epigenetics, systems biology, genomics, and single-cell genomics. She helped develop and implement systematic pipelines for genomic profiling and analysis of single cells from freshly dissected tumors. Previously, Dr. Rozenblatt-Rosen was a research scientist at the Dana-Farber Cancer Institute. She led a team that performed systematic analyses of host network perturbations induced by DNA tumor viruses to help interpret cancer genomes. As a postdoctoral fellow at the Dana-Farber Cancer Institute, she focused on understanding the links between tumor suppression and epigenetic mechanisms. Dr. Rozenblatt-Rosen earned a B.S. in Biology from Tel Aviv University and a Ph.D. from the Weizmann Institute of Science."
+      },
+      {
+        "name": "Bruce Johnson, MD",
+        "center": "",
+        "description": "Dr. Bruce Johnson is the Chief Clinical Research Officer at the Dana-Farber Cancer Institute and has organized and run clinical trials for more than 30 years. His translational research is devoted to testing novel therapeutic agents for their efficacy against lung cancer and other malignancies with specific genomic changes and the effects of the tumor microenvironment on efficacy of immunotherapy. Dr. Johnson was one of the scientists who discovered the association between epidermal growth factor receptor mutations and response to epidermal growth factor receptor-tyrosine kinase inhibitors. As the Director of the Center for Precision Medicine at the Dana-Farber Cancer Institute, he oversees the characterization of tumor specimens from patients both before and after therapy with chemotherapeutic agents, targeted agents, and immunotherapy. Dr. Johnson is a Professor of Medicine at Harvard Medical School, an Institute Physician at the Dana-Farber and Brigham and Women’s Hospital, and Past President of the American Society of Clinical Oncology."
+      },
+      {
+        "name": "Mario Suvà, MD, PhD",
+        "center": "",
+        "description": "Dr. Mario Suvà is a physician-scientist in the Department of Pathology at Massachusetts General Hospital (MGH) and an institute member at the Broad Institute. Dr. Suvà’s expertise is in clinical neuropathology, single-cell sequencing technology, and cancer research. Dr. Suvà co-directed landmark studies characterizing glioblastoma, oligodendroglioma, astrocytoma, and pediatric gliomas with single-cell genomic technologies, shedding light on tumor heterogeneity, tumor classification, glioma cell lineages, cancer stem cell programs, tumor evolution, and the composition of the tumor microenvironment. His laboratory focuses on dissecting the heterogeneity of patient tumors and relating transcriptional and genetic programs of individual cancer cells. Dr. Suvà earned his M.D. and Ph.D. from the University of Lausanne, Switzerland. His doctoral research identified cancer stem cells in Ewing sarcoma and highlighted mechanisms underlying their emergence. He conducted postdoctoral research at MGH and the Broad Institute, applying chromatin analysis and functional approaches to identify master regulators of glioma stem cell programs."
+      }
+    ],
+    "description": [
+      "To diagnose, study, monitor, and treat human cancer, there is an enormous need to define and characterize the cells that comprise tumors, chart their spatial organization, and decipher their functional connections. The generation of tumor atlases poses substantial challenges, including development and dissemination of robust SOPs for tissue collection, development of experimental design strategies, establishment of strategies to integrate across cellular and spatial data, and development of effective data sharing approaches.",
+      "To address these challenges and lay a foundation for HTAN, HTAPP was initiated in partnership with the National Cancer Institute (NCI) and the Frederick National Laboratory for Cancer Research (FNLCR). HTAPP aims to: (1) gain an understanding of the number of cells, tumors, and spatial methods required to describe tumor heterogeneity; (2) develop, validate, and transfer knowledge of SOPs for tissue procurement, sampling parameters, and data generation and analysis from seven tumor types; (3) generate pilot-scale, spatially resolved tumor atlases of metastatic breast cancer and pediatric neuroblastoma; (4) provide data and resources generated to the HTAN and broader community; and (5) assess the feasibility of applying single-cell genomics to FFPE tissues. Our team is composed of clinical, single-cell genomics, spatial genomics and proteomics, and computation experts, who have pioneered the development and application of these approaches to tumors."
+    ],
+    "phase": "phase1"
+  },
+  "hta2": {
+    "title": "Pre-Cancer Atlas Pilot Program",
+    "principalInvestigators": [
+      {
+        "name": "Avrum Spira, MD",
+        "center": "",
+        "description": ""
+      }
+    ],
+    "description": "",
+    "customURL": "https://mcl.nci.nih.gov/",
+    "phase": "phase1"
+  },
+  "hta3": {
+    "title": "Lung Pre-Cancer Atlas",
+    "principalInvestigators": [
+      {
+        "name": "Avrum Spira, MD",
+        "center": "",
+        "description": "Dr. Avrum Spira is a Professor of Medicine, Pathology, and Bioinformatics, and the Alexander Graham Bell Professor in Health Care Entrepreneurship at Boston University. He is founding Chief of the Division of Computational Biomedicine in the Department of Medicine, attends in the Medical Intensive Care Unit at Boston Medical Center, and directs the Translational Bioinformatics Program in the Clinical and Translational Science Institute at Boston University. He has recently been named global head of the new Lung Cancer Initiative within Johnson & Johnson and Director of the Johnson & Johnson Innovation Lung Cancer Center at Boston University. Dr. Spira has built a translational research program that focuses on genomic alterations associated with smoking-related lung disease, leading to a molecular test for the early detection of lung cancer (PerceptaTM) that has successfully translated into the clinic as well as a novel therapeutic for COPD that is in preclinical development."
+      },
+      {
+        "name": "Steven Dubinett, MD",
+        "center": "",
+        "description": "Dr. Steven M. Dubinett is Director of the University of California, Los Angeles (UCLA) Clinical & Translational Science Institute (CTSI), Associate Vice Chancellor, and Senior Associate Dean for Translational Research. He oversees the translation of UCLA biomedical discoveries into medical products and health interventions and is responsible for the efficient integration of the research infrastructure through the CTSI. He is currently Chair of the Executive Committee of UC Biomedical Research Acceleration, Integration, and Development (UC BRAID), which integrates clinical and translational research across the University of California. Dr. Dubinett has extensive experience in translational investigation, academic administration, mentorship, and peer review. He previously served as Director for Biomarker Development for the American College of Surgeons Oncology Group, directing biospecimen utilization in the context of clinical trials. Dr. Dubinett currently serves as the Chair of the Research Evaluation Panel for biospecimen utilization for the American College of Radiology Imaging Network/ National Lung Screening Trial."
+      }
+    ],
+    "description": "The Lung PCA: A Multi-Dimensional Atlas of Pulmonary Premalignancy is one of five research centers developing Pre-Cancer Atlases focused on unraveling the molecular underpinnings enabling the progression of pre-cancerous lesions to cancer. The Lung PCA is led by Dr. Avrum Spira (Boston University) and co-led by Dr. Steven Dubinett (University of California, Los Angeles), and Dr. Sarah Mazzilli (Boston University) in addition to collaborators across 10 institutions including: University of California Los Angeles; Stanford University; University of Colorado, Denver; MD Anderson Cancer Center; University College London; DFCI/Harvard University; Broad Institute; Roswell Park Comprehensive Cancer Center; University of Pennsylvania; and Vanderbilt University. The Lung PCA aims to build a high-resolution atlas characterizing the earliest cellular and molecular alterations in pre-cancerous lesions of the airway and lung, providing new opportunities for early cancer detection and novel targets to intercept the development of lung cancer. The atlas leverages unique retrospective and prospective cohorts assembled at multiple medical centers via our Biospecimen Unit, led by Daniel Merrick of the University of Colorado, to collect, annotate, and process premalignant lesion biospecimens of the lung and airway. Our Characterization Unit, led by Steven Dubinett of UCLA, will apply existing and emerging molecular profiling tools to characterize the genomic, transcriptomic, and proteomic landscape of these lesions. Our Data Analysis Unit, led by Marc Lenburg of Boston University, will develop pipelines for standardized multidimensional data processing, quality control, analysis and integration, leading to creation of a web-based portal for data dissemination and online integrative analysis to benefit the greater research community.",
+    "phase": "phase1"
+  },
+  "hta4": {
+    "title": "Center for Pediatric Tumor Cell Atlas",
+    "principalInvestigators": [
+      {
+        "name": "Kai Tan, PhD",
+        "center": "",
+        "description": "Dr. Kai Tan is a systems biologist and Associate Professor in the Department of Pediatrics, The Children’s Hospital of Philadelphia and University of Pennsylvania. He has extensive experience studying transcriptional and epigenetic regulation in normal development and oncogenesis through a combination of experimental genomics and computational models. Dr. Tan’s laboratory has developed a number of approaches for modeling transcriptional regulatory networks, which have been used to dissect the gene regulatory networks controlling embryonic hematopoiesis, T cell differentiation, and leukemogenesis. In addition, his group has pioneered a number of popular computational algorithms for constructing models of transcriptional regulatory networks by integrating multi-dimensional genomic, epigenomic, and transcriptomic datasets. The ultimate goal of his work is to understand dynamic molecular networks, the role of combinatorial epigenetic modifications and transcriptional regulation, and the role of 3-D genomic organization in gene regulation to improve the diagnosis and treatment of cancer patients."
+      },
+      {
+        "name": "Steven P. Hunger, MD",
+        "center": "",
+        "description": "Dr. Kai Tan is a systems biologist and Associate Professor in the Department of Pediatrics, The Children’s Hospital of Philadelphia and University of Pennsylvania. He has extensive experience studying transcriptional and epigenetic regulation in normal development and oncogenesis through a combination of experimental genomics and computational models. Dr. Tan’s laboratory has developed a number of approaches for modeling transcriptional regulatory networks, which have been used to dissect the gene regulatory networks controlling embryonic hematopoiesis, T cell differentiation, and leukemogenesis. In addition, his group has pioneered a number of popular computational algorithms for constructing models of transcriptional regulatory networks by integrating multi-dimensional genomic, epigenomic, and transcriptomic datasets. The ultimate goal of his work is to understand dynamic molecular networks, the role of combinatorial epigenetic modifications and transcriptional regulation, and the role of 3-D genomic organization in gene regulation to improve the diagnosis and treatment of cancer patients."
+      }
+    ],
+    "description": "Dr. Kai Tan is a systems biologist and Associate Professor in the Department of Pediatrics, The Children’s Hospital of Philadelphia and University of Pennsylvania. He has extensive experience studying transcriptional and epigenetic regulation in normal development and oncogenesis through a combination of experimental genomics and computational models. Dr. Tan’s laboratory has developed a number of approaches for modeling transcriptional regulatory networks, which have been used to dissect the gene regulatory networks controlling embryonic hematopoiesis, T cell differentiation, and leukemogenesis. In addition, his group has pioneered a number of popular computational algorithms for constructing models of transcriptional regulatory networks by integrating multi-dimensional genomic, epigenomic, and transcriptomic datasets. The ultimate goal of his work is to understand dynamic molecular networks, the role of combinatorial epigenetic modifications and transcriptional regulation, and the role of 3-D genomic organization in gene regulation to improve the diagnosis and treatment of cancer patients.",
+    "phase": "phase1"
+  },
+  "hta5": {
+    "title": "The Cellular Geography of Therapeutic Resistance in Cancer",
+    "principalInvestigators": [
+      {
+        "name": "Bruce Johnson, MD",
+        "center": "",
+        "description": "Dr. Bruce Johnson is the Chief Clinical Research Officer at the Dana-Farber Cancer Institute and has organized and run clinical trials for more than 30 years. His translational research is devoted to testing novel therapeutic agents for their efficacy against lung cancer and other malignancies with specific genomic changes and the effects of the tumor microenvironment on efficacy of immunotherapy. Dr. Johnson was one of the scientists who discovered the association between epidermal growth factor receptor mutations and response to epidermal growth factor receptor-tyrosine kinase inhibitors. As the Director of the Center for Precision Medicine at the Dana-Farber Cancer Institute, he oversees the characterization of tumor specimens from patients both before and after therapy with chemotherapeutic agents, targeted agents, and immunotherapy. Dr. Johnson is a Professor of Medicine at Harvard Medical School, an Institute Physician at the Dana-Farber Cancer Institute and Brigham and Women’s Hospital, and Past President of the American Society of Clinical Oncology."
+      },
+      {
+        "name": "Aviv Regev, PhD",
+        "center": "",
+        "description": "Dr. Aviv Regev’s research centers on understanding how complex molecular circuits function in cells and between cells in tissues. She is a professor in the Department of Biology at MIT, Chair of the Faculty and founding director of the Klarman Cell Observatory and Cell Circuits Program at the Broad Institute of MIT and Harvard, where she is a core member, and an Investigator at the Howard Hughes Medical Institute. Her lab has been a single-cell genomics pioneer – inventing key experimental methods and computational algorithms in the field, demonstrating their application, and inferring the molecular and cellular circuits that control cellular and tissue function in health and disease. She also is Founding Co-Chair of the international initiative to build a Human Cell Atlas (HCA), whose mission is to create comprehensive reference maps of all human cells – the fundamental units of life – as a basis for understanding human health and diagnosing, monitoring, and treating disease."
+      }
+    ],
+    "description": "The majority of patients die from cancer because their tumors either do not respond to therapy or eventually develop resistance to the treatments. The Boston Human Tumor Atlas Network Research Center includes research institutions in Boston, Stanford, and Princeton that are mapping the cell types in breast cancer, melanoma, and colon cancer. The resulting tumor atlases will generate spatial and single-cell resolution information to provide an unprecedented understanding of the malignant, immune, and stromal cellular and tissue compartments that drive intrinsic and acquired resistance to existing and emerging therapeutics. These compartments then can be used to inform patient stratification and new treatment strategies and to make precision cancer medicine a reality. This detailed information is essential for the targeted therapies (e.g., CDK4/6 inhibition) and immunotherapies (e.g., anti-PD-1 therapies) we are examining, because these therapies typically benefit only a subset of patients treated with them for a limited period of time, and mechanisms of resistance to them are thus far poorly understood. Our studies will help develop both new insights to identify patients at risk of resistance to their cancer therapies and new treatment strategies to overcome both de novo and acquired resistance, ultimately improving the outcome for patients with cancer.",
+    "phase": "phase1"
+  },
+  "hta6": {
+    "title": "Breast Pre-Cancer Atlas",
+    "principalInvestigators": [
+      {
+        "name": "E. Shelley Hwang, MD, MPH",
+        "center": "",
+        "description": "Dr. E. Shelley Hwang is the Mary and Deryl Hart Professor of Surgery at Duke University School of Medicine and Chief of Breast Surgery for the Duke Cancer Institute, an NIH-designated Comprehensive Cancer Center. Her research interests have spanned a broad range of projects in translational research that seek to elaborate biomarkers in the tumor, the microenvironment, and blood. Dr. Hwang is a surgeon-scientist and experienced clinical trial investigator with an over 15-year interest in both the biology and treatment of early-stage breast cancer. She also is the PI of a national cooperative group study through the ALLIANCE, known as the COMET study, which evaluates the role of active surveillance compared to usual care for DCIS."
+      },
+      {
+        "name": "Rob West, MD, PhD",
+        "center": "",
+        "description": "Dr. Rob West is a Professor of Pathology at Stanford University Medical Center. He is a clinician scientist with experience in translational genomics research to identify new prognostic and therapeutic markers in cancer. His research focus is on the progression of neoplasia to invasive carcinoma. His lab has developed spatially oriented in situ methods to study archival specimens. In addition to running a research laboratory, Dr. West also serves as a surgical pathologist specializing in breast pathology at Stanford University Hospital."
+      },
+      {
+        "name": "Carlo Maley, MD, MSc",
+        "center": "",
+        "description": "Dr. Carlo Maley is Associate Professor of the Biodesign Institute at the Arizona State University School of Life Sciences. He is a cancer biologist, evolutionary biologist, and computational biologist working at the intersection of those fields. His team applies evolutionary and ecological theory to three problems in cancer: (1) neoplastic progression: the evolutionary dynamics among cells of a tumor that drive progression from normal tissue to malignant cancers; (2) acquired therapeutic resistance: the evolutionary dynamics by which our therapies select for resistance and we fail to cure cancer; and (3) the evolution of cancer suppression mechanisms in large, long-lived animals like elephants and whales (a problem called Peto’s Paradox). Dr. Maley’s lab uses genomic data mining, phylogenetics, computational modeling, as well as wet lab techniques to solve these problems. In all of this work, their goals are to develop better methods to prevent cancer and improve cancer management."
+      }
+    ],
+    "description": [
+      "The Breast Pre-Cancer Atlas Center is designed to construct an atlas that can be used to better understand ductal carcinoma in situ (DCIS), a preinvasive breast cancer precursor. DCIS is an extremely common clinical diagnosis that is essentially a disease of screening triggered by the detection of abnormal breast calcifications on mammography. Before the advent of mammography, DCIS was an incidental and relatively uncommon finding. Over 60,000 women in the United States will be presented with this diagnosis each year with relatively weak evidence-based guidance for disease management, which ranges from active surveillance to bilateral mastectomy. We propose to compile multi-dimensional and multi-scale information on DCIS to construct a Pre-Cancer Atlas that can be used to better understand the disease but also to better stratify risk of progression, a useful translational endpoint.",
+      "To do this, we have assembled a team of investigators with deep and complementary clinical, experimental, and quantitative expertise and experience with DCIS and breast cancer in general. Further, we conduct these studies with full consideration of tumor evolution and ecology as it pertains to precancer development and progression. Specific aspects of the proposed atlas construction include: 1) several types of DCIS cohorts that will capture spatial and longitudinal information including a prospective clinical trial cohort undergoing active surveillance; 2) analyses designed to maintain relevant spatial organization of the disease for evolutionary and atlas building considerations based on 3) radiologic-histologic-cellular-molecular registration approaches; 4) characterization at multiple scales including whole-tumor, single-duct, and single-cell levels; 5) characterization of relevant parameters including mutations, copy number changes, methylation, gene expression, and microenvironmental elements including inflammatory cell profiles; 6) incorporation of the breast cancer-intrinsic subtype paradigm into the analytic phase; and 7) layered, spatial, and longitudinal data visualization. Overall, this work will provide a comprehensive platform to guide the next generation of studies on DCIS and other precancers."
+    ],
+    "phase": "phase1"
+  },
+  "hta7": {
+    "title": "Pre-Cancer Atlases Of Cutaneous & Hematologic Origin (Patch) Center",
+    "principalInvestigators": [
+      {
+        "name": "Peter Sorger, PhD",
+        "center": "",
+        "description": "Dr. Peter Sorger, Otto Krayer Professor of Systems Pharmacology at Harvard Medical School, leads the PATCH Center and is director of a shared research laboratory (the Laboratory of Systems Pharmacology; LSP) in which much of the PCA work is based. The LSP is a multi-investigator lab focused on improving the fundamental science used to develop therapeutic drugs, evaluate them in clinical trials, and identify patients most likely to benefit. Research in the Sorger lab focuses on mammalian signal transduction and oncogenesis in several types of cancer, including melanoma, using a mix of experimental and computational approaches. The laboratory developed the cyclic-immunofluorescence (CyCIF) method being used to construct the PCA pre-melanoma atlas as well as the software tools being used to analyze the resulting images, and the Open Microscopy Environment (OME) that is being used to manage PCA image data also was started in the lab. This pre-melanoma atlas is part of a larger digital histology effort, the Harvard Tissue Atlas, also led by Dr. Sorger."
+      },
+      {
+        "name": "Sandro Santagata, MD, PhD",
+        "center": "",
+        "description": "Dr. Sandro Santagata is an Associate Professor in Pathology at Harvard Medical School and a Neuropathologist in the Department of Pathology at Brigham and Women’s Hospital and the Department of Oncologic Pathology at Dana-Farber Cancer Institute. He is a member of the Ludwig Center at Harvard, the Harvard Program in Therapeutic Science (HiTS), and the HMS Laboratory of Systems Pharmacology (LSP). Dr. Santagata applies novel tissue imaging methods, including tissue-based cyclic immunofluorescence (CyCIF), to understand the spatial and molecular phenotypes of human cancer. Using clinical trial specimens, he measures and models therapeutic responses in tumors and their microenvironment. Drs. Santagata and Sorger co-direct all aspects of the Harvard Tissue Atlas, of which the pre-melanoma atlas is an essential component."
+      },
+      {
+        "name": "John Aster, MD, PhD",
+        "center": "",
+        "description": "Dr. Jon Aster is the Chief of Hematopathology at the Brigham and Women’s Hospital and the Dana-Farber Cancer Institute and co-leads the Lymphoma and Myeloma Program of the pan-Harvard Dana-Farber/Harvard Cancer Center (DF/HCC). He also serves as Director of the DF/HCC Specialized Histopathology Core Laboratory and is a member of the Harvard Ludwig Cancer Center. His research is focused on Notch signaling in T-cell acute lymphoblastic leukemia (T-ALL) and other cancers. Notch receptors participate in a signaling pathway that controls differentiation and other fundamental cellular processes in a context-specific fashion. The Aster lab has demonstrated that Notch signals can induce T-cell development from bone marrow progenitors and has shown that T-ALL cells depend on continued Notch signaling for growth. Dr. Aster is leading a pilot project in the PATCH Center to develop atlases of hematological pre-cancers and an effort to use multiplex tissue imaging data to improve medical education in pathology."
+      }
+    ],
+    "description": [
+      "An Atlas for Melanoma Precursors and a Pilot Atlas for Clonal Hematopoiesis",
+      "We are constructing a multi-dimensional atlas of pre-melanoma focused on understanding genetic and epigenetic events that transform melanocytes into invasive tumors. Melanoma is a cancer of increasing prevalence that is curable with minor surgery if detected early but life-threatening when it metastasizes. Melanomas metastasize when still small, making early detection essential but challenging. Our atlas will delineate the precise sequence of events leading up to pre-melanoma through detailed spatial analysis of cell-autonomous events such as oncogene mutation and non-autonomous events such as escape from immune surveillance. The atlas is based on highly-multiplexed tissue imaging and single cell sequencing and focused on samples in which the full sequence of events from atypia to invasive melanoma can be visualized in a single specimen. The atlas will serve as a publicly accessible resource for research scientists, physicians, and patients and improve our ability to (i) highlight lesions likely to progress to cancer, (ii) identify high-risk patients to inform decisions on surgery, (iii) identify low-risk patients to reduce unnecessary procedures, (iv) design improved procedures for routine screening of all individuals, and (v) inform treatment options when surgery is insufficient. Complementary studies with similar goals (but not supported by HTAN) are studying later stage melanomas."
+    ],
+    "phase": "phase1"
+  },
+  "hta8": {
+    "title": "Transition to Metastatic State: Lung Cancer, Pancreatic Cancer, and Brain Metastasis",
+    "principalInvestigators": [
+      {
+        "name": "Dana Pe’er, PhD",
+        "center": "",
+        "description": "Dr. Dana Pe’er is Chair of the Computational and Systems Biology Program and Scientific Director of The Alan and Sandra Gerry Metastasis and Tumor Ecosystems Center at Memorial Sloan Kettering Cancer Center. She develops novel computational methods to characterize regulatory circuit dynamics at the single-cell level in the context of complex tissues such as the tumor microenvironment. She received a Ph.D. in Computer Science at The Hebrew University of Jerusalem and trained as a postdoctoral fellow with Dr. George Church at Harvard University. Dr. Pe’er has been recognized with a number of honors including a Burroughs Wellcome Fund Career Award, an NIH Director’s New Innovator Award, an NIH Director’s Pioneer Award, and the Packard Fellowship in Science and Engineering. She currently serves on the editorial board of the journal Cell and the organizing committee of the Human Cell Atlas project, co-leading computational analysis for this project."
+      },
+      {
+        "name": "Christine Iacobuzio-Donahue, MD, PhD",
+        "center": "",
+        "description": "Dr. Christine Iacobuzio-Donahue is a board-certified Anatomic Pathologist with specialty training in gastrointestinal pathology and cancer genetics. She currently serves as an Attending Physician in Pathology, Director of the David M. Rubenstein Center for Pancreatic Cancer Research, and Director of the Last Wish Program at Memorial Sloan Kettering Cancer Center. Her lab employs a variety of models and methods, including a strong emphasis on genomic and bioinformatics analyses of human primary and metastatic pancreatic cancer tissues obtained from rapid autopsies, mouse models of pancreatic cancer, and, most recently, the development of a long-term evolutionary model system for functional analyses of clonal evolution and adaptive mechanisms. Dr. Iacobuzio-Donahue is the recipient of an R35 Outstanding Investigator Award and maintains a collaboration with the American Museum of Natural History funded by the Kleberg Foundation to develop novel tools and analytics for the evolutionary biology of cancer."
+      }
+    ],
+    "description": "Metastasis embodies the whole-organism pathophysiology of cancer. The spread of cancer cells beyond the primary tumor site is responsible for the majority of cancer deaths and is the most overt expression of cancer’s complex evolutionary dynamics. Intimately related to the intricate processes of development and immunity, the transition from locally invasive to metastatic cancer also poses a major scientific hurdle. Recent technological and computational advancements enable dynamic, multidimensional, multiplanar analysis of multiple tissues. We are applying these advances to clinical samples with the aim of generating a high-resolution spatiotemporal tissue atlas of the most lethal cancers in the United States: lung cancer, pancreatic cancer, and metastases of the central nervous system. Our approach is to obtain high-quality human biospecimens from surgical resections, biopsy, or autopsy of primary and disseminated tumors. Samples are interrogated using single-cell and single-nucleus RNA sequencing as well as spatially informative multiplexed molecular profiling using protein and RNA in situ hybridization–based technologies. Integration, analysis, and presentation of these datasets will be undertaken with the goal of generating human tumor atlases of value to the entire cancer research community.",
+    "phase": "phase1"
+  },
+  "hta9": {
+    "title": "Omic and Multidimensional Spatial Atlas Of Metastatic Breast Cancers",
+    "principalInvestigators": [
+      {
+        "name": "Joe Gray, PhD",
+        "center": "",
+        "description": "Dr. Joe W. Gray, a physicist and engineer by training, is the Director of the Center for Spatial Systems Biomedicine and Associate Director for Biophysical Oncology at the Knight Cancer Institute, both at Oregon Health & Science University. Dr. Gray’s research program uses integrated omic analysis and multiscale imaging to identify drug resistance mechanisms that are intrinsic to the tumor or that derive from tumor-microenvironment interactions. He has contributed to development of a number of important analytical tools including high-speed chromosome sorting, BrdUrd/DNA analysis of cell proliferation, Fluorescence In Situ Hybridization, Comparative Genomic Hybridization and End Sequence Profiling. Currently, he is applying omic and multiscale image analysis approaches to identify mechanisms of therapeutic resistance and vulnerability in metastatic breast cancer. He is author of more 500 publications and holds 80 US patents."
+      },
+      {
+        "name": "Gordon B. Mills, MD, PhD",
+        "center": "",
+        "description": "Dr. Gordon B. Mills earned his M.D. and Ph.D. in biochemistry and completed his training in Obstetrics and Gynecology at the University of Alberta. Prior to moving to the Knight Cancer Institute, Dr. Mills was at the MD Anderson Cancer Center, the number one ranked cancer center in the United States. At the Knight Cancer Institute at the Oregon Health & Science University, Dr. Mills is Director of Precision Oncology and SMMART trials. He is responsible for the implementation of an integrated program of tumor analysis, decision-making, and implementation of novel precision oncology trials. Dr. Mills is recognized as one of the most highly quoted scientists in the world with over 1,000 publications, and he also holds more than 20 patents."
+      },
+      {
+        "name": "George V. Thomas, MD",
+        "center": "",
+        "description": "Dr. George V. Thomas is Professor of Pathology at Oregon Health & Science University. He is a member of the Knight Cancer Institute, Director of the Histopathology Shared Resource, and Associate Medical Director of the Knight Diagnostic Laboratories. Dr. Thomas completed his pathology residency and fellowships in the Harvard and UCLA medical systems and was on the faculty at UCLA prior to joining OHSU. As a specialist in genitourinary cancers, he has served as an invited member of the Mouse Models of Human Cancer Consortium, Stand Up 2 Cancer Prostate Dream Team, Mechanisms of Cancer Therapeutics study section, TGCA Papillary Kidney Cancer Analysis Working Group, and the TCGA Pan-Cancer Metabolism Working Group. Clinically, he has leveraged his molecular insights to lead the molecular diagnostics efforts that guide the precision oncology program at the Knight Cancer Institute."
+      },
+      {
+        "name": "Jeremy Goecks, PhD",
+        "center": "",
+        "description": "Dr. Jeremy Goecks is an Associate Professor of Biomedical Engineering and Computational Biology at Oregon Health & Science University (OHSU). His research program develops computational tools and infrastructure for analysis of large biomedical datasets. At the OHSU Knight Cancer Institute, Dr. Goecks leads the development of computational methods for precision oncology that integrate clinical, imaging, and omics data to (1) predict tumor response to targeted therapies and (2) identify tumor cellular pathways associated with adaptation and susceptibility to therapies. He has leadership positions in several national and international computational biomedical infrastructure projects funded by NCI, NHGRI, and NSF. He also is a lead investigator for the Galaxy Project (http://galaxyproject.org), a web-based computational workbench used by thousands of scientists throughout the world."
+      }
+    ],
+    "description": "The overall goal of the HTAN OMS Atlas Center is to elucidate mechanisms by which metastatic breast cancers become resistant to current generation pathway- and immune checkpoint-targeted treatments. The OMS Atlas is motivated by the appreciation that these treatments are often effective in primary tumors but only transiently effective in the metastatic setting. Possible resistance mechanisms include tumor-intrinsic genomic instability and epigenomic plasticity, as well as events extrinsic to the cancer cells, including chemical and mechanical signals from the microenvironments, production of mechanical extracellular matrix barriers and/or changes in vasculature that reduce drug and/or immune cell access, nanoscale cancer cell-microenvironment interactions that reduce drug efficacy, and a plethora of immune resistance mechanisms, such as loss of HLA expression and antigen presentation, and immune exhaustion. These mechanisms likely vary between patients and within individual patients and change with time as tumors respond to therapeutic attack. The OMS Atlas will focus on elucidating resistance mechanisms in two specific current generation clinical trial scenarios: (a) hormone receptor-positive breast cancer (HRBC) undergoing treatment with a CDK4/6 inhibitor in combination with endocrine therapy and (b) triple negative breast cancer (TNBC) undergoing treatment with a PARP inhibitor and an immunomodulatory agent.",
+    "phase": "phase1"
+  },
+  "hta10": {
+    "title": "Pre-Cancer Atlas: Familial Adenomatous Polyposis",
+    "principalInvestigators": [
+      {
+        "name": "Michael Snyder, PhD",
+        "center": "",
+        "description": "Dr. Michael Snyder is the Stanford Ascherman Professor and Chair of Genetics and the Director of the Center of Genomics and Personalized Medicine. Dr. Snyder received his Ph.D. training at the California Institute of Technology and did his postdoc at Stanford University. He is a leader in the field of functional genomics and proteomics and one of the leaders of ENCODE. His laboratory was the first to perform a large-scale functional genomics project in any organism and has developed many technologies in genomics and proteomics including high-resolution tiling arrays for the entire human genome, methods for global mapping of transcription factor binding sites, paired-end sequencing for mapping of structural variation in eukaryotes, de novo genome sequencing of genomes using high-throughput technologies, and RNA-Seq. These technologies have been used for characterizing genomes, proteomes, and regulatory networks."
+      },
+      {
+        "name": "James Ford, MD",
+        "center": "",
+        "description": "Dr. James Ford is a medical oncologist and geneticist at Stanford and is devoted to studying the genetic basis of breast and GI cancer development, treatment, and prevention. Dr. Ford graduated from Yale University, where he later received his M.D. He was an internal medicine resident, Clinical Fellow in Medical Oncology, and Research Fellow of Biological Sciences at Stanford, and he joined the faculty in 1998. He is currently Professor of Medicine and Genetics and Director of the Stanford Cancer Genetics Clinic and the Cancer Genomics Program. Dr. Ford’s research goals are to understand the role of genetic changes in cancer genes in the development of cancer. He studies the role of the p53 and BRCA1 tumor suppressor genes in DNA repair and uses high-throughput genomic analyses of cancer to identify molecular signatures for targeted therapies. Dr. Ford’s clinical interests include the diagnosis and treatment of patients with a hereditary predisposition to cancer."
+      },
+      {
+        "name": "Christina Curtis, PhD",
+        "center": "",
+        "description": "Trained in molecular and computational biology and jointly appointed in Medicine and Genetics, Dr. Christina Curtis pursues systems biology and computational approaches to establish a quantitative and mechanistic understanding of cancer progression. Her research is focused on the development and application of innovative experimental and computational approaches to improve the diagnosis, treatment, and earlier detection of cancer by leveraging genome-scale data derived from clinical samples coupled with computational modeling and iterative experimentation. To this end, Dr. Curtis and her team have developed an integrated experimental and computational framework to measure clinically relevant patient-specific parameters and to measure clonal dynamics during tumor progression and through therapy. This led to their description of a Big Bang model of effectively neutral tumor evolution, thereby advancing a quantitative understanding of tumor progression and refining the de facto clonal evolution model."
+      },
+      {
+        "name": "William Greenleaf, PhD",
+        "center": "",
+        "description": "Dr. William Greenleaf studies the physical genome both by investigating the relationship between the folding of DNA in the nucleus and gene expression regulation, as well as the relationship between DNA sequence and the structure and function of encoded biomolecules."
+      }
+    ],
+    "description": [
+      "Multi-omic Characterization of Transformation of Familial Adenomatous Polyposis",
+      "We have established a state-of-the-art PreCancer Altas (PCA) for colorectal cancer (CRC) using Familial Adenomatous Polyposis (FAP) as a model system. CRC is one of the leading causes of death in the United States with 140,000 new cases arising each year. Mutations in the adenomatous polyposis coli (APC) gene are thought to be one of the early events in sporadic colorectal cancer. FAP families have inherited mutations in APC, and affected individuals classically develop hundreds of polyps, which often progress to invasive colon cancer by the third decade of life. Due to the extraordinarily high number of polyps that can be obtained from a single individual, FAP is an ideal disease system to study the host factors driving molecular heterogeneity in precancerous lesions. We expect these studies to inform diagnostic, preventative, and therapeutic measures for sporadic CRC. In order to obtain a comprehensive understanding of the early events that lead to and drive CRC, we will construct a PreCancer Atlas of the pre-cancerous polyps, early adenocarcinoma, and nearby normal tissue isolated from FAP patients. To build this atlas and execute this project, we have assembled an expert team of investigators with extensive experience working in large consortia. Together, we have already developed pipelines for multi-omics and imaging characterization, biospecimen collection, and analysis that we have leveraged for FAP samples."
+    ],
+    "phase": "phase1"
+  },
+  "hta11": {
+    "title": "Integrative Single-Cell Atlas Of Host And Microenvironment In Colorectal Neoplastic Transformation",
+    "principalInvestigators": [
+      {
+        "name": "Robert Coffey, MD",
+        "center": "",
+        "description": "Dr. Robert Coffey is John B. Wallace Professor of Medicine, Professor in the Department of Cell and Developmental Biology, and an Ingram Professor of Cancer Research at Vanderbilt University Medical Center. He directs the Vanderbilt Epithelial Biology Center and is principal investigator of Vanderbilt’s NCI-funded GI Specialized Programs of Research Excellence (SPORE), which focuses on colorectal cancer. He recently received an NCI Outstanding Investigator Award. His basic research focuses on the spatial compartmentalization of the EGF receptor (EGFR), its cognate ligands, and relevant signaling molecules in the context of polarized epithelial cells and how their dysregulation contributes to cancer. His lab identified a new mode of EGFR ligand signaling via exosomes, and he was a principal investigator within the U19 Common Fund initiative to understand the biogenesis and function of exosome-associated secreted RNAs. Other prior studies led by Dr. Coffey found that a pan-ERBB negative regulator, LRIG1, marks colonic stem cells and acts as a tumor suppressor in vivo. As part of a Common Fund NCI partnership grant with GE Healthcare, his lab also helped develop the optimized multiplex immunofluorescence (MxIF) platform used in this project."
+      },
+      {
+        "name": "Ken Lau, PhD",
+        "center": "",
+        "description": "Dr. Ken Lau earned his B.S. degree and his Ph.D. in Proteomics and Bioinformatics from the University of Toronto. After a joint postdoctoral fellowship at MIT and Massachusetts General Hospital, he joined the faculty at Vanderbilt as an Assistant Professor of Cell and Developmental Biology in 2013. Dr. Lau is an active member of the Vanderbilt Epithelial Biology Center and is currently an Associate Professor of Cell and Developmental Biology. Dr. Lau’s research revolves around how different cell populations in the gut integrate into tissue function with a specific focus on the gut’s role in microbial sensing and stem cells in colorectal cancer. His lab applies systems biology tools to understand tissue ecosystems as cell networks, spanning the realms of both experimental and computational biology. Dr. Lau has made various contributions to single-cell technologies, including multiplex microscopy, mass cytometry, and single-cell transcriptomics."
+      },
+      {
+        "name": "Martha J. Shrubsole, PhD",
+        "center": "",
+        "description": "Dr. Martha Shrubsole is Research Professor of Medicine at Vanderbilt University Medical Center where she leads a research portfolio of molecular, nutritional, and interventional epidemiology. A major focus of Dr. Shrubsole’s research is to understand the etiology of gastrointestinal neoplasia. She seeks to identify and evaluate modifiable factors, biomarkers, and molecular mechanisms for the prevention, early detection, and precision-based interception of cancer and its precursor lesions with emphasis on sessile serrated polyps and conventional colorectal adenomas. Some of these areas of study include nutrients such as one-carbon metabolism, inflammatory markers, gut microbiome, molecular landscape of colorectal polyps, health disparities, and predictors of metachronous adenomas. In addition, Dr. Shrubsole has had leading roles in multiple randomized trials and large-scale epidemiologic studies based in the United States and globally."
+      }
+    ],
+    "description": [
+      "COLON MAP: Colon Molecular Atlas Project",
+      "Colorectal cancer (CRC) is among the top three most prevalent cancers in global incidence and mortality. Most of these cancers develop from pre-cancerous adenomas. There is an unmet need to develop new preventive strategies and risk stratification models to decrease incidence, improve early detection, and prevent deaths from CRC.",
+      "We believe that the ability to provide the most effective precision diagnostics and preventive strategies can only be achieved with single-cell analysis. As such, we will map spatial relationships across the spectrum of normal colon, early polyps, and late adenomas, including their unique stromal and microbial microenvironments to identify unique molecular phenotypes.",
+      "Our goal will be accomplished through prospective, standardized collection and analysis of colorectal tissue, associated biospecimens, and related clinical and epidemiological data from participants undergoing colonoscopy or surgical resection. The biospecimens from these participants will be used for single-cell RNA sequencing, whole exome sequencing, multiplex immunofluorescence, species-specific bacterial fluorescence in situ hybridization, and other approaches. Finally, the information from these approaches will be integrated to develop a single-cell pre-cancer atlas with defined molecular phenotypes for dissemination to the broader scientific community."
+    ],
+    "phase": "phase1"
+  },
+  "hta12": {
+    "title": "Washington University Human Tumor Atlas Research Center",
+    "principalInvestigators": [
+      {
+        "name": "Li Ding, PhD",
+        "center": "",
+        "description": "Dr. Li Ding’s current research focuses on the discovery of genetic changes (somatic and germline) contributing to human diseases by integrating various data types, including DNA, RNA, and proteomics data. Her research team has developed a collection of widely-used computational tools, including VarScan, SomaticSniper, SciClone, BreakDancer, BreakFusion, MSIsensor, Pindel-C, GenomeVIP, HotSpot3D, PathScan, and MuSiC. Dr. Ding plays significant roles in The Cancer Genome Atlas (TCGA), the International Cancer Genome Consortium (ICGC), and the Clinical Proteomic Tumor Analysis Consortium (CPTAC). She co-chairs the TCGA PanCanAtlas Oncogenic Process Group, the TCGA Sarcoma Analysis Working Group, and the ICGC Mutation Calling Group. Dr. Ding also serves on the Steering Committees of the Genomic Data Commons (GDC), CPTAC, and TCGA. Dr. Ding has successfully led many large-scale, multi-institute studies on the genomics of lung adenocarcinomas, AML, and breast cancer. Building on this foundation, her team has produced a series of seminal publications in the fields of cancer genomics research and cancer biology."
+      },
+      {
+        "name": "Ryan Fields, MD",
+        "center": "",
+        "description": "Dr. Ryan Fields’ clinical expertise includes pancreatic, liver, bile duct, stomach and small intestine cancer; melanoma and other skin cancers; and sarcoma. His research interests include care of patients with tumors of the pancreas, liver (primary and metastatic), bile ducts, stomach, and small intestine, as well as patients with melanoma and other skin cancers and sarcomas. Dr. Fields’ research focuses on the identification and treatment of patients at high risk for recurrence of their cancer and the use of novel treatment modalities to improve survival."
+      },
+      {
+        "name": "William Gillanders, MD",
+        "center": "",
+        "description": "Dr. William Gillanders’ clinical expertise includes breast cancer and surgical endocrinology, including minimally invasive endocrine surgery. His research interests include the molecular detection of breast cancer in sentinel lymph nodes, peripheral blood, and bone marrow as well as antigen-specific T cell responses to cancer vaccines."
+      },
+      {
+        "name": "Samuel Achilefu, PhD",
+        "center": "",
+        "description": "Our research interests are in the design, development, and biochemical evaluation of molecular imaging agents and drugs in cells and living organisms. Through highly multidisciplinary research, we also develop new imaging systems for clinical applications. Our most recent accomplishments include the discovery of a broad spectrum cancer imaging agent, a portable goggle device for image-guided surgery, a depth-independent photo therapeutic platform for treating diseases and a reporter molecular system for reporting kinase activities. The ultimate goal is to validate new research concepts in the lab and translate them to humans."
+      }
+    ],
+    "description": "",
+    "phase": "phase1"
+  },
+  "hta200": {
+    "title": "Pre-Cancer Atlas of Skin Cancer",
+    "grantNumber": "CA294536",
+    "principalInvestigators": [
+      {
+        "name": "Hunter Shain, PhD",
+        "center": "UCSF",
+        "description": "Dr. Shain is an Associate Professor in the Department of Dermatology at the University of California San Francisco (UCSF). He is also affiliated with the Institute of Human Genetics and the Helen Diller Family Comprehensive Cancer Center. He has a B.S. in Biochemistry from the University of Illinois, a Ph.D. in Cancer Biology from Stanford University, and postdoctoral training in Cancer Genomics from UCSF. His laboratory harnesses a wide range of -omic technologies to better understand skin biology. Historically, they have utilized microarray and bulk-cell sequencing technologies, and nowadays they have shifted focus towards single-cell DNA-sequencing, single-cell RNA-sequencing, and spatial transcriptomic technologies.",
+        "isContact": true
+      },
+      {
+        "name": "Boris Bastian, MD",
+        "center": "UCSF",
+        "description": "Dr. Boris Bastian received his MD degree and Dr. Med degree from the Ludwig-Maximilian University of Munich. After completing a residency in dermatology at the University of Wurzburg, he received additional training in dermatopathology and completed a postdoctoral fellowship at the University of California, San Francisco before joining the institution's faculty and starting his research laboratory at UCSF’s Helen Diller Family Comprehensive Cancer Center. In 2010 he moved to the Memorial Sloan-Kettering Cancer Center to become Chairman of the Department of Pathology. He served as the President of the Society of Melanoma Research from 2010 to 2013. In 2011 he returned to UCSF where he holds the title of Gerson and Barbara Bakar Distinguished Professor of Cancer Biology. He founded and directs the Clinical Cancer Genomics Laboratory at UCSF, which performs molecular diagnostics for patients of the Helen Diller Family Comprehensive Cancer Center. He has clinical responsibilities in the Dermatopathology Section of the Departments of Dermatology and Pathology, where he also oversees the molecular diagnostic laboratory.\n\nDr. Bastian’s research laboratory focuses on the molecular genetics of cutaneous neoplasms, with a particular emphasis on the discovery of genetic alterations useful for diagnosis, classification, and therapy. His laboratory has contributed to the discovery of multiple genetic alterations in melanocytic neoplasia that are relevant for therapeutic and diagnostic purposes and he has established a taxonomy of melanocytic neoplasia that integrates molecular and clinical disease aspects. He has received numerous awards for his work."
+      },
+      {
+        "name": "Iwei Yeh, MD, PhD",
+        "center": "UCSF",
+        "description": "Dr. Yeh is a dermatologist and dermatopathologist with a background in biochemistry, genetics and bioinformatics. She currently practices diagnostic dermatopathology and performs basic and translational research in the field of cutaneous neoplasia. Her work has been focused on uncovering the genetics and biology of cutaneous neoplasms and translating our knowledge into clinical practice."
+      }
+    ],
+    "description": "This project aims to develop an atlas that maps the early phases of skin cancer, focusing on the transition from pre-cancerous lesions to melanoma and squamous cell carcinoma. The research will integrate genetic and immunological data to understand how the immune system interacts with tumors during these early stages. The goal is to identify biomarkers and therapeutic targets that could improve early diagnosis and treatment of skin cancers, potentially leading to better patient outcomes.",
+    "phase": "phase2"
+  },
+  "hta201": {
+    "title": "An Atlas of Pancreatic Tumorigenesis in the Context of Altered DNA Repair Occurring in High-Risk Individuals",
+    "grantNumber": "CA294548",
+    "principalInvestigators": [
+      {
+        "name": "Rosalie Sears, PhD",
+        "center": "OHSU",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Jonathan Brody, PhD",
+        "center": "OHSU",
+        "description": ""
+      },
+      {
+        "name": "Elana Fertig, PhD",
+        "center": "Johns Hopkins University",
+        "description": ""
+      },
+      {
+        "name": "Laura Wood, MD, PhD",
+        "center": "Johns Hopkins University",
+        "description": ""
+      }
+    ],
+    "description": "This project focuses on creating a 3D atlas of pancreatic cancer development, particularly in individuals with genetic mutations that increase cancer risk. By mapping the progression of pre-cancerous lesions to invasive cancer, the researchers aim to uncover the molecular mechanisms behind early cancer development. The atlas will provide critical insights for early detection and intervention strategies, potentially improving outcomes for high-risk individuals.",
+    "phase": "phase2"
+  },
+  "hta202": {
+    "title": "Understanding the Role of Tumor Microenvironment in Low-Grade Glioma Progression to Malignancy",
+    "grantNumber": "CA294551",
+    "principalInvestigators": [
+      {
+        "name": "Long Cai, PhD",
+        "center": "Caltech",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Richard Everson, MD",
+        "center": "UCLA",
+        "description": ""
+      },
+      {
+        "name": "Matthew Thomson, PhD",
+        "center": "Caltech",
+        "description": ""
+      },
+      {
+        "name": "Barbara Wold, PhD",
+        "center": "Caltech",
+        "description": ""
+      }
+    ],
+    "description": "Our PCA research center brings together the UCLA Neurosurgery team with the Caltech spatial single cell team to construct a comparative spatial atlas of low-grade gliomas. The collaboration between the three components of the PCA research center has already generated preliminary data in several glioma samples. We will expand this effort to generate a comparative atlas of gliomas with distinct progression outcomes using integrated spatial transcriptomics, proteomics, and chromosome profiling. By comparing the low-grade gliomas that eventually transform with ones that stay indolent or do not recur, and with IDH-mutant high-grade gliomas, we aim to understand the molecular and cellular mechanisms at the low-grade stage that are predictive of malignant transformation (MT) and to suggest intervention strategies to prevent MT. The comparative analysis will examine three types of changes in low-grade gliomas with different outcomes: cell type composition, tumor microenvironment, and pathway specific gene expression. From UCLA’s Brain Tumor Translation Resource (BTTR) center, we have already collected 99 fresh-frozen low-grade glioma samples and will collect approximately an additional 100 samples of low-grade glioma with different outcomes (MT, indolent, and no- recurrence). 38% of the current cohort of patients are from under-represented minority groups; we will continue to recruit from a diverse patient pool in order to better understand which patients may be at higher risk for malignant transformation and therefore need more frequent surveillance or earlier intervention. We will then generate an integrated multi-modal spatial atlas targeting 2500 mRNAs, 10 proteins and 10 DNA CNVs and translocations. From the high sensitivity and multiplexed RNA seqFISH assays, we will be able to capture not only cell type and microenvironment information, but also genes and pathways that could be causal for progression to malignancy. Lastly, we will use the data to 1) predict tumor progression based on the cell type compositions and microenvironments; 2) design intervention strategies based on the spatial data, using counterfactual inference models to affect immune infiltrating and other predictors of progression; and 3) build a model of tumor progression dynamics based on gene expression and mechanics of the tissue. Our comprehensive low-grade glioma tissue collection, the integrated spatial dataset with transcriptomics, proteomics and chromosomal abnormalities, and the models built using advanced machine-learning tools will extend the existing capabilities of the HTAN consortium and be interoperable. The atlas and the computational tools will be used by us and the wider scientific community to further understand the mechanisms leading to malignant transformation.",
+    "phase": "phase2"
+  },
+  "hta203": {
+    "title": "Center for Gastric Pre-Cancer Atlas of Multidimensional Evolution in 3D (GAME3D)",
+    "grantNumber": "CA294518",
+    "principalInvestigators": [
+      {
+        "name": "Linghua Wang, MD, PhD",
+        "center": "MD Anderson",
+        "description": "Dr. Wang is an Associate Professor in the Department of Genomic Medicine at MD Anderson Cancer Center. She has significant expertise in computational biology, cancer genomics, and immuno-informatics. Her group focuses on comprehensive profiling of the tumor ecosystem, exploring its cellular and molecular heterogeneity, phenotypic plasticity, and the dynamic interactions between cancer cells and the tumor microenvironment throughout tumor initiation, progression, metastasis, and therapeutic response or resistance. By integrating advanced single-cell and spatial multi-omics technologies with high-resolution cellular imaging, Dr. Wang’s lab develops and applies innovative bioinformatic tools and computational frameworks to drive novel discoveries. Her work has built single-cell, spatial, transcriptional, and clonotypic atlases across many early-stage cancers and precursor diseases.",
+        "isContact": true
+      },
+      {
+        "name": "Paul Mansfield, MD, FACS",
+        "center": "MD Anderson",
+        "description": "Dr. Mansfield is a Professor in the Department of Surgical Oncology at MD Anderson Cancer Center. He is a surgical oncologist with more than 30 years of experience in the clinical care and research of patients with gastric cancer. He has extensive expertise in patient recruitment and evaluation of the clinical implications of laboratory findings. He serves as the PI of the MD Anderson CDH1 gene registry, comprising more than 100 hereditary diffuse gastric cancer patients with demographic, clinical data and multiple tissue specimens collected from each patient."
+      },
+      {
+        "name": "Tae Hyun Hwang, PhD",
+        "center": "Mayo Clinic",
+        "description": "Dr. Hwang is the Florida Department of Health Cancer Chair, Departments of Artificial Intelligence & Informatics, Cancer Biology, and Immunology at the Mayo Clinic Comprehensive Cancer Center in Jacksonville, FL. He is a computational scientist focused on cancer biology, with primary expertise in developing and applying novel machine learning (ML) and artificial intelligence (AI) algorithms to unravel the complexities of human cancer mechanisms, including gastric cancer. In addition, he is pioneering 3D tumor modeling and AI-driven analysis of the tumor immune microenvironment. His lab conducts in-depth investigations using data derived from single-cell DNA/RNA/protein sequencing, spatial genomics, genetics, and advanced tissue imaging."
+      },
+      {
+        "name": "Mingyao Li, PhD",
+        "center": "University of Pennsylvania",
+        "description": "Dr. Li is a Professor of Biostatistics in the Department of Biostatistics and Epidemiology, with secondary appointments in Digital Pathology, Department of Pathology and Laboratory Medicine, and Statistics, Department of Statistics and Data Science, at the University of Pennsylvania School of Medicine. She is a computational researcher with a focus on identifying genes that contribute to human variation and diseases. Her research program consists of both a methodological component focused on developing novel statistical methods for statistical genetics and genomics, and an applied component focused on using these methods in clinical and biological studies. Dr. Li uses a multidisciplinary approach that integrates methods from statistics, machine learning, bioinformatics, and computational biology. Her lab has published papers on single-cell RNA-seq and its applications in human diseases as well as methods papers on spatial transcriptomics data anaylsis."
+      }
+    ],
+    "description": "The GAME3D Center aims to address the critical need for precision cancer interception in hereditary diffuse gastric cancer (HDGC) caused by pathogenic CDH1 germline mutations. Patients with such mutations carry an elevated lifetime risk of advanced diffuse gastric cancer up to 80%. Prophylactic total gastrectomy (PTG) is often advised but may not be necessary for all CDH1 mutation carriers. PTG is a\n\nmajor procedure associated with chronic physical and psychosocial disabilities, yet prior attempts to risk stratify patients based on specific variants or family cancer history have not been successful and tools to identify patients at high risk are currently lacking. This is largely due to our limited understanding of the earliest events that drive T1a lesion development and progression. GAME3D integrates cutting-edge multimodal, single-cell, and 3D spatial technologies to construct a comprehensive atlas of the N-T1a-AGC continuum. Through longitudinal samples, the Center will: (1) create a dynamic 2D spatial atlas; (2) build a 3D spatiotemporal atlas at single-cell resolution; and (3) develop computational models of tumor initiation and progression. This work will uncover key mechanisms driving AGC development, offering new targets for early interception.",
+    "phase": "phase2"
+  },
+  "hta204": {
+    "title": "Myeloma Multidimensional Precancer Atlas",
+    "grantNumber": "CA294507",
+    "principalInvestigators": [
+      {
+        "name": "Irene Ghobrial, MD",
+        "center": "Dana-Farber Cancer Institute",
+        "description": "",
+        "isContact": true
+      }
+    ],
+    "description": "This project will build a multidimensional atlas of multiple myeloma, focusing on the early stages of the disease when precancerous cells begin to evolve into malignant forms. By mapping the genetic, molecular, and spatial characteristics of these early changes, the research aims to identify targets for early intervention. This work could improve early diagnosis and lead to therapies that prevent the progression of multiple myeloma in high-risk individuals.",
+    "phase": "phase2"
+  },
+  "hta205": {
+    "title": "Pediatric Solid Tumor Microenvironment Atlas",
+    "grantNumber": "CA294552",
+    "principalInvestigators": [
+      {
+        "name": "Shahab Asgharzadeh, MD",
+        "center": "CHLA",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "James Amatruda, MD, PhD",
+        "center": "CHLA",
+        "description": ""
+      },
+      {
+        "name": "Long Cai, PhD",
+        "center": "Caltech",
+        "description": ""
+      }
+    ],
+    "description": "The majority of solid tumors in children have a unique origin compared to those in adults, stemming from their rise from embryonic cells. Despite this distinction, there is still limited understanding of the differences in the microenvironments of these pediatric tumors compared to adult cancers, and how these differences might contribute to lineage plasticity and treatment resistance. To address this knowledge gap, we propose a comprehensive investigation into the spatial biology of these tumors. Our goal is to shed light on the specific cells and mechanisms within the tumor microenvironment that play a role in inducing therapy resistance in pediatric solid tumors. This research will focus on prominent pediatric cancers such as rhabdomyosarcoma, neuroblastoma, and Wilms tumors. The primary goal of this multi-disciplinary Program is to establish a comprehensive Pediatric Solid Tumor Microenvironment (PSTME) Atlas that would lead to discovering basic mechanisms of de novo and acquired resistance to modern therapies, and uncovering tumor microenvironment (TME) targetable vulnerabilities driven by resistance. The motivation for creating the PSTME atlas is the urgent need to improve survival of patients with high-risk subtypes of the proposed cancers, and to decrease treatment- related morbidities. By delving into the intricacies of the tumor microenvironment and its impact on treatment response, we aim to advance our understanding of pediatric solid tumors and pave the way for more effective therapeutic strategies. The Project will be supported by collaboration among two institutions with distinct and unique resources and technologies, and complementary expertise: A) Children’s Hospital Los Angeles (CHLA) group will provide well annotated tumor specimens with clinical information in an ethnically diverse patient population, and lead in generating spatial proteomics data using pediatric and TME specific antibody panels. B) California Institute of Technology (Caltech) group will provide innovative spatial omics technologies including spatial transcriptomics and copy number, and novel data science approaches for integrative analysis of the generated data. The samples will be selected to represent solid tumor diversity based on established clinical risk stratifications, and critical points of transition (post chemotherapy response, relapse) to ensure capture of the diversity of PSTME. The PSTME atlas will impact the community through generation of easily accessible TME atlas providing a user friendly, searchable database of multiomics spatial analyses of common extracranial solid tumors with clinical and outcome data. It will also provide novel computational pipelines for integration and analysis of spatial data. These opensource tools will be made available to the community. In summary, the significance of the proposed project is the establishment of an atlas that will allow discovery of fundamental mechanisms of extrinsic cancer therapy resistance with the goal of leading to substantively improved probability of cure coupled with reduced therapy-related morbidity for children afflicted with solid tumors.",
+    "phase": "phase2"
+  },
+  "hta206": {
+    "title": "Human Prostate Tumor Atlas Center",
+    "grantNumber": "CA294532",
+    "principalInvestigators": [
+      {
+        "name": "Li Ding, PhD",
+        "center": "Washington University in St. Louis",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Feng Chen, PhD",
+        "center": "Washington University in St. Louis",
+        "description": ""
+      },
+      {
+        "name": "Ryan Fields, MD",
+        "center": "Washington University in St. Louis",
+        "description": ""
+      },
+      {
+        "name": "Russel Pachynski, MD",
+        "center": "Washington University in St. Louis",
+        "description": ""
+      }
+    ],
+    "description": "The Human Prostate Tumor Atlas Center will map the cellular and molecular architecture of prostate cancer, particularly focusing on African American men, who are disproportionately affected by aggressive forms of the disease. Using advanced spatial and molecular profiling techniques, this project will generate a high-resolution atlas to understand tumor dynamics, treatment resistance, and health disparities. The findings will help improve early diagnosis and treatment strategies, especially for underserved populations.",
+    "phase": "phase2"
+  },
+  "hta207": {
+    "title": "A Multimodal 3D Atlas of Colorectal Cancer Across Ages of Onset",
+    "grantNumber": "CA294527",
+    "principalInvestigators": [
+      {
+        "name": "Ken Lau, PhD",
+        "center": "Vanderbilt University",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Jeffrey Spraggins, PhD",
+        "center": "Vanderbilt University",
+        "description": ""
+      },
+      {
+        "name": "Robert Coffey, MD",
+        "center": "Vanderbilt University",
+        "description": ""
+      },
+      {
+        "name": "Martha Shrubsole, PhD",
+        "center": "Vanderbilt University",
+        "description": ""
+      }
+    ],
+    "description": "This project aims to create a 3D atlas of colorectal cancer to investigate differences between early-onset and late-onset cases of the disease. By analyzing the spatial organization of tumors and surrounding tissues, the research will reveal how interactions between cancer cells, microbes, and the immune system contribute to cancer progression. The findings could lead to new strategies for early detection and targeted treatments, particularly for younger patients who face increasing rates of colorectal cancer.",
+    "phase": "phase2"
+  },
+  "hta208": {
+    "title": "3D Spatial Multi-Omics Profiling of Ovarian Cancer",
+    "grantNumber": "CA294459",
+    "principalInvestigators": [
+      {
+        "name": "Samuel Mok, PhD",
+        "center": "MD Anderson",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Sammy Ferri-Borgogno, PhD",
+        "center": "MD Anderson",
+        "description": ""
+      },
+      {
+        "name": "Michael Birrer, MD, PhD",
+        "center": "University of Arkansas",
+        "description": ""
+      }
+    ],
+    "description": "This project aims to understand how high-grade serous ovarian cancer (HGSOC) metastasizes and develops resistance to chemotherapy, focusing on late-stage diagnosis. A 3D cancer atlas will be created using molecular and cellular profiling to map tumor progression in patients. The data will help identify key molecular changes responsible for resistance and could lead to more effective treatments and improved survival rates. The multi-disciplinary team will integrate various technologies to produce a comprehensive spatial map of ovarian cancer.",
+    "phase": "phase2"
+  },
+  "hta209": {
+    "navText": "Center for Human Lymphoma Spatiotemporal Atlas (HuLymSTA)",
+    "title": "Center for Human Lymphoma Spatiotemporal Atlas (HuLymSTA)",
+    "grantNumber": "CA294514",
+    "principalInvestigators": [
+      {
+        "name": "Rong Fan, PhD",
+        "center": "Yale University",
+        "description": "",
+        "isContact": true
+      },
+      {
+        "name": "Mina Xu, MD",
+        "center": "Yale University",
+        "description": ""
+      },
+      {
+        "name": "Stephanie Halene, MD",
+        "center": "Yale University",
+        "description": ""
+      },
+      {
+        "name": "Zongming Ma, PhD",
+        "center": "Yale University",
+        "description": ""
+      }
+    ],
+    "description": "This project will develop a comprehensive spatiotemporal atlas of lymphoma, focusing on the transformation of indolent follicular lymphoma into aggressive diffuse large B-cell lymphoma (DLBCL) and the evolution of angioimmunoblastic T-cell lymphoma (AITL). The atlas will map the genetic and spatial changes in tumor cells and their microenvironments over time, helping researchers understand the key factors driving cancer progression and resistance to treatment. The insights gained could lead to the identification of biomarkers for earlier intervention and more effective therapies.",
+    "phase": "phase2"
+  }
+}
