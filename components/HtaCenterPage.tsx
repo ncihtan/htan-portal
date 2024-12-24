@@ -124,9 +124,9 @@ const customHeaderContent: { [centerId: string]: JSX.Element } = {
         <HeaderLogos
             imgSources={[
                 '/phase1/DFCI-Logo-with-Flag.webp',
-                '/phase1/sage_bionetworks_logo.webp',
+                '/dcc/sage_bionetworks_logo.webp',
                 '/phase1/MSK_logo.webp',
-                '/phase1/isb_color_logo1.webp',
+                '/dcc/isb_color_logo1.webp',
             ]}
             headerImgClassname={styles.headerImg20}
         />

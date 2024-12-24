@@ -5,8 +5,7 @@ import HtaCenterPage, {
 } from '../../components/HtaCenterPage';
 import PageWrapper from '../../components/PageWrapper';
 import PreReleaseBanner from '../../components/PreReleaseBanner';
-import phase1Centers from '../../data/phase1_centers.json';
-import phase2Centers from '../../data/phase2_centers.json';
+import centers from '../../data/research_network.json';
 import { HtaCenters } from '../../types';
 
 const HTAPage = (props: HtaCenterPageProps) => {
@@ -21,10 +20,7 @@ const HTAPage = (props: HtaCenterPageProps) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = [
-        ...Object.keys(phase1Centers),
-        ...Object.keys(phase2Centers),
-    ].map((id) => ({
+    const paths = Object.keys(centers).map((id) => ({
         params: { id },
     }));
 
@@ -36,9 +32,7 @@ function getCenter(centers: HtaCenters, id?: string | string[]) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const hta =
-        getCenter(phase1Centers, params?.id) ||
-        getCenter(phase2Centers, params?.id);
+    const hta = getCenter(centers as HtaCenters, params?.id);
 
     return { props: { hta, id: params?.id } };
 };

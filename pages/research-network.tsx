@@ -1,12 +1,12 @@
+import _ from 'lodash';
 import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 
 import PageWrapper from '../components/PageWrapper';
 import PreReleaseBanner from '../components/PreReleaseBanner';
-import phase1Centers from '../data/phase1_centers.json';
-import phase2Centers from '../data/phase2_centers.json';
+import centers from '../data/research_network.json';
 import styles from './centercard.module.css';
-import { HtaCenters } from '../types';
+import { HtaCenter, HtaCenterPhase, HtaCenters } from '../types';
 
 const Cards = (props: { data: HtaCenters }) => {
     return (
@@ -37,6 +37,15 @@ const Cards = (props: { data: HtaCenters }) => {
 };
 
 const ResearchNetwork = () => {
+    const phase1Centers = _.pickBy<HtaCenter>(
+        centers,
+        (center) => center.phase === HtaCenterPhase.Phase1
+    ) as HtaCenters;
+    const phase2Centers = _.pickBy<HtaCenter>(
+        centers,
+        (center) => center.phase === HtaCenterPhase.Phase2
+    ) as HtaCenters;
+
     return (
         <>
             <PreReleaseBanner />

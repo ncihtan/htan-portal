@@ -27,8 +27,14 @@ export interface Category {
     [subcat: string]: SubCategory;
 }
 
+export enum HtaCenterPhase {
+    Phase1 = 'phase1',
+    Phase2 = 'phase2',
+    DCC = 'dcc',
+}
+
 export interface HtaCenter {
-    phase: string;
+    phase: HtaCenterPhase;
     title: string;
     grantNumber?: string;
     principalInvestigators: PrincipalInvestigator[];
