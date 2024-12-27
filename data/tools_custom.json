@@ -1338,5 +1338,25 @@
     "Tool Input Data": "",
     "Tool Output Data": "",
     "Tool Assay": "CyCIF"
+  },
+  {
+    "": "",
+    "Atlas Name": "HTAN HMS",
+    "Grant ID": "",
+    "Tool ID": "",
+    "Parent ID": "",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/38014110/",
+    "Perspective": "",
+    "Tool Name": "CSPOT",
+    "Tool Alias": "",
+    "Tool Type": "Library, Command-line tool",
+    "Tool Language": "Python",
+    "Tool Homepage": "https://labsyspharm.github.io/ashlar/",
+    "Tool Description": "Supervised machine learning in combination with classical segmentation to perform automated cell type calling",
+    "Tool Topic": "",
+    "Tool Operation": "",
+    "Tool Input Data": "",
+    "Tool Output Data": "",
+    "Tool Assay": "CODEX, CyCIF, mIHC"
   }
 ]
