@@ -5,13 +5,14 @@ import {
     EnhancedDataTable,
     getDefaultDataTableStyle,
 } from '@htan/data-portal-table';
-import { Atlas, Entity } from '@htan/data-portal-commons';
+import { Atlas, Entity, PublicationManifest } from '@htan/data-portal-commons';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
 
 import {
     generateColumnsForDataSchema,
     getAtlasColumn,
+    getPublicationColumn,
     sortByBiospecimenId,
     sortByParentID,
 } from '../lib/dataTableHelpers';
@@ -21,6 +22,7 @@ interface IBiospecimenTableProps {
     synapseAtlases: Atlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
+    publicationsByUid?: { [uid: string]: PublicationManifest };
 }
 
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
@@ -46,11 +48,12 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
         columns,
         (c) => c.selector === GenericAttributeNames.BiospecimenID
     );
-    // insert Atlas Name right after Biospecimen ID
+    // insert Atlas Name and Publications right after Biospecimen ID
     columns.splice(
         indexOfBiospecimenId + 1,
         0,
-        getAtlasColumn(props.synapseAtlases)
+        getAtlasColumn(props.synapseAtlases),
+        getPublicationColumn(props.publicationsByUid)
     );
 
     return (

@@ -12,6 +12,7 @@ export * from './lib/types';
 
 export * from './components/AtlasDescription';
 export * from './components/ExpandableText';
+export * from './components/PublicationIcon';
 export * from './components/ViewDetailsModal';
 
 export { default as commonStyles } from './components/common.module.scss';
