@@ -24,6 +24,7 @@ export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
     dataSchemaMap: SchemaDataById;
     allAttributes?: DataSchemaDataWithManifest[];
+    manifestId?: string;
 }
 
 enum ColumnName {
@@ -211,6 +212,19 @@ function getTabName(id: string, dataSchemaMap: SchemaDataById) {
     return ATTRIBUTE_OVERRIDES[attribute] || attribute;
 }
 
+function getInitialManifestIds(props: IDataSchemaProps) {
+    const schemaId = props.manifestId ? `bts:${props.manifestId}` : undefined;
+    const schema = schemaId ? props.dataSchemaMap[schemaId] : undefined;
+
+    return schemaId && schema ? [schemaId] : [];
+}
+
+function getInitialManifestId(props: IDataSchemaProps) {
+    const initialIds = getInitialManifestIds(props);
+
+    return _.isEmpty(initialIds) ? MANIFEST_TAB_ID : initialIds[0];
+}
+
 const DataSchemaTable: React.FunctionComponent<{
     schemaData: DataSchemaData[];
     dataSchemaMap?: { [id: string]: DataSchemaData };
@@ -259,8 +273,10 @@ const DataSchemaTable: React.FunctionComponent<{
 };
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
-    const [activeTab, setActiveTab] = useState(MANIFEST_TAB_ID);
-    const [openManifestTabs, setOpenManifestTabs] = useState<string[]>([]);
+    const [activeTab, setActiveTab] = useState(getInitialManifestId(props));
+    const [openManifestTabs, setOpenManifestTabs] = useState<string[]>(
+        getInitialManifestIds(props)
+    );
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);

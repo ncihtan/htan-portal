@@ -1,11 +1,14 @@
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
     getAllAttributes,
     getDataSchema,
     SchemaDataId,
 } from '@htan/data-portal-schema';
-import DataStandard, { DataStandardProps } from '../../components/DataStandard';
+import DataStandard, {
+    DataStandardProps,
+} from '../../../components/DataStandard';
+import { getFirstIdFromContext } from '../../../lib/helpers';
 
 const MassSpectrometry: React.FunctionComponent<DataStandardProps> = (
     props
@@ -58,7 +61,7 @@ const MassSpectrometry: React.FunctionComponent<DataStandardProps> = (
     );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const { dataSchemaData, schemaDataById } = await getDataSchema([
         SchemaDataId.MassSpectrometryLevel1,
         SchemaDataId.MassSpectrometryLevel2,
@@ -69,7 +72,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
 
-    return { props: { dataSchemaData, schemaDataById, allAttributes } };
+    return {
+        props: {
+            dataSchemaData,
+            schemaDataById,
+            allAttributes,
+            manifestId: getFirstIdFromContext(context),
+        },
+    };
 };
 
 export default MassSpectrometry;
