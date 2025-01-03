@@ -21,6 +21,7 @@ export interface DataStandardProps {
     dataSchemaData?: DataSchemaData[];
     schemaDataById?: SchemaDataById;
     allAttributes?: DataSchemaDataWithManifest[];
+    manifestId?: string;
 }
 
 const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
@@ -48,6 +49,7 @@ const DataStandard: React.FunctionComponent<DataStandardProps> = (props) => {
                             schemaData={props.dataSchemaData}
                             dataSchemaMap={props.schemaDataById}
                             allAttributes={props.allAttributes}
+                            manifestId={props.manifestId}
                         />
                     </Row>
                 )}
