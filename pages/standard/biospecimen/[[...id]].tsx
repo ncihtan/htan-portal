@@ -1,12 +1,15 @@
 import React from 'react';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 
-import DataStandard, { DataStandardProps } from '../../components/DataStandard';
 import {
     getAllAttributes,
     getDataSchema,
     SchemaDataId,
 } from '@htan/data-portal-schema';
+import DataStandard, {
+    DataStandardProps,
+} from '../../../components/DataStandard';
+import { getFirstIdFromContext } from '../../../lib/helpers';
 
 const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
     return (
@@ -80,13 +83,20 @@ const Biospecimen: React.FunctionComponent<DataStandardProps> = (props) => {
     );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const { dataSchemaData, schemaDataById } = await getDataSchema([
         SchemaDataId.Biospecimen,
     ]);
     const allAttributes = getAllAttributes(dataSchemaData, schemaDataById);
 
-    return { props: { dataSchemaData, schemaDataById, allAttributes } };
+    return {
+        props: {
+            dataSchemaData,
+            schemaDataById,
+            allAttributes,
+            manifestId: getFirstIdFromContext(context),
+        },
+    };
 };
 
 export default Biospecimen;
