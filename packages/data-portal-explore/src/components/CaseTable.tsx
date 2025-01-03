@@ -9,10 +9,11 @@ import {
     convertAgeInDaysToYears,
     GenericAttributeNames,
 } from '@htan/data-portal-utils';
-import { Atlas, Entity } from '@htan/data-portal-commons';
+import { Atlas, Entity, PublicationManifest } from '@htan/data-portal-commons';
 import {
     generateColumnsForDataSchema,
     getAtlasColumn,
+    getPublicationColumn,
     sortByParticipantId,
 } from '../lib/dataTableHelpers';
 import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
@@ -23,6 +24,7 @@ interface ICaseTableProps {
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     excludedColumns?: string[];
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
+    publicationsByUid?: { [uid: string]: PublicationManifest };
 }
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
@@ -88,11 +90,12 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         columns,
         (c) => c.selector === GenericAttributeNames.ParticipantID
     );
-    // insert Atlas Name right after Participant ID
+    // insert Atlas Name and Publications right after Participant ID
     columns.splice(
         indexOfParticipantId + 1,
         0,
-        getAtlasColumn(props.synapseAtlases)
+        getAtlasColumn(props.synapseAtlases),
+        getPublicationColumn(props.publicationsByUid)
     );
 
     return (

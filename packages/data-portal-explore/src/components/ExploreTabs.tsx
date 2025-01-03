@@ -53,7 +53,7 @@ interface IExploreTabsProps {
 
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
     getAtlasMetaData: () => AtlasMetaData;
-    publications: PublicationManifest[];
+    publicationsByUid: { [uid: string]: PublicationManifest };
 }
 
 const metricTypes = [
@@ -214,6 +214,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 props.groupsByPropertyFiltered
                             }
                             patientCount={props.cases.length}
+                            publicationsByUid={props.publicationsByUid}
                         />
                     </div>
                 )}
@@ -237,6 +238,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             samples={props.samples}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}
+                            publicationsByUid={props.publicationsByUid}
                         />
                     </div>
                 )}
@@ -260,6 +262,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             cases={props.cases}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}
+                            publicationsByUid={props.publicationsByUid}
                         />
                     </div>
                 )}
@@ -272,7 +275,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     >
                         <AtlasTable
                             setTab={setTab}
-                            publications={props.publications}
+                            publications={_.values(props.publicationsByUid)}
                             getAtlasMetaData={props.getAtlasMetaData}
                             synapseAtlasData={props.allSynapseAtlases}
                             selectedAtlases={props.selectedSynapseAtlases}
