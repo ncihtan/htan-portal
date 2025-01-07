@@ -113,7 +113,7 @@ function generateTerraManifestFile(files: Entity[]): string | undefined {
     const data = _(files)
         .filter((f) => !!f.viewers?.cds)
         .map((f) => [
-            f.name, // Use `name` property for the filename
+            f.viewers?.cds?.name, // Use `name` property for the filename
             f.viewers?.cds?.drs_uri
         ])
         .value();
