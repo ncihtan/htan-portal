@@ -98,6 +98,14 @@ function generateGen3ManifestFile(files: Entity[]): string | undefined {
                 'drs://nci-crdc.datacommons.io/',
                 ''
             ),
+            name: f.viewers?.cds?.name,
+            atlas_name: f.atlas_name,
+            assay_name: f.assayName,
+            level: f.level,
+            // make sure to replace all possible commas since we are generating a CSV file
+            data_file_id: f.DataFileID?.replace(/,/g, ' ').trim(),
+            parent_biospecimen_id: f.ParentBiospecimenID?.replace(/,/g, ' ').trim(),
+            parent_data_file_id: f.ParentDataFileID?.replace(/,/g, ' ').trim(),
         }))
         .value();
 
