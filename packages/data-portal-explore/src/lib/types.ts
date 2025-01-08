@@ -3,5 +3,6 @@ export enum ExploreTab {
     ATLAS = 'atlas',
     BIOSPECIMEN = 'biospecimen',
     CASES = 'cases',
+    PUBLICATION = 'publication',
     PLOTS = 'plots',
 }

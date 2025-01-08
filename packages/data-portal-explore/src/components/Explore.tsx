@@ -33,6 +33,7 @@ import {
     HTANToGenericAttributeMap,
     LoadDataResult,
     PublicationManifest,
+    PublicationSummary,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
 import {
@@ -53,7 +54,8 @@ export interface IExploreState {
     filters: { [key: string]: string[] };
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     atlases: Atlas[];
-    publicationsByUid: { [uid: string]: PublicationManifest };
+    publicationManifestByUid: { [uid: string]: PublicationManifest };
+    publicationSummaryByPubMedID?: { [pubMedId: string]: PublicationSummary };
     atlasData?: any;
 }
 
@@ -84,7 +86,8 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             files: [],
             filters: {},
             atlases: [],
-            publicationsByUid: {},
+            publicationManifestByUid: {},
+            publicationSummaryByPubMedID: {},
             schemaDataById: {},
         };
 
@@ -162,7 +165,9 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 this.setState({
                     files: fillInEntities(data),
                     atlases: data.atlases,
-                    publicationsByUid: data.publicationManifestByUid,
+                    publicationManifestByUid: data.publicationManifestByUid,
+                    publicationSummaryByPubMedID:
+                        data.publicationSummaryByPubMedID,
                 });
             });
 
@@ -189,6 +194,11 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     }
 
     @computed
+    get samples() {
+        return getFilteredSamples(this.state.files, this.cases, false);
+    }
+
+    @computed
     get filteredSamples() {
         return getFilteredSamples(
             this.filteredFiles,
@@ -207,6 +217,11 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     }
 
     @computed
+    get cases() {
+        return getFilteredCases(this.state.files, {}, true);
+    }
+
+    @computed
     get filteredCases() {
         return getFilteredCases(
             this.filteredFiles,
@@ -222,6 +237,15 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             this.nonAtlasSelectedFiltersByAttrName,
             this.showAllCases
         );
+    }
+
+    @computed get filteredPublications() {
+        return _(this.filteredCases)
+            .flatMap((c) => c.publicationIds)
+            .compact()
+            .uniq()
+            .map((id) => this.state.publicationManifestByUid[id])
+            .value();
     }
 
     @computed get atlasMap() {
@@ -349,8 +373,8 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         selectedSynapseAtlases={this.selectedAtlases}
                         allSynapseAtlases={this.allAtlases}
                         onSelectAtlas={this.onSelectAtlas}
-                        samples={this.filteredSamples}
-                        cases={this.filteredCases}
+                        samples={this.samples}
+                        cases={this.cases}
                         filteredCasesByNonAtlasFilters={
                             this.filteredCasesByNonAtlasFilters
                         }
@@ -369,7 +393,13 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={this.props.getAtlasMetaData}
-                        publicationsByUid={this.state.publicationsByUid}
+                        publicationManifestByUid={
+                            this.state.publicationManifestByUid
+                        }
+                        publicationSummaryByPubMedID={
+                            this.state.publicationSummaryByPubMedID
+                        }
+                        filteredPublications={this.filteredPublications}
                         genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
                     />
                 </div>
