@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { GetServerSidePropsContext } from 'next';
 import { NextRouter } from 'next/router';
 
 import {
@@ -178,4 +179,10 @@ export function isReleaseQCEnabled() {
     return (
         urlParams.has('rel') || urlParams.has('release') || urlParams.has('qc')
     );
+}
+
+export function getFirstIdFromContext(
+    context: GetServerSidePropsContext
+): string | null {
+    return context.query?.id?.[0] || null;
 }
