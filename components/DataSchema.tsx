@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Tooltip from 'rc-tooltip';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IDataTableColumn } from 'react-data-table-component';
 
 import {
@@ -24,6 +24,7 @@ export interface IDataSchemaProps {
     schemaData: DataSchemaData[];
     dataSchemaMap: SchemaDataById;
     allAttributes?: DataSchemaDataWithManifest[];
+    manifestId?: string;
 }
 
 enum ColumnName {
@@ -211,6 +212,25 @@ function getTabName(id: string, dataSchemaMap: SchemaDataById) {
     return ATTRIBUTE_OVERRIDES[attribute] || attribute;
 }
 
+function getInitialManifestIds(props: IDataSchemaProps) {
+    const knowIdsMap = _(props.schemaData)
+        .map((d) => d.id)
+        .keyBy((id) => id.toLowerCase())
+        .value();
+    const key = props.manifestId
+        ? `bts:${props.manifestId.toLowerCase()}`
+        : undefined;
+    const schemaId = key ? knowIdsMap[key] : undefined;
+
+    return schemaId ? [schemaId] : [];
+}
+
+function getInitialManifestId(props: IDataSchemaProps) {
+    const initialIds = getInitialManifestIds(props);
+
+    return _.isEmpty(initialIds) ? MANIFEST_TAB_ID : initialIds[0];
+}
+
 const DataSchemaTable: React.FunctionComponent<{
     schemaData: DataSchemaData[];
     dataSchemaMap?: { [id: string]: DataSchemaData };
@@ -259,8 +279,21 @@ const DataSchemaTable: React.FunctionComponent<{
 };
 
 const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
-    const [activeTab, setActiveTab] = useState(MANIFEST_TAB_ID);
-    const [openManifestTabs, setOpenManifestTabs] = useState<string[]>([]);
+    const [activeTab, setActiveTab] = useState(getInitialManifestId(props));
+    const [openManifestTabs, setOpenManifestTabs] = useState<string[]>(
+        getInitialManifestIds(props)
+    );
+
+    const componentRef = useRef<null | HTMLDivElement>(null);
+    useEffect(() => {
+        // scroll to this component if the initially active tab is not the default one
+        if (
+            componentRef.current &&
+            getInitialManifestId(props) != MANIFEST_TAB_ID
+        ) {
+            componentRef.current.scrollIntoView();
+        }
+    }, []);
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -283,7 +316,7 @@ const DataSchema: React.FunctionComponent<IDataSchemaProps> = (props) => {
     };
 
     return (
-        <div>
+        <div ref={componentRef}>
             <ul className="nav nav-tabs">
                 <li className="nav-item">
                     <a

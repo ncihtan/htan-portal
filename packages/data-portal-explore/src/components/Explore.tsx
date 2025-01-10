@@ -53,7 +53,7 @@ export interface IExploreState {
     filters: { [key: string]: string[] };
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     atlases: Atlas[];
-    publications: PublicationManifest[];
+    publicationsByUid: { [uid: string]: PublicationManifest };
     atlasData?: any;
 }
 
@@ -84,7 +84,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             files: [],
             filters: {},
             atlases: [],
-            publications: [],
+            publicationsByUid: {},
             schemaDataById: {},
         };
 
@@ -162,7 +162,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 this.setState({
                     files: fillInEntities(data),
                     atlases: data.atlases,
-                    publications: _.values(data.publicationManifestByUid),
+                    publicationsByUid: data.publicationManifestByUid,
                 });
             });
 
@@ -369,7 +369,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={this.props.getAtlasMetaData}
-                        publications={this.state.publications}
+                        publicationsByUid={this.state.publicationsByUid}
                         genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
                     />
                 </div>
