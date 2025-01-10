@@ -1397,6 +1397,11 @@
             "component": "ImagingLevel2",
             "synapseId": "syn52202009",
             "numItems": 28
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn62525529",
+            "numItems": 16
         }
     ],
     "HTA3": [
@@ -1484,11 +1489,6 @@
             "component": "ImagingLevel2",
             "synapseId": "syn52965394",
             "numItems": 2
-        },
-        {
-            "component": "MolecularTest",
-            "synapseId": "syn54993956",
-            "numItems": 61
         },
         {
             "component": "ImagingLevel2",
@@ -2393,7 +2393,7 @@
         },
         {
             "component": "ImagingLevel2",
-            "synapseId": "syn63942276",
+            "synapseId": "syn64042856",
             "numItems": 18
         }
     ],

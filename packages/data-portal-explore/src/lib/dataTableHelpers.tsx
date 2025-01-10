@@ -8,7 +8,13 @@ import {
     SchemaDataById,
     SchemaDataId,
 } from '@htan/data-portal-schema';
-import { Atlas, Entity, ExpandableText } from '@htan/data-portal-commons';
+import {
+    Atlas,
+    Entity,
+    ExpandableText,
+    PublicationIcon,
+    PublicationManifest,
+} from '@htan/data-portal-commons';
 
 export function generateColumnsForDataSchema<T>(
     schemaDataIds: SchemaDataId[],
@@ -90,6 +96,29 @@ export function getAtlasColumn(atlases: Atlas[]) {
         selector: (sample: Entity) => atlasMap[sample.atlasid].htan_name,
         wrap: true,
         sortable: true,
+    };
+}
+
+export function getPublicationColumn(publicationsByUid?: {
+    [uid: string]: PublicationManifest;
+}) {
+    return {
+        name: 'Publications',
+        selector: 'publicationIds',
+        wrap: true,
+        sortable: true,
+        searchable: false,
+        omit: !publicationsByUid,
+        cell: (entity: Entity) =>
+            entity.publicationIds?.map((uid) =>
+                publicationsByUid ? (
+                    <PublicationIcon
+                        publicationManifest={publicationsByUid[uid]}
+                    />
+                ) : (
+                    `${uid} `
+                )
+            ),
     };
 }
 

@@ -15,13 +15,25 @@ module.exports = withMDX({
             },
             {
                 source: '/publications/htapp_mbc_klughammer_2024',
-                destination: '/publications/hta1_2024_pdf_johanna-klughammer',
+                destination:
+                    '/publications/hta1_2024_nature-medicine_johanna-klughammer',
                 permanent: false,
             },
             {
                 source: '/publications/hta8_crc_moorman_2024',
                 destination: '/publications/hta8_2024_nature_a-r-moorman',
                 permanent: false,
+            },
+            // phase 1 centers
+            ...[...Array(12).keys()].map((i) => ({
+                source: `/hta${i + 1}`,
+                destination: `/center/hta${i + 1}`,
+                permanent: true,
+            })),
+            {
+                source: `/htan-dcc`,
+                destination: `/center/htan-dcc`,
+                permanent: true,
             },
         ];
     },

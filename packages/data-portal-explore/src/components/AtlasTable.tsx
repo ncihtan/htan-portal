@@ -18,8 +18,8 @@ import {
     AtlasDescription,
     AtlasMetaData,
     Entity,
-    getCiteFromPublicationManifest,
-    getPublicationUid,
+    isManuscriptInReview,
+    PublicationIcon,
     PublicationManifest,
 } from '@htan/data-portal-commons';
 import { ExploreTab } from '../lib/types';
@@ -166,7 +166,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
 
     getPublicationManifests = (atlas: Atlas) => {
         return this.props.publications.filter(
-            (p) => p.atlasid === atlas.htan_id
+            (p) => !isManuscriptInReview(p) && p.atlasid === atlas.htan_id
         );
     };
 
@@ -269,26 +269,9 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                     if (atlasTableData.publicationManifests.length > 0) {
                         return atlasTableData.publicationManifests.map(
                             (publicationManifest) => (
-                                <Tooltip
-                                    overlay={getCiteFromPublicationManifest(
-                                        publicationManifest
-                                    )}
-                                    key={getPublicationUid(publicationManifest)}
-                                >
-                                    <a
-                                        href={`//${
-                                            window.location.host
-                                        }/publications/${getPublicationUid(
-                                            publicationManifest
-                                        )}`}
-                                        key={getPublicationUid(
-                                            publicationManifest
-                                        )}
-                                        style={{ paddingRight: 3 }}
-                                    >
-                                        <FontAwesomeIcon icon={faBook} />
-                                    </a>
-                                </Tooltip>
+                                <PublicationIcon
+                                    publicationManifest={publicationManifest}
+                                />
                             )
                         );
                     } else {

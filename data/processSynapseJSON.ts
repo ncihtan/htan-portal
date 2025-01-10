@@ -174,18 +174,24 @@ function getPublicationsAsSynapseRecordsByAtlasId(
     publicationData: SynapsePublication[]
 ): { [htan_id: string]: SynapseRecords } {
     const publicationsById: { [htan_id: string]: SynapseRecords } = {};
+    // make sure we have all the possible keys sorted
+    const keySet = _(publicationData)
+        .flatMap((publication) => _.keys(publication))
+        .uniq()
+        .value()
+        .sort();
 
     publicationData.forEach((publication) => {
         const centerId = publication['HTAN Center ID'];
 
         publicationsById[centerId] = publicationsById[centerId] || {
             data_schema: 'bts:PublicationManifest',
-            column_order: _.keys(publication),
+            column_order: keySet,
             record_list: [],
         };
 
         publicationsById[centerId].record_list.push({
-            values: _.values(publication),
+            values: keySet.map((key) => (publication as any)[key] || ''),
         });
     });
 
@@ -368,7 +374,6 @@ function getReleaseSynapseIds(
 
 function addDownloadSourcesInfo(
     file: BaseSerializableEntity,
-    dbgapSynapseSet: Set<string>,
     dbgapImgSynapseSet: Set<string>
 ) {
     if (
@@ -379,8 +384,13 @@ function addDownloadSourcesInfo(
     ) {
         // BulkRNA, BulkWES, ScRNA, ScATAC, HI-C, BulkMethylation, 10xVisiumSpatialTranscriptomics-RNA-seq Levels 1 & 2
         // as specified in released.entities table (CDS_Release) column
+        // TODO: bai files are actually not on CDS, but we might want to remove
+        // them from the portal listing entirely so assume they are there
         file.isRawSequencing = true;
-        if (file.synapseId && dbgapSynapseSet.has(file.synapseId)) {
+        if (
+            (file.synapseId && file.viewers?.cds?.drs_uri) ||
+            file.Filename.endsWith('bai')
+        ) {
             file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
@@ -390,13 +400,10 @@ function addDownloadSourcesInfo(
         if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
             // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
-            if (
-                file.level === 'Level 2' &&
-                file.Component.startsWith('Imaging')
-            ) {
+            if (file.viewers?.cds?.drs_uri) {
                 file.downloadSource = DownloadSourceCategory.cds;
             } else {
-                file.downloadSource = DownloadSourceCategory.dbgap;
+                file.downloadSource = DownloadSourceCategory.comingSoon;
             }
         } else if (
             file.Component === 'OtherAssay' &&
@@ -487,7 +494,7 @@ function processSynapseJSON(
         .mapValues((p) => new Set(getPublicationAssociatedParentDataFileIDs(p)))
         .value();
 
-    // add publication id
+    // add publication ids
     flatData.forEach((f) => {
         _.forEach(
             publicationParentDataFileIdsByUid,
@@ -605,7 +612,19 @@ function processSynapseJSON(
         ancestryByParticipantID
     );
 
-    const dbgapSynapseSet = new Set<string>(getDbgapSynapseIds(entitiesById));
+    // add publication ids for biospecimens
+    addBiopsecimenPublicationIds(files, filesById, biospecimenByBiospecimenID);
+
+    // add publication ids for participants
+    addParticipantPublicationIds(
+        biospecimenByBiospecimenID,
+        diagnosisByParticipantID
+    );
+    addParticipantPublicationIds(
+        biospecimenByBiospecimenID,
+        demographicsByParticipantID
+    );
+
     const dbgapImgSynapseSet = new Set<string>(
         getDbgapImgSynapseIds(entitiesById)
     );
@@ -633,10 +652,10 @@ function processSynapseJSON(
             parentData?.therapy || []
         ).map((d) => d.ParticipantID);
 
-        addDownloadSourcesInfo(file, dbgapSynapseSet, dbgapImgSynapseSet);
+        addViewers(file);
+        addDownloadSourcesInfo(file, dbgapImgSynapseSet);
         addReleaseInfo(file, entitiesById);
         addImageChannelMetadata(file, entitiesById);
-        addViewers(file);
         return file as SerializableEntity;
     });
     //  .filter((f): f is SerializableEntity => !!f); // file should be defined (typescript doesnt understand (f=>f)
@@ -724,6 +743,71 @@ function addPrimaryParents(
 ) {
     files.forEach((f) => {
         findAndAddPrimaryParents(f, filesByFileId);
+    });
+}
+
+function addParticipantPublicationIds(
+    biospecimenByBiospecimenID: {
+        [biospecimenID: string]: BaseSerializableEntity;
+    },
+    casesByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
+    }
+) {
+    // for each biospecimen find related participants and add publication ids
+    _.forEach(biospecimenByBiospecimenID, (biospecimen) => {
+        const participant = getParticipantCaseData(
+            biospecimen,
+            biospecimenByBiospecimenID,
+            casesByParticipantID
+        );
+
+        if (participant && !_.isEmpty(biospecimen.publicationIds)) {
+            participant.publicationIds = participant.publicationIds || [];
+            participant.publicationIds.push(...biospecimen.publicationIds!);
+        }
+    });
+
+    // remove duplicate publication ids if any
+    _.forEach(casesByParticipantID, (participant) => {
+        if (!_.isEmpty(participant.publicationIds)) {
+            participant.publicationIds = _.uniq(participant.publicationIds);
+        }
+    });
+}
+
+function addBiopsecimenPublicationIds(
+    files: BaseSerializableEntity[],
+    filesByHTANId: { [DataFileID: string]: BaseSerializableEntity },
+    biospecimenByBiospecimenID: {
+        [biospecimenID: string]: BaseSerializableEntity;
+    }
+) {
+    // for each file find related biospecimens and add publication ids
+    files.forEach((file) => {
+        const primaryParents =
+            file.primaryParents && file.primaryParents.length
+                ? file.primaryParents
+                : [file.DataFileID];
+        const biospecimens = getUniqueParentBiospecimens(
+            primaryParents,
+            filesByHTANId,
+            biospecimenByBiospecimenID
+        );
+
+        if (!_.isEmpty(file.publicationIds)) {
+            biospecimens.forEach((biospecimen) => {
+                biospecimen.publicationIds = biospecimen.publicationIds || [];
+                biospecimen.publicationIds.push(...file.publicationIds!);
+            });
+        }
+    });
+
+    // remove duplicate publication ids if any
+    _.forEach(biospecimenByBiospecimenID, (biospecimen) => {
+        if (!_.isEmpty(biospecimen.publicationIds)) {
+            biospecimen.publicationIds = _.uniq(biospecimen.publicationIds);
+        }
     });
 }
 
@@ -859,6 +943,23 @@ function getParentBiospecimens(
     );
 }
 
+function getUniqueParentBiospecimens(
+    primaryParents: string[],
+    filesByHTANId: { [DataFileID: string]: BaseSerializableEntity },
+    biospecimenByBiospecimenID: {
+        [biospecimenID: string]: BaseSerializableEntity;
+    }
+) {
+    return _(primaryParents)
+        .map((p) =>
+            getParentBiospecimens(filesByHTANId[p], biospecimenByBiospecimenID)
+        )
+        .flatten()
+        .compact()
+        .uniqBy((b) => b.BiospecimenID)
+        .value();
+}
+
 function getSampleAndPatientData(
     file: BaseSerializableEntity,
     filesByHTANId: { [DataFileID: string]: BaseSerializableEntity },
@@ -893,14 +994,11 @@ function getSampleAndPatientData(
         }
     }
 
-    const biospecimen = _(primaryParents)
-        .map((p) =>
-            getParentBiospecimens(filesByHTANId[p], biospecimenByBiospecimenID)
-        )
-        .flatten()
-        .compact()
-        .uniqBy((b) => b.BiospecimenID)
-        .value();
+    const biospecimen = getUniqueParentBiospecimens(
+        primaryParents,
+        filesByHTANId,
+        biospecimenByBiospecimenID
+    );
 
     const diagnosis = _.uniqBy(
         getCaseData(
@@ -932,6 +1030,44 @@ function getSampleAndPatientData(
     return { biospecimen, diagnosis, demographics, therapy };
 }
 
+function getParticipantCaseData(
+    entity: BaseSerializableEntity,
+    biospecimenByBiospecimenID: {
+        [biospecimenID: string]: BaseSerializableEntity;
+    },
+    casesByParticipantID: {
+        [participantID: string]: BaseSerializableEntity;
+    }
+) {
+    // parentID can be both participant or biospecimen, so keep
+    // going up the tree until participant is found.
+    let parentID = entity.ParentID;
+    const alreadyProcessed = new Set();
+
+    while (parentID in biospecimenByBiospecimenID) {
+        // this is to prevent infinite loop due to possible circular references
+        if (alreadyProcessed.has(parentID)) {
+            break;
+        } else {
+            alreadyProcessed.add(parentID);
+        }
+
+        const parentBioSpecimen = biospecimenByBiospecimenID[parentID];
+        if (parentBioSpecimen.ParentID) {
+            parentID = parentBioSpecimen.ParentID;
+        }
+    }
+
+    if (!(parentID in casesByParticipantID)) {
+        // console.error(
+        //     `${s.BiospecimenID} does not have a parentID (${parentID}) with diagnosis/demographics information`
+        // );
+        return undefined;
+    } else {
+        return casesByParticipantID[parentID] as Entity;
+    }
+}
+
 function getCaseData(
     biospecimen: BaseSerializableEntity[],
     biospecimenByBiospecimenID: {
@@ -942,35 +1078,13 @@ function getCaseData(
     }
 ) {
     return biospecimen
-        .map((s) => {
-            // parentID can be both participant or biospecimen, so keep
-            // going up the tree until participant is found.
-            let parentID = s.ParentID;
-            const alreadyProcessed = new Set();
-
-            while (parentID in biospecimenByBiospecimenID) {
-                // this is to prevent infinite loop due to possible circular references
-                if (alreadyProcessed.has(parentID)) {
-                    break;
-                } else {
-                    alreadyProcessed.add(parentID);
-                }
-
-                const parentBioSpecimen = biospecimenByBiospecimenID[parentID];
-                if (parentBioSpecimen.ParentID) {
-                    parentID = parentBioSpecimen.ParentID;
-                }
-            }
-
-            if (!(parentID in casesByParticipantID)) {
-                // console.error(
-                //     `${s.BiospecimenID} does not have a parentID (${parentID}) with diagnosis/demographics information`
-                // );
-                return undefined;
-            } else {
-                return casesByParticipantID[parentID] as Entity;
-            }
-        })
+        .map((s) =>
+            getParticipantCaseData(
+                s,
+                biospecimenByBiospecimenID,
+                casesByParticipantID
+            )
+        )
         .filter((f) => !!f) as BaseSerializableEntity[];
 }
 

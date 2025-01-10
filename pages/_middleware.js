@@ -7,7 +7,8 @@ const Middleware = (req) => {
     if (
         req.nextUrl.pathname.startsWith('/HTA') &&
         !req.nextUrl.pathname.endsWith('.jpeg') &&
-        !req.nextUrl.pathname.endsWith('.png')
+        !req.nextUrl.pathname.endsWith('.png') &&
+        !req.nextUrl.pathname.endsWith('.webp')
     ) {
         return NextResponse.redirect(
             new URL(req.nextUrl.origin + req.nextUrl.pathname.toLowerCase())

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { GetServerSidePropsContext } from 'next';
 import { NextRouter } from 'next/router';
 
 import {
@@ -44,7 +45,7 @@ export async function fetchData(): Promise<LoadDataResult> {
     const processedSynURL =
         process.env.NODE_ENV === 'development'
             ? '/processed_syn_data.json'
-            : `${getCloudBaseUrl()}/processed_syn_data_20241105_1945.json`;
+            : `${getCloudBaseUrl()}/processed_syn_data_20250103_1351.json`;
     return fetchSynData(processedSynURL);
 }
 
@@ -178,4 +179,10 @@ export function isReleaseQCEnabled() {
     return (
         urlParams.has('rel') || urlParams.has('release') || urlParams.has('qc')
     );
+}
+
+export function getFirstIdFromContext(
+    context: GetServerSidePropsContext
+): string | null {
+    return context.query?.id?.[0] || null;
 }

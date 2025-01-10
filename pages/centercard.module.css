@@ -1,0 +1,61 @@
+.cardContainer {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    align-items: left;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.card {
+    background-color: #6a4a87; /* Purple background */
+    color: white;
+    width: 240px;
+    height: 450px;
+    text-align: left;
+    margin: 0px 15px 15px 0px;
+    box-sizing: border-box;
+    border: 3px solid black;
+}
+
+.cardTitle {
+    height: 125px;
+}
+
+.card img {
+    width: 234px;
+    height: 200px;
+    object-fit: scale-down;
+    background-color: white;
+    padding: 20px;
+}
+
+.text {
+    padding: 10px 20px 20px 20px;
+}
+
+.name {
+    line-height: 0.8;
+}
+
+.card h2 {
+    font-size: 14px;
+    margin: 0;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: white;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased; /* Smoother text for WebKit browsers */
+    -moz-osx-font-smoothing: grayscale; /* Smoother text for Firefox on macOS */
+    letter-spacing: 0.5px; /* Adjust letter spacing */
+}
+
+.card hr {
+    border: none;
+    border-top: 2px solid white;
+    margin: 10px 0;
+}
+
+.card p {
+    margin: 0;
+    line-height: 1.2;
+}

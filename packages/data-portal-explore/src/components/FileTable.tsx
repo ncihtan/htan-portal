@@ -15,7 +15,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { truncatedTableCell } from '../lib/dataTableHelpers';
+import {
+    getPublicationColumn,
+    truncatedTableCell,
+} from '../lib/dataTableHelpers';
 import SimpleScrollPane from './SimpleScrollPane';
 import { makeListColumn } from '../lib/fileTableHelpers';
 import LevelSelect from './LevelSelect';
@@ -41,6 +44,7 @@ import {
     Entity,
     FileAttributeMap,
     getViewerValues,
+    PublicationManifest,
     ViewDetailsModal,
 } from '@htan/data-portal-commons';
 
@@ -125,11 +129,11 @@ function generateTerraManifestFile(files: Entity[]): string | undefined {
     }
 }
 
-
 const FilenameWithAccessIcon: React.FunctionComponent<{
     file: Entity;
 }> = ({ file }) => {
-    const isControlledAccess = file.downloadSource === DownloadSourceCategory.dbgap;
+    const isControlledAccess =
+        file.downloadSource === DownloadSourceCategory.dbgap;
     const iconColor = isControlledAccess ? '#FF8C00' : '#00796B'; // Amber for controlled, Dark Teal for open
 
     return (
@@ -168,14 +172,16 @@ const dbgapInstructions = (files: Entity[]) => {
         <div>
             <CDSFileList files={files} />
             <p>
-                Your selection includes controlled-access Level 1 and/or Level 2 sequencing data (🔒). 
-                To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
+                Your selection includes controlled-access Level 1 and/or Level 2
+                sequencing data (🔒). To download Level 1/2 sequencing data, you
+                first need to have been granted access to the{' '}
                 <a
                     href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
                     target="_blank"
                 >
                     HTAN dbGaP Study, Accession: phs002371
-                </a>.
+                </a>
+                .
             </p>
         </div>
     );
@@ -195,24 +201,29 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
     return (
         <div>
             <p>
-                <strong>Load Files into SevenBridges CGC:</strong>{' '}
-                You can import these files into the{' '}
+                <strong>Load Files into SevenBridges CGC:</strong> You can
+                import these files into the{' '}
                 <a href="https://docs.cancergenomicscloud.org" target="_blank">
                     SevenBridges Cancer Genomics Cloud (SB-CGC)
                 </a>{' '}
-                by downloading the CDS manifest file below and following the instructions{' '}
+                by downloading the CDS manifest file below and following the
+                instructions{' '}
                 <a
                     href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
                     target="_blank"
                 >
                     here
-                </a>.
+                </a>
+                .
             </p>
             <button
                 className="btn btn-light"
-                onClick={() => fileDownload(manifestFile, CDS_MANIFEST_FILENAME)}
+                onClick={() =>
+                    fileDownload(manifestFile, CDS_MANIFEST_FILENAME)
+                }
             >
-                <FontAwesomeIcon icon={faDownload} /> Download <code>cds_manifest.csv</code>
+                <FontAwesomeIcon icon={faDownload} /> Download{' '}
+                <code>cds_manifest.csv</code>
             </button>
         </div>
     );
@@ -236,23 +247,32 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                 >
                     NCI Data Commons Framework Services API Key
                 </a>{' '}
-                is stored in <code>~/.gen3/credentials.json</code>.{' '}
-                (Note that Python 3.12 is not supported by the Gen3 SDK at this time.)
+                is stored in <code>~/.gen3/credentials.json</code>. (Note that
+                Python 3.12 is not supported by the Gen3 SDK at this time.)
             </p>
             <p>
                 <button
                     className="btn btn-light"
-                    onClick={() => fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)}
+                    onClick={() =>
+                        fileDownload(gen3manifestFile, GEN3_MANIFEST_FILENAME)
+                    }
                 >
-                    <FontAwesomeIcon icon={faDownload} /> Download <code>gen3_manifest.json</code>
+                    <FontAwesomeIcon icon={faDownload} /> Download{' '}
+                    <code>gen3_manifest.json</code>
                 </button>
             </p>
             <p>
                 Run the following <code>gen3</code> command.
                 <pre className="pre-scrollable">
-                    <pre style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '5px' }}>
+                    <pre
+                        style={{
+                            backgroundColor: '#f8f9fa',
+                            padding: '10px',
+                            borderRadius: '5px',
+                        }}
+                    >
                         <code>
-                        {`gen3 \\
+                            {`gen3 \\
     --endpoint=nci-crdc.datacommons.io \\
     drs-pull \\
     manifest gen3_manifest.json \\
@@ -291,7 +311,9 @@ const terra3ManifestInstructions = (terra3manifestFile: string | undefined) => {
     );
 };
 
-const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }) => {
+const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
+    files,
+}) => {
     const dbgapFiles = files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.dbgap
     );
@@ -306,33 +328,41 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
     return (
         <div>
             <hr />
-            <h4><strong>Files Available through NCI CRDC Cancer Data Service (CDS)</strong></h4>
+            <h4>
+                <strong>
+                    Files Available through NCI CRDC Cancer Data Service (CDS)
+                </strong>
+            </h4>
 
             {/* Render dbGaP instructions if dbGaP files exist */}
             {dbgapFiles.length > 0 && (
                 <div>
                     <p>
-                        <FontAwesomeIcon color="#FF8C00" icon={faLock}/>{' '}
-                        Your selection includes controlled-access Level 1 and/or Level 2 sequencing data.{' '}
-                        To download Level 1/2 sequencing data, you first need to have been granted access to the{' '}
+                        <FontAwesomeIcon color="#FF8C00" icon={faLock} /> Your
+                        selection includes controlled-access Level 1 and/or
+                        Level 2 sequencing data. To download Level 1/2
+                        sequencing data, you first need to have been granted
+                        access to the{' '}
                         <a
                             href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002371"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             HTAN dbGaP Study, Accession: phs002371
-                        </a>.
+                        </a>
+                        .
                     </p>
                     <CDSFileList files={dbgapFiles} />
                 </div>
             )}
-            
+
             {/* Render open access instructions if open access files exist */}
             {openAccessFiles.length > 0 && (
                 <div>
                     <p>
-                        <FontAwesomeIcon color="#00796B" icon={faLockOpen}/>{' '}
-                        The files listed below are available without additional access requirements.
+                        <FontAwesomeIcon color="#00796B" icon={faLockOpen} />{' '}
+                        The files listed below are available without additional
+                        access requirements.
                     </p>
                     <CDSFileList files={openAccessFiles} />
                 </div>
@@ -346,7 +376,6 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({ files }
     );
 };
 
-
 const NotDownloadableInstructions: React.FunctionComponent<{
     files: Entity[];
 }> = (props) => {
@@ -356,15 +385,18 @@ const NotDownloadableInstructions: React.FunctionComponent<{
 
     return props.files.length > 0 ? (
         <div>
-            <h4><strong>Files coming soon</strong></h4>
+            <h4>
+                <strong>Files coming soon</strong>
+            </h4>
             <p>Your selection includes data that is not downloadable yet:</p>
-            
+
             {/* List the files */}
             <pre className="pre-scrollable">
                 <code>
                     {props.files.map((f) => (
                         <div key={f.Filename}>
-                            <FontAwesomeIcon icon={faHourglassStart} /> {getFileBase(f.Filename)}
+                            <FontAwesomeIcon icon={faHourglassStart} />{' '}
+                            {getFileBase(f.Filename)}
                         </div>
                     ))}
                 </code>
@@ -373,11 +405,14 @@ const NotDownloadableInstructions: React.FunctionComponent<{
             {/* Additional message if files have preview viewers */}
             {hasAnyImageViewersForNonDownloadableFiles ? (
                 <p>
-                    These files are in preview. You can view metadata or explore them in one of the viewers in the rightmost column while they are prepared for public access.
+                    These files are in preview. You can view metadata or explore
+                    them in one of the viewers in the rightmost column while
+                    they are prepared for public access.
                 </p>
             ) : (
                 <p>
-                    These files are in preview. Metadata is available for review while the files are prepared for public access.
+                    These files are in preview. Metadata is available for review
+                    while the files are prepared for public access.
                 </p>
             )}
         </div>
@@ -431,15 +466,15 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
     return (
         <>
             <hr></hr>
-            <h4><strong>Files available in Synapse</strong></h4>
+            <h4>
+                <strong>Files available in Synapse</strong>
+            </h4>
             <p>
                 The files listed below are available through{' '}
-                <a
-                    href="https://synapse.org"
-                    target="_blank"
-                >
+                <a href="https://synapse.org" target="_blank">
                     Synapse
-                </a>.
+                </a>
+                .
             </p>
             <SynapseFileList files={props.files} />
             <p>
@@ -474,7 +509,8 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
                 >
                     Synapse documentation
                 </a>
-                . Files can also be downloaded manually through the Synapse web interface by clicking on the file name.
+                . Files can also be downloaded manually through the Synapse web
+                interface by clicking on the file name.
             </p>
         </>
     );
@@ -498,13 +534,15 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     const availabilityMessage = () => {
         const messages = [];
         if (cdsFiles.length > 0) {
-            messages.push("Available through NCI CRDC Cancer Data Service (CDS)");
+            messages.push(
+                'Available through NCI CRDC Cancer Data Service (CDS)'
+            );
         }
         if (synapseFiles.length > 0) {
-            messages.push("Available through Synapse");
+            messages.push('Available through Synapse');
         }
         if (notDownloadableFiles.length > 0) {
-            messages.push("Coming soon (not downloadable yet)");
+            messages.push('Coming soon (not downloadable yet)');
         }
         return messages;
     };
@@ -523,8 +561,11 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                         <li key={index}>{message}</li>
                     ))}
                 </ul>
-                <p>Follow the instructions below on how to access data from each of these sources.{' '}
-                Further details are avaliable in the <a href='docs.humantumoratlas.org'>HTAN Manual</a>.</p>
+                <p>
+                    Follow the instructions below on how to access data from
+                    each of these sources. Further details are avaliable in the{' '}
+                    <a href="docs.humantumoratlas.org">HTAN Manual</a>.
+                </p>
 
                 {/* CDS Section */}
                 {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
@@ -628,6 +669,7 @@ interface IFileTableProps {
         [attrName: string]: { [attrValue: string]: Entity[] };
     };
     patientCount: number;
+    publicationsByUid?: { [uid: string]: PublicationManifest };
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
 }
 
@@ -710,6 +752,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                 wrap: true,
                 sortable: true,
             },
+            getPublicationColumn(this.props.publicationsByUid),
             {
                 name: 'Biospecimen',
                 selector: (file: Entity) => {
@@ -1056,6 +1099,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             viewers: true,
             imageChannelMetadata: true,
             therapy: true,
+            publicationIds: true,
 
             //others to exclude
             Component: true,

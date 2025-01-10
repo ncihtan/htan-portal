@@ -1,10 +1,10 @@
 ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
-  40kB  sourcemap-register.js
-8478kB  index.js
-1423kB  index.js.map
-8518kB  [59306ms] - ncc 0.28.6
+   40kB  sourcemap-register.js
+11086kB  index.js
+ 1428kB  index.js.map
+11126kB  [33746ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'ScRNA-seqLevel3',
   Filename: 'single_cell_RNAseq_level_3_ped_glioma/HTAN_pHGG_161_New_Reg1_snRNA/barcodes.tsv.gz',

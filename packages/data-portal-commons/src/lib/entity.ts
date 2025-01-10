@@ -146,11 +146,17 @@ export interface AtlasMetaData {
     }[];
 }
 
+export enum PublicationContentType {
+    Published = 'published manuscript',
+    Preprint = 'preprint',
+    Prepublication = 'prepublication site for reviewers',
+}
+
 export interface PublicationManifest {
     PublicationAssociatedParentDataFileID: string;
     GrantID: string;
     CenterID: string;
-    PublicationContentType: string;
+    PublicationContentType: PublicationContentType;
     DOI: string;
     Title: string;
     Authors: string;

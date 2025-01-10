@@ -10,7 +10,8 @@
   },
   "scripts": {
     "dev": "yarn run next dev",
-    "updateData": "yarn run findAndReplace && yarn run processSynapseJSON && yarn run gzip",
+    "updateMappings": "bash data/fetch_autominerva_mappings.sh > data/htan-imaging-assets.json",
+    "updateData": "yarn run findAndReplace && yarn updateMappings && yarn run processSynapseJSON && yarn run gzip",
     "gzip": "yarn run gzipData && yarn run gzipMetadata",
     "gzipData": "gzip < public/syn_data.json > public/syn_data.json.gz && gzip < public/processed_syn_data.json > public/processed_syn_data.json.gz",
     "gzipMetadata": "rm -rf data/metadata_gzip/ && cp -r data/metadata data/metadata_gzip && find data/metadata_gzip -type f -exec gzip {} \\; -exec mv {}.gz {} \\;",
@@ -26,9 +27,9 @@
     "prettierPreCommit"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@mdx-js/loader": "^1.6.22",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
