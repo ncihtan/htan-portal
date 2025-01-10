@@ -27,7 +27,7 @@ import DataAvailabilityTable from 'packages/data-portal-explore/src/components/D
 interface IPublicationTabsProps {
     router: NextRouter;
     abstract: string;
-    synapseAtlas?: Atlas;
+    synapseAtlases: Atlas[];
     biospecimens: Entity[];
     cases: Entity[];
     supportingLinks: GeneralLink[];
@@ -476,11 +476,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             Show all cases from filtered files
                         </label>*/}
                             <CaseTable
-                                synapseAtlases={
-                                    props.synapseAtlas
-                                        ? [props.synapseAtlas]
-                                        : []
-                                }
+                                synapseAtlases={props.synapseAtlases}
                                 cases={props.cases}
                                 schemaDataById={props.schemaDataById}
                                 excludedColumns={[
@@ -509,11 +505,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             Show all biospecimens from filtered files
                         </label>*/}
                             <BiospecimenTable
-                                synapseAtlases={
-                                    props.synapseAtlas
-                                        ? [props.synapseAtlas]
-                                        : []
-                                }
+                                synapseAtlases={props.synapseAtlases}
                                 samples={props.biospecimens}
                                 schemaDataById={props.schemaDataById}
                                 genericAttributeMap={props.genericAttributeMap}

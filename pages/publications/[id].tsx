@@ -293,9 +293,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                         <PublicationTabs
                             router={router}
                             abstract={publicationManifest.PublicationAbstract}
-                            synapseAtlas={data.atlases.find(
-                                (a) => a.htan_id === publicationManifest.atlasid
-                            )}
+                            synapseAtlases={data.atlases}
                             biospecimens={biospecimensData}
                             cases={casesData}
                             assays={assayData}
