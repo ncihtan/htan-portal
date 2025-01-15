@@ -1,3 +1,4 @@
+import { GetStaticProps } from 'next';
 import { NextRouter, withRouter } from 'next/router';
 import React from 'react';
 import { Explore, ExploreTab } from '@htan/data-portal-explore';
@@ -5,6 +6,10 @@ import {
     parseSelectedFiltersFromUrl,
     SelectedFilter,
 } from '@htan/data-portal-filter';
+import {
+    DataSchemaData,
+    fetchAndProcessSchemaData,
+} from '@htan/data-portal-schema';
 
 import {
     ExploreURLQuery,
@@ -20,6 +25,7 @@ import PageWrapper from '../components/PageWrapper';
 
 interface IExplorePageProps {
     router: NextRouter;
+    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
 }
 
 const ExplorePage = (props: IExplorePageProps) => {
@@ -50,10 +56,19 @@ const ExplorePage = (props: IExplorePageProps) => {
                     getTab={getExploreTab}
                     fetchData={fetchData}
                     cloudBaseUrl={getCloudBaseUrl()}
+                    schemaDataById={props.schemaDataById}
                 />
             </PageWrapper>
         </>
     );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+    return {
+        props: {
+            schemaDataById: await fetchAndProcessSchemaData(),
+        },
+    };
 };
 
 export default withRouter(ExplorePage);

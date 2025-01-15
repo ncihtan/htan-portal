@@ -36,10 +36,7 @@ import {
     PublicationSummary,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
-import {
-    DataSchemaData,
-    fetchAndProcessSchemaData,
-} from '@htan/data-portal-schema';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 import { ExploreSummary } from './ExploreSummary';
 import { ExploreTabs } from './ExploreTabs';
@@ -52,11 +49,9 @@ import styles from './explore.module.scss';
 export interface IExploreState {
     files: Entity[];
     filters: { [key: string]: string[] };
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     atlases: Atlas[];
     publicationManifestByUid: { [uid: string]: PublicationManifest };
     publicationSummaryByPubMedID?: { [pubMedId: string]: PublicationSummary };
-    atlasData?: any;
 }
 
 export interface IExploreProps {
@@ -68,6 +63,7 @@ export interface IExploreProps {
     getTab?: () => ExploreTab;
     fetchData?: () => Promise<LoadDataResult>;
     cloudBaseUrl?: string;
+    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
 }
 
 @observer
@@ -88,7 +84,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             atlases: [],
             publicationManifestByUid: {},
             publicationSummaryByPubMedID: {},
-            schemaDataById: {},
         };
 
         //@ts-ignore
@@ -169,13 +164,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                     publicationSummaryByPubMedID:
                         data.publicationSummaryByPubMedID,
                 });
-            });
-
-            const schemaLoadingPromise = fromPromise(
-                fetchAndProcessSchemaData()
-            );
-            schemaLoadingPromise.then((schemaDataById) => {
-                this.setState({ schemaDataById });
             });
         });
     }
@@ -361,7 +349,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                     <ExploreTabs
                         setTab={this.props.setTab}
                         getTab={this.props.getTab}
-                        schemaDataById={this.state.schemaDataById}
+                        schemaDataById={this.props.schemaDataById}
                         files={this.state.files}
                         filteredFiles={this.filteredFiles}
                         filteredSynapseAtlases={this.filteredAtlases}
