@@ -58,6 +58,27 @@ interface IFileDownloadModalProps {
 }
 
 const DETAILS_COLUMN_NAME = 'Metadata';
+const DRS_URI_HOSTNAME = 'drs://nci-crdc.datacommons.io/';
+
+function getDrsUri(
+    uri?: string,
+    removeHostname: boolean = false,
+    prependHostname: boolean = false,
+    hostname = DRS_URI_HOSTNAME
+) {
+    let drsUri = uri;
+
+    if (removeHostname || prependHostname) {
+        // remove hostname in both cases to prevent duplicate hostname
+        drsUri = drsUri?.replace(hostname, '');
+    }
+
+    if (prependHostname && drsUri) {
+        drsUri = `${hostname}${drsUri}`;
+    }
+
+    return drsUri;
+}
 
 function generateCdsManifestFile(files: Entity[]): string | undefined {
     const columns = [
@@ -74,7 +95,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
     const data = _(files)
         .filter((f) => !!f.viewers?.cds)
         .map((f) => [
-            f.viewers?.cds?.drs_uri,
+            getDrsUri(f.viewers?.cds?.drs_uri, false, true),
             f.viewers?.cds?.name,
             f.atlas_name,
             _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join(' '),
@@ -98,10 +119,7 @@ function generateGen3ManifestFile(files: Entity[]): string | undefined {
     const data = _(files)
         .filter((f) => !!f.viewers?.cds)
         .map((f) => ({
-            object_id: f.viewers?.cds?.drs_uri?.replace(
-                'drs://nci-crdc.datacommons.io/',
-                ''
-            ),
+            object_id: getDrsUri(f.viewers?.cds?.drs_uri, true),
         }))
         .value();
 
