@@ -14,6 +14,7 @@ export interface SerializableEntity extends BaseSerializableEntity {
     diagnosisIds: ParticipantID[];
     demographicsIds: ParticipantID[];
     therapyIds: ParticipantID[];
+    caseIds: ParticipantID[];
 }
 
 export type DataFileID = string;
