@@ -203,7 +203,24 @@ export function getPublicationTitle(
     publicationSummary?: PublicationSummary,
     publicationManifest?: PublicationManifest
 ): string | undefined {
-    return publicationSummary?.title || publicationManifest?.Title;
+    const title = publicationSummary?.title || publicationManifest?.Title;
+    // remove trailing dot (if any)
+    return title?.trim().replace(/\.$/, '');
+}
+
+export function getPublicationDate(
+    publicationSummary?: PublicationSummary,
+    publicationManifest?: PublicationManifest
+) {
+    let date: string | undefined;
+
+    if (publicationSummary) {
+        date = publicationSummary.pubdate;
+    } else if (publicationManifest) {
+        date = publicationManifest.YearofPublication?.toString();
+    }
+
+    return date;
 }
 
 export function getPublicationSupportingLinks(

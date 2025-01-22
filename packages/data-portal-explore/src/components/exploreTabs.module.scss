@@ -1,7 +1,17 @@
-// data table column alignment workaround
+// atlas table numerical column header alignment workaround
 .atlasTab {
+    :global(#column-num_assays),
     :global(#column-num_cases),
     :global(#column-num_biospecimens) {
+        margin-left: auto !important;
+    }
+}
+
+// publication table numerical column header alignment workaround
+.publicationTab {
+    :global(div[id*='filteredParticipants']),
+    :global(div[id*='filteredBiospecimen']),
+    :global(div[id*='filteredFiles']) {
         margin-left: auto !important;
     }
 }
