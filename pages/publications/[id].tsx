@@ -15,12 +15,11 @@ import {
     commonStyles,
     Entity,
     fillInEntities,
-    filterFiles,
     getAllPublicationPagePaths,
     getFilteredCases,
+    getFilteredSamples,
     getPublicationAuthors,
     getPublicationDOI,
-    getPublicationFilters,
     getPublicationJournal,
     getPublicationPubMedID,
     getPublicationSupportingLinks,
@@ -34,49 +33,12 @@ import {
 } from '@htan/data-portal-commons';
 
 import {
-    ISelectedFiltersByAttrName,
-    SelectedFilter,
-} from '@htan/data-portal-filter';
-import {
     fetchAndProcessSchemaData,
     SchemaDataById,
 } from '@htan/data-portal-schema';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 
 import publicationIds from './static_page_ids.json';
-
-const filterByAttrName = (filters: SelectedFilter[]) => {
-    return _.chain(filters)
-        .groupBy((item) => item.group)
-        .mapValues((filters: SelectedFilter[]) => {
-            return new Set(filters.map((f) => f.value));
-        })
-        .value();
-};
-
-const getFilteredFiles = (
-    filterSelectionsByAttrName: ISelectedFiltersByAttrName,
-    files: LoadDataResult
-) => {
-    return filterFiles(filterSelectionsByAttrName, fillInEntities(files));
-};
-
-const getBiospecimensData = (
-    selectedFiltersByAttrName: { [x: string]: Set<string> },
-    filteredFiles: Entity[]
-) => {
-    const samples = _.chain(filteredFiles)
-        .flatMapDeep((file) => file.biospecimen)
-        .uniqBy((f) => f.BiospecimenID)
-        .value();
-    const filteredCaseIds = _.keyBy(
-        getFilteredCases(filteredFiles, selectedFiltersByAttrName, false),
-        (c) => c.ParticipantID
-    );
-    return samples.filter((s) => {
-        return s.ParticipantID in filteredCaseIds;
-    });
-};
 
 interface PublicationPageProps {
     publicationUid: string;
@@ -113,28 +75,21 @@ const PublicationPage = (props: PublicationPageProps) => {
                 setPublicationSummary(publicationSummary);
 
                 if (publicationManifest) {
-                    const selectedFiltersByAttrName = filterByAttrName(
-                        getPublicationFilters(publicationManifest)
-                    );
-                    const filteredFiles = getFilteredFiles(
-                        selectedFiltersByAttrName,
-                        data
+                    const filteredFiles = fillInEntities(data).filter((f) =>
+                        f.publicationIds?.includes(props.publicationUid)
                     );
                     const groupedData = groupFilesByAttrNameAndValue(
                         filteredFiles
                     );
                     setAssayData(groupedData['assayName']);
-                    const biospecimensData = getBiospecimensData(
-                        selectedFiltersByAttrName,
-                        filteredFiles
-                    );
-                    setBiospecimensData(biospecimensData);
-                    const casesData = getFilteredCases(
+                    const casesData = getFilteredCases(filteredFiles, {}, true);
+                    setCasesData(casesData);
+                    const biospecimensData = getFilteredSamples(
                         filteredFiles,
-                        selectedFiltersByAttrName,
+                        casesData,
                         false
                     );
-                    setCasesData(casesData);
+                    setBiospecimensData(biospecimensData);
 
                     if (isReleaseQCEnabled()) {
                         const missingPublicationFiles = _.difference(
@@ -324,10 +279,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 export async function getStaticPaths() {
     return {
-        paths: getAllPublicationPagePaths(publicationIds), // indicates that no page needs be created at build time
+        paths: getAllPublicationPagePaths(publicationIds),
         fallback: false,
         // TODO disabling dynamic pages for now
-        // paths: [], // indicates that no page needs be created at build time
+        // paths: [], // indicates that no page needs to be created at build time
         // fallback: 'blocking', // page will wait for the HTML to be generated
     };
 }
