@@ -195,8 +195,10 @@ export function getPublicationJournal(
 ): string | undefined {
     return isManuscriptInReview(publicationManifest)
         ? 'TBD'
-        : _.upperFirst(publicationSummary?.fulljournalname?.toLowerCase()) ||
-              publicationManifest?.LocationofPublication;
+        : (
+              publicationSummary?.fulljournalname?.toLowerCase() ||
+              publicationManifest?.LocationofPublication
+          )?.replace(/\w+/g, _.capitalize);
 }
 
 export function getPublicationTitle(
