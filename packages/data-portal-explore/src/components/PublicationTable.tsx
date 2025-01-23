@@ -158,8 +158,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             selector: (manifest: PublicationManifest) =>
                 getPublicationJournal(getSummary(manifest), manifest),
             wrap: true,
-            sortable: true,
-            omit: true,
+            sortable: true
         },
         {
             name: 'DOI',
