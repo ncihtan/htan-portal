@@ -93,12 +93,32 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
     const getSummary = (manifest: PublicationManifest) =>
         props.publicationSummaryByPubMedID?.[getPublicationPubMedID(manifest)];
 
-    const getDateTime = (manifest: PublicationManifest) => {
+    const getDate = (manifest: PublicationManifest) => {
         const summary = getSummary(manifest);
-        const date = summary
-            ? new Date(getPublicationDate(summary, manifest) || 0)
-            : new Date(0);
-        return date.getTime();
+        const date = getPublicationDate(summary, manifest);
+
+        // Assuming that the string is in the form of YYYY MMM DD
+        const parts = date?.split(/\s/);
+
+        let day = '1';
+        let month = '';
+        let year = '';
+
+        if (parts) {
+            day = parts.length > 2 ? parts[2] : day;
+            month = parts.length > 1 ? parts[1] : month;
+            year = parts[0];
+        }
+
+        if (year && month) {
+            return new Date(`${day} ${month} ${year}`);
+        } else {
+            return undefined;
+        }
+    };
+
+    const getDateTime = (manifest: PublicationManifest) => {
+        return getDate(manifest)?.getTime() || 0;
     };
 
     const columns = [
@@ -164,14 +184,13 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             name: 'Publication Date',
             selector: (manifest: PublicationManifest) => getDateTime(manifest),
             cell: (manifest: PublicationManifest) => {
-                const summary = getSummary(manifest);
-                const date = getPublicationDate(summary, manifest);
+                const date = getDate(manifest);
 
-                if (summary && date) {
+                if (date) {
                     const formatted = Intl.DateTimeFormat('en-US', {
                         year: 'numeric',
                         month: 'short',
-                    }).formatToParts(new Date(date));
+                    }).formatToParts(date);
                     const year = formatted.find((s) => s.type === 'year')
                         ?.value;
                     const month = formatted.find((s) => s.type === 'month')
