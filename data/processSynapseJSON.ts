@@ -624,6 +624,7 @@ function processSynapseJSON(
         biospecimenByBiospecimenID,
         demographicsByParticipantID
     );
+    fillInParticipantIds(biospecimenByBiospecimenID);
 
     const dbgapImgSynapseSet = new Set<string>(
         getDbgapImgSynapseIds(entitiesById)
@@ -658,16 +659,6 @@ function processSynapseJSON(
         addImageChannelMetadata(file, entitiesById);
         return file as SerializableEntity;
     });
-    //  .filter((f): f is SerializableEntity => !!f); // file should be defined (typescript doesnt understand (f=>f)
-    //.filter((f) => f.diagnosisIds.length > 0); // files must have a diagnosis
-
-    // TODO clean up when done
-    // remove files that can't be downloaded unless it's imaging
-    // .filter(
-    //     (f) =>
-    //         f.downloadSource !== DownloadSourceCategory.comingSoon ||
-    //         f.ImagingAssayType
-    // );
 
     // count cases and biospecimens for each atlas
     const filesByAtlas = _.groupBy(returnFiles, (f) => f.atlasid);
@@ -716,6 +707,19 @@ function processSynapseJSON(
         ) {
             file.assayName = 'NanoString GeoMX DSP';
         }
+    });
+
+    // set unique case ids
+    _.forEach(returnFiles, (file) => {
+        file.caseIds = _.uniq(
+            [
+                ...file.diagnosisIds.map((id) => diagnosisByParticipantID[id]),
+                ...file.demographicsIds.map(
+                    (id) => demographicsByParticipantID[id]
+                ),
+                ...file.therapyIds.map((id) => therapyByParticipantID[id]),
+            ].map((e) => e.ParticipantID)
+        );
     });
 
     return {
@@ -808,6 +812,20 @@ function addBiopsecimenPublicationIds(
         if (!_.isEmpty(biospecimen.publicationIds)) {
             biospecimen.publicationIds = _.uniq(biospecimen.publicationIds);
         }
+    });
+}
+
+function fillInParticipantIds(biospecimenByBiospecimenID: {
+    [biospecimenID: string]: BaseSerializableEntity;
+}) {
+    // give each biospecimen it's case id (i.e "diagnosis" HTANParticipantID)
+    // biospecimen have HTANParentID but that may or may not be it's case id because
+    // biospecimen can have other biospecimen as parents (one case at top)
+    _.forEach(biospecimenByBiospecimenID, (specimen) => {
+        const parentIdMatch = specimen.ParentID.match(/[^_]*_[^_]*/);
+        // we should always have a match
+        specimen.ParticipantID =
+            specimen.ParticipantID || (parentIdMatch ? parentIdMatch[0] : '');
     });
 }
 
