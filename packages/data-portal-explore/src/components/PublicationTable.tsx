@@ -158,7 +158,31 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             selector: (manifest: PublicationManifest) =>
                 getPublicationJournal(getSummary(manifest), manifest),
             wrap: true,
-            sortable: true
+            sortable: true,
+        },
+        {
+            name: 'Publication Date',
+            selector: (manifest: PublicationManifest) => getDateTime(manifest),
+            cell: (manifest: PublicationManifest) => {
+                const summary = getSummary(manifest);
+                const date = getPublicationDate(summary, manifest);
+
+                if (summary && date) {
+                    const formatted = Intl.DateTimeFormat('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                    }).formatToParts(new Date(date));
+                    const year = formatted.find((s) => s.type === 'year')
+                        ?.value;
+                    const month = formatted.find((s) => s.type === 'month')
+                        ?.value;
+                    return `${year} ${month}`;
+                } else {
+                    return '';
+                }
+            },
+            wrap: true,
+            sortable: true,
         },
         {
             name: 'DOI',
@@ -284,30 +308,6 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             wrap: true,
             sortable: true,
             omit: true,
-        },
-        {
-            name: 'Publication Date',
-            selector: (manifest: PublicationManifest) => getDateTime(manifest),
-            cell: (manifest: PublicationManifest) => {
-                const summary = getSummary(manifest);
-                const date = getPublicationDate(summary, manifest);
-
-                if (summary && date) {
-                    const formatted = Intl.DateTimeFormat('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                    }).formatToParts(new Date(date));
-                    const year = formatted.find((s) => s.type === 'year')
-                        ?.value;
-                    const month = formatted.find((s) => s.type === 'month')
-                        ?.value;
-                    return `${year} ${month}`;
-                } else {
-                    return '';
-                }
-            },
-            wrap: true,
-            sortable: true,
         },
     ];
 
