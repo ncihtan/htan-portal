@@ -199,7 +199,7 @@ function getPublicationsAsSynapseRecordsByAtlasId(
 }
 
 async function getEntitiesById() {
-    const rows = await csvToJson().fromFile('data/entities_v6_1.csv');
+    const rows = await csvToJson().fromFile('data/entities_v6_2.csv');
     return _.keyBy(rows, (row) => row.entityId);
 }
 
@@ -824,9 +824,16 @@ function findAndAddPrimaryParents(
     // otherwise, compute parents
     let primaryParents: DataFileID[] = [];
 
-    if (f.ParentDataFileID && !isLowestLevel(f)) {
-        // if there's a parent, traverse "upwards" to find primary parent
-        const parentIds = f.ParentDataFileID.split(/[,;]/).map((s) => s.trim());
+    let parentIds = f.ParentDataFileID
+        ? f.ParentDataFileID.split(/[,;]/).map((s) => s.trim())
+        : [];
+
+    // a file can be its own parent
+    // to avoid infinite recursive call we have to remove it
+    parentIds = parentIds.filter((parentId) => f.DataFileID !== parentId);
+
+    // if there's a parent, traverse "upwards" to find primary parent
+    if (!_.isEmpty(parentIds) && !isLowestLevel(f)) {
         const parentFiles = parentIds.reduce(
             (aggr: BaseSerializableEntity[], id: string) => {
                 const file = filesByFileId[id];
