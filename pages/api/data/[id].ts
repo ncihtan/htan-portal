@@ -14,7 +14,8 @@ let entities: Entity[] | undefined;
 
 function getFiles(): Entity[] {
     if (!entities) {
-        entities = fetchAndFillInEntities();
+        // entities = fetchAndFillInEntities();
+        entities = [];
     }
 
     return entities;
