@@ -1,6 +1,6 @@
 import { NextRouter, withRouter } from 'next/router';
 import React from 'react';
-import { Explore, ExploreTab } from '@htan/data-portal-explore';
+//import { ExploreTab } from '@htan/data-portal-explore';
 import {
     parseSelectedFiltersFromUrl,
     SelectedFilter,
@@ -14,9 +14,10 @@ import {
     setTab,
     updateSelectedFiltersInURL,
 } from '../lib/helpers';
-import getAtlasMetaData from '../lib/getAtlasMetaData';
+
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import PageWrapper from '../components/PageWrapper';
+import { ClientComponent } from './monkey';
 
 interface IExplorePageProps {
     router: NextRouter;
@@ -41,16 +42,7 @@ const ExplorePage = (props: IExplorePageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <Explore
-                    getAtlasMetaData={getAtlasMetaData}
-                    onFilterChange={onFilterChange}
-                    getSelectedFilters={getSelectedFilters}
-                    isReleaseQCEnabled={isReleaseQCEnabled}
-                    setTab={setExploreTab}
-                    getTab={getExploreTab}
-                    fetchData={fetchData}
-                    cloudBaseUrl={getCloudBaseUrl()}
-                />
+                <ClientComponent></ClientComponent>
             </PageWrapper>
         </>
     );

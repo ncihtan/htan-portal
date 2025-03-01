@@ -1,4 +1,6 @@
+'use client';
 import _ from 'lodash';
+import remoteData from 'mobxpromise';
 import {
     action,
     computed,
@@ -48,6 +50,7 @@ import { getDefaultSummaryData } from '../lib/helpers';
 import { ExploreTab } from '../lib/types';
 
 import styles from './explore.module.scss';
+import { doQuery, myQuery } from '../../../../lib/clickhouseStore.ts';
 
 export interface IExploreState {
     files: Entity[];
@@ -78,6 +81,12 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     @observable private showAllBiospecimens = false;
     @observable private showAllCases = false;
     @observable private _selectedFilters: SelectedFilter[] = [];
+
+    moo = new remoteData({
+        invoke: async () => {
+            return await doQuery(myQuery);
+        },
+    });
 
     constructor(props: any) {
         super(props);
@@ -312,16 +321,18 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     }
 
     render() {
-        if (
-            !this.dataLoadingPromise ||
-            this.dataLoadingPromise.state === 'pending'
-        ) {
-            return (
-                <div className={commonStyles.loadingIndicator}>
-                    <ScaleLoader />
-                </div>
-            );
-        }
+        // if (
+        //     !this.dataLoadingPromise ||
+        //     this.dataLoadingPromise.state === 'pending'
+        // ) {
+        //     return (
+        //         <div className={commonStyles.loadingIndicator}>
+        //             <ScaleLoader />
+        //         </div>
+        //     );
+        // }
+
+        console.log(this.moo.result);
 
         if (this.filteredFiles) {
             return (
@@ -358,50 +369,50 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         )}
                     />
 
-                    <ExploreTabs
-                        setTab={this.props.setTab}
-                        getTab={this.props.getTab}
-                        schemaDataById={this.state.schemaDataById}
-                        files={this.state.files}
-                        filteredFiles={this.filteredFiles}
-                        filteredSynapseAtlases={this.filteredAtlases}
-                        filteredSynapseAtlasesByNonAtlasFilters={
-                            this.filteredAtlasesByNonAtlasFilters
-                        }
-                        filteredSamples={this.filteredSamples}
-                        filteredCases={this.filteredCases}
-                        selectedSynapseAtlases={this.selectedAtlases}
-                        allSynapseAtlases={this.allAtlases}
-                        onSelectAtlas={this.onSelectAtlas}
-                        samples={this.samples}
-                        cases={this.cases}
-                        filteredCasesByNonAtlasFilters={
-                            this.filteredCasesByNonAtlasFilters
-                        }
-                        filteredSamplesByNonAtlasFilters={
-                            this.filteredSamplesByNonAtlasFilters
-                        }
-                        nonAtlasSelectedFiltersByAttrName={
-                            this.nonAtlasSelectedFiltersByAttrName
-                        }
-                        groupsByPropertyFiltered={this.groupsByPropertyFiltered}
-                        showAllBiospecimens={this.showAllBiospecimens}
-                        showAllCases={this.showAllCases}
-                        toggleShowAllBiospecimens={
-                            this.toggleShowAllBiospecimens
-                        }
-                        toggleShowAllCases={this.toggleShowAllCases}
-                        cloudBaseUrl={this.props.cloudBaseUrl}
-                        getAtlasMetaData={this.props.getAtlasMetaData}
-                        publicationManifestByUid={
-                            this.state.publicationManifestByUid
-                        }
-                        publicationSummaryByPubMedID={
-                            this.state.publicationSummaryByPubMedID
-                        }
-                        filteredPublications={this.filteredPublications}
-                        genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
-                    />
+                    {/*<ExploreTabs*/}
+                    {/*    setTab={this.props.setTab}*/}
+                    {/*    getTab={this.props.getTab}*/}
+                    {/*    schemaDataById={this.state.schemaDataById}*/}
+                    {/*    files={this.state.files}*/}
+                    {/*    filteredFiles={this.filteredFiles}*/}
+                    {/*    filteredSynapseAtlases={this.filteredAtlases}*/}
+                    {/*    filteredSynapseAtlasesByNonAtlasFilters={*/}
+                    {/*        this.filteredAtlasesByNonAtlasFilters*/}
+                    {/*    }*/}
+                    {/*    filteredSamples={this.filteredSamples}*/}
+                    {/*    filteredCases={this.filteredCases}*/}
+                    {/*    selectedSynapseAtlases={this.selectedAtlases}*/}
+                    {/*    allSynapseAtlases={this.allAtlases}*/}
+                    {/*    onSelectAtlas={this.onSelectAtlas}*/}
+                    {/*    samples={this.samples}*/}
+                    {/*    cases={this.cases}*/}
+                    {/*    filteredCasesByNonAtlasFilters={*/}
+                    {/*        this.filteredCasesByNonAtlasFilters*/}
+                    {/*    }*/}
+                    {/*    filteredSamplesByNonAtlasFilters={*/}
+                    {/*        this.filteredSamplesByNonAtlasFilters*/}
+                    {/*    }*/}
+                    {/*    nonAtlasSelectedFiltersByAttrName={*/}
+                    {/*        this.nonAtlasSelectedFiltersByAttrName*/}
+                    {/*    }*/}
+                    {/*    groupsByPropertyFiltered={this.groupsByPropertyFiltered}*/}
+                    {/*    showAllBiospecimens={this.showAllBiospecimens}*/}
+                    {/*    showAllCases={this.showAllCases}*/}
+                    {/*    toggleShowAllBiospecimens={*/}
+                    {/*        this.toggleShowAllBiospecimens*/}
+                    {/*    }*/}
+                    {/*    toggleShowAllCases={this.toggleShowAllCases}*/}
+                    {/*    cloudBaseUrl={this.props.cloudBaseUrl}*/}
+                    {/*    getAtlasMetaData={this.props.getAtlasMetaData}*/}
+                    {/*    publicationManifestByUid={*/}
+                    {/*        this.state.publicationManifestByUid*/}
+                    {/*    }*/}
+                    {/*    publicationSummaryByPubMedID={*/}
+                    {/*        this.state.publicationSummaryByPubMedID*/}
+                    {/*    }*/}
+                    {/*    filteredPublications={this.filteredPublications}*/}
+                    {/*    genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal*/}
+                    {/*/>*/}
                 </div>
             );
         }
