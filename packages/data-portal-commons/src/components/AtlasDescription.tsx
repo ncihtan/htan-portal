@@ -9,11 +9,7 @@ export const AtlasDescription: React.FunctionComponent<{
         props.atlasMeta.htan_id?.toLowerCase()
     ) ? (
         <span>
-            <a
-                href={`//${
-                    window.location.host
-                }/center/${props.atlasMeta.htan_id.toLowerCase()}`}
-            >
+            <a href={`/center/${props.atlasMeta.htan_id.toLowerCase()}`}>
                 {props.atlasName || props.atlasMeta?.title?.rendered}
             </a>
         </span>

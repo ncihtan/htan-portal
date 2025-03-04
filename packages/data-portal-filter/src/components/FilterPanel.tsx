@@ -21,7 +21,9 @@ export const FilterPanelMenu: FunctionComponent<{
                 closeMenu();
             };
 
-            $(window).on('click', clickHandler);
+            setTimeout(() => {
+                $(window).on('click', clickHandler);
+            }, 100);
 
             if (panelRef && panelRef.current) {
                 const rect = panelRef!.current.getBoundingClientRect();
@@ -75,7 +77,9 @@ const FilterPanel: FunctionComponent<{ placeholder?: string }> = observer(
         const panel = buttonRef.current && (
             <FilterPanelMenu
                 panelStyle={panelStyle}
-                closeMenu={action(() => (localStore.showPanel = false))}
+                closeMenu={action(() => {
+                    localStore.showPanel = false;
+                })}
             >
                 {children}
             </FilterPanelMenu>

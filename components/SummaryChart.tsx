@@ -527,7 +527,6 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
         );
     }
 
-    @computed
     private get tooltip() {
         if (!this.tooltipDatum) {
             return null;

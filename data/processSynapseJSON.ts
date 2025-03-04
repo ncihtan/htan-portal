@@ -35,7 +35,7 @@ import {
 } from '../packages/data-portal-commons/src/lib/synapse';
 import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
 import {
-    getPublicationAssociatedParentDataFileIDs,
+    getPublicationAssociatedParentDataFileIDs, getPublicationPubMedID,
     getPublicationUid,
 } from '../packages/data-portal-commons/src/lib/publicationHelpers';
 import {
@@ -110,6 +110,25 @@ async function writeProcessedFile() {
             [participantId: string]: BaseSerializableEntity;
         }
     );
+
+    // we need to fetch publication summaries after we process the json,
+    // because we need to know pubmed ids to query the external API
+
+    for (const [k, val] of Object.entries(processed.publicationManifestByUid)) {
+        const pubmedid = getPublicationPubMedID(val);
+
+        if (pubmedid !== '') {
+            const summaryResp = sums[parseInt(pubmedid)];
+            val.publicationId = getPublicationUid(val);
+            if (summaryResp) {
+                Object.assign(val, summaryResp);
+            } else {
+                val.jesus = true;
+            }
+        } else {
+        }
+    }
+
 
     fs.writeFileSync(
         'public/processed_syn_data.json',
@@ -494,6 +513,10 @@ function processSynapseJSON(
         (obj) => obj.Component === 'PublicationManifest'
     ) as unknown) as PublicationManifest[];
 
+    publications.forEach((p) => {
+        p.publicationId = getPublicationUid(p);
+    });
+
     const publicationParentDataFileIdsByUid = _(publications)
         .keyBy(getPublicationUid)
         .mapValues((p) => new Set(getPublicationAssociatedParentDataFileIDs(p)))
@@ -812,6 +835,8 @@ function addBiopsecimenPublicationIds(
     _.forEach(biospecimenByBiospecimenID, (biospecimen) => {
         if (!_.isEmpty(biospecimen.publicationIds)) {
             biospecimen.publicationIds = _.uniq(biospecimen.publicationIds);
+        } else {
+            biospecimen.publicationIds = [];
         }
     });
 }
