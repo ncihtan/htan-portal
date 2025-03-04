@@ -234,7 +234,6 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
             <p></p>
             <p>
                 <strong>Download Files using the Gen3 Client:</strong>{' '}
-                You can download these files using the{' '}
                 <>
                     <ol>
                         <li>
@@ -259,8 +258,6 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                         </li>
                     </ol>
                 </>.
-            </p>
-            <p>
                 <button
                     className="btn btn-light"
                     onClick={() =>
