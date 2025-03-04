@@ -181,7 +181,12 @@ export interface PublicationManifest {
     EutilsAuthors?: string;
     EutilsDOI?: string;
 
+    elocationid: string;
+    fulljournalname: string;
+    title: string;
+    AtlasMeta: Record<any, any>;
     // Derived or attached in frontend
+    publicationId: string;
     atlasid: string;
     atlas_name: string;
     assayName?: string;

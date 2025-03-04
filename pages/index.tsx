@@ -2,18 +2,13 @@ import React from 'react';
 import fs from 'fs';
 import process from 'process';
 import path from 'path';
+import _ from 'lodash';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import { GetStaticProps } from 'next';
 import PageWrapper from '../components/PageWrapper';
-import { computeDashboardData } from '../lib/helpers';
-import {
-    computeEntityReportByAssay,
-    computeEntityReportByOrgan,
-    fillInEntities,
-    LoadDataResult,
-} from '@htan/data-portal-commons';
+import { doQuery } from '../lib/clickhouseStore';
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -27,35 +22,99 @@ const Home = (data: IHomePropsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    // const processedSynapseData = await zlib
-    //     .gunzipSync(
-    //         await fs.readFileSync(
-    //             path.join(process.cwd(), 'public/processed_syn_data.json.gz')
-    //         )
-    //     )
-    //     .toString();
-    //
-    //
+    const assayCounts = await doQuery(`
+        SELECT
+            assayName,
+            atlas_name,
+            COUNT(distinct demographicsIds) AS count
+        FROM
+            files
+                ARRAY JOIN
+            demographicsIds
+        GROUP BY
+            assayName, atlas_name
+    `);
 
-    const processedSynapseData = fs.readFileSync(
-        path.join(process.cwd(), 'public/processed_syn_data.json'),
-        'utf8'
-    );
+    const organCounts = await doQuery(`
+        SELECT organType, atlas_name, count(DISTINCT ParticipantID) as count FROM (
+            SELECT * FROM diagnosis2
+                ARRAY JOIN organType
+            ) 
+        GROUP BY organType, atlas_name
+    `);
 
-    const files = fillInEntities(
-        (JSON.parse(processedSynapseData) as any) as LoadDataResult
-    );
+    const entityCounts = await doQuery(`
+        SELECT (SELECT count(*) FROM atlases) as atlasCount,
+        (SELECT count(*) FROM cases) as caseCount,
+        (SELECT count(distinct BiospecimenID) FROM specimen WHERE BiospecimenID IN (
+            SELECT DISTINCT bId
+            FROM files f
+                   ARRAY JOIN biospecimenIds AS bId
+        )) as sampleCount,
+        (SELECT count(organType) FROM (
+                                         SELECT organType FROM files ARRAY JOIN organType
+                                         GROUP BY organType
+                                     )) as organCount
+    `);
 
-    const blurb = `
-    HTAN is a National Cancer Institute (NCI)-funded Cancer MoonshotSM initiative to construct 3-dimensional atlases of the dynamic cellular, morphological, and molecular features of human cancers as they evolve from precancerous lesions to advanced disease. (Cell April 2020)
-    `;
+    const entitySummary = [
+        { description: 'Atlases', text: entityCounts[0].atlasCount },
+        { description: 'Organs', text: entityCounts[0].organCount },
+        { description: 'Cases', text: entityCounts[0].caseCount },
+        { description: 'Biospecimen', text: entityCounts[0].sampleCount },
+    ];
+
+    const organSum = _(organCounts)
+        .groupBy('organType')
+        .map((val, key) => {
+            const distributionByCenter = _(val)
+                .groupBy('atlas_name')
+                .map((vv, center) => {
+                    return {
+                        center,
+                        attributeFilterValues: [key],
+                        totalCount: _.sumBy(vv, (v) => parseInt(v.count)),
+                    };
+                })
+                .value();
+            return {
+                attributeName: 'organType',
+                attributeValue: key,
+                attributeFilterValues: [key],
+                distributionByCenter,
+                totalCount: _.sumBy(val, (v) => parseInt(v.count)),
+            };
+        })
+        .value();
+
+    const assaySum = _(assayCounts)
+        .groupBy('assayName')
+        .map((val, key) => {
+            const distributionByCenter = _(val)
+                .groupBy('atlas_name')
+                .map((vv, center) => {
+                    return {
+                        center,
+                        attributeFilterValues: [key],
+                        totalCount: _.sumBy(vv, (v) => parseInt(v.count)),
+                    };
+                })
+                .value();
+            return {
+                attributeName: 'assayName',
+                attributeValue: key,
+                attributeFilterValues: [key],
+                distributionByCenter,
+                totalCount: _.sumBy(val, (v) => parseInt(v.count)),
+            };
+        })
+        .value();
 
     return {
         props: {
-            hero_blurb: blurb,
-            synapseCounts: computeDashboardData(files),
-            organSummary: computeEntityReportByOrgan(files),
-            assaySummary: computeEntityReportByAssay(files),
+            synapseCounts: entitySummary,
+            organSummary: organSum,
+            assaySummary: assaySum,
         },
     };
 };

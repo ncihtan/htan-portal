@@ -15,10 +15,10 @@ export const FilterControls = observer(
 
         return (
             <div className={styles.filterControls}>
-                <FilterSearch
-                    selectOptions={selectOptions}
-                    setFilter={props.setFilter}
-                />
+                {/*<FilterSearch*/}
+                {/*    selectOptions={selectOptions}*/}
+                {/*    setFilter={props.setFilter}*/}
+                {/*/>*/}
                 {props.children}
             </div>
         );
