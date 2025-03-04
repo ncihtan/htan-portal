@@ -104,7 +104,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         this.showAllCases = !this.showAllCases;
     }
 
-    get selectedFilters(): SelectedFilter[] {
+    @computed get selectedFilters(): SelectedFilter[] {
         return this.props.getSelectedFilters
             ? this.props.getSelectedFilters()
             : this._selectedFilters;

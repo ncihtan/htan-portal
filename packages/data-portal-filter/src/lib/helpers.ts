@@ -305,7 +305,6 @@ export function getOptions<Attribute extends string, T>(
             opt.group = attrName;
             opt.isSelected = isOptionSelected(opt); // this call has to happen after setting `group`
         });
-        console.log(ret);
         return _.sortBy(ret, (o) => o.label);
     };
 }

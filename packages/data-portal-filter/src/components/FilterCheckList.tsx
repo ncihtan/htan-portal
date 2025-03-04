@@ -14,7 +14,6 @@ interface IFilterCheckList {
 
 export const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(
     function (props) {
-        debugger;
         return (
             <div>
                 {props.options.map((option) => {

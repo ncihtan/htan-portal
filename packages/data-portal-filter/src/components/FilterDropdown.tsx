@@ -27,8 +27,6 @@ export const FilterDropdown = <Attribute extends string, T>(
         props.placeholder ||
         props.attributeMap[props.attributes[0]].displayName;
 
-    debugger;
-
     return (
         <div>
             <div style={{ width }}>

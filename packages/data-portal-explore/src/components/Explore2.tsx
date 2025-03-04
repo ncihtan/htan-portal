@@ -7,6 +7,7 @@ import {
     makeObservable,
     observable,
     runInAction,
+    toJS,
 } from 'mobx';
 import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
@@ -79,18 +80,6 @@ export interface IExploreProps {
     cloudBaseUrl?: string;
 }
 
-const moo = new remoteData({
-    invoke: async () => {
-        const bla = await doQuery(myQuery);
-        return bla;
-    },
-});
-
-const Tester: React.FunctionComponent = observer(function () {
-    console.log(moo.status);
-    return <div>{moo.status}</div>;
-});
-
 @observer
 export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     @observable.ref private dataLoadingPromise:
@@ -118,6 +107,42 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         if (typeof window !== 'undefined') (window as any).me = this;
     }
 
+    unfilteredOptions = new remoteData({
+        invoke: async () => {
+            return doQuery(myQuery);
+        },
+    });
+
+    files = new remoteData({
+        invoke: async () => {
+            console.log('here i am');
+
+            let filterString = '';
+
+            const selectedFilters = toJS(this.selectedFilters);
+
+            if (selectedFilters.length > 0) {
+                const clauses = _(selectedFilters)
+                    .groupBy('group')
+                    .map((val, k) => {
+                        const values = val.map((v) => `'${v.value}'`).join(',');
+                        return `hasAny(${k},[${values}])`;
+                    })
+                    .value();
+
+                filterString = ' WHERE ' + clauses.join(' AND ');
+
+                console.log('clauses', clauses);
+            }
+
+            const q = 'SELECT * FROM files' + filterString;
+
+            console.log('', q);
+
+            return doQuery(q);
+        },
+    });
+
     @action.bound toggleShowAllBiospecimens() {
         this.showAllBiospecimens = !this.showAllBiospecimens;
     }
@@ -126,9 +151,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     }
 
     get selectedFilters(): SelectedFilter[] {
-        return this.props.getSelectedFilters
-            ? this.props.getSelectedFilters()
-            : this._selectedFilters;
+        return this._selectedFilters;
     }
 
     set selectedFilters(filters: SelectedFilter[]) {
@@ -147,7 +170,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         return groupFilesByAttrNameAndValue(this.filteredFiles);
     }
 
-    @computed
     get selectedFiltersByAttrName(): ISelectedFiltersByAttrName {
         return getSelectedFiltersByAttrName(this.selectedFilters);
     }
@@ -173,32 +195,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         if (this.props.onFilterChange) {
             this.props.onFilterChange(newFilters);
         }
-    }
-
-    componentDidMount(): void {
-        // runInAction(() => {
-        //     this.dataLoadingPromise = fromPromise(
-        //         this.props.fetchData
-        //             ? this.props.fetchData()
-        //             : fetchDefaultSynData()
-        //     );
-        //     this.dataLoadingPromise.then((data) => {
-        //         this.setState({
-        //             files: fillInEntities(data),
-        //             atlases: data.atlases,
-        //             publicationManifestByUid: data.publicationManifestByUid,
-        //             publicationSummaryByPubMedID:
-        //                 data.publicationSummaryByPubMedID,
-        //         });
-        //     });
-        //
-        //     const schemaLoadingPromise = fromPromise(
-        //         fetchAndProcessSchemaData()
-        //     );
-        //     schemaLoadingPromise.then((schemaDataById) => {
-        //         this.setState({ schemaDataById });
-        //     });
-        // });
     }
 
     @computed
@@ -334,27 +330,19 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
     @computed
     get groupsByProperty() {
-        const groupsByProperty = _(moo.result).groupBy('type').value();
+        const groupsByProperty = _(this.unfilteredOptions.result)
+            .groupBy('type')
+            .value();
         return groupsByProperty;
     }
 
     render() {
-        // if (
-        //     !this.dataLoadingPromise ||
-        //     this.dataLoadingPromise.state === 'pending'
-        // ) {
-        //     return (
-        //         <div className={commonStyles.loadingIndicator}>
-        //             <ScaleLoader />
-        //         </div>
-        //     );
-        // }
-        console.log('stateus', moo.status);
+        //console.log("goo", toJS(this.selectedFilters));
 
-        return <Tester />;
+        console.log(this.files.result);
 
-        if (!moo.isComplete) {
-            return <div>fdsafdsa</div>;
+        if (!this.unfilteredOptions.isComplete) {
+            return <div>Loading</div>;
         } else {
             const filterControlsProps: IGenericFilterControlProps<any, any> = {
                 countHeader: 'Files',
@@ -369,7 +357,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                     AttributeNames.TreatmentType,
                 ],
                 entities: [],
-                setFilter: () => {},
+                setFilter: this.setFilter,
                 selectedFiltersByGroupName: {},
                 selectedFilters: [],
                 groupsByProperty: this.groupsByProperty,
@@ -408,26 +396,36 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
             };
 
             return (
-                <FilterControls {...filterControlsProps}>
-                    <FilterDropdown
-                        {...dropdownProps}
-                        attributes={[AttributeNames.TissueorOrganofOrigin]}
-                        className={styles.filterCheckboxListContainer}
-                        width={120}
-                    />
+                <>
+                    <FilterControls {...filterControlsProps}>
+                        <FilterDropdown
+                            {...dropdownProps}
+                            attributes={[AttributeNames.TissueorOrganofOrigin]}
+                            className={styles.filterCheckboxListContainer}
+                            width={120}
+                        />
 
-                    <FilterDropdown
-                        {...dropdownProps}
-                        placeholder="Demographics"
-                        attributes={[
-                            AttributeNames.Gender,
-                            AttributeNames.Race,
-                            AttributeNames.Ethnicity,
-                        ]}
-                        className={styles.filterCheckboxListContainer}
-                        width={164}
+                        <FilterDropdown
+                            {...dropdownProps}
+                            placeholder="Demographics"
+                            attributes={[
+                                AttributeNames.Gender,
+                                AttributeNames.Race,
+                                AttributeNames.Ethnicity,
+                            ]}
+                            className={styles.filterCheckboxListContainer}
+                            width={164}
+                        />
+                    </FilterControls>
+
+                    <Filter
+                        setFilter={this.setFilter}
+                        selectedFiltersByGroupName={toJS(
+                            this.selectedFiltersByAttrName
+                        )}
+                        getFilterDisplayName={getFileFilterDisplayName}
                     />
-                </FilterControls>
+                </>
             );
         }
     }
