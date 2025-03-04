@@ -18,10 +18,11 @@ export const FilterPanelMenu: FunctionComponent<{
     useEffect(
         action(() => {
             const clickHandler = function () {
+                console.log('cheese');
                 closeMenu();
             };
 
-            $(window).on('click', clickHandler);
+            //$(window).on('click', clickHandler);
 
             if (panelRef && panelRef.current) {
                 const rect = panelRef!.current.getBoundingClientRect();
@@ -72,10 +73,15 @@ const FilterPanel: FunctionComponent<{ placeholder?: string }> = observer(
             panelStyle.left = pos.x + window.scrollX;
         }
 
+        console.log('moo', localStore.showPanel);
+
         const panel = buttonRef.current && (
             <FilterPanelMenu
                 panelStyle={panelStyle}
-                closeMenu={action(() => (localStore.showPanel = false))}
+                closeMenu={action(() => {
+                    console.log('closing');
+                    localStore.showPanel = false;
+                })}
             >
                 {children}
             </FilterPanelMenu>
