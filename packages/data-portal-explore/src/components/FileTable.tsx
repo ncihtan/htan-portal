@@ -252,10 +252,10 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                             Configure a Gen3 profile by running:
                             <pre className="pre-scrollable">
                                 <code>
-                                    {'gen3-client configure \\
+                                    {`gen3-client configure \\
     --profile=htan \\
     --cred=~/.gen3/credentials.json \\
-    --apiendpoint=https://nci-crdc.datacommons.io'}
+    --apiendpoint=https://nci-crdc.datacommons.io`}
                                 </code>
                             </pre>
                         </li>
