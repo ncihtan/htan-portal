@@ -155,6 +155,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         SchemaDataId.FamilyHistory,
         SchemaDataId.FollowUp,
         SchemaDataId.MolecularTest,
+        SchemaDataId.ParticipantVitalStatusUpdate,
         SchemaDataId.Therapy,
         SchemaDataId.ClinicalDataTier2,
         SchemaDataId.AcuteLymphoblasticLeukemiaTier3,
