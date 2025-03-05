@@ -5,6 +5,10 @@ const client = createClient({
     username: 'default',
     password: 'moo',
     request_timeout: 600000,
+    compression: {
+        response: true,
+        request: false,
+    },
 });
 
 export const myQuery = `

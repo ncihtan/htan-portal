@@ -113,7 +113,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         // }
 
         const [activeTab, setTab] = useState<ExploreTab>(
-            props.getTab?.() || ExploreTab.ATLAS
+            props.getTab?.() || ExploreTab.FILE
         );
         const [logScale, setLogScale] = useState(false);
 
@@ -138,54 +138,54 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
             <>
                 <div className="subnav">
                     <ul className="nav nav-tabs">
-                        <li className="nav-item">
-                            <a
-                                onClick={() => setTab(ExploreTab.ATLAS)}
-                                className={`nav-link ${
-                                    activeTab === ExploreTab.ATLAS
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Atlases
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() => setTab(ExploreTab.PUBLICATION)}
-                                className={`nav-link ${
-                                    activeTab === ExploreTab.PUBLICATION
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Publications
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() => setTab(ExploreTab.CASES)}
-                                className={`nav-link ${
-                                    activeTab === ExploreTab.CASES
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Cases
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() => setTab(ExploreTab.BIOSPECIMEN)}
-                                className={`nav-link ${
-                                    activeTab === ExploreTab.BIOSPECIMEN
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Biospecimens
-                            </a>
-                        </li>
+                        {/*<li className="nav-item">*/}
+                        {/*    <a*/}
+                        {/*        onClick={() => setTab(ExploreTab.ATLAS)}*/}
+                        {/*        className={`nav-link ${*/}
+                        {/*            activeTab === ExploreTab.ATLAS*/}
+                        {/*                ? 'active'*/}
+                        {/*                : ''*/}
+                        {/*        }`}*/}
+                        {/*    >*/}
+                        {/*        Atlases*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
+                        {/*<li className="nav-item">*/}
+                        {/*    <a*/}
+                        {/*        onClick={() => setTab(ExploreTab.PUBLICATION)}*/}
+                        {/*        className={`nav-link ${*/}
+                        {/*            activeTab === ExploreTab.PUBLICATION*/}
+                        {/*                ? 'active'*/}
+                        {/*                : ''*/}
+                        {/*        }`}*/}
+                        {/*    >*/}
+                        {/*        Publications*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
+                        {/*<li className="nav-item">*/}
+                        {/*    <a*/}
+                        {/*        onClick={() => setTab(ExploreTab.CASES)}*/}
+                        {/*        className={`nav-link ${*/}
+                        {/*            activeTab === ExploreTab.CASES*/}
+                        {/*                ? 'active'*/}
+                        {/*                : ''*/}
+                        {/*        }`}*/}
+                        {/*    >*/}
+                        {/*        Cases*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
+                        {/*<li className="nav-item">*/}
+                        {/*    <a*/}
+                        {/*        onClick={() => setTab(ExploreTab.BIOSPECIMEN)}*/}
+                        {/*        className={`nav-link ${*/}
+                        {/*            activeTab === ExploreTab.BIOSPECIMEN*/}
+                        {/*                ? 'active'*/}
+                        {/*                : ''*/}
+                        {/*        }`}*/}
+                        {/*    >*/}
+                        {/*        Biospecimens*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
                         <li className="nav-item">
                             <a
                                 onClick={() => setTab(ExploreTab.FILE)}
@@ -198,19 +198,19 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 Files
                             </a>
                         </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() => setTab(ExploreTab.PLOTS)}
-                                className={`nav-link ${
-                                    activeTab === ExploreTab.PLOTS
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Plots{' '}
-                                <span style={{ color: 'orange' }}>Beta!</span>
-                            </a>
-                        </li>
+                        {/*<li className="nav-item">*/}
+                        {/*    <a*/}
+                        {/*        onClick={() => setTab(ExploreTab.PLOTS)}*/}
+                        {/*        className={`nav-link ${*/}
+                        {/*            activeTab === ExploreTab.PLOTS*/}
+                        {/*                ? 'active'*/}
+                        {/*                : ''*/}
+                        {/*        }`}*/}
+                        {/*    >*/}
+                        {/*        Plots{' '}*/}
+                        {/*        <span style={{ color: 'orange' }}>Beta!</span>*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
                     </ul>
                 </div>
 
@@ -231,29 +231,29 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     </div>
                 )}
 
-                {activeTab === ExploreTab.BIOSPECIMEN && (
-                    <div
-                        className={`tab-content biospecimen ${
-                            activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
-                        }`}
-                    >
-                        {/*<label className="show-all-checkbox">
-                            <input
-                                type="checkbox"
-                                checked={props.showAllBiospecimens}
-                                onClick={props.toggleShowAllBiospecimens}
-                            />
-                            Show all biospecimens from filtered files
-                        </label>*/}
-                        <BiospecimenTable
-                            synapseAtlases={props.filteredSynapseAtlases}
-                            samples={props.filteredSamples}
-                            schemaDataById={props.schemaDataById}
-                            genericAttributeMap={props.genericAttributeMap}
-                            publicationsByUid={props.publicationManifestByUid}
-                        />
-                    </div>
-                )}
+                {/*{activeTab === ExploreTab.BIOSPECIMEN && (*/}
+                {/*    <div*/}
+                {/*        className={`tab-content biospecimen ${*/}
+                {/*            activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''*/}
+                {/*        }`}*/}
+                {/*    >*/}
+                {/*        /!*<label className="show-all-checkbox">*/}
+                {/*            <input*/}
+                {/*                type="checkbox"*/}
+                {/*                checked={props.showAllBiospecimens}*/}
+                {/*                onClick={props.toggleShowAllBiospecimens}*/}
+                {/*            />*/}
+                {/*            Show all biospecimens from filtered files*/}
+                {/*        </label>*!/*/}
+                {/*        <BiospecimenTable*/}
+                {/*            synapseAtlases={props.filteredSynapseAtlases}*/}
+                {/*            samples={props.filteredSamples}*/}
+                {/*            schemaDataById={props.schemaDataById}*/}
+                {/*            genericAttributeMap={props.genericAttributeMap}*/}
+                {/*            publicationsByUid={props.publicationManifestByUid}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*)}*/}
 
                 {activeTab === ExploreTab.CASES && (
                     <div

@@ -58,6 +58,7 @@ import { ExploreTab } from '../lib/types';
 
 import styles from './explore.module.scss';
 import { doQuery, myQuery } from '../../../../lib/clickhouseStore.ts';
+import FileTable from './FileTable.tsx';
 
 export interface IExploreState {
     files: Entity[];
@@ -131,8 +132,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                     .value();
 
                 filterString = ' WHERE ' + clauses.join(' AND ');
-
-                console.log('clauses', clauses);
             }
 
             const q = 'SELECT * FROM files' + filterString;
@@ -197,12 +196,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         }
     }
 
-    @computed
     get filteredFiles() {
         return filterFiles(this.selectedFiltersByAttrName, this.state.files);
     }
 
-    @computed
     get filteredFilesByNonAtlasFilters() {
         return filterFiles(
             this.nonAtlasSelectedFiltersByAttrName,
@@ -210,12 +207,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         );
     }
 
-    @computed
     get samples() {
         return getFilteredSamples(this.state.files, this.cases, false);
     }
 
-    @computed
     get filteredSamples() {
         return getFilteredSamples(
             this.filteredFiles,
@@ -224,7 +219,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         );
     }
 
-    @computed
     get filteredSamplesByNonAtlasFilters() {
         return getFilteredSamples(
             this.filteredFilesByNonAtlasFilters,
@@ -233,12 +227,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         );
     }
 
-    @computed
     get cases() {
         return getFilteredCases(this.state.files, {}, true);
     }
 
-    @computed
     get filteredCases() {
         return getFilteredCases(
             this.filteredFiles,
@@ -247,7 +239,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         );
     }
 
-    @computed
     get filteredCasesByNonAtlasFilters() {
         return getFilteredCases(
             this.filteredFilesByNonAtlasFilters,
@@ -256,7 +247,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         );
     }
 
-    @computed get filteredPublications() {
+    get filteredPublications() {
         return _(this.filteredCases)
             .flatMap((c) => c.publicationIds)
             .compact()
@@ -265,11 +256,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
             .value();
     }
 
-    @computed get atlasMap() {
+    get atlasMap() {
         return _.keyBy(this.state.atlases, (a) => a.htan_id);
     }
 
-    @computed
     get filteredAtlases() {
         // get only atlases associated with filtered files
         return _.chain(this.filteredFiles)
@@ -279,7 +269,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
             .value();
     }
 
-    @computed
     get selectedAtlases() {
         const atlasFilters = this.selectedFiltersByAttrName[
             AttributeNames.AtlasName
@@ -301,13 +290,12 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         }
     }
 
-    @computed get nonAtlasSelectedFiltersByAttrName() {
+    get nonAtlasSelectedFiltersByAttrName() {
         return _.omit(this.selectedFiltersByAttrName, [
             AttributeNames.AtlasName,
         ]);
     }
 
-    @computed
     get filteredAtlasesByNonAtlasFilters() {
         const filtersExceptAtlasFilters = this
             .nonAtlasSelectedFiltersByAttrName;
@@ -319,7 +307,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
             .value();
     }
 
-    @computed
     get allAtlases() {
         return _.chain(this.state.files)
             .map((f) => f.atlasid)
@@ -328,7 +315,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
             .value();
     }
 
-    @computed
     get groupsByProperty() {
         const groupsByProperty = _(this.unfilteredOptions.result)
             .groupBy('type')
@@ -342,7 +328,11 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         console.log(this.files.result);
 
         if (!this.unfilteredOptions.isComplete) {
-            return <div>Loading</div>;
+            return (
+                <div className={commonStyles.loadingIndicator}>
+                    <ScaleLoader />
+                </div>
+            );
         } else {
             const filterControlsProps: IGenericFilterControlProps<any, any> = {
                 countHeader: 'Files',
@@ -396,7 +386,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
             };
 
             return (
-                <>
+                <div className={styles.explore}>
                     <FilterControls {...filterControlsProps}>
                         <FilterDropdown
                             {...dropdownProps}
@@ -425,8 +415,65 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         )}
                         getFilterDisplayName={getFileFilterDisplayName}
                     />
-                </>
+
+                    <ExploreTabs
+                        setTab={this.props.setTab}
+                        getTab={this.props.getTab}
+                        schemaDataById={this.state.schemaDataById}
+                        files={this.state.files}
+                        filteredFiles={this.files.result}
+                        filteredSynapseAtlases={this.filteredAtlases}
+                        filteredSynapseAtlasesByNonAtlasFilters={
+                            this.filteredAtlasesByNonAtlasFilters
+                        }
+                        filteredSamples={this.filteredSamples}
+                        filteredCases={this.filteredCases}
+                        selectedSynapseAtlases={this.selectedAtlases}
+                        allSynapseAtlases={this.allAtlases}
+                        onSelectAtlas={this.onSelectAtlas}
+                        samples={this.samples}
+                        cases={this.cases}
+                        filteredCasesByNonAtlasFilters={
+                            this.filteredCasesByNonAtlasFilters
+                        }
+                        filteredSamplesByNonAtlasFilters={
+                            this.filteredSamplesByNonAtlasFilters
+                        }
+                        nonAtlasSelectedFiltersByAttrName={
+                            this.nonAtlasSelectedFiltersByAttrName
+                        }
+                        groupsByPropertyFiltered={this.groupsByPropertyFiltered}
+                        showAllBiospecimens={this.showAllBiospecimens}
+                        showAllCases={this.showAllCases}
+                        toggleShowAllBiospecimens={
+                            this.toggleShowAllBiospecimens
+                        }
+                        toggleShowAllCases={this.toggleShowAllCases}
+                        cloudBaseUrl={this.props.cloudBaseUrl}
+                        getAtlasMetaData={this.props.getAtlasMetaData}
+                        publicationManifestByUid={
+                            this.state.publicationManifestByUid
+                        }
+                        publicationSummaryByPubMedID={
+                            this.state.publicationSummaryByPubMedID
+                        }
+                        filteredPublications={this.filteredPublications}
+                        genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
+                    />
+                </div>
             );
         }
     }
+}
+
+function writeCell(value: string) {
+    if (_.isArray(value)) {
+        return <td>{truncate(value.slice(0, 3).join(', '))}</td>;
+    } else {
+        return <td>{value}</td>;
+    }
+}
+
+function truncate(val: string) {
+    return val.length > 50 ? val.substr(0, 50) + '...' : val;
 }
