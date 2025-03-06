@@ -59,8 +59,8 @@ const SpatialTranscriptomics: React.FunctionComponent<DataStandardProps> = (
                         </tr>
                         <tr>
                             <td>4</td>
-                            <td>In progress</td>
-                            <td>TBD</td>
+                            <td>Sample level summary data</td>
+                            <td>Clustering, t-SNE coordinates, h5ad, RDS</td>
                         </tr>
                         <tr>
                             <td>Auxiliary</td>
@@ -82,6 +82,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel1,
         SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel2,
         SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel3,
+        SchemaDataId.VisiumSpatialTranscriptomicsRNASeqLevel4,
         SchemaDataId.VisiumSpatialTranscriptomicsAuxiliaryFiles,
         SchemaDataId.NanoStringGeoMxDSPSpatialTranscriptomicsLevel1,
         SchemaDataId.NanoStringGeoMxDSPSpatialTranscriptomicsLevel2,
