@@ -305,21 +305,15 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             selector: (manifest: PublicationManifest) =>
                 manifest.PublicationContentType,
             cell: (manifest: PublicationManifest) => {
-                if (
-                    manifest.PublicationContentType?.toLowerCase() ===
-                    PublicationContentType.Prepublication
-                ) {
+                const type = manifest.PublicationContentType?.toLowerCase();
+                if (type === PublicationContentType.Prepublication) {
                     return <span className="text-danger">In Review</span>;
-                } else if (
-                    manifest.PublicationContentType?.toLowerCase() ===
-                    PublicationContentType.Preprint
-                ) {
+                } else if (type === PublicationContentType.Preprint) {
                     return <span>Preprint</span>;
-                } else if (
-                    manifest.PublicationContentType?.toLowerCase() ===
-                    PublicationContentType.Published
-                ) {
+                } else if (type === PublicationContentType.Published) {
                     return <span>Published</span>;
+                } else if (type === PublicationContentType.Accepted) {
+                    return <span>Accepted</span>;
                 } else {
                     return manifest.PublicationContentType;
                 }
