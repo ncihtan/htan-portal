@@ -150,6 +150,7 @@ export enum PublicationContentType {
     Published = 'published manuscript',
     Preprint = 'preprint',
     Prepublication = 'prepublication site for reviewers',
+    Accepted = 'accepted publication',
 }
 
 export interface PublicationManifest {
