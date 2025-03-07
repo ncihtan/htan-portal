@@ -207,6 +207,11 @@ export enum SchemaDataId {
     SlideSeqLevel3 = 'bts:Slide-seqLevel3',
     NanoStringGeoMxDSPROIDCCSegmentAnnotationMetadata = 'bts:NanoStringGeoMxDSPROIDCCSegmentAnnotationMetadata',
     NanoStringGeoMxDSPROIRCCSegmentAnnotationMetadata = 'bts:NanoStringGeoMxDSPROIRCCSegmentAnnotationMetadata',
+
+    ElectronMicroscopyLevel1 = 'bts:ElectronMicroscopyLevel1',
+    ElectronMicroscopyLevel2 = 'bts:ElectronMicroscopyLevel2',
+    ElectronMicroscopyLevel3 = 'bts:ElectronMicroscopyLevel3',
+    ElectronMicroscopyLevel4 = 'bts:ElectronMicroscopyLevel4',
 }
 
 export const LABEL_OVERRIDES: { [text: string]: string } = {
