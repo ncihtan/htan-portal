@@ -24,6 +24,7 @@ import { PublicationTable } from './PublicationTable';
 import { ExploreTab } from '../lib/types';
 
 import styles from './exploreTabs.module.scss';
+import { MobxPromise } from 'mobxpromise';
 
 interface IExploreTabsProps {
     setTab?: (tab: ExploreTab) => void;
@@ -32,7 +33,7 @@ interface IExploreTabsProps {
     filteredFiles: Entity[];
     nonAtlasSelectedFiltersByAttrName: ISelectedFiltersByAttrName;
     samples: Entity[];
-    cases: Entity[];
+    cases: MobxPromise<any>;
     filteredCasesByNonAtlasFilters: Entity[];
     filteredSamplesByNonAtlasFilters: Entity[];
     filteredCases: Entity[];
@@ -113,7 +114,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         // }
 
         const [activeTab, setTab] = useState<ExploreTab>(
-            props.getTab?.() || ExploreTab.FILE
+            props.getTab?.() || ExploreTab.CASES
         );
         const [logScale, setLogScale] = useState(false);
 
@@ -162,18 +163,18 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         {/*        Publications*/}
                         {/*    </a>*/}
                         {/*</li>*/}
-                        {/*<li className="nav-item">*/}
-                        {/*    <a*/}
-                        {/*        onClick={() => setTab(ExploreTab.CASES)}*/}
-                        {/*        className={`nav-link ${*/}
-                        {/*            activeTab === ExploreTab.CASES*/}
-                        {/*                ? 'active'*/}
-                        {/*                : ''*/}
-                        {/*        }`}*/}
-                        {/*    >*/}
-                        {/*        Cases*/}
-                        {/*    </a>*/}
-                        {/*</li>*/}
+                        <li className="nav-item">
+                            <a
+                                onClick={() => setTab(ExploreTab.CASES)}
+                                className={`nav-link ${
+                                    activeTab === ExploreTab.CASES
+                                        ? 'active'
+                                        : ''
+                                }`}
+                            >
+                                Cases
+                            </a>
+                        </li>
                         {/*<li className="nav-item">*/}
                         {/*    <a*/}
                         {/*        onClick={() => setTab(ExploreTab.BIOSPECIMEN)}*/}
@@ -271,7 +272,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </label>*/}
                         <CaseTable
                             synapseAtlases={props.filteredSynapseAtlases}
-                            cases={props.filteredCases}
+                            cases={props.cases.result}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}
                             publicationsByUid={props.publicationManifestByUid}

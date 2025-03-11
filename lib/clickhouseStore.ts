@@ -1,15 +1,26 @@
 import { createClient } from '@clickhouse/client-web';
 
 const client = createClient({
-    host: 'http://localhost:8123/default',
-    username: 'default',
-    password: 'moo',
+    host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
+    username: 'app_user',
+    password: 'P@ssword1976',
     request_timeout: 600000,
     compression: {
         response: true,
         request: false,
     },
 });
+
+// const client = createClient({
+//     host: 'http://localhost:8123/default',
+//     username: 'default',
+//     password: 'moo',
+//     request_timeout: 600000,
+//     compression: {
+//         response: true,
+//         request: false,
+//     },
+// });
 
 export const myQuery = `
     SELECT val, type, count(Distinct Filename) as count FROM (

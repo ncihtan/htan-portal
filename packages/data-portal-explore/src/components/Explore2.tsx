@@ -136,7 +136,21 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
             const q = 'SELECT * FROM files' + filterString;
 
-            console.log('', q);
+            console.log('query', q);
+
+            return doQuery(q);
+        },
+    });
+
+    cases2 = new remoteData({
+        invoke: async () => {
+            const q = `SELECT * FROM cases c
+                                         JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
+                       WHERE cases.ParticipantID IN (
+                           SELECT demographicsIds as moo FROM files f
+                           ARRAY JOIN demographicsIds
+                       WHERE hasAny(Gender,['female'])
+         )`;
 
             return doQuery(q);
         },
@@ -432,7 +446,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         allSynapseAtlases={this.allAtlases}
                         onSelectAtlas={this.onSelectAtlas}
                         samples={this.samples}
-                        cases={this.cases}
+                        cases={this.cases2}
                         filteredCasesByNonAtlasFilters={
                             this.filteredCasesByNonAtlasFilters
                         }

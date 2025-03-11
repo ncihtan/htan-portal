@@ -17,6 +17,7 @@ import {
     sortByParticipantId,
 } from '../lib/dataTableHelpers';
 import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
+import { commonColumns } from './columns.tsx';
 
 interface ICaseTableProps {
     cases: Entity[];
@@ -26,6 +27,138 @@ interface ICaseTableProps {
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
     publicationsByUid?: { [uid: string]: PublicationManifest };
 }
+
+const cols = [
+    {
+        name: 'HTAN Participant ID',
+        selector: 'HTANParticipantID',
+    },
+
+    {
+        name: 'atlas_name',
+        selector: 'atlas_name',
+    },
+    commonColumns.AgeatDiagnosis,
+    {
+        name: 'Primary Diagnosis',
+        selector: 'PrimaryDiagnosis',
+    },
+    {
+        name: 'Site of Resection or Biopsy',
+        selector: 'SiteofResectionorBiopsy',
+    },
+    {
+        name: 'Tissue or Organ of Origin',
+        selector: 'TissueorOrganofOrigin',
+    },
+    {
+        name: 'Morphology',
+        selector: 'Morphology',
+    },
+
+    {
+        name: 'Progression or Recurrence Type',
+        selector: 'ProgressionorRecurrenceType',
+    },
+
+    {
+        name: 'Last Known Disease Status',
+        selector: 'LastKnownDiseaseStatus',
+    },
+
+    {
+        name: 'Progression or Recurrence Type',
+        selector: 'ProgressionorRecurrenceType',
+    },
+
+    {
+        name: 'Days to Last Followup',
+        selector: 'DaystoLastFollowup',
+    },
+
+    {
+        name: 'Days to Last Known Disease Status',
+        selector: 'DaystoLastKnownDiseaseStatus',
+    },
+
+    {
+        name: 'Ethnicity',
+        selector: 'Ethnicity',
+    },
+    {
+        name: 'Gender',
+        selector: 'Gender',
+    },
+    {
+        name: 'Race',
+        selector: 'Race',
+    },
+    {
+        name: 'VitalStatus',
+        selector: 'VitalStatus',
+    },
+    {
+        name: 'DaystoBirth',
+        selector: 'DaystoBirth',
+    },
+    {
+        name: 'CountryofResidence',
+        selector: 'CountryofResidence',
+    },
+    {
+        name: 'AgeIsObfuscated',
+        selector: 'AgeIsObfuscated',
+    },
+    {
+        name: 'YearOfBirth',
+        selector: 'YearOfBirth',
+    },
+    {
+        name: 'Occupation Duration Years',
+        selector: 'OccupationDurationYears',
+    },
+    {
+        name: 'Premature At Birth',
+        selector: 'PrematureAtBirth',
+    },
+    {
+        name: 'Weeks Gestationat Birth',
+        selector: 'WeeksGestationatBirth',
+    },
+    {
+        name: 'Cause of Death',
+        selector: 'CauseofDeath',
+    },
+    {
+        name: 'Cause of Death Source',
+        selector: 'CauseofDeathSource',
+    },
+    {
+        name: 'Days to Death',
+        selector: 'DaystoDeath',
+    },
+    {
+        name: 'Year of Death',
+        selector: 'YearofDeath',
+    },
+    // {
+    //     "name": "atlasid",
+    //     "selector": "atlasid"
+    // },
+
+    {
+        name: 'assayName',
+        selector: 'assayName',
+    },
+    {
+        name: 'AtlasMeta',
+        selector: 'AtlasMeta',
+    },
+    {
+        name: 'publicationIds',
+        selector: 'publicationIds',
+    },
+];
 
 export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     const generatedColumns = generateColumnsForDataSchema(
@@ -63,40 +196,44 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     );
 
     // we need to add ancestry columns manually because they are attached externally and not part of any schema
-    const customColumns = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS'].map((name) => ({
-        id: name,
-        selector: name,
-        omit: true,
-        wrap: true,
-        sortable: true,
-        searchable: false,
-        cell: (sample: Entity) => {
-            const value = sample[name as keyof Entity] as number;
+    // const customColumns = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS'].map((name) => ({
+    //     id: name,
+    //     selector: name,
+    //     omit: true,
+    //     wrap: true,
+    //     sortable: true,
+    //     searchable: false,
+    //     cell: (sample: Entity) => {
+    //         const value = sample[name as keyof Entity] as number;
+    //
+    //         if (value === undefined) {
+    //             return value;
+    //         } else if (value < 0.001) {
+    //             return value.toExponential(4);
+    //         } else {
+    //             return value.toFixed(6);
+    //         }
+    //     },
+    //     name: `${name} Genomic Ancestry`,
+    // }));
 
-            if (value === undefined) {
-                return value;
-            } else if (value < 0.001) {
-                return value.toExponential(4);
-            } else {
-                return value.toFixed(6);
-            }
-        },
-        name: `${name} Genomic Ancestry`,
-    }));
+    //const columns = [...generatedColumns];
 
-    const columns = [...generatedColumns, ...customColumns];
-
-    const indexOfParticipantId = _.findIndex(
-        columns,
-        (c) => c.selector === GenericAttributeNames.ParticipantID
-    );
+    // const indexOfParticipantId = _.findIndex(
+    //     columns,
+    //     (c) => c.selector === GenericAttributeNames.ParticipantID
+    // );
     // insert Atlas Name and Publications right after Participant ID
-    columns.splice(
-        indexOfParticipantId + 1,
-        0,
-        getAtlasColumn(props.synapseAtlases),
-        getPublicationColumn(props.publicationsByUid)
-    );
+    // columns.splice(
+    //     indexOfParticipantId + 1,
+    //     0,
+    //     getAtlasColumn(props.synapseAtlases),
+    //     getPublicationColumn(props.publicationsByUid)
+    // );
+
+    console.log(props.cases);
+
+    const columns = cols;
 
     return (
         <EnhancedDataTable
