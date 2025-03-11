@@ -196,6 +196,7 @@ export enum SchemaDataId {
     VisiumSpatialTranscriptomicsRNASeqLevel1 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel1',
     VisiumSpatialTranscriptomicsRNASeqLevel2 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel2',
     VisiumSpatialTranscriptomicsRNASeqLevel3 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel3',
+    VisiumSpatialTranscriptomicsRNASeqLevel4 = 'bts:10xVisiumSpatialTranscriptomics-RNA-seqLevel4',
     VisiumSpatialTranscriptomicsAuxiliaryFiles = 'bts:10xVisiumSpatialTranscriptomics-AuxiliaryFiles',
     NanoStringGeoMxDSPSpatialTranscriptomicsLevel1 = 'bts:NanoStringGeoMxDSPSpatialTranscriptomicsLevel1',
     NanoStringGeoMxDSPSpatialTranscriptomicsLevel2 = 'bts:NanoStringGeoMxDSPSpatialTranscriptomicsLevel2',
