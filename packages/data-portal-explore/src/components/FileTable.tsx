@@ -233,21 +233,34 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
         <div>
             <p></p>
             <p>
-                <strong>Download Files using the Gen3 SDK for Python:</strong>{' '}
-                You can download these files using the{' '}
-                <a href="https://pypi.org/project/gen3/">Gen3 SDK for Python</a>{' '}
-                (<code>pip install gen3</code>). Ensure that your{' '}
-                <a
-                    href="https://nci-crdc.datacommons.io/identity"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    NCI Data Commons Framework Services API Key
-                </a>{' '}
-                is stored in <code>~/.gen3/credentials.json</code>. (Note that
-                Python 3.12 is not supported by the Gen3 SDK at this time.)
-            </p>
-            <p>
+                <strong>Download Files using the Gen3 Client:</strong>{' '}
+                <>
+                    <ol>
+                        <li>
+                            Install the{' '}
+                            <a href="https://gen3.org/resources/user/gen3-client/#1-installation-instructions" target="_blank" rel="noopener noreferrer">
+                                Gen3 Client
+                            </a>
+                        </li>
+                        <li>
+                            Get your{' '}
+                            <a href="https://nci-crdc.datacommons.io/identity" target="_blank" rel="noopener noreferrer">
+                                NCI Data Commons Framework Services API Key
+                            </a>
+                        </li>
+                        <li>
+                            Configure a Gen3 profile by running:
+                            <pre className="pre-scrollable">
+                                <code>
+                                    {`gen3-client configure \\
+    --profile=htan \\
+    --cred=~/.gen3/credentials.json \\
+    --apiendpoint=https://nci-crdc.datacommons.io`}
+                                </code>
+                            </pre>
+                        </li>
+                    </ol>
+                </>.
                 <button
                     className="btn btn-light"
                     onClick={() =>
@@ -269,11 +282,10 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                         }}
                     >
                         <code>
-                            {`gen3 \\
-    --endpoint=nci-crdc.datacommons.io \\
-    drs-pull \\
-    manifest gen3_manifest.json \\
-    my_htan_dir`}
+                            {`gen3-client download-multiple \\
+    --profile=htan \\
+    --manifest=gen3_manifest.json \\
+    --download_path=my_htan_dir`}
                         </code>
                     </pre>
                 </pre>
