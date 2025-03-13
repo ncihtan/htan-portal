@@ -114,29 +114,28 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         },
     });
 
+    get filterString() {
+        const selectedFilters = toJS(this.selectedFilters);
+        if (selectedFilters.length > 0) {
+            const clauses = _(selectedFilters)
+                .groupBy('group')
+                .map((val, k) => {
+                    const values = val.map((v) => `'${v.value}'`).join(',');
+                    return `hasAny(${k},[${values}])`;
+                })
+                .value();
+
+            return ' WHERE ' + clauses.join(' AND ');
+        } else {
+            return '';
+        }
+    }
+
     files = new remoteData({
         invoke: async () => {
-            console.log('here i am');
+            const q = 'SELECT * FROM files' + this.filterString;
 
-            let filterString = '';
-
-            const selectedFilters = toJS(this.selectedFilters);
-
-            if (selectedFilters.length > 0) {
-                const clauses = _(selectedFilters)
-                    .groupBy('group')
-                    .map((val, k) => {
-                        const values = val.map((v) => `'${v.value}'`).join(',');
-                        return `hasAny(${k},[${values}])`;
-                    })
-                    .value();
-
-                filterString = ' WHERE ' + clauses.join(' AND ');
-            }
-
-            const q = 'SELECT * FROM files' + filterString;
-
-            console.log('query', q);
+            console.log(q);
 
             return doQuery(q);
         },
@@ -149,8 +148,22 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                        WHERE cases.ParticipantID IN (
                            SELECT demographicsIds as moo FROM files f
                            ARRAY JOIN demographicsIds
-                       WHERE hasAny(Gender,['female'])
+                       ${this.filterString}
          )`;
+
+            return doQuery(q);
+        },
+    });
+
+    specimen = new remoteData({
+        invoke: async () => {
+            const q = `SELECT * FROM biospecimen c
+                                        --JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
+                       WHERE biospecimen.ParentID IN (
+                           SELECT demographicsIds as moo FROM files f
+                           ARRAY JOIN demographicsIds
+                     ${this.filterString}
+            )`;
 
             return doQuery(q);
         },
@@ -337,10 +350,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     }
 
     render() {
-        //console.log("goo", toJS(this.selectedFilters));
-
-        console.log(this.files.result);
-
         if (!this.unfilteredOptions.isComplete) {
             return (
                 <div className={commonStyles.loadingIndicator}>
@@ -430,6 +439,15 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         getFilterDisplayName={getFileFilterDisplayName}
                     />
 
+                    <ExploreSummary
+                        summaryData={getDefaultSummaryData(
+                            this.cases2.result!,
+                            [],
+                            this.files.result!,
+                            [] //this.groupsByPropertyFiltered
+                        )}
+                    />
+
                     <ExploreTabs
                         setTab={this.props.setTab}
                         getTab={this.props.getTab}
@@ -445,7 +463,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         selectedSynapseAtlases={this.selectedAtlases}
                         allSynapseAtlases={this.allAtlases}
                         onSelectAtlas={this.onSelectAtlas}
-                        samples={this.samples}
+                        samples={this.specimen.result!}
                         cases={this.cases2}
                         filteredCasesByNonAtlasFilters={
                             this.filteredCasesByNonAtlasFilters
