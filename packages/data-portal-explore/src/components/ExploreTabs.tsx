@@ -34,10 +34,12 @@ interface IExploreTabsProps {
     nonAtlasSelectedFiltersByAttrName: ISelectedFiltersByAttrName;
     samples: Entity[];
     cases: MobxPromise<any>;
+    atlases: MobxPromise<any>;
     filteredCasesByNonAtlasFilters: Entity[];
     filteredSamplesByNonAtlasFilters: Entity[];
     filteredCases: Entity[];
     filteredSamples: Entity[];
+    publications: Entity[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     groupsByPropertyFiltered: {
         [attrName: string]: { [attrValue: string]: Entity[] };
@@ -114,7 +116,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         // }
 
         const [activeTab, setTab] = useState<ExploreTab>(
-            props.getTab?.() || ExploreTab.BIOSPECIMEN
+            props.getTab?.() || ExploreTab.ATLAS
         );
         const [logScale, setLogScale] = useState(false);
 
@@ -139,30 +141,30 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
             <>
                 <div className="subnav">
                     <ul className="nav nav-tabs">
-                        {/*<li className="nav-item">*/}
-                        {/*    <a*/}
-                        {/*        onClick={() => setTab(ExploreTab.ATLAS)}*/}
-                        {/*        className={`nav-link ${*/}
-                        {/*            activeTab === ExploreTab.ATLAS*/}
-                        {/*                ? 'active'*/}
-                        {/*                : ''*/}
-                        {/*        }`}*/}
-                        {/*    >*/}
-                        {/*        Atlases*/}
-                        {/*    </a>*/}
-                        {/*</li>*/}
-                        {/*<li className="nav-item">*/}
-                        {/*    <a*/}
-                        {/*        onClick={() => setTab(ExploreTab.PUBLICATION)}*/}
-                        {/*        className={`nav-link ${*/}
-                        {/*            activeTab === ExploreTab.PUBLICATION*/}
-                        {/*                ? 'active'*/}
-                        {/*                : ''*/}
-                        {/*        }`}*/}
-                        {/*    >*/}
-                        {/*        Publications*/}
-                        {/*    </a>*/}
-                        {/*</li>*/}
+                        <li className="nav-item">
+                            <a
+                                onClick={() => setTab(ExploreTab.ATLAS)}
+                                className={`nav-link ${
+                                    activeTab === ExploreTab.ATLAS
+                                        ? 'active'
+                                        : ''
+                                }`}
+                            >
+                                Atlases
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a
+                                onClick={() => setTab(ExploreTab.PUBLICATION)}
+                                className={`nav-link ${
+                                    activeTab === ExploreTab.PUBLICATION
+                                        ? 'active'
+                                        : ''
+                                }`}
+                            >
+                                Publications
+                            </a>
+                        </li>
                         <li className="nav-item">
                             <a
                                 onClick={() => setTab(ExploreTab.CASES)}
@@ -287,7 +289,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <PublicationTable
-                            publications={props.filteredPublications}
+                            publications={props.publications}
                             publicationSummaryByPubMedID={
                                 props.publicationSummaryByPubMedID
                             }
@@ -312,6 +314,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             publications={_.values(
                                 props.publicationManifestByUid
                             )}
+                            atlases={props.atlases}
                             getAtlasMetaData={props.getAtlasMetaData}
                             synapseAtlasData={props.allSynapseAtlases}
                             selectedAtlases={props.selectedSynapseAtlases}

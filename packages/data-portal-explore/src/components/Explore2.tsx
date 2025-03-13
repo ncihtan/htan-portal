@@ -169,6 +169,44 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         },
     });
 
+    atlases = new remoteData({
+        invoke: async () => {
+            const q = `
+            SELECT * FROM atlases 
+                WHERE htan_id IN (
+                       SELECT files.atlasid FROM files 
+                )
+            `;
+
+            return doQuery(q);
+        },
+    });
+
+    publications = new remoteData({
+        invoke: async () => {
+            const q = `
+                WITH filteredPublications AS (SELECT DISTINCT uid FROM (
+                                                                           SELECT arrayJoin(associatedFiles) as fileId, uid FROM publication_manifest
+                                                                           WHERE fileId IN (
+                                                                               SELECT files.DataFileID FROM files
+                                                                           )
+                                                                       ))
+                SELECT pm.associatedFiles as associatedFiles,
+                       pm.uid as uid,
+                       p.title as title,
+                       p.authors as authors,
+                       p.fulljournalname as fulljournalname,
+                       p.pubdate as pubdate,
+                       pm.PMID as pubmedlink
+                FROM filteredPublications fp
+                         JOIN publications p ON p.uid = fp.uid
+                         JOIN publication_manifest pm ON p.uid = pm.uid
+             
+             `;
+            return doQuery(q);
+        },
+    });
+
     @action.bound toggleShowAllBiospecimens() {
         this.showAllBiospecimens = !this.showAllBiospecimens;
     }
@@ -399,6 +437,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                 //         isSelected: false
                 //     }];
             };
+
             const dropdownProps = {
                 options,
                 countHeader: filterControlsProps.countHeader,
@@ -425,6 +464,33 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                                 AttributeNames.Gender,
                                 AttributeNames.Race,
                                 AttributeNames.Ethnicity,
+                            ]}
+                            className={styles.filterCheckboxListContainer}
+                            width={164}
+                        />
+
+                        <FilterDropdown
+                            {...dropdownProps}
+                            placeholder="Disease"
+                            attributes={[AttributeNames.PrimaryDiagnosis]}
+                            className={styles.filterCheckboxListContainer}
+                            width={164}
+                        />
+
+                        <FilterDropdown
+                            {...dropdownProps}
+                            placeholder="Assay"
+                            attributes={[AttributeNames.assayName]}
+                            className={styles.filterCheckboxListContainer}
+                            width={164}
+                        />
+
+                        <FilterDropdown
+                            {...dropdownProps}
+                            placeholder="File"
+                            attributes={[
+                                AttributeNames.Level,
+                                AttributeNames.FileFormat,
                             ]}
                             className={styles.filterCheckboxListContainer}
                             width={164}
@@ -458,6 +524,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         filteredSynapseAtlasesByNonAtlasFilters={
                             this.filteredAtlasesByNonAtlasFilters
                         }
+                        atlases={this.atlases}
                         filteredSamples={this.filteredSamples}
                         filteredCases={this.filteredCases}
                         selectedSynapseAtlases={this.selectedAtlases}
@@ -489,6 +556,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         publicationSummaryByPubMedID={
                             this.state.publicationSummaryByPubMedID
                         }
+                        publications={this.publications.result!}
                         filteredPublications={this.filteredPublications}
                         genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
                     />

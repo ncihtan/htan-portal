@@ -28,7 +28,7 @@ export const myQuery = `
         UNION ALL
         SELECT Filename, arrayJoin(Race) as val, 'Race' as type FROM files
         UNION ALL
-        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'Disease' as type FROM files
+        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type FROM files
         UNION ALL
         SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type FROM files
         UNION ALL
@@ -37,6 +37,8 @@ export const myQuery = `
         SELECT Filename, level as val, 'Level' as type FROM files
         UNION ALL
         SELECT Filename, assayName as val, 'assayName' as type FROM files
+        UNION ALL
+        SELECT Filename, FileFormat as val, 'FileFormat' as type FROM files
 
         )
     GROUP BY val, type
