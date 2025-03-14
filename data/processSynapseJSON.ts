@@ -191,7 +191,10 @@ function getPublicationsAsSynapseRecordsByAtlasId(
         };
 
         publicationsById[centerId].record_list.push({
-            values: keySet.map((key) => (publication as any)[key] || ''),
+            values: keySet.map((key) => {
+                const value = (publication as any)[key];
+                return value === 0 ? 0 : value || '';
+            }),
         });
     });
 
@@ -1118,19 +1121,26 @@ function extractEntitiesFromSynapseData(
                 if (
                     synapseRecords.column_order.includes(
                         'HTAN Parent Biospecimen ID'
-                    ) &&
-                    !attributeToId['HTAN Parent Biospecimen ID']
+                    )
                 ) {
                     attributeToId['HTAN Parent Biospecimen ID'] =
+                        attributeToId['HTAN Parent Biospecimen ID'] ||
                         'bts:HTANParentBiospecimenID';
                 }
                 // this is a workaround for missing AssayType for certain schema ids
                 if (synapseRecords.column_order.includes('Assay Type')) {
-                    attributeToId['Assay Type'] = 'bts:AssayType';
+                    attributeToId['Assay Type'] =
+                        attributeToId['Assay Type'] || 'bts:AssayType';
                 }
                 // this is a workaround for missing DatasetName for certain schema ids
                 if (synapseRecords.column_order.includes('Dataset Name')) {
-                    attributeToId['Dataset Name'] = 'bts:DatasetName';
+                    attributeToId['Dataset Name'] =
+                        attributeToId['Dataset Name'] || 'bts:DatasetName';
+                }
+                // this is a workaround for missing CitedInNumber for publication manifest
+                if (synapseRecords.column_order.includes('Cited In Number')) {
+                    attributeToId['Cited In Number'] =
+                        attributeToId['Cited In Number'] || 'bts:CitedInNumber';
                 }
 
                 synapseRecords.record_list.forEach((record) => {
