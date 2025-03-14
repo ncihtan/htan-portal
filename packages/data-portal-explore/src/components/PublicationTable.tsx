@@ -210,7 +210,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             cell: (manifest: PublicationManifest) => {
                 const doi = getPublicationDOI(getSummary(manifest), manifest);
                 return doi ? (
-                    <a href={`https://doi.org/${doi}`}>
+                    <a href={`https://doi.org/${doi}`} target="_blank">
                         {doi} <FontAwesomeIcon icon={faExternalLinkAlt} />
                     </a>
                 ) : undefined;
@@ -226,8 +226,30 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             cell: (manifest: PublicationManifest) => {
                 const pubmedId = getPublicationPubMedID(manifest);
                 return pubmedId ? (
-                    <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}`}>
+                    <a
+                        href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}`}
+                        target="_blank"
+                    >
                         {pubmedId} <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    </a>
+                ) : undefined;
+            },
+            grow: 0.5,
+            wrap: true,
+            sortable: true,
+        },
+        {
+            name: 'Cited In',
+            selector: (manifest: PublicationManifest) => manifest.CitedInNumber,
+            cell: (manifest: PublicationManifest) => {
+                const pubmedId = getPublicationPubMedID(manifest);
+                return pubmedId ? (
+                    <a
+                        href={`https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=${pubmedId}`}
+                        target="_blank"
+                    >
+                        {manifest.CitedInNumber}{' '}
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
                     </a>
                 ) : undefined;
             },
