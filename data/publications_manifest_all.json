@@ -366,7 +366,9 @@
             "HTA3_0052_1901015",
             "HTA3_0052_1901014",
             "HTA3_0052_1901299"
-        ]
+        ],
+        "Cited In Number": 1,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=38588853"
     },
     {
         "Component": "PublicationManifest",
@@ -825,7 +827,8 @@
             "HTA3_0029_7300624",
             "HTA3_0011_7300340",
             "HTA3_0011_7300433"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -1460,7 +1463,8 @@
             "HTA3_70152_6218703",
             "HTA3_70152_9838881",
             "HTA3_70152_8332829"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -3425,7 +3429,9 @@
             "HTA3_8006_8791452259",
             "HTA3_8006_9344315119",
             "HTA3_8006_9744592748"
-        ]
+        ],
+        "Cited In Number": 5,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37477508"
     },
     {
         "Component": "PublicationManifest",
@@ -4091,7 +4097,9 @@
             "HTA4_9_50148",
             "HTA4_9_50149",
             "HTA4_9_50150"
-        ]
+        ],
+        "Cited In Number": 31,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34864916"
     },
     {
         "Component": "PublicationManifest",
@@ -7041,7 +7049,8 @@
             "HTA4_1001_4365",
             "HTA4_1001_4365",
             "HTA4_1001_4365"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -8594,7 +8603,8 @@
             "HTA4_2013_116686",
             "HTA4_2013_126686",
             "HTA4_2013_136686"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -11238,7 +11248,8 @@
             "HTA4_1001_4522",
             "HTA4_1001_4523",
             "HTA4_1001_4524"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -12724,7 +12735,8 @@
             "HTA6_0_4",
             "HTA6_0_5",
             "HTA6_0_6"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -12827,7 +12839,9 @@
             "HTA6_EXT5_45",
             "HTA6_EXT6_45",
             "HTA6_EXT7_45"
-        ]
+        ],
+        "Cited In Number": 126,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35063072"
     },
     {
         "Component": "PublicationManifest",
@@ -14404,7 +14418,9 @@
             "HTA6_99_34",
             "HTA6_9_16",
             "HTA6_9_17"
-        ]
+        ],
+        "Cited In Number": 26,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36400020"
     },
     {
         "Component": "PublicationManifest",
@@ -15871,7 +15887,8 @@
             "HTA6_0_4",
             "HTA6_0_5",
             "HTA6_0_6"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -16880,7 +16897,9 @@
             "HTA7_995_1000",
             "HTA7_995_1001",
             "HTA7_995_1002"
-        ]
+        ],
+        "Cited In Number": 86,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36669472"
     },
     {
         "Component": "PublicationManifest",
@@ -17664,7 +17683,9 @@
             "HTA7_8_1002",
             "HTA7_8_1003",
             "HTA7_8_1004"
-        ]
+        ],
+        "Cited In Number": 86,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35404441"
     },
     {
         "Component": "PublicationManifest",
@@ -17705,7 +17726,8 @@
             "HTA7_1_1683",
             "HTA7_1_1008",
             "HTA7_1_1684"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -47757,7 +47779,8 @@
             "HTA1_983_765950101",
             "HTA1_997_000150101",
             "HTA1_997_778950101"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -50963,7 +50986,8 @@
             "HTA1_204_6601307111",
             "HTA1_672_8509302111",
             "HTA1_672_8509306111"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -51125,7 +51149,9 @@
             "HTA1_710_60621011011",
             "HTA1_710_60621011012",
             "HTA1_272_483110110111"
-        ]
+        ],
+        "Cited In Number": 239,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34450029"
     },
     {
         "Component": "PublicationManifest",
@@ -51771,7 +51797,8 @@
             "HTA1_962_47111021013",
             "HTA1_962_47111022",
             "HTA1_962_471120101"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -52680,7 +52707,9 @@
             "HTA8_3004_310002",
             "HTA8_3004_310003",
             "HTA8_3004_310004"
-        ]
+        ],
+        "Cited In Number": 152,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34653364"
     },
     {
         "Component": "PublicationManifest",
@@ -53258,7 +53287,9 @@
             "HTA8_1037_110002",
             "HTA8_1037_110003",
             "HTA8_1037_110004"
-        ]
+        ],
+        "Cited In Number": 13,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37127830"
     },
     {
         "Component": "PublicationManifest",
@@ -56467,7 +56498,9 @@
             "HTA8_6029_002101008",
             "HTA8_6029_002101007",
             "HTA8_6029_002101009"
-        ]
+        ],
+        "Cited In Number": 1,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478232"
     },
     {
         "Component": "PublicationManifest",
@@ -57303,7 +57336,8 @@
             "HTA9_3_16581",
             "HTA9_3_16562",
             "HTA9_3_16569"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -85834,7 +85868,9 @@
             "HTA9_1_40599",
             "HTA9_1_40600",
             "HTA9_1_40601"
-        ]
+        ],
+        "Cited In Number": 18,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35243422"
     },
     {
         "Component": "PublicationManifest",
@@ -89383,7 +89419,9 @@
             "HTA10_05_07205002",
             "HTA10_05_07205003",
             "HTA10_05_07205004"
-        ]
+        ],
+        "Cited In Number": 92,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35726067"
     },
     {
         "Component": "PublicationManifest",
@@ -90988,7 +91026,9 @@
             "HTA10_07_50105006",
             "HTA10_07_50105007",
             "HTA10_07_50105008"
-        ]
+        ],
+        "Cited In Number": 1,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478120"
     },
     {
         "Component": "PublicationManifest",
@@ -92643,7 +92683,9 @@
             "HTA10_04_01005004",
             "HTA10_0000_16151281528062110084221322905769",
             "HTA10_0000_51277202575134703557245705760813"
-        ]
+        ],
+        "Cited In Number": 1,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478119"
     },
     {
         "Component": "PublicationManifest",
@@ -99204,7 +99246,9 @@
             "HTA11_866_300476990121111",
             "HTA11_866_300476990121121",
             "HTA11_866_300476990122111"
-        ]
+        ],
+        "Cited In Number": 111,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34910928"
     },
     {
         "Component": "PublicationManifest",
@@ -99327,7 +99371,8 @@
             "HTA11_20252_211",
             "HTA11_20251_212",
             "HTA11_20252_212"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -100692,7 +100737,9 @@
             "HTA11_99999971397_8038428605541121",
             "HTA11_99999971397_8038428605542111",
             "HTA11_99999971397_8038428605543111"
-        ]
+        ],
+        "Cited In Number": 19,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=38065082"
     },
     {
         "Component": "PublicationManifest",
@@ -105751,7 +105798,8 @@
             "HTA11_99999974143_8462111111",
             "HTA11_99999974143_8462111121",
             "HTA11_99999974143_8462112111"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -106826,7 +106874,9 @@
             "HTA12_255_2000",
             "HTA12_255_2001",
             "HTA12_255_2002"
-        ]
+        ],
+        "Cited In Number": 1,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478117"
     },
     {
         "Component": "PublicationManifest",
@@ -108795,7 +108845,8 @@
             "HTA12_248_3020",
             "HTA12_248_3005",
             "HTA12_273_2002"
-        ]
+        ],
+        "Cited In Number": 0
     },
     {
         "Component": "PublicationManifest",
@@ -112053,7 +112104,9 @@
             "HTA12_224_4005",
             "HTA12_225_4005",
             "HTA12_226_4005"
-        ]
+        ],
+        "Cited In Number": 21,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37914932"
     },
     {
         "Component": "PublicationManifest",
@@ -112113,7 +112166,9 @@
             "HTA12_167_3011",
             "HTA12_167_4000",
             "HTA12_167_4005"
-        ]
+        ],
+        "Cited In Number": 14,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36973268"
     },
     {
         "Component": "PublicationManifest",
@@ -113337,6 +113392,8 @@
             "HTA12_32_4005",
             "HTA12_32_1010",
             "HTA12_32_1011"
-        ]
+        ],
+        "Cited In Number": 70,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35995947"
     }
 ]

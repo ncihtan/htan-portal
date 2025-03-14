@@ -173,6 +173,7 @@ export interface PublicationManifest {
     Tool: string;
     SupportingLink?: string;
     SupportingLinkDescription?: string;
+    CitedInNumber?: number;
 
     // Derived or attached in frontend
     atlasid: string;
