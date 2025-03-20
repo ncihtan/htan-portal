@@ -115,6 +115,26 @@ async function writeProcessedFile() {
 
     // we need to fetch publication summaries after we process the json,
     // because we need to know pubmed ids to query the external API
+
+    const sums = await fetchPublicationSummaries(
+        _.values(processed.publicationManifestByUid).map(getPublicationPubMedID)
+    );
+
+    for (const [k, val] of Object.entries(processed.publicationManifestByUid)) {
+        const pubmedid = getPublicationPubMedID(val);
+
+        if (pubmedid !== '') {
+            const summaryResp = sums[parseInt(pubmedid)];
+            val.publicationId = getPublicationUid(val);
+            if (summaryResp) {
+                Object.assign(val, summaryResp);
+            } else {
+                val.jesus = true;
+            }
+        } else {
+        }
+    }
+
     processed.publicationSummaryByPubMedID = await fetchPublicationSummaries(
         _.values(processed.publicationManifestByUid).map(getPublicationPubMedID)
     );
@@ -488,6 +508,10 @@ function processSynapseJSON(
     const publications: PublicationManifest[] = (flatData.filter(
         (obj) => obj.Component === 'PublicationManifest'
     ) as unknown) as PublicationManifest[];
+
+    publications.forEach((p) => {
+        p.publicationId = getPublicationUid(p);
+    });
 
     const publicationParentDataFileIdsByUid = _(publications)
         .keyBy(getPublicationUid)

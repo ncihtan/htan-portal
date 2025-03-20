@@ -1,4 +1,5 @@
 import { createClient } from '@clickhouse/client-web';
+import _ from 'lodash';
 
 const client = createClient({
     host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
@@ -39,10 +40,29 @@ export const myQuery = `
         SELECT Filename, assayName as val, 'assayName' as type FROM files
         UNION ALL
         SELECT Filename, FileFormat as val, 'FileFormat' as type FROM files
+        UNION ALL
+        SELECT Filename, viewers as val, 'viewers' as type FROM files
 
         )
     GROUP BY val, type
 `;
+
+export const caseQuery = _.template(
+    `SELECT * FROM cases c
+                                         JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
+                       WHERE cases.ParticipantID IN (
+                           SELECT demographicsIds as moo FROM files f
+                           ARRAY JOIN demographicsIds
+                       <%=filterString%>
+         )`
+);
+
+export const specimenQuery = _.template(`
+            SELECT * FROM biospecimen c
+                       WHERE biospecimen.ParentID IN (
+                           SELECT demographicsIds as moo FROM files f
+                           ARRAY JOIN demographicsIds
+                     <%=this.filterString%>)`);
 
 export async function doQuery(str: any) {
     const resultSet = await client.query({

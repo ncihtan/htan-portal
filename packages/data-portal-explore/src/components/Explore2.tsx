@@ -1,16 +1,9 @@
 'use client';
 import _ from 'lodash';
-import remoteData from 'mobxpromise';
-import {
-    action,
-    computed,
-    makeObservable,
-    observable,
-    runInAction,
-    toJS,
-} from 'mobx';
+import remoteData, { MobxPromise } from 'mobxpromise';
+import { action, makeObservable, observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
+import { IPromiseBasedObservable } from 'mobx-utils';
 import { ScaleLoader } from 'react-spinners';
 import React from 'react';
 import {
@@ -18,9 +11,7 @@ import {
     FilterActionMeta,
     FilterControls,
     FilterDropdown,
-    getDropdownOptionsFromProps,
     getNewFilters,
-    getOptionsFromProps,
     getSelectedFiltersByAttrName,
     IGenericFilterControlProps,
     ISelectedFiltersByAttrName,
@@ -31,9 +22,7 @@ import {
     AtlasMetaData,
     commonStyles,
     Entity,
-    fetchDefaultSynData,
     FileAttributeMap,
-    fillInEntities,
     filterFiles,
     getFileFilterDisplayName,
     getFilteredCases,
@@ -45,20 +34,20 @@ import {
     PublicationSummary,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
-import {
-    DataSchemaData,
-    fetchAndProcessSchemaData,
-} from '@htan/data-portal-schema';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 import { ExploreSummary } from './ExploreSummary';
 import { ExploreTabs } from './ExploreTabs';
-import { FileFilterControls } from './FileFilterControls';
 import { getDefaultSummaryData } from '../lib/helpers';
 import { ExploreTab } from '../lib/types';
 
 import styles from './explore.module.scss';
-import { doQuery, myQuery } from '../../../../lib/clickhouseStore.ts';
-import FileTable from './FileTable.tsx';
+import {
+    caseQuery,
+    doQuery,
+    myQuery,
+    specimenQuery,
+} from '../../../../lib/clickhouseStore.ts';
 
 export interface IExploreState {
     files: Entity[];
@@ -134,37 +123,43 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     files = new remoteData({
         invoke: async () => {
             const q = 'SELECT * FROM files' + this.filterString;
-
-            console.log(q);
-
-            return doQuery(q);
+            const files = await doQuery(q);
+            return files;
         },
     });
 
-    cases2 = new remoteData({
+    cases = new remoteData({
         invoke: async () => {
-            const q = `SELECT * FROM cases c
-                                         JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
-                       WHERE cases.ParticipantID IN (
-                           SELECT demographicsIds as moo FROM files f
-                           ARRAY JOIN demographicsIds
-                       ${this.filterString}
-         )`;
+            const q = caseQuery({ filterString: '' });
+            const cases = await doQuery(q);
+            return cases;
+        },
+    });
 
-            return doQuery(q);
+    casesFiltered = new remoteData({
+        await: () => [],
+        invoke: async () => {
+            const q = caseQuery({ filterString: this.filterString });
+            return await doQuery(q);
         },
     });
 
     specimen = new remoteData({
         invoke: async () => {
-            const q = `SELECT * FROM biospecimen c
-                                        --JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
-                       WHERE biospecimen.ParentID IN (
-                           SELECT demographicsIds as moo FROM files f
-                           ARRAY JOIN demographicsIds
-                     ${this.filterString}
-            )`;
+            // const q = `SELECT * FROM biospecimen c
+            //            WHERE biospecimen.ParentID IN (
+            //                SELECT demographicsIds as moo FROM files f
+            //                ARRAY JOIN demographicsIds
+            //          ${this.filterString}
+            // )`;
+            const q = specimenQuery({ filterString: '' });
+            return doQuery(q);
+        },
+    });
 
+    specimenFiltered = new remoteData({
+        invoke: async () => {
+            const q = specimenQuery({ filterString: this.filterString });
             return doQuery(q);
         },
     });
@@ -183,27 +178,32 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     });
 
     publications = new remoteData({
+        await: () => [this.cases],
         invoke: async () => {
             const q = `
-                WITH filteredPublications AS (SELECT DISTINCT uid FROM (
-                                                                           SELECT arrayJoin(associatedFiles) as fileId, uid FROM publication_manifest
-                                                                           WHERE fileId IN (
-                                                                               SELECT files.DataFileID FROM files
-                                                                           )
-                                                                       ))
-                SELECT pm.associatedFiles as associatedFiles,
-                       pm.uid as uid,
-                       p.title as title,
-                       p.authors as authors,
-                       p.fulljournalname as fulljournalname,
-                       p.pubdate as pubdate,
-                       pm.PMID as pubmedlink
+
+                WITH filteredPublications AS (SELECT DISTINCT publicationId FROM (
+                                                                                     SELECT arrayJoin(associatedFiles) as fileId, publicationId FROM publication_manifest
+                                                                                     WHERE fileId IN (
+                                                                                         SELECT files.DataFileID FROM files 
+                                                                                             ${this.filterString}
+                                                                                     )
+                                                                                 ))
+                SELECT *
                 FROM filteredPublications fp
-                         JOIN publications p ON p.uid = fp.uid
-                         JOIN publication_manifest pm ON p.uid = pm.uid
-             
+                         LEFT JOIN publication_manifest pm on fp.publicationId = pm.publicationId
              `;
-            return doQuery(q);
+            const publications = await doQuery(q);
+
+            // const withPub = this.cases.result!.reduce((agg, c)=>{
+            //     c.publicationIds.forEach((publicationId)=>{
+            //         agg[publicationId] = agg[publicationId] || [];
+            //         agg[publicationId].push(c);
+            //     });
+            //     return agg;
+            // },{});
+
+            return publications;
         },
     });
 
@@ -241,6 +241,13 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     @action.bound
     setFilter(actionMeta: FilterActionMeta<SelectedFilter>) {
         this.selectedFilters = getNewFilters(this.selectedFilters, actionMeta);
+    }
+
+    @observable currentTab: ExploreTab = ExploreTab.ATLAS;
+
+    @action.bound
+    getTab(tabId: ExploreTab) {
+        return this.currentTab;
     }
 
     @action.bound
@@ -292,9 +299,9 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         );
     }
 
-    get cases() {
-        return getFilteredCases(this.state.files, {}, true);
-    }
+    // get cases() {
+    //     return getFilteredCases(this.state.files, {}, true);
+    // }
 
     get filteredCases() {
         return getFilteredCases(
@@ -388,7 +395,19 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     }
 
     render() {
-        if (!this.unfilteredOptions.isComplete) {
+        function allComplete(proms: MobxPromise<any>[]) {
+            return _.every(proms, (p) => p.isComplete);
+        }
+
+        if (
+            allComplete([
+                this.casesFiltered,
+                this.cases,
+                this.specimenFiltered,
+                this.specimen,
+                this.unfilteredOptions,
+            ]) === false
+        ) {
             return (
                 <div className={commonStyles.loadingIndicator}>
                     <ScaleLoader />
@@ -495,6 +514,16 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                             className={styles.filterCheckboxListContainer}
                             width={164}
                         />
+
+                        {/*<FilterDropdown*/}
+                        {/*    {...dropdownProps}*/}
+                        {/*    placeholder="Viewer"*/}
+                        {/*    attributes={[*/}
+                        {/*        AttributeNames.viewers*/}
+                        {/*    ]}*/}
+                        {/*    className={styles.filterCheckboxListContainer}*/}
+                        {/*    width={164}*/}
+                        {/*/>*/}
                     </FilterControls>
 
                     <Filter
@@ -507,7 +536,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
                     <ExploreSummary
                         summaryData={getDefaultSummaryData(
-                            this.cases2.result!,
+                            this.cases.result!,
                             [],
                             this.files.result!,
                             [] //this.groupsByPropertyFiltered
@@ -515,8 +544,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                     />
 
                     <ExploreTabs
-                        setTab={this.props.setTab}
-                        getTab={this.props.getTab}
+                        setTab={(currentTab: ExploreTab) => {
+                            this.currentTab = currentTab;
+                        }}
+                        activeTab={this.currentTab}
                         schemaDataById={this.state.schemaDataById}
                         files={this.state.files}
                         filteredFiles={this.files.result}
@@ -526,12 +557,13 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         }
                         atlases={this.atlases}
                         filteredSamples={this.filteredSamples}
-                        filteredCases={this.filteredCases}
+                        cases={this.cases}
+                        filteredCases={this.casesFiltered}
                         selectedSynapseAtlases={this.selectedAtlases}
                         allSynapseAtlases={this.allAtlases}
                         onSelectAtlas={this.onSelectAtlas}
-                        samples={this.specimen.result!}
-                        cases={this.cases2}
+                        samples={this.specimen}
+                        samplesFiltered={this.specimenFiltered}
                         filteredCasesByNonAtlasFilters={
                             this.filteredCasesByNonAtlasFilters
                         }

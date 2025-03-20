@@ -47,6 +47,8 @@ function getCounts(
             ? filteredCount
             : countFn(manifest, unfilteredEntities);
 
+    console.log(filteredCount, unfilteredCount);
+
     return {
         filteredCount,
         unfilteredCount,
@@ -94,8 +96,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         props.publicationSummaryByPubMedID?.[getPublicationPubMedID(manifest)];
 
     const getDate = (manifest: PublicationManifest) => {
-        const summary = getSummary(manifest);
-        const date = getPublicationDate(summary, manifest);
+        const date = getPublicationDate(manifest);
 
         // Assuming that the string is in the form of YYYY MMM DD
         const parts = date?.split(/\s/);
@@ -333,28 +334,103 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
     const columns = [
         {
             name: 'Title',
-            selector: 'title',
+            selector: (manifest: PublicationManifest) =>
+                getPublicationTitle(getSummary(manifest), manifest),
+            cell: (manifest: PublicationManifest) => (
+                <a
+                    href={`//${
+                        window.location.host
+                    }/publications/${getPublicationUid(manifest)}`}
+                >
+                    {getPublicationTitle(getSummary(manifest), manifest)}
+                </a>
+            ),
+            grow: 1.5,
+            wrap: true,
+            sortable: true,
         },
+
         {
             name: 'Authors',
             cell: (publication: Entity) => {
-                return (
-                    publication?.authors
-                        ?.map((a) => JSON.parse(a))
-                        .map((a) => a.name)
-                        .slice(0, 4)
-                        .join(', ') + ', et al.'
-                );
+                return publication?.Authors.split(',')
+                    .slice(0, 4)
+                    .concat([' et al'])
+                    .join(',');
             },
         },
         {
             name: 'Journal',
             selector: 'fulljournalname',
         },
+
+        {
+            name: 'Participants',
+            selector: (manifest: PublicationManifest) =>
+                getEntityCount(manifest, props.participants),
+            cell: (manifest: PublicationManifest) => {
+                const { filteredCount, unfilteredCount } = getCounts(
+                    manifest,
+                    props.filteredParticipants,
+                    props.participants
+                );
+                return (
+                    <Count
+                        filteredCount={filteredCount}
+                        unfilteredCount={unfilteredCount}
+                    />
+                );
+            },
+            grow: 0.5,
+            wrap: true,
+            sortable: true,
+        },
+        // {
+        //     name: 'Biospecimens',
+        //     selector: (manifest: PublicationManifest) =>
+        //         getEntityCount(manifest, props.biospecimens),
+        //     cell: (manifest: PublicationManifest) => {
+        //         const { filteredCount, unfilteredCount } = getCounts(
+        //             manifest,
+        //             props.filteredBiospecimens,
+        //             props.biospecimens
+        //         );
+        //         return (
+        //             <Count
+        //                 filteredCount={filteredCount}
+        //                 unfilteredCount={unfilteredCount}
+        //             />
+        //         );
+        //     },
+        //     grow: 0.7,
+        //     wrap: true,
+        //     sortable: true,
+        // },
+
         {
             name: 'Publication Date',
-            selector: 'pubdate',
+            selector: (manifest: PublicationManifest) => getDateTime(manifest),
+            cell: (manifest: PublicationManifest) => {
+                const date = getDate(manifest);
+
+                if (date) {
+                    const formatted = Intl.DateTimeFormat('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                    }).formatToParts(date);
+                    const year = formatted.find((s) => s.type === 'year')
+                        ?.value;
+                    const month = formatted.find((s) => s.type === 'month')
+                        ?.value;
+                    return `${year} ${month}`;
+                } else {
+                    return '';
+                }
+            },
+            wrap: true,
+            sortable: true,
         },
+
         {
             name: 'PubMed',
             cell: (publication: Entity) => {
@@ -371,17 +447,15 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         },
     ];
 
-    console.log(props.publications);
-
-    // const sortedData = _(props.publications)
-    //     .sortBy(getDateTime)
-    //     .reverse()
-    //     .value();
+    const sortedData = _(props.publications)
+        .sortBy(getDateTime)
+        .reverse()
+        .value();
 
     return (
         <EnhancedDataTable
             columns={columns}
-            data={props.publications}
+            data={sortedData}
             striped={true}
             dense={false}
             noHeader={true}

@@ -34,7 +34,9 @@ export function getPublicationPubMedID(
     publication: PublicationManifest
 ): string {
     // we only need the numerical id, not the entire URL
-    return publication ? publication.PMID.replace(/[^0-9]/g, '') : '';
+    return publication && publication.PMID
+        ? publication.PMID.replace(/[^0-9]/g, '')
+        : '';
 }
 
 export function getCite(
@@ -210,19 +212,11 @@ export function getPublicationTitle(
     return title?.trim().replace(/\.$/, '');
 }
 
-export function getPublicationDate(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
-) {
-    let date: string | undefined;
-
-    if (publicationSummary) {
-        date = publicationSummary.pubdate;
-    } else if (publicationManifest) {
-        date = publicationManifest.YearofPublication?.toString();
-    }
-
-    return date;
+export function getPublicationDate(publicationManifest: PublicationManifest) {
+    return (
+        publicationManifest.pubdate ||
+        publicationManifest.YearofPublication?.toString()
+    );
 }
 
 export function getPublicationSupportingLinks(
