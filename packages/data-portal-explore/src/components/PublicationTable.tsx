@@ -349,64 +349,50 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             wrap: true,
             sortable: true,
         },
-
         {
-            name: 'Authors',
-            cell: (publication: Entity) => {
-                return publication?.Authors.split(',')
-                    .slice(0, 4)
-                    .concat([' et al'])
-                    .join(',');
-            },
-        },
-        {
-            name: 'Journal',
-            selector: 'fulljournalname',
-        },
-
-        {
-            name: 'Participants',
-            selector: (manifest: PublicationManifest) =>
-                getEntityCount(manifest, props.participants),
+            name: 'Atlas',
+            selector: (manifest: PublicationManifest) => manifest.atlas_name,
             cell: (manifest: PublicationManifest) => {
-                const { filteredCount, unfilteredCount } = getCounts(
-                    manifest,
-                    props.filteredParticipants,
-                    props.participants
-                );
+                const meta = JSON.parse(manifest.AtlasMeta);
                 return (
-                    <Count
-                        filteredCount={filteredCount}
-                        unfilteredCount={unfilteredCount}
+                    <AtlasDescription
+                        atlasMeta={meta}
+                        atlasName={meta.lead_institutions}
                     />
                 );
             },
-            grow: 0.5,
             wrap: true,
             sortable: true,
         },
-        // {
-        //     name: 'Biospecimens',
-        //     selector: (manifest: PublicationManifest) =>
-        //         getEntityCount(manifest, props.biospecimens),
-        //     cell: (manifest: PublicationManifest) => {
-        //         const { filteredCount, unfilteredCount } = getCounts(
-        //             manifest,
-        //             props.filteredBiospecimens,
-        //             props.biospecimens
-        //         );
-        //         return (
-        //             <Count
-        //                 filteredCount={filteredCount}
-        //                 unfilteredCount={unfilteredCount}
-        //             />
-        //         );
-        //     },
-        //     grow: 0.7,
-        //     wrap: true,
-        //     sortable: true,
-        // },
+        {
+            name: 'Authors',
+            selector: (manifest: PublicationManifest) =>
+                getPublicationAuthors(getSummary(manifest), manifest).join(
+                    ', '
+                ),
+            cell: (manifest: PublicationManifest) => {
+                const authors = getPublicationAuthors(
+                    getSummary(manifest),
+                    manifest
+                );
+                let shortList = authors;
 
+                if (authors.length > 5) {
+                    shortList = authors.slice(0, 4).concat('et al.');
+                }
+
+                return shortList.join(', ');
+            },
+            wrap: true,
+            sortable: true,
+        },
+        {
+            name: 'Journal',
+            selector: (manifest: PublicationManifest) =>
+                getPublicationJournal(getSummary(manifest), manifest),
+            wrap: true,
+            sortable: true,
+        },
         {
             name: 'Publication Date',
             selector: (manifest: PublicationManifest) => getDateTime(manifest),
@@ -444,6 +430,49 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
                     </a>
                 );
             },
+        },
+
+        {
+            name: 'Participants',
+            selector: (manifest: PublicationManifest) =>
+                getEntityCount(manifest, props.participants),
+            cell: (manifest: PublicationManifest) => {
+                const { filteredCount, unfilteredCount } = getCounts(
+                    manifest,
+                    props.filteredParticipants,
+                    props.participants
+                );
+                return (
+                    <Count
+                        filteredCount={filteredCount}
+                        unfilteredCount={unfilteredCount}
+                    />
+                );
+            },
+            grow: 0.5,
+            wrap: true,
+            sortable: true,
+        },
+        {
+            name: 'Biospecimens',
+            selector: (manifest: PublicationManifest) =>
+                getEntityCount(manifest, props.biospecimens),
+            cell: (manifest: PublicationManifest) => {
+                const { filteredCount, unfilteredCount } = getCounts(
+                    manifest,
+                    props.filteredBiospecimens,
+                    props.biospecimens
+                );
+                return (
+                    <Count
+                        filteredCount={filteredCount}
+                        unfilteredCount={unfilteredCount}
+                    />
+                );
+            },
+            grow: 0.7,
+            wrap: true,
+            sortable: true,
         },
     ];
 
