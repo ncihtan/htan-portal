@@ -1358,5 +1358,25 @@
     "Tool Input Data": "",
     "Tool Output Data": "",
     "Tool Assay": "CODEX, CyCIF, mIHC"
+  },
+  {
+    "": "",
+    "Atlas Name": "HTAN WUSTL",
+    "Grant ID": "",
+    "Tool ID": "",
+    "Parent ID": "",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/39815104/",
+    "Perspective": "",
+    "Tool Name": "MISO",
+    "Tool Alias": "",
+    "Tool Type": "Annotation, Analysis, Visualization",
+    "Tool Language": "Python",
+    "Tool Homepage": "https://github.com/kpcoleman/miso",
+    "Tool Description": "MISO (MultI-modal Spatial Omics) is a versatile algorithm for feature extraction and clustering, capable of integrating multiple modalities from diverse spatial omics experiments with high spatial resolution",
+    "Tool Topic": "",
+    "Tool Operation": "",
+    "Tool Input Data": "",
+    "Tool Output Data": "",
+    "Tool Assay": "Spatial Transcriptomics"
   }
 ]
