@@ -131,6 +131,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
                     href={`//${
                         window.location.host
                     }/publications/${getPublicationUid(manifest)}`}
+                    className="py-1"
                 >
                     {getPublicationTitle(getSummary(manifest), manifest)}
                 </a>
