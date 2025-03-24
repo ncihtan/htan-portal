@@ -312,7 +312,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             )}
                             atlases={props.atlases}
                             getAtlasMetaData={props.getAtlasMetaData}
-                            synapseAtlasData={props.allSynapseAtlases}
                             selectedAtlases={props.selectedSynapseAtlases}
                             filteredAtlases={
                                 props.filteredSynapseAtlasesByNonAtlasFilters

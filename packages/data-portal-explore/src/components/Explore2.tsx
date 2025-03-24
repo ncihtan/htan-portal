@@ -122,13 +122,26 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
     files = new remoteData({
         invoke: async () => {
-            const q = 'SELECT * FROM files' + this.filterString;
+            const q = 'SELECT * FROM files';
             const files = await doQuery(q);
             return files;
         },
     });
 
-    cases = new remoteData({
+    filesFiltered = new remoteData<Entity[]>({
+        await: () => [this.files],
+        invoke: async () => {
+            if (this.filterString.length === 0) {
+                return this.files.result;
+            } else {
+                const q = 'SELECT * FROM files' + this.filterString;
+                const files = await doQuery(q);
+                return files;
+            }
+        },
+    });
+
+    cases = new remoteData<Entity[]>({
         invoke: async () => {
             const q = caseQuery({ filterString: '' });
             const cases = await doQuery(q);
@@ -136,7 +149,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         },
     });
 
-    casesFiltered = new remoteData({
+    casesFiltered = new remoteData<Entity[]>({
         await: () => [],
         invoke: async () => {
             const q = caseQuery({ filterString: this.filterString });
@@ -144,7 +157,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         },
     });
 
-    specimen = new remoteData({
+    specimen = new remoteData<Entity[]>({
         invoke: async () => {
             // const q = `SELECT * FROM biospecimen c
             //            WHERE biospecimen.ParentID IN (
@@ -157,14 +170,14 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         },
     });
 
-    specimenFiltered = new remoteData({
+    specimenFiltered = new remoteData<Entity[]>({
         invoke: async () => {
             const q = specimenQuery({ filterString: this.filterString });
             return doQuery(q);
         },
     });
 
-    atlases = new remoteData({
+    atlases = new remoteData<Atlas[]>({
         invoke: async () => {
             const q = `
             SELECT * FROM atlases 
@@ -173,7 +186,13 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                 )
             `;
 
-            return doQuery(q);
+            const data = await doQuery(q);
+
+            data.forEach(
+                (atlas) => (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta))
+            );
+
+            return data;
         },
     });
 
@@ -293,7 +312,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
     get filteredSamplesByNonAtlasFilters() {
         return getFilteredSamples(
-            this.filteredFilesByNonAtlasFilters,
+            this.filteredFiles,
             this.filteredCasesByNonAtlasFilters,
             this.showAllBiospecimens
         );
@@ -410,6 +429,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                 this.specimenFiltered,
                 this.specimen,
                 this.unfilteredOptions,
+                this.publications,
+                this.atlases,
+                this.filesFiltered,
+                this.files,
             ]) === false
         ) {
             return (
@@ -451,14 +474,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                 } else {
                     return [];
                 }
-
-                // return [{
-                //         value: "string",
-                //         label: "fdsafdsa",
-                //         group: "TissueorOrganofOrigin",
-                //         count: 5,
-                //         isSelected: false
-                //     }];
             };
 
             const dropdownProps = {
@@ -540,10 +555,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
                     <ExploreSummary
                         summaryData={getDefaultSummaryData(
-                            this.cases.result!,
-                            [],
-                            this.files.result!,
-                            [] //this.groupsByPropertyFiltered
+                            this.casesFiltered.result!,
+                            this.specimenFiltered.result,
+                            this.filesFiltered.result!,
+                            this.groupsByProperty
                         )}
                     />
 

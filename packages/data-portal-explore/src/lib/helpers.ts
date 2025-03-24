@@ -17,7 +17,7 @@ export function getDefaultSummaryData<T>(
         },
         {
             displayName: 'Organ',
-            attributeName: AttributeNames.organType,
+            attributeName: AttributeNames.TissueorOrganofOrigin,
         },
         {
             displayName: 'Cancer Type',
@@ -41,6 +41,7 @@ export function getDefaultSummaryData<T>(
         },
     ];
 
+    debugger;
     return summary.map((s) => {
         let values = getSummaryData(
             s.attributeName,

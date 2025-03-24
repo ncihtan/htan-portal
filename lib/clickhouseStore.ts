@@ -42,7 +42,8 @@ export const myQuery = `
         SELECT Filename, FileFormat as val, 'FileFormat' as type FROM files
         UNION ALL
         SELECT Filename, viewers as val, 'viewers' as type FROM files
-
+        UNION ALL
+        SELECT Filename, atlas_name as val, 'AtlasName' as type FROM files
         )
     GROUP BY val, type
 `;
