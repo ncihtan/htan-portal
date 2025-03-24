@@ -3,8 +3,8 @@ import _ from 'lodash';
 
 const client = createClient({
     host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
-    username: 'app_user',
-    password: 'P@ssword1976',
+    username: 'webuser',
+    password: 'My_password1976',
     request_timeout: 600000,
     compression: {
         response: true,
@@ -58,8 +58,8 @@ export const caseQuery = _.template(
 );
 
 export const specimenQuery = _.template(`
-            SELECT * FROM biospecimen c
-                       WHERE biospecimen.ParentID IN (
+            SELECT * FROM specimen c
+                       WHERE specimen.ParentID IN (
                            SELECT demographicsIds as moo FROM files f
                            ARRAY JOIN demographicsIds
                      <%=this.filterString%>)`);

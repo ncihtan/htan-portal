@@ -35,7 +35,7 @@ const cols = [
     },
 
     {
-        name: 'atlas_name',
+        name: 'Atlas Name',
         selector: 'atlas_name',
     },
     commonColumns.AgeatDiagnosis,
@@ -217,23 +217,9 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     //     name: `${name} Genomic Ancestry`,
     // }));
 
-    //const columns = [...generatedColumns];
+    const columns = [...cols];
 
-    // const indexOfParticipantId = _.findIndex(
-    //     columns,
-    //     (c) => c.selector === GenericAttributeNames.ParticipantID
-    // );
-    // insert Atlas Name and Publications right after Participant ID
-    // columns.splice(
-    //     indexOfParticipantId + 1,
-    //     0,
-    //     getAtlasColumn(props.synapseAtlases),
-    //     getPublicationColumn(props.publicationsByUid)
-    // );
-
-    console.log(props.cases);
-
-    const columns = cols;
+    columns.splice(2, 0, getPublicationColumn(props.publicationsByUid));
 
     return (
         <EnhancedDataTable

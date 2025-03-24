@@ -394,6 +394,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
         return groupsByProperty;
     }
 
+    get publicationsById() {
+        return _.keyBy(this.publications.result!, 'publicationId');
+    }
+
     render() {
         function allComplete(proms: MobxPromise<any>[]) {
             return _.every(proms, (p) => p.isComplete);
@@ -582,9 +586,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={this.props.getAtlasMetaData}
-                        publicationManifestByUid={
-                            this.state.publicationManifestByUid
-                        }
+                        publicationManifestByUid={this.publicationsById}
                         publicationSummaryByPubMedID={
                             this.state.publicationSummaryByPubMedID
                         }

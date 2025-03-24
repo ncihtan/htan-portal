@@ -831,6 +831,8 @@ function addBiopsecimenPublicationIds(
     _.forEach(biospecimenByBiospecimenID, (biospecimen) => {
         if (!_.isEmpty(biospecimen.publicationIds)) {
             biospecimen.publicationIds = _.uniq(biospecimen.publicationIds);
+        } else {
+            biospecimen.publicationIds = [];
         }
     });
 }

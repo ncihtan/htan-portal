@@ -72,6 +72,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
             name: 'Atlas Name',
             selector: 'atlas_name',
         },
+        getPublicationColumn(props.publicationsByUid),
         {
             name: 'HTAN Parent ID',
             selector: 'HTANParentID',
@@ -217,10 +218,6 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
             name: 'Method of Nucleic Acid Isolation',
             selector: 'MethodofNucleicAcidIsolation',
         },
-        // {
-        //     "name": "synapseId",
-        //     "selector": "synapseId"
-        // },
         {
             name: 'Acquisition Method Other Specify',
             selector: 'AcquisitionMethodOtherSpecify',
