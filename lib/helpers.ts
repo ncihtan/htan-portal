@@ -9,9 +9,7 @@ import {
 import {
     Entity,
     fetchSynData,
-    getNormalizedOrgan,
     LoadDataResult,
-    NOT_REPORTED,
 } from '@htan/data-portal-commons';
 import { ExploreTab } from '@htan/data-portal-explore';
 
@@ -134,44 +132,6 @@ export function setTab(tab: string, router: NextRouter) {
         undefined,
         { shallow: true }
     );
-}
-
-export type EntityReport = {
-    description: string;
-    text: string;
-};
-
-export function computeDashboardData(files: Entity[]): EntityReport[] {
-    const uniqueAtlases = new Set();
-    const uniqueOrgans = new Set();
-    const uniqueBiospecs = new Set();
-    const uniqueCases = new Set();
-
-    for (const file of files) {
-        if (file.atlasid) {
-            uniqueAtlases.add(file.atlasid);
-        }
-        for (const biospecimen of file.biospecimen) {
-            uniqueBiospecs.add(biospecimen.BiospecimenID);
-        }
-        for (const diagnosis of file.diagnosis) {
-            uniqueCases.add(diagnosis.ParticipantID);
-            uniqueOrgans.add(getNormalizedOrgan(diagnosis));
-        }
-        for (const demographics of file.demographics) {
-            uniqueCases.add(demographics.ParticipantID);
-        }
-    }
-
-    // remove "Not Reported" from the organ list
-    uniqueOrgans.delete(NOT_REPORTED);
-
-    return [
-        { description: 'Atlases', text: uniqueAtlases.size.toString() },
-        { description: 'Organs', text: uniqueOrgans.size.toString() },
-        { description: 'Cases', text: uniqueCases.size.toString() },
-        { description: 'Biospecimens', text: uniqueBiospecs.size.toString() },
-    ];
 }
 
 export function isReleaseQCEnabled() {
