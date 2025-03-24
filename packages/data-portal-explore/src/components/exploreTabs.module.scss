@@ -9,6 +9,7 @@
 
 // publication table numerical column header alignment workaround
 .publicationTab {
+    :global(div[id*='CitedInNumber']),
     :global(div[id*='filteredParticipants']),
     :global(div[id*='filteredBiospecimen']),
     :global(div[id*='filteredFiles']) {

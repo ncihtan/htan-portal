@@ -247,6 +247,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
                     <a
                         href={`https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=${pubmedId}`}
                         target="_blank"
+                        className="ml-auto"
                     >
                         {manifest.CitedInNumber}{' '}
                         <FontAwesomeIcon icon={faExternalLinkAlt} />
