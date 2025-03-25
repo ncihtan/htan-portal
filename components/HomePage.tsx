@@ -78,16 +78,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                             3-dimensional atlases of the dynamic cellular,
                             morphological, and molecular features of human
                             cancers as they evolve from precancerous lesions to
-                            advanced disease. (
-                            <span style={{ fontStyle: 'italic' }}>
-                                <a
-                                    style={{ color: '#fff' }}
-                                    href="https://www.sciencedirect.com/science/article/pii/S0092867420303469"
-                                >
-                                    Cell April 2020
-                                </a>
-                            </span>
-                            )
+                            advanced disease.
                         </p>
 
                         <div
@@ -104,7 +95,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                                     className="mr-4"
                                     size="lg"
                                 >
-                                    Explore latest Data
+                                    Explore Data
                                 </Button>
                                 <Button
                                     href="/overview"
@@ -112,7 +103,16 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                                     className="mr-4"
                                     size="lg"
                                 >
-                                    Learn more about HTAN
+                                    Learn more
+                                </Button>
+                                <Button
+                                    href="https://docs.humantumoratlas.org/data_access/citing_htan/"
+                                    variant="primary"
+                                    className="mr-4"
+                                    size="lg"
+                                    target="_blank"
+                                >
+                                    Citing HTAN
                                 </Button>
                             </ButtonToolbar>
                         </div>
