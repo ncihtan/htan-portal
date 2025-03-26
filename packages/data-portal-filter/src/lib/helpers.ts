@@ -314,8 +314,6 @@ export function getSelectOptions<Attribute extends string, T>(
     attributeNames: Attribute[],
     options: (attrName: Attribute) => OptionType[]
 ): { label: string; options: OptionType[] }[] {
-    debugger;
-
     return attributeNames.map((attrName) => {
         return {
             label: attributeMap[attrName].displayName,

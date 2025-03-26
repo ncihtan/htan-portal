@@ -33,7 +33,6 @@ export const FilterDropdown = <Attribute extends string, T>(
                 <FilterPanel placeholder={placeholder}>
                     <div className={props.className}>
                         {props.attributes.map((attribute) => {
-                            debugger;
                             const displayName =
                                 props.attributeMap[attribute].displayName;
                             return (

@@ -453,8 +453,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                 </div>
             );
         } else {
-            debugger;
-
             const filterControlsProps: IGenericFilterControlProps<any, any> = {
                 countHeader: 'Files',
                 attributeMap: FileAttributeMap,
