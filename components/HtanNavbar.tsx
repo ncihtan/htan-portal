@@ -2,7 +2,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import React, { useState } from 'react';
 import { Dropdown, NavDropdown } from 'react-bootstrap';
-import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -63,7 +62,10 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             </NavDropdown.Item>
             <NavDropdown.Item href="/data-access">Data Access</NavDropdown.Item>
             <Dropdown.Divider />
-            <Nav.Link href="https://www.protocols.io/workspaces/ncihtan">
+            <Nav.Link
+                href="https://www.protocols.io/workspaces/ncihtan"
+                target="_blank"
+            >
                 Protocols.io
             </Nav.Link>
         </NavSection>,
@@ -105,10 +107,15 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             </NavDropdown.Item>
             <NavDropdown.Item href="/events">Events</NavDropdown.Item>
             <Dropdown.Divider />
-            <Nav.Link href="https://groups.google.com/g/htan-news">
+            <Nav.Link
+                href="https://groups.google.com/g/htan-news"
+                target="_blank"
+            >
                 Newsletter
             </Nav.Link>
-            <Nav.Link href="https://twitter.com/ncihtan">Twitter</Nav.Link>
+            <Nav.Link href="https://twitter.com/ncihtan" target="_blank">
+                Twitter
+            </Nav.Link>
         </NavSection>,
     ];
 
@@ -124,6 +131,13 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">{navItems}</Nav>
+                <a
+                    href="https://docs.humantumoratlas.org/data_access/citing_htan/"
+                    target="_blank"
+                >
+                    Please cite HTAN{' '}
+                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                </a>
             </Navbar.Collapse>
         </Navbar>
     );
