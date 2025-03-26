@@ -9,6 +9,7 @@ import {
     getDropdownOptionsFromProps,
     getOptionsFromProps,
     IFilterControlsProps,
+    IGenericFilterControlProps,
     OptionType,
 } from '@htan/data-portal-filter';
 import { AttributeNames } from '@htan/data-portal-utils';
@@ -20,6 +21,7 @@ import {
 } from '@htan/data-portal-commons';
 
 import styles from './fileFilterControls.module.scss';
+import _ from 'lodash';
 
 interface IFileFilterControlProps
     extends IFilterControlsProps<Entity, AttributeNames> {
@@ -28,8 +30,7 @@ interface IFileFilterControlProps
 
 export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps> = observer(
     (props) => {
-        const filterControlsProps = {
-            ...props,
+        const filterControlsProps: IGenericFilterControlProps<any, any> = {
             countHeader: 'Files',
             attributeMap: FileAttributeMap,
             attributeNames: [
@@ -37,40 +38,52 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                 AttributeNames.TissueorOrganofOrigin,
                 AttributeNames.PrimaryDiagnosis,
                 AttributeNames.assayName,
-                AttributeNames.Level,
+                AttributeNames.level,
                 AttributeNames.FileFormat,
                 AttributeNames.TreatmentType,
             ],
+            entities: [],
+            setFilter: props.setFilter,
+            selectedFiltersByGroupName: props.selectedFiltersByGroupName,
+            selectedFilters: [],
+            groupsByProperty: props.groupsByProperty,
         };
 
-        const options = getOptionsFromProps(filterControlsProps);
-        const dropdownProps = getDropdownOptionsFromProps(
-            filterControlsProps,
-            options
-        );
+        const options = (str: string) => {
+            if (str in props.groupsByProperty) {
+                return _.map(props.groupsByProperty[str], (val, key) => {
+                    return {
+                        value: val.val,
+                        label: val.val,
+                        group: str,
+                        fieldType: val.fieldType,
+                        isSelected: false,
+                        count: val.count,
+                    };
+                });
+            } else {
+                return [];
+            }
+        };
+
+        const dropdownProps = {
+            options,
+            countHeader: filterControlsProps.countHeader,
+            setFilter: filterControlsProps.setFilter,
+            selectedFiltersByGroupName:
+                filterControlsProps.selectedFiltersByGroupName,
+            attributeMap: FileAttributeMap,
+        };
 
         return (
             <FilterControls {...filterControlsProps}>
                 <FilterDropdown
                     {...dropdownProps}
-                    attributes={[AttributeNames.AtlasName]}
-                />
-                <FilterDropdown
-                    {...dropdownProps}
-                    attributes={[
-                        AttributeNames.organType,
-                        AttributeNames.TissueorOrganofOrigin,
-                    ]}
-                    className={styles.filterCheckboxListContainer}
-                />
-                <FilterDropdown
-                    {...dropdownProps}
-                    attributes={[
-                        AttributeNames.PrimaryDiagnosis /*AttributeNames.Stage*/,
-                    ]}
+                    attributes={[AttributeNames.TissueorOrganofOrigin]}
                     className={styles.filterCheckboxListContainer}
                     width={120}
                 />
+
                 <FilterDropdown
                     {...dropdownProps}
                     placeholder="Demographics"
@@ -82,118 +95,50 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                     className={styles.filterCheckboxListContainer}
                     width={164}
                 />
+
                 <FilterDropdown
                     {...dropdownProps}
+                    placeholder="Disease"
+                    attributes={[AttributeNames.PrimaryDiagnosis]}
+                    className={styles.filterCheckboxListContainer}
+                    width={164}
+                />
+
+                <FilterDropdown
+                    {...dropdownProps}
+                    placeholder="Treatment"
                     attributes={[AttributeNames.TreatmentType]}
                     className={styles.filterCheckboxListContainer}
-                    width={120}
+                    width={164}
                 />
+
                 <FilterDropdown
                     {...dropdownProps}
-                    attributes={[AttributeNames.assayName]}
+                    placeholder="Viewers"
+                    attributes={[AttributeNames.viewersArr]}
+                    className={styles.filterCheckboxListContainer}
+                    width={164}
                 />
+
+                <FilterDropdown
+                    {...dropdownProps}
+                    placeholder="Assay"
+                    attributes={[AttributeNames.assayName]}
+                    className={styles.filterCheckboxListContainer}
+                    width={164}
+                />
+
                 <FilterDropdown
                     {...dropdownProps}
                     placeholder="File"
                     attributes={[
-                        AttributeNames.Level,
+                        AttributeNames.level,
                         AttributeNames.FileFormat,
                     ]}
                     className={styles.filterCheckboxListContainer}
-                    width={80}
+                    width={164}
                 />
-                <FilterDropdown
-                    {...dropdownProps}
-                    attributes={[AttributeNames.downloadSource]}
-                    className={styles.filterCheckboxListContainer}
-                    width={150}
-                    options={(attrName: AttributeNames) => {
-                        return options(attrName)
-                            .sort((a: OptionType, b: OptionType) => {
-                                const downloadSourceOrder = [
-                                    DownloadSourceCategory.dbgap,
-                                    DownloadSourceCategory.cds,
-                                    // DownloadSourceCategory.idc,
-                                    DownloadSourceCategory.synapse,
-                                    DownloadSourceCategory.comingSoon,
-                                ];
-                                return (
-                                    downloadSourceOrder.indexOf(
-                                        a.value as DownloadSourceCategory
-                                    ) -
-                                    downloadSourceOrder.indexOf(
-                                        b.value as DownloadSourceCategory
-                                    )
-                                );
-                            })
-                            .map((e: OptionType) => {
-                                const downloadLabels = {
-                                    [DownloadSourceCategory.dbgap]: (
-                                        <span>
-                                            CDS/SB-CGC (dbGaP{' '}
-                                            <FontAwesomeIcon
-                                                color="#FF8C00"
-                                                icon={faLock}
-                                            />
-                                            )
-                                        </span>
-                                    ),
-                                    // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
-                                    [DownloadSourceCategory.cds]: (
-                                        <span>
-                                            CDS/SB-CGC (Open Access{' '}
-                                            <FontAwesomeIcon
-                                                color="#00796B"
-                                                icon={faLockOpen}
-                                            />
-                                            )
-                                        </span>
-                                    ),
-                                    [DownloadSourceCategory.synapse]: (
-                                        <span>
-                                            Synapse (Open Access{' '}
-                                            <FontAwesomeIcon
-                                                color="#00796B"
-                                                icon={faLockOpen}
-                                            />
-                                            )
-                                        </span>
-                                    ),
-                                    [DownloadSourceCategory.comingSoon]:
-                                        'Coming Soon',
-                                };
 
-                                e.label =
-                                    downloadLabels[
-                                        e.value as DownloadSourceCategory
-                                    ];
-                                return e;
-                            });
-                    }}
-                />
-                <FilterDropdown
-                    {...dropdownProps}
-                    attributes={[AttributeNames.viewers]}
-                    options={(attrName: AttributeNames) => {
-                        return options(attrName).map((e: OptionType) => {
-                            const viewerLabels = {
-                                [FileViewerName.autoMinerva]: 'Autominerva',
-                                [FileViewerName.customMinerva]: 'Minerva Story',
-                                [FileViewerName.ucscXena]: 'UCSC Xena',
-                                [FileViewerName.cellxgene]: 'CellxGene',
-                                [FileViewerName.isbcgc]: 'BigQuery',
-
-                                // excluded values:
-                                // we are not supposed to see these as filter options
-                                [FileViewerName.cds]: 'CDS', // excluded (this only appears as a download source)
-                                [FileViewerName.idc]: 'IDC', // excluded (we do not show IDC links anymore)
-                            };
-
-                            e.label = viewerLabels[e.value as FileViewerName];
-                            return e;
-                        });
-                    }}
-                />
                 {props.enableReleaseFilter && (
                     <FilterDropdown
                         {...dropdownProps}

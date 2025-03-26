@@ -49,6 +49,7 @@ import {
     myQuery,
     specimenQuery,
 } from '../../../../lib/clickhouseStore.ts';
+import FileFilterControls from './FileFilterControls.tsx';
 
 export interface IExploreState {
     files: Entity[];
@@ -500,77 +501,32 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
             return (
                 <div className={styles.explore}>
-                    <FilterControls {...filterControlsProps}>
-                        <FilterDropdown
-                            {...dropdownProps}
-                            attributes={[AttributeNames.TissueorOrganofOrigin]}
-                            className={styles.filterCheckboxListContainer}
-                            width={120}
-                        />
-
-                        <FilterDropdown
-                            {...dropdownProps}
-                            placeholder="Demographics"
-                            attributes={[
-                                AttributeNames.Gender,
-                                AttributeNames.Race,
-                                AttributeNames.Ethnicity,
-                            ]}
-                            className={styles.filterCheckboxListContainer}
-                            width={164}
-                        />
-
-                        <FilterDropdown
-                            {...dropdownProps}
-                            placeholder="Disease"
-                            attributes={[AttributeNames.PrimaryDiagnosis]}
-                            className={styles.filterCheckboxListContainer}
-                            width={164}
-                        />
-
-                        <FilterDropdown
-                            {...dropdownProps}
-                            placeholder="Treatment"
-                            attributes={[AttributeNames.TreatmentType]}
-                            className={styles.filterCheckboxListContainer}
-                            width={164}
-                        />
-
-                        <FilterDropdown
-                            {...dropdownProps}
-                            placeholder="Viewers"
-                            attributes={[AttributeNames.viewersArr]}
-                            className={styles.filterCheckboxListContainer}
-                            width={164}
-                        />
-
-                        <FilterDropdown
-                            {...dropdownProps}
-                            placeholder="Assay"
-                            attributes={[AttributeNames.assayName]}
-                            className={styles.filterCheckboxListContainer}
-                            width={164}
-                        />
-
-                        <FilterDropdown
-                            {...dropdownProps}
-                            placeholder="File"
-                            attributes={[
-                                AttributeNames.level,
-                                AttributeNames.FileFormat,
-                            ]}
-                            className={styles.filterCheckboxListContainer}
-                            width={164}
-                        />
-                    </FilterControls>
-
-                    <Filter
+                    <FileFilterControls
                         setFilter={this.setFilter}
-                        selectedFiltersByGroupName={toJS(
+                        selectedFiltersByGroupName={
                             this.selectedFiltersByAttrName
-                        )}
-                        getFilterDisplayName={getFileFilterDisplayName}
+                        }
+                        selectedFilters={this.selectedFilters}
+                        entities={this.files.result!}
+                        groupsByProperty={this.groupsByProperty}
+                        enableReleaseFilter={
+                            this.props.isReleaseQCEnabled
+                                ? this.props.isReleaseQCEnabled()
+                                : false
+                        }
                     />
+
+                    {/*<FilterControls {...filterControlsProps}>*/}
+
+                    {/*</FilterControls>*/}
+
+                    {/*<Filter*/}
+                    {/*    setFilter={this.setFilter}*/}
+                    {/*    selectedFiltersByGroupName={toJS(*/}
+                    {/*        this.selectedFiltersByAttrName*/}
+                    {/*    )}*/}
+                    {/*    getFilterDisplayName={getFileFilterDisplayName}*/}
+                    {/*/>*/}
 
                     <ExploreSummary
                         summaryData={getDefaultSummaryData(

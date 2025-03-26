@@ -21,7 +21,9 @@ export const FilterPanelMenu: FunctionComponent<{
                 closeMenu();
             };
 
-            //$(window).on('click', clickHandler);
+            setTimeout(() => {
+                $(window).on('click', clickHandler);
+            }, 100);
 
             if (panelRef && panelRef.current) {
                 const rect = panelRef!.current.getBoundingClientRect();
