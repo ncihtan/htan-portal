@@ -10,6 +10,12 @@ const client = createClient({
         response: true,
         request: false,
     },
+    config: {
+        session_timeout: 60,
+        // output_format_json_quote_64bit_integers: 0,
+        // enable_http_compression: 0,
+        max_connections: 10, // Set your desired pool size
+    },
 });
 
 // const client = createClient({
@@ -24,28 +30,30 @@ const client = createClient({
 // });
 
 export const myQuery = `
-    SELECT val, type, count(Distinct Filename) as count FROM (
-        SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type FROM files
+    SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
+        SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files
         UNION ALL
-        SELECT Filename, arrayJoin(Race) as val, 'Race' as type FROM files
+        SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM files
         UNION ALL
-        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type FROM files
+        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM files
         UNION ALL
-        SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type FROM files
+        SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM files
         UNION ALL
-        SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type FROM files
+        SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM files
         UNION ALL
-        SELECT Filename, level as val, 'Level' as type FROM files
+        SELECT Filename, level as val, 'Level' as typ, 'array' as fieldType FROM files
         UNION ALL
-        SELECT Filename, assayName as val, 'assayName' as type FROM files
+        SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM files
         UNION ALL
-        SELECT Filename, FileFormat as val, 'FileFormat' as type FROM files
+        SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM files
         UNION ALL
-        SELECT Filename, viewers as val, 'viewers' as type FROM files
+        SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM files
         UNION ALL
-        SELECT Filename, atlas_name as val, 'AtlasName' as type FROM files
+        SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM files
+        UNION ALL
+        SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files
         )
-    GROUP BY val, type
+    GROUP BY val, type, fieldType
 `;
 
 export const caseQuery = _.template(
@@ -66,6 +74,8 @@ export const specimenQuery = _.template(`
                      <%=this.filterString%>)`);
 
 export async function doQuery(str: any) {
+    console.log(str);
+
     const resultSet = await client.query({
         query: str,
         format: 'JSONEachRow',

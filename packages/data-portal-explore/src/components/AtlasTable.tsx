@@ -165,7 +165,6 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     };
 
     getPublicationManifests = (atlas: Atlas) => {
-        debugger;
         return this.props.publications.filter(
             (p) => !isManuscriptInReview(p) && p.atlasid === atlas.htan_id
         );
@@ -174,7 +173,6 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
     get data(): AtlasTableData[] {
-        debugger;
         return this.props.atlases.result.map(
             (a) =>
                 ({
@@ -231,7 +229,6 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
             {
                 name: 'Atlas Name',
                 selector: (atlas: Atlas) => {
-                    console.log('groober', atlas);
                     return atlas.htan_name
                         ?.replace('HTAN ', '')
                         ?.replace(' - ', ' ');

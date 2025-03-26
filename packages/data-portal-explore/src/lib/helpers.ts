@@ -41,7 +41,6 @@ export function getDefaultSummaryData<T>(
         },
     ];
 
-    debugger;
     return summary.map((s) => {
         let values = getSummaryData(
             s.attributeName,

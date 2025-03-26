@@ -127,7 +127,7 @@ export const FileAttributeMap: {
         path: 'downloadSource',
         displayName: 'Data Access',
     },
-    [AttributeNames.viewers]: {
+    [AttributeNames.viewersArr]: {
         getValues: getViewerValues,
         displayName: 'Viewer',
     },

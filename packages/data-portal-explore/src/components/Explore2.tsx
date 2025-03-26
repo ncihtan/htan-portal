@@ -70,6 +70,10 @@ export interface IExploreProps {
     cloudBaseUrl?: string;
 }
 
+if (typeof window !== 'undefined') {
+    window.toJS = toJS;
+}
+
 @observer
 export class Explore2 extends React.Component<IExploreProps, IExploreState> {
     @observable.ref private dataLoadingPromise:
@@ -109,8 +113,13 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
             const clauses = _(selectedFilters)
                 .groupBy('group')
                 .map((val, k) => {
+                    // if any of the values are type string, we can assume they all are
                     const values = val.map((v) => `'${v.value}'`).join(',');
-                    return `hasAny(${k},[${values}])`;
+                    if (val.find((v) => v.fieldType === 'string')) {
+                        return `${k} in (${values})`;
+                    } else {
+                        return `hasAny(${k},[${values}])`;
+                    }
                 })
                 .value();
 
@@ -467,6 +476,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                             value: val.val,
                             label: val.val,
                             group: str,
+                            fieldType: val.fieldType,
                             isSelected: false,
                             count: val.count,
                         };
@@ -517,6 +527,22 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
                         <FilterDropdown
                             {...dropdownProps}
+                            placeholder="Treatment"
+                            attributes={[AttributeNames.TreatmentType]}
+                            className={styles.filterCheckboxListContainer}
+                            width={164}
+                        />
+
+                        <FilterDropdown
+                            {...dropdownProps}
+                            placeholder="Viewers"
+                            attributes={[AttributeNames.viewersArr]}
+                            className={styles.filterCheckboxListContainer}
+                            width={164}
+                        />
+
+                        <FilterDropdown
+                            {...dropdownProps}
                             placeholder="Assay"
                             attributes={[AttributeNames.assayName]}
                             className={styles.filterCheckboxListContainer}
@@ -533,16 +559,6 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                             className={styles.filterCheckboxListContainer}
                             width={164}
                         />
-
-                        {/*<FilterDropdown*/}
-                        {/*    {...dropdownProps}*/}
-                        {/*    placeholder="Viewer"*/}
-                        {/*    attributes={[*/}
-                        {/*        AttributeNames.viewers*/}
-                        {/*    ]}*/}
-                        {/*    className={styles.filterCheckboxListContainer}*/}
-                        {/*    width={164}*/}
-                        {/*/>*/}
                     </FilterControls>
 
                     <Filter

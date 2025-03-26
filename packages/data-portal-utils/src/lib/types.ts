@@ -27,7 +27,7 @@ export enum AttributeNames {
     publicationIds = 'publicationIds',
     downloadSource = 'downloadSource',
     releaseVersion = 'releaseVersion',
-    viewers = 'viewers',
+    viewersArr = 'viewersArr',
 }
 
 // Normalized/Generic attribute names
