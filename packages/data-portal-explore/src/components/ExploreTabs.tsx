@@ -307,9 +307,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     >
                         <AtlasTable
                             setTab={props.setTab}
-                            publications={_.values(
-                                props.publicationManifestByUid
-                            )}
+                            publications={props.publications}
                             atlases={props.atlases}
                             getAtlasMetaData={props.getAtlasMetaData}
                             selectedAtlases={props.selectedSynapseAtlases}

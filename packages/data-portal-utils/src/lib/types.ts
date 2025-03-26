@@ -17,7 +17,7 @@ export enum AttributeNames {
     Biospecimen = 'Biospecimen',
     AtlasName = 'AtlasName',
     Stage = 'Stage',
-    Level = 'Level',
+    level = 'level',
     FileFormat = 'FileFormat',
     TreatmentType = 'TreatmentType',
 

@@ -45,6 +45,7 @@ import styles from './explore.module.scss';
 import {
     caseQuery,
     doQuery,
+    fileQuery,
     myQuery,
     specimenQuery,
 } from '../../../../lib/clickhouseStore.ts';
@@ -131,7 +132,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
     files = new remoteData({
         invoke: async () => {
-            const q = 'SELECT * FROM files';
+            const q = fileQuery;
             const files = await doQuery(q);
             return files;
         },
@@ -428,7 +429,9 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
     render() {
         function allComplete(proms: MobxPromise<any>[]) {
-            return _.every(proms, (p) => p.isComplete);
+            return _(proms)
+                .map((p) => p.isComplete)
+                .every();
         }
 
         if (
@@ -450,6 +453,8 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                 </div>
             );
         } else {
+            debugger;
+
             const filterControlsProps: IGenericFilterControlProps<any, any> = {
                 countHeader: 'Files',
                 attributeMap: FileAttributeMap,
@@ -458,13 +463,13 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                     AttributeNames.TissueorOrganofOrigin,
                     AttributeNames.PrimaryDiagnosis,
                     AttributeNames.assayName,
-                    AttributeNames.Level,
+                    AttributeNames.level,
                     AttributeNames.FileFormat,
                     AttributeNames.TreatmentType,
                 ],
                 entities: [],
                 setFilter: this.setFilter,
-                selectedFiltersByGroupName: {},
+                selectedFiltersByGroupName: this.selectedFiltersByAttrName,
                 selectedFilters: [],
                 groupsByProperty: this.groupsByProperty,
             };
@@ -553,7 +558,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                             {...dropdownProps}
                             placeholder="File"
                             attributes={[
-                                AttributeNames.Level,
+                                AttributeNames.level,
                                 AttributeNames.FileFormat,
                             ]}
                             className={styles.filterCheckboxListContainer}
@@ -617,10 +622,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={this.props.getAtlasMetaData}
-                        publicationManifestByUid={this.publicationsById}
-                        publicationSummaryByPubMedID={
-                            this.state.publicationSummaryByPubMedID
-                        }
+                        // publicationManifestByUid={this.publicationsById}
+                        // publicationSummaryByPubMedID={
+                        //     this.state.publicationSummaryByPubMedID
+                        // }
                         publications={this.publications.result!}
                         filteredPublications={this.filteredPublications}
                         genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal

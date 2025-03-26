@@ -291,27 +291,27 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                     }
                 },
             },
-            {
-                name: 'Metadata',
-                grow: 0.1,
-                selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
-                cell: (atlas: Atlas) => {
-                    if (atlas.htan_id in (this.atlasMetaData || {})) {
-                        return (
-                            <button
-                                className={'btn btn-sm'}
-                                onClick={action(() => {
-                                    this.metadataModalAtlas = atlas;
-                                })}
-                            >
-                                <FontAwesomeIcon icon={faDownload} />
-                            </button>
-                        );
-                    } else {
-                        return <span>None</span>;
-                    }
-                },
-            },
+            // {
+            //     name: 'Metadata',
+            //     grow: 0.1,
+            //     selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
+            //     cell: (atlas: Atlas) => {
+            //         if (atlas.htan_id in (this.atlasMetaData || {})) {
+            //             return (
+            //                 <button
+            //                     className={'btn btn-sm'}
+            //                     onClick={action(() => {
+            //                         this.metadataModalAtlas = atlas;
+            //                     })}
+            //                 >
+            //                     <FontAwesomeIcon icon={faDownload} />
+            //                 </button>
+            //             );
+            //         } else {
+            //             return <span>None</span>;
+            //         }
+            //     },
+            // },
             {
                 name: 'Cases',
                 selector: 'num_cases',

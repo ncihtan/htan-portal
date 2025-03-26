@@ -41,7 +41,7 @@ export const myQuery = `
         UNION ALL
         SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM files
         UNION ALL
-        SELECT Filename, level as val, 'Level' as typ, 'array' as fieldType FROM files
+        SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM files
         UNION ALL
         SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM files
         UNION ALL
@@ -75,10 +75,41 @@ export const specimenQuery = _.template(`
 
 export async function doQuery(str: any) {
     console.log(str);
-
     const resultSet = await client.query({
         query: str,
         format: 'JSONEachRow',
     });
     return await resultSet.json();
 }
+
+export const fileQuery = `
+SELECT synapseId,
+atlasid,
+atlas_name,
+level,
+assayName,
+Filename,
+FileFormat,
+DataFileID,
+biospecimenIds,
+Gender,
+Ethnicity,
+Race,
+VitalStatus,
+TreatmentType,
+PrimaryDiagnosis,
+TissueorOrganofOrigin,
+ScRNAseqWorkflowType,
+ScRNAseqWorkflowParametersDescription,
+WorkflowVersion,
+WorkflowLink,
+publicationIds,
+diagnosisIds,
+demographicsIds,
+therapyIds,
+viewers,
+isRawSequencing,
+downloadSource,
+releaseVersion 
+FROM files
+`;
