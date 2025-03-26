@@ -35,7 +35,8 @@ interface IExploreTabsProps {
     samples: MobxPromise<Entity[]>;
     samplesFiltered: MobxPromise<Entity[]>;
     cases: MobxPromise<Entity[]>;
-    atlases: MobxPromise<any>;
+    atlases: MobxPromise<Atlas[]>;
+    atlasesFiltered: MobxPromise<Atlas[]>;
     filteredCasesByNonAtlasFilters: Entity[];
     filteredSamplesByNonAtlasFilters: Entity[];
     filteredCases: MobxPromise<Entity[]>;
@@ -193,19 +194,19 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 Files
                             </a>
                         </li>
-                        {/*<li className="nav-item">*/}
-                        {/*    <a*/}
-                        {/*        onClick={() => props.setTab(ExploreTab.PLOTS)}*/}
-                        {/*        className={`nav-link ${*/}
-                        {/*            activeTab === ExploreTab.PLOTS*/}
-                        {/*                ? 'active'*/}
-                        {/*                : ''*/}
-                        {/*        }`}*/}
-                        {/*    >*/}
-                        {/*        Plots{' '}*/}
-                        {/*        <span style={{ color: 'orange' }}>Beta!</span>*/}
-                        {/*    </a>*/}
-                        {/*</li>*/}
+                        <li className="nav-item">
+                            <a
+                                onClick={() => props.setTab(ExploreTab.PLOTS)}
+                                className={`nav-link ${
+                                    props.activeTab === ExploreTab.PLOTS
+                                        ? 'active'
+                                        : ''
+                                }`}
+                            >
+                                Plots{' '}
+                                <span style={{ color: 'orange' }}>Beta!</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -308,12 +309,10 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         <AtlasTable
                             setTab={props.setTab}
                             publications={props.publications}
-                            atlases={props.atlases}
+                            atlases={props.atlases.result}
                             getAtlasMetaData={props.getAtlasMetaData}
                             selectedAtlases={props.selectedSynapseAtlases}
-                            filteredAtlases={
-                                props.filteredSynapseAtlasesByNonAtlasFilters
-                            }
+                            filteredAtlases={props.atlasesFiltered.result}
                             onSelectAtlas={props.onSelectAtlas}
                             filteredCases={props.filteredCasesByNonAtlasFilters}
                             filteredBiospecimens={
@@ -423,48 +422,50 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             {/*</div>*/}
                         </form>
 
-                        {/*{props.filteredCases.length &&*/}
-                        {/*    selectedFields.value === 'Summary' && (*/}
-                        {/*        <div className={'d-flex'}>*/}
-                        {/*            <ExplorePlot*/}
-                        {/*                selectedField={{*/}
-                        {/*                    value: 'TissueorOrganofOrigin',*/}
-                        {/*                    label: 'Organ',*/}
-                        {/*                    data: { type: 'CASE' },*/}
-                        {/*                }}*/}
-                        {/*                filteredCases={props.filteredCases}*/}
-                        {/*                filteredSamples={props.filteredSamples}*/}
-                        {/*                normalizersByField={{*/}
-                        {/*                    TissueorOrganofOrigin: (*/}
-                        {/*                        e: Entity*/}
-                        {/*                    ) => getNormalizedOrgan(e),*/}
-                        {/*                }}*/}
-                        {/*                title={'Organs'}*/}
-                        {/*                width={500}*/}
-                        {/*                logScale={logScale}*/}
-                        {/*                metricType={metric}*/}
-                        {/*                hideNA={hideNA}*/}
-                        {/*            />*/}
-                        {/*            <ExplorePlot*/}
-                        {/*                title={'Assays'}*/}
-                        {/*                selectedField={{*/}
-                        {/*                    data: { type: 'SAMPLE' },*/}
-                        {/*                    label: 'Assay',*/}
-                        {/*                    value: 'assayName',*/}
-                        {/*                }}*/}
-                        {/*                width={500}*/}
-                        {/*                filteredCases={props.filteredCases}*/}
-                        {/*                filteredSamples={props.filteredFiles}*/}
-                        {/*                logScale={logScale}*/}
-                        {/*                metricType={metric}*/}
-                        {/*                samplesByValueMap={getSamplesByValueMap(*/}
-                        {/*                    props.filteredFiles,*/}
-                        {/*                    metric.value*/}
-                        {/*                )}*/}
-                        {/*                hideNA={hideNA}*/}
-                        {/*            />*/}
-                        {/*        </div>*/}
-                        {/*    )}*/}
+                        {props.filteredCases.length &&
+                            selectedFields.value === 'Summary' && (
+                                <div className={'d-flex'}>
+                                    <ExplorePlot
+                                        selectedField={{
+                                            value: 'TissueorOrganofOrigin',
+                                            label: 'Organ',
+                                            data: { type: 'CASE' },
+                                        }}
+                                        filteredCases={props.cases.result}
+                                        filteredSamples={
+                                            props.samplesFiltered.result
+                                        }
+                                        normalizersByField={{
+                                            TissueorOrganofOrigin: (
+                                                e: Entity
+                                            ) => getNormalizedOrgan(e),
+                                        }}
+                                        title={'Organs'}
+                                        width={500}
+                                        logScale={logScale}
+                                        metricType={metric}
+                                        hideNA={hideNA}
+                                    />
+                                    <ExplorePlot
+                                        title={'Assays'}
+                                        selectedField={{
+                                            data: { type: 'SAMPLE' },
+                                            label: 'Assay',
+                                            value: 'assayName',
+                                        }}
+                                        width={500}
+                                        filteredCases={props.cases.result}
+                                        filteredSamples={props.filteredFiles}
+                                        logScale={logScale}
+                                        metricType={metric}
+                                        samplesByValueMap={getSamplesByValueMap(
+                                            props.filteredFiles,
+                                            metric.value
+                                        )}
+                                        hideNA={hideNA}
+                                    />
+                                </div>
+                            )}
                         <div className={'d-flex flex-wrap'}>
                             {props.filteredCases.length &&
                                 selectedFields.map((option) => {

@@ -173,7 +173,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
     get data(): AtlasTableData[] {
-        return this.props.atlases.result.map(
+        return this.props.filteredAtlases.map(
             (a) =>
                 ({
                     ...a,

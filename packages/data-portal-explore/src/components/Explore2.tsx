@@ -43,6 +43,7 @@ import { ExploreTab } from '../lib/types';
 
 import styles from './explore.module.scss';
 import {
+    atlasQuery,
     caseQuery,
     doQuery,
     fileQuery,
@@ -190,20 +191,31 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
 
     atlases = new remoteData<Atlas[]>({
         invoke: async () => {
-            const q = `
-            SELECT * FROM atlases 
-                WHERE htan_id IN (
-                       SELECT files.atlasid FROM files 
-                )
-            `;
-
-            const data = await doQuery(q);
-
+            const data = await doQuery<Atlas>(atlasQuery({ filterString: '' }));
             data.forEach(
-                (atlas) => (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta))
+                (atlas: Atlas) =>
+                    (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta))
             );
-
             return data;
+        },
+    });
+
+    atlasesFiltered = new remoteData<Atlas[]>({
+        await: () => [this.atlases],
+        invoke: async () => {
+            if (this.filterString.length === 0) {
+                return this.atlases.result;
+            } else {
+                const data = await doQuery<Atlas>(
+                    atlasQuery({ filterString: this.filterString })
+                );
+                data.forEach(
+                    // @ts-ignore
+                    (atlas: Atlas) =>
+                        (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta))
+                );
+                return data;
+            }
         },
     });
 
@@ -443,7 +455,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                 this.specimen,
                 this.unfilteredOptions,
                 this.publications,
-                this.atlases,
+                this.atlasesFiltered,
                 this.filesFiltered,
                 this.files,
             ]) === false
@@ -516,22 +528,10 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                         }
                     />
 
-                    {/*<FilterControls {...filterControlsProps}>*/}
-
-                    {/*</FilterControls>*/}
-
-                    {/*<Filter*/}
-                    {/*    setFilter={this.setFilter}*/}
-                    {/*    selectedFiltersByGroupName={toJS(*/}
-                    {/*        this.selectedFiltersByAttrName*/}
-                    {/*    )}*/}
-                    {/*    getFilterDisplayName={getFileFilterDisplayName}*/}
-                    {/*/>*/}
-
                     <ExploreSummary
                         summaryData={getDefaultSummaryData(
                             this.casesFiltered.result!,
-                            this.specimenFiltered.result,
+                            this.specimenFiltered.result!,
                             this.filesFiltered.result!,
                             this.groupsByProperty
                         )}
@@ -550,6 +550,7 @@ export class Explore2 extends React.Component<IExploreProps, IExploreState> {
                             this.filteredAtlasesByNonAtlasFilters
                         }
                         atlases={this.atlases}
+                        atlasesFiltered={this.atlasesFiltered}
                         filteredSamples={this.filteredSamples}
                         cases={this.cases}
                         filteredCases={this.casesFiltered}

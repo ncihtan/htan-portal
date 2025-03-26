@@ -1,7 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 
-export const ClientComponent = dynamic(
+const ClientComponent = dynamic(
     () =>
         import('@htan/data-portal-explore')
             // this part is needed if your use a named export
@@ -12,3 +12,5 @@ export const ClientComponent = dynamic(
         ssr: false,
     }
 );
+
+export default ClientComponent;

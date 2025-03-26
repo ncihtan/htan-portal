@@ -10,24 +10,7 @@ const client = createClient({
         response: true,
         request: false,
     },
-    config: {
-        session_timeout: 60,
-        // output_format_json_quote_64bit_integers: 0,
-        // enable_http_compression: 0,
-        max_connections: 10, // Set your desired pool size
-    },
 });
-
-// const client = createClient({
-//     host: 'http://localhost:8123/default',
-//     username: 'default',
-//     password: 'moo',
-//     request_timeout: 600000,
-//     compression: {
-//         response: true,
-//         request: false,
-//     },
-// });
 
 export const myQuery = `
     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
@@ -56,24 +39,7 @@ export const myQuery = `
     GROUP BY val, type, fieldType
 `;
 
-export const caseQuery = _.template(
-    `SELECT * FROM cases c
-                                         JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
-                       WHERE cases.ParticipantID IN (
-                           SELECT demographicsIds as moo FROM files f
-                           ARRAY JOIN demographicsIds
-                       <%=filterString%>
-         )`
-);
-
-export const specimenQuery = _.template(`
-            SELECT * FROM specimen c
-                       WHERE specimen.ParentID IN (
-                           SELECT demographicsIds as moo FROM files f
-                           ARRAY JOIN demographicsIds
-                     <%=this.filterString%>)`);
-
-export async function doQuery(str: any) {
+export async function doQuery<T>(str: any): Promise<T[]> {
     console.log(str);
     const resultSet = await client.query({
         query: str,
@@ -113,3 +79,28 @@ downloadSource,
 releaseVersion 
 FROM files
 `;
+
+export const atlasQuery = _.template(`
+    SELECT * FROM atlases
+    WHERE htan_id IN (
+        SELECT files.atlasid FROM files
+        <%=filterString%>
+        )
+`);
+
+export const caseQuery = _.template(
+    `SELECT * FROM cases c
+                                         JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
+                       WHERE cases.ParticipantID IN (
+                           SELECT demographicsIds as moo FROM files f
+                           ARRAY JOIN demographicsIds
+                       <%=filterString%>
+         )`
+);
+
+export const specimenQuery = _.template(`
+            SELECT * FROM specimen c
+                       WHERE specimen.ParentID IN (
+                           SELECT demographicsIds as moo FROM files f
+                           ARRAY JOIN demographicsIds
+                     <%=filterString%>)`);
