@@ -38,7 +38,11 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     atlases,
     organSummary,
     assaySummary,
+    organSum,
 }) => {
+    console.log(synapseCounts);
+    console.log(organSum);
+
     return (
         <>
             <Jumbotron
