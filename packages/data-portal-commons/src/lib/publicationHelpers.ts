@@ -71,22 +71,9 @@ export function getCiteFromPublicationSummary(
 }
 
 export function getPublicationAuthors(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
+    publication: PublicationManifest
 ): string[] {
-    let authors: string[] = [];
-
-    if (publicationSummary) {
-        authors = getPublicationAuthorsFromPublicationSummary(
-            publicationSummary
-        );
-    } else if (publicationManifest) {
-        authors = getPublicationAuthorsFromPublicationManifest(
-            publicationManifest
-        );
-    }
-
-    return authors;
+    return getPublicationAuthorsFromPublicationManifest(publication);
 }
 
 export function getPublicationAuthorsFromPublicationManifest(

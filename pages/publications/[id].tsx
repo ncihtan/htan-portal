@@ -11,6 +11,7 @@ import _ from 'lodash';
 import { fetchData, isReleaseQCEnabled } from '../../lib/helpers';
 import { ScaleLoader } from 'react-spinners';
 import {
+    Atlas,
     AtlasDescription,
     commonStyles,
     Entity,
@@ -44,6 +45,8 @@ import {
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 
 import publicationIds from './static_page_ids.json';
+import { caseQuery, doQuery, specimenQuery } from '../../lib/clickhouseStore';
+import { usePathname } from 'next/navigation';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
     return _.chain(filters)
@@ -82,6 +85,9 @@ interface PublicationPageProps {
     publicationUid: string;
     schemaDataById: SchemaDataById;
     genericAttributeMap: { [attr: string]: GenericAttributeNames };
+    specimen: Entity[];
+    cases: Entity[];
+    atlases: Atlas[];
 }
 
 const PublicationPage = (props: PublicationPageProps) => {
@@ -157,11 +163,19 @@ const PublicationPage = (props: PublicationPageProps) => {
         getData();
     }, []);
 
+    const publication = props.publications.find(
+        (p) => p.publicationId === router.query.id
+    );
+
     const isLoading = _.isEmpty(data);
-    const doi = getPublicationDOI(publicationSummary, publicationManifest);
-    const pubmedId = publicationManifest
-        ? getPublicationPubMedID(publicationManifest)
-        : undefined;
+    const doi = publication.elocationid?.replace(/^doi: /, '');
+    const pubmedId = publication.uid;
+
+    const atlasMeta = JSON.parse(publication.AtlasMeta);
+
+    //console.log("pathName", usePathname().split("/").findLast());
+
+    console.log(assayData);
 
     return (
         <>
@@ -187,9 +201,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                             </div>
                             <div style={{ width: '100%' }}>
                                 <span style={{ fontStyle: 'italic' }}>
-                                    {isManuscriptInReview(
-                                        publicationManifest
-                                    ) ? (
+                                    {isManuscriptInReview(publication) ? (
                                         <>
                                             Manuscript (
                                             <strong className="text-danger">
@@ -202,30 +214,27 @@ const PublicationPage = (props: PublicationPageProps) => {
                                     )}
                                 </span>
                                 <h2 style={{ marginTop: 0, padding: 0 }}>
-                                    {getPublicationTitle(
-                                        publicationSummary,
-                                        publicationManifest
-                                    )}
+                                    {publication.title}
                                 </h2>
                                 <p>
                                     Authors:{' '}
-                                    {getPublicationAuthors(
-                                        publicationSummary,
-                                        publicationManifest
-                                    ).map((author, index, authors) => (
-                                        <>
-                                            <span
-                                                style={{
-                                                    fontStyle: 'italic',
-                                                }}
-                                            >
-                                                {author}
-                                            </span>
-                                            {index !== authors.length - 1 && (
-                                                <>{', '}</>
-                                            )}
-                                        </>
-                                    ))}{' '}
+                                    {getPublicationAuthors(publication).map(
+                                        (author, index, authors) => (
+                                            <>
+                                                <span
+                                                    style={{
+                                                        fontStyle: 'italic',
+                                                    }}
+                                                >
+                                                    {author}
+                                                </span>
+                                                {index !==
+                                                    authors.length - 1 && (
+                                                    <>{', '}</>
+                                                )}
+                                            </>
+                                        )
+                                    )}{' '}
                                     <br />
                                     {/*<span>Contact: </span>
                                     {props.data.publicationData.correspondingAuthors.map(
@@ -253,11 +262,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                                         )
                                     )}
                                     <br />*/}
-                                    Journal:{' '}
-                                    {getPublicationJournal(
-                                        publicationSummary,
-                                        publicationManifest
-                                    )}
+                                    Journal: {publication.fulljournalname}
                                     {pubmedId && (
                                         <>
                                             &nbsp; Pubmed:{' '}
@@ -268,7 +273,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                                             </a>{' '}
                                         </>
                                     )}
-                                    {doi && (
+                                    {publication.elocationid && (
                                         <>
                                             &nbsp; DOI:{' '}
                                             <a href={`https://doi.org/${doi}`}>
@@ -279,23 +284,18 @@ const PublicationPage = (props: PublicationPageProps) => {
                                     <br />
                                     Atlas:{' '}
                                     <AtlasDescription
-                                        atlasMeta={
-                                            publicationManifest.AtlasMeta
-                                        }
-                                        atlasName={
-                                            publicationManifest.AtlasMeta
-                                                .lead_institutions
-                                        }
+                                        atlasMeta={atlasMeta}
+                                        atlasName={atlasMeta.lead_institutions}
                                     />
                                 </p>
                             </div>
                         </div>
                         <PublicationTabs
                             router={router}
-                            abstract={publicationManifest.PublicationAbstract}
+                            abstract={publication.PublicationAbstract}
                             synapseAtlases={data.atlases}
-                            biospecimens={biospecimensData}
-                            cases={casesData}
+                            biospecimens={props.specimen}
+                            cases={props.cases}
                             assays={assayData}
                             supportingLinks={getPublicationSupportingLinks(
                                 publicationManifest
@@ -313,11 +313,20 @@ const PublicationPage = (props: PublicationPageProps) => {
 export default PublicationPage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
+    const publications = await doQuery('SELECT * FROM publication_manifest');
+
+    const specimen = await doQuery(specimenQuery({ filterString: '' }));
+
+    const cases = await doQuery(caseQuery({ filterString: '' }));
+
     return {
         props: {
             publicationUid: context.params?.id,
             schemaDataById: await fetchAndProcessSchemaData(),
             genericAttributeMap: HTANToGenericAttributeMap, // TODO needs to be configurable
+            publications,
+            specimen,
+            cases,
         },
     };
 };

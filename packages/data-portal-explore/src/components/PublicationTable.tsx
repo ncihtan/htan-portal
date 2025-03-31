@@ -371,10 +371,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
                     ', '
                 ),
             cell: (manifest: PublicationManifest) => {
-                const authors = getPublicationAuthors(
-                    getSummary(manifest),
-                    manifest
-                );
+                const authors = getPublicationAuthors(manifest);
                 let shortList = authors;
 
                 if (authors.length > 5) {
