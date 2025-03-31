@@ -40,7 +40,6 @@ export const myQuery = `
 `;
 
 export async function doQuery<T>(str: any): Promise<T[]> {
-    console.log(str);
     const resultSet = await client.query({
         query: str,
         format: 'JSONEachRow',

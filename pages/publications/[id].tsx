@@ -8,8 +8,6 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
-import { fetchData, isReleaseQCEnabled } from '../../lib/helpers';
-import { ScaleLoader } from 'react-spinners';
 import {
     Atlas,
     AtlasDescription,
@@ -53,38 +51,38 @@ import {
 } from '../../lib/clickhouseStore';
 import { usePathname } from 'next/navigation';
 
-const filterByAttrName = (filters: SelectedFilter[]) => {
-    return _.chain(filters)
-        .groupBy((item) => item.group)
-        .mapValues((filters: SelectedFilter[]) => {
-            return new Set(filters.map((f) => f.value));
-        })
-        .value();
-};
-
-const getFilteredFiles = (
-    filterSelectionsByAttrName: ISelectedFiltersByAttrName,
-    files: LoadDataResult
-) => {
-    return filterFiles(filterSelectionsByAttrName, fillInEntities(files));
-};
-
-const getBiospecimensData = (
-    selectedFiltersByAttrName: { [x: string]: Set<string> },
-    filteredFiles: Entity[]
-) => {
-    const samples = _.chain(filteredFiles)
-        .flatMapDeep((file) => file.biospecimen)
-        .uniqBy((f) => f.BiospecimenID)
-        .value();
-    const filteredCaseIds = _.keyBy(
-        getFilteredCases(filteredFiles, selectedFiltersByAttrName, false),
-        (c) => c.ParticipantID
-    );
-    return samples.filter((s) => {
-        return s.ParticipantID in filteredCaseIds;
-    });
-};
+// const filterByAttrName = (filters: SelectedFilter[]) => {
+//     return _.chain(filters)
+//         .groupBy((item) => item.group)
+//         .mapValues((filters: SelectedFilter[]) => {
+//             return new Set(filters.map((f) => f.value));
+//         })
+//         .value();
+// };
+//
+// const getFilteredFiles = (
+//     filterSelectionsByAttrName: ISelectedFiltersByAttrName,
+//     files: LoadDataResult
+// ) => {
+//     return filterFiles(filterSelectionsByAttrName, fillInEntities(files));
+// };
+//
+// const getBiospecimensData = (
+//     selectedFiltersByAttrName: { [x: string]: Set<string> },
+//     filteredFiles: Entity[]
+// ) => {
+//     const samples = _.chain(filteredFiles)
+//         .flatMapDeep((file) => file.biospecimen)
+//         .uniqBy((f) => f.BiospecimenID)
+//         .value();
+//     const filteredCaseIds = _.keyBy(
+//         getFilteredCases(filteredFiles, selectedFiltersByAttrName, false),
+//         (c) => c.ParticipantID
+//     );
+//     return samples.filter((s) => {
+//         return s.ParticipantID in filteredCaseIds;
+//     });
+// };
 
 interface PublicationPageProps {
     publicationUid: string;
@@ -185,11 +183,6 @@ const PublicationPage = (props: PublicationPageProps) => {
         <>
             <PreReleaseBanner />
             <PageWrapper>
-                {/*{isLoading && (*/}
-                {/*    <div className={commonStyles.loadingIndicator}>*/}
-                {/*        <ScaleLoader />*/}
-                {/*    </div>*/}
-                {/*)}*/}
                 {publication && (
                     <div className={styles.publicationPage}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
