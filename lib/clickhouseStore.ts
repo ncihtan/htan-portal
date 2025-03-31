@@ -104,3 +104,7 @@ export const specimenQuery = _.template(`
                            SELECT demographicsIds as moo FROM files f
                            ARRAY JOIN demographicsIds
                      <%=filterString%>)`);
+
+export const assayQuery = _.template(`
+    SELECT * FROM files WHERE has(files.publicationIds,'hta8_2024_nature_a-r-moorman')
+`);

@@ -45,7 +45,12 @@ import {
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 
 import publicationIds from './static_page_ids.json';
-import { caseQuery, doQuery, specimenQuery } from '../../lib/clickhouseStore';
+import {
+    assayQuery,
+    caseQuery,
+    doQuery,
+    specimenQuery,
+} from '../../lib/clickhouseStore';
 import { usePathname } from 'next/navigation';
 
 const filterByAttrName = (filters: SelectedFilter[]) => {
@@ -88,105 +93,104 @@ interface PublicationPageProps {
     specimen: Entity[];
     cases: Entity[];
     atlases: Atlas[];
+    assays: Entity[];
 }
 
 const PublicationPage = (props: PublicationPageProps) => {
     const router = useRouter();
-    const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
-    const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
-    const [casesData, setCasesData] = useState<Entity[]>([]);
-    const [assayData, setAssayData] = useState<{
-        [assayName: string]: Entity[];
-    }>({});
-    const [publicationManifest, setPublicationManifest] = useState<
-        PublicationManifest | undefined
-    >(undefined);
-    const [publicationSummary, setPublicationSummary] = useState<
-        PublicationSummary | undefined
-    >(undefined);
-
-    useEffect(() => {
-        async function getData() {
-            await fetchData().then((data) => {
-                setData(data);
-                const publicationManifest =
-                    data.publicationManifestByUid[props.publicationUid];
-                setPublicationManifest(publicationManifest);
-                const publicationSummary =
-                    data.publicationSummaryByPubMedID?.[
-                        getPublicationPubMedID(publicationManifest)
-                    ];
-                setPublicationSummary(publicationSummary);
-
-                if (publicationManifest) {
-                    const selectedFiltersByAttrName = filterByAttrName(
-                        getPublicationFilters(publicationManifest)
-                    );
-                    const filteredFiles = getFilteredFiles(
-                        selectedFiltersByAttrName,
-                        data
-                    );
-                    const groupedData = groupFilesByAttrNameAndValue(
-                        filteredFiles
-                    );
-                    setAssayData(groupedData['assayName']);
-                    const biospecimensData = getBiospecimensData(
-                        selectedFiltersByAttrName,
-                        filteredFiles
-                    );
-                    setBiospecimensData(biospecimensData);
-                    const casesData = getFilteredCases(
-                        filteredFiles,
-                        selectedFiltersByAttrName,
-                        false
-                    );
-                    setCasesData(casesData);
-
-                    if (isReleaseQCEnabled()) {
-                        const missingPublicationFiles = _.difference(
-                            publicationManifest?.PublicationAssociatedParentDataFileID.split(
-                                ','
-                            ),
-                            filteredFiles.map((f) => f.DataFileID)
-                        );
-
-                        if (!_.isEmpty(missingPublicationFiles)) {
-                            console.log(
-                                `Missing publication files for ${props.publicationUid}: `
-                            );
-                            console.log(missingPublicationFiles);
-                        }
-                    }
-                }
-            });
-        }
-        getData();
-    }, []);
+    // const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
+    // const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
+    // const [casesData, setCasesData] = useState<Entity[]>([]);
+    // const [assayData, setAssayData] = useState<{
+    //     [assayName: string]: Entity[];
+    // }>({});
+    // const [publicationManifest, setPublicationManifest] = useState<
+    //     PublicationManifest | undefined
+    // >(undefined);
+    // const [publicationSummary, setPublicationSummary] = useState<
+    //     PublicationSummary | undefined
+    // >(undefined);
+    //
+    // useEffect(() => {
+    //     async function getData() {
+    //         await fetchData().then((data) => {
+    //             setData(data);
+    //             const publicationManifest =
+    //                 data.publicationManifestByUid[props.publicationUid];
+    //             setPublicationManifest(publicationManifest);
+    //             const publicationSummary =
+    //                 data.publicationSummaryByPubMedID?.[
+    //                     getPublicationPubMedID(publicationManifest)
+    //                 ];
+    //             setPublicationSummary(publicationSummary);
+    //
+    //             if (publicationManifest) {
+    //                 const selectedFiltersByAttrName = filterByAttrName(
+    //                     getPublicationFilters(publicationManifest)
+    //                 );
+    //                 const filteredFiles = getFilteredFiles(
+    //                     selectedFiltersByAttrName,
+    //                     data
+    //                 );
+    //                 const groupedData = groupFilesByAttrNameAndValue(
+    //                     filteredFiles
+    //                 );
+    //                 setAssayData(groupedData['assayName']);
+    //                 const biospecimensData = getBiospecimensData(
+    //                     selectedFiltersByAttrName,
+    //                     filteredFiles
+    //                 );
+    //                 setBiospecimensData(biospecimensData);
+    //                 const casesData = getFilteredCases(
+    //                     filteredFiles,
+    //                     selectedFiltersByAttrName,
+    //                     false
+    //                 );
+    //                 setCasesData(casesData);
+    //
+    //                 if (isReleaseQCEnabled()) {
+    //                     const missingPublicationFiles = _.difference(
+    //                         publicationManifest?.PublicationAssociatedParentDataFileID.split(
+    //                             ','
+    //                         ),
+    //                         filteredFiles.map((f) => f.DataFileID)
+    //                     );
+    //
+    //                     if (!_.isEmpty(missingPublicationFiles)) {
+    //                         console.log(
+    //                             `Missing publication files for ${props.publicationUid}: `
+    //                         );
+    //                         console.log(missingPublicationFiles);
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     }
+    //     getData();
+    // }, []);
 
     const publication = props.publications.find(
         (p) => p.publicationId === router.query.id
     );
 
-    const isLoading = _.isEmpty(data);
+    // const isLoading = _.isEmpty(data);
     const doi = publication.elocationid?.replace(/^doi: /, '');
     const pubmedId = publication.uid;
 
     const atlasMeta = JSON.parse(publication.AtlasMeta);
 
-    //console.log("pathName", usePathname().split("/").findLast());
-
-    console.log(assayData);
+    const assaysByAssayNameMap = _.groupBy(props.assays, 'assayName');
 
     return (
         <>
             <PreReleaseBanner />
             <PageWrapper>
-                {isLoading && (
-                    <div className={commonStyles.loadingIndicator}>
-                        <ScaleLoader />
-                    </div>
-                )}
-                {!isLoading && publicationManifest && (
+                {/*{isLoading && (*/}
+                {/*    <div className={commonStyles.loadingIndicator}>*/}
+                {/*        <ScaleLoader />*/}
+                {/*    </div>*/}
+                {/*)}*/}
+                {publication && (
                     <div className={styles.publicationPage}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                             <div
@@ -293,12 +297,12 @@ const PublicationPage = (props: PublicationPageProps) => {
                         <PublicationTabs
                             router={router}
                             abstract={publication.PublicationAbstract}
-                            synapseAtlases={data.atlases}
+                            synapseAtlases={props.atlases}
                             biospecimens={props.specimen}
                             cases={props.cases}
-                            assays={assayData}
+                            assays={assaysByAssayNameMap}
                             supportingLinks={getPublicationSupportingLinks(
-                                publicationManifest
+                                publication
                             )}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}
@@ -315,9 +319,20 @@ export default PublicationPage;
 export const getStaticProps: GetStaticProps = async (context) => {
     const publications = await doQuery('SELECT * FROM publication_manifest');
 
-    const specimen = await doQuery(specimenQuery({ filterString: '' }));
+    const specimen = await doQuery(`
+        SELECT * FROM specimen WHERE
+        has(publicationIds,'${context.params.id}') 
+    `);
+    const cases = await doQuery(`
+        SELECT * FROM cases WHERE
+        has(publicationIds,'${context.params.id}')
+    `);
 
-    const cases = await doQuery(caseQuery({ filterString: '' }));
+    const atlases = await doQuery(`SELECT * FROM atlases`);
+
+    const assays = await doQuery(
+        assayQuery({ publicationId: context.params.id })
+    );
 
     return {
         props: {
@@ -327,6 +342,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
             publications,
             specimen,
             cases,
+            assays,
+            atlases,
         },
     };
 };

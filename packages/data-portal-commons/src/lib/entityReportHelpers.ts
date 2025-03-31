@@ -46,18 +46,24 @@ export type EntityReportByCenter = {
 };
 
 export function normalizeTissueOrOrganOrSite(value: string) {
-    return value.toLowerCase().replace(/,/g, '');
+    return value;
+    // if (_.isString(value)) {
+    //     return value.toLowerCase().replace(/,/g, '');
+    // } else {
+    //     debugger;
+    // }
 }
 
 function normalizeTreatment(value: string): string[] {
-    value = value.trim().toLowerCase();
-    const treatments = value.split(/,|;/).map((t) => {
-        const trimmedTreatment = t.trim();
-        return (
-            trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1)
-        );
-    });
-    return _.uniq(treatments);
+    return value;
+    // value = value.trim().toLowerCase();
+    // const treatments = value.split(/,|;/).map((t) => {
+    //     const trimmedTreatment = t.trim();
+    //     return (
+    //         trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1)
+    //     );
+    // });
+    // return _.uniq(treatments);
 }
 
 function initTissueOrOrganOrSiteToOrganMap(
