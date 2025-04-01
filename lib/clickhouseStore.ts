@@ -75,7 +75,8 @@ therapyIds,
 viewers,
 isRawSequencing,
 downloadSource,
-releaseVersion 
+releaseVersion,
+Component
 FROM files
 `;
 

@@ -95,7 +95,7 @@ function getSamplesByValueMap(
     const ret = entities.reduce((agg: Record<string, Entity[]>, file) => {
         if (file.assayName) {
             agg[file.assayName] = agg[file.assayName] || [];
-            agg[file.assayName].push(...file.biospecimen);
+            agg[file.assayName].push(...file.biospecimenIds);
         }
         return agg;
     }, {});
@@ -121,6 +121,8 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                 /TissueorOrganofOrigin|assayName/.test(opt.value)
             )
         );
+
+        console.log('selectedFields', selectedFields);
 
         const normalizersByField = {
             TissueorOrganofOrigin: (e: Entity) => getNormalizedOrgan(e),
@@ -422,52 +424,52 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             {/*</div>*/}
                         </form>
 
-                        {props.filteredCases.length &&
-                            selectedFields.value === 'Summary' && (
-                                <div className={'d-flex'}>
-                                    <ExplorePlot
-                                        selectedField={{
-                                            value: 'TissueorOrganofOrigin',
-                                            label: 'Organ',
-                                            data: { type: 'CASE' },
-                                        }}
-                                        filteredCases={props.cases.result}
-                                        filteredSamples={
-                                            props.samplesFiltered.result
-                                        }
-                                        normalizersByField={{
-                                            TissueorOrganofOrigin: (
-                                                e: Entity
-                                            ) => getNormalizedOrgan(e),
-                                        }}
-                                        title={'Organs'}
-                                        width={500}
-                                        logScale={logScale}
-                                        metricType={metric}
-                                        hideNA={hideNA}
-                                    />
-                                    <ExplorePlot
-                                        title={'Assays'}
-                                        selectedField={{
-                                            data: { type: 'SAMPLE' },
-                                            label: 'Assay',
-                                            value: 'assayName',
-                                        }}
-                                        width={500}
-                                        filteredCases={props.cases.result}
-                                        filteredSamples={props.filteredFiles}
-                                        logScale={logScale}
-                                        metricType={metric}
-                                        samplesByValueMap={getSamplesByValueMap(
-                                            props.filteredFiles,
-                                            metric.value
-                                        )}
-                                        hideNA={hideNA}
-                                    />
-                                </div>
-                            )}
+                        {/*{*/}
+                        {/*    selectedFields.value === 'Summary' && (*/}
+                        {/*        <div className={'d-flex'}>*/}
+                        {/*            <ExplorePlot*/}
+                        {/*                selectedField={{*/}
+                        {/*                    value: 'TissueorOrganofOrigin',*/}
+                        {/*                    label: 'Organ',*/}
+                        {/*                    data: { type: 'CASE' },*/}
+                        {/*                }}*/}
+                        {/*                filteredCases={props.cases.result}*/}
+                        {/*                filteredSamples={*/}
+                        {/*                    props.samplesFiltered.result*/}
+                        {/*                }*/}
+                        {/*                normalizersByField={{*/}
+                        {/*                    TissueorOrganofOrigin: (*/}
+                        {/*                        e: Entity*/}
+                        {/*                    ) => getNormalizedOrgan(e),*/}
+                        {/*                }}*/}
+                        {/*                title={'Organs'}*/}
+                        {/*                width={500}*/}
+                        {/*                logScale={logScale}*/}
+                        {/*                metricType={metric}*/}
+                        {/*                hideNA={hideNA}*/}
+                        {/*            />*/}
+                        {/*            <ExplorePlot*/}
+                        {/*                title={'Assays'}*/}
+                        {/*                selectedField={{*/}
+                        {/*                    data: { type: 'SAMPLE' },*/}
+                        {/*                    label: 'Assay',*/}
+                        {/*                    value: 'assayName',*/}
+                        {/*                }}*/}
+                        {/*                width={500}*/}
+                        {/*                filteredCases={props.cases.result}*/}
+                        {/*                filteredSamples={props.filteredFiles}*/}
+                        {/*                logScale={logScale}*/}
+                        {/*                metricType={metric}*/}
+                        {/*                samplesByValueMap={getSamplesByValueMap(*/}
+                        {/*                    props.filteredFiles,*/}
+                        {/*                    metric.value*/}
+                        {/*                )}*/}
+                        {/*                hideNA={hideNA}*/}
+                        {/*            />*/}
+                        {/*        </div>*/}
+                        {/*    )}*/}
                         <div className={'d-flex flex-wrap'}>
-                            {props.filteredCases.length &&
+                            {props.cases.result.length &&
                                 selectedFields.map((option) => {
                                     if (option.value === 'assayName') {
                                         return (
@@ -479,10 +481,10 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                                 }}
                                                 width={500}
                                                 filteredCases={
-                                                    props.filteredCases
+                                                    props.cases.result
                                                 }
                                                 filteredSamples={
-                                                    props.filteredFiles
+                                                    props.samples.result
                                                 }
                                                 logScale={logScale}
                                                 metricType={metric}
