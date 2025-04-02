@@ -99,7 +99,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
             getDrsUri(f.viewers?.cds?.drs_uri, false, true),
             f.viewers?.cds?.name,
             f.atlas_name,
-            _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join(' '),
+            _.uniq(f.biospecimenIds).join(' '),
             f.assayName,
             f.level,
             // make sure to replace all possible commas since we are generating a CSV file

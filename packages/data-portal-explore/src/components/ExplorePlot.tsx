@@ -125,15 +125,15 @@ export const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                 ? EntityType.CASE
                 : EntityType.SAMPLE;
 
-        const casesByIdMap = _.keyBy(filteredCases, (c) => c.ParticipantID);
+        (window as any).lodash = _;
+
+        const casesByIdMap = _.groupBy(filteredCases, (c) => c.ParticipantID);
 
         const propertyType = selectedField.data.type;
 
         const entityField: keyof Entity = selectedField.value as keyof Entity;
 
-        const accessor =
-            normalizersByField?.[entityField] ||
-            ((e: Entity) => e[entityField]);
+        const accessor = (e: Entity) => e[entityField];
 
         const _samplesByValueMap =
             samplesByValueMap ||
@@ -144,7 +144,7 @@ export const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                     // should actually be property type
                     // this will group the samples by a property of the case to which they belong,
                     // allowing us to count them by a case property
-                    entity = casesByIdMap[sample.ParticipantID];
+                    entity = casesByIdMap[sample.ParentID];
                 } else {
                     entity = sample;
                 }

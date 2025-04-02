@@ -122,8 +122,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
             )
         );
 
-        console.log('selectedFields', selectedFields);
-
         const normalizersByField = {
             TissueorOrganofOrigin: (e: Entity) => getNormalizedOrgan(e),
         };
@@ -316,10 +314,8 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             selectedAtlases={props.selectedSynapseAtlases}
                             filteredAtlases={props.atlasesFiltered.result}
                             onSelectAtlas={props.onSelectAtlas}
-                            filteredCases={props.filteredCasesByNonAtlasFilters}
-                            filteredBiospecimens={
-                                props.filteredSamplesByNonAtlasFilters
-                            }
+                            filteredCases={props.filteredCases.result!}
+                            filteredBiospecimens={props.samplesFiltered.result!}
                             selectedFiltersByAttrName={
                                 props.nonAtlasSelectedFiltersByAttrName
                             }
@@ -500,10 +496,10 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                             <div style={{ marginRight: 20 }}>
                                                 <ExplorePlot
                                                     filteredCases={
-                                                        props.filteredCases
+                                                        props.cases.result
                                                     }
                                                     filteredSamples={
-                                                        props.filteredSamples
+                                                        props.samples.result
                                                     }
                                                     logScale={logScale}
                                                     width={400}

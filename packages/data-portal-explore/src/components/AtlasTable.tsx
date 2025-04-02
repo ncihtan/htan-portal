@@ -210,6 +210,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     }
 
     get filteredCasesByAtlas() {
+        debugger;
         return _.groupBy(this.props.filteredCases, (c: Entity) => c.atlasid);
     }
 

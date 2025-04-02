@@ -502,15 +502,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 }
             };
 
-            const dropdownProps = {
-                options,
-                countHeader: filterControlsProps.countHeader,
-                setFilter: filterControlsProps.setFilter,
-                selectedFiltersByGroupName:
-                    filterControlsProps.selectedFiltersByGroupName,
-                attributeMap: FileAttributeMap,
-            };
-
             return (
                 <div className={styles.explore}>
                     <FileFilterControls
@@ -526,6 +517,14 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                                 ? this.props.isReleaseQCEnabled()
                                 : false
                         }
+                    />
+
+                    <Filter
+                        setFilter={this.setFilter}
+                        selectedFiltersByGroupName={
+                            this.selectedFiltersByAttrName
+                        }
+                        getFilterDisplayName={getFileFilterDisplayName}
                     />
 
                     <ExploreSummary
