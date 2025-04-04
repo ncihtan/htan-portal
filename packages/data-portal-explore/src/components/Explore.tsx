@@ -237,14 +237,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
              `;
             const publications = await doQuery(q);
 
-            // const withPub = this.cases.result!.reduce((agg, c)=>{
-            //     c.publicationIds.forEach((publicationId)=>{
-            //         agg[publicationId] = agg[publicationId] || [];
-            //         agg[publicationId].push(c);
-            //     });
-            //     return agg;
-            // },{});
-
             return publications;
         },
     });
@@ -285,7 +277,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         this.selectedFilters = getNewFilters(this.selectedFilters, actionMeta);
     }
 
-    @observable currentTab: ExploreTab = ExploreTab.ATLAS;
+    @observable currentTab: ExploreTab = ExploreTab.PLOTS;
 
     @action.bound
     getTab(tabId: ExploreTab) {

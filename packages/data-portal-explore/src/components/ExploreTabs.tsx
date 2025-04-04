@@ -25,6 +25,7 @@ import { ExploreTab } from '../lib/types';
 
 import styles from './exploreTabs.module.scss';
 import { MobxPromise } from 'mobxpromise';
+import { assayPlotQuery } from '../../../../lib/clickhouseStore.ts';
 
 interface IExploreTabsProps {
     setTab: (tab: ExploreTab) => void;
@@ -95,14 +96,15 @@ function getSamplesByValueMap(
     const ret = entities.reduce((agg: Record<string, Entity[]>, file) => {
         if (file.assayName) {
             agg[file.assayName] = agg[file.assayName] || [];
-            agg[file.assayName].push(...file.biospecimenIds);
+            agg[file.assayName].push(...file.biospecimenIds); // this should be biospecimen, not IDS but we changted it
         }
         return agg;
     }, {});
 
-    return _.mapValues(ret, (v, k) =>
-        _.uniqBy(v, (e) => e[countByField as keyof Entity])
-    );
+    return ret;
+    // return _.mapValues(ret, (v, k) =>
+    //     _.uniqBy(v, (e) => e[countByField as keyof Entity])
+    // );
 }
 
 export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
@@ -118,7 +120,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
 
         const [selectedFields, setSelectedFields] = useState(
             DEFAULT_EXPLORE_PLOT_OPTIONS.filter((opt) =>
-                /TissueorOrganofOrigin|assayName/.test(opt.value)
+                /Ethnicity|Race|Gender/.test(opt.value)
             )
         );
 
@@ -340,41 +342,41 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             className={'d-flex'}
                             style={{ alignItems: 'center' }}
                         >
-                            <div style={{ width: 300, marginRight: 20 }}>
-                                <Select
-                                    classNamePrefix={'react-select'}
-                                    isSearchable={false}
-                                    isClearable={false}
-                                    isMulti={true}
-                                    name={'field'}
-                                    components={{ MultiValue }}
-                                    controlShouldRenderValue={true}
-                                    options={DEFAULT_EXPLORE_PLOT_OPTIONS}
-                                    defaultValue={selectedFields}
-                                    hideSelectedOptions={false}
-                                    closeMenuOnSelect={false}
-                                    onChange={(e) => {
-                                        setSelectedFields(e as any);
-                                    }}
-                                />
-                            </div>
+                            {/*<div style={{ width: 300, marginRight: 20 }}>*/}
+                            {/*    <Select*/}
+                            {/*        classNamePrefix={'react-select'}*/}
+                            {/*        isSearchable={false}*/}
+                            {/*        isClearable={false}*/}
+                            {/*        isMulti={true}*/}
+                            {/*        name={'field'}*/}
+                            {/*        components={{ MultiValue }}*/}
+                            {/*        controlShouldRenderValue={true}*/}
+                            {/*        options={DEFAULT_EXPLORE_PLOT_OPTIONS}*/}
+                            {/*        defaultValue={selectedFields}*/}
+                            {/*        hideSelectedOptions={false}*/}
+                            {/*        closeMenuOnSelect={false}*/}
+                            {/*        onChange={(e) => {*/}
+                            {/*            setSelectedFields(e as any);*/}
+                            {/*        }}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
 
-                            <div style={{ width: 300, marginRight: 20 }}>
-                                <Select
-                                    classNamePrefix={'react-select'}
-                                    isSearchable={false}
-                                    isClearable={false}
-                                    name={'xaxis'}
-                                    controlShouldRenderValue={true}
-                                    options={metricTypes}
-                                    hideSelectedOptions={false}
-                                    closeMenuOnSelect={true}
-                                    onChange={(e) => {
-                                        setMetric(e!);
-                                    }}
-                                    value={metric}
-                                />
-                            </div>
+                            {/*<div style={{ width: 300, marginRight: 20 }}>*/}
+                            {/*    <Select*/}
+                            {/*        classNamePrefix={'react-select'}*/}
+                            {/*        isSearchable={false}*/}
+                            {/*        isClearable={false}*/}
+                            {/*        name={'xaxis'}*/}
+                            {/*        controlShouldRenderValue={true}*/}
+                            {/*        options={metricTypes}*/}
+                            {/*        hideSelectedOptions={false}*/}
+                            {/*        closeMenuOnSelect={true}*/}
+                            {/*        onChange={(e) => {*/}
+                            {/*            setMetric(e!);*/}
+                            {/*        }}*/}
+                            {/*        value={metric}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                             <div style={{ marginRight: 20 }}>
                                 <div className="form-check">
                                     <input
@@ -384,24 +386,24 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         onChange={() => setLogScale(!logScale)}
                                     />
                                     <label className="form-check-label">
-                                        Log
+                                        Log Scale
                                     </label>
                                 </div>
                             </div>
 
-                            <div style={{ marginRight: 20 }}>
-                                <div className="form-check">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        checked={hideNA}
-                                        onChange={() => setHideNA(!hideNA)}
-                                    />
-                                    <label className="form-check-label">
-                                        Hide NA
-                                    </label>
-                                </div>
-                            </div>
+                            {/*<div style={{ marginRight: 20 }}>*/}
+                            {/*    <div className="form-check">*/}
+                            {/*        <input*/}
+                            {/*            className="form-check-input"*/}
+                            {/*            type="checkbox"*/}
+                            {/*            checked={hideNA}*/}
+                            {/*            onChange={() => setHideNA(!hideNA)}*/}
+                            {/*        />*/}
+                            {/*        <label className="form-check-label">*/}
+                            {/*            Hide NA*/}
+                            {/*        </label>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
                             {/*<div>*/}
                             {/*    <div className="form-check">*/}
@@ -420,100 +422,38 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             {/*</div>*/}
                         </form>
 
-                        {/*{*/}
-                        {/*    selectedFields.value === 'Summary' && (*/}
-                        {/*        <div className={'d-flex'}>*/}
-                        {/*            <ExplorePlot*/}
-                        {/*                selectedField={{*/}
-                        {/*                    value: 'TissueorOrganofOrigin',*/}
-                        {/*                    label: 'Organ',*/}
-                        {/*                    data: { type: 'CASE' },*/}
-                        {/*                }}*/}
-                        {/*                filteredCases={props.cases.result}*/}
-                        {/*                filteredSamples={*/}
-                        {/*                    props.samplesFiltered.result*/}
-                        {/*                }*/}
-                        {/*                normalizersByField={{*/}
-                        {/*                    TissueorOrganofOrigin: (*/}
-                        {/*                        e: Entity*/}
-                        {/*                    ) => getNormalizedOrgan(e),*/}
-                        {/*                }}*/}
-                        {/*                title={'Organs'}*/}
-                        {/*                width={500}*/}
-                        {/*                logScale={logScale}*/}
-                        {/*                metricType={metric}*/}
-                        {/*                hideNA={hideNA}*/}
-                        {/*            />*/}
-                        {/*            <ExplorePlot*/}
-                        {/*                title={'Assays'}*/}
-                        {/*                selectedField={{*/}
-                        {/*                    data: { type: 'SAMPLE' },*/}
-                        {/*                    label: 'Assay',*/}
-                        {/*                    value: 'assayName',*/}
-                        {/*                }}*/}
-                        {/*                width={500}*/}
-                        {/*                filteredCases={props.cases.result}*/}
-                        {/*                filteredSamples={props.filteredFiles}*/}
-                        {/*                logScale={logScale}*/}
-                        {/*                metricType={metric}*/}
-                        {/*                samplesByValueMap={getSamplesByValueMap(*/}
-                        {/*                    props.filteredFiles,*/}
-                        {/*                    metric.value*/}
-                        {/*                )}*/}
-                        {/*                hideNA={hideNA}*/}
-                        {/*            />*/}
-                        {/*        </div>*/}
-                        {/*    )}*/}
                         <div className={'d-flex flex-wrap'}>
-                            {props.cases.result.length &&
-                                selectedFields.map((option) => {
-                                    if (option.value === 'assayName') {
-                                        return (
-                                            <ExplorePlot
-                                                selectedField={{
-                                                    data: { type: 'SAMPLE' },
-                                                    label: 'Assay',
-                                                    value: 'assayName',
-                                                }}
-                                                width={500}
-                                                filteredCases={
-                                                    props.cases.result
-                                                }
-                                                filteredSamples={
-                                                    props.samples.result
-                                                }
-                                                logScale={logScale}
-                                                metricType={metric}
-                                                samplesByValueMap={getSamplesByValueMap(
-                                                    props.filteredFiles,
-                                                    metric.value
-                                                )}
-                                                hideNA={hideNA}
-                                            />
-                                        );
-                                    } else {
-                                        return (
-                                            <div style={{ marginRight: 20 }}>
-                                                <ExplorePlot
-                                                    filteredCases={
-                                                        props.cases.result
-                                                    }
-                                                    filteredSamples={
-                                                        props.samples.result
-                                                    }
-                                                    logScale={logScale}
-                                                    width={400}
-                                                    normalizersByField={
-                                                        normalizersByField
-                                                    }
-                                                    metricType={metric}
-                                                    selectedField={option}
-                                                    hideNA={hideNA}
-                                                />{' '}
-                                            </div>
-                                        );
-                                    }
-                                })}
+                            <div style={{ marginRight: 20 }}>
+                                <ExplorePlot
+                                    logScale={logScale}
+                                    width={400}
+                                    metricType={metric}
+                                    selectedField={{
+                                        data: { type: 'SAMPLE' },
+                                        label: 'Assay',
+                                        value: 'assayName',
+                                    }}
+                                    hideNA={hideNA}
+                                    query={assayPlotQuery({ filterString: '' })}
+                                />{' '}
+                            </div>
+
+                            {selectedFields.map((option) => {
+                                return (
+                                    <div style={{ marginRight: 20 }}>
+                                        <ExplorePlot
+                                            logScale={logScale}
+                                            width={400}
+                                            normalizersByField={
+                                                normalizersByField
+                                            }
+                                            metricType={metric}
+                                            selectedField={option}
+                                            hideNA={hideNA}
+                                        />{' '}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 )}

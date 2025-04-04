@@ -44,6 +44,7 @@ export async function doQuery<T>(str: any): Promise<T[]> {
         query: str,
         format: 'JSONEachRow',
     });
+
     return await resultSet.json();
 }
 
@@ -108,3 +109,23 @@ export const specimenQuery = _.template(`
 export const assayQuery = _.template(`
     SELECT * FROM files WHERE has(files.publicationIds,'hta8_2024_nature_a-r-moorman')
 `);
+
+export const plotQuery = _.template(
+    `SELECT <%=field%> as label, count(<%=field%>) as count FROM <%=table%> c
+    WHERE c.ParticipantID IN (
+              SELECT ids FROM files f
+                           ARRAY JOIN demographicsIds as ids
+                    <%=filterString%>
+    )
+  GROUP BY <%=field%>`
+);
+
+export const assayPlotQuery = _.template(
+    `
+            SELECT assayName as label, count(DISTINCT demographic_id) as count FROM (
+                SELECT demographic_id, assayName
+                FROM files
+                ARRAY JOIN demographicsIds AS demographic_id
+        ) GROUP BY assayName
+    `
+);
