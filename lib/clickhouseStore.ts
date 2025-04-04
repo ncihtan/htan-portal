@@ -107,7 +107,7 @@ export const specimenQuery = _.template(`
                      <%=filterString%>)`);
 
 export const assayQuery = _.template(`
-    SELECT * FROM files WHERE has(files.publicationIds,'hta8_2024_nature_a-r-moorman')
+    SELECT * FROM files WHERE has(files.publicationIds,'<%=publicationId %>')
 `);
 
 export const plotQuery = _.template(
@@ -126,6 +126,7 @@ export const assayPlotQuery = _.template(
                 SELECT demographic_id, assayName
                 FROM files
                 ARRAY JOIN demographicsIds AS demographic_id
+                    <%=filterString%>
         ) GROUP BY assayName
     `
 );

@@ -83,12 +83,12 @@ function normalizeUnknownValues(
 }
 
 export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
-    {
-        data: { type: 'SAMPLE' },
-        label: 'Assay',
-        value: 'assayName',
-        table: 'moo',
-    },
+    // {
+    //     data: { type: 'SAMPLE' },
+    //     label: 'Assay',
+    //     value: 'assayName',
+    //     table: '',
+    // },
     {
         value: 'TissueorOrganofOrigin',
         label: 'Organ',
@@ -167,12 +167,15 @@ export const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
         let plotData = store.plotData.result;
 
         // these are used only if we are in logscale
-        const ticks = _.times(
-            Math.ceil(Math.log10(plotData[plotData.length - 1].count)),
-            (i) => {
-                return 10 ** (i + 1);
-            }
-        );
+        let ticks = [];
+        if (plotData && plotData.length) {
+            ticks = _.times(
+                Math.ceil(Math.log10(plotData[plotData.length - 1].count)),
+                (i) => {
+                    return 10 ** (i + 1);
+                }
+            );
+        }
 
         const tickProps = logScale
             ? {

@@ -25,7 +25,7 @@ import { ExploreTab } from '../lib/types';
 
 import styles from './exploreTabs.module.scss';
 import { MobxPromise } from 'mobxpromise';
-import { assayPlotQuery } from '../../../../lib/clickhouseStore.ts';
+import { assayPlotQuery, plotQuery } from '../../../../lib/clickhouseStore.ts';
 
 interface IExploreTabsProps {
     setTab: (tab: ExploreTab) => void;
@@ -64,6 +64,7 @@ interface IExploreTabsProps {
     publicationManifestByUid: { [uid: string]: PublicationManifest };
     publicationSummaryByPubMedID?: { [pubMedId: string]: PublicationSummary };
     filteredPublications: PublicationManifest[];
+    filterString: string;
 }
 
 const metricTypes = [
@@ -119,8 +120,8 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         const [metric, setMetric] = useState(metricTypes[0]);
 
         const [selectedFields, setSelectedFields] = useState(
-            DEFAULT_EXPLORE_PLOT_OPTIONS.filter((opt) =>
-                /Ethnicity|Race|Gender/.test(opt.value)
+            DEFAULT_EXPLORE_PLOT_OPTIONS.filter(
+                (opt) => /./.test(opt.value) // lets just do all of them now
             )
         );
 
@@ -434,7 +435,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         value: 'assayName',
                                     }}
                                     hideNA={hideNA}
-                                    query={assayPlotQuery({ filterString: '' })}
+                                    query={assayPlotQuery({
+                                        filterString: props.filterString,
+                                    })}
                                 />{' '}
                             </div>
 
@@ -450,6 +453,12 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                             metricType={metric}
                                             selectedField={option}
                                             hideNA={hideNA}
+                                            query={plotQuery({
+                                                field: option.value,
+                                                table: option.table,
+                                                filterString:
+                                                    props.filterString,
+                                            })}
                                         />{' '}
                                     </div>
                                 );

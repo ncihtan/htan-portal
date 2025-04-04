@@ -171,12 +171,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
 
     specimen = new remoteData<Entity[]>({
         invoke: async () => {
-            // const q = `SELECT * FROM biospecimen c
-            //            WHERE biospecimen.ParentID IN (
-            //                SELECT demographicsIds as moo FROM files f
-            //                ARRAY JOIN demographicsIds
-            //          ${this.filterString}
-            // )`;
             const q = specimenQuery({ filterString: '' });
             return doQuery(q);
         },
@@ -260,10 +254,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         }
     }
 
-    // get groupsByProperty() {
-    //     return groupFilesByAttrNameAndValue(this.state.files);
-    // }
-
     get groupsByPropertyFiltered() {
         return groupFilesByAttrNameAndValue(this.filteredFiles);
     }
@@ -313,67 +303,63 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         );
     }
 
-    get samples() {
-        return getFilteredSamples(this.state.files, this.cases, false);
-    }
-
-    get filteredSamples() {
-        return getFilteredSamples(
-            this.filteredFiles,
-            this.filteredCases,
-            this.showAllBiospecimens
-        );
-    }
-
-    get filteredSamplesByNonAtlasFilters() {
-        return getFilteredSamples(
-            this.filteredFiles,
-            this.filteredCasesByNonAtlasFilters,
-            this.showAllBiospecimens
-        );
-    }
-
-    // get cases() {
-    //     return getFilteredCases(this.state.files, {}, true);
+    // get samples() {
+    //     return getFilteredSamples(this.state.files, this.cases, false);
+    // }
+    //
+    // get filteredSamples() {
+    //     return getFilteredSamples(
+    //         this.filteredFiles,
+    //         this.filteredCases,
+    //         this.showAllBiospecimens
+    //     );
+    // }
+    //
+    // get filteredSamplesByNonAtlasFilters() {
+    //     return getFilteredSamples(
+    //         this.filteredFiles,
+    //         this.filteredCasesByNonAtlasFilters,
+    //         this.showAllBiospecimens
+    //     );
     // }
 
-    get filteredCases() {
-        return getFilteredCases(
-            this.filteredFiles,
-            this.selectedFiltersByAttrName,
-            this.showAllCases
-        );
-    }
+    // get filteredCases() {
+    //     return getFilteredCases(
+    //         this.filteredFiles,
+    //         this.selectedFiltersByAttrName,
+    //         this.showAllCases
+    //     );
+    // }
 
-    get filteredCasesByNonAtlasFilters() {
-        return getFilteredCases(
-            this.filteredFilesByNonAtlasFilters,
-            this.nonAtlasSelectedFiltersByAttrName,
-            this.showAllCases
-        );
-    }
+    // get filteredCasesByNonAtlasFilters() {
+    //     return getFilteredCases(
+    //         this.filteredFilesByNonAtlasFilters,
+    //         this.nonAtlasSelectedFiltersByAttrName,
+    //         this.showAllCases
+    //     );
+    // }
 
-    get filteredPublications() {
-        return _(this.filteredCases)
-            .flatMap((c) => c.publicationIds)
-            .compact()
-            .uniq()
-            .map((id) => this.state.publicationManifestByUid[id])
-            .value();
-    }
+    // get filteredPublications() {
+    //     return _(this.filteredCases)
+    //         .flatMap((c) => c.publicationIds)
+    //         .compact()
+    //         .uniq()
+    //         .map((id) => this.state.publicationManifestByUid[id])
+    //         .value();
+    // }
 
-    get atlasMap() {
-        return _.keyBy(this.state.atlases, (a) => a.htan_id);
-    }
+    // get atlasMap() {
+    //     return _.keyBy(this.state.atlases, (a) => a.htan_id);
+    // }
 
-    get filteredAtlases() {
-        // get only atlases associated with filtered files
-        return _.chain(this.filteredFiles)
-            .map((f) => f.atlasid)
-            .uniq()
-            .map((id) => this.atlasMap[id])
-            .value();
-    }
+    // get filteredAtlases() {
+    //     // get only atlases associated with filtered files
+    //     return _.chain(this.filteredFiles)
+    //         .map((f) => f.atlasid)
+    //         .uniq()
+    //         .map((id) => this.atlasMap[id])
+    //         .value();
+    // }
 
     get selectedAtlases() {
         const atlasFilters = this.selectedFiltersByAttrName[
@@ -413,13 +399,13 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             .value();
     }
 
-    get allAtlases() {
-        return _.chain(this.state.files)
-            .map((f) => f.atlasid)
-            .uniq()
-            .map((id) => this.atlasMap[id])
-            .value();
-    }
+    // get allAtlases() {
+    //     return _.chain(this.state.files)
+    //         .map((f) => f.atlasid)
+    //         .uniq()
+    //         .map((id) => this.atlasMap[id])
+    //         .value();
+    // }
 
     get groupsByProperty() {
         const groupsByProperty = _(this.unfilteredOptions.result)
@@ -458,42 +444,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 </div>
             );
         } else {
-            const filterControlsProps: IGenericFilterControlProps<any, any> = {
-                countHeader: 'Files',
-                attributeMap: FileAttributeMap,
-                attributeNames: [
-                    AttributeNames.AtlasName,
-                    AttributeNames.TissueorOrganofOrigin,
-                    AttributeNames.PrimaryDiagnosis,
-                    AttributeNames.assayName,
-                    AttributeNames.level,
-                    AttributeNames.FileFormat,
-                    AttributeNames.TreatmentType,
-                ],
-                entities: [],
-                setFilter: this.setFilter,
-                selectedFiltersByGroupName: this.selectedFiltersByAttrName,
-                selectedFilters: [],
-                groupsByProperty: this.groupsByProperty,
-            };
-
-            const options = (str: string) => {
-                if (str in this.groupsByProperty) {
-                    return _.map(this.groupsByProperty[str], (val, key) => {
-                        return {
-                            value: val.val,
-                            label: val.val,
-                            group: str,
-                            fieldType: val.fieldType,
-                            isSelected: false,
-                            count: val.count,
-                        };
-                    });
-                } else {
-                    return [];
-                }
-            };
-
             return (
                 <div className={styles.explore}>
                     <FileFilterControls
@@ -502,7 +452,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                             this.selectedFiltersByAttrName
                         }
                         selectedFilters={this.selectedFilters}
-                        entities={this.files.result!}
+                        entities={this.filesFiltered.result!}
                         groupsByProperty={this.groupsByProperty}
                         enableReleaseFilter={
                             this.props.isReleaseQCEnabled
@@ -532,6 +482,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         setTab={(currentTab: ExploreTab) => {
                             this.currentTab = currentTab;
                         }}
+                        filterString={this.filterString}
                         activeTab={this.currentTab}
                         schemaDataById={this.state.schemaDataById}
                         files={this.state.files}
