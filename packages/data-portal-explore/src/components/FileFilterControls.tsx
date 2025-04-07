@@ -51,16 +51,18 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
 
         const options = (str: string) => {
             if (str in props.groupsByProperty) {
-                return _.map(props.groupsByProperty[str], (val, key) => {
-                    return {
-                        value: val.val,
-                        label: val.val,
-                        group: str,
-                        fieldType: val.fieldType,
-                        isSelected: false,
-                        count: val.count,
-                    };
-                });
+                return _(props.groupsByProperty[str])
+                    .map((val, key) => {
+                        return {
+                            value: val.val,
+                            label: val.val,
+                            group: str,
+                            fieldType: val.fieldType,
+                            isSelected: false,
+                            count: val.count,
+                        };
+                    })
+                    .value();
             } else {
                 return [];
             }
