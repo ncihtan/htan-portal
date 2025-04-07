@@ -28,41 +28,6 @@ interface IBiospecimenTableProps {
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
     props
 ) => {
-    // const columns = generateColumnsForDataSchema(
-    //     [SchemaDataId.Biospecimen],
-    //     props.schemaDataById,
-    //     props.genericAttributeMap,
-    //     // need to add a custom sort function for the id
-    //     {
-    //         [GenericAttributeNames.BiospecimenID]: {
-    //             sortFunction: sortByBiospecimenId,
-    //         },
-    //         [GenericAttributeNames.ParentID]: {
-    //             sortFunction: sortByParentID,
-    //         },
-    //     },
-    //     // Component seems to be always "Biospecimen", no need to have a column for it
-    //     ['Component']
-    // );
-    // const indexOfBiospecimenId = _.findIndex(
-    //     columns,
-    //     (c) => c.selector === GenericAttributeNames.BiospecimenID
-    // );
-    // insert Atlas Name and Publications right after Biospecimen ID
-    // columns.splice(
-    //     indexOfBiospecimenId + 1,
-    //     0,
-    //     getAtlasColumn(props.synapseAtlases),
-    //     getPublicationColumn(props.publicationsByUid)
-    // );
-
-    // const columns = [
-    //     {
-    //         name:"BiospecimenID",
-    //         selector:"BiospecimenID"
-    //     }
-    // ];
-
     const columns = [
         {
             name: 'HTAN Biospecimen ID',

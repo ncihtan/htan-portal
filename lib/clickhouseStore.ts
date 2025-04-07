@@ -101,9 +101,9 @@ export const caseQuery = _.template(
 
 export const specimenQuery = _.template(`
             SELECT * FROM specimen c
-                       WHERE specimen.ParentID IN (
-                           SELECT demographicsIds as moo FROM files f
-                           ARRAY JOIN demographicsIds
+                       WHERE specimen.BiospecimenID IN (
+                           SELECT biospecimenIds FROM files f
+                           ARRAY JOIN biospecimenIds
                      <%=filterString%>)`);
 
 export const assayQuery = _.template(`

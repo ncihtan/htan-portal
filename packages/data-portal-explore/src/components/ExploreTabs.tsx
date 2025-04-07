@@ -247,7 +247,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             Show all biospecimens from filtered files
                         </label>*/}
                         <BiospecimenTable
-                            synapseAtlases={props.filteredSynapseAtlases}
+                            synapseAtlases={props.atlases.result}
                             samples={props.samples.result}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}

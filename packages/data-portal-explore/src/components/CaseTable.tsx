@@ -196,28 +196,28 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     );
 
     // we need to add ancestry columns manually because they are attached externally and not part of any schema
-    // const customColumns = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS'].map((name) => ({
-    //     id: name,
-    //     selector: name,
-    //     omit: true,
-    //     wrap: true,
-    //     sortable: true,
-    //     searchable: false,
-    //     cell: (sample: Entity) => {
-    //         const value = sample[name as keyof Entity] as number;
-    //
-    //         if (value === undefined) {
-    //             return value;
-    //         } else if (value < 0.001) {
-    //             return value.toExponential(4);
-    //         } else {
-    //             return value.toFixed(6);
-    //         }
-    //     },
-    //     name: `${name} Genomic Ancestry`,
-    // }));
+    const customColumns = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS'].map((name) => ({
+        id: name,
+        selector: name,
+        omit: true,
+        wrap: true,
+        sortable: true,
+        searchable: false,
+        cell: (sample: Entity) => {
+            const value = sample[name as keyof Entity] as number;
 
-    const columns = [...cols];
+            if (value === undefined) {
+                return value;
+            } else if (value < 0.001) {
+                return value.toExponential(4);
+            } else {
+                return value.toFixed(6);
+            }
+        },
+        name: `${name} Genomic Ancestry`,
+    }));
+
+    const columns = [...customColumns, ...cols];
 
     columns.splice(2, 0, getPublicationColumn(props.publicationsByUid));
 

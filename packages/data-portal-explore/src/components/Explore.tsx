@@ -231,6 +231,10 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
              `;
             const publications = await doQuery(q);
 
+            publications.forEach((pub) => {
+                pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
+            });
+
             return publications;
         },
     });

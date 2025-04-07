@@ -40,9 +40,6 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     assaySummary,
     organSum,
 }) => {
-    console.log(synapseCounts);
-    console.log(organSum);
-
     return (
         <>
             <Jumbotron

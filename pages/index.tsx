@@ -62,7 +62,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const entityCounts = await doQuery(`
         SELECT (SELECT count(*) FROM atlases) as atlasCount,
         (SELECT count(*) FROM cases) as caseCount,
-        (SELECT count(*) FROM specimen) as sampleCount,
+        (SELECT count(distinct BiospecimenID) FROM specimen WHERE BiospecimenID IN (
+            SELECT DISTINCT bId
+            FROM files f
+                   ARRAY JOIN biospecimenIds AS bId
+        )) as sampleCount,
         (SELECT count(distinct TissueorOrganofOrigin) FROM diagnosis) as organCount
     `);
 
