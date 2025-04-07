@@ -1,24 +1,14 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 import {
     FilterControls,
     FilterDropdown,
-    getDropdownOptionsFromProps,
-    getOptionsFromProps,
     IFilterControlsProps,
     IGenericFilterControlProps,
-    OptionType,
 } from '@htan/data-portal-filter';
 import { AttributeNames } from '@htan/data-portal-utils';
-import {
-    DownloadSourceCategory,
-    Entity,
-    FileAttributeMap,
-    FileViewerName,
-} from '@htan/data-portal-commons';
+import { Entity, FileAttributeMap } from '@htan/data-portal-commons';
 
 import styles from './fileFilterControls.module.scss';
 import _ from 'lodash';
@@ -81,7 +71,10 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             <FilterControls {...filterControlsProps}>
                 <FilterDropdown
                     {...dropdownProps}
-                    attributes={[AttributeNames.TissueorOrganofOrigin]}
+                    attributes={[
+                        AttributeNames.TissueorOrganofOrigin,
+                        AttributeNames.organType,
+                    ]}
                     className={styles.filterCheckboxListContainer}
                     width={120}
                 />
