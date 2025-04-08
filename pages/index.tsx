@@ -55,8 +55,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     `);
 
     const organCounts = await doQuery(`
-        SELECT TissueorOrganofOrigin as organ, atlas_name, count(TissueorOrganofOrigin) as count FROM diagnosis
-        GROUP BY organ, atlas_name
+        SELECT organType, atlas_name, count(DISTINCT ParticipantID) as count FROM (
+            SELECT * FROM diagnosis2
+                ARRAY JOIN organType
+            ) 
+        GROUP BY organType, atlas_name
     `);
 
     const entityCounts = await doQuery(`
@@ -67,7 +70,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
             FROM files f
                    ARRAY JOIN biospecimenIds AS bId
         )) as sampleCount,
-        (SELECT count(distinct TissueorOrganofOrigin) FROM diagnosis) as organCount
+        (SELECT count(organType) FROM (
+                                         SELECT organType FROM files ARRAY JOIN organType
+                                         GROUP BY organType
+                                     )) as organCount
     `);
 
     const entitySummary = [
@@ -77,8 +83,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
         { description: 'Biospecimen', text: entityCounts[0].sampleCount },
     ];
 
+    console.log(organCounts);
+
     const organSum = _(organCounts)
-        .groupBy('organ')
+        .groupBy('organType')
         .map((val, key) => {
             const distributionByCenter = _(val)
                 .groupBy('atlas_name')
@@ -91,7 +99,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
                 })
                 .value();
             return {
-                attributeName: 'TissueorOrganofOrigin',
+                attributeName: 'organType',
                 attributeValue: key,
                 attributeFilterValues: [key],
                 distributionByCenter,
@@ -122,15 +130,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
             };
         })
         .value();
-
-    // const processedSynapseData = fs.readFileSync(
-    //     path.join(process.cwd(), 'public/processed_syn_data.json'),
-    //     'utf8'
-    // );
-
-    // const files = fillInEntities(
-    //     (JSON.parse(processedSynapseData) as any) as LoadDataResult
-    // );
 
     const blurb = `
     HTAN is a National Cancer Institute (NCI)-funded Cancer MoonshotSM initiative to construct 3-dimensional atlases of the dynamic cellular, morphological, and molecular features of human cancers as they evolve from precancerous lesions to advanced disease. (Cell April 2020)
