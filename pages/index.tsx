@@ -8,14 +8,6 @@ import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import { GetStaticProps } from 'next';
 import PageWrapper from '../components/PageWrapper';
-import { computeDashboardData } from '../lib/helpers';
-import {
-    computeEntityReportByAssay,
-    computeEntityReportByOrgan,
-    fillInEntities,
-    LoadDataResult,
-} from '@htan/data-portal-commons';
-import { createClient } from '@clickhouse/client-web';
 import { doQuery } from '../lib/clickhouseStore';
 
 const Home = (data: IHomePropsProps) => {
@@ -28,17 +20,6 @@ const Home = (data: IHomePropsProps) => {
         </>
     );
 };
-
-// const client = createClient({
-//     host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
-//     username: 'webuser',
-//     password: 'My_password1976',
-//     request_timeout: 600000,
-//     compression: {
-//         response: true,
-//         request: false,
-//     },
-// });
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const assayCounts = await doQuery(`
@@ -82,8 +63,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         { description: 'Cases', text: entityCounts[0].caseCount },
         { description: 'Biospecimen', text: entityCounts[0].sampleCount },
     ];
-
-    console.log(organCounts);
 
     const organSum = _(organCounts)
         .groupBy('organType')
@@ -131,17 +110,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
         })
         .value();
 
-    const blurb = `
-    HTAN is a National Cancer Institute (NCI)-funded Cancer MoonshotSM initiative to construct 3-dimensional atlases of the dynamic cellular, morphological, and molecular features of human cancers as they evolve from precancerous lesions to advanced disease. (Cell April 2020)
-    `;
-
     return {
         props: {
-            hero_blurb: blurb,
             synapseCounts: entitySummary,
             organSummary: organSum,
             assaySummary: assaySum,
-            entityCounts,
         },
     };
 };
