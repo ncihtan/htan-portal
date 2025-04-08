@@ -12,7 +12,7 @@ const client = createClient({
     },
 });
 
-export const myQuery = `
+export const countsByTypeQuery = `
     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
         SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files
         UNION ALL
@@ -33,6 +33,8 @@ export const myQuery = `
         SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM files
         UNION ALL
         SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM files
+        UNION ALL
+        SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM files
         UNION ALL
         SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files
         )

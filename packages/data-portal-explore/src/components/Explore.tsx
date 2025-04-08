@@ -47,7 +47,7 @@ import {
     caseQuery,
     doQuery,
     fileQuery,
-    myQuery,
+    countsByTypeQuery,
     specimenQuery,
 } from '../../../../lib/clickhouseStore.ts';
 import FileFilterControls from './FileFilterControls.tsx';
@@ -106,7 +106,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
 
     unfilteredOptions = new remoteData({
         invoke: async () => {
-            return doQuery(myQuery);
+            return doQuery(countsByTypeQuery);
         },
     });
 
