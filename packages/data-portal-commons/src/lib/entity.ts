@@ -172,7 +172,10 @@ export interface PublicationManifest {
     Tool: string;
     SupportingLink?: string;
     SupportingLinkDescription?: string;
-
+    elocationid: string;
+    fulljournalname: string;
+    title: string;
+    AtlasMeta: Record<any, any>;
     // Derived or attached in frontend
     publicationId: string;
     atlasid: string;

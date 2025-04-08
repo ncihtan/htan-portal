@@ -92,86 +92,20 @@ interface PublicationPageProps {
     cases: Entity[];
     atlases: Atlas[];
     assays: Entity[];
+    publications: PublicationManifest[];
 }
 
 const PublicationPage = (props: PublicationPageProps) => {
     const router = useRouter();
-    // const [data, setData] = useState<LoadDataResult>({} as LoadDataResult);
-    // const [biospecimensData, setBiospecimensData] = useState<Entity[]>([]);
-    // const [casesData, setCasesData] = useState<Entity[]>([]);
-    // const [assayData, setAssayData] = useState<{
-    //     [assayName: string]: Entity[];
-    // }>({});
-    // const [publicationManifest, setPublicationManifest] = useState<
-    //     PublicationManifest | undefined
-    // >(undefined);
-    // const [publicationSummary, setPublicationSummary] = useState<
-    //     PublicationSummary | undefined
-    // >(undefined);
-    //
-    // useEffect(() => {
-    //     async function getData() {
-    //         await fetchData().then((data) => {
-    //             setData(data);
-    //             const publicationManifest =
-    //                 data.publicationManifestByUid[props.publicationUid];
-    //             setPublicationManifest(publicationManifest);
-    //             const publicationSummary =
-    //                 data.publicationSummaryByPubMedID?.[
-    //                     getPublicationPubMedID(publicationManifest)
-    //                 ];
-    //             setPublicationSummary(publicationSummary);
-    //
-    //             if (publicationManifest) {
-    //                 const selectedFiltersByAttrName = filterByAttrName(
-    //                     getPublicationFilters(publicationManifest)
-    //                 );
-    //                 const filteredFiles = getFilteredFiles(
-    //                     selectedFiltersByAttrName,
-    //                     data
-    //                 );
-    //                 const groupedData = groupFilesByAttrNameAndValue(
-    //                     filteredFiles
-    //                 );
-    //                 setAssayData(groupedData['assayName']);
-    //                 const biospecimensData = getBiospecimensData(
-    //                     selectedFiltersByAttrName,
-    //                     filteredFiles
-    //                 );
-    //                 setBiospecimensData(biospecimensData);
-    //                 const casesData = getFilteredCases(
-    //                     filteredFiles,
-    //                     selectedFiltersByAttrName,
-    //                     false
-    //                 );
-    //                 setCasesData(casesData);
-    //
-    //                 if (isReleaseQCEnabled()) {
-    //                     const missingPublicationFiles = _.difference(
-    //                         publicationManifest?.PublicationAssociatedParentDataFileID.split(
-    //                             ','
-    //                         ),
-    //                         filteredFiles.map((f) => f.DataFileID)
-    //                     );
-    //
-    //                     if (!_.isEmpty(missingPublicationFiles)) {
-    //                         console.log(
-    //                             `Missing publication files for ${props.publicationUid}: `
-    //                         );
-    //                         console.log(missingPublicationFiles);
-    //                     }
-    //                 }
-    //             }
-    //         });
-    //     }
-    //     getData();
-    // }, []);
 
     const publication = props.publications.find(
-        (p) => p.publicationId === router.query.id
+        (p: PublicationManifest) => p.publicationId === router.query.id
     );
 
-    // const isLoading = _.isEmpty(data);
+    if (!publication) {
+        return <div>There is no publication corresponding to this id.</div>;
+    }
+
     const doi = publication.elocationid?.replace(/^doi: /, '');
     const pubmedId = publication.uid;
 
@@ -312,20 +246,25 @@ export default PublicationPage;
 export const getStaticProps: GetStaticProps = async (context) => {
     const publications = await doQuery('SELECT * FROM publication_manifest');
 
+    publications.forEach((pub: PublicationManifest) => {
+        // @ts-ignore
+        pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
+    });
+
+    const publicationId = context.params?.id || '';
+
     const specimen = await doQuery(`
         SELECT * FROM specimen WHERE
-        has(publicationIds,'${context.params.id}') 
+        has(publicationIds,'${publicationId}') 
     `);
     const cases = await doQuery(`
         SELECT * FROM cases WHERE
-        has(publicationIds,'${context.params.id}')
+        has(publicationIds,'${publicationId}')
     `);
 
     const atlases = await doQuery(`SELECT * FROM atlases`);
 
-    const assays = await doQuery(
-        assayQuery({ publicationId: context.params.id })
-    );
+    const assays = await doQuery(assayQuery({ publicationId: publicationId }));
 
     return {
         props: {

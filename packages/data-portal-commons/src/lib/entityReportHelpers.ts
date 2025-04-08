@@ -47,14 +47,9 @@ export type EntityReportByCenter = {
 
 export function normalizeTissueOrOrganOrSite(value: string) {
     return value;
-    // if (_.isString(value)) {
-    //     return value.toLowerCase().replace(/,/g, '');
-    // } else {
-    //     debugger;
-    // }
 }
 
-function normalizeTreatment(value: string): string[] {
+function normalizeTreatment(value: string): string {
     return value;
     // value = value.trim().toLowerCase();
     // const treatments = value.split(/,|;/).map((t) => {
