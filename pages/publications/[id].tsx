@@ -109,7 +109,7 @@ const PublicationPage = (props: PublicationPageProps) => {
     const doi = publication.elocationid?.replace(/^doi: /, '');
     const pubmedId = publication.uid;
 
-    const atlasMeta = JSON.parse(publication.AtlasMeta);
+    const atlasMeta = publication.AtlasMeta;
 
     const assaysByAssayNameMap = _.groupBy(props.assays, 'assayName');
 
