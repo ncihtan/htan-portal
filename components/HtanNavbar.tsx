@@ -113,9 +113,6 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
             >
                 Newsletter
             </Nav.Link>
-            <Nav.Link href="https://twitter.com/ncihtan" target="_blank">
-                Twitter
-            </Nav.Link>
         </NavSection>,
     ];
 
