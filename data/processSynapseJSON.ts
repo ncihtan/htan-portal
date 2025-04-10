@@ -428,6 +428,8 @@ function addDownloadSourcesInfo(
                 ],
                 (assay) => file.assayName?.toLowerCase().includes(assay)
             ) ||
+            // raw files
+            file.Filename.endsWith('raw') ||
             // Level 3 & 4 all assays
             _.some(
                 ['Level 3', 'Level 4', 'Auxiliary', 'Other'],
