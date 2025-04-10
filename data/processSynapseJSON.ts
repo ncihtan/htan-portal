@@ -422,8 +422,8 @@ function addDownloadSourcesInfo(
                     'rppa',
                     'slide-seq',
                     'mass spectrometry',
-                    'LC-MS3',
-                    'LC-MS/MS',
+                    'lc-ms3',
+                    'lc-ms/ms',
                     'exseq',
                 ],
                 (assay) => file.assayName?.toLowerCase().includes(assay)
