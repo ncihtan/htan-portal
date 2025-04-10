@@ -422,11 +422,15 @@ function addDownloadSourcesInfo(
                     'rppa',
                     'slide-seq',
                     'mass spectrometry',
+                    'lc-ms3',
+                    'lc-ms/ms',
                     'exseq',
                     'xenium',
                 ],
                 (assay) => file.assayName?.toLowerCase().includes(assay)
             ) ||
+            // raw files
+            file.Filename.endsWith('raw') ||
             // Level 3 & 4 all assays
             _.some(
                 ['Level 3', 'Level 4', 'Auxiliary', 'Other'],
