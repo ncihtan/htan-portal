@@ -19,7 +19,7 @@ All data is coming from [Synapse](https://www.synapse.org/). We have a Python sc
 | Data                 | New major or point data release                   | Follow steps in Update Data Files section. Dar'ya manages BigQuery tables       |
 | Data Access          | CDS releases level1-2 data                        | Follow steps in Update Data Files section (particularly cds_drs mapping update) |
 | Viewers              | CellXGene releases single cell data               | Update cellxgene viewers JSON. Add entry manually                               |
-| Viewers              | New Minerva Viewers generated                     | Run script to update links. Adam generates the Minerva viewers                  |
+| Viewers              | New Minerva Viewers generated                     | Adam generates the Minerva viewers. Follow steps in Update Data Files section   |
 
 ### Update Data Files
 
