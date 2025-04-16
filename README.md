@@ -10,6 +10,17 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 All data is coming from [Synapse](https://www.synapse.org/). We have a Python script that generates a JSON file that contains all the metadata. There is currently no backend, it's a fully static site i.e. all filtering happens on the frontend.
 
+## Data Updates
+
+| Category             | Update Event                                      | Process                                                                         |
+|----------------------|---------------------------------------------------|---------------------------------------------------------------------------------|
+| Publication          | HTAN center has new publication                   | Update Publications JSON. Alex has script to generate this                      |
+| Tool                 | HTAN center has new tool                          | Update Tools JSON. Add entry manually                                           |
+| Data                 | New major or point data release                   | Follow steps in Update Data Files section. Dar'ya manages BigQuery tables       |
+| Data Access          | CDS releases level1-2 data                        | Follow steps in Update Data Files section (particularly cds_drs mapping update) |
+| Viewers              | CellXGene releases single cell data               | Update cellxgene viewers JSON. Add entry manually                               |
+| Viewers              | New Minerva Viewers generated                     | Run script to update links. Adam generates the Minerva viewers                  |
+
 ### Update Data Files
 
 #### Update release information
