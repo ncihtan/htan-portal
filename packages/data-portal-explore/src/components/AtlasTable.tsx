@@ -208,9 +208,12 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     };
 
     getPublicationManifests = (atlas: Atlas) => {
-        return this.props.publications.filter(
-            (p) => !isManuscriptInReview(p) && p.atlasid === atlas.htan_id
-        );
+        return _(this.props.publications)
+            .filter(
+                (p) => !isManuscriptInReview(p) && p.atlasid === atlas.htan_id
+            )
+            .sortBy([(p) => p.YearofPublication, (p) => p.PMID])
+            .value();
     };
 
     getViewerCounts = (atlas: Atlas) => {
