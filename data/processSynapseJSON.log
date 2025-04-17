@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
    40kB  sourcemap-register.js
-18216kB  index.js
+18215kB  index.js
  1430kB  index.js.map
-18256kB  [31468ms] - ncc 0.28.6
+18255kB  [34704ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'ScRNA-seqLevel3',
   Filename: 'single_cell_RNAseq_level_3/Lau10180_0002_S1_barcodes.tsv.gz',
@@ -1540,6 +1540,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA3_70104_97338889',
   ParentDataFileID: 'HTA3_70104_19979641',
+  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
@@ -1566,6 +1567,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA3_70132_42318352',
   ParentDataFileID: 'HTA3_70132_12230399',
+  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
@@ -1592,6 +1594,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA3_70149_27474655',
   ParentDataFileID: 'HTA3_70149_16408998',
+  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
@@ -1618,6 +1621,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA3_70149_77055932',
   ParentDataFileID: 'HTA3_70149_84371533',
+  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
