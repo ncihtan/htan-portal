@@ -238,13 +238,21 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                     <ol>
                         <li>
                             Install the{' '}
-                            <a href="https://gen3.org/resources/user/gen3-client/#1-installation-instructions" target="_blank" rel="noopener noreferrer">
+                            <a
+                                href="https://gen3.org/resources/user/gen3-client/#1-installation-instructions"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 Gen3 Client
                             </a>
                         </li>
                         <li>
                             Get your{' '}
-                            <a href="https://nci-crdc.datacommons.io/identity" target="_blank" rel="noopener noreferrer">
+                            <a
+                                href="https://nci-crdc.datacommons.io/identity"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 NCI Data Commons Framework Services API Key
                             </a>
                         </li>
@@ -260,7 +268,8 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
                             </pre>
                         </li>
                     </ol>
-                </>.
+                </>
+                .
                 <button
                     className="btn btn-light"
                     onClick={() =>
@@ -721,7 +730,13 @@ export class FileTable extends React.Component<IFileTableProps> {
                         );
 
                     return (
-                        <Tooltip overlay={getFileBase(file.Filename)}>
+                        <Tooltip
+                            overlay={
+                                <span className={styles.filenameTooltipContent}>
+                                    {getFileBase(file.Filename)}
+                                </span>
+                            }
+                        >
                             {linkOut}
                         </Tooltip>
                     );
