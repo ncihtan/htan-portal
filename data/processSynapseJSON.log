@@ -3,8 +3,8 @@ ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
    40kB  sourcemap-register.js
 18215kB  index.js
- 1430kB  index.js.map
-18255kB  [34704ms] - ncc 0.28.6
+ 1429kB  index.js.map
+18255kB  [41816ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'ScRNA-seqLevel3',
   Filename: 'single_cell_RNAseq_level_3/Lau10180_0002_S1_barcodes.tsv.gz',
@@ -1514,114 +1514,6 @@ Missing ParentBiospecimenID:  {
   DataFileID: 'HTA11_2025431401_105',
   ParentDataFileID: 'HTA11_2025431401_1',
   publicationIds: [ 'hta11_2025_nature-communications_cottam-ma' ],
-  primaryParents: []
-}
-Missing ParentBiospecimenID:  {
-  Component: 'BulkDNALevel3',
-  Filename: 'HTAN BU/Bulk_WES_Level_3/LUSC/PCGA02_20104_1092010.somatic_oncefiltered.pass.vcf',
-  FileFormat: 'vcf',
-  HTANParentDataFileID: 'HTA3_70104_19979641',
-  HTANDataFileID: 'HTA3_70104_97338889',
-  GenomicReference: 'human_g1k_v37_decoy.fasta',
-  GenomicReferenceURL: 'https://github.com/bahlolab/bioinfotools/blob/master/GATK/resource_bundle.md',
-  GermlineVariantsWorkflowURL: 'Not Applicable',
-  SomaticVariantsWorkflowURL: 'https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2',
-  SomaticVariantsSampleType: 'Case Sample',
-  StructuralVariantWorkflowURL: 'Not Applicable',
-  synapseId: 'syn65941740',
-  atlasid: 'HTA3',
-  atlas_name: 'HTAN BU',
-  level: 'Level 3',
-  assayName: 'Bulk DNA',
-  AtlasMeta: {
-    title: { rendered: 'The Lung Pre-Cancer Atlas' },
-    htan_id: 'hta3',
-    lead_institutions: 'Boston University, University of California, Los Angeles (UCLA)'
-  },
-  DataFileID: 'HTA3_70104_97338889',
-  ParentDataFileID: 'HTA3_70104_19979641',
-  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
-  primaryParents: []
-}
-Missing ParentBiospecimenID:  {
-  Component: 'BulkDNALevel3',
-  Filename: 'HTAN BU/Bulk_WES_Level_3/LUSC/PCGA02_20149_1049101.somatic_oncefiltered.pass.vcf',
-  FileFormat: 'vcf',
-  HTANParentDataFileID: 'HTA3_70132_12230399',
-  HTANDataFileID: 'HTA3_70132_42318352',
-  GenomicReference: 'human_g1k_v37_decoy.fasta',
-  GenomicReferenceURL: 'https://github.com/bahlolab/bioinfotools/blob/master/GATK/resource_bundle.md',
-  GermlineVariantsWorkflowURL: 'Not Applicable',
-  SomaticVariantsWorkflowURL: 'https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2',
-  SomaticVariantsSampleType: 'Case Sample',
-  StructuralVariantWorkflowURL: 'Not Applicable',
-  synapseId: 'syn65941745',
-  atlasid: 'HTA3',
-  atlas_name: 'HTAN BU',
-  level: 'Level 3',
-  assayName: 'Bulk DNA',
-  AtlasMeta: {
-    title: { rendered: 'The Lung Pre-Cancer Atlas' },
-    htan_id: 'hta3',
-    lead_institutions: 'Boston University, University of California, Los Angeles (UCLA)'
-  },
-  DataFileID: 'HTA3_70132_42318352',
-  ParentDataFileID: 'HTA3_70132_12230399',
-  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
-  primaryParents: []
-}
-Missing ParentBiospecimenID:  {
-  Component: 'BulkDNALevel3',
-  Filename: 'HTAN BU/Bulk_WES_Level_3/LUSC/PCGA02_20149_1049104.somatic_oncefiltered.pass.vcf',
-  FileFormat: 'vcf',
-  HTANParentDataFileID: 'HTA3_70149_16408998',
-  HTANDataFileID: 'HTA3_70149_27474655',
-  GenomicReference: 'human_g1k_v37_decoy.fasta',
-  GenomicReferenceURL: 'https://github.com/bahlolab/bioinfotools/blob/master/GATK/resource_bundle.md',
-  GermlineVariantsWorkflowURL: 'Not Applicable',
-  SomaticVariantsWorkflowURL: 'https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2',
-  SomaticVariantsSampleType: 'Case Sample',
-  StructuralVariantWorkflowURL: 'Not Applicable',
-  synapseId: 'syn65941746',
-  atlasid: 'HTA3',
-  atlas_name: 'HTAN BU',
-  level: 'Level 3',
-  assayName: 'Bulk DNA',
-  AtlasMeta: {
-    title: { rendered: 'The Lung Pre-Cancer Atlas' },
-    htan_id: 'hta3',
-    lead_institutions: 'Boston University, University of California, Los Angeles (UCLA)'
-  },
-  DataFileID: 'HTA3_70149_27474655',
-  ParentDataFileID: 'HTA3_70149_16408998',
-  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
-  primaryParents: []
-}
-Missing ParentBiospecimenID:  {
-  Component: 'BulkDNALevel3',
-  Filename: 'HTAN BU/Bulk_WES_Level_3/LUSC/PCGA02_20152_1052109.somatic_oncefiltered.pass.vcf',
-  FileFormat: 'vcf',
-  HTANParentDataFileID: 'HTA3_70149_84371533',
-  HTANDataFileID: 'HTA3_70149_77055932',
-  GenomicReference: 'human_g1k_v37_decoy.fasta',
-  GenomicReferenceURL: 'https://github.com/bahlolab/bioinfotools/blob/master/GATK/resource_bundle.md',
-  GermlineVariantsWorkflowURL: 'Not Applicable',
-  SomaticVariantsWorkflowURL: 'https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2',
-  SomaticVariantsSampleType: 'Case Sample',
-  StructuralVariantWorkflowURL: 'Not Applicable',
-  synapseId: 'syn65941747',
-  atlasid: 'HTA3',
-  atlas_name: 'HTAN BU',
-  level: 'Level 3',
-  assayName: 'Bulk DNA',
-  AtlasMeta: {
-    title: { rendered: 'The Lung Pre-Cancer Atlas' },
-    htan_id: 'hta3',
-    lead_institutions: 'Boston University, University of California, Los Angeles (UCLA)'
-  },
-  DataFileID: 'HTA3_70149_77055932',
-  ParentDataFileID: 'HTA3_70149_84371533',
-  publicationIds: [ 'hta3_2025_tbd_sandra-gómez-lópez' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
