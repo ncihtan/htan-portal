@@ -367,29 +367,35 @@
             "HTA3_0052_1901014",
             "HTA3_0052_1901299"
         ],
-        "Cited In Number": 1,
+        "Eutils Date": "2024 Jul",
+        "Eutils Title": "Graph Perceiver Network for Lung Tumor and Bronchial Premalignant Lesion Stratification from Histopathology.",
+        "Eutils Journal": "The American journal of pathology",
+        "Eutils Sort Date": "2024/07/01 00:00",
+        "Eutils Authors": "Gindra RH, Zheng Y, Green EJ, Reid ME, Mazzilli SA, Merrick DT, Burks EJ, Kolachalama VB, Beane JE",
+        "Eutils DOI": "10.1016/j.ajpath.2024.03.009",
+        "Cited In Number": 2,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=38588853"
     },
     {
         "Component": "PublicationManifest",
         "HTAN Grant ID": "CA233238",
         "HTAN Center ID": "HTA3",
-        "Publication Content Type": "Prepublication site for reviewers",
-        "DOI": "",
+        "Publication Content Type": "Published manuscript",
+        "DOI": "https://doi.org/10.1126/science.ads9145",
         "Title": "Aberrant basal cell clonal dynamics shape early lung carcinogenesis",
         "Authors": "Sandra G\u00f3mez-L\u00f3pez, Ahmed S. N. Alhendi, Moritz J. Przybilla, Ignacio Bordeu, Zoe E. Whiteman, Timothy Butler, Maral J. Rouhani, Lukas Kalinke, Imran Uddin, Kate E. J. Otter, Deepak P. Chandrasekharan, Marta Lebrusant-Fernandez, Abigail Y. L. Shurr, Pascal F. Durrenberger, David A. Moore, Mary Falzon, James L. Reading, I\u00f1igo Martincorena, Benjamin D. Simons, Peter J. Campbell, Sam M. Janes",
         "Corresponding Author": "Sam M. Janes",
         "Corresponding Author ORCID": "https://orcid.org/0000-0002-6634-5939",
         "Year of Publication": "2025",
-        "Location of Publication": "TBD",
+        "Location of Publication": "Science",
         "Publication Abstract": "Preinvasive squamous lung lesions are precursors of lung squamous cell carcinoma (LUSC). The cellular events underlying lesion formation are unknown. Using a carcinogen-induced model of LUSC with no added genetic hits or cell type bias, we find that carcinogen exposure leads to non-neutral competition among basal cells, aberrant clonal expansions, and basal cell mobilization along the airways. Ultimately, preinvasive lesions develop from a few highly mutated clones that dominate most of the bronchial tree. Multi-site sequencing in human patients confirms the presence of clonally related preinvasive lesions across distinct airway regions. Our work identifies a transition in basal cell clonal dynamics, and an associated shift in basal cell fate, as drivers of field cancerization in the lung.",
-        "License": "",
-        "PMID": "",
+        "License": "CC BY 4.0",
+        "PMID": "https://pubmed.ncbi.nlm.nih.gov/40310937/",
         "Publication contains HTAN ID": "",
         "Data Type": "",
         "Tool": "",
-        "Supporting Link": "",
-        "Supporting Link Description": "",
+        "Supporting Link": "https://www.ebi.ac.uk/ena/browser/text-search?query=ERP128764,https://www.ebi.ac.uk/ena/browser/text-search?query=ERP136782,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE276610,https://zenodo.org/records/15168190",
+        "Supporting Link Description": "ENA murine WGS^^^ENA murine scRNA-seq^^^GEO human scRNA-seq^^^Custom R, Python and Bash scripts available on Zenodo",
         "Publication-associated HTAN Parent Data File ID": [
             "HTA3_70104_83851742",
             "HTA3_70104_94048361",
@@ -399,7 +405,7 @@
             "HTA3_70132_84630732",
             "HTA3_70132_95012230",
             "HTA3_70149_92034584",
-            "HTA3_70149_29849254",
+            "HTA3_70149_45927757",
             "HTA3_70152_43206893",
             "HTA3_70152_53127247",
             "HTA3_70152_91726405",
@@ -410,8 +416,8 @@
             "HTA3_70132_72428473",
             "HTA3_70132_95211549",
             "HTA3_70132_21985147",
-            "HTA3_70149_3.866769",
-            "HTA3_70149_5.622579",
+            "HTA3_70149_3866769",
+            "HTA3_70149_18919332",
             "HTA3_70152_70544039",
             "HTA3_70152_75751011",
             "HTA3_70152_38090720",
@@ -440,6 +446,12 @@
             "HTA3_70152_13791271",
             "HTA3_70152_60307324"
         ],
+        "Eutils Date": "2025 May 1",
+        "Eutils Title": "Aberrant basal cell clonal dynamics shape early lung carcinogenesis.",
+        "Eutils Journal": "Science (New York, N.Y.)",
+        "Eutils Sort Date": "2025/05/01 00:00",
+        "Eutils Authors": "G\u00f3mez-L\u00f3pez S, Alhendi ASN, Przybilla MJ, Bordeu I, Whiteman ZE, Butler T, Rouhani MJ, Kalinke L, Uddin I, Otter KEJ, Chandrasekharan DP, Lebrusant-Fernandez M, Shurr AYL, Durrenberger PF, Moore DA, Falzon M, Reading JL, Martincorena I, Simons BD, Campbell PJ, Janes SM",
+        "Eutils DOI": "10.1126/science.ads9145",
         "Cited In Number": 0
     },
     {
@@ -3502,7 +3514,13 @@
             "HTA3_8006_9344315119",
             "HTA3_8006_9744592748"
         ],
-        "Cited In Number": 5,
+        "Eutils Date": "2023 Oct 2",
+        "Eutils Title": "Single-Cell Characterization of Pulmonary Nodules Implicates Suppression of Immunosurveillance across Early Stages of Lung Adenocarcinoma.",
+        "Eutils Journal": "Cancer research",
+        "Eutils Sort Date": "2023/10/02 00:00",
+        "Eutils Authors": "Yanagawa J, Tran LM, Salehi-Rad R, Lim RJ, Dumitras C, Fung E, Wallace WD, Prosper AE, Fishbein G, Shea C, Hong R, Kahangi B, Deng JJ, Gower AC, Liu B, Campbell JD, Mazzilli SA, Beane JE, Kadara H, Lenburg ME, Spira AE, Aberle DR, Krysan K, Dubinett SM",
+        "Eutils DOI": "10.1158/0008-5472.CAN-23-0128",
+        "Cited In Number": 8,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37477508"
     },
     {
@@ -4170,7 +4188,13 @@
             "HTA4_9_50149",
             "HTA4_9_50150"
         ],
-        "Cited In Number": 31,
+        "Eutils Date": "2022 Apr 7",
+        "Eutils Title": "Single-cell multiomics reveals increased plasticity, resistant populations, and stem-cell-like blasts in KMT2A-rearranged leukemia.",
+        "Eutils Journal": "Blood",
+        "Eutils Sort Date": "2022/04/07 00:00",
+        "Eutils Authors": "Chen C, Yu W, Alikarami F, Qiu Q, Chen CH, Flournoy J, Gao P, Uzun Y, Fang L, Davenport JW, Hu Y, Zhu Q, Wang K, Libbrecht C, Felmeister A, Rozich I, Ding YY, Hunger SP, Felix CA, Wu H, Brown PA, Guest EM, Barrett DM, Bernt KM, Tan K",
+        "Eutils DOI": "10.1182/blood.2021013442",
+        "Cited In Number": 41,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34864916"
     },
     {
@@ -7122,7 +7146,14 @@
             "HTA4_1001_4365",
             "HTA4_1001_4365"
         ],
-        "Cited In Number": 0
+        "Eutils Date": "2024 Dec 2",
+        "Eutils Title": "Identification and Characterization of Chemotherapy-Resistant High-Risk Neuroblastoma Persister Cells.",
+        "Eutils Journal": "Cancer discovery",
+        "Eutils Sort Date": "2024/12/02 00:00",
+        "Eutils Authors": "Grossmann LD, Chen CH, Uzun Y, Thadi A, Wolpaw AJ, Louault K, Goldstein Y, Surrey LF, Martinez D, Calafatti M, Gerelus M, Gao P, Lee L, Patel K, Kaufman RS, Shani G, Farrel A, Moshitch-Moshkovitz S, Grimaldi P, Shapiro M, Kendsersky NM, Lindsay JM, Casey CE, Krytska K, Scolaro L, Tsang M, Groff D, Matkar S, Kalna JR, Mycek E, McDevitt J, Runbeck E, Patel T, Bernt KM, Asgharzadeh S, DeClerck YA, Moss\u00e9 YP, Tan K, Maris JM",
+        "Eutils DOI": "10.1158/2159-8290.CD-24-0046",
+        "Cited In Number": 3,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39083807"
     },
     {
         "Component": "PublicationManifest",
@@ -8676,6 +8707,12 @@
             "HTA4_2013_126686",
             "HTA4_2013_136686"
         ],
+        "Eutils Date": "2024 Mar 8",
+        "Eutils Title": "A longitudinal single-cell and spatial multiomic atlas of pediatric high-grade glioma.",
+        "Eutils Journal": "bioRxiv : the preprint server for biology",
+        "Eutils Sort Date": "2024/03/08 00:00",
+        "Eutils Authors": "Sussman JH, Oldridge DA, Yu W, Chen CH, Zellmer AM, Rong J, Parvaresh-Rizi A, Thadi A, Xu J, Bandyopadhyay S, Sun Y, Wu D, Emerson Hunter C, Brosius S, Ahn KJ, Baxter AE, Koptyra MP, Vanguri RS, McGrory S, Resnick AC, Storm PB, Amankulor NM, Santi M, Viaene AN, Zhang N, Raedt T, Cole K, Tan K",
+        "Eutils DOI": "10.1101/2024.03.06.583588",
         "Cited In Number": 0
     },
     {
@@ -11321,6 +11358,12 @@
             "HTA4_1001_4523",
             "HTA4_1001_4524"
         ],
+        "Eutils Date": "2025 Apr 14",
+        "Eutils Title": "Longitudinal single-cell multiomic atlas of high-risk neuroblastoma reveals chemotherapy-induced tumor microenvironment rewiring.",
+        "Eutils Journal": "Nature genetics",
+        "Eutils Sort Date": "2025/04/14 00:00",
+        "Eutils Authors": "Yu W, Biyik-Sit R, Uzun Y, Chen CH, Thadi A, Sussman JH, Pang M, Wu CY, Grossmann LD, Gao P, Wu DW, Yousey A, Zhang M, Turn CS, Zhang Z, Bandyopadhyay S, Huang J, Patel T, Chen C, Martinez D, Surrey LF, Hogarty MD, Bernt K, Zhang NR, Maris JM, Tan K",
+        "Eutils DOI": "10.1038/s41588-025-02158-6",
         "Cited In Number": 0
     },
     {
@@ -12808,6 +12851,12 @@
             "HTA6_0_5",
             "HTA6_0_6"
         ],
+        "Eutils Date": "2025 Mar 18",
+        "Eutils Title": "Single Cell Expression Analysis of Ductal Carcinoma in Situ Identifies Complex Genotypic-Phenotypic Relationships Altering Epithelial Composition.",
+        "Eutils Journal": "Cancer research",
+        "Eutils Sort Date": "2025/03/18 00:00",
+        "Eutils Authors": "Qin X, Strand SH, Lee MR, Saraswathibhatla A, van IJzendoorn DGP, Zhu C, Vennam S, Varma S, Hall A, Factor RE, King L, Simpson L, Luo X, Colditz GA, Jiang S, Chaudhuri O, Hwang ES, Marks JR, Owzar K, West RB",
+        "Eutils DOI": "10.1158/0008-5472.CAN-24-3023",
         "Cited In Number": 0
     },
     {
@@ -12912,7 +12961,13 @@
             "HTA6_EXT6_45",
             "HTA6_EXT7_45"
         ],
-        "Cited In Number": 126,
+        "Eutils Date": "2022 Jan 20",
+        "Eutils Title": "Transition to invasive breast cancer is associated with progressive changes in the structure and composition of tumor stroma.",
+        "Eutils Journal": "Cell",
+        "Eutils Sort Date": "2022/01/20 00:00",
+        "Eutils Authors": "Risom T, Glass DR, Averbukh I, Liu CC, Baranski A, Kagel A, McCaffrey EF, Greenwald NF, Rivero-Guti\u00e9rrez B, Strand SH, Varma S, Kong A, Keren L, Srivastava S, Zhu C, Khair Z, Veis DJ, Deschryver K, Vennam S, Maley C, Hwang ES, Marks JR, Bendall SC, Colditz GA, West RB, Angelo M",
+        "Eutils DOI": "10.1016/j.cell.2021.12.023",
+        "Cited In Number": 148,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35063072"
     },
     {
@@ -14491,7 +14546,13 @@
             "HTA6_9_16",
             "HTA6_9_17"
         ],
-        "Cited In Number": 26,
+        "Eutils Date": "2022 Dec 12",
+        "Eutils Title": "Molecular classification and biomarkers of clinical outcome in breast ductal carcinoma in situ: Analysis of TBCRC 038 and RAHBT cohorts.",
+        "Eutils Journal": "Cancer cell",
+        "Eutils Sort Date": "2022/12/12 00:00",
+        "Eutils Authors": "Strand SH, Rivero-Guti\u00e9rrez B, Houlahan KE, Seoane JA, King LM, Risom T, Simpson LA, Vennam S, Khan A, Cisneros L, Hardman T, Harmon B, Couch F, Gallagher K, Kilgore M, Wei S, DeMichele A, King T, McAuliffe PF, Nangia J, Lee J, Tseng J, Storniolo AM, Thompson AM, Gupta GP, Burns R, Veis DJ, DeSchryver K, Zhu C, Matusiak M, Wang J, Zhu SX, Tappenden J, Ding DY, Zhang D, Luo J, Jiang S, Varma S, Anderson L, Straub C, Srivastava S, Curtis C, Tibshirani R, Angelo RM, Hall A, Owzar K, Polyak K, Maley C, Marks JR, Colditz GA, Hwang ES, West RB",
+        "Eutils DOI": "10.1016/j.ccell.2022.10.021",
+        "Cited In Number": 33,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36400020"
     },
     {
@@ -15960,6 +16021,12 @@
             "HTA6_0_5",
             "HTA6_0_6"
         ],
+        "Eutils Date": "2024 Sep 2",
+        "Eutils Title": "Analysis of ductal carcinoma in situ by self-reported race reveals molecular differences related to outcome.",
+        "Eutils Journal": "Breast cancer research : BCR",
+        "Eutils Sort Date": "2024/09/02 00:00",
+        "Eutils Authors": "Strand SH, Houlahan KE, Branch V, Lynch T, Rivero-Guiti\u00e9rrez B, Harmon B, Couch F, Gallagher K, Kilgore M, Wei S, DeMichele A, King T, McAuliffe P, Curtis C, Owzar K, Marks JR, Colditz GA, Hwang ES, West RB",
+        "Eutils DOI": "10.1186/s13058-024-01885-8",
         "Cited In Number": 0
     },
     {
@@ -16970,7 +17037,13 @@
             "HTA7_995_1001",
             "HTA7_995_1002"
         ],
-        "Cited In Number": 86,
+        "Eutils Date": "2023 Jan 19",
+        "Eutils Title": "Multiplexed 3D atlas of state transitions and immune interaction in colorectal cancer.",
+        "Eutils Journal": "Cell",
+        "Eutils Sort Date": "2023/01/19 00:00",
+        "Eutils Authors": "Lin JR, Wang S, Coy S, Chen YA, Yapp C, Tyler M, Nariya MK, Heiser CN, Lau KS, Santagata S, Sorger PK",
+        "Eutils DOI": "10.1016/j.cell.2022.12.028",
+        "Cited In Number": 107,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36669472"
     },
     {
@@ -17756,7 +17829,13 @@
             "HTA7_8_1003",
             "HTA7_8_1004"
         ],
-        "Cited In Number": 86,
+        "Eutils Date": "2022 Jun 2",
+        "Eutils Title": "The Spatial Landscape of Progression and Immunoediting in Primary Melanoma at Single-Cell Resolution.",
+        "Eutils Journal": "Cancer discovery",
+        "Eutils Sort Date": "2022/06/02 00:00",
+        "Eutils Authors": "Nirmal AJ, Maliga Z, Vallius T, Quattrochi B, Chen AA, Jacobson CA, Pelletier RJ, Yapp C, Arias-Camison R, Chen YA, Lian CG, Murphy GF, Santagata S, Sorger PK",
+        "Eutils DOI": "10.1158/2159-8290.CD-21-1357",
+        "Cited In Number": 103,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35404441"
     },
     {
@@ -17773,7 +17852,7 @@
         "Location of Publication": "biorXiv",
         "Publication Abstract": "Homeostasis of normal tissues and the emergence of diseases such as cancer are controlled by changes in the proportions and states of diverse cell types, cell-cell interactions, and acellular components of the tissue microenvironment1. Spatial omics using highly multiplexed tissue profiling2 makes it possible to study these processes in situ, usually on thin, 4-5 micron thick sections (the standard histopathology format)3. Microscopy-based tissue imaging is commonly performed at a resolution sufficient to determine cell types but not detect the subtle morphological features associated with cytoskeletal reorganisation, juxtracrine signalling, or membrane trafficking4. Here we introduce a 3D imaging approach using existing instruments and reagents that is able to characterize a wide variety of organelles and structures at sub-micron scale while simultaneously quantifying millimetre-scale spatial features. We perform high-resolution 54-plex cyclic immunofluorescence (CyCIF) imaging3 on sections of primary human melanoma thick enough (30-40 microns) to fully encompass two or more layers of intact cells. In pre-invasive melanoma in situ5, 3D imaging of entire cell volumes showed that transformed melanocytic cells are plastic in state and participate in tightly localised niches of interferon signalling near sites of initial invasion into the underlying dermis. Below this layer, immune cells engaged in an unexpectedly diverse array of membrane-membrane interactions as well as looser \u201cneighbourhood\u201d associations6. These data provide new insight into the transitions occurring during early tumour formation and demonstrate the potential for phenotyping tissues at a level of detail previously restricted to cultured cells and organoids.",
         "License": "CC-BY-NC-ND-4.0",
-        "PMID": "https://pubmed.ncbi.nlm.nih.gov/38014052/",
+        "PMID": "",
         "Publication contains HTAN ID": "Yes",
         "Data Type": "CyCIF",
         "Tool": "Yes",
@@ -47852,7 +47931,14 @@
             "HTA1_997_000150101",
             "HTA1_997_778950101"
         ],
-        "Cited In Number": 0
+        "Eutils Date": "2024 Nov",
+        "Eutils Title": "A multi-modal single-cell and spatial expression map of metastatic breast cancer biopsies across clinicopathological features.",
+        "Eutils Journal": "Nature medicine",
+        "Eutils Sort Date": "2024/11/01 00:00",
+        "Eutils Authors": "Klughammer J, Abravanel DL, Segerstolpe \u00c5, Blosser TR, Goltsev Y, Cui Y, Goodwin DR, Sinha A, Ashenberg O, Slyper M, Vigneau S, Jan\u00e9-Valbuena J, Alon S, Caraccio C, Chen J, Cohen O, Cullen N, DelloStritto LK, Dionne D, Files J, Frangieh A, Helvie K, Hughes ME, Inga S, Kanodia A, Lako A, MacKichan C, Mages S, Moriel N, Murray E, Napolitano S, Nguyen K, Nitzan M, Ortiz R, Patel M, Pfaff KL, Porter CBM, Rotem A, Strauss S, Strasser R, Thorner AR, Turner M, Wakiro I, Waldman J, Wu J, G\u00f3mez Tejeda Za\u00f1udo J, Zhang D, Lin NU, Tolaney SM, Winer EP, Boyden ES, Chen F, Nolan GP, Rodig SJ, Zhuang X, Rozenblatt-Rosen O, Johnson BE, Regev A, Wagle N",
+        "Eutils DOI": "10.1038/s41591-024-03215-z",
+        "Cited In Number": 3,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478111"
     },
     {
         "Component": "PublicationManifest",
@@ -47868,7 +47954,7 @@
         "Location of Publication": "biorXiv",
         "Publication Abstract": "Neuroblastoma is a pediatric cancer arising from the developing sympathoadrenal lineage with complex inter- and intra-tumoral heterogeneity. To chart this complexity, we generated a comprehensive cell atlas of 55 neuroblastoma patient tumors, collected from two pediatric cancer institutions, spanning a range of clinical, genetic, and histologic features. Our atlas combines single-cell/nucleus RNA-seq (sc/scRNA-seq), bulk RNA-seq, whole exome sequencing, DNA methylation profiling, spatial transcriptomics, and two spatial proteomic methods. Sc/snRNA-seq revealed three malignant cell states with features of sympathoadrenal lineage development. All of the neuroblastomas had malignant cells that resembled sympathoblasts and the more differentiated adrenergic cells. A subset of tumors had malignant cells in a mesenchymal cell state with molecular features of Schwann cell precursors. DNA methylation profiles defined four groupings of patients, which differ in the degree of malignant cell heterogeneity and clinical outcomes. Using spatial proteomics, we found that neuroblastomas are spatially compartmentalized, with malignant tumor cells sequestered away from immune cells. Finally, we identify spatially restricted signaling patterns in immune cells from spatial transcriptomics. To facilitate the visualization and analysis of our atlas as a resource for further research in neuroblastoma, single cell, and spatial-omics, all data are shared through the Human Tumor Atlas Network Data Commons at www.humantumoratlas.org.",
         "License": "CC-BY-NC-ND-4.0",
-        "PMID": "https://pubmed.ncbi.nlm.nih.gov/38260392/",
+        "PMID": "",
         "Publication contains HTAN ID": "Yes",
         "Data Type": "scRNA-seq,Bulk RNA-seq,Bulk DNA,MIBI",
         "Tool": "Yes",
@@ -51222,7 +51308,13 @@
             "HTA1_710_60621011012",
             "HTA1_272_483110110111"
         ],
-        "Cited In Number": 239,
+        "Eutils Date": "2021 Sep 2",
+        "Eutils Title": "Spatially organized multicellular immune hubs in human colorectal cancer.",
+        "Eutils Journal": "Cell",
+        "Eutils Sort Date": "2021/09/02 00:00",
+        "Eutils Authors": "Pelka K, Hofree M, Chen JH, Sarkizova S, Pirl JD, Jorgji V, Bejnood A, Dionne D, Ge WH, Xu KH, Chao SX, Zollinger DR, Lieb DJ, Reeves JW, Fuhrman CA, Hoang ML, Delorey T, Nguyen LT, Waldman J, Klapholz M, Wakiro I, Cohen O, Albers J, Smillie CS, Cuoco MS, Wu J, Su MJ, Yeung J, Vijaykumar B, Magnuson AM, Asinovski N, Moll T, Goder-Reiser MN, Applebaum AS, Brais LK, DelloStritto LK, Denning SL, Phillips ST, Hill EK, Meehan JK, Frederick DT, Sharova T, Kanodia A, Todres EZ, Jan\u00e9-Valbuena J, Biton M, Izar B, Lambden CD, Clancy TE, Bleday R, Melnitchouk N, Irani J, Kunitake H, Berger DL, Srivastava A, Hornick JL, Ogino S, Rotem A, Vigneau S, Johnson BE, Corcoran RB, Sharpe AH, Kuchroo VK, Ng K, Giannakis M, Nieman LT, Boland GM, Aguirre AJ, Anderson AC, Rozenblatt-Rosen O, Regev A, Hacohen N",
+        "Eutils DOI": "10.1016/j.cell.2021.08.003",
+        "Cited In Number": 288,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34450029"
     },
     {
@@ -51870,6 +51962,12 @@
             "HTA1_962_47111022",
             "HTA1_962_471120101"
         ],
+        "Eutils Date": "2024 Feb 14",
+        "Eutils Title": "A cellular and spatial atlas of TP53 -associated tissue remodeling in lung adenocarcinoma.",
+        "Eutils Journal": "bioRxiv : the preprint server for biology",
+        "Eutils Sort Date": "2024/02/14 00:00",
+        "Eutils Authors": "Zhao W, Kepecs B, Mahadevan NR, Segerstolpe A, Weirather JL, Besson NR, Giotti B, Soong BY, Li C, Vigneau S, Slyper M, Wakiro I, Jane-Valbuena J, Ashenberg O, Rotem A, Bueno R, Rozenblatt-Rosen O, Pfaff K, Rodig S, Hata AN, Regev A, Johnson BE, Tsankov AM",
+        "Eutils DOI": "10.1101/2023.06.28.546977",
         "Cited In Number": 0
     },
     {
@@ -52780,7 +52878,13 @@
             "HTA8_3004_310003",
             "HTA8_3004_310004"
         ],
-        "Cited In Number": 152,
+        "Eutils Date": "2021 Nov 8",
+        "Eutils Title": "Signatures of plasticity, metastasis, and immunosuppression in an atlas of human small cell lung cancer.",
+        "Eutils Journal": "Cancer cell",
+        "Eutils Sort Date": "2021/11/08 00:00",
+        "Eutils Authors": "Chan JM, Quintanal-Villalonga \u00c1, Gao VR, Xie Y, Allaj V, Chaudhary O, Masilionis I, Egger J, Chow A, Walle T, Mattar M, Yarlagadda DVK, Wang JL, Uddin F, Offin M, Ciampricotti M, Qeriqi B, Bahr A, de Stanchina E, Bhanot UK, Lai WV, Bott MJ, Jones DR, Ruiz A, Baine MK, Li Y, Rekhtman N, Poirier JT, Nawy T, Sen T, Mazutis L, Hollmann TJ, Pe'er D, Rudin CM",
+        "Eutils DOI": "10.1016/j.ccell.2021.09.008",
+        "Cited In Number": 187,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34653364"
     },
     {
@@ -53360,7 +53464,13 @@
             "HTA8_1037_110003",
             "HTA8_1037_110004"
         ],
-        "Cited In Number": 13,
+        "Eutils Date": "2023 Jun",
+        "Eutils Title": "Conserved transcriptional connectivity of regulatory T cells in the tumor microenvironment informs new combination cancer therapy strategies.",
+        "Eutils Journal": "Nature immunology",
+        "Eutils Sort Date": "2023/06/01 00:00",
+        "Eutils Authors": "Glasner A, Rose SA, Sharma R, Gudjonson H, Chu T, Green JA, Rampersaud S, Valdez IK, Andretta ES, Dhillon BS, Schizas M, Dikiy S, Mendoza A, Hu W, Wang ZM, Chaudhary O, Xu T, Mazutis L, Rizzuto G, Quintanal-Villalonga A, Manoj P, de Stanchina E, Rudin CM, Pe'er D, Rudensky AY",
+        "Eutils DOI": "10.1038/s41590-023-01504-2",
+        "Cited In Number": 17,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37127830"
     },
     {
@@ -56651,7 +56761,13 @@
             "HTA8_6029_002101007",
             "HTA8_6029_002101009"
         ],
-        "Cited In Number": 1,
+        "Eutils Date": "2025 Jan",
+        "Eutils Title": "Progressive plasticity during colorectal cancer metastasis.",
+        "Eutils Journal": "Nature",
+        "Eutils Sort Date": "2025/01/01 00:00",
+        "Eutils Authors": "Moorman A, Benitez EK, Cambulli F, Jiang Q, Mahmoud A, Lumish M, Hartner S, Balkaran S, Bermeo J, Asawa S, Firat C, Saxena A, Wu F, Luthra A, Burdziak C, Xie Y, Sgambati V, Luckett K, Li Y, Yi Z, Masilionis I, Soares K, Pappou E, Yaeger R, Kingham TP, Jarnagin W, Paty PB, Weiser MR, Mazutis L, D'Angelica M, Shia J, Garcia-Aguilar J, Nawy T, Hollmann TJ, Chalign\u00e9 R, Sanchez-Vega F, Sharma R, Pe'er D, Ganesh K",
+        "Eutils DOI": "10.1038/s41586-024-08150-0",
+        "Cited In Number": 8,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478232"
     },
     {
@@ -86021,7 +86137,13 @@
             "HTA9_1_40600",
             "HTA9_1_40601"
         ],
-        "Cited In Number": 18,
+        "Eutils Date": "2022 Feb 15",
+        "Eutils Title": "An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer.",
+        "Eutils Journal": "Cell reports. Medicine",
+        "Eutils Sort Date": "2022/02/15 00:00",
+        "Eutils Authors": "Johnson BE, Creason AL, Stommel JM, Keck JM, Parmar S, Betts CB, Blucher A, Boniface C, Bucher E, Burlingame E, Camp T, Chin K, Eng J, Estabrook J, Feiler HS, Heskett MB, Hu Z, Kolodzie A, Kong BL, Labrie M, Lee J, Leyshock P, Mitri S, Patterson J, Riesterer JL, Sivagnanam S, Somers J, Sudar D, Thibault G, Weeder BR, Zheng C, Nan X, Thompson RF, Heiser LM, Spellman PT, Thomas G, Demir E, Chang YH, Coussens LM, Guimaraes AR, Corless C, Goecks J, Bergan R, Mitri Z, Mills GB, Gray JW",
+        "Eutils DOI": "10.1016/j.xcrm.2022.100525",
+        "Cited In Number": 21,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35243422"
     },
     {
@@ -89572,7 +89694,13 @@
             "HTA10_05_07205003",
             "HTA10_05_07205004"
         ],
-        "Cited In Number": 92,
+        "Eutils Date": "2022 Jul",
+        "Eutils Title": "Single-cell analyses define a continuum of cell state and composition changes in the malignant transformation of polyps to colorectal cancer.",
+        "Eutils Journal": "Nature genetics",
+        "Eutils Sort Date": "2022/07/01 00:00",
+        "Eutils Authors": "Becker WR, Nevins SA, Chen DC, Chiu R, Horning AM, Guha TK, Laquindanum R, Mills M, Chaib H, Ladabaum U, Longacre T, Shen J, Esplin ED, Kundaje A, Ford JM, Curtis C, Snyder MP, Greenleaf WJ",
+        "Eutils DOI": "10.1038/s41588-022-01088-x",
+        "Cited In Number": 108,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35726067"
     },
     {
@@ -91179,6 +91307,12 @@
             "HTA10_07_50105007",
             "HTA10_07_50105008"
         ],
+        "Eutils Date": "2024 Nov",
+        "Eutils Title": "Multiomic analysis of familial adenomatous polyposis reveals molecular pathways associated with early tumorigenesis.",
+        "Eutils Journal": "Nature cancer",
+        "Eutils Sort Date": "2024/11/01 00:00",
+        "Eutils Authors": "Esplin ED, Hanson C, Wu S, Horning AM, Barapour N, Nevins SA, Jiang L, Contrepois K, Lee H, Guha TK, Hu Z, Laquindanum R, Mills MA, Chaib H, Chiu R, Jian R, Chan J, Ellenberger M, Becker WR, Bahmani B, Khan A, Michael B, Weimer AK, Esplin DG, Shen J, Lancaster S, Monte E, Karathanos TV, Ladabaum U, Longacre TA, Kundaje A, Curtis C, Greenleaf WJ, Ford JM, Snyder MP",
+        "Eutils DOI": "10.1038/s43018-024-00831-z",
         "Cited In Number": 1,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478120"
     },
@@ -92836,7 +92970,13 @@
             "HTA10_0000_16151281528062110084221322905769",
             "HTA10_0000_51277202575134703557245705760813"
         ],
-        "Cited In Number": 1,
+        "Eutils Date": "2024 Nov",
+        "Eutils Title": "Global loss of promoter-enhancer connectivity and rebalancing of gene expression during early colorectal cancer carcinogenesis.",
+        "Eutils Journal": "Nature cancer",
+        "Eutils Sort Date": "2024/11/01 00:00",
+        "Eutils Authors": "Zhu Y, Lee H, White S, Weimer AK, Monte E, Horning A, Nevins SA, Esplin ED, Paul K, Krieger G, Shipony Z, Chiu R, Laquindanum R, Karathanos TV, Chua MWY, Mills M, Ladabaum U, Longacre T, Shen J, Jaimovich A, Lipson D, Kundaje A, Greenleaf WJ, Curtis C, Ford JM, Snyder MP",
+        "Eutils DOI": "10.1038/s43018-024-00823-z",
+        "Cited In Number": 4,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478119"
     },
     {
@@ -99399,7 +99539,13 @@
             "HTA11_866_300476990121121",
             "HTA11_866_300476990122111"
         ],
-        "Cited In Number": 111,
+        "Eutils Date": "2021 Dec 22",
+        "Eutils Title": "Differential pre-malignant programs and microenvironment chart distinct paths to malignancy in human colorectal polyps.",
+        "Eutils Journal": "Cell",
+        "Eutils Sort Date": "2021/12/22 00:00",
+        "Eutils Authors": "Chen B, Scurrah CR, McKinley ET, Simmons AJ, Ramirez-Solano MA, Zhu X, Markham NO, Heiser CN, Vega PN, Rolong A, Kim H, Sheng Q, Drewes JL, Zhou Y, Southard-Smith AN, Xu Y, Ro J, Jones AL, Revetta F, Berry LD, Niitsu H, Islam M, Pelka K, Hofree M, Chen JH, Sarkizova S, Ng K, Giannakis M, Boland GM, Aguirre AJ, Anderson AC, Rozenblatt-Rosen O, Regev A, Hacohen N, Kawasaki K, Sato T, Goettel JA, Grady WM, Zheng W, Washington MK, Cai Q, Sears CL, Goldenring JR, Franklin JL, Su T, Huh WJ, Vandekar S, Roland JT, Liu Q, Coffey RJ, Shrubsole MJ, Lau KS",
+        "Eutils DOI": "10.1016/j.cell.2021.11.031",
+        "Cited In Number": 134,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34910928"
     },
     {
@@ -100890,7 +101036,13 @@
             "HTA11_99999971397_8038428605542111",
             "HTA11_99999971397_8038428605543111"
         ],
-        "Cited In Number": 19,
+        "Eutils Date": "2023 Dec 7",
+        "Eutils Title": "Molecular cartography uncovers evolutionary and microenvironmental dynamics in sporadic colorectal tumors.",
+        "Eutils Journal": "Cell",
+        "Eutils Sort Date": "2023/12/07 00:00",
+        "Eutils Authors": "Heiser CN, Simmons AJ, Revetta F, McKinley ET, Ramirez-Solano MA, Wang J, Kaur H, Shao J, Ayers GD, Wang Y, Glass SE, Tasneem N, Chen Z, Qin Y, Kim W, Rolong A, Chen B, Vega PN, Drewes JL, Markham NO, Saleh N, Nikolos F, Vandekar S, Jones AL, Washington MK, Roland JT, Chan KS, Sch\u00fcrpf T, Sears CL, Liu Q, Shrubsole MJ, Coffey RJ, Lau KS",
+        "Eutils DOI": "10.1016/j.cell.2023.11.006",
+        "Cited In Number": 28,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=38065082"
     },
     {
@@ -105951,7 +106103,14 @@
             "HTA11_99999974143_8462111121",
             "HTA11_99999974143_8462112111"
         ],
-        "Cited In Number": 0
+        "Eutils Date": "2024 Oct",
+        "Eutils Title": "Temporal recording of mammalian development and precancer.",
+        "Eutils Journal": "Nature",
+        "Eutils Sort Date": "2024/10/01 00:00",
+        "Eutils Authors": "Islam M, Yang Y, Simmons AJ, Shah VM, Musale KP, Xu Y, Tasneem N, Chen Z, Trinh LT, Molina P, Ramirez-Solano MA, Sadien ID, Dou J, Rolong A, Chen K, Magnuson MA, Rathmell JC, Macara IG, Winton DJ, Liu Q, Zafar H, Kalhor R, Church GM, Shrubsole MJ, Coffey RJ, Lau KS",
+        "Eutils DOI": "10.1038/s41586-024-07954-4",
+        "Cited In Number": 3,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478207"
     },
     {
         "Component": "PublicationManifest",
@@ -107027,7 +107186,13 @@
             "HTA12_255_2001",
             "HTA12_255_2002"
         ],
-        "Cited In Number": 1,
+        "Eutils Date": "2024 Nov",
+        "Eutils Title": "Differential chromatin accessibility and transcriptional dynamics define breast cancer subtypes and their lineages.",
+        "Eutils Journal": "Nature cancer",
+        "Eutils Sort Date": "2024/11/01 00:00",
+        "Eutils Authors": "Iglesia MD, Jayasinghe RG, Chen S, Terekhanova NV, Herndon JM, Storrs E, Karpova A, Zhou DC, Naser Al Deen N, Shinkle AT, Lu RJ, Caravan W, Houston A, Zhao Y, Sato K, Lal P, Street C, Martins Rodrigues F, Southard-Smith AN, Targino da Costa ALN, Zhu H, Mo CK, Crowson L, Fulton RS, Wyczalkowski MA, Fronick CC, Fulton LA, Sun H, Davies SR, Appelbaum EL, Chasnoff SE, Carmody M, Brooks C, Liu R, Wendl MC, Oh C, Bender D, Cruchaga C, Harari O, Bredemeyer A, Lavine K, Bose R, Margenthaler J, Held JM, Achilefu S, Ademuyiwa F, Aft R, Ma C, Colditz GA, Ju T, Oh ST, Fitzpatrick J, Hwang ES, Shoghi KI, Chheda MG, Veis DJ, Chen F, Fields RC, Gillanders WE, Ding L",
+        "Eutils DOI": "10.1038/s43018-024-00773-6",
+        "Cited In Number": 3,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478117"
     },
     {
@@ -108998,7 +109163,14 @@
             "HTA12_248_3005",
             "HTA12_273_2002"
         ],
-        "Cited In Number": 0
+        "Eutils Date": "2024 Oct",
+        "Eutils Title": "Tumour evolution and microenvironment interactions in 2D and 3D space.",
+        "Eutils Journal": "Nature",
+        "Eutils Sort Date": "2024/10/01 00:00",
+        "Eutils Authors": "Mo CK, Liu J, Chen S, Storrs E, Targino da Costa ALN, Houston A, Wendl MC, Jayasinghe RG, Iglesia MD, Ma C, Herndon JM, Southard-Smith AN, Liu X, Mudd J, Karpova A, Shinkle A, Goedegebuure SP, Abdelzaher ATMA, Bo P, Fulghum L, Livingston S, Balaban M, Hill A, Ippolito JE, Thorsson V, Held JM, Hagemann IS, Kim EH, Bayguinov PO, Kim AH, Mullen MM, Shoghi KI, Ju T, Reimers MA, Weimholt C, Kang LI, Puram SV, Veis DJ, Pachynski R, Fuh KC, Chheda MG, Gillanders WE, Fields RC, Raphael BJ, Chen F, Ding L",
+        "Eutils DOI": "10.1038/s41586-024-08087-4",
+        "Cited In Number": 11,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478210"
     },
     {
         "Component": "PublicationManifest",
@@ -112257,7 +112429,13 @@
             "HTA12_225_4005",
             "HTA12_226_4005"
         ],
-        "Cited In Number": 21,
+        "Eutils Date": "2023 Nov",
+        "Eutils Title": "Epigenetic regulation during cancer transitions across 11 tumour types.",
+        "Eutils Journal": "Nature",
+        "Eutils Sort Date": "2023/11/01 00:00",
+        "Eutils Authors": "Terekhanova NV, Karpova A, Liang WW, Strzalkowski A, Chen S, Li Y, Southard-Smith AN, Iglesia MD, Wendl MC, Jayasinghe RG, Liu J, Song Y, Cao S, Houston A, Liu X, Wyczalkowski MA, Lu RJ, Caravan W, Shinkle A, Naser Al Deen N, Herndon JM, Mudd J, Ma C, Sarkar H, Sato K, Ibrahim OM, Mo CK, Chasnoff SE, Porta-Pardo E, Held JM, Pachynski R, Schwarz JK, Gillanders WE, Kim AH, Vij R, DiPersio JF, Puram SV, Chheda MG, Fuh KC, DeNardo DG, Fields RC, Chen F, Raphael BJ, Ding L",
+        "Eutils DOI": "10.1038/s41586-023-06682-5",
+        "Cited In Number": 47,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37914932"
     },
     {
@@ -112319,7 +112497,13 @@
             "HTA12_167_4000",
             "HTA12_167_4005"
         ],
-        "Cited In Number": 14,
+        "Eutils Date": "2023 Mar 27",
+        "Eutils Title": "Epigenetic and transcriptomic characterization reveals progression markers and essential pathways in clear cell renal cell carcinoma.",
+        "Eutils Journal": "Nature communications",
+        "Eutils Sort Date": "2023/03/27 00:00",
+        "Eutils Authors": "Wu Y, Terekhanova NV, Caravan W, Naser Al Deen N, Lal P, Chen S, Mo CK, Cao S, Li Y, Karpova A, Liu R, Zhao Y, Shinkle A, Strunilin I, Weimholt C, Sato K, Yao L, Serasanambati M, Yang X, Wyczalkowski M, Zhu H, Zhou DC, Jayasinghe RG, Mendez D, Wendl MC, Clark D, Newton C, Ruan Y, Reimers MA, Pachynski RK, Kinsinger C, Jewell S, Chan DW, Zhang H, Chaudhuri AA, Chheda MG, Humphreys BD, Mesri M, Rodriguez H, Hsieh JJ, Ding L, Chen F",
+        "Eutils DOI": "10.1038/s41467-023-37211-7",
+        "Cited In Number": 18,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36973268"
     },
     {
@@ -113545,7 +113729,13 @@
             "HTA12_32_1010",
             "HTA12_32_1011"
         ],
-        "Cited In Number": 70,
+        "Eutils Date": "2022 Sep",
+        "Eutils Title": "Spatially restricted drivers and transitional cell populations cooperate with the microenvironment in untreated and chemo-resistant pancreatic cancer.",
+        "Eutils Journal": "Nature genetics",
+        "Eutils Sort Date": "2022/09/01 00:00",
+        "Eutils Authors": "Cui Zhou D, Jayasinghe RG, Chen S, Herndon JM, Iglesia MD, Navale P, Wendl MC, Caravan W, Sato K, Storrs E, Mo CK, Liu J, Southard-Smith AN, Wu Y, Naser Al Deen N, Baer JM, Fulton RS, Wyczalkowski MA, Liu R, Fronick CC, Fulton LA, Shinkle A, Thammavong L, Zhu H, Sun H, Wang LB, Li Y, Zuo C, McMichael JF, Davies SR, Appelbaum EL, Robbins KJ, Chasnoff SE, Yang X, Reeb AN, Oh C, Serasanambati M, Lal P, Varghese R, Mashl JR, Ponce J, Terekhanova NV, Yao L, Wang F, Chen L, Schnaubelt M, Lu RJ, Schwarz JK, Puram SV, Kim AH, Song SK, Shoghi KI, Lau KS, Ju T, Chen K, Chatterjee D, Hawkins WG, Zhang H, Achilefu S, Chheda MG, Oh ST, Gillanders WE, Chen F, DeNardo DG, Fields RC, Ding L",
+        "Eutils DOI": "10.1038/s41588-022-01157-1",
+        "Cited In Number": 89,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35995947"
     }
 ]
