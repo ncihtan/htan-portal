@@ -4,10 +4,7 @@ import Tooltip from 'rc-tooltip';
 import React from 'react';
 
 import { PublicationManifest } from '../lib/entity';
-import {
-    getCiteFromPublicationManifest,
-    getPublicationUid,
-} from '../lib/publicationHelpers';
+import { getCite, getPublicationUid } from '../lib/publicationHelpers';
 
 export const PublicationIcon: React.FunctionComponent<{
     publicationManifest: PublicationManifest;
@@ -16,7 +13,7 @@ export const PublicationIcon: React.FunctionComponent<{
 
     return (
         <Tooltip
-            overlay={getCiteFromPublicationManifest(publicationManifest)}
+            overlay={getCite(publicationManifest)}
             key={getPublicationUid(publicationManifest)}
         >
             <a

@@ -33,7 +33,6 @@ import {
     HTANToGenericAttributeMap,
     LoadDataResult,
     PublicationManifest,
-    PublicationSummary,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
 import {
@@ -55,7 +54,6 @@ export interface IExploreState {
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     atlases: Atlas[];
     publicationManifestByUid: { [uid: string]: PublicationManifest };
-    publicationSummaryByPubMedID?: { [pubMedId: string]: PublicationSummary };
     atlasData?: any;
 }
 
@@ -87,7 +85,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             filters: {},
             atlases: [],
             publicationManifestByUid: {},
-            publicationSummaryByPubMedID: {},
             schemaDataById: {},
         };
 
@@ -166,8 +163,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                     files: fillInEntities(data),
                     atlases: data.atlases,
                     publicationManifestByUid: data.publicationManifestByUid,
-                    publicationSummaryByPubMedID:
-                        data.publicationSummaryByPubMedID,
                 });
             });
 
@@ -395,9 +390,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         getAtlasMetaData={this.props.getAtlasMetaData}
                         publicationManifestByUid={
                             this.state.publicationManifestByUid
-                        }
-                        publicationSummaryByPubMedID={
-                            this.state.publicationSummaryByPubMedID
                         }
                         filteredPublications={this.filteredPublications}
                         genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal

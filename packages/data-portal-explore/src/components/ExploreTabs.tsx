@@ -11,7 +11,6 @@ import {
     Entity,
     getNormalizedOrgan,
     PublicationManifest,
-    PublicationSummary,
 } from '@htan/data-portal-commons';
 import { DataSchemaData } from '@htan/data-portal-schema';
 
@@ -56,7 +55,6 @@ interface IExploreTabsProps {
     genericAttributeMap?: { [attr: string]: GenericAttributeNames };
     getAtlasMetaData: () => AtlasMetaData;
     publicationManifestByUid: { [uid: string]: PublicationManifest };
-    publicationSummaryByPubMedID?: { [pubMedId: string]: PublicationSummary };
     filteredPublications: PublicationManifest[];
 }
 
@@ -287,9 +285,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     >
                         <PublicationTable
                             publications={props.filteredPublications}
-                            publicationSummaryByPubMedID={
-                                props.publicationSummaryByPubMedID
-                            }
                             participants={props.cases}
                             filteredParticipants={props.filteredCases}
                             biospecimens={props.samples}
