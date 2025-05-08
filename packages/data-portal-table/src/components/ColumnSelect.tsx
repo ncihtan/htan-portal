@@ -38,14 +38,13 @@ export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
         makeObservable<ColumnSelect, 'onChange'>(this);
     }
 
-    @computed get placeholder() {
+    get placeholder() {
         return (
             this.props.placeholder ||
             `Columns (${this.selectedOptions.length}/${this.options.length})`
         );
     }
 
-    @computed
     public get selectedOptions() {
         return (this.props.columnVisibility || [])
             .filter((c) => c.visible)
@@ -55,7 +54,6 @@ export class ColumnSelect extends React.Component<IColumnSelectProps, {}> {
             }));
     }
 
-    @computed
     public get options(): Option[] {
         return (this.props.columnVisibility || [])
             .filter((c) => c.toggleable)

@@ -34,7 +34,10 @@ export function getPublicationPubMedID(
     publication: PublicationManifest
 ): string {
     // we only need the numerical id, not the entire URL
-    return publication ? publication.PMID.replace(/[^0-9]/g, '') : '';
+
+    return publication && publication.uid
+        ? publication.uid.replace(/[^0-9]/g, '')
+        : '';
 }
 
 export function getCite(
@@ -69,22 +72,9 @@ export function getCiteFromPublicationSummary(
 }
 
 export function getPublicationAuthors(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
+    publication: PublicationManifest
 ): string[] {
-    let authors: string[] = [];
-
-    if (publicationSummary) {
-        authors = getPublicationAuthorsFromPublicationSummary(
-            publicationSummary
-        );
-    } else if (publicationManifest) {
-        authors = getPublicationAuthorsFromPublicationManifest(
-            publicationManifest
-        );
-    }
-
-    return authors;
+    return getPublicationAuthorsFromPublicationManifest(publication);
 }
 
 export function getPublicationAuthorsFromPublicationManifest(
@@ -210,19 +200,11 @@ export function getPublicationTitle(
     return title?.trim().replace(/\.$/, '');
 }
 
-export function getPublicationDate(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
-) {
-    let date: string | undefined;
-
-    if (publicationSummary) {
-        date = publicationSummary.pubdate;
-    } else if (publicationManifest) {
-        date = publicationManifest.YearofPublication?.toString();
-    }
-
-    return date;
+export function getPublicationDate(publicationManifest: PublicationManifest) {
+    return (
+        publicationManifest.pubdate ||
+        publicationManifest.YearofPublication?.toString()
+    );
 }
 
 export function getPublicationSupportingLinks(

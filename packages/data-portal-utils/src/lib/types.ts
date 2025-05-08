@@ -17,7 +17,7 @@ export enum AttributeNames {
     Biospecimen = 'Biospecimen',
     AtlasName = 'AtlasName',
     Stage = 'Stage',
-    Level = 'Level',
+    level = 'level',
     FileFormat = 'FileFormat',
     TreatmentType = 'TreatmentType',
 
@@ -27,7 +27,7 @@ export enum AttributeNames {
     publicationIds = 'publicationIds',
     downloadSource = 'downloadSource',
     releaseVersion = 'releaseVersion',
-    viewers = 'viewers',
+    viewersArr = 'viewersArr',
 }
 
 // Normalized/Generic attribute names

@@ -29,11 +29,10 @@ export class LevelSelect extends React.Component<ILevelSelectProps, {}> {
         makeObservable<LevelSelect, 'onChange'>(this);
     }
 
-    @computed get placeholder() {
+    get placeholder() {
         return this.props.placeholder || `Level`;
     }
 
-    @computed
     public get selectedOptions() {
         return (this.props.selectedLevels || []).map((l) => ({
             value: l,
@@ -41,7 +40,6 @@ export class LevelSelect extends React.Component<ILevelSelectProps, {}> {
         }));
     }
 
-    @computed
     public get options(): Option[] {
         return (this.props.allLevels?.sort() || []).map((l) => ({
             value: l,

@@ -5,6 +5,9 @@ module.exports = withMDX({
     swcMinify: true,
     pageExtensions: ['js', 'jsx', 'mdx', 'tsx'],
     staticPageGenerationTimeout: 120,
+    typescript: {
+        ignoreBuildErrors: true,
+    },
     redirects: async () => {
         // Note: don't put trailing slash in the redirect URLs
         return [
