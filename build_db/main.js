@@ -2,7 +2,9 @@ import _ from 'lodash';
 import fs from 'fs';
 import axios from 'axios';
 import {createTable} from "./client.js";
-//import json from './processed_syn_data_20250122_1537.json' with { type: 'json' };
+// prettier-ignore
+import json from '../public/processed_syn_data.json' with { type: 'json' };
+// prettier-ignore
 import organMappings from './organMappings.json' with { type: 'json' };
 
 const fileFields = [
@@ -241,53 +243,46 @@ function postProcessFiles(file){
 
 const JSONPATH = "http://localhost:3000/processed_syn_data.json"; //https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20250122_1537.json
 
-function main(){
-    axios.get(JSONPATH).then(d=>{
+async function main(){
 
-        console.log("keys", Object.keys(d.data));
+    console.log(Object.keys(json));
 
-        //console.log(d.data.files.slice(0,10));
+    const d = {
+        data:json
+    };
 
+    console.log("keys", Object.keys(d.data));
 
-        //let fields = findFields(Object.values(d.data.publicationSummaryByPubMedID));
-
-        function findCase(subject, caseMap, sampleMap){
-            if (subject.ParentID in caseMap) {
-                return subject.ParentID;
-            } else if (subject.ParentID in sampleMap && subject.ParentID !== subject.BiospecimenID) {
-                return findCase(sampleMap[subject.ParentID], caseMap, sampleMap);
-            } else {
-                console.log("not found", subject.ParentID);
-                return undefined;
-            }
+    function findCase(subject, caseMap, sampleMap){
+        if (subject.ParentID in caseMap) {
+            return subject.ParentID;
+        } else if (subject.ParentID in sampleMap && subject.ParentID !== subject.BiospecimenID) {
+            return findCase(sampleMap[subject.ParentID], caseMap, sampleMap);
+        } else {
+            console.log("not found", subject.ParentID);
+            return undefined;
         }
+    }
 
-        //console.log(Object.values(d.data.publicationManifestByUid));
+    const samples = Object.values(d.data.biospecimenByBiospecimenID);
+    const caseMap = d.data.demographicsByParticipantID;
+    const sampleMap = d.data.biospecimenByBiospecimenID;
 
-        const samples = Object.values(d.data.biospecimenByBiospecimenID);
-        const caseMap = d.data.demographicsByParticipantID;
-        const sampleMap = d.data.biospecimenByBiospecimenID;
+    console.log("total", Object.values(d.data.biospecimenByBiospecimenID).length);
 
+    const specimenWithParticipantId = samples.reduce((agg, s)=>{
+        const caseId = findCase(s, caseMap, sampleMap);
+        if (caseId) {
+            s.ParticipantID = caseId;
+            agg.push(s);
+        }
+        return agg;
+    },[]);
 
-        //console.log("top level", samples.filter(s=>s.ParentID in caseMap).length);
+    console.log("hasCase", specimenWithParticipantId.length);
 
-        console.log("total", Object.values(d.data.biospecimenByBiospecimenID).length);
-
-        const specimenWithParticipantId = samples.reduce((agg, s)=>{
-            const caseId = findCase(s, caseMap, sampleMap);
-            if (caseId) {
-                s.ParticipantID = caseId;
-                agg.push(s);
-            }
-            return agg;
-        },[]);
-
-        console.log("hasCase", specimenWithParticipantId.length);
-
-
-        //console.log(fields);
-
-        const publicationManifestConfig = {
+    const configs = {
+        publicationManifestConfig : {
             fields: findFields(Object.values(d.data.publicationManifestByUid)),
             data:Object.values(d.data.publicationManifestByUid),
             tableName:"publication_manifest",
@@ -295,34 +290,30 @@ function main(){
                 "associatedFiles Array(TEXT) MATERIALIZED splitByChar(',',PublicationAssociatedParentDataFileID)",
                 // "uid TEXT MATERIALIZED arrayElement(splitByChar('\/', PMID),4)"
             ]
-        };
-
-        const atlasConfig = {
+        },
+        atlasConfig : {
             fields: findFields(d.data.atlases),
             data:d.data.atlases,
             tableName:"atlases",
             derivedColumns:[
             ]
-        };
-
-        const casesConfig = {
+        },
+        casesConfig : {
             fields: findFields(Object.values(d.data.demographicsByParticipantID)),
             data:Object.values(d.data.demographicsByParticipantID),
             tableName:"cases",
             derivedColumns:[
             ]
-        };
-
-        const diagnosisConfig = {
+        },
+        diagnosisConfig : {
             fields: [...findFields(Object.values(d.data.diagnosisByParticipantID)),"organType"],
             data:Object.values(d.data.diagnosisByParticipantID),
-            tableName:"diagnosis2",
+            tableName:"diagnosis",
             postProcess:postProcessFiles,
             derivedColumns:[
             ]
-        };
-
-        const fileConfig = {
+        },
+        fileConfig : {
             fields: fileFields,
             data:d.data.files,
             tableName:"files",
@@ -330,46 +321,88 @@ function main(){
             derivedColumns:[
                 "viewersArr Array(TEXT) MATERIALIZED JSONExtractKeys(viewers)",
             ]
-        };
-
-        const specimenConfig = {
+        },
+        specimenConfig : {
             fields: findFields(specimenWithParticipantId),
             data:specimenWithParticipantId,
             tableName:"specimen",
             derivedColumns:[
             ]
-        };
+        }
+    }
 
-        // const publicationConfig= {
-        //     fields:findFields(Object.values(d.data.publicationSummaryByPubMedID)),
-        //     data:Object.values(d.data.publicationSummaryByPubMedID),
-        //     tableName:"publications",
-        //     //derivedColumns:["pubmedid TEXT MATERIALIZED ifNull(simpleJSONExtractString(arrayElementOrNull(articleids,1),'value'),'')"]
-        // };
+    // const publicationManifestConfig = {
+    //     fields: findFields(Object.values(d.data.publicationManifestByUid)),
+    //     data:Object.values(d.data.publicationManifestByUid),
+    //     tableName:"publication_manifest",
+    //     derivedColumns:[
+    //         "associatedFiles Array(TEXT) MATERIALIZED splitByChar(',',PublicationAssociatedParentDataFileID)",
+    //         // "uid TEXT MATERIALIZED arrayElement(splitByChar('\/', PMID),4)"
+    //     ]
+    // };
+    //
+    // const atlasConfig = {
+    //     fields: findFields(d.data.atlases),
+    //     data:d.data.atlases,
+    //     tableName:"atlases",
+    //     derivedColumns:[
+    //     ]
+    // };
+    //
+    // const casesConfig = {
+    //     fields: findFields(Object.values(d.data.demographicsByParticipantID)),
+    //     data:Object.values(d.data.demographicsByParticipantID),
+    //     tableName:"cases",
+    //     derivedColumns:[
+    //     ]
+    // };
+    //
+    // const diagnosisConfig = {
+    //     fields: [...findFields(Object.values(d.data.diagnosisByParticipantID)),"organType"],
+    //     data:Object.values(d.data.diagnosisByParticipantID),
+    //     tableName:"diagnosis2",
+    //     postProcess:postProcessFiles,
+    //     derivedColumns:[
+    //     ]
+    // };
+    //
+    // const fileConfig = {
+    //     fields: fileFields,
+    //     data:d.data.files,
+    //     tableName:"files",
+    //     postProcess:postProcessFiles,
+    //     derivedColumns:[
+    //         "viewersArr Array(TEXT) MATERIALIZED JSONExtractKeys(viewers)",
+    //     ]
+    // };
+    //
+    // const specimenConfig = {
+    //     fields: findFields(specimenWithParticipantId),
+    //     data:specimenWithParticipantId,
+    //     tableName:"specimen",
+    //     derivedColumns:[
+    //     ]
+    // };
+    //
+    // const config = diagnosisConfig; // publicationManifestConfig; //publicationManifestConfig;
 
-        const config = diagnosisConfig; // publicationManifestConfig; //publicationManifestConfig;
 
-
+    function doCreate(config) {
         const preprocess = config.preprocess ? config.preprocess : (f)=>f;
         const rows = config.data.slice(0)
             .map(preprocess)
             .map(f=>formatRow(f, d.data, config.fields, config.postProcess));
 
+        return createTable(config.tableName, rows, config.fields, config.derivedColumns);
 
-        createTable(config.tableName, rows, config.fields, config.derivedColumns);
+    }
 
-        // const out = rows.map(r=>JSON.stringify(r)).join("\n");
-        //
-        // //console.log(out);
-        //
-        // try {
-        //     fs.writeFileSync("out.jsonl", out);
-        //     console.log(`File has been written successfully. (${rows.length} rows)`);
-        // } catch (err) {
-        //     console.error('An error occurred:', err);
-        // }
+    for (const tablename in configs) {
+        console.log(`creating table ${tablename}`);
+        await doCreate(configs[tablename])
+        console.log(`table created ${tablename}`);
+    }
 
-    })
-}
+};
 
 main();
