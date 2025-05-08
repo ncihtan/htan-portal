@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const organCounts = await doQuery(`
         SELECT organType, atlas_name, count(DISTINCT ParticipantID) as count FROM (
-            SELECT * FROM diagnosis2
+            SELECT * FROM diagnosis
                 ARRAY JOIN organType
             ) 
         GROUP BY organType, atlas_name

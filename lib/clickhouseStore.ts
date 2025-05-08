@@ -2,7 +2,7 @@ import { createClient } from '@clickhouse/client-web';
 import _ from 'lodash';
 
 const client = createClient({
-    host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
+    host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan2',
     username: 'webuser',
     password: 'My_password1976',
     request_timeout: 600000,
