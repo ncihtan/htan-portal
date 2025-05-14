@@ -384,7 +384,7 @@ function addDownloadSourcesInfo(
         file.isRawSequencing = true;
         if (
             (file.synapseId && file.viewers?.cds?.drs_uri) ||
-            file.Filename.endsWith('bai')
+            file.Filename?.toLowerCase().endsWith('bai')
         ) {
             file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
@@ -422,7 +422,9 @@ function addDownloadSourcesInfo(
                 (assay) => file.assayName?.toLowerCase().includes(assay)
             ) ||
             // raw files
-            file.Filename.endsWith('raw') ||
+            file.Filename?.toLowerCase().endsWith('raw') ||
+            // mzML files
+            file.Filename?.toLowerCase().endsWith('mzml') ||
             // Level 3 & 4 all assays
             _.some(
                 ['Level 3', 'Level 4', 'Auxiliary', 'Other'],
