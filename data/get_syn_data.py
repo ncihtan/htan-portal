@@ -283,13 +283,7 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
                 if component in MANIFESTS_WITHOUT_ENTITY_ID:
                     pass
                 else:
-                    if 'Filename' in manifest_df.columns:
-                        manifest_df = manifest_df[
-                            manifest_df["entityId"].isin(include_release_ids)
-                        ].copy()
-                    else:
-                        manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
-
+                    manifest_df = manifest_df[manifest_df["entityId"].isin(include_release_ids)].copy()
 
             if len(manifest_df) == 0:
                 continue

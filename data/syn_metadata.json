@@ -1413,7 +1413,7 @@
         {
             "component": "Demographics",
             "synapseId": "syn39147270",
-            "numItems": 482
+            "numItems": 484
         },
         {
             "component": "ScRNA-seqLevel1",
@@ -1468,7 +1468,7 @@
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn51614856",
-            "numItems": 527
+            "numItems": 530
         },
         {
             "component": "BulkRNA-seqLevel1",
@@ -1503,7 +1503,7 @@
         {
             "component": "BulkDNALevel2",
             "synapseId": "syn66227732",
-            "numItems": 8
+            "numItems": 12
         },
         {
             "component": "BulkDNALevel3",
@@ -2581,7 +2581,7 @@
         {
             "component": "BulkDNALevel2",
             "synapseId": "syn52598014",
-            "numItems": 112
+            "numItems": 102
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -2845,7 +2845,7 @@
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn39285399",
-            "numItems": 128
+            "numItems": 64
         },
         {
             "component": "ScRNA-seqLevel3",

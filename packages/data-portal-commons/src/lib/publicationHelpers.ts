@@ -1,11 +1,6 @@
-import fetch from 'node-fetch';
 import _ from 'lodash';
 import { SelectedFilter } from '@htan/data-portal-filter';
-import {
-    PublicationContentType,
-    PublicationManifest,
-    PublicationSummary,
-} from './entity';
+import { PublicationContentType, PublicationManifest } from './entity';
 import { GeneralLink } from './types';
 
 export function isManuscriptInReview(publication?: PublicationManifest) {
@@ -22,7 +17,7 @@ export function getPublicationUid(publication: PublicationManifest): string {
     const center = publication.CenterID.toLowerCase();
     const year = publication.YearofPublication;
     const firstAuthor = normalizeValue(
-        getPublicationAuthorsFromPublicationManifest(publication)[0]
+        parsePublicationAuthors(publication?.Authors)[0]
     );
     // const titleFirstFiveWords = normalizeValue(publication.Title.split(/[\s/,\\]+/).slice(0,5).join(' '));
     const location = normalizeValue(publication.LocationofPublication);
@@ -37,66 +32,38 @@ export function getPublicationPubMedID(
     return publication ? publication.PMID.replace(/[^0-9]/g, '') : '';
 }
 
-export function getCite(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
-): string | undefined {
-    let cite: string | undefined;
+export function getCite(publication?: PublicationManifest): string | undefined {
+    return publication
+        ? `${getPublicationAuthors(publication)[0]} et al (${getPublicationYear(
+              publication
+          )})`
+        : undefined;
+}
 
-    if (publicationSummary) {
-        cite = getCiteFromPublicationSummary(publicationSummary);
-    } else if (publicationManifest) {
-        cite = getCiteFromPublicationManifest(publicationManifest);
+export function getPublicationYear(
+    publication?: PublicationManifest
+): string | undefined {
+    let year: string | undefined;
+
+    if (publication?.EutilsSortDate) {
+        year = publication?.EutilsSortDate.split('/')[0];
+    } else {
+        year = publication?.YearofPublication.toString();
     }
 
-    return cite;
-}
-
-export function getCiteFromPublicationManifest(
-    publication: PublicationManifest
-): string {
-    return `${
-        getPublicationAuthorsFromPublicationManifest(publication)[0]
-    } et al (${publication.YearofPublication})`;
-}
-
-export function getCiteFromPublicationSummary(
-    publication: PublicationSummary
-): string {
-    return `${
-        getPublicationAuthorsFromPublicationSummary(publication)[0]
-    } et al (${publication.sortpubdate.split('/')[0]})`;
+    return year;
 }
 
 export function getPublicationAuthors(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
+    publication?: PublicationManifest
 ): string[] {
-    let authors: string[] = [];
-
-    if (publicationSummary) {
-        authors = getPublicationAuthorsFromPublicationSummary(
-            publicationSummary
-        );
-    } else if (publicationManifest) {
-        authors = getPublicationAuthorsFromPublicationManifest(
-            publicationManifest
-        );
-    }
-
-    return authors;
+    return parsePublicationAuthors(
+        publication?.EutilsAuthors || publication?.Authors
+    );
 }
 
-export function getPublicationAuthorsFromPublicationManifest(
-    publication: PublicationManifest
-): string[] {
-    return publication.Authors.split(',').map((a) => a.trim());
-}
-
-export function getPublicationAuthorsFromPublicationSummary(
-    publication: PublicationSummary
-): string[] {
-    return publication.authors.map((a) => a.name);
+function parsePublicationAuthors(authors?: string): string[] {
+    return authors?.split(',').map((a) => a.trim()) || [];
 }
 
 function getComponentFilters() {
@@ -155,30 +122,17 @@ export function getPublicationFilters(
 }
 
 export function getPublicationDOI(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
+    publication?: PublicationManifest
 ): string | undefined {
     let doi: string | undefined;
 
-    if (publicationSummary) {
-        doi = getPublicationDoiFromPublicationSummary(publicationSummary);
-    } else if (publicationManifest) {
-        doi = getPublicationDoiFromPublicationManifest(publicationManifest);
+    if (publication?.EutilsDOI) {
+        doi = publication?.EutilsDOI;
+    } else if (publication?.DOI) {
+        doi = publication?.DOI.replace('https://doi.org/', '');
     }
 
     return doi;
-}
-
-export function getPublicationDoiFromPublicationManifest(
-    publication: PublicationManifest
-): string {
-    return publication.DOI.replace('https://doi.org/', '');
-}
-
-export function getPublicationDoiFromPublicationSummary(
-    publication: PublicationSummary
-): string | undefined {
-    return publication.articleids.find((id) => id.idtype === 'doi')?.value;
 }
 
 export function getPublicationAssociatedParentDataFileIDs(
@@ -190,50 +144,37 @@ export function getPublicationAssociatedParentDataFileIDs(
 }
 
 export function getPublicationJournal(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
+    publication?: PublicationManifest
 ): string | undefined {
-    return isManuscriptInReview(publicationManifest)
+    return isManuscriptInReview(publication)
         ? 'TBD'
         : (
-              publicationSummary?.fulljournalname?.toLowerCase() ||
-              publicationManifest?.LocationofPublication
+              publication?.EutilsJournal?.toLowerCase() ||
+              publication?.LocationofPublication
           )?.replace(/\w+/g, _.capitalize);
 }
 
 export function getPublicationTitle(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
+    publication?: PublicationManifest
 ): string | undefined {
-    const title = publicationSummary?.title || publicationManifest?.Title;
+    const title = publication?.EutilsTitle || publication?.Title;
     // remove trailing dot (if any)
     return title?.trim().replace(/\.$/, '');
 }
 
-export function getPublicationDate(
-    publicationSummary?: PublicationSummary,
-    publicationManifest?: PublicationManifest
-) {
-    let date: string | undefined;
-
-    if (publicationSummary) {
-        date = publicationSummary.pubdate;
-    } else if (publicationManifest) {
-        date = publicationManifest.YearofPublication?.toString();
-    }
-
-    return date;
+export function getPublicationDate(publication?: PublicationManifest) {
+    return (
+        publication?.EutilsDate || publication?.YearofPublication?.toString()
+    );
 }
 
 export function getPublicationSupportingLinks(
-    publicationManifest?: PublicationManifest
+    publication?: PublicationManifest
 ): GeneralLink[] {
-    const urls = publicationManifest?.SupportingLink
-        ? publicationManifest.SupportingLink.split(',')
+    const urls = publication?.SupportingLink
+        ? publication.SupportingLink.split(',')
         : undefined;
-    const descriptions = publicationManifest?.SupportingLinkDescription?.split(
-        '^^^'
-    );
+    const descriptions = publication?.SupportingLinkDescription?.split('^^^');
 
     return (
         urls?.map((link, index) => ({
@@ -246,26 +187,26 @@ export function getPublicationSupportingLinks(
     );
 }
 
-export async function fetchPublicationSummaries(
-    pubMedIds?: string[],
-    dataUri: string = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?retmode=json&db=pubmed'
-): Promise<{ [pubMedID: string]: PublicationSummary } | undefined> {
-    if (pubMedIds) {
-        try {
-            const res = await fetch(`${dataUri}&id=${pubMedIds.join(',')}`);
-
-            // const json = await res.json();
-            const text = await res.text();
-            const json = JSON.parse(text);
-
-            return json.result;
-        } catch {
-            return undefined;
-        }
-    }
-
-    return undefined;
-}
+// export async function fetchPublicationSummaries(
+//     pubMedIds?: string[],
+//     dataUri: string = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?retmode=json&db=pubmed'
+// ): Promise<{ [pubMedID: string]: PublicationSummary } | undefined> {
+//     if (pubMedIds) {
+//         try {
+//             const res = await fetch(`${dataUri}&id=${pubMedIds.join(',')}`);
+//
+//             // const json = await res.json();
+//             const text = await res.text();
+//             const json = JSON.parse(text);
+//
+//             return json.result;
+//         } catch {
+//             return undefined;
+//         }
+//     }
+//
+//     return undefined;
+// }
 
 export function getAllPublicationPagePaths(ids: string[]) {
     return ids.map((id) => ({ params: { id } }));

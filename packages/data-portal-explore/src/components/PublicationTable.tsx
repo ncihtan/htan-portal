@@ -14,7 +14,6 @@ import {
     getPublicationUid,
     PublicationContentType,
     PublicationManifest,
-    PublicationSummary,
 } from '@htan/data-portal-commons';
 import {
     EnhancedDataTable,
@@ -23,7 +22,6 @@ import {
 
 interface IPublicationTableProps {
     publications: PublicationManifest[];
-    publicationSummaryByPubMedID?: { [pubMedId: string]: PublicationSummary };
     participants: Entity[];
     filteredParticipants: Entity[];
     biospecimens: Entity[];
@@ -90,12 +88,8 @@ const Count: React.FunctionComponent<{
 export const PublicationTable: React.FunctionComponent<IPublicationTableProps> = (
     props
 ) => {
-    const getSummary = (manifest: PublicationManifest) =>
-        props.publicationSummaryByPubMedID?.[getPublicationPubMedID(manifest)];
-
     const getDate = (manifest: PublicationManifest) => {
-        const summary = getSummary(manifest);
-        const date = getPublicationDate(summary, manifest);
+        const date = getPublicationDate(manifest);
 
         // Assuming that the string is in the form of YYYY MMM DD
         const parts = date?.split(/\s/);
@@ -125,7 +119,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         {
             name: 'Title',
             selector: (manifest: PublicationManifest) =>
-                getPublicationTitle(getSummary(manifest), manifest),
+                getPublicationTitle(manifest),
             cell: (manifest: PublicationManifest) => (
                 <a
                     href={`//${
@@ -133,7 +127,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
                     }/publications/${getPublicationUid(manifest)}`}
                     className="py-1"
                 >
-                    {getPublicationTitle(getSummary(manifest), manifest)}
+                    {getPublicationTitle(manifest)}
                 </a>
             ),
             grow: 1.5,
@@ -155,14 +149,9 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         {
             name: 'Authors',
             selector: (manifest: PublicationManifest) =>
-                getPublicationAuthors(getSummary(manifest), manifest).join(
-                    ', '
-                ),
+                getPublicationAuthors(manifest).join(', '),
             cell: (manifest: PublicationManifest) => {
-                const authors = getPublicationAuthors(
-                    getSummary(manifest),
-                    manifest
-                );
+                const authors = getPublicationAuthors(manifest);
                 let shortList = authors;
 
                 if (authors.length > 5) {
@@ -177,7 +166,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         {
             name: 'Journal',
             selector: (manifest: PublicationManifest) =>
-                getPublicationJournal(getSummary(manifest), manifest),
+                getPublicationJournal(manifest),
             wrap: true,
             sortable: true,
         },
@@ -207,9 +196,9 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         {
             name: 'DOI',
             selector: (manifest: PublicationManifest) =>
-                getPublicationDOI(getSummary(manifest), manifest),
+                getPublicationDOI(manifest),
             cell: (manifest: PublicationManifest) => {
-                const doi = getPublicationDOI(getSummary(manifest), manifest);
+                const doi = getPublicationDOI(manifest);
                 return doi ? (
                     <a href={`https://doi.org/${doi}`} target="_blank">
                         {doi} <FontAwesomeIcon icon={faExternalLinkAlt} />

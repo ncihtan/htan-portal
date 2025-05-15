@@ -7,7 +7,6 @@ import {
     Atlas,
     Entity,
     PublicationManifest,
-    PublicationSummary,
     SerializableEntity,
 } from './entity';
 import {
@@ -147,9 +146,6 @@ export interface LoadDataResult {
     atlases: Atlas[];
     publicationManifestByUid: {
         [uid: string]: PublicationManifest;
-    };
-    publicationSummaryByPubMedID?: {
-        [pubMedID: string]: PublicationSummary;
     };
     biospecimenByBiospecimenID: {
         [BiospecimenID: string]: SerializableEntity;

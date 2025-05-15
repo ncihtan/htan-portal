@@ -35,9 +35,7 @@ import {
 } from '../packages/data-portal-commons/src/lib/synapse';
 import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
 import {
-    fetchPublicationSummaries,
     getPublicationAssociatedParentDataFileIDs,
-    getPublicationPubMedID,
     getPublicationUid,
 } from '../packages/data-portal-commons/src/lib/publicationHelpers';
 import {
@@ -111,12 +109,6 @@ async function writeProcessedFile() {
         (ancestryById as unknown) as {
             [participantId: string]: BaseSerializableEntity;
         }
-    );
-
-    // we need to fetch publication summaries after we process the json,
-    // because we need to know pubmed ids to query the external API
-    processed.publicationSummaryByPubMedID = await fetchPublicationSummaries(
-        _.values(processed.publicationManifestByUid).map(getPublicationPubMedID)
     );
 
     fs.writeFileSync(
@@ -392,7 +384,7 @@ function addDownloadSourcesInfo(
         file.isRawSequencing = true;
         if (
             (file.synapseId && file.viewers?.cds?.drs_uri) ||
-            file.Filename.endsWith('bai')
+            file.Filename?.toLowerCase().endsWith('bai')
         ) {
             file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
@@ -430,7 +422,9 @@ function addDownloadSourcesInfo(
                 (assay) => file.assayName?.toLowerCase().includes(assay)
             ) ||
             // raw files
-            file.Filename.endsWith('raw') ||
+            file.Filename?.toLowerCase().endsWith('raw') ||
+            // mzML files
+            file.Filename?.toLowerCase().endsWith('mzml') ||
             // Level 3 & 4 all assays
             _.some(
                 ['Level 3', 'Level 4', 'Auxiliary', 'Other'],
@@ -1149,11 +1143,11 @@ function extractEntitiesFromSynapseData(
                     attributeToId['Dataset Name'] =
                         attributeToId['Dataset Name'] || 'bts:DatasetName';
                 }
-                // this is a workaround for missing CitedInNumber for publication manifest
-                if (synapseRecords.column_order.includes('Cited In Number')) {
-                    attributeToId['Cited In Number'] =
-                        attributeToId['Cited In Number'] || 'bts:CitedInNumber';
-                }
+                // this is a workaround for missing fields for publication manifest
+                addMissingPublicationManifestFields(
+                    synapseRecords,
+                    attributeToId
+                );
 
                 synapseRecords.record_list.forEach((record) => {
                     const entity: Partial<BaseSerializableEntity> = {};
@@ -1238,6 +1232,29 @@ function extractEntitiesFromSynapseData(
     });
 
     return entities;
+}
+
+function addMissingPublicationManifestFields(
+    synapseRecords: SynapseRecords,
+    attributeToId: { [attribute: string]: string }
+) {
+    const fields = [
+        'Cited In Number',
+        'Eutils Date',
+        'Eutils Date',
+        'Eutils Title',
+        'Eutils Journal',
+        'Eutils Sort Date',
+        'Eutils Authors',
+        'Eutils DOI',
+    ];
+
+    fields.forEach((field) => {
+        if (synapseRecords.column_order.includes(field)) {
+            attributeToId[field] =
+                attributeToId[field] || `bts:${field.replace(/\s/g, '')}`;
+        }
+    });
 }
 
 function extractParentImagingAssayTypes(

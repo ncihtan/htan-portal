@@ -174,6 +174,12 @@ export interface PublicationManifest {
     SupportingLink?: string;
     SupportingLinkDescription?: string;
     CitedInNumber?: number;
+    EutilsDate?: string;
+    EutilsTitle?: string;
+    EutilsJournal?: string;
+    EutilsSortDate?: string;
+    EutilsAuthors?: string;
+    EutilsDOI?: string;
 
     // Derived or attached in frontend
     atlasid: string;
@@ -181,66 +187,6 @@ export interface PublicationManifest {
     assayName?: string;
     AtlasMeta: AtlasMeta;
     synapseId?: string;
-}
-
-export interface PublicationSummary {
-    uid: string;
-    pubdate: string;
-    epubdate: string;
-    source: string;
-    authors: {
-        name: string;
-        authtype: string;
-        clusterid: string;
-    }[];
-    lastauthor: string;
-    title: string;
-    sorttitle: string;
-    volume: string;
-    issue: string;
-    pages: string;
-    lang: string[];
-    nlmuniqueid: string;
-    issn: string;
-    essn: string;
-    pubtype: string[];
-    recordstatus: string;
-    pubstatus: string;
-    articleids: {
-        idtype: string;
-        idtypen: number;
-        value: string;
-    }[];
-    history: {
-        pubstatus: string;
-        date: string;
-    }[];
-    references: {
-        refsource: string;
-        reftype: string;
-        pmid: string;
-        note: string;
-    }[];
-    attributes: string[];
-    pmcrefcount: number;
-    fulljournalname: string;
-    elocationid: string;
-    doctype: string;
-    booktitle: string;
-    medium: string;
-    edition: string;
-    publisherlocation: string;
-    publishername: string;
-    srcdate: string;
-    reportnumber: string;
-    availablefromurl: string;
-    locationlabel: string;
-    docdate: string;
-    bookname: string;
-    chapter: string;
-    sortpubdate: string;
-    sortfirstauthor: string;
-    vernaculartitle: string;
 }
 
 export interface AccessoryManifest {
