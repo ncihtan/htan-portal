@@ -1486,9 +1486,14 @@
             "numItems": 12
         },
         {
+            "component": "MolecularTest",
+            "synapseId": "syn54993956",
+            "numItems": 61
+        },
+        {
             "component": "ImagingLevel2",
             "synapseId": "syn57431469",
-            "numItems": 346
+            "numItems": 786
         },
         {
             "component": "BulkRNA-seqLevel2",
@@ -1499,6 +1504,11 @@
             "component": "BulkRNA-seqLevel3",
             "synapseId": "syn59053360",
             "numItems": 186
+        },
+        {
+            "component": "ScDNA-seqLevel1",
+            "synapseId": "syn59058327",
+            "numItems": 159
         },
         {
             "component": "BulkDNALevel2",
@@ -2071,6 +2081,26 @@
             "component": "BulkDNALevel1",
             "synapseId": "syn65492294",
             "numItems": 26
+        },
+        {
+            "component": "Demographics",
+            "synapseId": "syn65493054",
+            "numItems": 16
+        },
+        {
+            "component": "Diagnosis",
+            "synapseId": "syn65515169",
+            "numItems": 16
+        },
+        {
+            "component": "Biospecimen",
+            "synapseId": "syn65615889",
+            "numItems": 27
+        },
+        {
+            "component": "BulkRNA-seqLevel1",
+            "synapseId": "syn66298028",
+            "numItems": 54
         }
     ],
     "HTA4": [
@@ -2491,7 +2521,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn51185203",
-            "numItems": 269
+            "numItems": 276
         },
         {
             "component": "BulkDNALevel2",
@@ -2815,7 +2845,7 @@
         {
             "component": "Demographics",
             "synapseId": "syn39283850",
-            "numItems": 39
+            "numItems": 40
         },
         {
             "component": "Diagnosis",
@@ -2961,6 +2991,16 @@
             "component": "ScATAC-seqLevel3",
             "synapseId": "syn61064183",
             "numItems": 80
+        },
+        {
+            "component": "Biospecimen",
+            "synapseId": "syn66312808",
+            "numItems": 35
+        },
+        {
+            "component": "10XXeniumISS",
+            "synapseId": "syn66366532",
+            "numItems": 32
         }
     ],
     "HTA13": [
