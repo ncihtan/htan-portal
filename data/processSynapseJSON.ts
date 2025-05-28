@@ -194,7 +194,7 @@ function getPublicationsAsSynapseRecordsByAtlasId(
 }
 
 async function getEntitiesById() {
-    const rows = await csvToJson().fromFile('data/entities_v6_2.csv');
+    const rows = await csvToJson().fromFile('data/entities_v6_3.csv');
     return _.keyBy(rows, (row) => row.entityId);
 }
 
