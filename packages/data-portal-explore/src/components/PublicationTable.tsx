@@ -138,7 +138,6 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             name: 'Atlas',
             selector: (manifest: PublicationManifest) => manifest.atlas_name,
             cell: (manifest: PublicationManifest) => {
-                console.log(manifest);
                 return (
                     <AtlasDescription
                         atlasMeta={manifest.AtlasMeta}

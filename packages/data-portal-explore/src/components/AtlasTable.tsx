@@ -22,7 +22,7 @@ import {
     AtlasMetaData,
     Entity,
     FileViewerName,
-    filterFiles,
+    getViewerValues,
     isManuscriptInReview,
     PublicationIcon,
     PublicationManifest,
@@ -145,7 +145,7 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
 const ViewerCount: React.FunctionComponent<IAtlasViewerCountProps> = (
     props
 ) => {
-    const count = props.atlas.viewerCounts[props.fileViewerName];
+    const count = props.atlas.viewerCounts?.[props.fileViewerName];
     const filterString = urlEncodeSelectedFilters([
         { group: 'viewers', value: props.fileViewerName },
         { group: 'AtlasName', value: props.atlas.htan_name },
@@ -200,6 +200,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     constructor(props: IAtlasTableProps) {
         super(props);
         makeObservable(this);
+        console.log('constructing atlas table');
         //this.atlasMetaData = this.props.getAtlasMetaData();
     }
 
@@ -217,7 +218,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     };
 
     getViewerCounts = (atlas: Atlas) => {
-        return this.viewerCountByAtlas[atlas.htan_id];
+        return this.viewerCountByAtlas(atlas.htan_id);
     };
 
     // we need to update data every time the selection changes to rerender the table
@@ -235,7 +236,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     }
 
     get filesByAtlas() {
-        return _.groupBy(this.props.files, (c: Entity) => c.atlasid);
+        return _.groupBy(this.props.filteredFiles, (c: Entity) => c.atlasid);
     }
 
     get assaysByAtlas() {
@@ -247,14 +248,23 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         );
     }
 
-    get viewerCountByAtlas(): ViewerCountByAtlas {
-        return _.mapValues(this.filesByAtlas, (files: Entity[]) =>
-            _.mapValues(
-                FileViewerName,
-                (value) =>
-                    filterFiles({ viewers: new Set([value]) }, files).length
-            )
-        );
+    myData: any = null;
+    myCache: any = null;
+
+    viewerCountByAtlas(atlas: any): ViewerCountByAtlas {
+        // return _.mapValues(this.filesByAtlas, (files) => {
+        //     return _(files)
+        //         .map((file) => getViewerValues(file))
+        //         .flatten()
+        //         .countBy()
+        //         .value();
+        // });
+
+        return _(this.filesByAtlas[atlas])
+            .map((file) => getViewerValues(file))
+            .flatten()
+            .countBy()
+            .value();
     }
 
     get filteredAssaysByAtlas() {
@@ -671,38 +681,6 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     };
 
     render() {
-        console.log(this.props.atlases.result);
-
-        // const columns = [
-        //     {
-        //         name: 'Atlas Name',
-        //         selector: 'htan_name',
-        //     },
-        //     {
-        //         name: 'Atlas Description',
-        //         cell: (atlas: any) => {
-        //             const parsed = JSON.parse(atlas.AtlasMeta);
-        //             return parsed.short_description || parsed.title.rendered;
-        //         },
-        //     },
-        //     {
-        //         name: 'Publications',
-        //         cell: () => '',
-        //     },
-        //     {
-        //         name: 'Metadata',
-        //         cell: () => '',
-        //     },
-        //     {
-        //         name: 'Cases',
-        //         selector: 'num_cases',
-        //     },
-        //     {
-        //         name: 'Biospecimens',
-        //         selector: 'num_biospecimens',
-        //     },
-        // ];
-
         return (
             <>
                 <EnhancedDataTable

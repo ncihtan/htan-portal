@@ -5,5 +5,9 @@ export function getViewerValues(
     entity: Entity,
     exclude: FileViewerName[] = [FileViewerName.cds, FileViewerName.idc]
 ) {
-    return _(entity.viewers).keys().difference(exclude).value();
+    const viewers =
+        typeof entity.viewers === 'string'
+            ? JSON.parse(entity.viewers)
+            : entity.viewers;
+    return _(viewers).keys().difference(exclude).value();
 }
