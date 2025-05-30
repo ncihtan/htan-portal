@@ -127,8 +127,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
             TissueorOrganofOrigin: (e: Entity) => getNormalizedOrgan(e),
         };
 
-        console.log('rendering explore tabs', props.filteredFiles);
-
         return (
             <>
                 <div className="subnav">
