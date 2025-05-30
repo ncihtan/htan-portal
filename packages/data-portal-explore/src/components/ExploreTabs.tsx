@@ -123,11 +123,11 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
             )
         );
 
-        console.log(props.publications);
-
         const normalizersByField = {
             TissueorOrganofOrigin: (e: Entity) => getNormalizedOrgan(e),
         };
+
+        console.log('rendering explore tabs', props.filteredFiles);
 
         return (
             <>
@@ -325,7 +325,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             selectedFiltersByAttrName={
                                 props.nonAtlasSelectedFiltersByAttrName
                             }
-                            files={props.files}
                             filteredFiles={props.filteredFiles}
                             cloudBaseUrl={props.cloudBaseUrl || ''}
                         />
