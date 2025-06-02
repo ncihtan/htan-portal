@@ -102,7 +102,6 @@ export function getAtlasColumn(atlases: Atlas[]) {
 export function getPublicationColumn(publicationsByUid?: {
     [uid: string]: PublicationManifest;
 }) {
-    console.log(publicationsByUid);
     return {
         name: 'Publications',
         selector: 'publicationIds',
@@ -112,7 +111,7 @@ export function getPublicationColumn(publicationsByUid?: {
         omit: false,
         cell: (entity: Entity) =>
             entity.publicationIds?.map((uid) =>
-                publicationsByUid ? (
+                publicationsByUid && publicationsByUid[uid] ? (
                     <PublicationIcon
                         publicationManifest={publicationsByUid[uid]}
                     />

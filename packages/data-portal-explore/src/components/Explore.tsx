@@ -427,6 +427,8 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 .every();
         }
 
+        window.goo = this;
+
         if (
             allComplete([
                 this.casesFiltered,
@@ -471,15 +473,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         getFilterDisplayName={getFileFilterDisplayName}
                     />
 
-                    <ExploreSummary
-                        summaryData={getDefaultSummaryData(
-                            this.casesFiltered.result!,
-                            this.specimenFiltered.result!,
-                            this.filesFiltered.result!,
-                            this.groupsByProperty
-                        )}
-                    />
-
                     <ExploreTabs
                         setTab={(currentTab: ExploreTab) => {
                             this.currentTab = currentTab;
@@ -487,8 +480,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         filterString={this.filterString}
                         activeTab={this.currentTab}
                         schemaDataById={this.state.schemaDataById}
-                        files={this.state.files}
-                        filteredFiles={this.files.result}
+                        filteredFiles={this.filesFiltered.result}
                         filteredSynapseAtlases={this.filteredAtlases}
                         filteredSynapseAtlasesByNonAtlasFilters={
                             this.filteredAtlasesByNonAtlasFilters

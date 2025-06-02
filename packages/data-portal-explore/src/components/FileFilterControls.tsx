@@ -4,6 +4,8 @@ import React from 'react';
 import {
     FilterControls,
     FilterDropdown,
+    getDropdownOptionsFromProps,
+    getOptionsFromProps,
     IFilterControlsProps,
     IGenericFilterControlProps,
 } from '@htan/data-portal-filter';
@@ -38,6 +40,27 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             selectedFilters: [],
             groupsByProperty: props.groupsByProperty,
         };
+
+        // const filterControlsProps = {
+        //     ...props,
+        //     countHeader: 'Files',
+        //     attributeMap: FileAttributeMap,
+        //     attributeNames: [
+        //         AttributeNames.AtlasName,
+        //         AttributeNames.TissueorOrganofOrigin,
+        //         AttributeNames.PrimaryDiagnosis,
+        //         AttributeNames.assayName,
+        //         AttributeNames.Level,
+        //         AttributeNames.FileFormat,
+        //         AttributeNames.TreatmentType,
+        //     ],
+        // };
+
+        // const options = getOptionsFromProps(filterControlsProps);
+        // const dropdownProps = getDropdownOptionsFromProps(
+        //     filterControlsProps,
+        //     options
+        // );
 
         const options = (str: string) => {
             if (str in props.groupsByProperty) {
