@@ -14,6 +14,10 @@ export function getPublicationUid(publication: PublicationManifest): string {
     const normalizeValue = (value: string) =>
         value.trim().toLowerCase().replace(/\s/g, '-').replace(/\./g, '');
 
+    if (!publication) {
+        debugger;
+    }
+
     const center = publication.CenterID.toLowerCase();
     const year = publication.YearofPublication;
     const firstAuthor = normalizeValue(
