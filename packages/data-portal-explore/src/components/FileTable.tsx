@@ -526,6 +526,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 (f.level === 'Level 1' || f.level == 'Level 2') &&
                 !f.viewers?.cds)
     );
+    const cgcFiles = cdsFiles.concat(synapseFiles)
 
     const availabilityMessage = () => {
         const messages = [];
@@ -564,7 +565,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 </p>
 
                 {/* CDS Section */}
-                {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                {cgcFiles.length > 0 && <CDSInstructions files={cgcFiles} />}
 
                 {/* Synapse Section */}
                 {synapseFiles.length > 0 && (
