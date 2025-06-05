@@ -100,7 +100,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
                 : f.viewers?.synapse
                 ? `drs://repo-prod.prod.sagebase.org/${f.synapseId}`
                 : undefined,
-            f.viewers?.cds?.name ?? f.viewers?.synapse?.name,
+            f.viewers?.cds?.name ?? getFileBase(f.Filename),
             f.atlas_name,
             _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join(' '),
             f.assayName,
