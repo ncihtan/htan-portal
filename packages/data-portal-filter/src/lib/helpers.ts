@@ -238,10 +238,10 @@ export function makeOptions<Attribute extends string, T>(
 
     return _.map(entitiesByProperty[attrName], (val, key) => {
         return {
-            value: val,
-            label: val,
+            value: val.val,
+            label: val.val,
             group: attrName,
-            count: counts[key] || 0,
+            count: parseInt(val.count),
         };
     });
 }

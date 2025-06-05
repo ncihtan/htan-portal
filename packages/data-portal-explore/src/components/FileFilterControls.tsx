@@ -41,25 +41,26 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             groupsByProperty: props.groupsByProperty,
         };
 
-        // const filterControlsProps = {
-        //     ...props,
-        //     countHeader: 'Files',
-        //     attributeMap: FileAttributeMap,
-        //     attributeNames: [
-        //         AttributeNames.AtlasName,
-        //         AttributeNames.TissueorOrganofOrigin,
-        //         AttributeNames.PrimaryDiagnosis,
-        //         AttributeNames.assayName,
-        //         AttributeNames.Level,
-        //         AttributeNames.FileFormat,
-        //         AttributeNames.TreatmentType,
-        //     ],
-        // };
+        const filterControlsProps2 = {
+            ...props,
+            countHeader: 'Files',
+            attributeMap: FileAttributeMap,
+            attributeNames: [
+                AttributeNames.AtlasName,
+                AttributeNames.TissueorOrganofOrigin,
+                AttributeNames.PrimaryDiagnosis,
+                AttributeNames.assayName,
+                AttributeNames.Level,
+                AttributeNames.FileFormat,
+                AttributeNames.TreatmentType,
+            ],
+        };
 
-        // const options = getOptionsFromProps(filterControlsProps);
-        // const dropdownProps = getDropdownOptionsFromProps(
+        let options2 = getOptionsFromProps(filterControlsProps2);
+
+        // const dropdownProps2 = getDropdownOptionsFromProps(
         //     filterControlsProps,
-        //     options
+        //     options2
         // );
 
         const options = (str: string) => {
@@ -81,14 +82,17 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             }
         };
 
-        const dropdownProps = {
-            options,
+        let dropdownProps = {
+            options: options2,
             countHeader: filterControlsProps.countHeader,
             setFilter: filterControlsProps.setFilter,
             selectedFiltersByGroupName:
                 filterControlsProps.selectedFiltersByGroupName,
             attributeMap: FileAttributeMap,
         };
+
+        //dropdownProps = dropdownProps2;
+        //debugger;
 
         return (
             <FilterControls {...filterControlsProps}>
