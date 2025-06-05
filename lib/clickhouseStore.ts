@@ -12,67 +12,37 @@ const client = createClient({
     },
 });
 
-// i need to apply the filter to files here with <%=filterString%>
-export const countsByTypeQuery = `
-    SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
-        SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files
-        UNION ALL
-        SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM files
-        UNION ALL
-        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM files
-        UNION ALL
-        SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM files
-        UNION ALL
-        SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM files
-        UNION ALL
-        SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM files
-        UNION ALL
-        SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM files
-        UNION ALL
-        SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM files
-        UNION ALL
-        SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM files
-        UNION ALL
-        SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM files
-        UNION ALL
-        SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM files
-        UNION ALL
-        SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files
-        )
-    GROUP BY val, type, fieldType
-`;
-
-// export const countsByTypeQueryFiltered = `
-//         WITH files2 AS (SELECT viewersArr, * FROM files <%=filterString%>)
+// // i need to apply the filter to files here with <%=filterString%>
+// export const countsByTypeQuery = `
 //     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
-//         SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files2
+//         SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM files2
+//         SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM files2
+//         SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM files2
+//         SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM files2
+//         SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM files2
+//         SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM files2
+//         SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM files2
+//         SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM files2
+//         SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM files
 //         UNION ALL
-//         SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM files2
+//         SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM files2
+//         SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM files
 //         UNION ALL
-//         SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files2
+//         SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files
 //         )
 //     GROUP BY val, type, fieldType
 // `;
 
-export const countsByTypeQueryFiltered = _.template(`
+export const countsByTypeQuery = _.template(`
     WITH files2 AS (SELECT viewersArr, * FROM files <%=filterString%>)
     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
         SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files2
@@ -99,6 +69,7 @@ export const countsByTypeQueryFiltered = _.template(`
         UNION ALL
         SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files2
         )
+    WHERE notEmpty(val)                                                                 
     GROUP BY val, type, fieldType
 `);
 
