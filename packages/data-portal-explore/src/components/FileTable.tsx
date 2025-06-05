@@ -93,7 +93,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
         'parent_data_file_id',
     ];
     const data = _(files)
-        .filter((f) => !!f.viewers?.cds || !!f.viewers?.synapse)
+        .filter((f) => !!f.viewers?.cds || f.downloadSource === DownloadSourceCategory.synapse)
         .map((f) => [
             f.viewers?.cds?.drs_uri
                 ? getDrsUri(f.viewers.cds.drs_uri, true)
