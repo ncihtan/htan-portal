@@ -93,10 +93,14 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
         'parent_data_file_id',
     ];
     const data = _(files)
-        .filter((f) => !!f.viewers?.cds)
+        .filter((f) => !!f.viewers?.cds || f.downloadSource === DownloadSourceCategory.synapse)
         .map((f) => [
-            getDrsUri(f.viewers?.cds?.drs_uri, false, true),
-            f.viewers?.cds?.name,
+            f.viewers?.cds?.drs_uri
+                ? getDrsUri(f.viewers.cds.drs_uri, true)
+                : f.downloadSource === DownloadSourceCategory.synapse
+                ? `drs://repo-prod.prod.sagebase.org/${f.synapseId}`
+                : undefined,
+            f.viewers?.cds?.name ?? getFileBase(f.Filename),
             f.atlas_name,
             _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join(' '),
             f.assayName,
@@ -313,8 +317,10 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
         (f) => f.downloadSource !== DownloadSourceCategory.dbgap
     );
 
-    const manifestFile = generateCdsManifestFile(files);
-    const gen3manifestFile = generateGen3ManifestFile(files);
+    // Combine dbgap and open access files for manifest generation
+    const cdsEligibleFiles = dbgapFiles.concat(openAccessFiles);
+    const manifestFile = generateCdsManifestFile(cdsEligibleFiles);
+    const gen3manifestFile = generateGen3ManifestFile(cdsEligibleFiles);
 
     return (
         <div>
@@ -520,6 +526,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 (f.level === 'Level 1' || f.level == 'Level 2') &&
                 !f.viewers?.cds)
     );
+    const cgcFiles = cdsFiles.concat(synapseFiles)
 
     const availabilityMessage = () => {
         const messages = [];
@@ -558,7 +565,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 </p>
 
                 {/* CDS Section */}
-                {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                {cgcFiles.length > 0 && <CDSInstructions files={cgcFiles} />}
 
                 {/* Synapse Section */}
                 {synapseFiles.length > 0 && (
