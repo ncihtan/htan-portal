@@ -392,7 +392,10 @@ function addDownloadSourcesInfo(
         }
     } else {
         file.isRawSequencing = false;
-        if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
+        // Explicitly set CODEX Level 1 files to use Synapse as download source
+        if (file.assayName?.toLowerCase() === 'codex' && file.level === 'Level 1') {
+            file.downloadSource = DownloadSourceCategory.synapse;
+        } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
             // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
             if (file.viewers?.cds?.drs_uri) {
