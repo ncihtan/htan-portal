@@ -93,10 +93,12 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
         'parent_data_file_id',
     ];
     const data = _(files)
-        .filter((f) => !!f.viewers?.cds)
+        .filter((f) => !!f.viewers?.cds || !!f.viewers?.synapse)
         .map((f) => [
-            getDrsUri(f.viewers?.cds?.drs_uri, false, true),
-            f.viewers?.cds?.name,
+            f.viewers?.cds?.drs_uri
+                ? getDrsUri(f.viewers.cds.drs_uri, true)
+                : `drs://repo-prod.prod.sagebase.org/${f.synapseId}`,
+            f.viewers?.synapse?.name,
             f.atlas_name,
             _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join(' '),
             f.assayName,
