@@ -97,7 +97,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
         .map((f) => [
             f.viewers?.cds?.drs_uri
                 ? getDrsUri(f.viewers.cds.drs_uri, true)
-                : f.viewers?.synapse
+                : f.downloadSource === DownloadSourceCategory.synapse
                 ? `drs://repo-prod.prod.sagebase.org/${f.synapseId}`
                 : undefined,
             f.viewers?.cds?.name ?? getFileBase(f.Filename),
