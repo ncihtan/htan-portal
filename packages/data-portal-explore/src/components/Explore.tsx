@@ -114,7 +114,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 return this.unfilteredOptions.result;
             } else {
                 const filteredResult = await doQuery(
-                    countsByTypeQueryFiltered({
+                    countsByTypeQuery({
                         filterString: this.filterString,
                     })
                 );
@@ -476,6 +476,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 this.atlasesFiltered,
                 this.filesFiltered,
                 this.files,
+                this.unfilteredOptions,
             ]) === false
         ) {
             return (
