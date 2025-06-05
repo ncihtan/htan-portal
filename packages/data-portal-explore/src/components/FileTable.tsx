@@ -317,8 +317,10 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
         (f) => f.downloadSource !== DownloadSourceCategory.dbgap
     );
 
-    const manifestFile = generateCdsManifestFile(files);
-    const gen3manifestFile = generateGen3ManifestFile(files);
+    // Combine dbgap and open access files for manifest generation
+    const cdsEligibleFiles = dbgapFiles.concat(openAccessFiles);
+    const manifestFile = generateCdsManifestFile(cdsEligibleFiles);
+    const gen3manifestFile = generateGen3ManifestFile(cdsEligibleFiles);
 
     return (
         <div>
