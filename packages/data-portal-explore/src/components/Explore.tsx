@@ -48,6 +48,8 @@ import {
     fileQuery,
     countsByTypeQuery,
     specimenQuery,
+    countsByTypeQueryMOO,
+    countsByTypeQueryFiltered,
 } from '../../../../lib/clickhouseStore.ts';
 import FileFilterControls from './FileFilterControls.tsx';
 
@@ -103,7 +105,43 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
 
     unfilteredOptions = new remoteData({
         invoke: async () => {
-            return doQuery(countsByTypeQuery);
+            return doQuery(countsByTypeQueryFiltered({ filterString: '' }));
+        },
+    });
+
+    filteredOptions = new remoteData({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            if (this.filterString === '') {
+                return this.unfilteredOptions.result;
+            } else {
+                const filteredResult = await doQuery(
+                    countsByTypeQueryFiltered({
+                        filterString: this.filterString,
+                    })
+                );
+                const filteredMap = _.keyBy(
+                    filteredResult,
+                    (option) => option.val + option.type
+                );
+                const unfilteredMap = _.keyBy(
+                    this.unfilteredOptions.result,
+                    (option) => option.val + option.type
+                );
+                const moo = _(unfilteredMap)
+                    .mapValues((o, k) => {
+                        if (k in filteredMap) {
+                            return filteredMap[k];
+                        } else {
+                            const updated = _.clone(o);
+                            updated.count = 0;
+                            return updated;
+                        }
+                    })
+                    .values()
+                    .value();
+                return moo;
+            }
         },
     });
 
@@ -410,7 +448,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     // }
 
     get groupsByProperty() {
-        const groupsByProperty = _(this.unfilteredOptions.result)
+        const groupsByProperty = _(this.filteredOptions.result)
             .groupBy('type')
             .value();
         return groupsByProperty;
@@ -435,7 +473,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 this.cases,
                 this.specimenFiltered,
                 this.specimen,
-                this.unfilteredOptions,
+                this.filteredOptions,
                 this.publications,
                 this.atlasesFiltered,
                 this.filesFiltered,

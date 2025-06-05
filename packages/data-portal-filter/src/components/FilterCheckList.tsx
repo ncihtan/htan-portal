@@ -17,6 +17,7 @@ export const FilterCheckList: FunctionComponent<IFilterCheckList> = observer(
         return (
             <div>
                 {props.options.map((option) => {
+                    debugger;
                     const id = `cb-${option.group}-${option.value}`;
                     const disabled = option.count === 0;
                     const checked =

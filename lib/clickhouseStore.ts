@@ -12,6 +12,7 @@ const client = createClient({
     },
 });
 
+// i need to apply the filter to files here with <%=filterString%>
 export const countsByTypeQuery = `
     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
         SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files
@@ -40,6 +41,68 @@ export const countsByTypeQuery = `
         )
     GROUP BY val, type, fieldType
 `;
+
+// export const countsByTypeQueryFiltered = `
+//         WITH files2 AS (SELECT viewersArr, * FROM files <%=filterString%>)
+//     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
+//         SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM files2
+//         UNION ALL
+//         SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM files2
+//         UNION ALL
+//         SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files2
+//         )
+//     GROUP BY val, type, fieldType
+// `;
+
+export const countsByTypeQueryFiltered = _.template(`
+    WITH files2 AS (SELECT viewersArr, * FROM files <%=filterString%>)
+    SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
+        SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM files2
+        UNION ALL
+        SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM files2
+        UNION ALL
+        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM files2
+        UNION ALL
+        SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM files2
+        UNION ALL
+        SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM files2
+        UNION ALL
+        SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM files2
+        UNION ALL
+        SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM files2
+        UNION ALL
+        SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM files2
+        UNION ALL
+        SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM files2
+        UNION ALL
+        SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM files2
+        UNION ALL
+        SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM files2
+        UNION ALL
+        SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM files2
+        )
+    GROUP BY val, type, fieldType
+`);
+
+//export const countsByTypeQueryMOO = _.template(countsByTypeQueryFiltered);
 
 export async function doQuery<T>(str: any): Promise<T[]> {
     const resultSet = await client.query({
