@@ -463,52 +463,58 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 .every();
         }
 
-        window.goo = this;
+        const allDataLoaded = allComplete([
+            this.casesFiltered,
+            this.cases,
+            this.specimenFiltered,
+            this.specimen,
+            this.filteredOptions,
+            this.publications,
+            this.atlasesFiltered,
+            this.filesFiltered,
+            this.files,
+            this.unfilteredOptions,
+        ]);
 
-        if (
-            allComplete([
-                this.casesFiltered,
-                this.cases,
-                this.specimenFiltered,
-                this.specimen,
-                this.filteredOptions,
-                this.publications,
-                this.atlasesFiltered,
-                this.filesFiltered,
-                this.files,
-                this.unfilteredOptions,
-            ]) === false
-        ) {
+        // Always render the filter controls, regardless of data loading state
+        const filterControls = (
+            <>
+                <FileFilterControls
+                    setFilter={this.setFilter}
+                    selectedFiltersByGroupName={this.selectedFiltersByAttrName}
+                    selectedFilters={this.selectedFilters}
+                    entities={this.filesFiltered.result || []}
+                    groupsByProperty={this.groupsByProperty}
+                    enableReleaseFilter={
+                        this.props.isReleaseQCEnabled
+                            ? this.props.isReleaseQCEnabled()
+                            : false
+                    }
+                />
+
+                <Filter
+                    setFilter={this.setFilter}
+                    selectedFiltersByGroupName={this.selectedFiltersByAttrName}
+                    getFilterDisplayName={getFileFilterDisplayName}
+                />
+            </>
+        );
+
+        // If data is still loading, show filter controls with loading indicator
+        if (!allDataLoaded) {
             return (
-                <div className={commonStyles.loadingIndicator}>
-                    <ScaleLoader />
+                <div className={styles.explore}>
+                    {filterControls}
+                    <div className={commonStyles.loadingIndicator}>
+                        <ScaleLoader />
+                    </div>
                 </div>
             );
         } else {
+            // All data loaded, show complete UI
             return (
                 <div className={styles.explore}>
-                    <FileFilterControls
-                        setFilter={this.setFilter}
-                        selectedFiltersByGroupName={
-                            this.selectedFiltersByAttrName
-                        }
-                        selectedFilters={this.selectedFilters}
-                        entities={this.filesFiltered.result!}
-                        groupsByProperty={this.groupsByProperty}
-                        enableReleaseFilter={
-                            this.props.isReleaseQCEnabled
-                                ? this.props.isReleaseQCEnabled()
-                                : false
-                        }
-                    />
-
-                    <Filter
-                        setFilter={this.setFilter}
-                        selectedFiltersByGroupName={
-                            this.selectedFiltersByAttrName
-                        }
-                        getFilterDisplayName={getFileFilterDisplayName}
-                    />
+                    {filterControls}
 
                     <ExploreTabs
                         setTab={(currentTab: ExploreTab) => {
@@ -552,7 +558,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         getAtlasMetaData={this.props.getAtlasMetaData}
                         publications={this.publications.result!}
                         filteredPublications={this.filteredPublications}
-                        genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
+                        genericAttributeMap={HTANToGenericAttributeMap}
                     />
                 </div>
             );
