@@ -20,12 +20,13 @@ export enum AttributeNames {
     level = 'level',
     FileFormat = 'FileFormat',
     TreatmentType = 'TreatmentType',
+    DownloadSource = 'DownloadSource',
 
     // Derived or attached in frontend
     organType = 'organType',
     assayName = 'assayName',
     publicationIds = 'publicationIds',
-    downloadSource = 'downloadSource',
+
     releaseVersion = 'releaseVersion',
     viewersArr = 'viewersArr',
 }
@@ -43,6 +44,7 @@ export enum GenericAttributeNames {
     GrantID = 'GrantID',
     CenterID = 'CenterID',
     PublicationContainsID = 'PublicationContainsID',
+    DownloadSource = 'DownloadSource',
 }
 
 export type AttributeMap<T, Attribute extends string> = {

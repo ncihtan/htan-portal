@@ -33,6 +33,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                 AttributeNames.level,
                 AttributeNames.FileFormat,
                 AttributeNames.TreatmentType,
+                AttributeNames.DownloadSource,
             ],
             entities: [],
             setFilter: props.setFilter,
@@ -41,58 +42,37 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             groupsByProperty: props.groupsByProperty,
         };
 
-        const filterControlsProps2 = {
-            ...props,
-            countHeader: 'Files',
-            attributeMap: FileAttributeMap,
-            attributeNames: [
-                AttributeNames.AtlasName,
-                AttributeNames.TissueorOrganofOrigin,
-                AttributeNames.PrimaryDiagnosis,
-                AttributeNames.assayName,
-                AttributeNames.Level,
-                AttributeNames.FileFormat,
-                AttributeNames.TreatmentType,
-            ],
-        };
+        // const filterControlsProps2 = {
+        //     ...props,
+        //     countHeader: 'Files',
+        //     attributeMap: FileAttributeMap,
+        //     attributeNames: [
+        //         AttributeNames.AtlasName,
+        //         AttributeNames.TissueorOrganofOrigin,
+        //         AttributeNames.PrimaryDiagnosis,
+        //         AttributeNames.assayName,
+        //         AttributeNames.Level,
+        //         AttributeNames.FileFormat,
+        //         AttributeNames.TreatmentType,
+        //     ],
+        // };
 
-        let options2 = getOptionsFromProps(filterControlsProps2);
+        debugger;
+        let options = getOptionsFromProps(filterControlsProps);
 
         // const dropdownProps2 = getDropdownOptionsFromProps(
         //     filterControlsProps,
         //     options2
         // );
 
-        const options = (str: string) => {
-            if (str in props.groupsByProperty) {
-                return _(props.groupsByProperty[str])
-                    .map((val, key) => {
-                        return {
-                            value: val.val,
-                            label: val.val,
-                            group: str,
-                            fieldType: val.fieldType,
-                            isSelected: false,
-                            count: val.count,
-                        };
-                    })
-                    .value();
-            } else {
-                return [];
-            }
-        };
-
         let dropdownProps = {
-            options: options2,
+            options: options,
             countHeader: filterControlsProps.countHeader,
             setFilter: filterControlsProps.setFilter,
             selectedFiltersByGroupName:
                 filterControlsProps.selectedFiltersByGroupName,
             attributeMap: FileAttributeMap,
         };
-
-        //dropdownProps = dropdownProps2;
-        //debugger;
 
         return (
             <FilterControls {...filterControlsProps}>
@@ -157,6 +137,14 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                         AttributeNames.level,
                         AttributeNames.FileFormat,
                     ]}
+                    className={styles.filterCheckboxListContainer}
+                    width={164}
+                />
+
+                <FilterDropdown
+                    {...dropdownProps}
+                    placeholder="Download Source"
+                    attributes={[AttributeNames.DownloadSource]}
                     className={styles.filterCheckboxListContainer}
                     width={164}
                 />

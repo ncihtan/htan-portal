@@ -334,71 +334,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         return filterFiles(this.selectedFiltersByAttrName, this.state.files);
     }
 
-    get filteredFilesByNonAtlasFilters() {
-        return filterFiles(
-            this.nonAtlasSelectedFiltersByAttrName,
-            this.state.files
-        );
-    }
-
-    // get samples() {
-    //     return getFilteredSamples(this.state.files, this.cases, false);
-    // }
-    //
-    // get filteredSamples() {
-    //     return getFilteredSamples(
-    //         this.filteredFiles,
-    //         this.filteredCases,
-    //         this.showAllBiospecimens
-    //     );
-    // }
-    //
-    // get filteredSamplesByNonAtlasFilters() {
-    //     return getFilteredSamples(
-    //         this.filteredFiles,
-    //         this.filteredCasesByNonAtlasFilters,
-    //         this.showAllBiospecimens
-    //     );
-    // }
-
-    // get filteredCases() {
-    //     return getFilteredCases(
-    //         this.filteredFiles,
-    //         this.selectedFiltersByAttrName,
-    //         this.showAllCases
-    //     );
-    // }
-
-    // get filteredCasesByNonAtlasFilters() {
-    //     return getFilteredCases(
-    //         this.filteredFilesByNonAtlasFilters,
-    //         this.nonAtlasSelectedFiltersByAttrName,
-    //         this.showAllCases
-    //     );
-    // }
-
-    // get filteredPublications() {
-    //     return _(this.filteredCases)
-    //         .flatMap((c) => c.publicationIds)
-    //         .compact()
-    //         .uniq()
-    //         .map((id) => this.state.publicationManifestByUid[id])
-    //         .value();
-    // }
-
-    // get atlasMap() {
-    //     return _.keyBy(this.state.atlases, (a) => a.htan_id);
-    // }
-
-    // get filteredAtlases() {
-    //     // get only atlases associated with filtered files
-    //     return _.chain(this.filteredFiles)
-    //         .map((f) => f.atlasid)
-    //         .uniq()
-    //         .map((id) => this.atlasMap[id])
-    //         .value();
-    // }
-
     get selectedAtlases() {
         const atlasFilters = this.selectedFiltersByAttrName[
             AttributeNames.AtlasName
@@ -437,23 +372,11 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             .value();
     }
 
-    // get allAtlases() {
-    //     return _.chain(this.state.files)
-    //         .map((f) => f.atlasid)
-    //         .uniq()
-    //         .map((id) => this.atlasMap[id])
-    //         .value();
-    // }
-
     get groupsByProperty() {
         const groupsByProperty = _(this.filteredOptions.result)
             .groupBy('type')
             .value();
         return groupsByProperty;
-    }
-
-    get publicationsById() {
-        return _.keyBy(this.publications.result!, 'publicationId');
     }
 
     render() {
