@@ -78,6 +78,14 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             <FilterControls {...filterControlsProps}>
                 <FilterDropdown
                     {...dropdownProps}
+                    placeholder="Atlas"
+                    attributes={[AttributeNames.AtlasName]}
+                    className={styles.filterCheckboxListContainer}
+                    width={164}
+                />
+
+                <FilterDropdown
+                    {...dropdownProps}
                     attributes={[
                         AttributeNames.organType,
                         AttributeNames.TissueorOrganofOrigin,
@@ -88,20 +96,20 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
 
                 <FilterDropdown
                     {...dropdownProps}
-                    placeholder="Demographics"
-                    attributes={[
-                        AttributeNames.Gender,
-                        AttributeNames.Race,
-                        AttributeNames.Ethnicity,
-                    ]}
+                    placeholder="Disease"
+                    attributes={[AttributeNames.PrimaryDiagnosis]}
                     className={styles.filterCheckboxListContainer}
                     width={164}
                 />
 
                 <FilterDropdown
                     {...dropdownProps}
-                    placeholder="Disease"
-                    attributes={[AttributeNames.PrimaryDiagnosis]}
+                    placeholder="Demographics"
+                    attributes={[
+                        AttributeNames.Gender,
+                        AttributeNames.Race,
+                        AttributeNames.Ethnicity,
+                    ]}
                     className={styles.filterCheckboxListContainer}
                     width={164}
                 />
