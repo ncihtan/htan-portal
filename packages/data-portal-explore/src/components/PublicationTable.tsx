@@ -215,14 +215,11 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             name: 'PubMed',
             selector: (manifest: PublicationManifest) =>
                 getPublicationPubMedID(manifest),
-            cell: (manifest: PublicationManifest) => {
-                const pubmedId = getPublicationPubMedID(manifest);
-                return pubmedId ? (
-                    <a
-                        href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}`}
-                        target="_blank"
-                    >
-                        {pubmedId} <FontAwesomeIcon icon={faExternalLinkAlt} />
+            cell: (publication: PublicationManifest) => {
+                return publication.PMID ? (
+                    <a href={`${publication.PMID}`} target="_blank">
+                        {publication.PMID}{' '}
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
                     </a>
                 ) : undefined;
             },
@@ -233,7 +230,9 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             name: 'Cited by',
             selector: (manifest: PublicationManifest) => manifest.CitedInNumber,
             cell: (manifest: PublicationManifest) => {
-                const pubmedId = getPublicationPubMedID(manifest);
+                const pubmedId = manifest.PMID
+                    ? manifest.PMID.match(/(\d+)\/$/)?.[0]
+                    : '';
                 return pubmedId ? (
                     <a
                         href={`https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=${pubmedId}`}
