@@ -556,30 +556,34 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                     <thead>
                         <tr>
                             <th>Access Type</th>
-                            <th>Files</th>
-                            <th>Cloud-Compatible</th>
+                            <th>Number of files</th>
+                            <th>Download method</th>
+                            <th>Cloud compute options</th>
                         </tr>
                     </thead>
                     <tbody>
                         {cdsFiles.length > 0 && (
                             <tr>
-                                <td>CDS (Open/Controlled)</td>
+                                <td>CDS (Controlled access)</td>
                                 <td>{cdsFiles.length}</td>
-                                <td>✅</td>
+                                <td>Gen3 client + dbGaP credentials + manifest</td>
+                                <td>SevenBridges CGC, Terra</td>
                             </tr>
                         )}
                         {synapseFiles.length > 0 && (
                             <tr>
                                 <td>Synapse</td>
                                 <td>{synapseFiles.length}</td>
-                                <td>✅</td>
+                                <td> Open in Synapse web UI or use Synapse python client</td>
+                                <td>✅ SevenBridges CGC, Terra</td>
                             </tr>
                         )}
                         {notDownloadableFiles.length > 0 && (
                             <tr>
                                 <td>Coming Soon</td>
                                 <td>{notDownloadableFiles.length}</td>
-                                <td>🚫</td>
+                                <td>Metadata available now. File access in progress.</td>
+                                <td></td>
                             </tr>
                         )}
                     </tbody>
