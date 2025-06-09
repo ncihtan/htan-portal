@@ -268,7 +268,7 @@ async function main(){
     const caseMap = d.data.demographicsByParticipantID;
     const sampleMap = d.data.biospecimenByBiospecimenID;
 
-    console.log("total", Object.values(d.data.biospecimenByBiospecimenID).length);
+    //console.log("total", Object.values(d.data.biospecimenByBiospecimenID).length);
 
     const specimenWithParticipantId = samples.reduce((agg, s)=>{
         const caseId = findCase(s, caseMap, sampleMap);
@@ -281,9 +281,48 @@ async function main(){
 
     console.log("hasCase", specimenWithParticipantId.length);
 
-    const configs = {
+
+    let configs = {
         publicationManifestConfig : {
-            fields: findFields(Object.values(d.data.publicationManifestByUid)),
+            fields: [
+                'Authors',
+                'CitedInNumber',
+                'Component',
+                'CorrespondingAuthor',
+                'CorrespondingAuthorORCID',
+                'DataType',
+                'EutilsAuthors',
+                'EutilsDOI',
+                'EutilsDate',
+                'EutilsJournal',
+                'EutilsSortDate',
+                'EutilsTitle',
+                'HTANCenterID',
+                'HTANGrantID',
+                'License',
+                'LocationofPublication',
+                'PublicationAbstract',
+                'PublicationContentType',
+                'PublicationcontainsHTANID',
+                'Publication-associatedHTANParentDataFileID',
+                'SupportingLink',
+                'SupportingLinkDescription',
+                'Title',
+                'Tool',
+                'YearofPublication',
+                'atlasid',
+                'atlas_name',
+                'level',
+                'assayName',
+                'AtlasMeta',
+                'PublicationAssociatedParentDataFileID',
+                'GrantID',
+                'CenterID',
+                'PublicationContainsID',
+                'publicationId',
+                'PMID'
+            ]
+            ,
             data:Object.values(d.data.publicationManifestByUid),
             tableName:"publication_manifest",
             derivedColumns:[
@@ -331,71 +370,20 @@ async function main(){
         }
     }
 
-    // const publicationManifestConfig = {
-    //     fields: findFields(Object.values(d.data.publicationManifestByUid)),
-    //     data:Object.values(d.data.publicationManifestByUid),
-    //     tableName:"publication_manifest",
-    //     derivedColumns:[
-    //         "associatedFiles Array(TEXT) MATERIALIZED splitByChar(',',PublicationAssociatedParentDataFileID)",
-    //         // "uid TEXT MATERIALIZED arrayElement(splitByChar('\/', PMID),4)"
-    //     ]
-    // };
-    //
-    // const atlasConfig = {
-    //     fields: findFields(d.data.atlases),
-    //     data:d.data.atlases,
-    //     tableName:"atlases",
-    //     derivedColumns:[
-    //     ]
-    // };
-    //
-    // const casesConfig = {
-    //     fields: findFields(Object.values(d.data.demographicsByParticipantID)),
-    //     data:Object.values(d.data.demographicsByParticipantID),
-    //     tableName:"cases",
-    //     derivedColumns:[
-    //     ]
-    // };
-    //
-    // const diagnosisConfig = {
-    //     fields: [...findFields(Object.values(d.data.diagnosisByParticipantID)),"organType"],
-    //     data:Object.values(d.data.diagnosisByParticipantID),
-    //     tableName:"diagnosis2",
-    //     postProcess:postProcessFiles,
-    //     derivedColumns:[
-    //     ]
-    // };
-    //
-    // const fileConfig = {
-    //     fields: fileFields,
-    //     data:d.data.files,
-    //     tableName:"files",
-    //     postProcess:postProcessFiles,
-    //     derivedColumns:[
-    //         "viewersArr Array(TEXT) MATERIALIZED JSONExtractKeys(viewers)",
-    //     ]
-    // };
-    //
-    // const specimenConfig = {
-    //     fields: findFields(specimenWithParticipantId),
-    //     data:specimenWithParticipantId,
-    //     tableName:"specimen",
-    //     derivedColumns:[
-    //     ]
-    // };
-    //
-    // const config = diagnosisConfig; // publicationManifestConfig; //publicationManifestConfig;
 
 
     function doCreate(config) {
         const preprocess = config.preprocess ? config.preprocess : (f)=>f;
-        const rows = config.data.slice(0)
+        const rows = config.data
             .map(preprocess)
             .map(f=>formatRow(f, d.data, config.fields, config.postProcess));
 
         return createTable(config.tableName, rows, config.fields, config.derivedColumns);
 
     }
+
+    configs = { publicationManifestConfig:configs.publicationManifestConfig };
+
 
     for (const tablename in configs) {
         console.log(`creating table ${tablename}`);

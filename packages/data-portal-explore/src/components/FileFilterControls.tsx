@@ -42,28 +42,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             groupsByProperty: props.groupsByProperty,
         };
 
-        // const filterControlsProps2 = {
-        //     ...props,
-        //     countHeader: 'Files',
-        //     attributeMap: FileAttributeMap,
-        //     attributeNames: [
-        //         AttributeNames.AtlasName,
-        //         AttributeNames.TissueorOrganofOrigin,
-        //         AttributeNames.PrimaryDiagnosis,
-        //         AttributeNames.assayName,
-        //         AttributeNames.Level,
-        //         AttributeNames.FileFormat,
-        //         AttributeNames.TreatmentType,
-        //     ],
-        // };
-
-        debugger;
         let options = getOptionsFromProps(filterControlsProps);
-
-        // const dropdownProps2 = getDropdownOptionsFromProps(
-        //     filterControlsProps,
-        //     options2
-        // );
 
         let dropdownProps = {
             options: options,
