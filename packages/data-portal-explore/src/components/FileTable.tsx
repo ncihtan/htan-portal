@@ -528,6 +528,10 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     );
     const cgcFiles = cdsFiles.concat(synapseFiles)
 
+    // Precompute CDS controlled and open-access counts
+    const cdsControlledCount = cdsFiles.filter(f => f.downloadSource === 'dbgap').length;
+    const cdsOpenCount = cdsFiles.filter(f => f.downloadSource !== 'dbgap').length;
+
     const availabilityMessage = () => {
         const messages = [];
         if (cdsFiles.length > 0) {
@@ -576,18 +580,18 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                         <td>✅ SevenBridges, Tera (coming soon)</td>
                       </tr>
                     )}
-                    {cdsFiles.filter(f => f.downloadSource !== 'dbgap').length > 0 && (
+                    {cdsOpenCount > 0 && (
                       <tr>
                         <td>CDS – Open Access</td>
-                        <td>{cdsFiles.filter(f => f.downloadSource !== 'dbgap').length}</td>
+                        <td>{cdsOpenCount}</td>
                         <td><code>gen3-client</code> + manifest</td>
                         <td>✅ SevenBridges</td>
                       </tr>
                     )}
-                    {cdsFiles.filter(f => f.downloadSource === 'dbgap').length > 0 && (
+                    {cdsControlledCount > 0 && (
                       <tr>
                         <td>CDS – Controlled (dbGaP)</td>
-                        <td>{cdsFiles.filter(f => f.downloadSource === 'dbgap').length}</td>
+                        <td>{cdsControlledCount}</td>
                         <td><code>gen3-client</code> + dbGaP credentials + manifest</td>
                         <td>✅ SevenBridges</td>
                       </tr>
