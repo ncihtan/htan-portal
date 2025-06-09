@@ -551,38 +551,56 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
-                {/* User-centered summary table */}
+                {/* Enhanced user-centered summary table */}
                 <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Access Type</th>
-                            <th>Files</th>
-                            <th>Cloud-Compatible</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {cdsFiles.length > 0 && (
-                            <tr>
-                                <td>CDS (Open/Controlled)</td>
-                                <td>{cdsFiles.length}</td>
-                                <td>✅</td>
-                            </tr>
-                        )}
-                        {synapseFiles.length > 0 && (
-                            <tr>
-                                <td>Synapse</td>
-                                <td>{synapseFiles.length}</td>
-                                <td>✅</td>
-                            </tr>
-                        )}
-                        {notDownloadableFiles.length > 0 && (
-                            <tr>
-                                <td>Coming Soon</td>
-                                <td>{notDownloadableFiles.length}</td>
-                                <td>🚫</td>
-                            </tr>
-                        )}
-                    </tbody>
+                  <thead>
+                    <tr>
+                      <th>Access Type</th>
+                      <th>Files</th>
+                      <th>Access Method (clickable or copy-paste)</th>
+                      <th>Use in Cloud Compute?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {synapseFiles.length > 0 && (
+                      <tr>
+                        <td>Synapse</td>
+                        <td>{synapseFiles.length}</td>
+                        <td>
+                          Open in{' '}
+                          <a href="https://www.synapse.org" target="_blank" rel="noopener noreferrer">
+                            Synapse
+                          </a>{' '}
+                          or <code>synapse get &lt;ID&gt;</code>
+                        </td>
+                        <td>✅ SevenBridges, Tera (coming soon)</td>
+                      </tr>
+                    )}
+                    {cdsFiles.filter(f => f.downloadSource !== 'dbgap').length > 0 && (
+                      <tr>
+                        <td>CDS – Open Access</td>
+                        <td>{cdsFiles.filter(f => f.downloadSource !== 'dbgap').length}</td>
+                        <td><code>gen3-client</code> + manifest</td>
+                        <td>✅ SevenBridges</td>
+                      </tr>
+                    )}
+                    {cdsFiles.filter(f => f.downloadSource === 'dbgap').length > 0 && (
+                      <tr>
+                        <td>CDS – Controlled (dbGaP)</td>
+                        <td>{cdsFiles.filter(f => f.downloadSource === 'dbgap').length}</td>
+                        <td><code>gen3-client</code> + dbGaP credentials + manifest</td>
+                        <td>✅ SevenBridges</td>
+                      </tr>
+                    )}
+                    {notDownloadableFiles.length > 0 && (
+                      <tr>
+                        <td>Coming Soon</td>
+                        <td>{notDownloadableFiles.length}</td>
+                        <td>Not yet available – you’ll be notified when it’s ready</td>
+                        <td>🚫</td>
+                      </tr>
+                    )}
+                  </tbody>
                 </table>
                 <p>
                     Files can be downloaded or launched in cloud platforms depending on their access method.
