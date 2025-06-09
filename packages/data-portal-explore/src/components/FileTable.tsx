@@ -545,7 +545,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     };
 
     return (
-        <Modal show={props.isOpen} onHide={props.onClose}>
+        <Modal show={props.isOpen} onHide={props.onClose} dialogClassName="wide-modal">
             <Modal.Header closeButton>
                 <Modal.Title>Download Selected Files</Modal.Title>
             </Modal.Header>
