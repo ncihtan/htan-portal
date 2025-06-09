@@ -50,6 +50,7 @@ import {
     specimenQuery,
 } from '../../../../lib/clickhouseStore.ts';
 import FileFilterControls from './FileFilterControls.tsx';
+import getAtlasMetaData from '../../../../lib/getAtlasMetaData.ts';
 
 export interface IExploreState {
     files: Entity[];
@@ -478,7 +479,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         }
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
-                        getAtlasMetaData={this.props.getAtlasMetaData}
+                        getAtlasMetaData={getAtlasMetaData}
                         publications={this.publications.result!}
                         filteredPublications={this.filteredPublications}
                         genericAttributeMap={HTANToGenericAttributeMap}
