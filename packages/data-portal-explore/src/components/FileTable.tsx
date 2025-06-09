@@ -551,17 +551,45 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             </Modal.Header>
 
             <Modal.Body>
-                {/* Summary Section */}
-                <p>Your selection include files that are:</p>
-                <ul>
-                    {availabilityMessage().map((message, index) => (
-                        <li key={index}>{message}</li>
-                    ))}
-                </ul>
+                {/* User-centered summary table */}
+                <table className="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Access Type</th>
+                            <th>Files</th>
+                            <th>Cloud-Compatible</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {cdsFiles.length > 0 && (
+                            <tr>
+                                <td>CDS (Open/Controlled)</td>
+                                <td>{cdsFiles.length}</td>
+                                <td>✅</td>
+                            </tr>
+                        )}
+                        {synapseFiles.length > 0 && (
+                            <tr>
+                                <td>Synapse</td>
+                                <td>{synapseFiles.length}</td>
+                                <td>✅</td>
+                            </tr>
+                        )}
+                        {notDownloadableFiles.length > 0 && (
+                            <tr>
+                                <td>Coming Soon</td>
+                                <td>{notDownloadableFiles.length}</td>
+                                <td>🚫</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
                 <p>
-                    Follow the instructions below on how to access data from
-                    each of these sources. Further details are avaliable in the{' '}
-                    <a href="docs.humantumoratlas.org">HTAN Manual</a>.
+                    Files can be downloaded or launched in cloud platforms depending on their access method.
+                    Instructions below are grouped by source. More detail is available in the{' '}
+                    <a href="https://docs.humantumoratlas.org" target="_blank" rel="noopener noreferrer">
+                        HTAN Manual
+                    </a>.
                 </p>
 
                 {/* CDS Section */}
