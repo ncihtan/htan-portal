@@ -238,10 +238,10 @@ export function makeOptions<Attribute extends string, T>(
 
     return _.map(entitiesByProperty[attrName], (val, key) => {
         return {
-            value: key,
-            label: key,
+            value: val.val,
+            label: val.val,
             group: attrName,
-            count: counts[key] || 0,
+            count: parseInt(val.count),
         };
     });
 }
@@ -249,13 +249,14 @@ export function makeOptions<Attribute extends string, T>(
 export function getOptionsFromProps<Attribute extends string, T>(
     props: IGenericFilterControlProps<T, Attribute>
 ): (attrName: Attribute) => OptionType[] {
-    return getOptions(
+    const moo = getOptions(
         props.attributeMap,
         props.selectedFiltersByGroupName,
         props.selectedFilters,
         props.entities,
         props.groupsByProperty
     );
+    return moo;
 }
 
 export function getSelectOptionsFromProps<Attribute extends string, T>(

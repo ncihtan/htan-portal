@@ -2,11 +2,13 @@ import { VictoryChart } from 'victory-chart';
 import { VictoryContainer, VictoryLabel, VictoryTheme } from 'victory-core';
 import { VictoryAxis } from 'victory-axis';
 import { VictoryBar } from 'victory-bar';
-import React from 'react';
-import { observer } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
+import { observer, useLocalStore } from 'mobx-react';
 import _ from 'lodash';
 import { Option } from 'react-select/src/filters';
 import { Entity } from '@htan/data-portal-commons';
+import remoteData from 'mobxpromise';
+import { doQuery, plotQuery } from '../../../../lib/clickhouseStore.ts';
 
 export function getExploreChartOptions(
     filteredCases: Entity[],
@@ -48,16 +50,13 @@ export function getExploreChartOptions(
 }
 
 interface IExplorePlotProps {
-    filteredCases: Entity[];
-    filteredSamples: Entity[];
     selectedField: Option;
-    normalizersByField?: Record<string, (entity: Entity) => string>;
     width?: number;
     logScale: boolean;
     metricType: any;
-    samplesByValueMap?: Record<string, Entity[]>;
     hideNA?: boolean;
     normalizeNA?: boolean;
+    query?: string;
 }
 
 enum EntityType {
@@ -84,25 +83,39 @@ function normalizeUnknownValues(
 }
 
 export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
-    { data: { type: 'SAMPLE' }, label: 'Assay', value: 'assayName' },
+    // {
+    //     data: { type: 'SAMPLE' },
+    //     label: 'Assay',
+    //     value: 'assayName',
+    //     table: '',
+    // },
     {
         value: 'TissueorOrganofOrigin',
         label: 'Organ',
+        table: 'diagnosis',
         data: { type: 'CASE' },
     },
     {
         value: 'PrimaryDiagnosis',
         label: 'Primary Diagnosis',
+        table: 'diagnosis',
         data: { type: 'CASE' },
     },
     {
         value: 'Ethnicity',
         label: 'Ethnicity',
+        table: 'cases',
         data: { type: 'CASE' },
     },
-    { value: 'Gender', label: 'Gender', data: { type: 'CASE' } },
+    {
+        value: 'Gender',
+        table: 'cases',
+        label: 'Gender',
+        data: { type: 'CASE' },
+    },
     {
         value: 'Race',
+        table: 'cases',
         label: 'Race',
         data: { type: 'CASE' },
     },
@@ -110,77 +123,59 @@ export const DEFAULT_EXPLORE_PLOT_OPTIONS = [
 
 export const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
     function ({
-        filteredCases,
-        filteredSamples,
         selectedField,
         width = 800,
         logScale,
         metricType,
-        normalizersByField,
-        samplesByValueMap,
         hideNA,
+        query,
     }) {
         const mode =
             metricType.value === 'ParticipantID'
                 ? EntityType.CASE
                 : EntityType.SAMPLE;
 
-        const casesByIdMap = _.keyBy(filteredCases, (c) => c.ParticipantID);
+        const store = useLocalStore(() => ({
+            plotData: new remoteData({
+                invoke: async () => {
+                    const q =
+                        query ||
+                        plotQuery({
+                            field: selectedField.value,
+                            table: selectedField.table,
+                            filterString: '',
+                        });
 
-        const propertyType = selectedField.data.type;
+                    const d = await doQuery(q);
+
+                    // clickhouse returns counts as strings, so fix this
+                    d.forEach((item) => {
+                        item.count = parseInt(item.count);
+                    });
+
+                    return _.orderBy(d, 'count');
+                },
+            }),
+        }));
+
+        if (!store.plotData.isComplete) {
+            return <></>;
+        }
 
         const entityField: keyof Entity = selectedField.value as keyof Entity;
 
-        const accessor =
-            normalizersByField?.[entityField] ||
-            ((e: Entity) => e[entityField]);
-
-        const _samplesByValueMap =
-            samplesByValueMap ||
-            _.groupBy(filteredSamples, (sample) => {
-                // these will result in the counts
-                let entity: Entity;
-                if (propertyType === EntityType.CASE) {
-                    // should actually be property type
-                    // this will group the samples by a property of the case to which they belong,
-                    // allowing us to count them by a case property
-                    entity = casesByIdMap[sample.ParticipantID];
-                } else {
-                    entity = sample;
-                }
-
-                return normalizeUnknownValues(entity, accessor);
-            });
-
-        if (hideNA) delete _samplesByValueMap['NA'];
-
-        // generate reports
-        const reportsByValueMap = _.mapValues(_samplesByValueMap, (samples) => {
-            return {
-                sampleCount: _.uniqBy(samples, (s) => s.BiospecimenID).length,
-                caseCount: _.uniqBy(samples, (s) => s.ParticipantID).length,
-            };
-        });
-
-        // transform reports into format required by plot
-        const plotData = _(reportsByValueMap)
-            .map((v, k) => {
-                return {
-                    label: k,
-                    count:
-                        mode === EntityType.CASE ? v.caseCount : v.sampleCount,
-                };
-            })
-            .orderBy((datum) => datum.count, 'asc')
-            .value();
+        let plotData = store.plotData.result;
 
         // these are used only if we are in logscale
-        const ticks = _.times(
-            Math.ceil(Math.log10(plotData[plotData.length - 1].count)),
-            (i) => {
-                return 10 ** (i + 1);
-            }
-        );
+        let ticks = [];
+        if (plotData && plotData.length) {
+            ticks = _.times(
+                Math.ceil(Math.log10(plotData[plotData.length - 1].count)),
+                (i) => {
+                    return 10 ** (i + 1);
+                }
+            );
+        }
 
         const tickProps = logScale
             ? {

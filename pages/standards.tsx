@@ -33,12 +33,10 @@ const Standards = (props: StandardsProps) => {
                                             props.releaseTag.name
                                         )}
                                     >
-                                        <a target="_blank">
-                                            {props.releaseTag.name}{' '}
-                                            <FontAwesomeIcon
-                                                icon={faExternalLinkAlt}
-                                            />
-                                        </a>
+                                        {props.releaseTag.name}{' '}
+                                        <FontAwesomeIcon
+                                            icon={faExternalLinkAlt}
+                                        />
                                     </Link>
                                 </h4>
                             </h1>

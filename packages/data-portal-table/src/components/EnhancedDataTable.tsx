@@ -186,7 +186,6 @@ export class EnhancedDataTable<T = any> extends React.Component<
         );
     }
 
-    @computed
     get data() {
         const searchText =
             this.props.searchText || this.filterText.debouncedValue;
@@ -222,7 +221,6 @@ export class EnhancedDataTable<T = any> extends React.Component<
         });
     }
 
-    @computed
     get columns(): IDataTableColumn[] {
         return (this.props.columns || []).map((c) => ({
             ...c,
@@ -230,7 +228,6 @@ export class EnhancedDataTable<T = any> extends React.Component<
         }));
     }
 
-    @computed
     get columnVisibility(): { [columnKey: string]: boolean } {
         return resolveColumnVisibility(
             this.columnVisibilityByColumnDefinition,
@@ -239,7 +236,6 @@ export class EnhancedDataTable<T = any> extends React.Component<
         );
     }
 
-    @computed
     get columnVisibilitySpec(): ColumnVisibility[] {
         return getColumnVisibility(this.props.columns, this.columnVisibility);
     }

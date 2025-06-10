@@ -10,9 +10,6 @@ import Plots from './Plots';
 import { AtlasMeta, EntityReportByAttribute } from '@htan/data-portal-commons';
 
 export interface IHomePropsProps {
-    hero_blurb: string;
-    cards: any[];
-    atlases: AtlasMeta[];
     synapseCounts: EntityReport[];
     organSummary: EntityReportByAttribute[];
     assaySummary: EntityReportByAttribute[];
@@ -32,10 +29,7 @@ function dashboardIcon(text: string, description: string) {
 }
 
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
-    hero_blurb,
-    cards,
     synapseCounts,
-    atlases,
     organSummary,
     assaySummary,
 }) => {

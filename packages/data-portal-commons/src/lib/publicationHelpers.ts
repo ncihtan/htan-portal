@@ -14,6 +14,10 @@ export function getPublicationUid(publication: PublicationManifest): string {
     const normalizeValue = (value: string) =>
         value.trim().toLowerCase().replace(/\s/g, '-').replace(/\./g, '');
 
+    if (!publication) {
+        debugger;
+    }
+
     const center = publication.CenterID.toLowerCase();
     const year = publication.YearofPublication;
     const firstAuthor = normalizeValue(
@@ -29,7 +33,10 @@ export function getPublicationPubMedID(
     publication: PublicationManifest
 ): string {
     // we only need the numerical id, not the entire URL
-    return publication ? publication.PMID.replace(/[^0-9]/g, '') : '';
+
+    return publication && publication.uid
+        ? publication.uid.replace(/[^0-9]/g, '')
+        : '';
 }
 
 export function getCite(publication?: PublicationManifest): string | undefined {

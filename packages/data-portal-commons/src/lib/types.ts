@@ -106,7 +106,7 @@ export const FileAttributeMap: {
         displayName: 'Stage',
         caseFilter: true,
     },
-    [AttributeNames.Level]: {
+    [AttributeNames.level]: {
         path: 'level',
         displayName: 'Level',
     },
@@ -122,11 +122,11 @@ export const FileAttributeMap: {
         path: 'publicationIds',
         displayName: 'Publication',
     },
-    [AttributeNames.downloadSource]: {
-        path: 'downloadSource',
+    [AttributeNames.DownloadSource]: {
+        path: 'DownloadSource',
         displayName: 'Data Access',
     },
-    [AttributeNames.viewers]: {
+    [AttributeNames.viewersArr]: {
         getValues: getViewerValues,
         displayName: 'Viewer',
     },
