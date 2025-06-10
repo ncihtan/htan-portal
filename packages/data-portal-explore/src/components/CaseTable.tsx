@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 
 import {
@@ -11,13 +10,10 @@ import {
 } from '@htan/data-portal-utils';
 import { Atlas, Entity, PublicationManifest } from '@htan/data-portal-commons';
 import {
-    generateColumnsForDataSchema,
-    getAtlasColumn,
     getPublicationColumn,
     sortByParticipantId,
 } from '../lib/dataTableHelpers';
-import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
-import { commonColumns } from './columns.tsx';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 interface ICaseTableProps {
     cases: Entity[];
@@ -243,9 +239,12 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         name: `${name} Genomic Ancestry`,
     }));
 
-    const columns = [...cols, ...customColumns];
-
-    columns.splice(2, 0, getPublicationColumn(props.publicationsByUid));
+    const columns = [
+        ...cols.slice(0, 2),
+        getPublicationColumn(props.publicationsByUid),
+        ...cols.slice(3),
+        ...customColumns,
+    ];
 
     return (
         <EnhancedDataTable

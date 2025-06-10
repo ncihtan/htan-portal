@@ -103,6 +103,7 @@ export function getPublicationColumn(publicationsByUid?: {
     [uid: string]: PublicationManifest;
 }) {
     return {
+        id: 'Publications',
         name: 'Publications',
         selector: 'publicationIds',
         wrap: true,

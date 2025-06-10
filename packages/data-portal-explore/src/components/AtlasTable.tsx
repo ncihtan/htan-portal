@@ -39,7 +39,7 @@ interface IAtlasTableProps {
     selectedFiltersByAttrName: ISelectedFiltersByAttrName;
     filteredCases: Entity[];
     filteredBiospecimens: Entity[];
-    files: Entity[];
+    // files: Entity[];
     filteredFiles: Entity[];
     cloudBaseUrl: string;
     atlases: any[];
@@ -223,14 +223,16 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
     get data(): AtlasTableData[] {
-        return this.props.filteredAtlases.map(
-            (a) =>
-                ({
-                    ...a,
-                    isSelected: this.isRowSelected(a),
-                    publicationManifests: this.getPublicationManifests(a),
-                    viewerCounts: this.getViewerCounts(a),
-                } as AtlasTableData)
+        return (
+            this.props.filteredAtlases?.map(
+                (a) =>
+                    ({
+                        ...a,
+                        isSelected: this.isRowSelected(a),
+                        publicationManifests: this.getPublicationManifests(a),
+                        viewerCounts: this.getViewerCounts(a),
+                    } as AtlasTableData)
+            ) || []
         );
     }
 
@@ -247,10 +249,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         );
     }
 
-    myData: any = null;
-    myCache: any = null;
-
-    viewerCountByAtlas(atlas: any): ViewerCountByAtlas {
+    viewerCountByAtlas(atlas: any) {
         // return _.mapValues(this.filesByAtlas, (files) => {
         //     return _(files)
         //         .map((file) => getViewerValues(file))

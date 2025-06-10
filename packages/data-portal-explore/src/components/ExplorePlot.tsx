@@ -8,7 +8,9 @@ import _ from 'lodash';
 import { Option } from 'react-select/src/filters';
 import { Entity } from '@htan/data-portal-commons';
 import remoteData from 'mobxpromise';
-import { doQuery, plotQuery } from '../../../../lib/clickhouseStore.ts';
+
+// TODO we should move this into packages/data-portal-commons
+import { doQuery, plotQuery } from '../../../../lib/clickhouseStore';
 
 export function getExploreChartOptions(
     filteredCases: Entity[],
@@ -50,7 +52,7 @@ export function getExploreChartOptions(
 }
 
 interface IExplorePlotProps {
-    selectedField: Option;
+    selectedField: Option & { table?: string };
     width?: number;
     logScale: boolean;
     metricType: any;
@@ -146,7 +148,7 @@ export const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
                             filterString: '',
                         });
 
-                    const d = await doQuery(q);
+                    const d = await doQuery<{ count: any }>(q);
 
                     // clickhouse returns counts as strings, so fix this
                     d.forEach((item) => {
@@ -167,7 +169,7 @@ export const ExplorePlot: React.FunctionComponent<IExplorePlotProps> = observer(
         let plotData = store.plotData.result;
 
         // these are used only if we are in logscale
-        let ticks = [];
+        let ticks: any[] = [];
         if (plotData && plotData.length) {
             ticks = _.times(
                 Math.ceil(Math.log10(plotData[plotData.length - 1].count)),

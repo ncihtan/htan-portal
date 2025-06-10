@@ -42,7 +42,7 @@ const ExplorePage = (props: IExplorePageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <ClientComponent></ClientComponent>
+                <ClientComponent />
             </PageWrapper>
         </>
     );
