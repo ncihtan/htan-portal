@@ -30,20 +30,21 @@ export interface BaseSerializableEntity {
     DataFileID: DataFileID; // this is used as the stable UID
     ParentBiospecimenID: string;
     ParentDataFileID: string;
-    TissueorOrganofOrigin: string;
-    PrimaryDiagnosis: string;
+    TissueorOrganofOrigin: string[];
+    PrimaryDiagnosis: string[];
     AgeatDiagnosis: number;
     FileFormat: string;
     Filename: string;
     ParticipantID: string;
     ImagingAssayType?: string;
     AssayType?: string;
-    Race: string;
-    Ethnicity: string;
+    Race: string[];
+    Ethnicity: string[];
     CountryofResidence: string;
-    Gender: string;
+    Gender: string[];
     Islowestlevel?: string;
-    TreatmentType: string;
+    TreatmentType: string[];
+    VitalStatus: string[];
 
     // Ancestry data attached in frontend
     AFR: Number;
@@ -184,7 +185,6 @@ export interface PublicationManifest {
     elocationid: string;
     fulljournalname: string;
     title: string;
-    AtlasMeta: Record<any, any>;
     // Derived or attached in frontend
     publicationId: string;
     atlasid: string;
