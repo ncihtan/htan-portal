@@ -47,7 +47,9 @@ import {
     PublicationManifest,
     ViewDetailsModal,
 } from '@htan/data-portal-commons';
-import { addViewers } from '../../../../lib/file_utils.ts';
+
+// TODO we should move this into packages/data-portal-commons
+import { addViewers } from '../../../../lib/file_utils';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';

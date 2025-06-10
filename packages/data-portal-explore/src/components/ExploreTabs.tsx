@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
+import { MobxPromise } from 'mobxpromise';
 import React, { useState } from 'react';
-import Select, { MultiValueProps } from 'react-select';
+import { MultiValueProps } from 'react-select';
 import _ from 'lodash';
 
 import { ISelectedFiltersByAttrName } from '@htan/data-portal-filter';
@@ -23,8 +24,9 @@ import { PublicationTable } from './PublicationTable';
 import { ExploreTab } from '../lib/types';
 
 import styles from './exploreTabs.module.scss';
-import { MobxPromise } from 'mobxpromise';
-import { assayPlotQuery, plotQuery } from '../../../../lib/clickhouseStore.ts';
+
+// TODO we should move this into packages/data-portal-commons
+import { assayPlotQuery, plotQuery } from '../../../../lib/clickhouseStore';
 
 interface IExploreTabsProps {
     setTab: (tab: ExploreTab) => void;
@@ -41,7 +43,7 @@ interface IExploreTabsProps {
     filteredSamplesByNonAtlasFilters: Entity[];
     filteredCases: MobxPromise<Entity[]>;
     filteredSamples: Entity[];
-    publications: Entity[];
+    publications: PublicationManifest[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     groupsByPropertyFiltered: {
         [attrName: string]: { [attrValue: string]: Entity[] };
@@ -91,8 +93,8 @@ const MultiValue = (props: MultiValueProps<any>) => {
 function getSamplesByValueMap(
     entities: Entity[],
     countByField: string
-): Record<string, Entity[]> {
-    const ret = entities.reduce((agg: Record<string, Entity[]>, file) => {
+): Record<string, string[]> {
+    const ret = entities.reduce((agg: Record<string, string[]>, file) => {
         if (file.assayName) {
             agg[file.assayName] = agg[file.assayName] || [];
             agg[file.assayName].push(...file.biospecimenIds); // this should be biospecimen, not IDS but we changted it
@@ -222,7 +224,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             groupsByPropertyFiltered={
                                 props.groupsByPropertyFiltered
                             }
-                            patientCount={props.filteredCases.length}
+                            patientCount={
+                                props.filteredCases.result?.length || 0
+                            }
                             publicationsByUid={props.publicationManifestByUid}
                         />
                     </div>
@@ -245,8 +249,8 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             Show all biospecimens from filtered files
                         </label>*/}
                         <BiospecimenTable
-                            synapseAtlases={props.atlases.result}
-                            samples={props.samples.result}
+                            synapseAtlases={props.atlases.result || []}
+                            samples={props.samples.result || []}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}
                             publicationsByUid={_.keyBy(
@@ -273,7 +277,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </label>*/}
                         <CaseTable
                             synapseAtlases={props.filteredSynapseAtlases}
-                            cases={props.cases.result}
+                            cases={props.cases.result || []}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}
                             publicationsByUid={_.keyBy(
@@ -313,7 +317,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         <AtlasTable
                             setTab={props.setTab}
                             publications={props.publications}
-                            atlases={props.atlases.result}
+                            atlases={props.atlases.result || []}
                             getAtlasMetaData={props.getAtlasMetaData}
                             selectedAtlases={props.selectedSynapseAtlases}
                             filteredAtlases={props.atlasesFiltered.result}
@@ -447,9 +451,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         <ExplorePlot
                                             logScale={logScale}
                                             width={400}
-                                            normalizersByField={
-                                                normalizersByField
-                                            }
+                                            // normalizersByField={
+                                            //     normalizersByField
+                                            // }
                                             metricType={metric}
                                             selectedField={option}
                                             hideNA={hideNA}

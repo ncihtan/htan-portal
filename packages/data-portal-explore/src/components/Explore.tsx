@@ -62,7 +62,7 @@ export interface IExploreState {
 }
 
 export interface IExploreProps {
-    getAtlasMetaData: () => AtlasMetaData;
+    getAtlasMetaData?: () => AtlasMetaData;
     onFilterChange?: (selectedFilters: SelectedFilter[]) => void;
     getSelectedFilters?: () => SelectedFilter[];
     isReleaseQCEnabled?: () => boolean;
@@ -479,7 +479,9 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         }
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
-                        getAtlasMetaData={getAtlasMetaData}
+                        getAtlasMetaData={
+                            this.props.getAtlasMetaData || getAtlasMetaData
+                        }
                         publications={this.publications.result!}
                         filteredPublications={this.filteredPublications}
                         genericAttributeMap={HTANToGenericAttributeMap}
