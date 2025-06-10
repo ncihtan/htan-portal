@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PreReleaseBanner from '../../components/PreReleaseBanner';
 import { GetStaticProps } from 'next';
 import PageWrapper from '../../components/PageWrapper';
@@ -11,30 +11,18 @@ import _ from 'lodash';
 import {
     Atlas,
     AtlasDescription,
-    commonStyles,
     Entity,
-    fillInEntities,
-    filterFiles,
     getAllPublicationPagePaths,
-    getFilteredCases,
     getPublicationAuthors,
     getPublicationDOI,
-    getPublicationFilters,
     getPublicationJournal,
     getPublicationPubMedID,
     getPublicationSupportingLinks,
     getPublicationTitle,
-    groupFilesByAttrNameAndValue,
     HTANToGenericAttributeMap,
     isManuscriptInReview,
-    LoadDataResult,
     PublicationManifest,
 } from '@htan/data-portal-commons';
-
-import {
-    ISelectedFiltersByAttrName,
-    SelectedFilter,
-} from '@htan/data-portal-filter';
 import {
     fetchAndProcessSchemaData,
     SchemaDataById,
@@ -42,13 +30,7 @@ import {
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 
 import publicationIds from './static_page_ids.json';
-import {
-    assayQuery,
-    caseQuery,
-    doQuery,
-    specimenQuery,
-} from '../../lib/clickhouseStore';
-import { usePathname } from 'next/navigation';
+import { assayQuery, doQuery } from '../../lib/clickhouseStore';
 
 // const filterByAttrName = (filters: SelectedFilter[]) => {
 //     return _.chain(filters)
@@ -105,8 +87,8 @@ const PublicationPage = (props: PublicationPageProps) => {
         return <div>There is no publication corresponding to this id.</div>;
     }
 
-    const doi = publication.elocationid?.replace(/^doi: /, '');
-    const pubmedId = publication.uid;
+    const doi = getPublicationDOI(publication);
+    const pubmedId = getPublicationPubMedID(publication);
 
     const atlasMeta = publication.AtlasMeta;
 
@@ -144,7 +126,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                                     )}
                                 </span>
                                 <h2 style={{ marginTop: 0, padding: 0 }}>
-                                    {publication.title}
+                                    {getPublicationTitle(publication)}
                                 </h2>
                                 <p>
                                     Authors:{' '}
@@ -192,7 +174,8 @@ const PublicationPage = (props: PublicationPageProps) => {
                                         )
                                     )}
                                     <br />*/}
-                                    Journal: {publication.fulljournalname}
+                                    Journal:{' '}
+                                    {getPublicationJournal(publication)}
                                     {pubmedId && (
                                         <>
                                             &nbsp; Pubmed:{' '}
@@ -203,7 +186,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                                             </a>{' '}
                                         </>
                                     )}
-                                    {publication.elocationid && (
+                                    {doi && (
                                         <>
                                             &nbsp; DOI:{' '}
                                             <a href={`https://doi.org/${doi}`}>
@@ -243,7 +226,9 @@ const PublicationPage = (props: PublicationPageProps) => {
 export default PublicationPage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const publications = await doQuery('SELECT * FROM publication_manifest');
+    const publications = await doQuery<PublicationManifest>(
+        'SELECT * FROM publication_manifest'
+    );
 
     publications.forEach((pub: PublicationManifest) => {
         // @ts-ignore
