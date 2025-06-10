@@ -168,6 +168,7 @@ export interface PublicationManifest {
     PublicationAbstract: string;
     License?: string;
     PMID: string;
+    uid: string;
     PublicationContainsID: string;
     DataType: string;
     Tool: string;
@@ -184,7 +185,7 @@ export interface PublicationManifest {
     elocationid: string;
     fulljournalname: string;
     title: string;
-    AtlasMeta: Record<any, any>;
+    //    AtlasMeta: Record<any, any>;
     // Derived or attached in frontend
     publicationId: string;
     atlasid: string;

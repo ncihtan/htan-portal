@@ -15,6 +15,7 @@ import {
     getSelectedFiltersByAttrName,
     IGenericFilterControlProps,
     ISelectedFiltersByAttrName,
+    OptionType,
     SelectedFilter,
 } from '@htan/data-portal-filter';
 import {
@@ -22,11 +23,8 @@ import {
     AtlasMetaData,
     commonStyles,
     Entity,
-    FileAttributeMap,
     filterFiles,
     getFileFilterDisplayName,
-    getFilteredCases,
-    getFilteredSamples,
     groupFilesByAttrNameAndValue,
     HTANToGenericAttributeMap,
     LoadDataResult,
@@ -34,12 +32,10 @@ import {
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
 import { DataSchemaData } from '@htan/data-portal-schema';
-
-import { ExploreSummary } from './ExploreSummary';
 import { ExploreTabs } from './ExploreTabs';
-import { getDefaultSummaryData } from '../lib/helpers';
 import { ExploreTab } from '../lib/types';
 
+// @ts-ignore
 import styles from './explore.module.scss';
 import {
     atlasQuery,
@@ -102,19 +98,21 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         if (typeof window !== 'undefined') (window as any).me = this;
     }
 
-    unfilteredOptions = new remoteData({
+    unfilteredOptions = new remoteData<OptionType[]>({
         invoke: async () => {
-            return doQuery(countsByTypeQuery({ filterString: '' }));
+            return await doQuery<OptionType>(
+                countsByTypeQuery({ filterString: '' })
+            );
         },
     });
 
-    filteredOptions = new remoteData({
+    filteredOptions = new remoteData<OptionType[]>({
         await: () => [this.unfilteredOptions],
         invoke: async () => {
             if (this.filterString === '') {
                 return this.unfilteredOptions.result;
             } else {
-                const filteredResult = await doQuery(
+                const filteredResult = await doQuery<OptionType[]>(
                     countsByTypeQuery({
                         filterString: this.filterString,
                     })
@@ -132,7 +130,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         if (k in filteredMap) {
                             return filteredMap[k];
                         } else {
-                            const updated = _.clone(o);
+                            const updated = _.clone<OptionType>(o);
                             updated.count = 0;
                             return updated;
                         }
@@ -169,7 +167,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     files = new remoteData({
         invoke: async () => {
             const q = fileQuery;
-            const files = await doQuery(q);
+            const files = await doQuery<Entity>(q);
             return files;
         },
     });
@@ -178,11 +176,10 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         await: () => [this.files],
         invoke: async () => {
             if (this.filterString.length === 0) {
-                return this.files.result;
+                return Promise.resolve(this.files.result!);
             } else {
                 const q = 'SELECT * FROM files' + this.filterString;
-                const files = await doQuery(q);
-                return files;
+                return doQuery<Entity>(q);
             }
         },
     });
@@ -237,9 +234,11 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 const data = await doQuery<Atlas>(
                     atlasQuery({ filterString: this.filterString })
                 );
+
                 data.forEach(
                     // @ts-ignore
                     (atlas: Atlas) =>
+                        // @ts-ignore (we need to get db to return parsed JSON if that's possible
                         (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta))
                 );
                 return data;
@@ -263,7 +262,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                 FROM filteredPublications fp
                          LEFT JOIN publication_manifest pm on fp.publicationId = pm.publicationId
              `;
-            const publications = await doQuery(q);
+            const publications = await doQuery<PublicationManifest>(q);
 
             _.forEach(publications, (pub: PublicationManifest) => {
                 // @ts-ignore (we're fixing this
@@ -454,23 +453,12 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         }
                         atlases={this.atlases}
                         atlasesFiltered={this.atlasesFiltered}
-                        filteredSamples={this.filteredSamples}
                         cases={this.cases}
                         filteredCases={this.casesFiltered}
                         selectedSynapseAtlases={this.selectedAtlases}
-                        allSynapseAtlases={this.allAtlases}
                         onSelectAtlas={this.onSelectAtlas}
                         samples={this.specimen}
                         samplesFiltered={this.specimenFiltered}
-                        filteredCasesByNonAtlasFilters={
-                            this.filteredCasesByNonAtlasFilters
-                        }
-                        filteredSamplesByNonAtlasFilters={
-                            this.filteredSamplesByNonAtlasFilters
-                        }
-                        nonAtlasSelectedFiltersByAttrName={
-                            this.nonAtlasSelectedFiltersByAttrName
-                        }
                         groupsByPropertyFiltered={this.groupsByPropertyFiltered}
                         showAllBiospecimens={this.showAllBiospecimens}
                         showAllCases={this.showAllCases}
@@ -481,7 +469,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={getAtlasMetaData}
                         publications={this.publications.result!}
-                        filteredPublications={this.filteredPublications}
                         genericAttributeMap={HTANToGenericAttributeMap}
                     />
                 </div>

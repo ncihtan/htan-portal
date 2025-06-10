@@ -171,7 +171,7 @@ const ViewerCount: React.FunctionComponent<IAtlasViewerCountProps> = (
 type AtlasTableData = Atlas & {
     isSelected: boolean;
     publicationManifests: PublicationManifest[];
-    viewerCounts: { [name in FileViewerName]: number };
+    viewerCounts: Record<string, number>;
 };
 
 function filteredCount(
@@ -222,16 +222,13 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
 
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
-    get data(): AtlasTableData[] {
-        return this.props.filteredAtlases.map(
-            (a) =>
-                ({
-                    ...a,
-                    isSelected: this.isRowSelected(a),
-                    publicationManifests: this.getPublicationManifests(a),
-                    viewerCounts: this.getViewerCounts(a),
-                } as AtlasTableData)
-        );
+    get data() {
+        return this!.props.filteredAtlases!.map((a) => ({
+            ...a,
+            isSelected: this.isRowSelected(a),
+            publicationManifests: this.getPublicationManifests(a),
+            viewerCounts: this.getViewerCounts(a),
+        }));
     }
 
     get filesByAtlas() {
@@ -247,23 +244,13 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         );
     }
 
-    myData: any = null;
-    myCache: any = null;
-
-    viewerCountByAtlas(atlas: any): ViewerCountByAtlas {
-        // return _.mapValues(this.filesByAtlas, (files) => {
-        //     return _(files)
-        //         .map((file) => getViewerValues(file))
-        //         .flatten()
-        //         .countBy()
-        //         .value();
-        // });
-
-        return _(this.filesByAtlas[atlas])
+    viewerCountByAtlas(atlas: any): Record<string, number> {
+        const moo = _(this.filesByAtlas[atlas])
             .map((file) => getViewerValues(file))
             .flatten()
             .countBy()
             .value();
+        return moo;
     }
 
     get filteredAssaysByAtlas() {

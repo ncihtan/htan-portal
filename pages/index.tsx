@@ -22,7 +22,11 @@ const Home = (data: IHomePropsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const assayCounts = await doQuery(`
+    const assayCounts = await doQuery<{
+        assayName: string;
+        atlas_name: string;
+        count: number;
+    }>(`
         SELECT
             assayName,
             atlas_name,
@@ -35,7 +39,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
             assayName, atlas_name
     `);
 
-    const organCounts = await doQuery(`
+    const organCounts = await doQuery<{
+        organType: string;
+        atlas_name: string;
+        count: number;
+    }>(`
         SELECT organType, atlas_name, count(DISTINCT ParticipantID) as count FROM (
             SELECT * FROM diagnosis
                 ARRAY JOIN organType
@@ -43,7 +51,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
         GROUP BY organType, atlas_name
     `);
 
-    const entityCounts = await doQuery(`
+    const entityCounts = await doQuery<{
+        atlasCount: number;
+        caseCount: number;
+        sampleCount: number;
+        organCount: number;
+    }>(`
         SELECT (SELECT count(*) FROM atlases) as atlasCount,
         (SELECT count(*) FROM cases) as caseCount,
         (SELECT count(distinct BiospecimenID) FROM specimen WHERE BiospecimenID IN (

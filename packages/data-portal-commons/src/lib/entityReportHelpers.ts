@@ -49,16 +49,15 @@ export function normalizeTissueOrOrganOrSite(value: string) {
     return value;
 }
 
-function normalizeTreatment(value: string): string {
-    return value;
-    // value = value.trim().toLowerCase();
-    // const treatments = value.split(/,|;/).map((t) => {
-    //     const trimmedTreatment = t.trim();
-    //     return (
-    //         trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1)
-    //     );
-    // });
-    // return _.uniq(treatments);
+function normalizeTreatment(value: string): string[] {
+    const trimmedValue = value.trim().toLowerCase();
+    const treatments = trimmedValue.split(/,|;/).map((t) => {
+        const trimmedTreatment = t.trim();
+        return (
+            trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1)
+        );
+    });
+    return _.uniq(treatments);
 }
 
 function initTissueOrOrganOrSiteToOrganMap(

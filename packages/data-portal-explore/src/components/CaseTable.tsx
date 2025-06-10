@@ -17,7 +17,6 @@ import {
     sortByParticipantId,
 } from '../lib/dataTableHelpers';
 import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
-import { commonColumns } from './columns.tsx';
 
 interface ICaseTableProps {
     cases: Entity[];

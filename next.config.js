@@ -6,7 +6,7 @@ module.exports = withMDX({
     pageExtensions: ['js', 'jsx', 'mdx', 'tsx'],
     staticPageGenerationTimeout: 120,
     typescript: {
-        ignoreBuildErrors: true,
+        ignoreBuildErrors: false,
     },
     redirects: async () => {
         // Note: don't put trailing slash in the redirect URLs

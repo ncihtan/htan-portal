@@ -45,8 +45,6 @@ export const countsByTypeQuery = _.template(`
     GROUP BY val, type, fieldType
 `);
 
-//export const countsByTypeQueryMOO = _.template(countsByTypeQueryFiltered);
-
 export async function doQuery<T>(str: any): Promise<T[]> {
     const resultSet = await client.query({
         query: str,
@@ -80,7 +78,6 @@ WorkflowLink,
 publicationIds,
 diagnosisIds,
 demographicsIds,
-therapyIds,
 viewers,
 isRawSequencing,
 downloadSource,
