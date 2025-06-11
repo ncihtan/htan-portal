@@ -13,6 +13,7 @@ export type SelectedFilter = {
     group: string;
     value: string;
     id?: string;
+    fieldType?: string;
 };
 
 export interface ISelectedFiltersByAttrName {
