@@ -13,7 +13,6 @@ import { AttributeNames } from '@htan/data-portal-utils';
 import { Entity, FileAttributeMap } from '@htan/data-portal-commons';
 
 import styles from './fileFilterControls.module.scss';
-import _ from 'lodash';
 
 interface IFileFilterControlProps
     extends IFilterControlsProps<Entity, AttributeNames> {
@@ -42,10 +41,19 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             groupsByProperty: props.groupsByProperty,
         };
 
-        let options = getOptionsFromProps(filterControlsProps);
+        const options = getOptionsFromProps(
+            filterControlsProps,
+            (val, key) => ({
+                value: val.val,
+                label: val.val,
+                count: parseInt(val.count),
+            })
+        );
 
-        let dropdownProps = {
-            options: options,
+        // TODO investigate why getDropdownOptionsFromProps causes TS error
+        // const dropdownProps = getDropdownOptionsFromProps(filterControlsProps, options);
+        const dropdownProps = {
+            options,
             countHeader: filterControlsProps.countHeader,
             setFilter: filterControlsProps.setFilter,
             selectedFiltersByGroupName:

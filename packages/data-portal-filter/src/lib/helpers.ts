@@ -224,7 +224,8 @@ export function makeOptions<Attribute extends string, T>(
     attributeMap: AttributeMap<T, Attribute>,
     selectedFiltersByAttrName: ISelectedFiltersByAttrName,
     entities: T[],
-    entitiesByProperty: { [attrName: string]: { [attrValue: string]: T[] } }
+    entitiesByProperty: { [attrName: string]: { [attrValue: string]: T[] } },
+    optionMapper?: (val: any, key: string) => Partial<OptionType>
 ): OptionType[] {
     const filtersWithoutThisAttr = _.omit(selectedFiltersByAttrName, [
         attrName,
@@ -237,26 +238,29 @@ export function makeOptions<Attribute extends string, T>(
     );
 
     return _.map(entitiesByProperty[attrName], (val, key) => {
+        const optionsOverride = optionMapper ? optionMapper(val, key) : {};
         return {
-            value: val.val,
-            label: val.val,
+            value: key,
+            label: key,
             group: attrName,
-            count: parseInt(val.count),
+            count: counts[key] || 0,
+            ...optionsOverride,
         };
     });
 }
 
 export function getOptionsFromProps<Attribute extends string, T>(
-    props: IGenericFilterControlProps<T, Attribute>
+    props: IGenericFilterControlProps<T, Attribute>,
+    optionMapper?: (val: any, key: string) => Partial<OptionType>
 ): (attrName: Attribute) => OptionType[] {
-    const moo = getOptions(
+    return getOptions(
         props.attributeMap,
         props.selectedFiltersByGroupName,
         props.selectedFilters,
         props.entities,
-        props.groupsByProperty
+        props.groupsByProperty,
+        optionMapper
     );
-    return moo;
 }
 
 export function getSelectOptionsFromProps<Attribute extends string, T>(
@@ -284,7 +288,8 @@ export function getOptions<Attribute extends string, T>(
     selectedFiltersByGroupName: ISelectedFiltersByAttrName,
     selectedFilters: SelectedFilter[],
     entities: T[],
-    groupsByProperty: { [attrName: string]: { [attrValue: string]: T[] } }
+    groupsByProperty: { [attrName: string]: { [attrValue: string]: T[] } },
+    optionMapper?: (val: any, key: string) => Partial<OptionType>
 ): (attrName: Attribute) => OptionType[] {
     const isOptionSelected = (option: SelectedFilter) => {
         return (
@@ -300,7 +305,8 @@ export function getOptions<Attribute extends string, T>(
             attributeMap,
             selectedFiltersByGroupName,
             entities,
-            groupsByProperty
+            groupsByProperty,
+            optionMapper
         );
         ret.forEach((opt) => {
             opt.group = attrName;
