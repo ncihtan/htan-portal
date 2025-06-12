@@ -215,11 +215,11 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             name: 'PubMed',
             selector: (manifest: PublicationManifest) =>
                 getPublicationPubMedID(manifest),
-            cell: (publication: PublicationManifest) => {
-                return publication.PMID ? (
-                    <a href={`${publication.PMID}`} target="_blank">
-                        {publication.PMID}{' '}
-                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+            cell: (manifest: PublicationManifest) => {
+                const pmid = getPublicationPubMedID(manifest);
+                return pmid ? (
+                    <a href={`${manifest.PMID}`} target="_blank">
+                        {pmid} <FontAwesomeIcon icon={faExternalLinkAlt} />
                     </a>
                 ) : undefined;
             },
