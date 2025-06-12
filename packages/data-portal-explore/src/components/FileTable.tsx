@@ -47,6 +47,7 @@ import {
     PublicationManifest,
     ViewDetailsModal,
 } from '@htan/data-portal-commons';
+import { GroupsByProperty } from '@htan/data-portal-filter';
 
 // TODO we should move this into packages/data-portal-commons
 import { addViewers } from '../../../../lib/file_utils';
@@ -658,9 +659,7 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
 
 interface IFileTableProps {
     entities: Entity[];
-    groupsByPropertyFiltered: {
-        [attrName: string]: { [attrValue: string]: Entity[] };
-    };
+    groupsByPropertyFiltered: GroupsByProperty<Entity>;
     patientCount: number;
     publicationsByUid?: { [uid: string]: PublicationManifest };
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
@@ -751,8 +750,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                 wrap: true,
                 sortable: true,
             },
-            // Ino says we can nix the publications column
-            // getPublicationColumn(this.props.publicationsByUid),
+            getPublicationColumn(this.props.publicationsByUid),
             {
                 name: 'Biospecimen',
                 selector: (file: Entity) => {

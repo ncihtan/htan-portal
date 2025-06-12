@@ -44,9 +44,9 @@ import {
     fileQuery,
     countsByTypeQuery,
     specimenQuery,
-} from '../../../../lib/clickhouseStore.ts';
-import FileFilterControls from './FileFilterControls.tsx';
-import getAtlasMetaData from '../../../../lib/getAtlasMetaData.ts';
+} from '../../../../lib/clickhouseStore';
+import FileFilterControls from './FileFilterControls';
+import getAtlasMetaData from '../../../../lib/getAtlasMetaData';
 
 export interface IExploreState {
     files: Entity[];
@@ -224,6 +224,10 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         },
     });
 
+    get atlasMap() {
+        return _.keyBy(this.atlases.result, (a) => a.htan_id);
+    }
+
     atlasesFiltered = new remoteData<Atlas[]>({
         await: () => [this.atlases],
         invoke: async () => {
@@ -270,6 +274,10 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             return publications;
         },
     });
+
+    get publicationsById() {
+        return _.keyBy(this.publications.result, (p) => p.publicationId);
+    }
 
     @action.bound toggleShowAllBiospecimens() {
         this.showAllBiospecimens = !this.showAllBiospecimens;
@@ -462,10 +470,12 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         samples={this.specimen}
                         samplesFiltered={this.specimenFiltered}
                         filteredCasesByNonAtlasFilters={
-                            this.filteredCasesByNonAtlasFilters
+                            // TODO this.filteredCasesByNonAtlasFilters
+                            []
                         }
                         filteredSamplesByNonAtlasFilters={
-                            this.filteredSamplesByNonAtlasFilters
+                            // TODO this.filteredSamplesByNonAtlasFilters
+                            []
                         }
                         nonAtlasSelectedFiltersByAttrName={
                             this.nonAtlasSelectedFiltersByAttrName
@@ -481,10 +491,12 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         getAtlasMetaData={
                             this.props.getAtlasMetaData || getAtlasMetaData
                         }
-                        // TODO this should be unfiltered publications, not filtered
-                        publications={this.publications.result!}
-                        filteredPublications={this.publications.result!}
                         genericAttributeMap={HTANToGenericAttributeMap}
+                        files={this.files.result!}
+                        filteredPublications={this.publications.result!}
+                        // TODO these should be unfiltered publications, not filtered
+                        publications={this.publications.result!}
+                        publicationManifestByUid={this.publicationsById}
                     />
                 </div>
             );

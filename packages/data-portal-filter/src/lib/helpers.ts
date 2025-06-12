@@ -9,6 +9,7 @@ import {
     FilterAction,
     OptionType,
     IGenericFilterControlProps,
+    GroupsByProperty,
 } from './types';
 
 export function getSelectedFiltersByAttrName(
@@ -87,7 +88,7 @@ function getAttrValueFromEntity<Attribute extends string, T>(
 export function groupEntitiesByAttrNameAndValue<Attribute extends string, T>(
     entities: T[],
     attributeMap: AttributeMap<T, Attribute>
-): { [attrName: string]: { [attrValue: string]: T[] } } {
+): GroupsByProperty<T> {
     const ret: {
         [attrName: string]: {
             [attrValue: string]: T[];
@@ -224,7 +225,7 @@ export function makeOptions<Attribute extends string, T>(
     attributeMap: AttributeMap<T, Attribute>,
     selectedFiltersByAttrName: ISelectedFiltersByAttrName,
     entities: T[],
-    entitiesByProperty: { [attrName: string]: { [attrValue: string]: T[] } },
+    entitiesByProperty: GroupsByProperty<T>,
     optionMapper?: (val: any, key: string) => Partial<OptionType>
 ): OptionType[] {
     const filtersWithoutThisAttr = _.omit(selectedFiltersByAttrName, [
@@ -288,7 +289,7 @@ export function getOptions<Attribute extends string, T>(
     selectedFiltersByGroupName: ISelectedFiltersByAttrName,
     selectedFilters: SelectedFilter[],
     entities: T[],
-    groupsByProperty: { [attrName: string]: { [attrValue: string]: T[] } },
+    groupsByProperty: GroupsByProperty<T>,
     optionMapper?: (val: any, key: string) => Partial<OptionType>
 ): (attrName: Attribute) => OptionType[] {
     const isOptionSelected = (option: SelectedFilter) => {
