@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 import { MultiValueProps } from 'react-select';
 import _ from 'lodash';
 
-import { ISelectedFiltersByAttrName } from '@htan/data-portal-filter';
+import {
+    GroupsByProperty,
+    ISelectedFiltersByAttrName,
+} from '@htan/data-portal-filter';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 import {
     Atlas,
@@ -45,9 +48,7 @@ interface IExploreTabsProps {
     filteredSamples: Entity[];
     publications: PublicationManifest[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    groupsByPropertyFiltered: {
-        [attrName: string]: { [attrValue: string]: Entity[] };
-    };
+    groupsByPropertyFiltered: GroupsByProperty<Entity>;
     filteredSynapseAtlases: Atlas[];
     filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
     selectedSynapseAtlases: Atlas[];
