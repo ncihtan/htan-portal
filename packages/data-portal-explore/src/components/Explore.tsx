@@ -145,16 +145,28 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
 
     get filterString() {
         const selectedFilters = toJS(this.selectedFilters);
+        const filterToFieldMap: { [filter: string]: string } = {
+            AtlasName: 'atlas_name',
+        };
+
         if (selectedFilters.length > 0) {
             const clauses = _(selectedFilters)
                 .groupBy('group')
                 .map((val, k) => {
+                    const field = filterToFieldMap[k] || k;
                     // if any of the values are type string, we can assume they all are
                     const values = val.map((v) => `'${v.value}'`).join(',');
-                    if (val.find((v) => v.fieldType === 'string')) {
-                        return `${k} in (${values})`;
+                    if (
+                        val.find((v) => {
+                            const option = this.unfilteredOptions.result?.find(
+                                (o) => o.val === v.value
+                            );
+                            return option?.fieldType === 'string';
+                        })
+                    ) {
+                        return `${field} in (${values})`;
                     } else {
-                        return `hasAny(${k},[${values}])`;
+                        return `hasAny(${field},[${values}])`;
                     }
                 })
                 .value();
