@@ -21,9 +21,6 @@ import {
     Entity,
     filterFiles,
     getFileFilterDisplayName,
-    getFilteredCases,
-    getFilteredSamples,
-    groupFilesByAttrNameAndValue,
     HTANToGenericAttributeMap,
     LoadDataResult,
     PublicationManifest,
@@ -71,6 +68,43 @@ export interface IExploreProps {
 if (typeof window !== 'undefined') {
     //@ts-ignore
     window.toJS = toJS;
+}
+
+// TODO move to a utility class?
+function getFilterString(
+    selectedFilters: SelectedFilter[],
+    unfilteredOptions: MobxPromise<CountByType[]>
+) {
+    const filterToFieldMap: { [filter: string]: string } = {
+        AtlasName: 'atlas_name',
+    };
+
+    if (selectedFilters.length > 0) {
+        const clauses = _(selectedFilters)
+            .groupBy('group')
+            .map((val, k) => {
+                const field = filterToFieldMap[k] || k;
+                // if any of the values are type string, we can assume they all are
+                const values = val.map((v) => `'${v.value}'`).join(',');
+                if (
+                    val.find((v) => {
+                        const option = unfilteredOptions.result?.find(
+                            (o) => o.val === v.value
+                        );
+                        return option?.fieldType === 'string';
+                    })
+                ) {
+                    return `${field} in (${values})`;
+                } else {
+                    return `hasAny(${field},[${values}])`;
+                }
+            })
+            .value();
+
+        return ' WHERE ' + clauses.join(' AND ');
+    } else {
+        return '';
+    }
 }
 
 @observer
@@ -145,36 +179,14 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
 
     get filterString() {
         const selectedFilters = toJS(this.selectedFilters);
-        const filterToFieldMap: { [filter: string]: string } = {
-            AtlasName: 'atlas_name',
-        };
+        return getFilterString(selectedFilters, this.unfilteredOptions);
+    }
 
-        if (selectedFilters.length > 0) {
-            const clauses = _(selectedFilters)
-                .groupBy('group')
-                .map((val, k) => {
-                    const field = filterToFieldMap[k] || k;
-                    // if any of the values are type string, we can assume they all are
-                    const values = val.map((v) => `'${v.value}'`).join(',');
-                    if (
-                        val.find((v) => {
-                            const option = this.unfilteredOptions.result?.find(
-                                (o) => o.val === v.value
-                            );
-                            return option?.fieldType === 'string';
-                        })
-                    ) {
-                        return `${field} in (${values})`;
-                    } else {
-                        return `hasAny(${field},[${values}])`;
-                    }
-                })
-                .value();
-
-            return ' WHERE ' + clauses.join(' AND ');
-        } else {
-            return '';
-        }
+    get filterStringWithoutAtlasFilters() {
+        const selectedFilters = toJS(this.selectedFilters).filter(
+            (f) => f.group !== AttributeNames.AtlasName
+        );
+        return getFilterString(selectedFilters, this.unfilteredOptions);
     }
 
     files = new remoteData<Entity[]>({
@@ -240,24 +252,30 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         return _.keyBy(this.atlases.result, (a) => a.htan_id);
     }
 
+    async filterAtlases(filterString: string) {
+        if (filterString.length === 0) {
+            return this.atlases.result || [];
+        } else {
+            const data = await doQuery<Atlas>(
+                atlasQuery({ filterString: filterString })
+            );
+            data.forEach(
+                (atlas: Atlas) =>
+                    (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta.toString()))
+            );
+            return data;
+        }
+    }
+
+    atlasesFilteredByNonAtlasFilters = new remoteData<Atlas[]>({
+        await: () => [this.atlases],
+        invoke: async () =>
+            this.filterAtlases(this.filterStringWithoutAtlasFilters),
+    });
+
     atlasesFiltered = new remoteData<Atlas[]>({
         await: () => [this.atlases],
-        invoke: async () => {
-            if (this.filterString.length === 0) {
-                return this.atlases.result || [];
-            } else {
-                const data = await doQuery<Atlas>(
-                    atlasQuery({ filterString: this.filterString })
-                );
-                data.forEach(
-                    (atlas: Atlas) =>
-                        (atlas.AtlasMeta = JSON.parse(
-                            atlas.AtlasMeta.toString()
-                        ))
-                );
-                return data;
-            }
-        },
+        invoke: async () => this.filterAtlases(this.filterString),
     });
 
     publications = new remoteData({
@@ -379,17 +397,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         ]);
     }
 
-    get filteredAtlasesByNonAtlasFilters() {
-        const filtersExceptAtlasFilters = this
-            .nonAtlasSelectedFiltersByAttrName;
-
-        return _.chain(filterFiles(filtersExceptAtlasFilters, this.state.files))
-            .map((f) => f.atlasid)
-            .uniq()
-            .map((id) => this.atlasMap[id])
-            .value();
-    }
-
     get groupsByProperty() {
         return _(this.filteredOptions.result).groupBy('type').value();
     }
@@ -412,6 +419,8 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             this.filesFiltered,
             this.files,
             this.unfilteredOptions,
+            this.atlasesFiltered,
+            this.atlasesFilteredByNonAtlasFilters,
         ]);
 
         // Always render the filter controls, regardless of data loading state
@@ -475,10 +484,9 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                             this.atlasesFiltered.result || []
                         }
                         filteredSynapseAtlasesByNonAtlasFilters={
-                            this.filteredAtlasesByNonAtlasFilters
+                            this.atlasesFilteredByNonAtlasFilters.result || []
                         }
                         atlases={this.atlases}
-                        atlasesFiltered={this.atlasesFiltered}
                         filteredSamples={this.casesFiltered.result || []}
                         cases={this.cases}
                         filteredCases={this.casesFiltered}
