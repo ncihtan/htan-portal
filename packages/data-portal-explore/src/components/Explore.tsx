@@ -311,7 +311,11 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     }
 
     get groupsByPropertyFiltered() {
-        return groupFilesByAttrNameAndValue(this.filteredFiles);
+        return _(this.groupsByProperty)
+            .mapValues((group) =>
+                group.filter((g) => parseInt(g.count.toString()) > 0)
+            )
+            .value();
     }
 
     get selectedFiltersByAttrName(): ISelectedFiltersByAttrName {
@@ -346,10 +350,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         if (this.props.onFilterChange) {
             this.props.onFilterChange(newFilters);
         }
-    }
-
-    get filteredFiles() {
-        return filterFiles(this.selectedFiltersByAttrName, this.state.files);
     }
 
     get selectedAtlases() {
@@ -391,10 +391,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     }
 
     get groupsByProperty() {
-        const groupsByProperty = _(this.filteredOptions.result)
-            .groupBy('type')
-            .value();
-        return groupsByProperty;
+        return _(this.filteredOptions.result).groupBy('type').value();
     }
 
     render() {
@@ -456,6 +453,15 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             return (
                 <div className={styles.explore}>
                     {filterControls}
+
+                    <ExploreSummary
+                        summaryData={getDefaultSummaryData(
+                            this.casesFiltered.result || [],
+                            this.specimenFiltered.result || [],
+                            this.filesFiltered.result || [],
+                            this.groupsByPropertyFiltered
+                        )}
+                    />
 
                     <ExploreTabs
                         setTab={(currentTab: ExploreTab) => {
