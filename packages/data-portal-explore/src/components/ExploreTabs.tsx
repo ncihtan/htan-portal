@@ -41,7 +41,6 @@ interface IExploreTabsProps {
     samplesFiltered: MobxPromise<Entity[]>;
     cases: MobxPromise<Entity[]>;
     atlases: MobxPromise<Atlas[]>;
-    atlasesFiltered: MobxPromise<Atlas[]>;
     filteredCasesByNonAtlasFilters: Entity[];
     filteredSamplesByNonAtlasFilters: Entity[];
     filteredCases: MobxPromise<Entity[]>;
@@ -321,7 +320,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             atlases={props.atlases.result || []}
                             getAtlasMetaData={props.getAtlasMetaData}
                             selectedAtlases={props.selectedSynapseAtlases}
-                            filteredAtlases={props.atlasesFiltered.result}
+                            filteredAtlases={
+                                props.filteredSynapseAtlasesByNonAtlasFilters
+                            }
                             onSelectAtlas={props.onSelectAtlas}
                             filteredCases={props.filteredCases.result!}
                             filteredBiospecimens={props.samplesFiltered.result!}
