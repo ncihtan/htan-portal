@@ -12,34 +12,63 @@ const client = createClient({
     },
 });
 
+export const defaultCountsByTypeQueryFilterString = {
+    genderFilterString: '',
+    raceFilterString: '',
+    primaryDiagnosisFilterString: '',
+    ethnicityFilterString: '',
+    tissueOrOrganOfOriginFilterString: '',
+    levelFilterString: '',
+    assayNameFilterString: '',
+    treatmentTypeFilterString: '',
+    fileFormatFilterString: '',
+    viewersFilterString: '',
+    organTypeFilterString: '',
+    atlasNameFilterString: '',
+    downloadSourceFilterString: '',
+};
+
 export const countsByTypeQuery = _.template(`
-    WITH fileQuery AS (SELECT viewersArr, * FROM files <%=filterString%>)
+    WITH
+        fileQueryForGender AS (SELECT viewersArr, * FROM files <%=genderFilterString%>),
+        fileQueryForRace AS (SELECT viewersArr, * FROM files <%=raceFilterString%>),
+        fileQueryForPrimaryDiagnosis AS (SELECT viewersArr, * FROM files <%=primaryDiagnosisFilterString%>),
+        fileQueryForEthnicity AS (SELECT viewersArr, * FROM files <%=ethnicityFilterString%>),
+        fileQueryForTissueOrOrganOfOrigin AS (SELECT viewersArr, * FROM files <%=tissueOrOrganOfOriginFilterString%>),
+        fileQueryForLevel AS (SELECT viewersArr, * FROM files <%=levelFilterString%>),
+        fileQueryForAssayName AS (SELECT viewersArr, * FROM files <%=assayNameFilterString%>),
+        fileQueryForTreatmentType AS (SELECT viewersArr, * FROM files <%=treatmentTypeFilterString%>),
+        fileQueryForFileFormat AS (SELECT viewersArr, * FROM files <%=fileFormatFilterString%>),
+        fileQueryForViewers AS (SELECT viewersArr, * FROM files <%=viewersFilterString%>),
+        fileQueryForOrganType AS (SELECT viewersArr, * FROM files <%=organTypeFilterString%>),
+        fileQueryForAtlasName AS (SELECT viewersArr, * FROM files <%=atlasNameFilterString%>),
+        fileQueryForDownloadSource AS (SELECT viewersArr, * FROM files <%=downloadSourceFilterString%>)
     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
-        SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM fileQueryForGender
         UNION ALL
-        SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM fileQueryForRace
         UNION ALL
-        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM fileQueryForPrimaryDiagnosis
         UNION ALL
-        SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM fileQueryForEthnicity
         UNION ALL
-        SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
         UNION ALL
-        SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM fileQuery
+        SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM fileQueryForLevel
         UNION ALL
-        SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM fileQuery
+        SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM fileQueryForAssayName
         UNION ALL
-        SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM fileQueryForTreatmentType
         UNION ALL
-        SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM fileQuery
+        SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM fileQueryForFileFormat
         UNION ALL
-        SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM fileQueryForViewers
         UNION ALL
-        SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM fileQuery
+        SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM fileQueryForOrganType
         UNION ALL
-        SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQuery
+        SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
         UNION ALL
-        SELECT Filename, downloadSource as val, 'DownloadSource' as type, 'string' as fieldType FROM fileQuery
+        SELECT Filename, downloadSource as val, 'DownloadSource' as type, 'string' as fieldType FROM fileQueryForDownloadSource
         )
     WHERE notEmpty(val)                                                                 
     GROUP BY val, type, fieldType

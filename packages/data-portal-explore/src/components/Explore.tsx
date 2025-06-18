@@ -37,9 +37,10 @@ import styles from './explore.module.scss';
 import {
     atlasQuery,
     caseQuery,
+    countsByTypeQuery,
+    defaultCountsByTypeQueryFilterString,
     doQuery,
     fileQuery,
-    countsByTypeQuery,
     specimenQuery,
 } from '../../../../lib/clickhouseStore';
 import FileFilterControls from './FileFilterControls';
@@ -107,6 +108,16 @@ function getFilterString(
     }
 }
 
+function getFilterStringExcludeSelf(
+    selectedFilters: SelectedFilter[],
+    unfilteredOptions: MobxPromise<CountByType[]>,
+    selfGroup: AttributeNames
+) {
+    const filters = toJS(selectedFilters).filter((f) => f.group !== selfGroup);
+
+    return getFilterString(filters, unfilteredOptions);
+}
+
 @observer
 export class Explore extends React.Component<IExploreProps, IExploreState> {
     @observable.ref private dataLoadingPromise:
@@ -136,7 +147,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     unfilteredOptions = new remoteData({
         invoke: async () => {
             return doQuery<CountByType>(
-                countsByTypeQuery({ filterString: '' })
+                countsByTypeQuery(defaultCountsByTypeQueryFilterString)
             );
         },
     });
@@ -149,7 +160,45 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             } else {
                 const filteredResult = await doQuery<CountByType>(
                     countsByTypeQuery({
-                        filterString: this.filterString,
+                        genderFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.Gender
+                        ),
+                        raceFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.Race
+                        ),
+                        primaryDiagnosisFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.PrimaryDiagnosis
+                        ),
+                        ethnicityFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.Ethnicity
+                        ),
+                        tissueOrOrganOfOriginFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.TissueorOrganofOrigin
+                        ),
+                        levelFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.level
+                        ),
+                        assayNameFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.assayName
+                        ),
+                        treatmentTypeFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.TreatmentType
+                        ),
+                        fileFormatFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.FileFormat
+                        ),
+                        viewersFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.viewersArr
+                        ),
+                        organTypeFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.organType
+                        ),
+                        atlasNameFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.AtlasName
+                        ),
+                        downloadSourceFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.DownloadSource
+                        ),
                     })
                 );
                 const filteredMap = _.keyBy(
@@ -182,11 +231,12 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         return getFilterString(selectedFilters, this.unfilteredOptions);
     }
 
-    get filterStringWithoutAtlasFilters() {
-        const selectedFilters = toJS(this.selectedFilters).filter(
-            (f) => f.group !== AttributeNames.AtlasName
+    getFilterStringForAttribute(attribute: AttributeNames) {
+        return getFilterStringExcludeSelf(
+            toJS(this.selectedFilters),
+            this.unfilteredOptions,
+            attribute
         );
-        return getFilterString(selectedFilters, this.unfilteredOptions);
     }
 
     files = new remoteData<Entity[]>({
@@ -270,7 +320,9 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     atlasesFilteredByNonAtlasFilters = new remoteData<Atlas[]>({
         await: () => [this.atlases],
         invoke: async () =>
-            this.filterAtlases(this.filterStringWithoutAtlasFilters),
+            this.filterAtlases(
+                this.getFilterStringForAttribute(AttributeNames.AtlasName)
+            ),
     });
 
     atlasesFiltered = new remoteData<Atlas[]>({
