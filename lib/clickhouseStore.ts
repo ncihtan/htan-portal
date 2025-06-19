@@ -68,7 +68,7 @@ export const countsByTypeQuery = _.template(`
         UNION ALL
         SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
         UNION ALL
-        SELECT Filename, downloadSource as val, 'DownloadSource' as type, 'string' as fieldType FROM fileQueryForDownloadSource
+        SELECT Filename, downloadSource as val, 'downloadSource' as type, 'string' as fieldType FROM fileQueryForDownloadSource
         )
     WHERE notEmpty(val)                                                                 
     GROUP BY val, type, fieldType

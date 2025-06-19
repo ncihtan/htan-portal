@@ -122,8 +122,8 @@ export const FileAttributeMap: {
         path: 'publicationIds',
         displayName: 'Publication',
     },
-    [AttributeNames.DownloadSource]: {
-        path: 'DownloadSource',
+    [AttributeNames.downloadSource]: {
+        path: 'downloadSource',
         displayName: 'Data Access',
     },
     [AttributeNames.viewersArr]: {

@@ -197,7 +197,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                             AttributeNames.AtlasName
                         ),
                         downloadSourceFilterString: this.getFilterStringForAttribute(
-                            AttributeNames.DownloadSource
+                            AttributeNames.downloadSource
                         ),
                     })
                 );
