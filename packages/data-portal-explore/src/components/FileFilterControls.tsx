@@ -1,5 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 import {
     FilterControls,
@@ -8,9 +10,15 @@ import {
     getOptionsFromProps,
     IFilterControlsProps,
     IGenericFilterControlProps,
+    OptionType,
 } from '@htan/data-portal-filter';
 import { AttributeNames } from '@htan/data-portal-utils';
-import { Entity, FileAttributeMap } from '@htan/data-portal-commons';
+import {
+    DownloadSourceCategory,
+    Entity,
+    FileAttributeMap,
+    FileViewerName,
+} from '@htan/data-portal-commons';
 
 import styles from './fileFilterControls.module.scss';
 
@@ -32,7 +40,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                 AttributeNames.level,
                 AttributeNames.FileFormat,
                 AttributeNames.TreatmentType,
-                AttributeNames.DownloadSource,
+                AttributeNames.downloadSource,
             ],
             entities: [],
             setFilter: props.setFilter,
@@ -111,10 +119,39 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
 
                 <FilterDropdown
                     {...dropdownProps}
-                    placeholder="Viewers"
+                    placeholder="Viewer"
                     attributes={[AttributeNames.viewersArr]}
                     className={styles.filterCheckboxListContainer}
                     width={164}
+                    options={(attrName: AttributeNames) => {
+                        return options(attrName)
+                            .filter(
+                                (e: OptionType) =>
+                                    ![
+                                        FileViewerName.cds,
+                                        FileViewerName.idc,
+                                    ].includes(e.value as FileViewerName)
+                            )
+                            .map((e: OptionType) => {
+                                const viewerLabels = {
+                                    [FileViewerName.autoMinerva]: 'Autominerva',
+                                    [FileViewerName.customMinerva]:
+                                        'Minerva Story',
+                                    [FileViewerName.ucscXena]: 'UCSC Xena',
+                                    [FileViewerName.cellxgene]: 'CellxGene',
+                                    [FileViewerName.isbcgc]: 'BigQuery',
+
+                                    // excluded values:
+                                    // we are not supposed to see these as filter options
+                                    [FileViewerName.cds]: 'CDS', // excluded (this only appears as a download source)
+                                    [FileViewerName.idc]: 'IDC', // excluded (we do not show IDC links anymore)
+                                };
+
+                                e.label =
+                                    viewerLabels[e.value as FileViewerName];
+                                return e;
+                            });
+                    }}
                 />
 
                 <FilterDropdown
@@ -138,10 +175,73 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
 
                 <FilterDropdown
                     {...dropdownProps}
-                    placeholder="Download Source"
-                    attributes={[AttributeNames.DownloadSource]}
+                    placeholder="Data Access"
+                    attributes={[AttributeNames.downloadSource]}
                     className={styles.filterCheckboxListContainer}
                     width={164}
+                    options={(attrName: AttributeNames) => {
+                        return options(attrName)
+                            .sort((a: OptionType, b: OptionType) => {
+                                const downloadSourceOrder = [
+                                    DownloadSourceCategory.dbgap,
+                                    DownloadSourceCategory.cds,
+                                    // DownloadSourceCategory.idc,
+                                    DownloadSourceCategory.synapse,
+                                    DownloadSourceCategory.comingSoon,
+                                ];
+                                return (
+                                    downloadSourceOrder.indexOf(
+                                        a.value as DownloadSourceCategory
+                                    ) -
+                                    downloadSourceOrder.indexOf(
+                                        b.value as DownloadSourceCategory
+                                    )
+                                );
+                            })
+                            .map((e: OptionType) => {
+                                const downloadLabels = {
+                                    [DownloadSourceCategory.dbgap]: (
+                                        <span>
+                                            CDS/SB-CGC (dbGaP{' '}
+                                            <FontAwesomeIcon
+                                                color="#FF8C00"
+                                                icon={faLock}
+                                            />
+                                            )
+                                        </span>
+                                    ),
+                                    // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
+                                    [DownloadSourceCategory.cds]: (
+                                        <span>
+                                            CDS/SB-CGC (Open Access{' '}
+                                            <FontAwesomeIcon
+                                                color="#00796B"
+                                                icon={faLockOpen}
+                                            />
+                                            )
+                                        </span>
+                                    ),
+                                    [DownloadSourceCategory.synapse]: (
+                                        <span>
+                                            Synapse (Open Access{' '}
+                                            <FontAwesomeIcon
+                                                color="#00796B"
+                                                icon={faLockOpen}
+                                            />
+                                            )
+                                        </span>
+                                    ),
+                                    [DownloadSourceCategory.comingSoon]:
+                                        'Coming Soon',
+                                };
+
+                                e.label =
+                                    downloadLabels[
+                                        e.value as DownloadSourceCategory
+                                    ];
+                                return e;
+                            });
+                    }}
                 />
 
                 {props.enableReleaseFilter && (
