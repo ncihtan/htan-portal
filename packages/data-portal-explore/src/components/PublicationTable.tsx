@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     AtlasDescription,
     Entity,
+    getAtlasDescription,
     getPublicationAuthors,
     getPublicationDate,
     getPublicationDOI,
@@ -136,7 +137,8 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         },
         {
             name: 'Atlas',
-            selector: (manifest: PublicationManifest) => manifest.atlas_name,
+            selector: (manifest: PublicationManifest) =>
+                getAtlasDescription(manifest.AtlasMeta),
             cell: (manifest: PublicationManifest) => {
                 return (
                     <AtlasDescription
@@ -230,9 +232,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             name: 'Cited by',
             selector: (manifest: PublicationManifest) => manifest.CitedInNumber,
             cell: (manifest: PublicationManifest) => {
-                const pubmedId = manifest.PMID
-                    ? manifest.PMID.match(/(\d+)\/$/)?.[0]
-                    : '';
+                const pubmedId = getPublicationPubMedID(manifest);
                 return pubmedId ? (
                     <a
                         href={`https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=${pubmedId}`}
@@ -248,26 +248,6 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             wrap: false,
             sortable: true,
         },
-        // {
-        //     name: 'Cited by',
-        //     selector: (manifest: PublicationManifest) => manifest.CitedInNumber,
-        //     cell: (manifest: PublicationManifest) => {
-        //         const pubmedId = getPublicationPubMedID(manifest);
-        //         return pubmedId ? (
-        //             <a
-        //                 href={`https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=${pubmedId}`}
-        //                 target="_blank"
-        //                 className="ml-auto"
-        //             >
-        //                 {manifest.pmcrefcount}{' '}
-        //                 <FontAwesomeIcon icon={faExternalLinkAlt} />
-        //             </a>
-        //         ) : undefined;
-        //     },
-        //     grow: 0.5,
-        //     wrap: false,
-        //     sortable: true,
-        // },
         {
             name: 'Cases',
             selector: (manifest: PublicationManifest) =>
