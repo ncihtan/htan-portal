@@ -49,4 +49,5 @@ export interface IGenericFilterControlProps<T, Attribute extends string>
     countHeader: string;
     attributeMap: AttributeMap<T, Attribute>;
     attributeNames: Attribute[];
+    optionMapper?: (val: any, key: string) => Partial<OptionType>;
 }

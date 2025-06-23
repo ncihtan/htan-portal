@@ -251,8 +251,7 @@ export function makeOptions<Attribute extends string, T>(
 }
 
 export function getOptionsFromProps<Attribute extends string, T>(
-    props: IGenericFilterControlProps<T, Attribute>,
-    optionMapper?: (val: any, key: string) => Partial<OptionType>
+    props: IGenericFilterControlProps<T, Attribute>
 ): (attrName: Attribute) => OptionType[] {
     return getOptions(
         props.attributeMap,
@@ -260,7 +259,7 @@ export function getOptionsFromProps<Attribute extends string, T>(
         props.selectedFilters,
         props.entities,
         props.groupsByProperty,
-        optionMapper
+        props.optionMapper
     );
 }
 

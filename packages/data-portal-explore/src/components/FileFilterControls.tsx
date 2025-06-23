@@ -47,16 +47,14 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
             selectedFiltersByGroupName: props.selectedFiltersByGroupName,
             selectedFilters: [],
             groupsByProperty: props.groupsByProperty,
-        };
-
-        const options = getOptionsFromProps(
-            filterControlsProps,
-            (val, key) => ({
+            optionMapper: (val, key) => ({
                 value: val.val,
                 label: val.val,
                 count: parseInt(val.count),
-            })
-        );
+            }),
+        };
+
+        const options = getOptionsFromProps(filterControlsProps);
 
         // TODO investigate why getDropdownOptionsFromProps causes TS error
         // const dropdownProps = getDropdownOptionsFromProps(filterControlsProps, options);
