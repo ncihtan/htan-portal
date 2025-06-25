@@ -125,7 +125,10 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         | undefined;
     @observable private showAllBiospecimens = false;
     @observable private showAllCases = false;
-    @observable private _selectedFilters: SelectedFilter[] = [];
+    @observable private _selectedFilters: SelectedFilter[] = this.props
+        .getSelectedFilters
+        ? this.props.getSelectedFilters()
+        : [];
 
     constructor(props: any) {
         super(props);
@@ -247,7 +250,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     });
 
     filesFiltered = new remoteData<Entity[]>({
-        await: () => [this.files],
+        await: () => [this.files, this.unfilteredOptions],
         invoke: async () => {
             if (this.filterString.length === 0) {
                 return this.files.result || [];
@@ -266,7 +269,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     });
 
     casesFiltered = new remoteData<Entity[]>({
-        await: () => [],
+        await: () => [this.unfilteredOptions],
         invoke: async () => {
             const q = caseQuery({ filterString: this.filterString });
             return await doQuery<Entity>(q);
@@ -281,6 +284,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     });
 
     specimenFiltered = new remoteData<Entity[]>({
+        await: () => [this.unfilteredOptions],
         invoke: async () => {
             const q = specimenQuery({ filterString: this.filterString });
             return doQuery<Entity>(q);
@@ -318,7 +322,7 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     }
 
     atlasesFilteredByNonAtlasFilters = new remoteData<Atlas[]>({
-        await: () => [this.atlases],
+        await: () => [this.atlases, this.unfilteredOptions],
         invoke: async () =>
             this.filterAtlases(
                 this.getFilterStringForAttribute(AttributeNames.AtlasName)
@@ -326,25 +330,27 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     });
 
     atlasesFiltered = new remoteData<Atlas[]>({
-        await: () => [this.atlases],
+        await: () => [this.atlases, this.unfilteredOptions],
         invoke: async () => this.filterAtlases(this.filterString),
     });
 
     publications = new remoteData({
-        await: () => [this.cases],
+        await: () => [this.cases, this.unfilteredOptions],
         invoke: async () => {
             const q = `
-
-                WITH filteredPublications AS (SELECT DISTINCT publicationId FROM (
-                                                                                     SELECT arrayJoin(associatedFiles) as fileId, publicationId FROM publication_manifest
-                                                                                     WHERE fileId IN (
-                                                                                         SELECT files.DataFileID FROM files 
-                                                                                             ${this.filterString}
-                                                                                     )
-                                                                                 ))
+                WITH filteredPublications AS (
+                    SELECT DISTINCT publicationId FROM (
+                         SELECT arrayJoin(associatedFiles) as fileId, publicationId
+                         FROM publication_manifest
+                         WHERE fileId IN (
+                             SELECT files.DataFileID FROM files 
+                                 ${this.filterString}
+                         )
+                     )
+                )
                 SELECT *
                 FROM filteredPublications fp
-                         LEFT JOIN publication_manifest pm on fp.publicationId = pm.publicationId
+                    LEFT JOIN publication_manifest pm on fp.publicationId = pm.publicationId
              `;
             const publications = await doQuery<PublicationManifest>(q);
 
@@ -375,9 +381,9 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     set selectedFilters(filters: SelectedFilter[]) {
         if (this.props.onFilterChange) {
             this.props.onFilterChange(filters);
-        } else {
-            this._selectedFilters = filters;
         }
+
+        this._selectedFilters = filters;
     }
 
     get groupsByPropertyFiltered() {
@@ -417,8 +423,15 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             ...selected.map((a) => ({ group, value: a.htan_name }))
         );
 
-        if (this.props.onFilterChange) {
-            this.props.onFilterChange(newFilters);
+        const newFiltersByAttribute = getSelectedFiltersByAttrName(newFilters);
+        const newAtlasFilters = newFiltersByAttribute[AttributeNames.AtlasName];
+        const currentAtlasFilters = this.selectedFiltersByAttrName[
+            AttributeNames.AtlasName
+        ];
+
+        // update selected filters if only selected atlas filters actually change
+        if (!_.isEqual(newAtlasFilters, currentAtlasFilters)) {
+            this.selectedFilters = newFilters;
         }
     }
 
@@ -427,13 +440,8 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             AttributeNames.AtlasName
         ];
 
-        if (_.size(atlasFilters)) {
-            return _.chain(
-                filterFiles(
-                    { [AttributeNames.AtlasName]: atlasFilters },
-                    this.state.files
-                )
-            )
+        if (_.size(atlasFilters) > 0) {
+            return _.chain(this.filesFiltered.result)
                 .map((f) => f.atlasid)
                 .uniq()
                 .map((id) => this.atlasMap[id])
@@ -466,13 +474,13 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             this.specimenFiltered,
             this.specimen,
             this.filteredOptions,
-            this.publications,
-            this.atlasesFiltered,
-            this.filesFiltered,
-            this.files,
             this.unfilteredOptions,
+            this.publications,
+            this.atlases,
             this.atlasesFiltered,
             this.atlasesFilteredByNonAtlasFilters,
+            this.filesFiltered,
+            this.files,
         ]);
 
         // Always render the filter controls, regardless of data loading state

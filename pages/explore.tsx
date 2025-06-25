@@ -28,21 +28,25 @@ const ExplorePage = (props: IExplorePageProps) => {
         parseSelectedFiltersFromUrl(
             (props.router.query as ExploreURLQuery).selectedFilters // use casting as ExploreURLQuery to use typescript to ensure URL correctness
         ) || [];
-    // const onFilterChange = (newFilters: SelectedFilter[]) => {
-    //     updateSelectedFiltersInURL(newFilters, props.router);
-    // };
+    const onFilterChange = (newFilters: SelectedFilter[]) => {
+        updateSelectedFiltersInURL(newFilters, props.router);
+    };
     // const setExploreTab = (tab: ExploreTab) => {
     //     setTab(tab, props.router);
     // };
-    const getExploreTab = () =>
-        (props.router.query.tab || ExploreTab.ATLAS) as ExploreTab;
+    // const getExploreTab = () =>
+    //     (props.router.query.tab || ExploreTab.ATLAS) as ExploreTab;
 
     return (
         <>
             <PreReleaseBanner />
 
             <PageWrapper>
-                <ClientComponent />
+                <ClientComponent
+                    onFilterChange={onFilterChange}
+                    getSelectedFilters={getSelectedFilters}
+                    isReleaseQCEnabled={isReleaseQCEnabled}
+                />
             </PageWrapper>
         </>
     );
