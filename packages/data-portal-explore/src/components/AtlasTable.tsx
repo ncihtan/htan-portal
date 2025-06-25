@@ -147,7 +147,7 @@ const ViewerCount: React.FunctionComponent<IAtlasViewerCountProps> = (
 ) => {
     const count = props.atlas.viewerCounts?.[props.fileViewerName];
     const filterString = urlEncodeSelectedFilters([
-        { group: 'viewers', value: props.fileViewerName },
+        { group: 'viewersArr', value: props.fileViewerName },
         { group: 'AtlasName', value: props.atlas.htan_name },
     ]);
     const defaultHref = `/explore?selectedFilters=${filterString}&tab=file`;
