@@ -829,28 +829,28 @@ export class FileTable extends React.Component<IFileTableProps> {
                 wrap: true,
                 sortable: true,
             },
-            // {
-            //     name: DETAILS_COLUMN_NAME,
-            //     selector: (file: Entity) => 'Details',
-            //     cell: (file: Entity) => {
-            //         if (true) {
-            //             // TODO: determine if there are more details
-            //             return (
-            //                 <a
-            //                     href={'#'}
-            //                     onClick={action(() => {
-            //                         this.viewDetailsFile = file;
-            //                     })}
-            //                 >
-            //                     View Metadata
-            //                 </a>
-            //             );
-            //         }
-            //     },
-            //     wrap: true,
-            //     sortable: false,
-            //     searchable: false,
-            // },
+            {
+                name: DETAILS_COLUMN_NAME,
+                selector: (file: Entity) => 'Details',
+                cell: (file: Entity) => {
+                    if (true) {
+                        // TODO: determine if there are more details
+                        return (
+                            <a
+                                href={'#'}
+                                onClick={action(() => {
+                                    this.viewDetailsFile = file;
+                                })}
+                            >
+                                View Metadata
+                            </a>
+                        );
+                    }
+                },
+                wrap: true,
+                sortable: false,
+                searchable: false,
+            },
             {
                 name: 'View',
                 cell: (file: Entity) => {
@@ -1084,6 +1084,13 @@ export class FileTable extends React.Component<IFileTableProps> {
             imageChannelMetadata: true,
             therapy: true,
             publicationIds: true,
+            TreatmentType: true,
+
+            // duplicate fields which are only added for filtering purposes
+            Gender: true,
+            Race: true,
+            Ethnicity: true,
+            VitalStatus: true,
 
             //others to exclude
             Component: true,
