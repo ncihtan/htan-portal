@@ -61,13 +61,6 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
                 Data Standards
             </NavDropdown.Item>
             <NavDropdown.Item href="/data-access">Data Access</NavDropdown.Item>
-            <Dropdown.Divider />
-            <Nav.Link
-                href="https://www.protocols.io/workspaces/ncihtan"
-                target="_blank"
-            >
-                Protocols.io
-            </Nav.Link>
         </NavSection>,
 
         <NavSection text={'About HTAN'}>
