@@ -1,6 +1,4 @@
 import _ from 'lodash';
-import fs from 'fs';
-import axios from 'axios';
 import {createTable} from "./client.js";
 // prettier-ignore
 import json from '../public/processed_syn_data.json' with { type: 'json' };
@@ -40,7 +38,6 @@ const fileFields = [
     "releaseVersion",
     "organType"
 ];
-
 
 const caseFields = [  'Component',
     'HTANParticipantID',
@@ -156,19 +153,12 @@ const diagnosisFields = [
     'publicationIds'
 ];
 
-
-function debug(file){
-    //console.log(file);
-}
-
-function formatRow(file, data, fields, postProcess){
-
+function formatRow(file, data, fields, postProcess) {
     //console.log(fields);
-
     //console.log(file.demographicsIds.map(id=>demographicsById[id]))
 
-    const obj = {}
-    fields.slice(0).forEach((k,v)=>{
+    let obj = {}
+    fields.slice(0).forEach((k,v)=> {
 
         if (k.includes(".")) {
             const [root, prop] = k.split(".");
@@ -198,13 +188,13 @@ function formatRow(file, data, fields, postProcess){
     })
 
     if (postProcess) {
-        postProcess(obj);
+        obj = postProcess(obj);
     }
 
     return obj;
 }
 
-function findFields(data){
+function findFields(data) {
 
     //const fields = Object.keys(data[0]);
     const fields = _(Object.values(data))
@@ -214,8 +204,8 @@ function findFields(data){
         .value();
 
 
-    const fieldsWithSomedata =_(fields).filter(field=>{
-        const rowsWithData = _.filter(data,(row=>{
+    const fieldsWithSomedata = _(fields).filter(field => {
+        const rowsWithData = _.filter(data,(row => {
             return row[field]
         }));
 
@@ -223,13 +213,11 @@ function findFields(data){
 
     }).value()
 
-
     return fieldsWithSomedata;
-
-
 }
 
-function postProcessFiles(file){
+function postProcessFiles(file) {
+    // update organ type
     _.forEach(organMappings,(val, key)=>{
 
         const target = _.isArray(file.TissueorOrganofOrigin) ? file.TissueorOrganofOrigin : [file.TissueorOrganofOrigin];
@@ -238,13 +226,14 @@ function postProcessFiles(file){
             file.organType.push(key);
         }
     });
-    return file;
+
+    // remove duplicate values
+    return _.mapValues(file, (value) => _.isArray(value) ? _.uniq(value): value);
 }
 
 const JSONPATH = "http://localhost:3000/processed_syn_data.json"; //https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20250122_1537.json
 
 async function main(){
-
     console.log(Object.keys(json));
 
     const d = {
@@ -370,8 +359,6 @@ async function main(){
         }
     }
 
-
-
     function doCreate(config) {
         const preprocess = config.preprocess ? config.preprocess : (f)=>f;
         const rows = config.data
@@ -379,18 +366,16 @@ async function main(){
             .map(f=>formatRow(f, d.data, config.fields, config.postProcess));
 
         return createTable(config.tableName, rows, config.fields, config.derivedColumns);
-
     }
 
-    configs = { publicationManifestConfig:configs.publicationManifestConfig };
+    // enable this if you only want to import new publication data
+    // configs = { publicationManifestConfig:configs.publicationManifestConfig };
 
-
-    for (const tablename in configs) {
-        console.log(`creating table ${tablename}`);
-        await doCreate(configs[tablename])
-        console.log(`table created ${tablename}`);
+    for (const config in configs) {
+        console.log(`creating table ${configs[config].tableName}`);
+        await doCreate(configs[config])
+        console.log(`table created ${configs[config].tableName}`);
     }
-
-};
+}
 
 main();
