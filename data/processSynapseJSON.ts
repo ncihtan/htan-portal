@@ -35,7 +35,8 @@ import {
 } from '../packages/data-portal-commons/src/lib/synapse';
 import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
 import {
-    getPublicationAssociatedParentDataFileIDs, getPublicationPubMedID,
+    getPublicationAssociatedParentDataFileIDs,
+    getPublicationPubMedID,
     getPublicationUid,
 } from '../packages/data-portal-commons/src/lib/publicationHelpers';
 import {
@@ -110,25 +111,6 @@ async function writeProcessedFile() {
             [participantId: string]: BaseSerializableEntity;
         }
     );
-
-    // we need to fetch publication summaries after we process the json,
-    // because we need to know pubmed ids to query the external API
-
-    for (const [k, val] of Object.entries(processed.publicationManifestByUid)) {
-        const pubmedid = getPublicationPubMedID(val);
-
-        if (pubmedid !== '') {
-            const summaryResp = sums[parseInt(pubmedid)];
-            val.publicationId = getPublicationUid(val);
-            if (summaryResp) {
-                Object.assign(val, summaryResp);
-            } else {
-                val.jesus = true;
-            }
-        } else {
-        }
-    }
-
 
     fs.writeFileSync(
         'public/processed_syn_data.json',
@@ -412,7 +394,10 @@ function addDownloadSourcesInfo(
     } else {
         file.isRawSequencing = false;
         // Explicitly set CODEX Level 1 files to use Synapse as download source
-        if (file.assayName?.toLowerCase() === 'codex' && file.level === 'Level 1') {
+        if (
+            file.assayName?.toLowerCase() === 'codex' &&
+            file.level === 'Level 1'
+        ) {
             file.downloadSource = DownloadSourceCategory.synapse;
         } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
