@@ -803,14 +803,18 @@ export class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: 'Organ',
-                selector: 'TissueorOrganofOrigin',
+                selector: (file: Entity) => {
+                    return file.TissueorOrganofOrigin.join(', ');
+                },
                 cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
             },
             {
                 name: 'Treatment',
-                selector: 'TreatmentType',
+                selector: (file: Entity) => {
+                    return file.TreatmentType.join(', ');
+                },
                 cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
@@ -818,7 +822,9 @@ export class FileTable extends React.Component<IFileTableProps> {
             },
             {
                 name: 'Diagnosis',
-                selector: 'PrimaryDiagnosis',
+                selector: (file: Entity) => {
+                    return file.PrimaryDiagnosis.join(', ');
+                },
                 cell: truncatedTableCell,
                 wrap: true,
                 sortable: true,
