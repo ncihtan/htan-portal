@@ -202,6 +202,9 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         downloadSourceFilterString: this.getFilterStringForAttribute(
                             AttributeNames.downloadSource
                         ),
+                        releaseVersionFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.releaseVersion
+                        ),
                     })
                 );
                 const filteredMap = _.keyBy(

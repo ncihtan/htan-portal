@@ -26,6 +26,7 @@ export const defaultCountsByTypeQueryFilterString = {
     organTypeFilterString: '',
     atlasNameFilterString: '',
     downloadSourceFilterString: '',
+    releaseVersionFilterString: '',
 };
 
 export const countsByTypeQuery = _.template(`
@@ -42,7 +43,8 @@ export const countsByTypeQuery = _.template(`
         fileQueryForViewers AS (SELECT viewersArr, * FROM files <%=viewersFilterString%>),
         fileQueryForOrganType AS (SELECT viewersArr, * FROM files <%=organTypeFilterString%>),
         fileQueryForAtlasName AS (SELECT viewersArr, * FROM files <%=atlasNameFilterString%>),
-        fileQueryForDownloadSource AS (SELECT viewersArr, * FROM files <%=downloadSourceFilterString%>)
+        fileQueryForDownloadSource AS (SELECT viewersArr, * FROM files <%=downloadSourceFilterString%>),
+        fileQueryForReleaseVersion AS (SELECT viewersArr, * FROM files <%=releaseVersionFilterString%>)
     SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
         SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM fileQueryForGender
         UNION ALL
@@ -69,6 +71,8 @@ export const countsByTypeQuery = _.template(`
         SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
         UNION ALL
         SELECT Filename, downloadSource as val, 'downloadSource' as type, 'string' as fieldType FROM fileQueryForDownloadSource
+        UNION ALL
+        SELECT Filename, releaseVersion as val, 'releaseVersion' as type, 'string' as fieldType FROM fileQueryForReleaseVersion
         )
     WHERE notEmpty(val)                                                                 
     GROUP BY val, type, fieldType
