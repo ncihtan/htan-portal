@@ -1091,6 +1091,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             therapy: true,
             publicationIds: true,
             TreatmentType: true,
+            TissueorOrganofOrigin: true,
 
             // duplicate fields which are only added for filtering purposes
             Gender: true,

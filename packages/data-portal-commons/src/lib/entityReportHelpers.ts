@@ -1,4 +1,4 @@
-import _, { isEmpty } from 'lodash';
+import _ from 'lodash';
 import { AttributeNames } from '@htan/data-portal-utils';
 import { Entity } from './entity';
 import humanOrganMappings from '../assets/human-organ-mappings.json';
@@ -46,7 +46,7 @@ export type EntityReportByCenter = {
 };
 
 export function normalizeTissueOrOrganOrSite(value: string) {
-    return value;
+    return value.toLowerCase().replace(/,/g, '');
 }
 
 function normalizeTreatment(value: string[]): string[] {

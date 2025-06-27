@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import {createTable} from "./client.js";
+import {normalizeTissueOrOrganOrSite} from "@htan/data-portal-commons";
 // prettier-ignore
 import json from '../public/processed_syn_data.json' with { type: 'json' };
 // prettier-ignore
-import organMappings from './organMappings.json' with { type: 'json' };
+import organMappings from '../packages/data-portal-commons/src/assets/human-organ-mappings.json' with { type: 'json' };
 
 const fileFields = [
     "synapseId",
@@ -219,9 +220,12 @@ function findFields(data) {
 function postProcessFiles(file) {
     // update organ type
     _.forEach(organMappings,(val, key)=>{
-
         const target = _.isArray(file.TissueorOrganofOrigin) ? file.TissueorOrganofOrigin : [file.TissueorOrganofOrigin];
-        if (_.intersection(val.byTissueOrOrganOfOrigin, target).length > 0) {
+        if (_.intersection(
+                val.byTissueOrOrganOfOrigin.map(normalizeTissueOrOrganOrSite),
+                target.map(normalizeTissueOrOrganOrSite)
+            ).length > 0
+        ) {
             file.organType = file.organType || [];
             file.organType.push(key);
         }
