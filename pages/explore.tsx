@@ -8,7 +8,6 @@ import {
 
 import {
     ExploreURLQuery,
-    fetchData,
     getCloudBaseUrl,
     isReleaseQCEnabled,
     setTab,
@@ -34,8 +33,8 @@ const ExplorePage = (props: IExplorePageProps) => {
     // const setExploreTab = (tab: ExploreTab) => {
     //     setTab(tab, props.router);
     // };
-    // const getExploreTab = () =>
-    //     (props.router.query.tab || ExploreTab.ATLAS) as ExploreTab;
+    const getExploreTab = () =>
+        props.router.query.tab?.toString().toLowerCase() as ExploreTab;
 
     return (
         <>
@@ -46,6 +45,8 @@ const ExplorePage = (props: IExplorePageProps) => {
                     onFilterChange={onFilterChange}
                     getSelectedFilters={getSelectedFilters}
                     isReleaseQCEnabled={isReleaseQCEnabled}
+                    getTab={getExploreTab}
+                    cloudBaseUrl={getCloudBaseUrl()}
                 />
             </PageWrapper>
         </>

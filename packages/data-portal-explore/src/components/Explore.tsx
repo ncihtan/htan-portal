@@ -3,7 +3,6 @@ import _ from 'lodash';
 import remoteData, { MobxPromise } from 'mobxpromise';
 import { action, makeObservable, observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import { IPromiseBasedObservable } from 'mobx-utils';
 import { ScaleLoader } from 'react-spinners';
 import React from 'react';
 import {
@@ -19,14 +18,11 @@ import {
     AtlasMetaData,
     commonStyles,
     Entity,
-    filterFiles,
     getFileFilterDisplayName,
-    HTANToGenericAttributeMap,
     LoadDataResult,
     PublicationManifest,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
-import { DataSchemaData } from '@htan/data-portal-schema';
 
 import { ExploreSummary } from './ExploreSummary';
 import { ExploreTabs } from './ExploreTabs';
@@ -45,15 +41,6 @@ import {
 } from '../../../../lib/clickhouseStore';
 import FileFilterControls from './FileFilterControls';
 import getAtlasMetaData from '../../../../lib/getAtlasMetaData';
-
-export interface IExploreState {
-    files: Entity[];
-    filters: { [key: string]: string[] };
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    atlases: Atlas[];
-    publicationManifestByUid: { [uid: string]: PublicationManifest };
-    atlasData?: any;
-}
 
 export interface IExploreProps {
     getAtlasMetaData?: () => AtlasMetaData;
@@ -119,32 +106,17 @@ function getFilterStringExcludeSelf(
 }
 
 @observer
-export class Explore extends React.Component<IExploreProps, IExploreState> {
-    @observable.ref private dataLoadingPromise:
-        | IPromiseBasedObservable<LoadDataResult>
-        | undefined;
+export class Explore extends React.Component<IExploreProps> {
     @observable private showAllBiospecimens = false;
     @observable private showAllCases = false;
-    @observable private _selectedFilters: SelectedFilter[] = this.props
-        .getSelectedFilters
-        ? this.props.getSelectedFilters()
-        : [];
+    @observable private _selectedFilters: SelectedFilter[] =
+        this.props.getSelectedFilters?.() || [];
+    @observable private currentTab: ExploreTab =
+        this.props.getTab?.() || ExploreTab.ATLAS;
 
     constructor(props: any) {
         super(props);
-
-        this.state = {
-            files: [],
-            filters: {},
-            atlases: [],
-            publicationManifestByUid: {},
-            schemaDataById: {},
-        };
-
         makeObservable(this);
-
-        //@ts-ignore
-        if (typeof window !== 'undefined') (window as any).me = this;
     }
 
     unfilteredOptions = new remoteData({
@@ -406,13 +378,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         this.selectedFilters = getNewFilters(this.selectedFilters, actionMeta);
     }
 
-    @observable currentTab: ExploreTab = ExploreTab.ATLAS;
-
-    @action.bound
-    getTab(tabId: ExploreTab) {
-        return this.currentTab;
-    }
-
     @action.bound
     onSelectAtlas(selected: Atlas[]) {
         const group = AttributeNames.AtlasName;
@@ -541,7 +506,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         }}
                         filterString={this.filterString}
                         activeTab={this.currentTab}
-                        schemaDataById={this.state.schemaDataById}
                         filteredFiles={this.filesFiltered.result || []}
                         filteredSynapseAtlases={
                             this.atlasesFiltered.result || []
@@ -580,7 +544,6 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         getAtlasMetaData={
                             this.props.getAtlasMetaData || getAtlasMetaData
                         }
-                        genericAttributeMap={HTANToGenericAttributeMap}
                         files={this.files.result!}
                         filteredPublications={this.publications.result!}
                         // TODO these should be unfiltered publications, not filtered

@@ -8,7 +8,6 @@ import {
     GroupsByProperty,
     ISelectedFiltersByAttrName,
 } from '@htan/data-portal-filter';
-import { GenericAttributeNames } from '@htan/data-portal-utils';
 import {
     Atlas,
     AtlasMetaData,
@@ -16,7 +15,6 @@ import {
     getNormalizedOrgan,
     PublicationManifest,
 } from '@htan/data-portal-commons';
-import { DataSchemaData } from '@htan/data-portal-schema';
 
 import { AtlasTable } from './AtlasTable';
 import { BiospecimenTable } from './BiospecimenTable';
@@ -46,7 +44,6 @@ interface IExploreTabsProps {
     filteredCases: MobxPromise<Entity[]>;
     filteredSamples: Entity[];
     publications: PublicationManifest[];
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
     groupsByPropertyFiltered: GroupsByProperty<Entity>;
     filteredSynapseAtlases: Atlas[];
     filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
@@ -60,7 +57,6 @@ interface IExploreTabsProps {
     toggleShowAllCases: () => void;
     showAllCases: boolean;
 
-    genericAttributeMap?: { [attr: string]: GenericAttributeNames };
     getAtlasMetaData: () => AtlasMetaData;
     publicationManifestByUid: { [uid: string]: PublicationManifest };
     filteredPublications: PublicationManifest[];
@@ -251,8 +247,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         <BiospecimenTable
                             synapseAtlases={props.atlases.result || []}
                             samples={props.samples.result || []}
-                            schemaDataById={props.schemaDataById}
-                            genericAttributeMap={props.genericAttributeMap}
                             publicationsByUid={_.keyBy(
                                 props.publications,
                                 'publicationId'
@@ -278,8 +272,6 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         <CaseTable
                             synapseAtlases={props.filteredSynapseAtlases}
                             cases={props.cases.result || []}
-                            schemaDataById={props.schemaDataById}
-                            genericAttributeMap={props.genericAttributeMap}
                             publicationsByUid={_.keyBy(
                                 props.publications,
                                 'publicationId'
