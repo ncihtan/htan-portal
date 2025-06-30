@@ -1,5 +1,5 @@
 'use client';
-import _ from 'lodash';
+import _, { Dictionary } from 'lodash';
 import remoteData, { MobxPromise } from 'mobxpromise';
 import { action, makeObservable, observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
@@ -37,6 +37,7 @@ import {
     defaultCountsByTypeQueryFilterString,
     doQuery,
     fileQuery,
+    getCountsByTypeQueryUniformFilterString,
     specimenQuery,
 } from '../../../../lib/clickhouseStore';
 import FileFilterControls from './FileFilterControls';
@@ -105,6 +106,22 @@ function getFilterStringExcludeSelf(
     return getFilterString(filters, unfilteredOptions);
 }
 
+function groupOptionsByType(
+    filteredOptions?: CountByType[]
+): Dictionary<CountByType[]> {
+    return _(filteredOptions).groupBy('type').value();
+}
+
+function getGroupsByPropertyFiltered(
+    groupsByProperty: Dictionary<CountByType[]>
+): Dictionary<CountByType[]> {
+    return _(groupsByProperty)
+        .mapValues((group) =>
+            group.filter((g) => parseInt(g.count.toString()) > 0)
+        )
+        .value();
+}
+
 @observer
 export class Explore extends React.Component<IExploreProps> {
     @observable private showAllBiospecimens = false;
@@ -127,13 +144,32 @@ export class Explore extends React.Component<IExploreProps> {
         },
     });
 
+    filteredOptionsForSummary = new remoteData({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            if (this.filterString === '') {
+                return this.unfilteredOptions.result;
+            } else {
+                const filteredCountsByType = await doQuery<CountByType>(
+                    countsByTypeQuery(
+                        getCountsByTypeQueryUniformFilterString(
+                            this.filterString
+                        )
+                    )
+                );
+
+                return this.getOptionsFromFilteredCounts(filteredCountsByType);
+            }
+        },
+    });
+
     filteredOptions = new remoteData({
         await: () => [this.unfilteredOptions],
         invoke: async () => {
             if (this.filterString === '') {
                 return this.unfilteredOptions.result;
             } else {
-                const filteredResult = await doQuery<CountByType>(
+                const filteredCountsByType = await doQuery<CountByType>(
                     countsByTypeQuery({
                         genderFilterString: this.getFilterStringForAttribute(
                             AttributeNames.Gender
@@ -179,27 +215,8 @@ export class Explore extends React.Component<IExploreProps> {
                         ),
                     })
                 );
-                const filteredMap = _.keyBy(
-                    filteredResult,
-                    (option) => option.val + option.type
-                );
-                const unfilteredMap = _.keyBy(
-                    this.unfilteredOptions.result,
-                    (option) => option.val + option.type
-                );
 
-                return _(unfilteredMap)
-                    .mapValues((o, k) => {
-                        if (k in filteredMap) {
-                            return filteredMap[k];
-                        } else {
-                            const updated = _.clone(o);
-                            updated.count = 0;
-                            return updated;
-                        }
-                    })
-                    .values()
-                    .value();
+                return this.getOptionsFromFilteredCounts(filteredCountsByType);
             }
         },
     });
@@ -215,6 +232,32 @@ export class Explore extends React.Component<IExploreProps> {
             this.unfilteredOptions,
             attribute
         );
+    }
+
+    getOptionsFromFilteredCounts(
+        filteredCountsByType: CountByType[]
+    ): CountByType[] {
+        const filteredMap = _.keyBy(
+            filteredCountsByType,
+            (option) => option.val + option.type
+        );
+        const unfilteredMap = _.keyBy(
+            this.unfilteredOptions.result,
+            (option) => option.val + option.type
+        );
+
+        return _(unfilteredMap)
+            .mapValues((o, k) => {
+                if (k in filteredMap) {
+                    return filteredMap[k];
+                } else {
+                    const updated = _.clone(o);
+                    updated.count = 0;
+                    return updated;
+                }
+            })
+            .values()
+            .value();
     }
 
     files = new remoteData<Entity[]>({
@@ -362,11 +405,11 @@ export class Explore extends React.Component<IExploreProps> {
     }
 
     get groupsByPropertyFiltered() {
-        return _(this.groupsByProperty)
-            .mapValues((group) =>
-                group.filter((g) => parseInt(g.count.toString()) > 0)
-            )
-            .value();
+        return getGroupsByPropertyFiltered(this.groupsByProperty);
+    }
+
+    get groupsByPropertyFilteredForSummary() {
+        return getGroupsByPropertyFiltered(this.groupsByPropertyForSummary);
     }
 
     get selectedFiltersByAttrName(): ISelectedFiltersByAttrName {
@@ -426,7 +469,11 @@ export class Explore extends React.Component<IExploreProps> {
     }
 
     get groupsByProperty() {
-        return _(this.filteredOptions.result).groupBy('type').value();
+        return groupOptionsByType(this.filteredOptions.result);
+    }
+
+    get groupsByPropertyForSummary() {
+        return groupOptionsByType(this.filteredOptionsForSummary.result);
     }
 
     render() {
@@ -442,6 +489,7 @@ export class Explore extends React.Component<IExploreProps> {
             this.specimenFiltered,
             this.specimen,
             this.filteredOptions,
+            this.filteredOptionsForSummary,
             this.unfilteredOptions,
             this.publications,
             this.atlases,
@@ -496,7 +544,7 @@ export class Explore extends React.Component<IExploreProps> {
                             this.casesFiltered.result || [],
                             this.specimenFiltered.result || [],
                             this.filesFiltered.result || [],
-                            this.groupsByPropertyFiltered
+                            this.groupsByPropertyFilteredForSummary
                         )}
                     />
 

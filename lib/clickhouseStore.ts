@@ -12,22 +12,28 @@ const client = createClient({
     },
 });
 
-export const defaultCountsByTypeQueryFilterString = {
-    genderFilterString: '',
-    raceFilterString: '',
-    primaryDiagnosisFilterString: '',
-    ethnicityFilterString: '',
-    tissueOrOrganOfOriginFilterString: '',
-    levelFilterString: '',
-    assayNameFilterString: '',
-    treatmentTypeFilterString: '',
-    fileFormatFilterString: '',
-    viewersFilterString: '',
-    organTypeFilterString: '',
-    atlasNameFilterString: '',
-    downloadSourceFilterString: '',
-    releaseVersionFilterString: '',
-};
+export function getCountsByTypeQueryUniformFilterString(filterString: string) {
+    return {
+        genderFilterString: filterString,
+        raceFilterString: filterString,
+        primaryDiagnosisFilterString: filterString,
+        ethnicityFilterString: filterString,
+        tissueOrOrganOfOriginFilterString: filterString,
+        levelFilterString: filterString,
+        assayNameFilterString: filterString,
+        treatmentTypeFilterString: filterString,
+        fileFormatFilterString: filterString,
+        viewersFilterString: filterString,
+        organTypeFilterString: filterString,
+        atlasNameFilterString: filterString,
+        downloadSourceFilterString: filterString,
+        releaseVersionFilterString: filterString,
+    };
+}
+
+export const defaultCountsByTypeQueryFilterString = getCountsByTypeQueryUniformFilterString(
+    ''
+);
 
 export const countsByTypeQuery = _.template(`
     WITH
