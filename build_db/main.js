@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {createTable} from "./client.js";
-import {normalizeTissueOrOrganOrSite} from "@htan/data-portal-commons";
+import {normalizeTissueOrOrganOrSite, normalizeTreatment} from "@htan/data-portal-commons";
 // prettier-ignore
 import json from '../public/processed_syn_data.json' with { type: 'json' };
 // prettier-ignore
@@ -231,8 +231,11 @@ function postProcessFiles(file) {
         }
     });
 
+    // normalize treatment values
+    file.TreatmentType = _(file.TreatmentType).compact().flatMap(normalizeTreatment).value();
+
     // remove duplicate values
-    return _.mapValues(file, (value) => _.isArray(value) ? _.uniq(value): value);
+    return _.mapValues(file, (value) => _.isArray(value) ? _(value).uniq().compact().value(): value);
 }
 
 const JSONPATH = "http://localhost:3000/processed_syn_data.json"; //https://d13ch66cwesneh.cloudfront.net/processed_syn_data_20250122_1537.json
