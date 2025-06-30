@@ -7,7 +7,8 @@ export function getDefaultSummaryData<T>(
     filteredCases: T[],
     filteredSamples: T[],
     filteredFiles: T[],
-    groupsByPropertyFiltered?: GroupsByProperty<T>
+    groupsByPropertyFiltered?: GroupsByProperty<T>,
+    getOptionValue?: (val: any, key: string) => string
 ) {
     const summary = [
         {
@@ -44,7 +45,8 @@ export function getDefaultSummaryData<T>(
         let values = getSummaryData(
             s.attributeName,
             s.entities,
-            groupsByPropertyFiltered
+            groupsByPropertyFiltered,
+            getOptionValue
         );
 
         // special case ORGAN: remove NOT_REPORTED from the values
@@ -62,12 +64,13 @@ export function getDefaultSummaryData<T>(
 export function getSummaryData<T>(
     attributeName?: string,
     entities?: T[],
-    groupsByPropertyFiltered?: GroupsByProperty<T>
+    groupsByPropertyFiltered?: GroupsByProperty<T>,
+    getOptionValue: (val: any, key: string) => string = (val, key) => key
 ): any[] {
     if (entities) {
         return entities;
     } else if (attributeName && groupsByPropertyFiltered) {
-        return _.keys(groupsByPropertyFiltered[attributeName]);
+        return _.map(groupsByPropertyFiltered[attributeName], getOptionValue);
     } else {
         return [];
     }

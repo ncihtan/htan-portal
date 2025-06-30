@@ -544,7 +544,8 @@ export class Explore extends React.Component<IExploreProps> {
                             this.casesFiltered.result || [],
                             this.specimenFiltered.result || [],
                             this.filesFiltered.result || [],
-                            this.groupsByPropertyFilteredForSummary
+                            this.groupsByPropertyFilteredForSummary,
+                            (val: any, key: string) => val.val
                         )}
                     />
 
