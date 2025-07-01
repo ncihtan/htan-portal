@@ -115,42 +115,6 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
 
                 <FilterDropdown
                     {...dropdownProps}
-                    placeholder="Viewer"
-                    attributes={[AttributeNames.viewersArr]}
-                    className={styles.filterCheckboxListContainer}
-                    options={(attrName: AttributeNames) => {
-                        return options(attrName)
-                            .filter(
-                                (e: OptionType) =>
-                                    ![
-                                        FileViewerName.cds,
-                                        FileViewerName.idc,
-                                    ].includes(e.value as FileViewerName)
-                            )
-                            .map((e: OptionType) => {
-                                const viewerLabels = {
-                                    [FileViewerName.autoMinerva]: 'Autominerva',
-                                    [FileViewerName.customMinerva]:
-                                        'Minerva Story',
-                                    [FileViewerName.ucscXena]: 'UCSC Xena',
-                                    [FileViewerName.cellxgene]: 'CellxGene',
-                                    [FileViewerName.isbcgc]: 'BigQuery',
-
-                                    // excluded values:
-                                    // we are not supposed to see these as filter options
-                                    [FileViewerName.cds]: 'CDS', // excluded (this only appears as a download source)
-                                    [FileViewerName.idc]: 'IDC', // excluded (we do not show IDC links anymore)
-                                };
-
-                                e.label =
-                                    viewerLabels[e.value as FileViewerName];
-                                return e;
-                            });
-                    }}
-                />
-
-                <FilterDropdown
-                    {...dropdownProps}
                     placeholder="Assay"
                     attributes={[AttributeNames.assayName]}
                     className={styles.filterCheckboxListContainer}
@@ -233,6 +197,42 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                     downloadLabels[
                                         e.value as DownloadSourceCategory
                                     ];
+                                return e;
+                            });
+                    }}
+                />
+
+                <FilterDropdown
+                    {...dropdownProps}
+                    placeholder="Viewer"
+                    attributes={[AttributeNames.viewersArr]}
+                    className={styles.filterCheckboxListContainer}
+                    options={(attrName: AttributeNames) => {
+                        return options(attrName)
+                            .filter(
+                                (e: OptionType) =>
+                                    ![
+                                        FileViewerName.cds,
+                                        FileViewerName.idc,
+                                    ].includes(e.value as FileViewerName)
+                            )
+                            .map((e: OptionType) => {
+                                const viewerLabels = {
+                                    [FileViewerName.autoMinerva]: 'Autominerva',
+                                    [FileViewerName.customMinerva]:
+                                        'Minerva Story',
+                                    [FileViewerName.ucscXena]: 'UCSC Xena',
+                                    [FileViewerName.cellxgene]: 'CellxGene',
+                                    [FileViewerName.isbcgc]: 'BigQuery',
+
+                                    // excluded values:
+                                    // we are not supposed to see these as filter options
+                                    [FileViewerName.cds]: 'CDS', // excluded (this only appears as a download source)
+                                    [FileViewerName.idc]: 'IDC', // excluded (we do not show IDC links anymore)
+                                };
+
+                                e.label =
+                                    viewerLabels[e.value as FileViewerName];
                                 return e;
                             });
                     }}
