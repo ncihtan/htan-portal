@@ -27,7 +27,6 @@
     "prettierPreCommit"
   ],
   "dependencies": {
-    "@clickhouse/client": "^1.11.1",
     "@clickhouse/client-web": "^1.10.1",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -89,6 +88,7 @@
     "victory": "^36.2.0"
   },
   "devDependencies": {
+    "@clickhouse/client": "^1.11.1",
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.9.3",
     "@types/node-fetch": "^2.5.5",

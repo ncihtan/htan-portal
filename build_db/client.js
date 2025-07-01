@@ -14,11 +14,8 @@ const client = createClient({
     },
 });
 
-export async function doQuery(str) {
-    const resultSet = await client.query({
-        query: str,
-    });
-    return resultSet;
+export async function doQuery(query) {
+    return client.query({ query });
 }
 
 function correctFieldName(f) {
@@ -31,10 +28,6 @@ export async function createTable(
     fields,
     derivedColumns = null
 ) {
-    //const fields = Object.keys(data[0]);
-
-    ///const fieldsWithData = _(fields).filter(f=>_.some(data,(r)=>r[f] != null)).value();
-
     const q = `CREATE OR REPLACE TABLE ${tableName}
         (
             ${fields
@@ -51,13 +44,8 @@ export async function createTable(
     } 
         )          
             ENGINE = MergeTree
-             ORDER BY ${fields[0]}
+            ORDER BY ${fields[0]}
       `;
-
-    //console.log(q);
-    //console.log(data[0]);
-
-    //return;
 
     await doQuery(q).then((r) => {});
 
