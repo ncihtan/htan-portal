@@ -79,12 +79,10 @@ export const countsByTypeQuery = _.template(`
         SELECT Filename, downloadSource as val, 'downloadSource' as type, 'string' as fieldType FROM fileQueryForDownloadSource
         UNION ALL
         SELECT Filename, releaseVersion as val, 'releaseVersion' as type, 'string' as fieldType FROM fileQueryForReleaseVersion
-        )
+    )
     WHERE notEmpty(val)                                                                 
     GROUP BY val, type, fieldType
 `);
-
-//export const countsByTypeQueryMOO = _.template(countsByTypeQueryFiltered);
 
 export async function doQuery<T>(str: any): Promise<T[]> {
     const resultSet = await client.query({
@@ -96,36 +94,37 @@ export async function doQuery<T>(str: any): Promise<T[]> {
 }
 
 export const fileQuery = `
-SELECT synapseId,
-atlasid,
-atlas_name,
-level,
-assayName,
-Filename,
-FileFormat,
-DataFileID,
-biospecimenIds,
-Gender,
-Ethnicity,
-Race,
-VitalStatus,
-TreatmentType,
-PrimaryDiagnosis,
-TissueorOrganofOrigin,
-ScRNAseqWorkflowType,
-ScRNAseqWorkflowParametersDescription,
-WorkflowVersion,
-WorkflowLink,
-publicationIds,
-diagnosisIds,
-demographicsIds,
-therapyIds,
-viewers,
-isRawSequencing,
-downloadSource,
-releaseVersion,
-Component
-FROM files
+    SELECT
+        synapseId,
+        atlasid,
+        atlas_name,
+        level,
+        assayName,
+        Filename,
+        FileFormat,
+        DataFileID,
+        biospecimenIds,
+        Gender,
+        Ethnicity,
+        Race,
+        VitalStatus,
+        TreatmentType,
+        PrimaryDiagnosis,
+        TissueorOrganofOrigin,
+        ScRNAseqWorkflowType,
+        ScRNAseqWorkflowParametersDescription,
+        WorkflowVersion,
+        WorkflowLink,
+        publicationIds,
+        diagnosisIds,
+        demographicsIds,
+        therapyIds,
+        viewers,
+        isRawSequencing,
+        downloadSource,
+        releaseVersion,
+        Component
+    FROM files
 `;
 
 export const atlasQuery = _.template(`
@@ -136,44 +135,45 @@ export const atlasQuery = _.template(`
         )
 `);
 
-export const caseQuery = _.template(
-    `SELECT * FROM cases c
-                                         JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
-                       WHERE cases.ParticipantID IN (
-                           SELECT demographicsIds as moo FROM files f
-                           ARRAY JOIN demographicsIds
-                       <%=filterString%>
-         )`
-);
+export const caseQuery = _.template(`
+    SELECT * FROM cases c
+    JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
+    WHERE cases.ParticipantID IN (
+        SELECT demographicsIds as moo FROM files f
+        ARRAY JOIN demographicsIds
+        <%=filterString%>
+    )
+`);
 
 export const specimenQuery = _.template(`
-            SELECT * FROM specimen c
-                       WHERE specimen.BiospecimenID IN (
-                           SELECT biospecimenIds FROM files f
-                           ARRAY JOIN biospecimenIds
-                     <%=filterString%>)`);
+    SELECT * FROM specimen c
+    WHERE specimen.BiospecimenID IN (
+        SELECT biospecimenIds FROM files f
+        ARRAY JOIN biospecimenIds
+        <%=filterString%>
+    )
+`);
 
 export const assayQuery = _.template(`
     SELECT * FROM files WHERE has(files.publicationIds,'<%=publicationId %>')
 `);
 
-export const plotQuery = _.template(
-    `SELECT <%=field%> as label, count(<%=field%>) as count FROM <%=table%> c
+export const plotQuery = _.template(`
+    SELECT <%=field%> as label, count(<%=field%>) as count FROM <%=table%> c
     WHERE c.ParticipantID IN (
-              SELECT ids FROM files f
-                           ARRAY JOIN demographicsIds as ids
-                    <%=filterString%>
+        SELECT ids FROM files f
+        ARRAY JOIN demographicsIds as ids
+        <%=filterString%>
     )
-  GROUP BY <%=field%>`
-);
+    GROUP BY <%=field%>
+`);
 
-export const assayPlotQuery = _.template(
-    `
-            SELECT assayName as label, count(DISTINCT demographic_id) as count FROM (
-                SELECT demographic_id, assayName
-                FROM files
-                ARRAY JOIN demographicsIds AS demographic_id
-                    <%=filterString%>
-        ) GROUP BY assayName
-    `
-);
+export const assayPlotQuery = _.template(`
+    SELECT assayName as label, count(DISTINCT demographic_id) as count FROM (
+        SELECT demographic_id, assayName
+        FROM files
+        ARRAY JOIN demographicsIds AS demographic_id
+        <%=filterString%>
+    )
+    GROUP BY assayName
+`);
