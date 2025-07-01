@@ -39,8 +39,8 @@ interface IExploreTabsProps {
     samplesFiltered: MobxPromise<Entity[]>;
     cases: MobxPromise<Entity[]>;
     atlases: MobxPromise<Atlas[]>;
-    filteredCasesByNonAtlasFilters: Entity[];
-    filteredSamplesByNonAtlasFilters: Entity[];
+    filteredCasesByNonAtlasFilters: MobxPromise<Entity[]>;
+    filteredSamplesByNonAtlasFilters: MobxPromise<Entity[]>;
     filteredCases: MobxPromise<Entity[]>;
     filteredSamples: Entity[];
     publications: PublicationManifest[];
@@ -289,7 +289,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <PublicationTable
-                            publications={props.publications}
+                            publications={props.filteredPublications}
                             participants={props.cases.result!}
                             filteredParticipants={props.filteredCases.result!}
                             biospecimens={props.samples.result!}
@@ -316,8 +316,12 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 props.filteredSynapseAtlasesByNonAtlasFilters
                             }
                             onSelectAtlas={props.onSelectAtlas}
-                            filteredCases={props.filteredCases.result!}
-                            filteredBiospecimens={props.samplesFiltered.result!}
+                            filteredCases={
+                                props.filteredCasesByNonAtlasFilters.result!
+                            }
+                            filteredBiospecimens={
+                                props.filteredSamplesByNonAtlasFilters.result!
+                            }
                             selectedFiltersByAttrName={
                                 props.nonAtlasSelectedFiltersByAttrName
                             }

@@ -96,6 +96,15 @@ function getFilterString(
     }
 }
 
+function postProcessPublications(publications: PublicationManifest[]) {
+    _.forEach(publications, (pub: PublicationManifest) => {
+        // @ts-ignore
+        pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
+    });
+
+    return publications;
+}
+
 function getFilterStringExcludeSelf(
     selectedFilters: SelectedFilter[],
     unfilteredOptions: MobxPromise<CountByType[]>,
@@ -294,6 +303,18 @@ export class Explore extends React.Component<IExploreProps> {
         },
     });
 
+    casesFilteredByNonAtlasFilters = new remoteData<Entity[]>({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            const q = caseQuery({
+                filterString: this.getFilterStringForAttribute(
+                    AttributeNames.AtlasName
+                ),
+            });
+            return await doQuery<Entity>(q);
+        },
+    });
+
     specimen = new remoteData<Entity[]>({
         invoke: async () => {
             const q = specimenQuery({ filterString: '' });
@@ -305,6 +326,18 @@ export class Explore extends React.Component<IExploreProps> {
         await: () => [this.unfilteredOptions],
         invoke: async () => {
             const q = specimenQuery({ filterString: this.filterString });
+            return doQuery<Entity>(q);
+        },
+    });
+
+    specimenFilteredByNonAtlasFilters = new remoteData<Entity[]>({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            const q = specimenQuery({
+                filterString: this.getFilterStringForAttribute(
+                    AttributeNames.AtlasName
+                ),
+            });
             return doQuery<Entity>(q);
         },
     });
@@ -355,6 +388,17 @@ export class Explore extends React.Component<IExploreProps> {
     publications = new remoteData({
         await: () => [this.cases, this.unfilteredOptions],
         invoke: async () => {
+            const publications = await doQuery<PublicationManifest>(
+                `SELECT * FROM publication_manifest`
+            );
+
+            return postProcessPublications(publications);
+        },
+    });
+
+    publicationsFiltered = new remoteData({
+        await: () => [this.cases, this.unfilteredOptions],
+        invoke: async () => {
             const q = `
                 WITH filteredPublications AS (
                     SELECT DISTINCT publicationId FROM (
@@ -372,12 +416,7 @@ export class Explore extends React.Component<IExploreProps> {
              `;
             const publications = await doQuery<PublicationManifest>(q);
 
-            _.forEach(publications, (pub: PublicationManifest) => {
-                // @ts-ignore (we're fixing this
-                pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
-            });
-
-            return publications;
+            return postProcessPublications(publications);
         },
     });
 
@@ -484,14 +523,17 @@ export class Explore extends React.Component<IExploreProps> {
         }
 
         const allDataLoaded = allComplete([
+            this.casesFilteredByNonAtlasFilters,
             this.casesFiltered,
             this.cases,
+            this.specimenFilteredByNonAtlasFilters,
             this.specimenFiltered,
             this.specimen,
             this.filteredOptions,
             this.filteredOptionsForSummary,
             this.unfilteredOptions,
             this.publications,
+            this.publicationsFiltered,
             this.atlases,
             this.atlasesFiltered,
             this.atlasesFilteredByNonAtlasFilters,
@@ -572,12 +614,10 @@ export class Explore extends React.Component<IExploreProps> {
                         samples={this.specimen}
                         samplesFiltered={this.specimenFiltered}
                         filteredCasesByNonAtlasFilters={
-                            // TODO this.filteredCasesByNonAtlasFilters
-                            []
+                            this.casesFilteredByNonAtlasFilters
                         }
                         filteredSamplesByNonAtlasFilters={
-                            // TODO this.filteredSamplesByNonAtlasFilters
-                            []
+                            this.specimenFilteredByNonAtlasFilters
                         }
                         nonAtlasSelectedFiltersByAttrName={
                             this.nonAtlasSelectedFiltersByAttrName
@@ -594,8 +634,7 @@ export class Explore extends React.Component<IExploreProps> {
                             this.props.getAtlasMetaData || getAtlasMetaData
                         }
                         files={this.files.result!}
-                        filteredPublications={this.publications.result!}
-                        // TODO these should be unfiltered publications, not filtered
+                        filteredPublications={this.publicationsFiltered.result!}
                         publications={this.publications.result!}
                         publicationManifestByUid={this.publicationsById}
                     />
