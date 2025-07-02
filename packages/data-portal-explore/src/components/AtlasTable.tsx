@@ -42,7 +42,6 @@ interface IAtlasTableProps {
     // files: Entity[];
     filteredFiles: Entity[];
     cloudBaseUrl: string;
-    atlases: any[];
 }
 
 interface IAtlasMetadataLinkModalProps {
