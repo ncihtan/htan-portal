@@ -29,7 +29,10 @@ interface IFileFilterControlProps
 
 export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps> = observer(
     (props) => {
-        const filterControlsProps: IGenericFilterControlProps<any, any> = {
+        const filterControlsProps: IGenericFilterControlProps<
+            Entity,
+            AttributeNames
+        > = {
             countHeader: 'Files',
             attributeMap: FileAttributeMap,
             attributeNames: [
@@ -55,17 +58,10 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
         };
 
         const options = getOptionsFromProps(filterControlsProps);
-
-        // TODO investigate why getDropdownOptionsFromProps causes TS error
-        // const dropdownProps = getDropdownOptionsFromProps(filterControlsProps, options);
-        const dropdownProps = {
-            options,
-            countHeader: filterControlsProps.countHeader,
-            setFilter: filterControlsProps.setFilter,
-            selectedFiltersByGroupName:
-                filterControlsProps.selectedFiltersByGroupName,
-            attributeMap: FileAttributeMap,
-        };
+        const dropdownProps = getDropdownOptionsFromProps(
+            filterControlsProps,
+            options
+        );
 
         return (
             <FilterControls {...filterControlsProps}>
