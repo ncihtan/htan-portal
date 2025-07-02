@@ -55,34 +55,34 @@ export const countsByTypeQuery = _.template(`
         fileQueryForAtlasName AS (SELECT viewersArr, * FROM files <%=atlasNameFilterString%>),
         fileQueryForDownloadSource AS (SELECT viewersArr, * FROM files <%=downloadSourceFilterString%>),
         fileQueryForReleaseVersion AS (SELECT viewersArr, * FROM files <%=releaseVersionFilterString%>)
-    SELECT val, type, fieldType, count(Distinct Filename) as count FROM (
-        SELECT Filename, arrayJoin(Gender) as val, 'Gender' as type, 'array' as  fieldType FROM fileQueryForGender
+    SELECT val, type, fieldType, count(Distinct concat(DataFileID, synapseId)) as count FROM (
+        SELECT DataFileID, synapseId, arrayJoin(Gender) as val, 'Gender' as type, 'array' as fieldType FROM fileQueryForGender
         UNION ALL
-        SELECT Filename, arrayJoin(Race) as val, 'Race' as type,  'array' as  fieldType FROM fileQueryForRace
+        SELECT DataFileID, synapseId, arrayJoin(Race) as val, 'Race' as type, 'array' as fieldType FROM fileQueryForRace
         UNION ALL
-        SELECT Filename, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type,  'array' as  fieldType FROM fileQueryForPrimaryDiagnosis
+        SELECT DataFileID, synapseId, arrayJoin(PrimaryDiagnosis) as val, 'PrimaryDiagnosis' as type, 'array' as fieldType FROM fileQueryForPrimaryDiagnosis
         UNION ALL
-        SELECT Filename, arrayJoin(Ethnicity) as val, 'Ethnicity' as type,'array' as fieldType FROM fileQueryForEthnicity
+        SELECT DataFileID, synapseId, arrayJoin(Ethnicity) as val, 'Ethnicity' as type, 'array' as fieldType FROM fileQueryForEthnicity
         UNION ALL
-        SELECT Filename, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type,'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
+        SELECT DataFileID, synapseId, arrayJoin(TissueorOrganofOrigin) as val, 'TissueorOrganofOrigin' as type, 'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
         UNION ALL
-        SELECT Filename, level as val, 'level' as typ, 'string' as fieldType FROM fileQueryForLevel
+        SELECT DataFileID, synapseId, level as val, 'level' as typ, 'string' as fieldType FROM fileQueryForLevel
         UNION ALL
-        SELECT Filename, assayName as val, 'assayName' as type, 'string' as  fieldType FROM fileQueryForAssayName
+        SELECT DataFileID, synapseId, assayName as val, 'assayName' as type, 'string' as fieldType FROM fileQueryForAssayName
         UNION ALL
-        SELECT Filename, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM fileQueryForTreatmentType
+        SELECT DataFileID, synapseId, arrayJoin(TreatmentType) as val, 'TreatmentType' as type, 'array' as fieldType FROM fileQueryForTreatmentType
         UNION ALL
-        SELECT Filename, FileFormat as val, 'FileFormat' as type, 'string' as fieldType  FROM fileQueryForFileFormat
+        SELECT DataFileID, synapseId, FileFormat as val, 'FileFormat' as type, 'string' as fieldType FROM fileQueryForFileFormat
         UNION ALL
-        SELECT Filename, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM fileQueryForViewers
+        SELECT DataFileID, synapseId, arrayJoin(viewersArr) as val, 'viewersArr' as type, 'array' as fieldType FROM fileQueryForViewers
         UNION ALL
-        SELECT Filename, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM fileQueryForOrganType
+        SELECT DataFileID, synapseId, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM fileQueryForOrganType
         UNION ALL
-        SELECT Filename, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
+        SELECT DataFileID, synapseId, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
         UNION ALL
-        SELECT Filename, downloadSource as val, 'downloadSource' as type, 'string' as fieldType FROM fileQueryForDownloadSource
+        SELECT DataFileID, synapseId, downloadSource as val, 'downloadSource' as type, 'string' as fieldType FROM fileQueryForDownloadSource
         UNION ALL
-        SELECT Filename, releaseVersion as val, 'releaseVersion' as type, 'string' as fieldType FROM fileQueryForReleaseVersion
+        SELECT DataFileID, synapseId, releaseVersion as val, 'releaseVersion' as type, 'string' as fieldType FROM fileQueryForReleaseVersion
     )
     WHERE notEmpty(val)                                                                 
     GROUP BY val, type, fieldType
