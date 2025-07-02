@@ -16,35 +16,35 @@ import {
 import {
     Atlas,
     AtlasMetaData,
+    atlasQuery,
+    caseQuery,
     commonStyles,
+    CountByType,
+    countsByTypeQuery,
+    defaultCountsByTypeQueryFilterString,
+    doQuery,
     Entity,
+    fileQuery,
+    getCountsByTypeQueryUniformFilterString,
     getFileFilterDisplayName,
+    getFilterString,
     LoadDataResult,
     PublicationManifest,
+    specimenQuery,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
 
 import { ExploreSummary } from './ExploreSummary';
 import { ExploreTabs } from './ExploreTabs';
+import FileFilterControls from './FileFilterControls';
+
 import { getDefaultSummaryData } from '../lib/helpers';
-import { CountByType, ExploreTab } from '../lib/types';
+import { ExploreTab } from '../lib/types';
 
 import styles from './explore.module.scss';
-import {
-    atlasQuery,
-    caseQuery,
-    countsByTypeQuery,
-    defaultCountsByTypeQueryFilterString,
-    doQuery,
-    fileQuery,
-    getCountsByTypeQueryUniformFilterString,
-    specimenQuery,
-} from '../../../../lib/clickhouseStore';
-import FileFilterControls from './FileFilterControls';
-import getAtlasMetaData from '../../../../lib/getAtlasMetaData';
 
 export interface IExploreProps {
-    getAtlasMetaData?: () => AtlasMetaData;
+    getAtlasMetaData: () => AtlasMetaData;
     onFilterChange?: (selectedFilters: SelectedFilter[]) => void;
     getSelectedFilters?: () => SelectedFilter[];
     isReleaseQCEnabled?: () => boolean;
@@ -57,43 +57,6 @@ export interface IExploreProps {
 if (typeof window !== 'undefined') {
     //@ts-ignore
     window.toJS = toJS;
-}
-
-// TODO move to a utility class?
-function getFilterString(
-    selectedFilters: SelectedFilter[],
-    unfilteredOptions: MobxPromise<CountByType[]>
-) {
-    const filterToFieldMap: { [filter: string]: string } = {
-        AtlasName: 'atlas_name',
-    };
-
-    if (selectedFilters.length > 0) {
-        const clauses = _(selectedFilters)
-            .groupBy('group')
-            .map((val, k) => {
-                const field = filterToFieldMap[k] || k;
-                // if any of the values are type string, we can assume they all are
-                const values = val.map((v) => `'${v.value}'`).join(',');
-                if (
-                    val.find((v) => {
-                        const option = unfilteredOptions.result?.find(
-                            (o) => o.val === v.value
-                        );
-                        return option?.fieldType === 'string';
-                    })
-                ) {
-                    return `${field} in (${values})`;
-                } else {
-                    return `hasAny(${field},[${values}])`;
-                }
-            })
-            .value();
-
-        return ' WHERE ' + clauses.join(' AND ');
-    } else {
-        return '';
-    }
 }
 
 function postProcessPublications(publications: PublicationManifest[]) {
@@ -112,7 +75,7 @@ function getFilterStringExcludeSelf(
 ) {
     const filters = toJS(selectedFilters).filter((f) => f.group !== selfGroup);
 
-    return getFilterString(filters, unfilteredOptions);
+    return getFilterString(filters, unfilteredOptions.result);
 }
 
 function groupOptionsByType(
@@ -232,7 +195,7 @@ export class Explore extends React.Component<IExploreProps> {
 
     get filterString() {
         const selectedFilters = toJS(this.selectedFilters);
-        return getFilterString(selectedFilters, this.unfilteredOptions);
+        return getFilterString(selectedFilters, this.unfilteredOptions.result);
     }
 
     getFilterStringForAttribute(attribute: AttributeNames) {
@@ -630,9 +593,7 @@ export class Explore extends React.Component<IExploreProps> {
                         }
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
-                        getAtlasMetaData={
-                            this.props.getAtlasMetaData || getAtlasMetaData
-                        }
+                        getAtlasMetaData={this.props.getAtlasMetaData}
                         files={this.files.result!}
                         filteredPublications={this.publicationsFiltered.result!}
                         publications={this.publications.result!}

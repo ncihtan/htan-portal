@@ -1,7 +1,11 @@
-import { createClient } from '@clickhouse/client-web';
 import _ from 'lodash';
+import { createClient } from '@clickhouse/client-web';
+import { WebClickHouseClient } from '@clickhouse/client-web/dist/client';
+import { SelectedFilter } from '@htan/data-portal-filter';
 
-const client = createClient({
+import { CountByType } from './types';
+
+const defaultClient: WebClickHouseClient = createClient({
     host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
     username: 'webuser',
     password: 'My_password1976',
@@ -84,7 +88,10 @@ export const countsByTypeQuery = _.template(`
     GROUP BY val, type, fieldType
 `);
 
-export async function doQuery<T>(str: any): Promise<T[]> {
+export async function doQuery<T>(
+    str: any,
+    client: WebClickHouseClient = defaultClient
+): Promise<T[]> {
     const resultSet = await client.query({
         query: str,
         format: 'JSONEachRow',
@@ -177,3 +184,39 @@ export const assayPlotQuery = _.template(`
     )
     GROUP BY assayName
 `);
+
+export function getFilterString(
+    selectedFilters: SelectedFilter[],
+    unfilteredOptions?: CountByType[]
+) {
+    const filterToFieldMap: { [filter: string]: string } = {
+        AtlasName: 'atlas_name',
+    };
+
+    if (selectedFilters.length > 0) {
+        const clauses = _(selectedFilters)
+            .groupBy('group')
+            .map((val, k) => {
+                const field = filterToFieldMap[k] || k;
+                // if any of the values are type string, we can assume they all are
+                const values = val.map((v) => `'${v.value}'`).join(',');
+                if (
+                    val.find((v) => {
+                        const option = unfilteredOptions?.find(
+                            (o) => o.val === v.value
+                        );
+                        return option?.fieldType === 'string';
+                    })
+                ) {
+                    return `${field} in (${values})`;
+                } else {
+                    return `hasAny(${field},[${values}])`;
+                }
+            })
+            .value();
+
+        return ' WHERE ' + clauses.join(' AND ');
+    } else {
+        return '';
+    }
+}

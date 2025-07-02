@@ -6,6 +6,7 @@ import {
     SelectedFilter,
 } from '@htan/data-portal-filter';
 
+import getAtlasMetaData from '../lib/getAtlasMetaData';
 import {
     ExploreURLQuery,
     getCloudBaseUrl,
@@ -42,6 +43,7 @@ const ExplorePage = (props: IExplorePageProps) => {
 
             <PageWrapper>
                 <ExploreClientComponent
+                    getAtlasMetaData={getAtlasMetaData}
                     onFilterChange={onFilterChange}
                     getSelectedFilters={getSelectedFilters}
                     isReleaseQCEnabled={isReleaseQCEnabled}

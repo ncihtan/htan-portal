@@ -1,14 +1,12 @@
 import React from 'react';
-import fs from 'fs';
-import process from 'process';
-import path from 'path';
 import _ from 'lodash';
+
+import { doQuery } from '@htan/data-portal-commons';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
 import { GetStaticProps } from 'next';
 import PageWrapper from '../components/PageWrapper';
-import { doQuery } from '../lib/clickhouseStore';
 
 const Home = (data: IHomePropsProps) => {
     return (
@@ -62,12 +60,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
         (SELECT count(distinct BiospecimenID) FROM specimen WHERE BiospecimenID IN (
             SELECT DISTINCT bId
             FROM files f
-                   ARRAY JOIN biospecimenIds AS bId
+            ARRAY JOIN biospecimenIds AS bId
         )) as sampleCount,
         (SELECT count(organType) FROM (
-                                         SELECT organType FROM files ARRAY JOIN organType
-                                         GROUP BY organType
-                                     )) as organCount
+            SELECT organType FROM files
+            ARRAY JOIN organType
+            GROUP BY organType
+        )) as organCount
     `);
 
     const entitySummary = [

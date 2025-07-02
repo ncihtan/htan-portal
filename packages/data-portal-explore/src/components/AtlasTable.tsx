@@ -720,7 +720,6 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                     })}
                     atlas={this.metadataModalAtlas}
                     atlasMetaData={this.atlasMetaData}
-                    // TODO get this from a prop
                     cloudBaseUrl={this.props.cloudBaseUrl}
                 />
             </>

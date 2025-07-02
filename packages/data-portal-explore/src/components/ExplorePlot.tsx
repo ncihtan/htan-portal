@@ -1,16 +1,14 @@
+import _ from 'lodash';
+import { observer, useLocalStore } from 'mobx-react';
+import remoteData from 'mobxpromise';
+import React from 'react';
+import { Option } from 'react-select/src/filters';
 import { VictoryChart } from 'victory-chart';
 import { VictoryContainer, VictoryLabel, VictoryTheme } from 'victory-core';
 import { VictoryAxis } from 'victory-axis';
 import { VictoryBar } from 'victory-bar';
-import React, { useEffect, useState } from 'react';
-import { observer, useLocalStore } from 'mobx-react';
-import _ from 'lodash';
-import { Option } from 'react-select/src/filters';
-import { Entity } from '@htan/data-portal-commons';
-import remoteData from 'mobxpromise';
 
-// TODO we should move this into packages/data-portal-commons
-import { doQuery, plotQuery } from '../../../../lib/clickhouseStore';
+import { Entity, doQuery, plotQuery } from '@htan/data-portal-commons';
 
 export function getExploreChartOptions(
     filteredCases: Entity[],

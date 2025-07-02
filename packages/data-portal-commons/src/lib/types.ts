@@ -163,3 +163,10 @@ export interface GeneralLink {
     name: string;
     link: string;
 }
+
+export type CountByType = {
+    val: string;
+    type: string;
+    fieldType: string;
+    count: string | number;
+};

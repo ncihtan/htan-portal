@@ -1,3 +1,4 @@
+export * from './lib/clickhouseHelpers';
 export * from './lib/entity';
 export * from './lib/entityReportHelpers';
 export * from './lib/fetchSynData';

@@ -9,8 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
 import {
+    assayQuery,
     Atlas,
     AtlasDescription,
+    doQuery,
     Entity,
     getAllPublicationPagePaths,
     getPublicationAuthors,
@@ -30,7 +32,6 @@ import {
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 
 import publicationIds from './static_page_ids.json';
-import { assayQuery, doQuery } from '../../lib/clickhouseStore';
 
 // const filterByAttrName = (filters: SelectedFilter[]) => {
 //     return _.chain(filters)

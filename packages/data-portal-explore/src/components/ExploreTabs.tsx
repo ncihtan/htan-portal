@@ -9,10 +9,12 @@ import {
     ISelectedFiltersByAttrName,
 } from '@htan/data-portal-filter';
 import {
+    assayPlotQuery,
     Atlas,
     AtlasMetaData,
     Entity,
     getNormalizedOrgan,
+    plotQuery,
     PublicationManifest,
 } from '@htan/data-portal-commons';
 
@@ -25,9 +27,6 @@ import { PublicationTable } from './PublicationTable';
 import { ExploreTab } from '../lib/types';
 
 import styles from './exploreTabs.module.scss';
-
-// TODO we should move this into packages/data-portal-commons
-import { assayPlotQuery, plotQuery } from '../../../../lib/clickhouseStore';
 
 interface IExploreTabsProps {
     setTab: (tab: ExploreTab) => void;
