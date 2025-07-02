@@ -16,7 +16,7 @@ import {
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import PageWrapper from '../components/PageWrapper';
-import ClientComponent from './monkey';
+import ExploreClientComponent from './explore_client';
 
 interface IExplorePageProps {
     router: NextRouter;
@@ -41,7 +41,7 @@ const ExplorePage = (props: IExplorePageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <ClientComponent
+                <ExploreClientComponent
                     onFilterChange={onFilterChange}
                     getSelectedFilters={getSelectedFilters}
                     isReleaseQCEnabled={isReleaseQCEnabled}
