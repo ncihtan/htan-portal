@@ -11,18 +11,15 @@ import {
     AccessoryManifest,
     Atlas,
     AtlasMeta,
-    AutoMinerva,
     BaseSerializableEntity,
-    CdsAsset,
     DataFileID,
     DownloadSourceCategory,
     Entity,
-    FileViewerName,
-    IdcImagingAsset,
     PublicationManifest,
     ReleaseEntity,
     SerializableEntity,
 } from '../packages/data-portal-commons/src/lib/entity';
+import { addViewers } from '../packages/data-portal-commons/src/lib/fileHelpers';
 import {
     HTANAttributeNames,
     HTANToGenericAttributeMap,
@@ -36,7 +33,6 @@ import {
 import { isLowestLevel } from '../packages/data-portal-commons/src/lib/isLowestLevel';
 import {
     getPublicationAssociatedParentDataFileIDs,
-    getPublicationPubMedID,
     getPublicationUid,
 } from '../packages/data-portal-commons/src/lib/publicationHelpers';
 import {
@@ -44,27 +40,6 @@ import {
     getAttributeToSchemaIdMap,
     SchemaDataById,
 } from '../packages/data-portal-schema/src/lib/dataSchemaHelpers';
-import { getFileBase } from '../packages/data-portal-utils/src/lib/file';
-
-import CELLXGENE_MAPPINGS from './cellxgene-mappings.json';
-import UCSCXENA_MAPPINGS from './ucscxena-mappings.json';
-import ISBCGC_MAPPINGS from './isbcgc-mappings.json';
-import CUSTOM_MINERVA_STORY_MAPPINGS from './minerva-story-mappings.json';
-import AUTOMINERVA_ASSETS from './htan-imaging-assets.json';
-import IDC_IMAGING_ASSETS from './idc-imaging-assets.json';
-import CDS_ASSETS from './cds_drs_mapping.json';
-
-const IDC_MAPPINGS: {
-    [fileId: string]: IdcImagingAsset;
-} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier');
-
-const CDS_MAPPINGS: {
-    [fileId: string]: CdsAsset;
-} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID');
-
-const AUTOMINERVA_MAPPINGS: {
-    [synapseId: string]: AutoMinerva;
-} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid');
 
 interface ImagingMetadata {
     HTAN_Data_File_ID: string;
@@ -311,35 +286,6 @@ function addImageChannelMetadata(
             version,
         };
     }
-}
-
-function addViewers(
-    file: BaseSerializableEntity,
-    ucscXenaMappings: { [fileId: string]: string } = UCSCXENA_MAPPINGS,
-    cellxgeneMappings: { [filename: string]: string } = CELLXGENE_MAPPINGS,
-    isbcgcMappings: { [synapseId: string]: string } = ISBCGC_MAPPINGS,
-    customMinervaStoryMappings: {
-        [filename: string]: string;
-    } = CUSTOM_MINERVA_STORY_MAPPINGS,
-    thumbNailAndAutominervaMappings: {
-        [synapseId: string]: AutoMinerva;
-    } = AUTOMINERVA_MAPPINGS,
-    idcMappings: { [fileId: string]: IdcImagingAsset } = IDC_MAPPINGS,
-    cdsMappings: { [fileId: string]: CdsAsset } = CDS_MAPPINGS
-) {
-    const filename = getFileBase(file.Filename);
-    const synapseId = file.synapseId || '';
-
-    file.viewers = {
-        [FileViewerName.ucscXena]: ucscXenaMappings[file.DataFileID],
-        [FileViewerName.cellxgene]: cellxgeneMappings[filename],
-        [FileViewerName.isbcgc]: isbcgcMappings[synapseId],
-        [FileViewerName.customMinerva]: customMinervaStoryMappings[filename],
-        [FileViewerName.autoMinerva]:
-            thumbNailAndAutominervaMappings[synapseId],
-        [FileViewerName.idc]: idcMappings[file.DataFileID],
-        [FileViewerName.cds]: cdsMappings[file.DataFileID],
-    };
 }
 
 function getDbgapSynapseIds(entitiesById: {

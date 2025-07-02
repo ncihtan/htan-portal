@@ -2,6 +2,7 @@ export * from './lib/clickhouseHelpers';
 export * from './lib/entity';
 export * from './lib/entityReportHelpers';
 export * from './lib/fetchSynData';
+export * from './lib/fileHelpers';
 export * from './lib/fillInEntities';
 export * from './lib/filterHelpers';
 export * from './lib/getCaseValues';

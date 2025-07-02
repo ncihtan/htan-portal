@@ -1,8 +1,8 @@
 import fileDownload from 'js-file-download';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import React, { CSSProperties, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import React, { CSSProperties } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -39,6 +39,7 @@ import {
     truncateFilename,
 } from '@htan/data-portal-utils';
 import {
+    addViewers,
     commonStyles,
     DownloadSourceCategory,
     Entity,
@@ -48,9 +49,6 @@ import {
     ViewDetailsModal,
 } from '@htan/data-portal-commons';
 import { GroupsByProperty } from '@htan/data-portal-filter';
-
-// TODO we should move this into packages/data-portal-commons
-import { addViewers } from '../../../../lib/file_utils';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';
