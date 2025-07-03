@@ -2,9 +2,9 @@ import { createClient } from '@clickhouse/client';
 import _ from 'lodash';
 
 const client = createClient({
-    host:
+    url:
         process.env.CLICKHOUSE_HOST ??
-        'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan2',
+        'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
     username: process.env.CLICKHOUSE_USER ?? 'app_user',
     password: process.env.CLICKHOUSE_PASSWORD,
     request_timeout: 600000,

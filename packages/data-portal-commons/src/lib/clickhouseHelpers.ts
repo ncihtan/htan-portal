@@ -6,7 +6,7 @@ import { SelectedFilter } from '@htan/data-portal-filter';
 import { CountByType } from './types';
 
 const defaultClient: WebClickHouseClient = createClient({
-    host: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
+    url: 'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
     username: 'webuser',
     password: 'My_password1976',
     request_timeout: 600000,
@@ -146,16 +146,16 @@ export const caseQuery = _.template(`
     SELECT * FROM cases c
     JOIN diagnosis d ON c.ParticipantID = d.ParticipantID
     WHERE cases.ParticipantID IN (
-        SELECT demographicsIds as moo FROM files f
+        SELECT demographicsIds FROM files
         ARRAY JOIN demographicsIds
         <%=filterString%>
     )
 `);
 
 export const specimenQuery = _.template(`
-    SELECT * FROM specimen c
+    SELECT * FROM specimen
     WHERE specimen.BiospecimenID IN (
-        SELECT biospecimenIds FROM files f
+        SELECT biospecimenIds FROM files
         ARRAY JOIN biospecimenIds
         <%=filterString%>
     )
@@ -168,7 +168,7 @@ export const assayQuery = _.template(`
 export const plotQuery = _.template(`
     SELECT <%=field%> as label, count(<%=field%>) as count FROM <%=table%> c
     WHERE c.ParticipantID IN (
-        SELECT ids FROM files f
+        SELECT ids FROM files
         ARRAY JOIN demographicsIds as ids
         <%=filterString%>
     )
