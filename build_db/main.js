@@ -106,7 +106,8 @@ function postProcessFiles(file) {
     });
 
     // normalize treatment values
-    file.TreatmentType = _(file.TreatmentType).compact().flatMap(normalizeTreatment).value();
+    const treatmentType = _.isArray(file.TreatmentType) ? file.TreatmentType: [file.TreatmentType];
+    file.TreatmentType = _(treatmentType).compact().flatMap(normalizeTreatment).value();
 
     // remove duplicate values
     return _.mapValues(file, (value) => _.isArray(value) ? _(value).uniq().compact().value(): value);
