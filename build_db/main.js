@@ -76,6 +76,28 @@ function formatRow(file, data, fields, postProcess) {
     return obj;
 }
 
+function generateCaseData(
+    demographicsByParticipantID,
+    diagnosisByParticipantID
+) {
+    const cases = _.map(demographicsByParticipantID, (demo) => {
+        const dia = diagnosisByParticipantID[demo.ParticipantID];
+        if (dia) {
+            return {
+                ...dia,
+                ...demo
+            };
+        }
+        else {
+            return demo;
+        }
+    });
+
+    const participantsWithoutDemographics = _.difference(_.keys(diagnosisByParticipantID), _.keys(demographicsByParticipantID));
+
+    return cases.concat(participantsWithoutDemographics.map((participantID) => diagnosisByParticipantID[participantID]));
+}
+
 function findFields(data) {
     //const fields = Object.keys(data[0]);
     const fields = _(Object.values(data))
@@ -96,8 +118,8 @@ function postProcessFiles(file) {
     _.forEach(organMappings,(val, key)=>{
         const target = _.isArray(file.TissueorOrganofOrigin) ? file.TissueorOrganofOrigin : [file.TissueorOrganofOrigin];
         if (_.intersection(
-                val.byTissueOrOrganOfOrigin.map(normalizeTissueOrOrganOrSite),
-                target.map(normalizeTissueOrOrganOrSite)
+                _(val.byTissueOrOrganOfOrigin).compact().map(normalizeTissueOrOrganOrSite).value(),
+                _(target).compact().map(normalizeTissueOrOrganOrSite).value()
             ).length > 0
         ) {
             file.organType = file.organType || [];
@@ -202,16 +224,26 @@ async function main(){
             tableName: "atlases",
             derivedColumns: []
         },
-        casesConfig : {
+        demographicsConfig : {
             fields: findFields(Object.values(d.data.demographicsByParticipantID)),
             data: Object.values(d.data.demographicsByParticipantID),
-            tableName: "cases",
+            tableName: "demographics",
             derivedColumns: []
         },
         diagnosisConfig : {
             fields: [...findFields(Object.values(d.data.diagnosisByParticipantID)),"organType"],
             data: Object.values(d.data.diagnosisByParticipantID),
             tableName: "diagnosis",
+            postProcess: postProcessFiles,
+            derivedColumns: []
+        },
+        casesConfig: {
+            fields: _.uniq([
+                ...findFields(Object.values(d.data.demographicsByParticipantID)),
+                ...findFields(Object.values(d.data.diagnosisByParticipantID))
+            ]),
+            data: generateCaseData(d.data.demographicsByParticipantID, d.data.diagnosisByParticipantID),
+            tableName: "cases",
             postProcess: postProcessFiles,
             derivedColumns: []
         },
