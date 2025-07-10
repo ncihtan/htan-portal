@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-import { doQuery } from '@htan/data-portal-commons';
+import { caseQuery, doQuery } from '@htan/data-portal-commons';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
@@ -42,11 +42,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
         atlas_name: string;
         count: string;
     }>(`
-        SELECT organType, atlas_name, count(DISTINCT ParticipantID) as count FROM (
-            SELECT * FROM diagnosis
-                ARRAY JOIN organType
-            ) 
-        GROUP BY organType, atlas_name
+        SELECT 
+            organType,
+            atlas_name, 
+            count(DISTINCT ParticipantID) as count 
+        FROM (
+            ${caseQuery({ filterString: '' })}
+        )
+        ARRAY JOIN organType
+        GROUP BY 
+            organType, atlas_name
     `);
 
     const entityCounts = await doQuery<{

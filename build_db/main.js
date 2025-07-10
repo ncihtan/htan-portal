@@ -232,7 +232,10 @@ async function main(){
             derivedColumns: []
         },
         diagnosisConfig : {
-            fields: [...findFields(Object.values(d.data.diagnosisByParticipantID)),"organType"],
+            fields: [
+                ...findFields(Object.values(d.data.diagnosisByParticipantID)),
+                "organType",
+            ],
             data: Object.values(d.data.diagnosisByParticipantID),
             tableName: "diagnosis",
             postProcess: postProcessFiles,
@@ -241,7 +244,8 @@ async function main(){
         casesConfig: {
             fields: _.uniq([
                 ...findFields(Object.values(d.data.demographicsByParticipantID)),
-                ...findFields(Object.values(d.data.diagnosisByParticipantID))
+                ...findFields(Object.values(d.data.diagnosisByParticipantID)),
+                "organType",
             ]),
             data: cases,
             tableName: "cases",
