@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-import { caseQuery, doQuery } from '@htan/data-portal-commons';
+import { caseQuery, doQuery, NOT_REPORTED } from '@htan/data-portal-commons';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
@@ -61,7 +61,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
         organCount: string;
     }>(`
         SELECT (SELECT count(*) FROM atlases) as atlasCount,
-        (SELECT count(*) FROM cases) as caseCount,
+        (SELECT count(*) FROM (${caseQuery({
+            filterString: '',
+        })})) as caseCount,
         (SELECT count(distinct BiospecimenID) FROM specimen WHERE BiospecimenID IN (
             SELECT DISTINCT bId
             FROM files f
@@ -70,6 +72,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         (SELECT count(organType) FROM (
             SELECT organType FROM files
             ARRAY JOIN organType
+            WHERE organType != '${NOT_REPORTED}'
             GROUP BY organType
         )) as organCount
     `);
