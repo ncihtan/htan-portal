@@ -145,10 +145,10 @@ export const atlasQuery = _.template(`
 export const caseQuery = _.template(`
     SELECT * FROM cases
     WHERE ParticipantID IN (
-        SELECT demographicsIds FROM files
+        SELECT demographicsIds FROM files 
         ARRAY JOIN demographicsIds
         <%=filterString%>
-    ) OR ParticipantID IN (
+        UNION DISTINCT 
         SELECT diagnosisIds FROM files
         ARRAY JOIN diagnosisIds
         <%=filterString%>
