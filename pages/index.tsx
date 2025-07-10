@@ -29,10 +29,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
             assayName,
             atlas_name,
             COUNT(distinct demographicsIds) AS count
-        FROM
-            files
-                ARRAY JOIN
-            demographicsIds
+        FROM files
+        ARRAY JOIN demographicsIds
         GROUP BY
             assayName, atlas_name
     `);
@@ -61,9 +59,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
         organCount: string;
     }>(`
         SELECT (SELECT count(*) FROM atlases) as atlasCount,
-        (SELECT count(*) FROM (${caseQuery({
-            filterString: '',
-        })})) as caseCount,
+        (SELECT count(*) FROM (
+            ${caseQuery({ filterString: '' })}                          
+        )) as caseCount,
         (SELECT count(distinct BiospecimenID) FROM specimen WHERE BiospecimenID IN (
             SELECT DISTINCT bId
             FROM files f
