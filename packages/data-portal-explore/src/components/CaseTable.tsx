@@ -242,7 +242,7 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
     const columns = [
         ...cols.slice(0, 2),
         getPublicationColumn(props.publicationsByUid),
-        ...cols.slice(3),
+        ...cols.slice(2),
         ...customColumns,
     ];
 
