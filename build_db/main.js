@@ -153,8 +153,9 @@ async function main(){
     };
     // console.log("keys", Object.keys(d.data));
 
+    const cases = generateCaseData(d.data.demographicsByParticipantID, d.data.diagnosisByParticipantID);
+    const caseMap = _.keyBy(cases, (c) => c.ParticipantID);
     const samples = Object.values(d.data.biospecimenByBiospecimenID);
-    const caseMap = d.data.demographicsByParticipantID;
     const sampleMap = d.data.biospecimenByBiospecimenID;
 
     // console.log("total", Object.values(d.data.biospecimenByBiospecimenID).length);
@@ -242,7 +243,7 @@ async function main(){
                 ...findFields(Object.values(d.data.demographicsByParticipantID)),
                 ...findFields(Object.values(d.data.diagnosisByParticipantID))
             ]),
-            data: generateCaseData(d.data.demographicsByParticipantID, d.data.diagnosisByParticipantID),
+            data: cases,
             tableName: "cases",
             postProcess: postProcessFiles,
             derivedColumns: []
