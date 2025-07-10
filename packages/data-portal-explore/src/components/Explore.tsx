@@ -570,7 +570,7 @@ export class Explore extends React.Component<IExploreProps> {
                         atlases={this.atlases}
                         filteredSamples={this.casesFiltered.result || []}
                         cases={this.cases}
-                        filteredCases={this.casesFiltered}
+                        casesFiltered={this.casesFiltered}
                         selectedSynapseAtlases={this.selectedAtlases}
                         allSynapseAtlases={this.atlases.result || []}
                         onSelectAtlas={this.onSelectAtlas}

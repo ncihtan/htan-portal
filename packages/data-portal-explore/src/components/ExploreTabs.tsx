@@ -37,10 +37,10 @@ interface IExploreTabsProps {
     samples: MobxPromise<Entity[]>;
     samplesFiltered: MobxPromise<Entity[]>;
     cases: MobxPromise<Entity[]>;
+    casesFiltered: MobxPromise<Entity[]>;
     atlases: MobxPromise<Atlas[]>;
     filteredCasesByNonAtlasFilters: MobxPromise<Entity[]>;
     filteredSamplesByNonAtlasFilters: MobxPromise<Entity[]>;
-    filteredCases: MobxPromise<Entity[]>;
     filteredSamples: Entity[];
     publications: PublicationManifest[];
     groupsByPropertyFiltered: GroupsByProperty<Entity>;
@@ -220,7 +220,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 props.groupsByPropertyFiltered
                             }
                             patientCount={
-                                props.filteredCases.result?.length || 0
+                                props.casesFiltered.result?.length || 0
                             }
                             publicationsByUid={props.publicationManifestByUid}
                         />
@@ -245,7 +245,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </label>*/}
                         <BiospecimenTable
                             synapseAtlases={props.atlases.result || []}
-                            samples={props.samples.result || []}
+                            samples={props.samplesFiltered.result || []}
                             publicationsByUid={_.keyBy(
                                 props.publications,
                                 'publicationId'
@@ -270,7 +270,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </label>*/}
                         <CaseTable
                             synapseAtlases={props.filteredSynapseAtlases}
-                            cases={props.cases.result || []}
+                            cases={props.casesFiltered.result || []}
                             publicationsByUid={_.keyBy(
                                 props.publications,
                                 'publicationId'
@@ -290,7 +290,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         <PublicationTable
                             publications={props.filteredPublications}
                             participants={props.cases.result!}
-                            filteredParticipants={props.filteredCases.result!}
+                            filteredParticipants={props.casesFiltered.result!}
                             biospecimens={props.samples.result!}
                             filteredBiospecimens={props.samplesFiltered.result!}
                             files={props.files}
