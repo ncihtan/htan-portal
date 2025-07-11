@@ -102,7 +102,7 @@ function findFields(data) {
     //const fields = Object.keys(data[0]);
     const fields = _(Object.values(data))
         .flatMap((o)=>Object.keys(o))
-        .filter(t=>/[a-z]/.test(t))
+        .filter(t=>/[a-z]/i.test(t))
         .uniq()
         .value();
 

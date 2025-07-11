@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 
 import {
@@ -226,10 +227,10 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
         sortable: true,
         searchable: false,
         cell: (sample: Entity) => {
-            const value = sample[name as keyof Entity] as number;
+            const value = Number(sample[name as keyof Entity]);
 
-            if (value === undefined) {
-                return value;
+            if (value === 0 || _.isNaN(value)) {
+                return undefined;
             } else if (value < 0.001) {
                 return value.toExponential(4);
             } else {
