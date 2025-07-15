@@ -63,6 +63,7 @@ function postProcessPublications(publications: PublicationManifest[]) {
     _.forEach(publications, (pub: PublicationManifest) => {
         // @ts-ignore
         pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
+        pub.CitedInNumber = Number(pub.CitedInNumber);
     });
 
     return publications;
