@@ -130,6 +130,7 @@ export const fileQuery = `
         isRawSequencing,
         downloadSource,
         releaseVersion,
+        imageChannelMetadata,
         Component
     FROM files
 `;

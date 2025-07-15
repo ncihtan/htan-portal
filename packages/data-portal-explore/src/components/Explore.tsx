@@ -69,6 +69,16 @@ function postProcessPublications(publications: PublicationManifest[]) {
     return publications;
 }
 
+function postProcessFiles(files: Entity[]) {
+    _.forEach(files, (f: Entity) => {
+        f.imageChannelMetadata = !_.isEmpty(f.imageChannelMetadata)
+            ? JSON.parse(f.imageChannelMetadata!.toString())
+            : f.imageChannelMetadata;
+    });
+
+    return files;
+}
+
 function getFilterStringExcludeSelf(
     selectedFilters: SelectedFilter[],
     unfilteredOptions: MobxPromise<CountByType[]>,
@@ -235,8 +245,8 @@ export class Explore extends React.Component<IExploreProps> {
 
     files = new remoteData<Entity[]>({
         invoke: async () => {
-            const q = fileQuery;
-            return await doQuery<Entity>(q);
+            const data = await doQuery<Entity>(fileQuery);
+            return postProcessFiles(data);
         },
     });
 
@@ -246,8 +256,9 @@ export class Explore extends React.Component<IExploreProps> {
             if (this.filterString.length === 0) {
                 return this.files.result || [];
             } else {
-                const q = 'SELECT * FROM files' + this.filterString;
-                return await doQuery<Entity>(q);
+                const q = fileQuery + this.filterString;
+                const data = await doQuery<Entity>(q);
+                return postProcessFiles(data);
             }
         },
     });

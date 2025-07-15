@@ -33,6 +33,7 @@ const fileFields = [
     "WorkflowVersion",
     "WorkflowLink",
     "AtlasMeta",
+    "imageChannelMetadata",
     "publicationIds",
     "diagnosisIds",
     "demographicsIds",
