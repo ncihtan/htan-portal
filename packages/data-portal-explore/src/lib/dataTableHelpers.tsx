@@ -103,15 +103,16 @@ export function getPublicationColumn(publicationsByUid?: {
     [uid: string]: PublicationManifest;
 }) {
     return {
+        id: 'Publications',
         name: 'Publications',
         selector: 'publicationIds',
         wrap: true,
         sortable: true,
         searchable: false,
-        omit: !publicationsByUid,
+        omit: false,
         cell: (entity: Entity) =>
             entity.publicationIds?.map((uid) =>
-                publicationsByUid ? (
+                publicationsByUid && publicationsByUid[uid] ? (
                     <PublicationIcon
                         publicationManifest={publicationsByUid[uid]}
                     />

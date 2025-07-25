@@ -106,7 +106,7 @@ export const FileAttributeMap: {
         displayName: 'Stage',
         caseFilter: true,
     },
-    [AttributeNames.Level]: {
+    [AttributeNames.level]: {
         path: 'level',
         displayName: 'Level',
     },
@@ -126,7 +126,7 @@ export const FileAttributeMap: {
         path: 'downloadSource',
         displayName: 'Data Access',
     },
-    [AttributeNames.viewers]: {
+    [AttributeNames.viewersArr]: {
         getValues: getViewerValues,
         displayName: 'Viewer',
     },
@@ -163,3 +163,10 @@ export interface GeneralLink {
     name: string;
     link: string;
 }
+
+export type CountByType = {
+    val: string;
+    type: string;
+    fieldType: string;
+    count: string | number;
+};

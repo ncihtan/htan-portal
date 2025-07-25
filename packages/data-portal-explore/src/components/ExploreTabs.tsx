@@ -1,18 +1,22 @@
 import { observer } from 'mobx-react';
+import { MobxPromise } from 'mobxpromise';
 import React, { useState } from 'react';
-import Select, { MultiValueProps } from 'react-select';
+import { MultiValueProps } from 'react-select';
 import _ from 'lodash';
 
-import { ISelectedFiltersByAttrName } from '@htan/data-portal-filter';
-import { GenericAttributeNames } from '@htan/data-portal-utils';
 import {
+    GroupsByProperty,
+    ISelectedFiltersByAttrName,
+} from '@htan/data-portal-filter';
+import {
+    assayPlotQuery,
     Atlas,
     AtlasMetaData,
     Entity,
     getNormalizedOrgan,
+    plotQuery,
     PublicationManifest,
 } from '@htan/data-portal-commons';
-import { DataSchemaData } from '@htan/data-portal-schema';
 
 import { AtlasTable } from './AtlasTable';
 import { BiospecimenTable } from './BiospecimenTable';
@@ -25,21 +29,21 @@ import { ExploreTab } from '../lib/types';
 import styles from './exploreTabs.module.scss';
 
 interface IExploreTabsProps {
-    setTab?: (tab: ExploreTab) => void;
-    getTab?: () => ExploreTab;
+    setTab: (tab: ExploreTab) => void;
     files: Entity[];
+    activeTab: ExploreTab;
     filteredFiles: Entity[];
     nonAtlasSelectedFiltersByAttrName: ISelectedFiltersByAttrName;
-    samples: Entity[];
-    cases: Entity[];
-    filteredCasesByNonAtlasFilters: Entity[];
-    filteredSamplesByNonAtlasFilters: Entity[];
-    filteredCases: Entity[];
+    samples: MobxPromise<Entity[]>;
+    samplesFiltered: MobxPromise<Entity[]>;
+    cases: MobxPromise<Entity[]>;
+    casesFiltered: MobxPromise<Entity[]>;
+    atlases: MobxPromise<Atlas[]>;
+    filteredCasesByNonAtlasFilters: MobxPromise<Entity[]>;
+    filteredSamplesByNonAtlasFilters: MobxPromise<Entity[]>;
     filteredSamples: Entity[];
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    groupsByPropertyFiltered: {
-        [attrName: string]: { [attrValue: string]: Entity[] };
-    };
+    publications: PublicationManifest[];
+    groupsByPropertyFiltered: GroupsByProperty<Entity>;
     filteredSynapseAtlases: Atlas[];
     filteredSynapseAtlasesByNonAtlasFilters: Atlas[];
     selectedSynapseAtlases: Atlas[];
@@ -52,10 +56,10 @@ interface IExploreTabsProps {
     toggleShowAllCases: () => void;
     showAllCases: boolean;
 
-    genericAttributeMap?: { [attr: string]: GenericAttributeNames };
     getAtlasMetaData: () => AtlasMetaData;
     publicationManifestByUid: { [uid: string]: PublicationManifest };
     filteredPublications: PublicationManifest[];
+    filterString: string;
 }
 
 const metricTypes = [
@@ -84,35 +88,23 @@ const MultiValue = (props: MultiValueProps<any>) => {
 function getSamplesByValueMap(
     entities: Entity[],
     countByField: string
-): Record<string, Entity[]> {
-    const ret = entities.reduce((agg: Record<string, Entity[]>, file) => {
+): Record<string, string[]> {
+    const ret = entities.reduce((agg: Record<string, string[]>, file) => {
         if (file.assayName) {
             agg[file.assayName] = agg[file.assayName] || [];
-            agg[file.assayName].push(...file.biospecimen);
+            agg[file.assayName].push(...file.biospecimenIds); // this should be biospecimen, not IDS but we changted it
         }
         return agg;
     }, {});
 
-    return _.mapValues(ret, (v, k) =>
-        _.uniqBy(v, (e) => e[countByField as keyof Entity])
-    );
+    return ret;
+    // return _.mapValues(ret, (v, k) =>
+    //     _.uniqBy(v, (e) => e[countByField as keyof Entity])
+    // );
 }
 
 export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
     (props) => {
-        // TODO ignoring setTab for now because it significantly slows down switching between tabs
-        // let activeTab: string;
-        // let setTab: (tab: ExploreTab) => void;
-        // if (props.getTab && props.setTab) {
-        //     activeTab = props.getTab();
-        //     setTab = props.setTab;
-        // } else {
-        //     [activeTab, setTab] = useState<ExploreTab>(ExploreTab.ATLAS);
-        // }
-
-        const [activeTab, setTab] = useState<ExploreTab>(
-            props.getTab?.() || ExploreTab.ATLAS
-        );
         const [logScale, setLogScale] = useState(false);
 
         // TODO harmonization is not functional yet
@@ -123,8 +115,8 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
         const [metric, setMetric] = useState(metricTypes[0]);
 
         const [selectedFields, setSelectedFields] = useState(
-            DEFAULT_EXPLORE_PLOT_OPTIONS.filter((opt) =>
-                /TissueorOrganofOrigin|assayName/.test(opt.value)
+            DEFAULT_EXPLORE_PLOT_OPTIONS.filter(
+                (opt) => /./.test(opt.value) // lets just do all of them now
             )
         );
 
@@ -138,9 +130,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     <ul className="nav nav-tabs">
                         <li className="nav-item">
                             <a
-                                onClick={() => setTab(ExploreTab.ATLAS)}
+                                onClick={() => props.setTab(ExploreTab.ATLAS)}
                                 className={`nav-link ${
-                                    activeTab === ExploreTab.ATLAS
+                                    props.activeTab === ExploreTab.ATLAS
                                         ? 'active'
                                         : ''
                                 }`}
@@ -150,9 +142,11 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() => setTab(ExploreTab.PUBLICATION)}
+                                onClick={() =>
+                                    props.setTab(ExploreTab.PUBLICATION)
+                                }
                                 className={`nav-link ${
-                                    activeTab === ExploreTab.PUBLICATION
+                                    props.activeTab === ExploreTab.PUBLICATION
                                         ? 'active'
                                         : ''
                                 }`}
@@ -162,9 +156,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() => setTab(ExploreTab.CASES)}
+                                onClick={() => props.setTab(ExploreTab.CASES)}
                                 className={`nav-link ${
-                                    activeTab === ExploreTab.CASES
+                                    props.activeTab === ExploreTab.CASES
                                         ? 'active'
                                         : ''
                                 }`}
@@ -174,9 +168,11 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() => setTab(ExploreTab.BIOSPECIMEN)}
+                                onClick={() =>
+                                    props.setTab(ExploreTab.BIOSPECIMEN)
+                                }
                                 className={`nav-link ${
-                                    activeTab === ExploreTab.BIOSPECIMEN
+                                    props.activeTab === ExploreTab.BIOSPECIMEN
                                         ? 'active'
                                         : ''
                                 }`}
@@ -186,9 +182,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() => setTab(ExploreTab.FILE)}
+                                onClick={() => props.setTab(ExploreTab.FILE)}
                                 className={`nav-link ${
-                                    activeTab === ExploreTab.FILE
+                                    props.activeTab === ExploreTab.FILE
                                         ? 'active'
                                         : ''
                                 }`}
@@ -198,9 +194,9 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </li>
                         <li className="nav-item">
                             <a
-                                onClick={() => setTab(ExploreTab.PLOTS)}
+                                onClick={() => props.setTab(ExploreTab.PLOTS)}
                                 className={`nav-link ${
-                                    activeTab === ExploreTab.PLOTS
+                                    props.activeTab === ExploreTab.PLOTS
                                         ? 'active'
                                         : ''
                                 }`}
@@ -212,10 +208,10 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     </ul>
                 </div>
 
-                {activeTab === ExploreTab.FILE && (
+                {props.activeTab === ExploreTab.FILE && (
                     <div
                         className={`tab-content fileTab ${
-                            activeTab !== ExploreTab.FILE ? 'd-none' : ''
+                            props.activeTab !== ExploreTab.FILE ? 'd-none' : ''
                         }`}
                     >
                         <FileTable
@@ -223,16 +219,20 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             groupsByPropertyFiltered={
                                 props.groupsByPropertyFiltered
                             }
-                            patientCount={props.filteredCases.length}
+                            patientCount={
+                                props.casesFiltered.result?.length || 0
+                            }
                             publicationsByUid={props.publicationManifestByUid}
                         />
                     </div>
                 )}
 
-                {activeTab === ExploreTab.BIOSPECIMEN && (
+                {props.activeTab === ExploreTab.BIOSPECIMEN && (
                     <div
                         className={`tab-content biospecimen ${
-                            activeTab !== ExploreTab.BIOSPECIMEN ? 'd-none' : ''
+                            props.activeTab !== ExploreTab.BIOSPECIMEN
+                                ? 'd-none'
+                                : ''
                         }`}
                     >
                         {/*<label className="show-all-checkbox">
@@ -244,19 +244,20 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             Show all biospecimens from filtered files
                         </label>*/}
                         <BiospecimenTable
-                            synapseAtlases={props.filteredSynapseAtlases}
-                            samples={props.filteredSamples}
-                            schemaDataById={props.schemaDataById}
-                            genericAttributeMap={props.genericAttributeMap}
-                            publicationsByUid={props.publicationManifestByUid}
+                            synapseAtlases={props.atlases.result || []}
+                            samples={props.samplesFiltered.result || []}
+                            publicationsByUid={_.keyBy(
+                                props.publications,
+                                'publicationId'
+                            )}
                         />
                     </div>
                 )}
 
-                {activeTab === ExploreTab.CASES && (
+                {props.activeTab === ExploreTab.CASES && (
                     <div
                         className={`tab-content cases ${
-                            activeTab !== ExploreTab.CASES ? 'd-none' : ''
+                            props.activeTab !== ExploreTab.CASES ? 'd-none' : ''
                         }`}
                     >
                         {/*<label className="show-all-checkbox">
@@ -269,68 +270,69 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         </label>*/}
                         <CaseTable
                             synapseAtlases={props.filteredSynapseAtlases}
-                            cases={props.filteredCases}
-                            schemaDataById={props.schemaDataById}
-                            genericAttributeMap={props.genericAttributeMap}
-                            publicationsByUid={props.publicationManifestByUid}
+                            cases={props.casesFiltered.result || []}
+                            publicationsByUid={_.keyBy(
+                                props.publications,
+                                'publicationId'
+                            )}
                         />
                     </div>
                 )}
 
-                {activeTab === ExploreTab.PUBLICATION && (
+                {props.activeTab === ExploreTab.PUBLICATION && (
                     <div
                         className={`tab-content ${styles.publicationTab} ${
-                            activeTab !== ExploreTab.PUBLICATION ? 'd-none' : ''
+                            props.activeTab !== ExploreTab.PUBLICATION
+                                ? 'd-none'
+                                : ''
                         }`}
                     >
                         <PublicationTable
                             publications={props.filteredPublications}
-                            participants={props.cases}
-                            filteredParticipants={props.filteredCases}
-                            biospecimens={props.samples}
-                            filteredBiospecimens={props.filteredSamples}
+                            participants={props.cases.result!}
+                            filteredParticipants={props.casesFiltered.result!}
+                            biospecimens={props.samples.result!}
+                            filteredBiospecimens={props.samplesFiltered.result!}
                             files={props.files}
                             filteredFiles={props.filteredFiles}
                         />
                     </div>
                 )}
 
-                {activeTab === ExploreTab.ATLAS && (
+                {props.activeTab === ExploreTab.ATLAS && (
                     <div
                         className={`tab-content ${styles.atlasTab} ${
-                            activeTab !== ExploreTab.ATLAS ? 'd-none' : ''
+                            props.activeTab !== ExploreTab.ATLAS ? 'd-none' : ''
                         }`}
                     >
                         <AtlasTable
-                            setTab={setTab}
-                            publications={_.values(
-                                props.publicationManifestByUid
-                            )}
+                            setTab={props.setTab}
+                            publications={props.publications}
                             getAtlasMetaData={props.getAtlasMetaData}
-                            synapseAtlasData={props.allSynapseAtlases}
                             selectedAtlases={props.selectedSynapseAtlases}
                             filteredAtlases={
                                 props.filteredSynapseAtlasesByNonAtlasFilters
                             }
                             onSelectAtlas={props.onSelectAtlas}
-                            filteredCases={props.filteredCasesByNonAtlasFilters}
+                            filteredCases={
+                                props.filteredCasesByNonAtlasFilters.result!
+                            }
                             filteredBiospecimens={
-                                props.filteredSamplesByNonAtlasFilters
+                                props.filteredSamplesByNonAtlasFilters.result!
                             }
                             selectedFiltersByAttrName={
                                 props.nonAtlasSelectedFiltersByAttrName
                             }
-                            files={props.files}
                             filteredFiles={props.filteredFiles}
                             cloudBaseUrl={props.cloudBaseUrl || ''}
                         />
                     </div>
                 )}
 
-                {activeTab === ExploreTab.PLOTS && (
+                {props.activeTab === ExploreTab.PLOTS && (
                     <div
                         className={`tab-content fileTab ${
-                            activeTab !== ExploreTab.PLOTS ? 'd-none' : ''
+                            props.activeTab !== ExploreTab.PLOTS ? 'd-none' : ''
                         }`}
                     >
                         <div className={'alert alert-warning'}>
@@ -341,41 +343,41 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             className={'d-flex'}
                             style={{ alignItems: 'center' }}
                         >
-                            <div style={{ width: 300, marginRight: 20 }}>
-                                <Select
-                                    classNamePrefix={'react-select'}
-                                    isSearchable={false}
-                                    isClearable={false}
-                                    isMulti={true}
-                                    name={'field'}
-                                    components={{ MultiValue }}
-                                    controlShouldRenderValue={true}
-                                    options={DEFAULT_EXPLORE_PLOT_OPTIONS}
-                                    defaultValue={selectedFields}
-                                    hideSelectedOptions={false}
-                                    closeMenuOnSelect={false}
-                                    onChange={(e) => {
-                                        setSelectedFields(e as any);
-                                    }}
-                                />
-                            </div>
+                            {/*<div style={{ width: 300, marginRight: 20 }}>*/}
+                            {/*    <Select*/}
+                            {/*        classNamePrefix={'react-select'}*/}
+                            {/*        isSearchable={false}*/}
+                            {/*        isClearable={false}*/}
+                            {/*        isMulti={true}*/}
+                            {/*        name={'field'}*/}
+                            {/*        components={{ MultiValue }}*/}
+                            {/*        controlShouldRenderValue={true}*/}
+                            {/*        options={DEFAULT_EXPLORE_PLOT_OPTIONS}*/}
+                            {/*        defaultValue={selectedFields}*/}
+                            {/*        hideSelectedOptions={false}*/}
+                            {/*        closeMenuOnSelect={false}*/}
+                            {/*        onChange={(e) => {*/}
+                            {/*            setSelectedFields(e as any);*/}
+                            {/*        }}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
 
-                            <div style={{ width: 300, marginRight: 20 }}>
-                                <Select
-                                    classNamePrefix={'react-select'}
-                                    isSearchable={false}
-                                    isClearable={false}
-                                    name={'xaxis'}
-                                    controlShouldRenderValue={true}
-                                    options={metricTypes}
-                                    hideSelectedOptions={false}
-                                    closeMenuOnSelect={true}
-                                    onChange={(e) => {
-                                        setMetric(e!);
-                                    }}
-                                    value={metric}
-                                />
-                            </div>
+                            {/*<div style={{ width: 300, marginRight: 20 }}>*/}
+                            {/*    <Select*/}
+                            {/*        classNamePrefix={'react-select'}*/}
+                            {/*        isSearchable={false}*/}
+                            {/*        isClearable={false}*/}
+                            {/*        name={'xaxis'}*/}
+                            {/*        controlShouldRenderValue={true}*/}
+                            {/*        options={metricTypes}*/}
+                            {/*        hideSelectedOptions={false}*/}
+                            {/*        closeMenuOnSelect={true}*/}
+                            {/*        onChange={(e) => {*/}
+                            {/*            setMetric(e!);*/}
+                            {/*        }}*/}
+                            {/*        value={metric}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                             <div style={{ marginRight: 20 }}>
                                 <div className="form-check">
                                     <input
@@ -385,24 +387,24 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                         onChange={() => setLogScale(!logScale)}
                                     />
                                     <label className="form-check-label">
-                                        Log
+                                        Log Scale
                                     </label>
                                 </div>
                             </div>
 
-                            <div style={{ marginRight: 20 }}>
-                                <div className="form-check">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        checked={hideNA}
-                                        onChange={() => setHideNA(!hideNA)}
-                                    />
-                                    <label className="form-check-label">
-                                        Hide NA
-                                    </label>
-                                </div>
-                            </div>
+                            {/*<div style={{ marginRight: 20 }}>*/}
+                            {/*    <div className="form-check">*/}
+                            {/*        <input*/}
+                            {/*            className="form-check-input"*/}
+                            {/*            type="checkbox"*/}
+                            {/*            checked={hideNA}*/}
+                            {/*            onChange={() => setHideNA(!hideNA)}*/}
+                            {/*        />*/}
+                            {/*        <label className="form-check-label">*/}
+                            {/*            Hide NA*/}
+                            {/*        </label>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
                             {/*<div>*/}
                             {/*    <div className="form-check">*/}
@@ -421,98 +423,46 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             {/*</div>*/}
                         </form>
 
-                        {/*{props.filteredCases.length &&*/}
-                        {/*    selectedFields.value === 'Summary' && (*/}
-                        {/*        <div className={'d-flex'}>*/}
-                        {/*            <ExplorePlot*/}
-                        {/*                selectedField={{*/}
-                        {/*                    value: 'TissueorOrganofOrigin',*/}
-                        {/*                    label: 'Organ',*/}
-                        {/*                    data: { type: 'CASE' },*/}
-                        {/*                }}*/}
-                        {/*                filteredCases={props.filteredCases}*/}
-                        {/*                filteredSamples={props.filteredSamples}*/}
-                        {/*                normalizersByField={{*/}
-                        {/*                    TissueorOrganofOrigin: (*/}
-                        {/*                        e: Entity*/}
-                        {/*                    ) => getNormalizedOrgan(e),*/}
-                        {/*                }}*/}
-                        {/*                title={'Organs'}*/}
-                        {/*                width={500}*/}
-                        {/*                logScale={logScale}*/}
-                        {/*                metricType={metric}*/}
-                        {/*                hideNA={hideNA}*/}
-                        {/*            />*/}
-                        {/*            <ExplorePlot*/}
-                        {/*                title={'Assays'}*/}
-                        {/*                selectedField={{*/}
-                        {/*                    data: { type: 'SAMPLE' },*/}
-                        {/*                    label: 'Assay',*/}
-                        {/*                    value: 'assayName',*/}
-                        {/*                }}*/}
-                        {/*                width={500}*/}
-                        {/*                filteredCases={props.filteredCases}*/}
-                        {/*                filteredSamples={props.filteredFiles}*/}
-                        {/*                logScale={logScale}*/}
-                        {/*                metricType={metric}*/}
-                        {/*                samplesByValueMap={getSamplesByValueMap(*/}
-                        {/*                    props.filteredFiles,*/}
-                        {/*                    metric.value*/}
-                        {/*                )}*/}
-                        {/*                hideNA={hideNA}*/}
-                        {/*            />*/}
-                        {/*        </div>*/}
-                        {/*    )}*/}
                         <div className={'d-flex flex-wrap'}>
-                            {props.filteredCases.length &&
-                                selectedFields.map((option) => {
-                                    if (option.value === 'assayName') {
-                                        return (
-                                            <ExplorePlot
-                                                selectedField={{
-                                                    data: { type: 'SAMPLE' },
-                                                    label: 'Assay',
-                                                    value: 'assayName',
-                                                }}
-                                                width={500}
-                                                filteredCases={
-                                                    props.filteredCases
-                                                }
-                                                filteredSamples={
-                                                    props.filteredFiles
-                                                }
-                                                logScale={logScale}
-                                                metricType={metric}
-                                                samplesByValueMap={getSamplesByValueMap(
-                                                    props.filteredFiles,
-                                                    metric.value
-                                                )}
-                                                hideNA={hideNA}
-                                            />
-                                        );
-                                    } else {
-                                        return (
-                                            <div style={{ marginRight: 20 }}>
-                                                <ExplorePlot
-                                                    filteredCases={
-                                                        props.filteredCases
-                                                    }
-                                                    filteredSamples={
-                                                        props.filteredSamples
-                                                    }
-                                                    logScale={logScale}
-                                                    width={400}
-                                                    normalizersByField={
-                                                        normalizersByField
-                                                    }
-                                                    metricType={metric}
-                                                    selectedField={option}
-                                                    hideNA={hideNA}
-                                                />{' '}
-                                            </div>
-                                        );
-                                    }
-                                })}
+                            <div style={{ marginRight: 20 }}>
+                                <ExplorePlot
+                                    logScale={logScale}
+                                    width={400}
+                                    metricType={metric}
+                                    selectedField={{
+                                        data: { type: 'SAMPLE' },
+                                        label: 'Assay',
+                                        value: 'assayName',
+                                    }}
+                                    hideNA={hideNA}
+                                    query={assayPlotQuery({
+                                        filterString: props.filterString,
+                                    })}
+                                />{' '}
+                            </div>
+
+                            {selectedFields.map((option) => {
+                                return (
+                                    <div style={{ marginRight: 20 }}>
+                                        <ExplorePlot
+                                            logScale={logScale}
+                                            width={400}
+                                            // normalizersByField={
+                                            //     normalizersByField
+                                            // }
+                                            metricType={metric}
+                                            selectedField={option}
+                                            hideNA={hideNA}
+                                            query={plotQuery({
+                                                field: option.value,
+                                                table: option.table,
+                                                filterString:
+                                                    props.filterString,
+                                            })}
+                                        />{' '}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 )}

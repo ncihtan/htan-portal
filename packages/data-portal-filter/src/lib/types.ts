@@ -32,12 +32,16 @@ export interface FilterActionMeta<OptionType extends OptionTypeBase>
     action: ActionTypes | FilterAction;
 }
 
+export interface GroupsByProperty<T, S = any> {
+    [attrName: string]: { [attrValue: string]: T[] } | S[];
+}
+
 export interface IFilterControlsProps<T, Attribute extends string> {
     setFilter: (actionMeta: any) => void;
     selectedFiltersByGroupName: ISelectedFiltersByAttrName;
     selectedFilters: SelectedFilter[];
     entities: T[];
-    groupsByProperty: { [attrName: string]: { [attrValue: string]: T[] } };
+    groupsByProperty: GroupsByProperty<T>;
 }
 
 export interface IGenericFilterControlProps<T, Attribute extends string>
@@ -45,4 +49,5 @@ export interface IGenericFilterControlProps<T, Attribute extends string>
     countHeader: string;
     attributeMap: AttributeMap<T, Attribute>;
     attributeNames: Attribute[];
+    optionMapper?: (val: any, key: string) => Partial<OptionType>;
 }

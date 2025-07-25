@@ -1,8 +1,8 @@
 import fileDownload from 'js-file-download';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import React, { CSSProperties, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import React, { CSSProperties } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -39,6 +39,7 @@ import {
     truncateFilename,
 } from '@htan/data-portal-utils';
 import {
+    addViewers,
     commonStyles,
     DownloadSourceCategory,
     Entity,
@@ -47,6 +48,7 @@ import {
     PublicationManifest,
     ViewDetailsModal,
 } from '@htan/data-portal-commons';
+import { GroupsByProperty } from '@htan/data-portal-filter';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';
@@ -98,7 +100,7 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
             getDrsUri(f.viewers?.cds?.drs_uri, false, true),
             f.viewers?.cds?.name,
             f.atlas_name,
-            _.uniq(f.biospecimen.map((b) => b.BiospecimenID)).join(' '),
+            _.uniq(f.biospecimenIds).join(' '),
             f.assayName,
             f.level,
             // make sure to replace all possible commas since we are generating a CSV file
@@ -655,9 +657,7 @@ function getImageViewersAssociatedWithFile(file: Entity): ImageViewerInfo {
 
 interface IFileTableProps {
     entities: Entity[];
-    groupsByPropertyFiltered: {
-        [attrName: string]: { [attrValue: string]: Entity[] };
-    };
+    groupsByPropertyFiltered: GroupsByProperty<Entity>;
     patientCount: number;
     publicationsByUid?: { [uid: string]: PublicationManifest };
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
@@ -752,14 +752,10 @@ export class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'Biospecimen',
                 selector: (file: Entity) => {
-                    return _.uniq(
-                        file.biospecimen.map((b) => b.BiospecimenID)
-                    ).join(', ');
+                    return _.uniq(file.biospecimenIds).join(', ');
                 },
                 cell: (file: Entity) => {
-                    const uniqueBiospecimens = _.uniq(
-                        file.biospecimen.map((b) => b.BiospecimenID)
-                    );
+                    const uniqueBiospecimens = _.uniq(file.biospecimenIds);
                     if (uniqueBiospecimens.length === 0) {
                         return '0 Biospecimens';
                     } else if (uniqueBiospecimens.length === 1) {
@@ -806,9 +802,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'Organ',
                 selector: (file: Entity) => {
-                    return _.uniq(
-                        file.diagnosis.map((d) => d.TissueorOrganofOrigin)
-                    ).join(', ');
+                    return file.TissueorOrganofOrigin.join(', ');
                 },
                 cell: truncatedTableCell,
                 wrap: true,
@@ -817,9 +811,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'Treatment',
                 selector: (file: Entity) => {
-                    return _.uniq(
-                        file.therapy.map((d) => d.TreatmentType)
-                    ).join(', ');
+                    return file.TreatmentType.join(', ');
                 },
                 cell: truncatedTableCell,
                 wrap: true,
@@ -829,9 +821,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'Diagnosis',
                 selector: (file: Entity) => {
-                    return _.uniq(
-                        file.diagnosis.map((d) => d.PrimaryDiagnosis)
-                    ).join(', ');
+                    return file.PrimaryDiagnosis.join(', ');
                 },
                 cell: truncatedTableCell,
                 wrap: true,
@@ -868,6 +858,8 @@ export class FileTable extends React.Component<IFileTableProps> {
             {
                 name: 'View',
                 cell: (file: Entity) => {
+                    addViewers(file);
+
                     const cellXGeneLink = file.viewers?.cellxgene;
                     const ucscXenaLink = file.viewers?.ucscXena;
                     const bigQueryLink = file.viewers?.isbcgc;
@@ -1096,6 +1088,14 @@ export class FileTable extends React.Component<IFileTableProps> {
             imageChannelMetadata: true,
             therapy: true,
             publicationIds: true,
+            TreatmentType: true,
+            TissueorOrganofOrigin: true,
+
+            // duplicate fields which are only added for filtering purposes
+            Gender: true,
+            Race: true,
+            Ethnicity: true,
+            VitalStatus: true,
 
             //others to exclude
             Component: true,
@@ -1147,7 +1147,7 @@ export class FileTable extends React.Component<IFileTableProps> {
             .value();
     }
 
-    @computed get columns() {
+    get columns() {
         return _.sortBy(
             [...this.defaultColumns, ...this.otherColumns],
             (column) => {
@@ -1164,7 +1164,7 @@ export class FileTable extends React.Component<IFileTableProps> {
         );
     }
 
-    @computed get filteredEntities() {
+    get filteredEntities() {
         return this.props.enableLevelFilter
             ? _.chain(this.props.entities)
                   .filter((e) => this.selectedLevels.includes(e.level))
@@ -1228,7 +1228,7 @@ export class FileTable extends React.Component<IFileTableProps> {
         this.selected = state.selectedRows;
     };
 
-    @computed get hasFilesSelected() {
+    get hasFilesSelected() {
         return this.selected.length > 0;
     }
 

@@ -30,13 +30,12 @@ track of this information in Google BigQuery. One can get the latest dump of
 that using these commands (requires access to the htan-dcc google project):
 
 ```bash
-cd data
 bq extract --destination_format CSV released.entities_v6_3 gs://htan-release-files/entities_v6_3.csv
 bq extract --destination_format CSV released.metadata_v6_3 gs://htan-release-files/metadata_v6_3.csv
 bq extract --destination_format NEWLINE_DELIMITED_JSON released.cds_drs_mapping_V2 gs://htan-release-files/cds_drs_mapping.json
-gsutil cp gs://htan-release-files/entities_v6_3.csv entities_v6_3.csv
-gsutil cp gs://htan-release-files/metadata_v6_3.csv metadata_v6_3.csv
-gsutil cp gs://htan-release-files/cds_drs_mapping.json cds_drs_mapping.json
+gsutil cp gs://htan-release-files/entities_v6_3.csv data/entities_v6_3.csv
+gsutil cp gs://htan-release-files/metadata_v6_3.csv data/metadata_v6_3.csv
+gsutil cp gs://htan-release-files/cds_drs_mapping.json packages/data-portal-commons/src/assets/cds_drs_mapping.json
 ```
 
 #### Pull files from Synapse and Process for ingestion

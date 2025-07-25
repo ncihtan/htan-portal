@@ -22,7 +22,7 @@ import {
     AtlasMetaData,
     Entity,
     FileViewerName,
-    filterFiles,
+    getViewerValues,
     isManuscriptInReview,
     PublicationIcon,
     PublicationManifest,
@@ -33,14 +33,13 @@ interface IAtlasTableProps {
     publications: PublicationManifest[];
     getAtlasMetaData: () => AtlasMetaData;
     setTab: (tab: ExploreTab) => void;
-    synapseAtlasData: Atlas[];
     selectedAtlases?: Atlas[];
     filteredAtlases?: Atlas[];
     onSelectAtlas?: (selected: Atlas[]) => void;
     selectedFiltersByAttrName: ISelectedFiltersByAttrName;
     filteredCases: Entity[];
     filteredBiospecimens: Entity[];
-    files: Entity[];
+    // files: Entity[];
     filteredFiles: Entity[];
     cloudBaseUrl: string;
 }
@@ -145,9 +144,9 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
 const ViewerCount: React.FunctionComponent<IAtlasViewerCountProps> = (
     props
 ) => {
-    const count = props.atlas.viewerCounts[props.fileViewerName];
+    const count = props.atlas.viewerCounts?.[props.fileViewerName];
     const filterString = urlEncodeSelectedFilters([
-        { group: 'viewers', value: props.fileViewerName },
+        { group: 'viewersArr', value: props.fileViewerName },
         { group: 'AtlasName', value: props.atlas.htan_name },
     ]);
     const defaultHref = `/explore?selectedFilters=${filterString}&tab=file`;
@@ -188,12 +187,12 @@ function filteredCount(
 export class AtlasTable extends React.Component<IAtlasTableProps> {
     @observable metadataModalAtlas: Atlas | null = null;
     atlasMetaData: AtlasMetaData;
-    @computed
+
     get selectedAtlases() {
         return _.keyBy(this.props.selectedAtlases || [], (a) => a.htan_id);
     }
 
-    @computed get hasAtlasesSelected() {
+    get hasAtlasesSelected() {
         return (this.props.selectedAtlases || []).length > 0;
     }
 
@@ -217,28 +216,30 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
     };
 
     getViewerCounts = (atlas: Atlas) => {
-        return this.viewerCountByAtlas[atlas.htan_id];
+        return this.viewerCountByAtlas(atlas.htan_id);
     };
 
     // we need to update data every time the selection changes to rerender the table
     // see selectableRowSelected property at https://www.npmjs.com/package/react-data-table-component#row-selection
-    @computed get data(): AtlasTableData[] {
-        return (this.props.filteredAtlases || this.props.synapseAtlasData).map(
-            (a) =>
-                ({
-                    ...a,
-                    isSelected: this.isRowSelected(a),
-                    publicationManifests: this.getPublicationManifests(a),
-                    viewerCounts: this.getViewerCounts(a),
-                } as AtlasTableData)
+    get data(): AtlasTableData[] {
+        return (
+            this.props.filteredAtlases?.map(
+                (a) =>
+                    ({
+                        ...a,
+                        isSelected: this.isRowSelected(a),
+                        publicationManifests: this.getPublicationManifests(a),
+                        viewerCounts: this.getViewerCounts(a),
+                    } as AtlasTableData)
+            ) || []
         );
     }
 
-    @computed get filesByAtlas() {
-        return _.groupBy(this.props.files, (c: Entity) => c.atlasid);
+    get filesByAtlas() {
+        return _.groupBy(this.props.filteredFiles, (c: Entity) => c.atlasid);
     }
 
-    @computed get assaysByAtlas() {
+    get assaysByAtlas() {
         return _.mapValues(this.filesByAtlas, (files) =>
             _(files)
                 .map((file) => file.assayName)
@@ -247,17 +248,23 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         );
     }
 
-    @computed get viewerCountByAtlas(): ViewerCountByAtlas {
-        return _.mapValues(this.filesByAtlas, (files: Entity[]) =>
-            _.mapValues(
-                FileViewerName,
-                (value) =>
-                    filterFiles({ viewers: new Set([value]) }, files).length
-            )
-        );
+    viewerCountByAtlas(atlas: any) {
+        // return _.mapValues(this.filesByAtlas, (files) => {
+        //     return _(files)
+        //         .map((file) => getViewerValues(file))
+        //         .flatten()
+        //         .countBy()
+        //         .value();
+        // });
+
+        return _(this.filesByAtlas[atlas])
+            .map((file) => getViewerValues(file))
+            .flatten()
+            .countBy()
+            .value();
     }
 
-    @computed get filteredAssaysByAtlas() {
+    get filteredAssaysByAtlas() {
         return _.mapValues(this.filteredFilesByAtlas, (files) =>
             _(files)
                 .map((file) => file.assayName)
@@ -266,22 +273,22 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         );
     }
 
-    @computed get filteredFilesByAtlas() {
+    get filteredFilesByAtlas() {
         return _.groupBy(this.props.filteredFiles, (c: Entity) => c.atlasid);
     }
 
-    @computed get filteredCasesByAtlas() {
+    get filteredCasesByAtlas() {
         return _.groupBy(this.props.filteredCases, (c: Entity) => c.atlasid);
     }
 
-    @computed get filteredBiospecimensByAtlas() {
+    get filteredBiospecimensByAtlas() {
         return _.groupBy(
             this.props.filteredBiospecimens,
             (c: Entity) => c.atlasid
         );
     }
 
-    @computed get shouldShowFilteredFractions() {
+    get shouldShowFilteredFractions() {
         return !_.isEmpty(this.props.selectedFiltersByAttrName);
     }
 
@@ -289,8 +296,11 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         return [
             {
                 name: 'Atlas Name',
-                selector: (atlas: Atlas) =>
-                    atlas.htan_name.replace('HTAN ', '').replace(' - ', ' '),
+                selector: (atlas: Atlas) => {
+                    return atlas.htan_name
+                        ?.replace('HTAN ', '')
+                        ?.replace(' - ', ' ');
+                },
                 grow: 0.6,
                 minWidth: '50',
                 wrap: true,
@@ -354,7 +364,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 grow: 0.1,
                 selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
                 cell: (atlas: Atlas) => {
-                    if (atlas.htan_id in this.atlasMetaData) {
+                    if (atlas.htan_id in (this.atlasMetaData || {})) {
                         return (
                             <button
                                 className={'btn btn-sm'}
@@ -709,7 +719,6 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                     })}
                     atlas={this.metadataModalAtlas}
                     atlasMetaData={this.atlasMetaData}
-                    // TODO get this from a prop
                     cloudBaseUrl={this.props.cloudBaseUrl}
                 />
             </>

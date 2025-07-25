@@ -11,18 +11,15 @@ import {
     AccessoryManifest,
     Atlas,
     AtlasMeta,
-    AutoMinerva,
     BaseSerializableEntity,
-    CdsAsset,
     DataFileID,
     DownloadSourceCategory,
     Entity,
-    FileViewerName,
-    IdcImagingAsset,
     PublicationManifest,
     ReleaseEntity,
     SerializableEntity,
 } from '../packages/data-portal-commons/src/lib/entity';
+import { addViewers } from '../packages/data-portal-commons/src/lib/fileHelpers';
 import {
     HTANAttributeNames,
     HTANToGenericAttributeMap,
@@ -43,27 +40,6 @@ import {
     getAttributeToSchemaIdMap,
     SchemaDataById,
 } from '../packages/data-portal-schema/src/lib/dataSchemaHelpers';
-import { getFileBase } from '../packages/data-portal-utils/src/lib/file';
-
-import CELLXGENE_MAPPINGS from './cellxgene-mappings.json';
-import UCSCXENA_MAPPINGS from './ucscxena-mappings.json';
-import ISBCGC_MAPPINGS from './isbcgc-mappings.json';
-import CUSTOM_MINERVA_STORY_MAPPINGS from './minerva-story-mappings.json';
-import AUTOMINERVA_ASSETS from './htan-imaging-assets.json';
-import IDC_IMAGING_ASSETS from './idc-imaging-assets.json';
-import CDS_ASSETS from './cds_drs_mapping.json';
-
-const IDC_MAPPINGS: {
-    [fileId: string]: IdcImagingAsset;
-} = _.keyBy<IdcImagingAsset>(IDC_IMAGING_ASSETS, 'ContainerIdentifier');
-
-const CDS_MAPPINGS: {
-    [fileId: string]: CdsAsset;
-} = _.keyBy<CdsAsset>(CDS_ASSETS, 'HTAN_Data_File_ID');
-
-const AUTOMINERVA_MAPPINGS: {
-    [synapseId: string]: AutoMinerva;
-} = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid');
 
 interface ImagingMetadata {
     HTAN_Data_File_ID: string;
@@ -312,35 +288,6 @@ function addImageChannelMetadata(
     }
 }
 
-function addViewers(
-    file: BaseSerializableEntity,
-    ucscXenaMappings: { [fileId: string]: string } = UCSCXENA_MAPPINGS,
-    cellxgeneMappings: { [filename: string]: string } = CELLXGENE_MAPPINGS,
-    isbcgcMappings: { [synapseId: string]: string } = ISBCGC_MAPPINGS,
-    customMinervaStoryMappings: {
-        [filename: string]: string;
-    } = CUSTOM_MINERVA_STORY_MAPPINGS,
-    thumbNailAndAutominervaMappings: {
-        [synapseId: string]: AutoMinerva;
-    } = AUTOMINERVA_MAPPINGS,
-    idcMappings: { [fileId: string]: IdcImagingAsset } = IDC_MAPPINGS,
-    cdsMappings: { [fileId: string]: CdsAsset } = CDS_MAPPINGS
-) {
-    const filename = getFileBase(file.Filename);
-    const synapseId = file.synapseId || '';
-
-    file.viewers = {
-        [FileViewerName.ucscXena]: ucscXenaMappings[file.DataFileID],
-        [FileViewerName.cellxgene]: cellxgeneMappings[filename],
-        [FileViewerName.isbcgc]: isbcgcMappings[synapseId],
-        [FileViewerName.customMinerva]: customMinervaStoryMappings[filename],
-        [FileViewerName.autoMinerva]:
-            thumbNailAndAutominervaMappings[synapseId],
-        [FileViewerName.idc]: idcMappings[file.DataFileID],
-        [FileViewerName.cds]: cdsMappings[file.DataFileID],
-    };
-}
-
 function getDbgapSynapseIds(entitiesById: {
     [entityId: string]: ReleaseEntity;
 }) {
@@ -393,7 +340,10 @@ function addDownloadSourcesInfo(
     } else {
         file.isRawSequencing = false;
         // Explicitly set CODEX Level 1 files to use Synapse as download source
-        if (file.assayName?.toLowerCase() === 'codex' && file.level === 'Level 1') {
+        if (
+            file.assayName?.toLowerCase() === 'codex' &&
+            file.level === 'Level 1'
+        ) {
             file.downloadSource = DownloadSourceCategory.synapse;
         } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
@@ -493,6 +443,10 @@ function processSynapseJSON(
     const publications: PublicationManifest[] = (flatData.filter(
         (obj) => obj.Component === 'PublicationManifest'
     ) as unknown) as PublicationManifest[];
+
+    publications.forEach((p) => {
+        p.publicationId = getPublicationUid(p);
+    });
 
     const publicationParentDataFileIdsByUid = _(publications)
         .keyBy(getPublicationUid)
@@ -812,6 +766,8 @@ function addBiopsecimenPublicationIds(
     _.forEach(biospecimenByBiospecimenID, (biospecimen) => {
         if (!_.isEmpty(biospecimen.publicationIds)) {
             biospecimen.publicationIds = _.uniq(biospecimen.publicationIds);
+        } else {
+            biospecimen.publicationIds = [];
         }
     });
 }

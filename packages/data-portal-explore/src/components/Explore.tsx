@@ -1,13 +1,8 @@
-import _ from 'lodash';
-import {
-    action,
-    computed,
-    makeObservable,
-    observable,
-    runInAction,
-} from 'mobx';
+'use client';
+import _, { Dictionary } from 'lodash';
+import remoteData, { MobxPromise } from 'mobxpromise';
+import { action, makeObservable, observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import { ScaleLoader } from 'react-spinners';
 import React from 'react';
 import {
@@ -21,41 +16,32 @@ import {
 import {
     Atlas,
     AtlasMetaData,
+    atlasQuery,
+    caseQuery,
     commonStyles,
+    CountByType,
+    countsByTypeQuery,
+    defaultCountsByTypeQueryFilterString,
+    doQuery,
     Entity,
-    fetchDefaultSynData,
-    fillInEntities,
-    filterFiles,
+    fileQuery,
+    getCountsByTypeQueryUniformFilterString,
     getFileFilterDisplayName,
-    getFilteredCases,
-    getFilteredSamples,
-    groupFilesByAttrNameAndValue,
-    HTANToGenericAttributeMap,
+    getFilterString,
     LoadDataResult,
     PublicationManifest,
+    specimenQuery,
 } from '@htan/data-portal-commons';
 import { AttributeNames } from '@htan/data-portal-utils';
-import {
-    DataSchemaData,
-    fetchAndProcessSchemaData,
-} from '@htan/data-portal-schema';
 
 import { ExploreSummary } from './ExploreSummary';
 import { ExploreTabs } from './ExploreTabs';
-import { FileFilterControls } from './FileFilterControls';
+import FileFilterControls from './FileFilterControls';
+
 import { getDefaultSummaryData } from '../lib/helpers';
 import { ExploreTab } from '../lib/types';
 
 import styles from './explore.module.scss';
-
-export interface IExploreState {
-    files: Entity[];
-    filters: { [key: string]: string[] };
-    schemaDataById?: { [schemaDataId: string]: DataSchemaData };
-    atlases: Atlas[];
-    publicationManifestByUid: { [uid: string]: PublicationManifest };
-    atlasData?: any;
-}
 
 export interface IExploreProps {
     getAtlasMetaData: () => AtlasMetaData;
@@ -68,30 +54,349 @@ export interface IExploreProps {
     cloudBaseUrl?: string;
 }
 
+if (typeof window !== 'undefined') {
+    //@ts-ignore
+    window.toJS = toJS;
+}
+
+function postProcessPublications(publications: PublicationManifest[]) {
+    _.forEach(publications, (pub: PublicationManifest) => {
+        // @ts-ignore
+        pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
+        pub.CitedInNumber = Number(pub.CitedInNumber);
+    });
+
+    return publications;
+}
+
+function postProcessFiles(files: Entity[]) {
+    _.forEach(files, (f: Entity) => {
+        f.imageChannelMetadata = !_.isEmpty(f.imageChannelMetadata)
+            ? JSON.parse(f.imageChannelMetadata!.toString())
+            : f.imageChannelMetadata;
+    });
+
+    return files;
+}
+
+function getFilterStringExcludeSelf(
+    selectedFilters: SelectedFilter[],
+    unfilteredOptions: MobxPromise<CountByType[]>,
+    selfGroup: AttributeNames
+) {
+    const filters = toJS(selectedFilters).filter((f) => f.group !== selfGroup);
+
+    return getFilterString(filters, unfilteredOptions.result);
+}
+
+function groupOptionsByType(
+    filteredOptions?: CountByType[]
+): Dictionary<CountByType[]> {
+    return _(filteredOptions).groupBy('type').value();
+}
+
+function getGroupsByPropertyFiltered(
+    groupsByProperty: Dictionary<CountByType[]>
+): Dictionary<CountByType[]> {
+    return _(groupsByProperty)
+        .mapValues((group) =>
+            group.filter((g) => parseInt(g.count.toString()) > 0)
+        )
+        .value();
+}
+
 @observer
-export class Explore extends React.Component<IExploreProps, IExploreState> {
-    @observable.ref private dataLoadingPromise:
-        | IPromiseBasedObservable<LoadDataResult>
-        | undefined;
+export class Explore extends React.Component<IExploreProps> {
     @observable private showAllBiospecimens = false;
     @observable private showAllCases = false;
-    @observable private _selectedFilters: SelectedFilter[] = [];
+    @observable private _selectedFilters: SelectedFilter[] =
+        this.props.getSelectedFilters?.() || [];
+    @observable private currentTab: ExploreTab =
+        this.props.getTab?.() || ExploreTab.ATLAS;
 
     constructor(props: any) {
         super(props);
-
-        this.state = {
-            files: [],
-            filters: {},
-            atlases: [],
-            publicationManifestByUid: {},
-            schemaDataById: {},
-        };
-
-        //@ts-ignore
-        if (typeof window !== 'undefined') (window as any).me = this;
-
         makeObservable(this);
+    }
+
+    unfilteredOptions = new remoteData({
+        invoke: async () => {
+            return doQuery<CountByType>(
+                countsByTypeQuery(defaultCountsByTypeQueryFilterString)
+            );
+        },
+    });
+
+    filteredOptionsForSummary = new remoteData({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            if (this.filterString === '') {
+                return this.unfilteredOptions.result;
+            } else {
+                const filteredCountsByType = await doQuery<CountByType>(
+                    countsByTypeQuery(
+                        getCountsByTypeQueryUniformFilterString(
+                            this.filterString
+                        )
+                    )
+                );
+
+                return this.getOptionsFromFilteredCounts(filteredCountsByType);
+            }
+        },
+    });
+
+    filteredOptions = new remoteData({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            if (this.filterString === '') {
+                return this.unfilteredOptions.result;
+            } else {
+                const filteredCountsByType = await doQuery<CountByType>(
+                    countsByTypeQuery({
+                        genderFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.Gender
+                        ),
+                        raceFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.Race
+                        ),
+                        primaryDiagnosisFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.PrimaryDiagnosis
+                        ),
+                        ethnicityFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.Ethnicity
+                        ),
+                        tissueOrOrganOfOriginFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.TissueorOrganofOrigin
+                        ),
+                        levelFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.level
+                        ),
+                        assayNameFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.assayName
+                        ),
+                        treatmentTypeFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.TreatmentType
+                        ),
+                        fileFormatFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.FileFormat
+                        ),
+                        viewersFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.viewersArr
+                        ),
+                        organTypeFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.organType
+                        ),
+                        atlasNameFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.AtlasName
+                        ),
+                        downloadSourceFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.downloadSource
+                        ),
+                        releaseVersionFilterString: this.getFilterStringForAttribute(
+                            AttributeNames.releaseVersion
+                        ),
+                    })
+                );
+
+                return this.getOptionsFromFilteredCounts(filteredCountsByType);
+            }
+        },
+    });
+
+    get filterString() {
+        const selectedFilters = toJS(this.selectedFilters);
+        return getFilterString(selectedFilters, this.unfilteredOptions.result);
+    }
+
+    getFilterStringForAttribute(attribute: AttributeNames) {
+        return getFilterStringExcludeSelf(
+            toJS(this.selectedFilters),
+            this.unfilteredOptions,
+            attribute
+        );
+    }
+
+    getOptionsFromFilteredCounts(
+        filteredCountsByType: CountByType[]
+    ): CountByType[] {
+        const filteredMap = _.keyBy(
+            filteredCountsByType,
+            (option) => option.val + option.type
+        );
+        const unfilteredMap = _.keyBy(
+            this.unfilteredOptions.result,
+            (option) => option.val + option.type
+        );
+
+        return _(unfilteredMap)
+            .mapValues((o, k) => {
+                if (k in filteredMap) {
+                    return filteredMap[k];
+                } else {
+                    const updated = _.clone(o);
+                    updated.count = 0;
+                    return updated;
+                }
+            })
+            .values()
+            .value();
+    }
+
+    files = new remoteData<Entity[]>({
+        invoke: async () => {
+            const data = await doQuery<Entity>(fileQuery);
+            return postProcessFiles(data);
+        },
+    });
+
+    filesFiltered = new remoteData<Entity[]>({
+        await: () => [this.files, this.unfilteredOptions],
+        invoke: async () => {
+            if (this.filterString.length === 0) {
+                return this.files.result || [];
+            } else {
+                const q = fileQuery + this.filterString;
+                const data = await doQuery<Entity>(q);
+                return postProcessFiles(data);
+            }
+        },
+    });
+
+    cases = new remoteData<Entity[]>({
+        invoke: async () => {
+            const q = caseQuery({ filterString: '' });
+            return await doQuery<Entity>(q);
+        },
+    });
+
+    casesFiltered = new remoteData<Entity[]>({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            const q = caseQuery({ filterString: this.filterString });
+            return await doQuery<Entity>(q);
+        },
+    });
+
+    casesFilteredByNonAtlasFilters = new remoteData<Entity[]>({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            const q = caseQuery({
+                filterString: this.getFilterStringForAttribute(
+                    AttributeNames.AtlasName
+                ),
+            });
+            return await doQuery<Entity>(q);
+        },
+    });
+
+    specimen = new remoteData<Entity[]>({
+        invoke: async () => {
+            const q = specimenQuery({ filterString: '' });
+            return doQuery<Entity>(q);
+        },
+    });
+
+    specimenFiltered = new remoteData<Entity[]>({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            const q = specimenQuery({ filterString: this.filterString });
+            return doQuery<Entity>(q);
+        },
+    });
+
+    specimenFilteredByNonAtlasFilters = new remoteData<Entity[]>({
+        await: () => [this.unfilteredOptions],
+        invoke: async () => {
+            const q = specimenQuery({
+                filterString: this.getFilterStringForAttribute(
+                    AttributeNames.AtlasName
+                ),
+            });
+            return doQuery<Entity>(q);
+        },
+    });
+
+    atlases = new remoteData<Atlas[]>({
+        invoke: async () => {
+            const data = await doQuery<Atlas>(atlasQuery({ filterString: '' }));
+            data.forEach(
+                (atlas: Atlas) =>
+                    (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta.toString()))
+            );
+            return data;
+        },
+    });
+
+    get atlasMap() {
+        return _.keyBy(this.atlases.result, (a) => a.htan_id);
+    }
+
+    async filterAtlases(filterString: string) {
+        if (filterString.length === 0) {
+            return this.atlases.result || [];
+        } else {
+            const data = await doQuery<Atlas>(
+                atlasQuery({ filterString: filterString })
+            );
+            data.forEach(
+                (atlas: Atlas) =>
+                    (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta.toString()))
+            );
+            return data;
+        }
+    }
+
+    atlasesFilteredByNonAtlasFilters = new remoteData<Atlas[]>({
+        await: () => [this.atlases, this.unfilteredOptions],
+        invoke: async () =>
+            this.filterAtlases(
+                this.getFilterStringForAttribute(AttributeNames.AtlasName)
+            ),
+    });
+
+    atlasesFiltered = new remoteData<Atlas[]>({
+        await: () => [this.atlases, this.unfilteredOptions],
+        invoke: async () => this.filterAtlases(this.filterString),
+    });
+
+    publications = new remoteData({
+        await: () => [this.cases, this.unfilteredOptions],
+        invoke: async () => {
+            const publications = await doQuery<PublicationManifest>(
+                `SELECT * FROM publication_manifest`
+            );
+
+            return postProcessPublications(publications);
+        },
+    });
+
+    publicationsFiltered = new remoteData({
+        await: () => [this.cases, this.unfilteredOptions],
+        invoke: async () => {
+            const q = `
+                WITH filteredPublications AS (
+                    SELECT DISTINCT publicationId FROM (
+                         SELECT arrayJoin(associatedFiles) as fileId, publicationId
+                         FROM publication_manifest
+                         WHERE fileId IN (
+                             SELECT files.DataFileID FROM files 
+                                 ${this.filterString}
+                         )
+                     )
+                )
+                SELECT *
+                FROM filteredPublications fp
+                    LEFT JOIN publication_manifest pm on fp.publicationId = pm.publicationId
+             `;
+            const publications = await doQuery<PublicationManifest>(q);
+
+            return postProcessPublications(publications);
+        },
+    });
+
+    get publicationsById() {
+        return _.keyBy(this.publications.result, (p) => p.publicationId);
     }
 
     @action.bound toggleShowAllBiospecimens() {
@@ -102,28 +407,25 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
     }
 
     get selectedFilters(): SelectedFilter[] {
-        return this.props.getSelectedFilters
-            ? this.props.getSelectedFilters()
-            : this._selectedFilters;
+        return this._selectedFilters;
     }
 
     set selectedFilters(filters: SelectedFilter[]) {
         if (this.props.onFilterChange) {
             this.props.onFilterChange(filters);
-        } else {
-            this._selectedFilters = filters;
         }
-    }
 
-    get groupsByProperty() {
-        return groupFilesByAttrNameAndValue(this.state.files);
+        this._selectedFilters = filters;
     }
 
     get groupsByPropertyFiltered() {
-        return groupFilesByAttrNameAndValue(this.filteredFiles);
+        return getGroupsByPropertyFiltered(this.groupsByProperty);
     }
 
-    @computed
+    get groupsByPropertyFilteredForSummary() {
+        return getGroupsByPropertyFiltered(this.groupsByPropertyForSummary);
+    }
+
     get selectedFiltersByAttrName(): ISelectedFiltersByAttrName {
         return getSelectedFiltersByAttrName(this.selectedFilters);
     }
@@ -146,130 +448,25 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
             ...selected.map((a) => ({ group, value: a.htan_name }))
         );
 
-        if (this.props.onFilterChange) {
-            this.props.onFilterChange(newFilters);
+        const newFiltersByAttribute = getSelectedFiltersByAttrName(newFilters);
+        const newAtlasFilters = newFiltersByAttribute[AttributeNames.AtlasName];
+        const currentAtlasFilters = this.selectedFiltersByAttrName[
+            AttributeNames.AtlasName
+        ];
+
+        // update selected filters if only selected atlas filters actually change
+        if (!_.isEqual(newAtlasFilters, currentAtlasFilters)) {
+            this.selectedFilters = newFilters;
         }
     }
 
-    componentDidMount(): void {
-        runInAction(() => {
-            this.dataLoadingPromise = fromPromise(
-                this.props.fetchData
-                    ? this.props.fetchData()
-                    : fetchDefaultSynData()
-            );
-            this.dataLoadingPromise.then((data) => {
-                this.setState({
-                    files: fillInEntities(data),
-                    atlases: data.atlases,
-                    publicationManifestByUid: data.publicationManifestByUid,
-                });
-            });
-
-            const schemaLoadingPromise = fromPromise(
-                fetchAndProcessSchemaData()
-            );
-            schemaLoadingPromise.then((schemaDataById) => {
-                this.setState({ schemaDataById });
-            });
-        });
-    }
-
-    @computed
-    get filteredFiles() {
-        return filterFiles(this.selectedFiltersByAttrName, this.state.files);
-    }
-
-    @computed
-    get filteredFilesByNonAtlasFilters() {
-        return filterFiles(
-            this.nonAtlasSelectedFiltersByAttrName,
-            this.state.files
-        );
-    }
-
-    @computed
-    get samples() {
-        return getFilteredSamples(this.state.files, this.cases, false);
-    }
-
-    @computed
-    get filteredSamples() {
-        return getFilteredSamples(
-            this.filteredFiles,
-            this.filteredCases,
-            this.showAllBiospecimens
-        );
-    }
-
-    @computed
-    get filteredSamplesByNonAtlasFilters() {
-        return getFilteredSamples(
-            this.filteredFilesByNonAtlasFilters,
-            this.filteredCasesByNonAtlasFilters,
-            this.showAllBiospecimens
-        );
-    }
-
-    @computed
-    get cases() {
-        return getFilteredCases(this.state.files, {}, true);
-    }
-
-    @computed
-    get filteredCases() {
-        return getFilteredCases(
-            this.filteredFiles,
-            this.selectedFiltersByAttrName,
-            this.showAllCases
-        );
-    }
-
-    @computed
-    get filteredCasesByNonAtlasFilters() {
-        return getFilteredCases(
-            this.filteredFilesByNonAtlasFilters,
-            this.nonAtlasSelectedFiltersByAttrName,
-            this.showAllCases
-        );
-    }
-
-    @computed get filteredPublications() {
-        return _(this.filteredCases)
-            .flatMap((c) => c.publicationIds)
-            .compact()
-            .uniq()
-            .map((id) => this.state.publicationManifestByUid[id])
-            .value();
-    }
-
-    @computed get atlasMap() {
-        return _.keyBy(this.state.atlases, (a) => a.htan_id);
-    }
-
-    @computed
-    get filteredAtlases() {
-        // get only atlases associated with filtered files
-        return _.chain(this.filteredFiles)
-            .map((f) => f.atlasid)
-            .uniq()
-            .map((id) => this.atlasMap[id])
-            .value();
-    }
-
-    @computed
     get selectedAtlases() {
         const atlasFilters = this.selectedFiltersByAttrName[
             AttributeNames.AtlasName
         ];
 
-        if (_.size(atlasFilters)) {
-            return _.chain(
-                filterFiles(
-                    { [AttributeNames.AtlasName]: atlasFilters },
-                    this.state.files
-                )
-            )
+        if (_.size(atlasFilters) > 0) {
+            return _.chain(this.filesFiltered.result)
                 .map((f) => f.atlasid)
                 .uniq()
                 .map((id) => this.atlasMap[id])
@@ -279,102 +476,123 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
         }
     }
 
-    @computed get nonAtlasSelectedFiltersByAttrName() {
+    get nonAtlasSelectedFiltersByAttrName() {
         return _.omit(this.selectedFiltersByAttrName, [
             AttributeNames.AtlasName,
         ]);
     }
 
-    @computed
-    get filteredAtlasesByNonAtlasFilters() {
-        const filtersExceptAtlasFilters = this
-            .nonAtlasSelectedFiltersByAttrName;
-
-        return _.chain(filterFiles(filtersExceptAtlasFilters, this.state.files))
-            .map((f) => f.atlasid)
-            .uniq()
-            .map((id) => this.atlasMap[id])
-            .value();
+    get groupsByProperty() {
+        return groupOptionsByType(this.filteredOptions.result);
     }
 
-    @computed
-    get allAtlases() {
-        return _.chain(this.state.files)
-            .map((f) => f.atlasid)
-            .uniq()
-            .map((id) => this.atlasMap[id])
-            .value();
+    get groupsByPropertyForSummary() {
+        return groupOptionsByType(this.filteredOptionsForSummary.result);
     }
 
     render() {
-        if (
-            !this.dataLoadingPromise ||
-            this.dataLoadingPromise.state === 'pending'
-        ) {
-            return (
-                <div className={commonStyles.loadingIndicator}>
-                    <ScaleLoader />
-                </div>
-            );
+        function allComplete(proms: MobxPromise<any>[]) {
+            return _(proms)
+                .map((p) => p.isComplete)
+                .every();
         }
 
-        if (this.filteredFiles) {
+        const allDataLoaded = allComplete([
+            this.casesFilteredByNonAtlasFilters,
+            this.casesFiltered,
+            this.cases,
+            this.specimenFilteredByNonAtlasFilters,
+            this.specimenFiltered,
+            this.specimen,
+            this.filteredOptions,
+            this.filteredOptionsForSummary,
+            this.unfilteredOptions,
+            this.publications,
+            this.publicationsFiltered,
+            this.atlases,
+            this.atlasesFiltered,
+            this.atlasesFilteredByNonAtlasFilters,
+            this.filesFiltered,
+            this.files,
+        ]);
+
+        // Always render the filter controls, regardless of data loading state
+        const filterControls = (
+            <>
+                <FileFilterControls
+                    setFilter={this.setFilter}
+                    selectedFiltersByGroupName={this.selectedFiltersByAttrName}
+                    selectedFilters={this.selectedFilters}
+                    entities={this.filesFiltered.result || []}
+                    groupsByProperty={this.groupsByProperty}
+                    enableReleaseFilter={
+                        this.props.isReleaseQCEnabled
+                            ? this.props.isReleaseQCEnabled()
+                            : false
+                    }
+                />
+
+                <Filter
+                    setFilter={this.setFilter}
+                    selectedFiltersByGroupName={this.selectedFiltersByAttrName}
+                    getFilterDisplayName={getFileFilterDisplayName}
+                />
+            </>
+        );
+
+        // If data is still loading, show filter controls with loading indicator
+        if (!allDataLoaded) {
             return (
                 <div className={styles.explore}>
-                    <FileFilterControls
-                        setFilter={this.setFilter}
-                        selectedFiltersByGroupName={
-                            this.selectedFiltersByAttrName
-                        }
-                        selectedFilters={this.selectedFilters}
-                        entities={this.state.files}
-                        groupsByProperty={this.groupsByProperty}
-                        enableReleaseFilter={
-                            this.props.isReleaseQCEnabled
-                                ? this.props.isReleaseQCEnabled()
-                                : false
-                        }
-                    />
-
-                    <Filter
-                        setFilter={this.setFilter}
-                        selectedFiltersByGroupName={
-                            this.selectedFiltersByAttrName
-                        }
-                        getFilterDisplayName={getFileFilterDisplayName}
-                    />
+                    {filterControls}
+                    <div className={commonStyles.loadingIndicator}>
+                        <ScaleLoader />
+                    </div>
+                </div>
+            );
+        } else {
+            // All data loaded, show complete UI
+            return (
+                <div className={styles.explore}>
+                    {filterControls}
 
                     <ExploreSummary
                         summaryData={getDefaultSummaryData(
-                            this.filteredCases,
-                            this.filteredSamples,
-                            this.filteredFiles,
-                            this.groupsByPropertyFiltered
+                            this.casesFiltered.result || [],
+                            this.specimenFiltered.result || [],
+                            this.filesFiltered.result || [],
+                            this.groupsByPropertyFilteredForSummary,
+                            (val: any, key: string) => val.val
                         )}
                     />
 
                     <ExploreTabs
-                        setTab={this.props.setTab}
-                        getTab={this.props.getTab}
-                        schemaDataById={this.state.schemaDataById}
-                        files={this.state.files}
-                        filteredFiles={this.filteredFiles}
-                        filteredSynapseAtlases={this.filteredAtlases}
-                        filteredSynapseAtlasesByNonAtlasFilters={
-                            this.filteredAtlasesByNonAtlasFilters
+                        setTab={(currentTab: ExploreTab) => {
+                            this.currentTab = currentTab;
+                        }}
+                        filterString={this.filterString}
+                        activeTab={this.currentTab}
+                        filteredFiles={this.filesFiltered.result || []}
+                        filteredSynapseAtlases={
+                            this.atlasesFiltered.result || []
                         }
-                        filteredSamples={this.filteredSamples}
-                        filteredCases={this.filteredCases}
-                        selectedSynapseAtlases={this.selectedAtlases}
-                        allSynapseAtlases={this.allAtlases}
-                        onSelectAtlas={this.onSelectAtlas}
-                        samples={this.samples}
+                        filteredSynapseAtlasesByNonAtlasFilters={
+                            this.atlasesFilteredByNonAtlasFilters.result || []
+                        }
+                        atlases={this.atlases}
+                        filteredSamples={this.casesFiltered.result || []}
                         cases={this.cases}
+                        casesFiltered={this.casesFiltered}
+                        selectedSynapseAtlases={this.selectedAtlases}
+                        allSynapseAtlases={this.atlases.result || []}
+                        onSelectAtlas={this.onSelectAtlas}
+                        samples={this.specimen}
+                        samplesFiltered={this.specimenFiltered}
                         filteredCasesByNonAtlasFilters={
-                            this.filteredCasesByNonAtlasFilters
+                            this.casesFilteredByNonAtlasFilters
                         }
                         filteredSamplesByNonAtlasFilters={
-                            this.filteredSamplesByNonAtlasFilters
+                            this.specimenFilteredByNonAtlasFilters
                         }
                         nonAtlasSelectedFiltersByAttrName={
                             this.nonAtlasSelectedFiltersByAttrName
@@ -388,16 +606,13 @@ export class Explore extends React.Component<IExploreProps, IExploreState> {
                         toggleShowAllCases={this.toggleShowAllCases}
                         cloudBaseUrl={this.props.cloudBaseUrl}
                         getAtlasMetaData={this.props.getAtlasMetaData}
-                        publicationManifestByUid={
-                            this.state.publicationManifestByUid
-                        }
-                        filteredPublications={this.filteredPublications}
-                        genericAttributeMap={HTANToGenericAttributeMap} // TODO needs to be configurable, different mappings for each portal
+                        files={this.files.result!}
+                        filteredPublications={this.publicationsFiltered.result!}
+                        publications={this.publications.result!}
+                        publicationManifestByUid={this.publicationsById}
                     />
                 </div>
             );
         }
     }
 }
-
-export default Explore;

@@ -49,14 +49,19 @@ export function normalizeTissueOrOrganOrSite(value: string) {
     return value.toLowerCase().replace(/,/g, '');
 }
 
-function normalizeTreatment(value: string): string[] {
-    value = value.trim().toLowerCase();
-    const treatments = value.split(/,|;/).map((t) => {
-        const trimmedTreatment = t.trim();
-        return (
-            trimmedTreatment.charAt(0).toUpperCase() + trimmedTreatment.slice(1)
-        );
-    });
+export function normalizeTreatment(value: string): string[] {
+    const treatments = value
+        .trim()
+        .toLowerCase()
+        .split(/,|;/)
+        .map((t) => {
+            const trimmedTreatment = t.trim();
+            return (
+                trimmedTreatment.charAt(0).toUpperCase() +
+                trimmedTreatment.slice(1)
+            );
+        });
+
     return _.uniq(treatments);
 }
 
@@ -129,16 +134,16 @@ export function computeEntityReportByAttribute(
     );
 }
 
-export function getNormalizedOrgan(entity: Entity) {
-    return entity.TissueorOrganofOrigin
+export function getNormalizedOrgan(entity: Entity): string {
+    return !_.isEmpty(entity.TissueorOrganofOrigin)
         ? tissueOrOriginToOrganMap[
-              normalizeTissueOrOrganOrSite(entity.TissueorOrganofOrigin)
-          ] || entity.TissueorOrganofOrigin
-        : entity.TissueorOrganofOrigin;
+              normalizeTissueOrOrganOrSite(entity.TissueorOrganofOrigin[0])
+          ] || entity.TissueorOrganofOrigin[0]
+        : '';
 }
 
 export function getNormalizedTreatment(entity: Entity) {
-    return entity.TreatmentType ? normalizeTreatment(entity.TreatmentType) : [];
+    return entity.TreatmentType || [];
 }
 
 export function getNormalizedAssay(entity: Entity) {
@@ -276,7 +281,7 @@ export function computeAttributeValueDistributionByCenter(
 }
 
 export function getOrganFilterValues(entities: Entity[]) {
-    return _.uniq(entities.map((d) => d.TissueorOrganofOrigin));
+    return _.uniq(entities.map((d) => d.TissueorOrganofOrigin?.[0]));
 }
 
 export function getAssayFilterValues(entities: Entity[]) {
