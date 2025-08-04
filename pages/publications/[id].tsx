@@ -83,6 +83,10 @@ const PublicationPage = (props: PublicationPageProps) => {
     const publication = props.publications.find(
         (p: PublicationManifest) => p.publicationId === router.query.id
     );
+    const publicationsByUid = _.keyBy(
+        props.publications,
+        (p) => p.publicationId
+    );
 
     if (!publication) {
         return <div>There is no publication corresponding to this id.</div>;
@@ -216,6 +220,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                             )}
                             schemaDataById={props.schemaDataById}
                             genericAttributeMap={props.genericAttributeMap}
+                            publicationsByUid={publicationsByUid}
                         />
                     </div>
                 )}
@@ -234,6 +239,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     publications.forEach((pub: PublicationManifest) => {
         // @ts-ignore
         pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
+        pub.CitedInNumber = Number(pub.CitedInNumber);
     });
 
     const publicationId = context.params?.id || '';

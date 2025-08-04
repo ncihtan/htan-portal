@@ -17,9 +17,7 @@ export const PublicationIcon: React.FunctionComponent<{
             key={getPublicationUid(publicationManifest)}
         >
             <a
-                href={`//${
-                    window.location.host
-                }/publications/${getPublicationUid(publicationManifest)}`}
+                href={`/publications/${getPublicationUid(publicationManifest)}`}
                 key={getPublicationUid(publicationManifest)}
                 style={{ paddingRight: 3 }}
             >
