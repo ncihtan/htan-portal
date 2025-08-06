@@ -15,6 +15,7 @@ import {
     Entity,
     FileAttributeMap,
     GeneralLink,
+    PublicationManifest,
 } from '@htan/data-portal-commons';
 import { DataSchemaData } from '@htan/data-portal-schema';
 import {
@@ -27,6 +28,7 @@ import DataAvailabilityTable from 'packages/data-portal-explore/src/components/D
 interface IPublicationTabsProps {
     router: NextRouter;
     abstract: string;
+    publicationsByUid: { [uid: string]: PublicationManifest };
     synapseAtlases: Atlas[];
     biospecimens: Entity[];
     cases: Entity[];
@@ -268,6 +270,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
     (props) => {
         const activeTab = props.router.query.tab || PublicationTab.OVERVIEW;
         const pubId = props.router.query?.id?.toString();
+
         return (
             <>
                 <div className="subnav">
@@ -484,6 +487,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                     'VitalStatus',
                                 ]}
                                 genericAttributeMap={props.genericAttributeMap}
+                                publicationsByUid={props.publicationsByUid}
                             />
                         </div>
                     )}
@@ -509,6 +513,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 samples={props.biospecimens}
                                 schemaDataById={props.schemaDataById}
                                 genericAttributeMap={props.genericAttributeMap}
+                                publicationsByUid={props.publicationsByUid}
                             />
                         </div>
                     )}
@@ -524,6 +529,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                                 }`}
                             >
                                 <FileTable
+                                    publicationsByUid={props.publicationsByUid}
                                     entities={props.assays[assayName]}
                                     groupsByPropertyFiltered={groupEntitiesByAttrNameAndValue(
                                         props.assays[assayName],
