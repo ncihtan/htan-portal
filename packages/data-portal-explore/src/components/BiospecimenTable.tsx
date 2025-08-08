@@ -7,11 +7,9 @@ import {
 } from '@htan/data-portal-table';
 import { Atlas, Entity, PublicationManifest } from '@htan/data-portal-commons';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
-import { DataSchemaData, SchemaDataId } from '@htan/data-portal-schema';
+import { DataSchemaData } from '@htan/data-portal-schema';
 
 import {
-    generateColumnsForDataSchema,
-    getAtlasColumn,
     getPublicationColumn,
     sortByBiospecimenId,
     sortByParentID,
@@ -25,6 +23,65 @@ interface IBiospecimenTableProps {
     publicationsByUid?: { [uid: string]: PublicationManifest };
 }
 
+const initiallyHiddenColNames = {
+    SourceHTANBiospecimenID: 'Source HTAN Biospecimen ID',
+    ParticipantID: 'Participant ID',
+    AdjacentBiospecimenIDs: 'Adjacent Biospecimen IDs',
+    ProtocolLink: 'Protocol Link',
+    SiteDataSource: 'Site Data Source',
+    CollectionMedia: 'Collection Media',
+    MountingMedium: 'Mounting Medium',
+    ProcessingLocation: 'Processing Location',
+    HistologyAssessmentBy: 'Histology Assessment By',
+    HistologyAssessmentMedium: 'Histology Assessment Medium',
+    PreinvasiveMorphology: 'Preinvasive Morphology',
+    TumorInfiltratingLymphocytes: 'Tumor Infiltrating Lymphocytes',
+    DegreeofDysplasia: 'Degree of Dysplasia',
+    DysplasiaFraction: 'Dysplasia Fraction',
+    NumberProliferatingCells: 'Number Proliferating Cells',
+    PercentEosinophilInfiltration: 'Percent Eosinophil Infiltration',
+    PercentGranulocyteInfiltration: 'Percent Granulocyte Infiltration',
+    PercentInflamInfiltration: 'Percent Inflam Infiltration',
+    PercentLymphocyteInfiltration: 'Percent Lymphocyte Infiltration',
+    PercentMonocyteInfiltration: 'Percent Monocyte Infiltration',
+    PercentNecrosis: 'Percent Necrosis',
+    PercentNeutrophilInfiltration: 'Percent Neutrophil Infiltration',
+    PercentNormalCells: 'Percent Normal Cells',
+    PercentStromalCells: 'Percent Stromal Cells',
+    PercentTumorCells: 'Percent Tumor Cells',
+    PercentTumorNuclei: 'Percent Tumor Nuclei',
+    FiducialMarker: 'Fiducial Marker',
+    SlicingMethod: 'Slicing Method',
+    LysisBuffer: 'Lysis Buffer',
+    MethodofNucleicAcidIsolation: 'Method of Nucleic Acid Isolation',
+    AcquisitionMethodOtherSpecify: 'Acquisition Method Other Specify',
+    AnalyteType: 'Analyte Type',
+    FixationDuration: 'Fixation Duration',
+    HistologicMorphologyCode: 'Histologic Morphology Code',
+    IschemicTemperature: 'Ischemic Temperature',
+    IschemicTime: 'Ischemic Time',
+    PortionWeight: 'Portion Weight',
+    PreservationMethod: 'Preservation Method',
+    SectionThicknessValue: 'Section Thickness Value',
+    SectioningDaysfromIndex: 'Sectioning Days from Index',
+    ShippingConditionType: 'Shipping Condition Type',
+    SlideChargeType: 'Slide Charge Type',
+    SpecimenLaterality: 'Specimen Laterality',
+    TotalVolume: 'Total Volume',
+    TumorTissueType: 'Tumor Tissue Type',
+    BiospecimenDimension1: 'Biospecimen Dimension 1',
+    BiospecimenDimension2: 'Biospecimen Dimension 2',
+    BiospecimenDimension3: 'Biospecimen Dimension 3',
+    DimensionsUnit: 'Dimensions Unit',
+    SectionNumberinSequence: 'Section Number in Sequence',
+    TotalVolumeUnit: 'Total Volume Unit',
+    TopographyCode: 'Topography Code',
+    AdditionalTopography: 'Additional Topography',
+    synapseId: 'Synapse ID',
+    level: 'Level',
+    atlasid: 'Atlas ID',
+};
+
 export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> = (
     props
 ) => {
@@ -33,268 +90,64 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
             name: 'HTAN Biospecimen ID',
             selector: GenericAttributeNames.BiospecimenID,
             sortFunction: sortByBiospecimenId,
+            sortable: true,
         },
         {
             name: 'Atlas Name',
             selector: 'atlas_name',
+            sortable: true,
         },
         getPublicationColumn(props.publicationsByUid),
         {
             name: 'HTAN Parent ID',
             selector: 'HTANParentID',
+            sortFunction: sortByParentID,
+            sortable: true,
         },
         {
             name: 'Timepoint Label',
             selector: 'TimepointLabel',
+            sortable: true,
         },
         {
             name: 'Collection Days from Index',
             selector: 'CollectionDaysfromIndex',
+            sortable: true,
         },
-
         {
             name: 'Biospecimen Type',
             selector: 'BiospecimenType',
+            sortable: true,
         },
         {
             name: 'Acquisition Method Type',
             selector: 'AcquisitionMethodType',
+            sortable: true,
         },
         {
             name: 'Fixative Type',
             selector: 'FixativeType',
+            sortable: true,
         },
         {
             name: 'Storage Method',
             selector: 'StorageMethod',
+            sortable: true,
         },
         {
             name: 'Processing Days from Index',
             selector: 'ProcessingDaysfromIndex',
+            sortable: true,
         },
-        {
-            name: 'Adjacent Biospecimen IDs',
-            selector: 'AdjacentBiospecimenIDs',
-            omit: true,
-        },
-        {
-            name: 'Protocol Link',
-            selector: 'ProtocolLink',
-        },
-        {
-            name: 'Site Data Source',
-            selector: 'SiteDataSource',
-            omit: true,
-        },
-        {
-            name: 'Collection Media',
-            selector: 'CollectionMedia',
-            omit: true,
-        },
-        {
-            name: 'Mounting Medium',
-            selector: 'MountingMedium',
-            omit: true,
-        },
-        {
-            name: 'Processing Location',
-            selector: 'ProcessingLocation',
-            omit: true,
-        },
-        {
-            name: 'Histology Assessment By',
-            selector: 'HistologyAssessmentBy',
-            omit: true,
-        },
-        {
-            name: 'Histology Assessment Medium',
-            selector: 'HistologyAssessmentMedium',
-            omit: true,
-        },
-        {
-            name: 'Preinvasive Morphology',
-            selector: 'PreinvasiveMorphology',
-            omit: true,
-        },
-        {
-            name: 'Tumor Infiltrating Lymphocytes',
-            selector: 'TumorInfiltratingLymphocytes',
-        },
-        {
-            name: 'Degree of Dysplasia',
-            selector: 'DegreeofDysplasia',
-            omit: true,
-        },
-        {
-            name: 'Dysplasia Fraction',
-            selector: 'DysplasiaFraction',
-            omit: true,
-        },
-        {
-            name: 'Number Proliferating Cells',
-            selector: 'NumberProliferatingCells',
-            omit: true,
-        },
-        {
-            name: 'Percent Eosinophil Infiltration',
-            selector: 'PercentEosinophilInfiltration',
-            omit: true,
-        },
-        {
-            name: 'Percent Granulocyte Infiltration',
-            selector: 'PercentGranulocyteInfiltration',
-            omit: true,
-        },
-        {
-            name: 'Percent Inflam Infiltration',
-            selector: 'PercentInflamInfiltration',
-            omit: true,
-        },
-        {
-            name: 'Percent Lymphocyte Infiltration',
-            selector: 'PercentLymphocyteInfiltration',
-            omit: true,
-        },
-        {
-            name: 'Percent Monocyte Infiltration',
-            selector: 'PercentMonocyteInfiltration',
-            omit: true,
-        },
-        {
-            name: 'Percent Necrosis',
-            selector: 'PercentNecrosis',
-            omit: true,
-        },
-        {
-            name: 'Percent Neutrophil Infiltration',
-            selector: 'PercentNeutrophilInfiltration',
-            omit: true,
-        },
-        {
-            name: 'Percent Normal Cells',
-            selector: 'PercentNormalCells',
-            omit: true,
-        },
-        {
-            name: 'Percent Stromal Cells',
-            selector: 'PercentStromalCells',
-            omit: true,
-        },
-        {
-            name: 'Percent Tumor Cells',
-            selector: 'PercentTumorCells',
-            omit: true,
-        },
-        {
-            name: 'Percent Tumor Nuclei',
-            selector: 'PercentTumorNuclei',
-            omit: true,
-        },
-        {
-            name: 'Fiducial Marker',
-            selector: 'FiducialMarker',
-            omit: true,
-        },
-        {
-            name: 'Slicing Method',
-            selector: 'SlicingMethod',
-            omit: true,
-        },
-        {
-            name: 'Lysis Buffer',
-            selector: 'LysisBuffer',
-            omit: true,
-        },
-        {
-            name: 'Method of Nucleic Acid Isolation',
-            selector: 'MethodofNucleicAcidIsolation',
-            omit: true,
-        },
-        {
-            name: 'Acquisition Method Other Specify',
-            selector: 'AcquisitionMethodOtherSpecify',
-            omit: true,
-        },
-        {
-            name: 'Analyte Type',
-            selector: 'AnalyteType',
-            omit: true,
-        },
-        {
-            name: 'Fixation Duration',
-            selector: 'FixationDuration',
-            omit: true,
-        },
-        {
-            name: 'Histologic Morphology Code',
-            selector: 'HistologicMorphologyCode',
-            omit: true,
-        },
-        {
-            name: 'Ischemic Temperature',
-            selector: 'IschemicTemperature',
-            omit: true,
-        },
-        {
-            name: 'Ischemic Time',
-            selector: 'IschemicTime',
-            omit: true,
-        },
-        {
-            name: 'Portion Weight',
-            selector: 'PortionWeight',
-            omit: true,
-        },
-        {
-            name: 'Preservation Method',
-            selector: 'PreservationMethod',
-            omit: true,
-        },
-        {
-            name: 'Section Thickness Value',
-            selector: 'SectionThicknessValue',
-            omit: true,
-        },
-        {
-            name: 'Sectioning Days from Index',
-            selector: 'SectioningDaysfromIndex',
-        },
-        {
-            name: 'Shipping Condition Type',
-            selector: 'ShippingConditionType',
-        },
-        {
-            name: 'Slide Charge Type',
-            selector: 'SlideChargeType',
-        },
-        {
-            name: 'Specimen Laterality',
-            selector: 'SpecimenLaterality',
-        },
-        {
-            name: 'Total Volume',
-            selector: 'TotalVolume',
-        },
-        {
-            name: 'Tumor Tissue Type',
-            selector: 'TumorTissueType',
-        },
-        {
-            name: 'atlasid',
-            selector: 'atlasid',
-        },
-        // {
-        //     "name": "level",
-        //     "selector": "level"
-        // },
-        {
-            name: 'Assay Name',
-            selector: 'assayName',
-        },
-        // {
-        //     "name": "Atlas Meta",
-        //     "selector": "AtlasMeta"
-        // },
+        ..._(initiallyHiddenColNames)
+            .toPairs()
+            .map(([key, value]) => ({
+                name: value,
+                selector: key,
+                sortable: true,
+                omit: true,
+            }))
+            .value(),
     ];
 
     return (
