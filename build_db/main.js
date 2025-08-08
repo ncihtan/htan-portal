@@ -20,6 +20,7 @@ const fileFields = [
     "FileFormat",
     "Component",
     "DataFileID",
+    "ParentDataFileID",
     "biospecimenIds",
     "demographicsIds.Gender",
     "demographicsIds.Ethnicity",
