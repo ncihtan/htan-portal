@@ -95,10 +95,14 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
         'parent_data_file_id',
     ];
     const data = _(files)
-        .filter((f) => !!f.viewers?.cds)
+        .filter((f) => !!f.viewers?.cds || f.downloadSource === DownloadSourceCategory.synapse)
         .map((f) => [
-            getDrsUri(f.viewers?.cds?.drs_uri, false, true),
-            f.viewers?.cds?.name,
+            f.viewers?.cds?.drs_uri
+                ? getDrsUri(f.viewers.cds.drs_uri, true)
+                : f.downloadSource === DownloadSourceCategory.synapse
+                ? `drs://repo-prod.prod.sagebase.org/${f.synapseId}`
+                : undefined,
+            f.viewers?.cds?.name ?? getFileBase(f.Filename),
             f.atlas_name,
             _.uniq(f.biospecimenIds).join(' '),
             f.assayName,
@@ -315,8 +319,10 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
         (f) => f.downloadSource !== DownloadSourceCategory.dbgap
     );
 
-    const manifestFile = generateCdsManifestFile(files);
-    const gen3manifestFile = generateGen3ManifestFile(files);
+    // Combine dbgap and open access files for manifest generation
+    const cdsEligibleFiles = dbgapFiles.concat(openAccessFiles);
+    const manifestFile = generateCdsManifestFile(cdsEligibleFiles);
+    const gen3manifestFile = generateGen3ManifestFile(cdsEligibleFiles);
 
     return (
         <div>
@@ -522,6 +528,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 (f.level === 'Level 1' || f.level == 'Level 2') &&
                 !f.viewers?.cds)
     );
+    const cgcFiles = cdsFiles.concat(synapseFiles)
 
     const availabilityMessage = () => {
         const messages = [];
@@ -540,27 +547,59 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     };
 
     return (
-        <Modal show={props.isOpen} onHide={props.onClose}>
+        <Modal show={props.isOpen} onHide={props.onClose} dialogClassName="wide-modal">
             <Modal.Header closeButton>
                 <Modal.Title>Download Selected Files</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
-                {/* Summary Section */}
-                <p>Your selection include files that are:</p>
-                <ul>
-                    {availabilityMessage().map((message, index) => (
-                        <li key={index}>{message}</li>
-                    ))}
-                </ul>
+                {/* User-centered summary table */}
+                <table className="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Access Type</th>
+                            <th>Number of files</th>
+                            <th>Download method</th>
+                            <th>Cloud compute options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {cdsFiles.length > 0 && (
+                            <tr>
+                                <td>CDS (Controlled access)</td>
+                                <td>{cdsFiles.length}</td>
+                                <td>Gen3 client + dbGaP credentials + manifest</td>
+                                <td>SevenBridges CGC, Terra</td>
+                            </tr>
+                        )}
+                        {synapseFiles.length > 0 && (
+                            <tr>
+                                <td>Synapse</td>
+                                <td>{synapseFiles.length}</td>
+                                <td> Open in Synapse web UI or use Synapse python client</td>
+                                <td>✅ SevenBridges CGC, Terra</td>
+                            </tr>
+                        )}
+                        {notDownloadableFiles.length > 0 && (
+                            <tr>
+                                <td>Coming Soon</td>
+                                <td>{notDownloadableFiles.length}</td>
+                                <td>Metadata available now. File access in progress.</td>
+                                <td></td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
                 <p>
-                    Follow the instructions below on how to access data from
-                    each of these sources. Further details are avaliable in the{' '}
-                    <a href="docs.humantumoratlas.org">HTAN Manual</a>.
+                    Files can be downloaded or launched in cloud platforms depending on their access method.
+                    Instructions below are grouped by source. More detail is available in the{' '}
+                    <a href="https://docs.humantumoratlas.org" target="_blank" rel="noopener noreferrer">
+                        HTAN Manual
+                    </a>.
                 </p>
 
                 {/* CDS Section */}
-                {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                {cgcFiles.length > 0 && <CDSInstructions files={cgcFiles} />}
 
                 {/* Synapse Section */}
                 {synapseFiles.length > 0 && (
