@@ -314,6 +314,10 @@ function getReleaseSynapseIds(
         .map((e) => e.entityId);
 }
 
+function getNormalizedGeoMxDspAssayName(assayName?: string) {
+    return assayName?.toLowerCase().replace(/\s/g, '').replace(/-/g, '');
+}
+
 function addDownloadSourcesInfo(
     file: BaseSerializableEntity,
     dbgapImgSynapseSet: Set<string>
@@ -373,6 +377,10 @@ function addDownloadSourcesInfo(
                     'xenium',
                 ],
                 (assay) => file.assayName?.toLowerCase().includes(assay)
+            ) ||
+            // GeoMX DSP assays
+            getNormalizedGeoMxDspAssayName(file.assayName)?.includes(
+                'geomxdsp'
             ) ||
             // raw files
             file.Filename?.toLowerCase().endsWith('raw') ||
@@ -668,10 +676,9 @@ function processSynapseJSON(
         }
         // unify "NanoString GeoMX DSP" assays
         else if (
-            assayNameLowerVase
-                ?.replace(/\s/g, '')
-                .replace(/-/g, '')
-                .includes('geomxdsp')
+            getNormalizedGeoMxDspAssayName(assayNameLowerVase)?.includes(
+                'geomxdsp'
+            )
         ) {
             file.assayName = 'NanoString GeoMX DSP';
         }
