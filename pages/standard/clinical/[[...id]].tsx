@@ -121,6 +121,16 @@ const Clinical: React.FunctionComponent<DataStandardProps> = (props) => {
                         </td>
                     </tr>
                     <tr>
+                        <td>Participant Vital Status Update</td>
+                        <td>
+                            Implemented in May 2024. This manifest is used to
+                            update a participant's vital status if new
+                            information is available. Prior to May 2024, vital
+                            status was rewritten in the demographics manifest
+                            when updates were available.
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Therapy</td>
                         <td>
                             Record of the administration and intention of
