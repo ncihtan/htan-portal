@@ -1213,6 +1213,7 @@ function addMissingPublicationManifestFields(
         'Eutils Sort Date',
         'Eutils Authors',
         'Eutils DOI',
+        'UCSC Cell Browser Link',
     ];
 
     fields.forEach((field) => {

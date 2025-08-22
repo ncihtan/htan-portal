@@ -123,9 +123,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
                 getPublicationTitle(manifest),
             cell: (manifest: PublicationManifest) => (
                 <a
-                    href={`//${
-                        window.location.host
-                    }/publications/${getPublicationUid(manifest)}`}
+                    href={`/publications/${getPublicationUid(manifest)}`}
                     className="py-1"
                 >
                     {getPublicationTitle(manifest)}
@@ -314,6 +312,21 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             omit: true,
         },
         {
+            name: 'UCSC Cell Browser',
+            selector: (manifest: PublicationManifest) =>
+                manifest.UCSCCellBrowserLink,
+            cell: (manifest: PublicationManifest) => {
+                return manifest.UCSCCellBrowserLink ? (
+                    <a href={manifest.UCSCCellBrowserLink} target="_blank">
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    </a>
+                ) : undefined;
+            },
+            wrap: true,
+            sortable: true,
+            omit: true,
+        },
+        {
             name: 'Content Type',
             selector: (manifest: PublicationManifest) =>
                 manifest.PublicationContentType,
@@ -336,148 +349,6 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             omit: true,
         },
     ];
-
-    // const columns = [
-    //     {
-    //         name: 'Title',
-    //         selector: (manifest: PublicationManifest) =>
-    //             getPublicationTitle(getSummary(manifest), manifest),
-    //         cell: (manifest: PublicationManifest) => (
-    //             <a
-    //                 href={`//${
-    //                     window.location.host
-    //                 }/publications/${getPublicationUid(manifest)}`}
-    //             >
-    //                 {getPublicationTitle(getSummary(manifest), manifest)}
-    //             </a>
-    //         ),
-    //         grow: 1.5,
-    //         wrap: true,
-    //         sortable: true,
-    //     },
-    //     {
-    //         name: 'Atlas',
-    //         selector: (manifest: PublicationManifest) => manifest.atlas_name,
-    //         cell: (manifest: PublicationManifest) => {
-    //             const meta = JSON.parse(manifest.AtlasMeta);
-    //             return (
-    //                 <AtlasDescription
-    //                     atlasMeta={meta}
-    //                     atlasName={meta.lead_institutions}
-    //                 />
-    //             );
-    //         },
-    //         wrap: true,
-    //         sortable: true,
-    //     },
-    //     {
-    //         name: 'Authors',
-    //         selector: (manifest: PublicationManifest) =>
-    //             getPublicationAuthors(getSummary(manifest), manifest).join(
-    //                 ', '
-    //             ),
-    //         cell: (manifest: PublicationManifest) => {
-    //             const authors = getPublicationAuthors(manifest);
-    //             let shortList = authors;
-    //
-    //             if (authors.length > 5) {
-    //                 shortList = authors.slice(0, 4).concat('et al.');
-    //             }
-    //
-    //             return shortList.join(', ');
-    //         },
-    //         wrap: true,
-    //         sortable: true,
-    //     },
-    //     {
-    //         name: 'Journal',
-    //         selector: (manifest: PublicationManifest) =>
-    //             getPublicationJournal(getSummary(manifest), manifest),
-    //         wrap: true,
-    //         sortable: true,
-    //     },
-    //     {
-    //         name: 'Publication Date',
-    //         selector: (manifest: PublicationManifest) => getDateTime(manifest),
-    //         cell: (manifest: PublicationManifest) => {
-    //             const date = getDate(manifest);
-    //
-    //             if (date) {
-    //                 const formatted = Intl.DateTimeFormat('en-US', {
-    //                     year: 'numeric',
-    //                     month: 'short',
-    //                 }).formatToParts(date);
-    //                 const year = formatted.find((s) => s.type === 'year')
-    //                     ?.value;
-    //                 const month = formatted.find((s) => s.type === 'month')
-    //                     ?.value;
-    //                 return `${year} ${month}`;
-    //             } else {
-    //                 return '';
-    //             }
-    //         },
-    //         wrap: true,
-    //         sortable: true,
-    //     },
-    //
-    //     {
-    //         name: 'PubMed',
-    //         cell: (publication: Entity) => {
-    //             return (
-    //                 <a
-    //                     href={`https://pubmed.ncbi.nlm.nih.gov/${publication.PMID}`}
-    //                     target={'_blank'}
-    //                 >
-    //                     {publication.uid}{' '}
-    //                     <FontAwesomeIcon icon={faExternalLinkAlt} />
-    //                 </a>
-    //             );
-    //         },
-    //     },
-    //
-    //     {
-    //         name: 'Participants',
-    //         selector: (manifest: PublicationManifest) =>
-    //             getEntityCount(manifest, props.participants),
-    //         cell: (manifest: PublicationManifest) => {
-    //             const { filteredCount, unfilteredCount } = getCounts(
-    //                 manifest,
-    //                 props.filteredParticipants,
-    //                 props.participants
-    //             );
-    //             return (
-    //                 <Count
-    //                     filteredCount={filteredCount}
-    //                     unfilteredCount={unfilteredCount}
-    //                 />
-    //             );
-    //         },
-    //         grow: 0.5,
-    //         wrap: true,
-    //         sortable: true,
-    //     },
-    //     {
-    //         name: 'Biospecimens',
-    //         selector: (manifest: PublicationManifest) =>
-    //             getEntityCount(manifest, props.biospecimens),
-    //         cell: (manifest: PublicationManifest) => {
-    //             const { filteredCount, unfilteredCount } = getCounts(
-    //                 manifest,
-    //                 props.filteredBiospecimens,
-    //                 props.biospecimens
-    //             );
-    //             return (
-    //                 <Count
-    //                     filteredCount={filteredCount}
-    //                     unfilteredCount={unfilteredCount}
-    //                 />
-    //             );
-    //         },
-    //         grow: 0.7,
-    //         wrap: true,
-    //         sortable: true,
-    //     },
-    // ];
 
     const sortedData = _(props.publications)
         .sortBy(getDateTime)

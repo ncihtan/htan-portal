@@ -172,6 +172,7 @@ export interface PublicationManifest {
     PublicationContainsID: string;
     DataType: string;
     Tool: string;
+    UCSCCellBrowserLink?: string;
     SupportingLink?: string;
     SupportingLinkDescription?: string;
     CitedInNumber?: number;

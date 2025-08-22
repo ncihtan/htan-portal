@@ -200,6 +200,7 @@ async function main(){
                 'SupportingLinkDescription',
                 'Title',
                 'Tool',
+                'UCSCCellBrowserLink',
                 'YearofPublication',
                 'atlasid',
                 'atlas_name',
