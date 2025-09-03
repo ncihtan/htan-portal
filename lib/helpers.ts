@@ -36,7 +36,7 @@ function doesFileHaveMultipleParents(file: Entity) {
 }
 
 export function getCloudBaseUrl() {
-    return 'https://d13ch66cwesneh.cloudfront.net';
+    return 'https://htanfiles.assets.cbioportal.org';
 }
 
 export async function fetchData(): Promise<LoadDataResult> {
