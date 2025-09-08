@@ -556,7 +556,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                 <p>
                     Follow the instructions below on how to access data from
                     each of these sources. Further details are avaliable in the{' '}
-                    <a href="docs.humantumoratlas.org">HTAN Manual</a>.
+                    <a href="https://docs.humantumoratlas.org">HTAN Manual</a>.
                 </p>
 
                 {/* CDS Section */}
