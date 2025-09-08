@@ -17,7 +17,7 @@ All data is coming from [Synapse](https://www.synapse.org/). We have a Python sc
 | Publication          | HTAN center has new publication                   | Update Publications JSON. Alex has script to generate this                      |
 | Tool                 | HTAN center has new tool                          | Update Tools JSON. Add entry manually                                           |
 | Data                 | New major or point data release                   | Follow steps in Update Data Files section. Dar'ya manages BigQuery tables       |
-| Data Access          | CDS releases level1-2 data                        | Follow steps in Update Data Files section (particularly cds_drs mapping update) |
+| Data Access          | CRDC-GC releases level1-2 data                    | Follow steps in Update Data Files section (particularly crdcgc_drs mapping update) |
 | Viewers              | CellXGene releases single cell data               | Update cellxgene viewers JSON. Add entry manually                               |
 | Viewers              | New Minerva Viewers generated                     | Adam generates the Minerva viewers. Follow steps in Update Data Files section   |
 
@@ -32,10 +32,10 @@ that using these commands (requires access to the htan-dcc google project):
 ```bash
 bq extract --destination_format CSV released.entities_v6_3 gs://htan-release-files/entities_v6_3.csv
 bq extract --destination_format CSV released.metadata_v6_3 gs://htan-release-files/metadata_v6_3.csv
-bq extract --destination_format NEWLINE_DELIMITED_JSON released.cds_drs_mapping_V2 gs://htan-release-files/cds_drs_mapping.json
+bq extract --destination_format NEWLINE_DELIMITED_JSON released.cds_drs_mapping_V2 gs://htan-release-files/crdcgc_drs_mapping.json
 gsutil cp gs://htan-release-files/entities_v6_3.csv data/entities_v6_3.csv
 gsutil cp gs://htan-release-files/metadata_v6_3.csv data/metadata_v6_3.csv
-gsutil cp gs://htan-release-files/cds_drs_mapping.json packages/data-portal-commons/src/assets/cds_drs_mapping.json
+gsutil cp gs://htan-release-files/crdcgc_drs_mapping.json packages/data-portal-commons/src/assets/crdcgc_drs_mapping.json
 ```
 
 #### Pull files from Synapse and Process for ingestion

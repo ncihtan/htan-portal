@@ -138,7 +138,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                             .sort((a: OptionType, b: OptionType) => {
                                 const downloadSourceOrder = [
                                     DownloadSourceCategory.dbgap,
-                                    DownloadSourceCategory.cds,
+                                    DownloadSourceCategory.crdcGc,
                                     // DownloadSourceCategory.idc,
                                     DownloadSourceCategory.synapse,
                                     DownloadSourceCategory.comingSoon,
@@ -156,7 +156,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                 const downloadLabels = {
                                     [DownloadSourceCategory.dbgap]: (
                                         <span>
-                                            CDS/SB-CGC (dbGaP{' '}
+                                            CRDC-GC/SB-CGC (dbGaP{' '}
                                             <FontAwesomeIcon
                                                 color="#FF8C00"
                                                 icon={faLock}
@@ -165,9 +165,9 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                                         </span>
                                     ),
                                     // [DownloadSourceCategory.idc]: 'IDC (Imaging)',
-                                    [DownloadSourceCategory.cds]: (
+                                    [DownloadSourceCategory.crdcGc]: (
                                         <span>
-                                            CDS/SB-CGC (Open Access{' '}
+                                            CRDC-GC/SB-CGC (Open Access{' '}
                                             <FontAwesomeIcon
                                                 color="#00796B"
                                                 icon={faLockOpen}
@@ -208,7 +208,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
                             .filter(
                                 (e: OptionType) =>
                                     ![
-                                        FileViewerName.cds,
+                                        FileViewerName.crdcGc,
                                         FileViewerName.idc,
                                     ].includes(e.value as FileViewerName)
                             )
@@ -223,7 +223,7 @@ export const FileFilterControls: React.FunctionComponent<IFileFilterControlProps
 
                                     // excluded values:
                                     // we are not supposed to see these as filter options
-                                    [FileViewerName.cds]: 'CDS', // excluded (this only appears as a download source)
+                                    [FileViewerName.crdcGc]: 'CRDC-GC', // excluded (this only appears as a download source)
                                     [FileViewerName.idc]: 'IDC', // excluded (we do not show IDC links anymore)
                                 };
 

@@ -3,7 +3,7 @@ import { Entity, FileViewerName } from './entity';
 
 export function getViewerValues(
     entity: Entity,
-    exclude: FileViewerName[] = [FileViewerName.cds, FileViewerName.idc]
+    exclude: FileViewerName[] = [FileViewerName.crdcGc, FileViewerName.idc]
 ): FileViewerName[] {
     const viewers = _.isString(entity.viewers)
         ? JSON.parse(entity.viewers)

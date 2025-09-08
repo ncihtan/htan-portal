@@ -73,7 +73,7 @@ export interface BaseSerializableEntity {
 export enum FileViewerName {
     autoMinerva = 'autoMinerva',
     idc = 'idc',
-    cds = 'cds',
+    crdcGc = 'crdcGc',
     customMinerva = 'customMinerva',
     ucscXena = 'ucscXena',
     cellxgene = 'cellxgene',
@@ -83,7 +83,7 @@ export enum FileViewerName {
 export interface FileViewers {
     [FileViewerName.autoMinerva]?: AutoMinerva;
     [FileViewerName.idc]?: IdcImagingAsset;
-    [FileViewerName.cds]?: CdsAsset;
+    [FileViewerName.crdcGc]?: CrdcGcAsset;
     [FileViewerName.customMinerva]?: string;
     [FileViewerName.ucscXena]?: string;
     [FileViewerName.cellxgene]?: string;
@@ -104,7 +104,7 @@ export interface IdcImagingAsset {
     viewer_url: string;
 }
 
-export interface CdsAsset {
+export interface CrdcGcAsset {
     name: string;
     entityId?: string;
     HTAN_Data_File_ID: string;
@@ -119,7 +119,7 @@ export interface ImageChannelMetadata {
 export enum DownloadSourceCategory {
     dbgap = 'dbGaP',
     // idc = 'IDC',
-    cds = 'CDS/SB-CGC (open access)',
+    crdcGc = 'CRDC-GC/SB-CGC (open access)',
     synapse = 'Synapse',
     comingSoon = 'Coming Soon',
 }
