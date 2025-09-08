@@ -52,6 +52,7 @@ import { GroupsByProperty } from '@htan/data-portal-filter';
 
 const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
 const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';
+const TERRA_MANIFEST_FILENAME = 'terra_manifest.tsv';
 
 interface IFileDownloadModalProps {
     files: Entity[];
@@ -126,6 +127,26 @@ function generateGen3ManifestFile(files: Entity[]): string | undefined {
         .value();
 
     return data.length > 0 ? JSON.stringify(data, null, 2) : undefined;
+}
+
+function generateTerraManifestFile(files: Entity[]): string | undefined {
+    const columns = [
+        'entity:filename',
+        'drs_uri'
+    ];
+    const data = _(files)
+        .filter((f) => !!f.viewers?.cds)
+        .map((f) => [
+            f.viewers?.cds?.name, // Use `name` property for the filename
+            f.viewers?.cds?.drs_uri
+        ])
+        .value();
+
+    if (data.length > 0) {
+        return [columns, ...data].map((row) => row.join('\t')).join('\n'); // Join with tabs for TSV format
+    } else {
+        return undefined;
+    }
 }
 
 const FilenameWithAccessIcon: React.FunctionComponent<{
@@ -305,6 +326,32 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
     );
 };
 
+const terra3ManifestInstructions = (terra3manifestFile: string | undefined) => {
+    if (!terra3manifestFile) return null;
+
+    return (
+        <div>
+            <p></p>
+            <p>
+                <strong>Access files in Terra:</strong>{' '}
+                First link your Terra account to NCI CRDC Framework Services from your{' '}
+                <a href="https://app.terra.bio/#profile?tab=externalIdentities" target="_blank" rel="noopener noreferrer">
+                Terra profile External Identities
+                </a> page.{' '}
+                You can then add these files to Terra using the following manifest file.
+            </p>
+            <p>
+                <button
+                    className="btn btn-light"
+                    onClick={() => fileDownload(terra3manifestFile, TERRA_MANIFEST_FILENAME)}
+                >
+                    <FontAwesomeIcon icon={faDownload} /> Download <code>terra_manifest.tsv</code>
+                </button>
+            </p>
+        </div>
+    );
+};
+
 const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
     files,
 }) => {
@@ -317,6 +364,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
 
     const manifestFile = generateCdsManifestFile(files);
     const gen3manifestFile = generateGen3ManifestFile(files);
+    const terra3manifestFile = generateTerraManifestFile(files);
 
     return (
         <div>
@@ -363,6 +411,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
 
             {/* CDS and Gen3 manifest instructions */}
             {cdsManifestInstructions(manifestFile)}
+            {terra3ManifestInstructions(terra3manifestFile)}
             {gen3ManifestInstructions(gen3manifestFile)}
         </div>
     );
