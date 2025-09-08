@@ -8,9 +8,7 @@ import {
 } from '@htan/data-portal-filter';
 import {
     Entity,
-    fetchSynData,
     getNormalizedOrgan,
-    LoadDataResult,
     NOT_REPORTED,
 } from '@htan/data-portal-commons';
 import { ExploreTab } from '@htan/data-portal-explore';
@@ -36,43 +34,8 @@ function doesFileHaveMultipleParents(file: Entity) {
 }
 
 export function getCloudBaseUrl() {
-    return 'https://d13ch66cwesneh.cloudfront.net';
+    return 'https://htanfiles.assets.cbioportal.org';
 }
-
-export async function fetchData(): Promise<LoadDataResult> {
-    // in development we use local processed syn data. In production we use
-    // other URL (too large to serve thru next max 250MB limit)
-    const processedSynURL =
-        process.env.NODE_ENV === 'development'
-            ? '/processed_syn_data.json'
-            : `${getCloudBaseUrl()}/processed_syn_data_20250624_1356.json`;
-    return fetchSynData(processedSynURL);
-}
-
-// TODO this function doesn't seem to be used anywhere anymore
-// export function sortStageOptions(options: OptionType[]) {
-//     const sortedOptions = _.sortBy(options, (option) => {
-//         const numeral = option.value.match(/stage ([IVXLCDM]+)/i);
-//         let val = undefined;
-//         if (!!numeral && numeral.length > 1) {
-//             try {
-//                 const number = toArabic(numeral[1]);
-//             } catch (ex) {
-//                 val = numeral[1];
-//             }
-//         }
-//         return option.label;
-//     });
-//
-//     const withStage = sortedOptions.filter((option) =>
-//         /stage/i.test(option.label)
-//     );
-//     const withoutStage = sortedOptions.filter(
-//         (option) => !/stage/i.test(option.label)
-//     );
-//
-//     return withStage.concat(withoutStage);
-// }
 
 function addQueryStringToURL(
     url: string,
