@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "yarn run next dev",
+    "buildPackages": "yarn workspace @htan/data-portal-utils build && yarn workspace @htan/data-portal-commons build && yarn workspace @htan/data-portal-table build && yarn workspace @htan/data-portal-schema build && yarn workspace @htan/data-portal-filter build && yarn workspace @htan/data-portal-explore build",
     "updateMappings": "bash data/fetch_autominerva_mappings.sh > packages/data-portal-commons/src/assets/htan-imaging-assets.json",
     "updateData": "yarn run findAndReplace && yarn updateMappings && yarn run processSynapseJSON && yarn run gzip",
     "gzip": "yarn run gzipData && yarn run gzipMetadata",

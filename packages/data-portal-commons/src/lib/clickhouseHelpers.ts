@@ -5,8 +5,11 @@ import { SelectedFilter } from '@htan/data-portal-filter';
 
 import { CountByType } from './types';
 
-export const DEFAULT_CLICKHOUSE_URL =
-    'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan_2025-09-09';
+export const DEFAULT_CLICKHOUSE_HOST =
+    'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443';
+export const DEFAULT_CLICKHOUSE_DB = 'htan_2025_09_09';
+export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
+
 const defaultClient: WebClickHouseClient = createClient({
     url: DEFAULT_CLICKHOUSE_URL,
     username: 'webuser',
