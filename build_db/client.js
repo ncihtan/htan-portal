@@ -1,10 +1,9 @@
-import { createClient } from '@clickhouse/client';
 import _ from 'lodash';
+import { createClient } from '@clickhouse/client';
+import { DEFAULT_CLICKHOUSE_URL } from '@htan/data-portal-commons';
 
 const client = createClient({
-    url:
-        process.env.CLICKHOUSE_HOST ??
-        'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
+    url: process.env.CLICKHOUSE_HOST ?? DEFAULT_CLICKHOUSE_URL,
     username: process.env.CLICKHOUSE_USER ?? 'app_user',
     password: process.env.CLICKHOUSE_PASSWORD,
     request_timeout: 600000,
