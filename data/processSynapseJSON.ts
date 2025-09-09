@@ -334,7 +334,7 @@ function addDownloadSourcesInfo(
         // them from the portal listing entirely so assume they are there
         file.isRawSequencing = true;
         if (
-            (file.synapseId && file.viewers?.cds?.drs_uri) ||
+            (file.synapseId && file.viewers?.crdcGc?.drs_uri) ||
             file.Filename?.toLowerCase().endsWith('bai')
         ) {
             file.downloadSource = DownloadSourceCategory.dbgap;
@@ -352,8 +352,8 @@ function addDownloadSourcesInfo(
         } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
             // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
-            if (file.viewers?.cds?.drs_uri) {
-                file.downloadSource = DownloadSourceCategory.cds;
+            if (file.viewers?.crdcGc?.drs_uri) {
+                file.downloadSource = DownloadSourceCategory.crdcGc;
             } else {
                 file.downloadSource = DownloadSourceCategory.comingSoon;
             }
