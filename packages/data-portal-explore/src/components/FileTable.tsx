@@ -50,7 +50,7 @@ import {
 } from '@htan/data-portal-commons';
 import { GroupsByProperty } from '@htan/data-portal-filter';
 
-const CDS_MANIFEST_FILENAME = 'cds_manifest.csv';
+const CRDC_GC_MANIFEST_FILENAME = 'crdc_gc_manifest.csv';
 const GEN3_MANIFEST_FILENAME = 'gen3_manifest.json';
 
 interface IFileDownloadModalProps {
@@ -82,7 +82,7 @@ function getDrsUri(
     return drsUri;
 }
 
-function generateCdsManifestFile(files: Entity[]): string | undefined {
+function generateCrdcGcManifestFile(files: Entity[]): string | undefined {
     const columns = [
         'drs_uri',
         'name',
@@ -95,10 +95,10 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
         'parent_data_file_id',
     ];
     const data = _(files)
-        .filter((f) => !!f.viewers?.cds)
+        .filter((f) => !!f.viewers?.crdcGc)
         .map((f) => [
-            getDrsUri(f.viewers?.cds?.drs_uri, false, true),
-            f.viewers?.cds?.name,
+            getDrsUri(f.viewers?.crdcGc?.drs_uri, false, true),
+            f.viewers?.crdcGc?.name,
             f.atlas_name,
             _.uniq(f.biospecimenIds).join(' '),
             f.assayName,
@@ -119,9 +119,9 @@ function generateCdsManifestFile(files: Entity[]): string | undefined {
 
 function generateGen3ManifestFile(files: Entity[]): string | undefined {
     const data = _(files)
-        .filter((f) => !!f.viewers?.cds)
+        .filter((f) => !!f.viewers?.crdcGc)
         .map((f) => ({
-            object_id: getDrsUri(f.viewers?.cds?.drs_uri, true),
+            object_id: getDrsUri(f.viewers?.crdcGc?.drs_uri, true),
         }))
         .value();
 
@@ -147,7 +147,7 @@ const FilenameWithAccessIcon: React.FunctionComponent<{
     );
 };
 
-const CDSFileList: React.FunctionComponent<{
+const CrdcGcFileList: React.FunctionComponent<{
     files: Entity[];
 }> = (props) => {
     return (
@@ -169,7 +169,7 @@ const dbgapInstructions = (files: Entity[]) => {
 
     return (
         <div>
-            <CDSFileList files={files} />
+            <CrdcGcFileList files={files} />
             <p>
                 Your selection includes controlled-access Level 1 and/or Level 2
                 sequencing data (🔒). To download Level 1/2 sequencing data, you
@@ -189,12 +189,12 @@ const dbgapInstructions = (files: Entity[]) => {
 const openAccessInstructions = (files: Entity[]) => {
     return (
         <div>
-            <CDSFileList files={files} />
+            <CrdcGcFileList files={files} />
         </div>
     );
 };
 
-const cdsManifestInstructions = (manifestFile: string | undefined) => {
+const crdcGcManifestInstructions = (manifestFile: string | undefined) => {
     if (!manifestFile) return null;
 
     return (
@@ -205,7 +205,7 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
                 <a href="https://docs.cancergenomicscloud.org" target="_blank">
                     SevenBridges Cancer Genomics Cloud (SB-CGC)
                 </a>{' '}
-                by downloading the CDS manifest file below and following the
+                by downloading the CRDC-GC manifest file below and following the
                 instructions{' '}
                 <a
                     href="https://docs.cancergenomicscloud.org/docs/import-from-a-drs-server#import-from-a-manifest-file"
@@ -218,11 +218,11 @@ const cdsManifestInstructions = (manifestFile: string | undefined) => {
             <button
                 className="btn btn-light"
                 onClick={() =>
-                    fileDownload(manifestFile, CDS_MANIFEST_FILENAME)
+                    fileDownload(manifestFile, CRDC_GC_MANIFEST_FILENAME)
                 }
             >
                 <FontAwesomeIcon icon={faDownload} /> Download{' '}
-                <code>cds_manifest.csv</code>
+                <code>crdc_gc_manifest.csv</code>
             </button>
         </div>
     );
@@ -305,7 +305,7 @@ const gen3ManifestInstructions = (gen3manifestFile: string | undefined) => {
     );
 };
 
-const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
+const CrdcGcInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
     files,
 }) => {
     const dbgapFiles = files.filter(
@@ -315,7 +315,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
         (f) => f.downloadSource !== DownloadSourceCategory.dbgap
     );
 
-    const manifestFile = generateCdsManifestFile(files);
+    const manifestFile = generateCrdcGcManifestFile(files);
     const gen3manifestFile = generateGen3ManifestFile(files);
 
     return (
@@ -323,7 +323,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
             <hr />
             <h4>
                 <strong>
-                    Files Available through NCI CRDC Cancer Data Service (CDS)
+                    Files Available through NCI CRDC General Commons (CRDC-GC)
                 </strong>
             </h4>
 
@@ -345,7 +345,7 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
                         </a>
                         .
                     </p>
-                    <CDSFileList files={dbgapFiles} />
+                    <CrdcGcFileList files={dbgapFiles} />
                 </div>
             )}
 
@@ -357,12 +357,12 @@ const CDSInstructions: React.FunctionComponent<{ files: Entity[] }> = ({
                         The files listed below are available without additional
                         access requirements.
                     </p>
-                    <CDSFileList files={openAccessFiles} />
+                    <CrdcGcFileList files={openAccessFiles} />
                 </div>
             )}
 
-            {/* CDS and Gen3 manifest instructions */}
-            {cdsManifestInstructions(manifestFile)}
+            {/* CRDC-GC and Gen3 manifest instructions */}
+            {crdcGcManifestInstructions(manifestFile)}
             {gen3ManifestInstructions(gen3manifestFile)}
         </div>
     );
@@ -511,7 +511,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     props
 ) => {
-    const cdsFiles = props.files.filter((f) => f.viewers?.cds);
+    const crdcGcFiles = props.files.filter((f) => f.viewers?.crdcGc);
     const synapseFiles = props.files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.synapse
     );
@@ -520,14 +520,14 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             f.downloadSource?.includes(DownloadSourceCategory.comingSoon) ||
             (f.Component.startsWith('Imaging') &&
                 (f.level === 'Level 1' || f.level == 'Level 2') &&
-                !f.viewers?.cds)
+                !f.viewers?.crdcGc)
     );
 
     const availabilityMessage = () => {
         const messages = [];
-        if (cdsFiles.length > 0) {
+        if (crdcGcFiles.length > 0) {
             messages.push(
-                'Available through NCI CRDC Cancer Data Service (CDS)'
+                'Available through NCI CRDC General Commons (CRDC-GC)'
             );
         }
         if (synapseFiles.length > 0) {
@@ -559,8 +559,10 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
                     <a href="https://docs.humantumoratlas.org">HTAN Manual</a>.
                 </p>
 
-                {/* CDS Section */}
-                {cdsFiles.length > 0 && <CDSInstructions files={cdsFiles} />}
+                {/* CRDC-GC Section */}
+                {crdcGcFiles.length > 0 && (
+                    <CrdcGcInstructions files={crdcGcFiles} />
+                )}
 
                 {/* Synapse Section */}
                 {synapseFiles.length > 0 && (

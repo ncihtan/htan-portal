@@ -1,10 +1,13 @@
-import { createClient } from '@clickhouse/client';
 import _ from 'lodash';
+import { createClient } from '@clickhouse/client';
+import {
+    DEFAULT_CLICKHOUSE_DB,
+    DEFAULT_CLICKHOUSE_HOST,
+    DEFAULT_CLICKHOUSE_URL,
+} from '@htan/data-portal-commons';
 
-const client = createClient({
-    url:
-        process.env.CLICKHOUSE_HOST ??
-        'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443/htan',
+const clientConfig = {
+    url: process.env.CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
     username: process.env.CLICKHOUSE_USER ?? 'app_user',
     password: process.env.CLICKHOUSE_PASSWORD,
     request_timeout: 600000,
@@ -12,7 +15,9 @@ const client = createClient({
         response: false,
         request: false,
     },
-});
+};
+
+const client = createClient(clientConfig);
 
 export async function doQuery(query) {
     return client.query({ query });
@@ -20,6 +25,17 @@ export async function doQuery(query) {
 
 function correctFieldName(f) {
     return f.replace(/-associated/, 'Associated');
+}
+
+export async function createDbIfNotExist(dbName = DEFAULT_CLICKHOUSE_DB) {
+    // we need to create a separate client (without the DB name) to be able to create a new DB
+    // otherwise we will get unknown database error
+    const client = createClient({
+        ...clientConfig,
+        url: process.env.CLICKHOUSE_HOST ?? DEFAULT_CLICKHOUSE_HOST,
+    });
+
+    return client.query({ query: `CREATE DATABASE IF NOT EXISTS ${dbName}` });
 }
 
 export async function createTable(

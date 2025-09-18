@@ -14,8 +14,8 @@ interface IDataAvailabilityTableProps {
 interface ITableRowData {
     tabId?: string;
     rowName: string;
-    cdsDbgapCount: number;
-    cdsOpenAccessCount: number;
+    crdcGcDbgapCount: number;
+    crdcGcOpenAccessCount: number;
     synapseOpenAccessCount: number;
     comingSoonCount: number;
     comingSoonText: string | number;
@@ -85,11 +85,11 @@ function getTableRowData(
     return _.map(_.keys(tableRowGroups).sort(), (rowName) => {
         const entities = tableRowGroups[rowName];
         const tabId = entities.length > 0 ? entities[0]?.assayName : undefined;
-        const cdsDbgapCount = entities.filter(
+        const crdcGcDbgapCount = entities.filter(
             (entity) => entity.downloadSource === DownloadSourceCategory.dbgap
         ).length;
-        const cdsOpenAccessCount = entities.filter(
-            (entity) => entity.downloadSource === DownloadSourceCategory.cds
+        const crdcGcOpenAccessCount = entities.filter(
+            (entity) => entity.downloadSource === DownloadSourceCategory.crdcGc
         ).length;
         const synapseOpenAccessCount = entities.filter(
             (entity) => entity.downloadSource === DownloadSourceCategory.synapse
@@ -108,8 +108,8 @@ function getTableRowData(
         return {
             tabId,
             rowName,
-            cdsDbgapCount,
-            cdsOpenAccessCount,
+            crdcGcDbgapCount,
+            crdcGcOpenAccessCount,
             synapseOpenAccessCount,
             comingSoonCount,
             comingSoonText,
@@ -120,8 +120,8 @@ function getTableRowData(
 function getTotalCountByDownloadSource(tableRowData: ITableRowData[]) {
     return _.mapValues(
         {
-            [DownloadSourceCategory.dbgap]: 'cdsDbgapCount',
-            [DownloadSourceCategory.cds]: 'cdsOpenAccessCount',
+            [DownloadSourceCategory.dbgap]: 'crdcGcDbgapCount',
+            [DownloadSourceCategory.crdcGc]: 'crdcGcOpenAccessCount',
             [DownloadSourceCategory.synapse]: 'synapseOpenAccessCount',
             [DownloadSourceCategory.comingSoon]: 'comingSoonCount',
         },
@@ -147,7 +147,7 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                         0 && (
                         <th>
                             <a href="/data-access">
-                                CDS/SB-CGC (dbGaP{' '}
+                                CRDC-GC/SB-CGC (dbGaP{' '}
                                 <FontAwesomeIcon
                                     color="#FF8C00"
                                     icon={faLock}
@@ -156,11 +156,11 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                             </a>
                         </th>
                     )}
-                    {totalCountByDownloadSource[DownloadSourceCategory.cds] >
+                    {totalCountByDownloadSource[DownloadSourceCategory.crdcGc] >
                         0 && (
                         <th>
                             <a href="/data-access">
-                                CDS/SB-CGC (Open Access{` `}
+                                CRDC-GC/SB-CGC (Open Access{` `}
                                 <FontAwesomeIcon
                                     color="#00796B"
                                     icon={faLockOpen}
@@ -197,8 +197,8 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                     ({
                         tabId,
                         rowName,
-                        cdsDbgapCount,
-                        cdsOpenAccessCount,
+                        crdcGcDbgapCount,
+                        crdcGcOpenAccessCount,
                         synapseOpenAccessCount,
                         comingSoonText,
                     }) => {
@@ -217,15 +217,15 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                                     ] > 0 && (
                                         <LinkComponent
                                             link={link}
-                                            count={cdsDbgapCount}
+                                            count={crdcGcDbgapCount}
                                         />
                                     )}
                                     {totalCountByDownloadSource[
-                                        DownloadSourceCategory.cds
+                                        DownloadSourceCategory.crdcGc
                                     ] > 0 && (
                                         <LinkComponent
                                             link={link}
-                                            count={cdsOpenAccessCount}
+                                            count={crdcGcOpenAccessCount}
                                         />
                                     )}
                                     {totalCountByDownloadSource[

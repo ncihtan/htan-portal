@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { createTable } from "./client.js";
+import {createDbIfNotExist, createTable} from "./client.js";
 import {
     normalizeTissueOrOrganOrSite,
     normalizeTreatment
@@ -283,6 +283,8 @@ async function main(){
 
     // enable this if you only want to import new publication data
     // configs = { publicationManifestConfig:configs.publicationManifestConfig };
+
+    await createDbIfNotExist();
 
     for (const config in configs) {
         console.log(`creating table ${configs[config].tableName}`);
