@@ -51,21 +51,21 @@ yarn run updateData
 
 ### Export to bucket
 
-At the moment all data is hosted on S3 for producion. This is because there is a file size limit for vercel. To update it:
+At the moment metadata is hosted on S3 for production. To update it:
 
-1. gzip file (note that it's already gzipped in the repo)
-2. Remove ".gz" extension so it's just json and rename to include current date in filename.
-3. Upload file to s3 bucket "htanfiles" (part of schultz AWS org)
-4. The file needs two meta settings:  `Content-Encloding=gzip` and `Content-Type=application/json`
-5. Once file is up, change path in
-`/lib/helpers.ts`
+1. gzip all the files in the metadata directory (Note that these files are not stored in the repo)
+2. Remove ".gz" extension from the gzipped files so they're just csv files
+3. Upload files to the s3 bucket "htanfiles/metadata" (part of schultz AWS org)
+4. The file needs two meta settings:  `Content-Encloding=gzip` and `Content-Type=text/csv`
 
 Or step 1-4 as command:
 
 ```bash
-MY_AWS_PROFILE=inodb
-aws s3 cp processed_syn_data.json.gz s3://htanfiles/processed_syn_data_$(date "+%Y%m%d_%H%M").json --profile=${MY_AWS_PROFILE} --content-encoding gzip --content-type=application/json --acl public-read
-aws s3 cp metadata_gzip s3://htanfiles/metadata --recursive --profile=${MY_AWS_PROFILE} --content-encoding gzip --content-type=text/csv --acl public-read
+MY_AWS_PROFILE=203403084713
+MY_AWS_USERNAME=htan_service_account
+yarn gzipMetadata 
+saml2aws login --force --session-duration=28800 -a ${MY_AWS_PROFILE} --username=${MY_AWS_USERNAME}
+aws s3 cp metadata_gzip s3://sc-203403084713-pp-5kti2c6hsoc5c-bucket-qarb8wed4umr/metadata --recursive --profile=${MY_AWS_PROFILE} --content-encoding gzip --content-type=text/csv
 ```
 
 ## Testing
