@@ -1,6 +1,6 @@
 import React from 'react';
 
-const iSCALE: React.FunctionComponent = () => {
+const ISCALE: React.FunctionComponent = () => {
     return (
         <div>
             <h3>iSCALE</h3>
@@ -25,4 +25,4 @@ const iSCALE: React.FunctionComponent = () => {
     );
 };
 
-export default iSCALE;
+export default ISCALE;
