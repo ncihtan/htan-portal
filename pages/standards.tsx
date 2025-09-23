@@ -25,21 +25,17 @@ const Standards = (props: StandardsProps) => {
                 <Container>
                     <Row>
                         <div className="standards-content">
-                            <h1>
-                                HTAN Data Standards
-                                <h4>
-                                    <Link
-                                        href={getLinkToRelease(
-                                            props.releaseTag.name
-                                        )}
-                                    >
-                                        {props.releaseTag.name}{' '}
-                                        <FontAwesomeIcon
-                                            icon={faExternalLinkAlt}
-                                        />
-                                    </Link>
-                                </h4>
-                            </h1>
+                            <h1>HTAN Data Standards</h1>
+                            <h4>
+                                <Link
+                                    href={getLinkToRelease(
+                                        props.releaseTag.name
+                                    )}
+                                >
+                                    {props.releaseTag.name}{' '}
+                                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                </Link>
+                            </h4>
 
                             <p>
                                 All HTAN Centers are required to encode their
