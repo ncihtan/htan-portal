@@ -198,7 +198,20 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
 
     constructor(props: IAtlasTableProps) {
         super(props);
-        makeObservable(this);
+        makeObservable(this, {
+            metadataModalAtlas: observable,
+            selectedAtlases: computed,
+            hasAtlasesSelected: computed,
+            data: computed,
+            filesByAtlas: computed,
+            assaysByAtlas: computed,
+            filteredAssaysByAtlas: computed,
+            filteredFilesByAtlas: computed,
+            filteredCasesByAtlas: computed,
+            filteredBiospecimensByAtlas: computed,
+            shouldShowFilteredFractions: computed,
+            columns: computed,
+        });
         this.atlasMetaData = this.props.getAtlasMetaData();
     }
 
