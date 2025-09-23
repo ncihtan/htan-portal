@@ -26,7 +26,10 @@ import {
 
 import styles from './tools.module.scss';
 
-const ToolPage = observer((props: { router: NextRouter; tools: Tools }) => {
+const ToolPage: React.FunctionComponent<{
+    router: NextRouter;
+    tools: Tools;
+}> = observer((props) => {
     const selectedFilters =
         parseSelectedFiltersFromUrl(
             (props.router.query as ExploreURLQuery).selectedFilters // use casting as ExploreURLQuery to use typescript to ensure URL correctness
