@@ -8,6 +8,7 @@ import CytoCommunity from './CytoCommunity';
 import UCSCXena from './UCSCXena';
 import CalicoST from './CalicoST';
 import MIMCyCIF from './MIMCyCIF';
+import iSCALE from './iSCALE';
 
 export const ToolDetails: { [toolID: string]: JSX.Element } = {
     HTA8_T0: <CBioPortal />,
@@ -19,5 +20,6 @@ export const ToolDetails: { [toolID: string]: JSX.Element } = {
     HTA4_T0: <CytoCommunity />,
     HTA4_T1: <CelloType />,
     HTA12_T0: <CalicoST />,
+    HTA12_T1: <iSCALE />,
     HTA9_T0: <MIMCyCIF />,
 };
