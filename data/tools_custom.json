@@ -1393,8 +1393,8 @@
     "Tool Language": "Python, sh",
     "Tool Homepage": "https://github.com/amesch441/iSCALE",
     "Tool Description": "iSCALE (Inferring Spatially resolved Cellular Architectures for Large-sized tissue Environments) is a novel framework designed to integrate multiple daughter captures and utilize H&E information from large tissue samples, enabling the prediction of gene expression in large-sized tissues with near single-cell resolution.",
-    "Tool Topic": "analysis, annotation, visualization",
-    "Tool Operation": "analysis, annotation, visualization",
+    "Tool Topic": "",
+    "Tool Operation": "",
     "Tool Input Data": "",
     "Tool Output Data": "",
     "Tool Assay": "Spatial Transcriptomics, H&E whole slide images"
