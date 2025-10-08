@@ -705,27 +705,27 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn38868462",
-            "numItems": 817
+            "numItems": 916
         },
         {
             "component": "Demographics",
             "synapseId": "syn38868669",
-            "numItems": 173
+            "numItems": 195
         },
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn39050879",
-            "numItems": 252
+            "numItems": 256
         },
         {
             "component": "ScRNA-seqLevel1",
             "synapseId": "syn39050991",
-            "numItems": 486
+            "numItems": 488
         },
         {
             "component": "Diagnosis",
             "synapseId": "syn39051142",
-            "numItems": 157
+            "numItems": 179
         },
         {
             "component": "Exposure",
@@ -745,12 +745,12 @@
         {
             "component": "Therapy",
             "synapseId": "syn39051860",
-            "numItems": 157
+            "numItems": 179
         },
         {
             "component": "MolecularTest",
             "synapseId": "syn39051938",
-            "numItems": 157
+            "numItems": 179
         },
         {
             "component": "ImagingLevel2",
@@ -770,17 +770,17 @@
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn39059762",
-            "numItems": 630
+            "numItems": 710
         },
         {
             "component": "BulkDNALevel2",
             "synapseId": "syn39059805",
-            "numItems": 315
+            "numItems": 355
         },
         {
             "component": "BulkDNALevel3",
             "synapseId": "syn39059825",
-            "numItems": 215
+            "numItems": 235
         },
         {
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel1",
@@ -823,14 +823,24 @@
             "numItems": 18
         },
         {
+            "component": "ImagingLevel2",
+            "synapseId": "syn55253954",
+            "numItems": 207
+        },
+        {
             "component": "ScRNA-seqLevel1",
             "synapseId": "syn64826454",
-            "numItems": 48
+            "numItems": 52
         },
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn64826483",
-            "numItems": 20
+            "numItems": 25
+        },
+        {
+            "component": "ScRNA-seqLevel3",
+            "synapseId": "syn64826499",
+            "numItems": 1
         },
         {
             "component": "10xVisiumSpatialTranscriptomics-RNA-seqLevel1",
@@ -954,67 +964,62 @@
         {
             "component": "ImagingLevel2",
             "synapseId": "syn35465046",
-            "numItems": 178
+            "numItems": 412
         },
         {
             "component": "BulkRNA-seqLevel1",
             "synapseId": "syn39140594",
-            "numItems": 88
+            "numItems": 162
         },
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn39140863",
-            "numItems": 292
+            "numItems": 324
         },
         {
             "component": "Biospecimen",
             "synapseId": "syn39141309",
-            "numItems": 1473
+            "numItems": 1866
         },
         {
             "component": "Diagnosis",
             "synapseId": "syn39141331",
-            "numItems": 21
+            "numItems": 33
         },
         {
             "component": "Exposure",
             "synapseId": "syn39141342",
-            "numItems": 21
+            "numItems": 33
         },
         {
             "component": "FamilyHistory",
             "synapseId": "syn39141349",
-            "numItems": 21
+            "numItems": 33
         },
         {
             "component": "FollowUp",
             "synapseId": "syn39141359",
-            "numItems": 12
+            "numItems": 33
         },
         {
             "component": "Therapy",
             "synapseId": "syn39141376",
-            "numItems": 75
+            "numItems": 125
         },
         {
             "component": "MolecularTest",
             "synapseId": "syn39141939",
-            "numItems": 762
+            "numItems": 1461
         },
         {
             "component": "Demographics",
             "synapseId": "syn39141967",
-            "numItems": 21
-        },
-        {
-            "component": "BreastCancerTier3",
-            "synapseId": "syn39142015",
-            "numItems": 15
+            "numItems": 33
         },
         {
             "component": "BulkRNA-seqLevel3",
             "synapseId": "syn39142026",
-            "numItems": 33
+            "numItems": 70
         },
         {
             "component": "ScATAC-seqLevel1",
@@ -1024,22 +1029,22 @@
         {
             "component": "BulkRNA-seqLevel2",
             "synapseId": "syn39142062",
-            "numItems": 28
+            "numItems": 65
         },
         {
             "component": "BulkDNALevel2",
             "synapseId": "syn39142091",
-            "numItems": 48
+            "numItems": 68
         },
         {
             "component": "ImagingLevel3",
             "synapseId": "syn50932231",
-            "numItems": 236
+            "numItems": 448
         },
         {
             "component": "BulkDNALevel3",
             "synapseId": "syn52844205",
-            "numItems": 88
+            "numItems": 146
         },
         {
             "component": "ElectronMicroscopyLevel1",
@@ -1134,7 +1139,7 @@
         {
             "component": "ElectronMicroscopyLevel2",
             "synapseId": "syn53251539",
-            "numItems": 1831
+            "numItems": 1832
         },
         {
             "component": "ElectronMicroscopyLevel2",
@@ -1149,7 +1154,7 @@
         {
             "component": "ElectronMicroscopyLevel2",
             "synapseId": "syn53251543",
-            "numItems": 2275
+            "numItems": 2276
         },
         {
             "component": "ElectronMicroscopyLevel2",
@@ -1209,17 +1214,17 @@
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn53280193",
-            "numItems": 44
+            "numItems": 187
         },
         {
             "component": "BulkDNALevel2",
             "synapseId": "syn53280205",
-            "numItems": 22
+            "numItems": 73
         },
         {
             "component": "BulkDNALevel3",
             "synapseId": "syn53280207",
-            "numItems": 19
+            "numItems": 64
         },
         {
             "component": "ScATAC-seqLevel1",
@@ -1269,7 +1274,7 @@
         {
             "component": "ElectronMicroscopyLevel1",
             "synapseId": "syn53351701",
-            "numItems": 2335
+            "numItems": 2509
         },
         {
             "component": "ElectronMicroscopyLevel1",
@@ -1299,7 +1304,7 @@
         {
             "component": "ElectronMicroscopyLevel1",
             "synapseId": "syn53351967",
-            "numItems": 2472
+            "numItems": 2580
         },
         {
             "component": "ImagingLevel2",
@@ -1314,19 +1319,129 @@
         {
             "component": "ImagingLevel4",
             "synapseId": "syn53352058",
-            "numItems": 120
+            "numItems": 410
         },
         {
             "component": "ImagingLevel4",
             "synapseId": "syn53352069",
             "numItems": 201
+        },
+        {
+            "component": "ElectronMicroscopyLevel1",
+            "synapseId": "syn66310072",
+            "numItems": 221
+        },
+        {
+            "component": "ElectronMicroscopyLevel1",
+            "synapseId": "syn66310595",
+            "numItems": 2402
+        },
+        {
+            "component": "ElectronMicroscopyLevel1",
+            "synapseId": "syn66310606",
+            "numItems": 2043
+        },
+        {
+            "component": "ElectronMicroscopyLevel1",
+            "synapseId": "syn68742159",
+            "numItems": 2436
+        },
+        {
+            "component": "ElectronMicroscopyLevel1",
+            "synapseId": "syn68742171",
+            "numItems": 2981
+        },
+        {
+            "component": "ElectronMicroscopyLevel2",
+            "synapseId": "syn68742279",
+            "numItems": 1646
+        },
+        {
+            "component": "ElectronMicroscopyLevel2",
+            "synapseId": "syn68743031",
+            "numItems": 2276
+        },
+        {
+            "component": "ScRNA-seqLevel1",
+            "synapseId": "syn68876286",
+            "numItems": 100
+        },
+        {
+            "component": "ScRNA-seqLevel2",
+            "synapseId": "syn68876293",
+            "numItems": 13
+        },
+        {
+            "component": "ScRNA-seqLevel3",
+            "synapseId": "syn68876301",
+            "numItems": 13
+        },
+        {
+            "component": "ImagingLevel1",
+            "synapseId": "syn68876329",
+            "numItems": 779
+        },
+        {
+            "component": "ElectronMicroscopyLevel4",
+            "synapseId": "syn68917755",
+            "numItems": 41
+        },
+        {
+            "component": "ElectronMicroscopyLevel3",
+            "synapseId": "syn68917756",
+            "numItems": 32
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn68918337",
+            "numItems": 77
+        },
+        {
+            "component": "ScDNA-seqLevel1",
+            "synapseId": "syn68918382",
+            "numItems": 1615
+        },
+        {
+            "component": "ScDNA-seqLevel2",
+            "synapseId": "syn68918623",
+            "numItems": 1271
+        },
+        {
+            "component": "ElectronMicroscopyLevel2",
+            "synapseId": "syn68922422",
+            "numItems": 626
+        },
+        {
+            "component": "ElectronMicroscopyLevel2",
+            "synapseId": "syn68922428",
+            "numItems": 308
+        },
+        {
+            "component": "ElectronMicroscopyLevel2",
+            "synapseId": "syn68922446",
+            "numItems": 719
+        },
+        {
+            "component": "NanoStringGeoMxDSPSpatialTranscriptomicsLevel3",
+            "synapseId": "syn68924054",
+            "numItems": 46
+        },
+        {
+            "component": "ElectronMicroscopyLevel2",
+            "synapseId": "syn68929224",
+            "numItems": 1383
+        },
+        {
+            "component": "OtherAssay",
+            "synapseId": "syn69046652",
+            "numItems": 11
         }
     ],
     "HTA7": [
         {
             "component": "Biospecimen",
             "synapseId": "syn35488819",
-            "numItems": 903
+            "numItems": 1287
         },
         {
             "component": "Demographics",
@@ -1336,32 +1451,32 @@
         {
             "component": "Diagnosis",
             "synapseId": "syn39143347",
-            "numItems": 130
+            "numItems": 246
         },
         {
             "component": "Exposure",
             "synapseId": "syn39143395",
-            "numItems": 130
+            "numItems": 245
         },
         {
             "component": "FamilyHistory",
             "synapseId": "syn39143430",
-            "numItems": 135
+            "numItems": 250
         },
         {
             "component": "FollowUp",
             "synapseId": "syn39143463",
-            "numItems": 130
+            "numItems": 245
         },
         {
             "component": "Therapy",
             "synapseId": "syn39143602",
-            "numItems": 130
+            "numItems": 245
         },
         {
             "component": "MolecularTest",
             "synapseId": "syn39144665",
-            "numItems": 1160
+            "numItems": 1275
         },
         {
             "component": "BulkRNA-seqLevel1",
@@ -1407,6 +1522,26 @@
             "component": "ImagingLevel2",
             "synapseId": "syn62525529",
             "numItems": 16
+        },
+        {
+            "component": "ImagingLevel3",
+            "synapseId": "syn69084819",
+            "numItems": 44
+        },
+        {
+            "component": "ImagingLevel4",
+            "synapseId": "syn69084825",
+            "numItems": 44
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn69087590",
+            "numItems": 88
+        },
+        {
+            "component": "Demographics",
+            "synapseId": "syn69500311",
+            "numItems": 115
         }
     ],
     "HTA3": [
@@ -1423,12 +1558,12 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn39147740",
-            "numItems": 2998
+            "numItems": 3172
         },
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn39147967",
-            "numItems": 15
+            "numItems": 16
         },
         {
             "component": "ScRNA-seqLevel3",
@@ -1473,17 +1608,17 @@
         {
             "component": "BulkRNA-seqLevel1",
             "synapseId": "syn51668044",
-            "numItems": 826
+            "numItems": 1556
         },
         {
             "component": "Biospecimen",
             "synapseId": "syn52888248",
-            "numItems": 456
+            "numItems": 2355
         },
         {
             "component": "ImagingLevel2",
             "synapseId": "syn52965394",
-            "numItems": 12
+            "numItems": 86
         },
         {
             "component": "MolecularTest",
@@ -1493,17 +1628,17 @@
         {
             "component": "ImagingLevel2",
             "synapseId": "syn57431469",
-            "numItems": 786
+            "numItems": 1062
         },
         {
             "component": "BulkRNA-seqLevel2",
             "synapseId": "syn58995098",
-            "numItems": 317
+            "numItems": 528
         },
         {
             "component": "BulkRNA-seqLevel3",
             "synapseId": "syn59053360",
-            "numItems": 186
+            "numItems": 525
         },
         {
             "component": "ScDNA-seqLevel1",
@@ -1519,6 +1654,21 @@
             "component": "BulkDNALevel3",
             "synapseId": "syn66227738",
             "numItems": 12
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn69051117",
+            "numItems": 24
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn69051321",
+            "numItems": 44
+        },
+        {
+            "component": "BulkDNALevel1",
+            "synapseId": "syn69058835",
+            "numItems": 254
         }
     ],
     "HTA12": [
@@ -1985,7 +2135,7 @@
         {
             "component": "Demographics",
             "synapseId": "syn61518993",
-            "numItems": 19
+            "numItems": 45
         },
         {
             "component": "Exposure",
@@ -2010,7 +2160,7 @@
         {
             "component": "Diagnosis",
             "synapseId": "syn61555387",
-            "numItems": 43
+            "numItems": 45
         },
         {
             "component": "Therapy",
@@ -2075,12 +2225,12 @@
         {
             "component": "ScRNA-seqLevel1",
             "synapseId": "syn65487792",
-            "numItems": 88
+            "numItems": 101
         },
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn65492294",
-            "numItems": 26
+            "numItems": 33
         },
         {
             "component": "Demographics",
@@ -2364,42 +2514,42 @@
         {
             "component": "Demographics",
             "synapseId": "syn39253974",
-            "numItems": 134
+            "numItems": 203
         },
         {
             "component": "Diagnosis",
             "synapseId": "syn39254633",
-            "numItems": 132
+            "numItems": 201
         },
         {
             "component": "Exposure",
             "synapseId": "syn39255034",
-            "numItems": 122
+            "numItems": 152
         },
         {
             "component": "FamilyHistory",
             "synapseId": "syn39255093",
-            "numItems": 235
+            "numItems": 304
         },
         {
             "component": "FollowUp",
             "synapseId": "syn39255125",
-            "numItems": 132
+            "numItems": 162
         },
         {
             "component": "Therapy",
             "synapseId": "syn39255232",
-            "numItems": 355
+            "numItems": 586
         },
         {
             "component": "MolecularTest",
             "synapseId": "syn39255845",
-            "numItems": 405
+            "numItems": 786
         },
         {
             "component": "Biospecimen",
             "synapseId": "syn39256250",
-            "numItems": 353
+            "numItems": 453
         },
         {
             "component": "ImagingLevel2",
@@ -2434,7 +2584,7 @@
         {
             "component": "ClinicalDataTier2",
             "synapseId": "syn61460537",
-            "numItems": 33
+            "numItems": 40
         },
         {
             "component": "ImagingLevel4",
@@ -2485,6 +2635,31 @@
             "component": "ScRNA-seqLevel1",
             "synapseId": "syn65488573",
             "numItems": 214
+        },
+        {
+            "component": "ScRNA-seqLevel2",
+            "synapseId": "syn68244751",
+            "numItems": 53
+        },
+        {
+            "component": "ScRNA-seqLevel3",
+            "synapseId": "syn68258161",
+            "numItems": 212
+        },
+        {
+            "component": "ScRNA-seqLevel4",
+            "synapseId": "syn68374652",
+            "numItems": 3
+        },
+        {
+            "component": "ScRNA-seqLevel1",
+            "synapseId": "syn68413039",
+            "numItems": 248
+        },
+        {
+            "component": "FollowUp",
+            "synapseId": "syn69050054",
+            "numItems": 30
         }
     ],
     "HTA5": [
@@ -2521,7 +2696,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn51185203",
-            "numItems": 276
+            "numItems": 336
         },
         {
             "component": "BulkDNALevel2",
@@ -2556,7 +2731,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn51692755",
-            "numItems": 225
+            "numItems": 529
         },
         {
             "component": "Demographics",
@@ -2662,6 +2837,86 @@
             "component": "ImagingLevel2",
             "synapseId": "syn61462953",
             "numItems": 12936
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn61915532",
+            "numItems": 30
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn63942438",
+            "numItems": 46
+        },
+        {
+            "component": "BulkDNALevel3",
+            "synapseId": "syn68642193",
+            "numItems": 114
+        },
+        {
+            "component": "BulkDNALevel2",
+            "synapseId": "syn69050340",
+            "numItems": 33
+        },
+        {
+            "component": "ImagingLevel1",
+            "synapseId": "syn69074259",
+            "numItems": 11120
+        },
+        {
+            "component": "ScRNA-seqLevel4",
+            "synapseId": "syn69075101",
+            "numItems": 56
+        },
+        {
+            "component": "ScRNA-seqLevel2",
+            "synapseId": "syn69075593",
+            "numItems": 4
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn69075686",
+            "numItems": 32
+        },
+        {
+            "component": "ImagingLevel3",
+            "synapseId": "syn69075720",
+            "numItems": 32
+        },
+        {
+            "component": "ScRNA-seqLevel3",
+            "synapseId": "syn69075777",
+            "numItems": 13
+        },
+        {
+            "component": "ImagingLevel4",
+            "synapseId": "syn69082216",
+            "numItems": 32
+        },
+        {
+            "component": "ImagingLevel1",
+            "synapseId": "syn69082229",
+            "numItems": 3
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn69082323",
+            "numItems": 37
+        },
+        {
+            "component": "ImagingLevel3",
+            "synapseId": "syn69083018",
+            "numItems": 37
+        },
+        {
+            "component": "ImagingLevel4",
+            "synapseId": "syn69083041",
+            "numItems": 37
+        },
+        {
+            "component": "ScRNA-seqLevel1",
+            "synapseId": "syn69087849",
+            "numItems": 144
         }
     ],
     "HTA6": [
@@ -3000,6 +3255,21 @@
         {
             "component": "10XXeniumISS",
             "synapseId": "syn66366532",
+            "numItems": 32
+        },
+        {
+            "component": "BulkDNALevel1",
+            "synapseId": "syn69060592",
+            "numItems": 7
+        },
+        {
+            "component": "BulkDNALevel3",
+            "synapseId": "syn69060601",
+            "numItems": 3
+        },
+        {
+            "component": "ImagingLevel2",
+            "synapseId": "syn69259437",
             "numItems": 32
         }
     ],
