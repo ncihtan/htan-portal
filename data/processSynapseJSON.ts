@@ -170,7 +170,7 @@ function getPublicationsAsSynapseRecordsByAtlasId(
 }
 
 async function getEntitiesById() {
-    const rows = await csvToJson().fromFile('data/entities_v6_3.csv');
+    const rows = await csvToJson().fromFile('data/entities_v7_0.csv');
     return _.keyBy(rows, (row) => row.entityId);
 }
 
@@ -1145,19 +1145,21 @@ function extractEntitiesFromSynapseData(
                     entity.atlasid = atlas.htan_id;
                     entity.atlas_name = atlas.htan_name;
                     if (entity.Component) {
+                        const parentImagingAssayTypes = extractParentImagingAssayTypes(
+                            entity.ParentDataFileID ||
+                                (entity as any)[
+                                    HTANAttributeNames.HTANParentDataFileID
+                                ],
+                            imagingLevel1ById,
+                            imagingLevel2ById
+                        );
+
                         const parsedAssay = parseRawAssayType(
                             entity.Component,
                             entity.ImagingAssayType,
                             entity.AssayType,
                             (entity as any).DataType,
-                            extractParentImagingAssayTypes(
-                                entity.ParentDataFileID ||
-                                    (entity as any)[
-                                        HTANAttributeNames.HTANParentDataFileID
-                                    ],
-                                imagingLevel1ById,
-                                imagingLevel2ById
-                            )
+                            parentImagingAssayTypes
                         );
                         //file.Component = parsed.name;
                         if (parsedAssay.level && parsedAssay.level.length > 1) {
@@ -1167,13 +1169,22 @@ function extractEntitiesFromSynapseData(
                         }
                         entity.assayName = parsedAssay.name;
 
-                        // special case for Other Assay.  These are assays that don't fit
+                        // special case for Other Assay. These are assays that don't fit
                         // the standard model.  To have a more descriptive name use assay
                         // type field instead
                         if (parsedAssay.name === 'Other Assay') {
                             entity.assayName =
                                 entity.AssayType || 'Other Assay';
                             entity.level = 'Other';
+                            // special case for 'Not Applicable' Imaging assays.
+                            // Convert those to simply 'Imaging'.
+                        } else if (
+                            parsedAssay.name.toLowerCase() ===
+                                'not applicable' &&
+                            (entity.ImagingAssayType ||
+                                parentImagingAssayTypes?.length)
+                        ) {
+                            entity.assayName = 'Imaging';
                         } else if (
                             parsedAssay.name.toLowerCase().includes('auxiliary')
                         ) {

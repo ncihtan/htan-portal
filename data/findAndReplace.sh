@@ -10,6 +10,11 @@ gsed -i 's/Level3Segmentation/Level3/g' data/syn_metadata.json &&
 gsed -i 's/"SRRSBiospecimen"/"Biospecimen"/g' public/syn_data.json &&
 gsed -i 's/"SRRSImagingLevel2"/"ImagingLevel2"/g' public/syn_data.json &&
 gsed -i 's/"scRNA-Seq"/"scRNA-seq"/g' public/syn_data.json &&
+gsed -i 's/"ScRNA-seq"/"scRNA-seq"/g' public/syn_data.json &&
+gsed -i 's/"ScRNA-Seq"/"scRNA-seq"/g' public/syn_data.json &&
+gsed -i 's/"scDNA-Seq"/"scDNA-seq"/g' public/syn_data.json &&
+gsed -i 's/"ScDNA-seq"/"scDNA-seq"/g' public/syn_data.json &&
+gsed -i 's/"ScDNA-Seq"/"scDNA-seq"/g' public/syn_data.json &&
 gsed -i 's/"RPPA level2"/"RPPA"/g' public/syn_data.json &&
 gsed -i 's/"exseq"/"ExSEQ"/g' public/syn_data.json &&
 gsed -i 's/"ExSeq"/"ExSEQ"/g' public/syn_data.json &&
