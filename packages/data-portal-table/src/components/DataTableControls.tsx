@@ -42,8 +42,8 @@ export class DataTableControls extends React.Component<IDataTableControlsProps> 
                 <Tooltip
                     overlay={
                         <span>
-                            Download the entire metadata table below as a TSV
-                            file including the hidden columns
+                            Download the metadata table below as a TSV file
+                            including the hidden columns
                         </span>
                     }
                     placement="left"
