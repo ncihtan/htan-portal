@@ -49,6 +49,33 @@ cd ..
 yarn run updateData
 ```
 
+### Import processed data into Clickhouse DB
+
+First, you need to create admin and read-only users on your clickhouse DB server.
+
+```sql
+-- create a new user with read-only access to htan_*.*
+DROP USER IF EXISTS 'htanwebuser'
+CREATE USER 'htanwebuser' IDENTIFIED BY 'HT4N_P0RT4L_isDaBest';
+
+GRANT SELECT ON htan_*.* TO 'htanwebuser';
+SHOW GRANTS FOR 'htanwebuser';
+
+-- create an admin user with write access to htan_*.* only
+DROP USER IF EXISTS 'htan_admin';
+CREATE USER 'htan_admin' IDENTIFIED BY 'YOUR_FAVORITE_PASSWORD_HERE';
+
+GRANT CREATE DATABASE, SELECT, INSERT, ALTER, CREATE TABLE, DROP TABLE, CREATE VIEW, CREATE DICTIONARY ON htan_*.* TO 'htan_admin';
+
+SHOW GRANTS FOR 'htan_admin';
+```
+
+Then you can import data by running the node script
+
+```bash
+node build_db/main.js
+```
+
 ### Export to bucket
 
 At the moment metadata is hosted on S3 for production. To update it:

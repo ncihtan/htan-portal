@@ -8,7 +8,7 @@ import {
 
 const clientConfig = {
     url: process.env.CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
-    username: process.env.CLICKHOUSE_USER ?? 'app_user',
+    username: process.env.CLICKHOUSE_USER ?? 'htan_admin',
     password: process.env.CLICKHOUSE_PASSWORD,
     request_timeout: 600000,
     compression: {
