@@ -23,6 +23,8 @@ import {
     getPublicationTitle,
     HTANToGenericAttributeMap,
     isManuscriptInReview,
+    postProcessFiles,
+    postProcessPublications,
     PublicationManifest,
 } from '@htan/data-portal-commons';
 import {
@@ -236,36 +238,32 @@ export const getStaticProps: GetStaticProps = async (context) => {
         'SELECT * FROM publication_manifest'
     );
 
-    publications.forEach((pub: PublicationManifest) => {
-        // @ts-ignore
-        pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
-        pub.CitedInNumber = Number(pub.CitedInNumber);
-    });
-
     const publicationId = context.params?.id || '';
 
-    const specimen = await doQuery(`
+    const specimen = await doQuery<Entity>(`
         SELECT * FROM specimen WHERE
         has(publicationIds,'${publicationId}') 
     `);
-    const cases = await doQuery(`
+    const cases = await doQuery<Entity>(`
         SELECT * FROM cases WHERE
         has(publicationIds,'${publicationId}')
     `);
 
-    const atlases = await doQuery(`SELECT * FROM atlases`);
+    const atlases = await doQuery<Atlas>(`SELECT * FROM atlases`);
 
-    const assays = await doQuery(assayQuery({ publicationId: publicationId }));
+    const assays = await doQuery<Entity>(
+        assayQuery({ publicationId: publicationId })
+    );
 
     return {
         props: {
             publicationUid: context.params?.id,
             schemaDataById: await fetchAndProcessSchemaData(),
             genericAttributeMap: HTANToGenericAttributeMap, // TODO needs to be configurable
-            publications,
+            publications: postProcessPublications(publications),
+            assays: postProcessFiles(assays),
             specimen,
             cases,
-            assays,
             atlases,
         },
     };

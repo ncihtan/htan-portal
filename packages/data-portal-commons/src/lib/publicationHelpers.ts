@@ -189,6 +189,17 @@ export function getPublicationSupportingLinks(
     );
 }
 
+export function postProcessPublications(publications: PublicationManifest[]) {
+    // we need to parse certain fields of the publication data because everything is stored as plain text in the database
+    _.forEach(publications, (pub: PublicationManifest) => {
+        // @ts-ignore
+        pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
+        pub.CitedInNumber = Number(pub.CitedInNumber);
+    });
+
+    return publications;
+}
+
 // export async function fetchPublicationSummaries(
 //     pubMedIds?: string[],
 //     dataUri: string = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?retmode=json&db=pubmed'
