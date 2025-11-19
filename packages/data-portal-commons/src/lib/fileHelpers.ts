@@ -4,6 +4,7 @@ import {
     AutoMinerva,
     BaseSerializableEntity,
     CrdcGcAsset,
+    Entity,
     FileViewerName,
     IdcImagingAsset,
 } from './entity';
@@ -55,4 +56,15 @@ export function addViewers(
         [FileViewerName.idc]: idcMappings[file.DataFileID],
         [FileViewerName.crdcGc]: crdcGcMappings[file.DataFileID],
     };
+}
+
+export function postProcessFiles(files: Entity[]) {
+    // we need to parse certain fields of the entity data because everything is stored as plain text in the database
+    _.forEach(files, (f: Entity) => {
+        f.imageChannelMetadata = !_.isEmpty(f.imageChannelMetadata)
+            ? JSON.parse(f.imageChannelMetadata!.toString())
+            : f.imageChannelMetadata;
+    });
+
+    return files;
 }

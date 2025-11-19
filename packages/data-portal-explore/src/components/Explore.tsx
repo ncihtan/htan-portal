@@ -29,6 +29,8 @@ import {
     getFileFilterDisplayName,
     getFilterString,
     LoadDataResult,
+    postProcessFiles,
+    postProcessPublications,
     PublicationManifest,
     specimenQuery,
 } from '@htan/data-portal-commons';
@@ -57,26 +59,6 @@ export interface IExploreProps {
 if (typeof window !== 'undefined') {
     //@ts-ignore
     window.toJS = toJS;
-}
-
-function postProcessPublications(publications: PublicationManifest[]) {
-    _.forEach(publications, (pub: PublicationManifest) => {
-        // @ts-ignore
-        pub.AtlasMeta = JSON.parse(pub.AtlasMeta);
-        pub.CitedInNumber = Number(pub.CitedInNumber);
-    });
-
-    return publications;
-}
-
-function postProcessFiles(files: Entity[]) {
-    _.forEach(files, (f: Entity) => {
-        f.imageChannelMetadata = !_.isEmpty(f.imageChannelMetadata)
-            ? JSON.parse(f.imageChannelMetadata!.toString())
-            : f.imageChannelMetadata;
-    });
-
-    return files;
 }
 
 function getFilterStringExcludeSelf(
