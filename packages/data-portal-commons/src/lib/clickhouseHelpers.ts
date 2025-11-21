@@ -6,14 +6,14 @@ import { SelectedFilter } from '@htan/data-portal-filter';
 import { CountByType } from './types';
 
 export const DEFAULT_CLICKHOUSE_HOST =
-    'https://mecgt250i0.us-east-1.aws.clickhouse.cloud:8443';
+    'https://dl96orhu96.us-east-1.aws.clickhouse.cloud:8443';
 export const DEFAULT_CLICKHOUSE_DB = 'htan_2025_10_08';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
 const defaultClient: WebClickHouseClient = createClient({
     url: DEFAULT_CLICKHOUSE_URL,
-    username: 'webuser',
-    password: 'My_password1976',
+    username: 'htanwebuser',
+    password: 'HT4N_P0RT4L_isDaBest',
     request_timeout: 600000,
     compression: {
         response: true,
