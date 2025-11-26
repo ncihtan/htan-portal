@@ -1377,11 +1377,6 @@
             "numItems": 13
         },
         {
-            "component": "ImagingLevel1",
-            "synapseId": "syn68876329",
-            "numItems": 779
-        },
-        {
             "component": "ElectronMicroscopyLevel4",
             "synapseId": "syn68917755",
             "numItems": 41
@@ -1563,7 +1558,7 @@
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn39147967",
-            "numItems": 16
+            "numItems": 86
         },
         {
             "component": "ScRNA-seqLevel3",
@@ -1618,7 +1613,7 @@
         {
             "component": "ImagingLevel2",
             "synapseId": "syn52965394",
-            "numItems": 86
+            "numItems": 14
         },
         {
             "component": "MolecularTest",
@@ -1633,12 +1628,12 @@
         {
             "component": "BulkRNA-seqLevel2",
             "synapseId": "syn58995098",
-            "numItems": 528
+            "numItems": 537
         },
         {
             "component": "BulkRNA-seqLevel3",
             "synapseId": "syn59053360",
-            "numItems": 525
+            "numItems": 534
         },
         {
             "component": "ScDNA-seqLevel1",
@@ -2514,7 +2509,7 @@
         {
             "component": "Demographics",
             "synapseId": "syn39253974",
-            "numItems": 203
+            "numItems": 202
         },
         {
             "component": "Diagnosis",
@@ -2731,7 +2726,7 @@
         {
             "component": "Biospecimen",
             "synapseId": "syn51692755",
-            "numItems": 529
+            "numItems": 528
         },
         {
             "component": "Demographics",
@@ -2859,11 +2854,6 @@
             "numItems": 33
         },
         {
-            "component": "ImagingLevel1",
-            "synapseId": "syn69074259",
-            "numItems": 11120
-        },
-        {
             "component": "ScRNA-seqLevel4",
             "synapseId": "syn69075101",
             "numItems": 56
@@ -2892,11 +2882,6 @@
             "component": "ImagingLevel4",
             "synapseId": "syn69082216",
             "numItems": 32
-        },
-        {
-            "component": "ImagingLevel1",
-            "synapseId": "syn69082229",
-            "numItems": 3
         },
         {
             "component": "ImagingLevel2",
@@ -3176,11 +3161,6 @@
             "component": "ScATAC-seqLevel2",
             "synapseId": "syn52177151",
             "numItems": 17
-        },
-        {
-            "component": "ImagingLevel1",
-            "synapseId": "syn53335738",
-            "numItems": 16
         },
         {
             "component": "ImagingLevel3",

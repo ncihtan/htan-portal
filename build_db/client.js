@@ -27,13 +27,14 @@ function correctFieldName(f) {
     return f.replace(/-associated/, 'Associated');
 }
 
-export async function createDbIfNotExist(dbName = DEFAULT_CLICKHOUSE_DB) {
+export async function createDbIfNotExist() {
     // we need to create a separate client (without the DB name) to be able to create a new DB
     // otherwise we will get unknown database error
     const client = createClient({
         ...clientConfig,
         url: process.env.CLICKHOUSE_HOST ?? DEFAULT_CLICKHOUSE_HOST,
     });
+    const dbName = process.env.CLICKHOUSE_DB ?? DEFAULT_CLICKHOUSE_DB;
 
     return client.query({ query: `CREATE DATABASE IF NOT EXISTS ${dbName}` });
 }
