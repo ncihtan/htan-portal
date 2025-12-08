@@ -1558,7 +1558,7 @@
         {
             "component": "ScRNA-seqLevel2",
             "synapseId": "syn39147967",
-            "numItems": 86
+            "numItems": 16
         },
         {
             "component": "ScRNA-seqLevel3",
@@ -1628,12 +1628,12 @@
         {
             "component": "BulkRNA-seqLevel2",
             "synapseId": "syn58995098",
-            "numItems": 537
+            "numItems": 528
         },
         {
             "component": "BulkRNA-seqLevel3",
             "synapseId": "syn59053360",
-            "numItems": 534
+            "numItems": 525
         },
         {
             "component": "ScDNA-seqLevel1",
@@ -2856,7 +2856,7 @@
         {
             "component": "ScRNA-seqLevel4",
             "synapseId": "syn69075101",
-            "numItems": 56
+            "numItems": 48
         },
         {
             "component": "ScRNA-seqLevel2",
@@ -2876,7 +2876,7 @@
         {
             "component": "ScRNA-seqLevel3",
             "synapseId": "syn69075777",
-            "numItems": 13
+            "numItems": 12
         },
         {
             "component": "ImagingLevel4",
