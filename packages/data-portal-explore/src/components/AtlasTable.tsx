@@ -215,7 +215,10 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
             .value();
     };
 
-    getViewerCounts = (atlas: Atlas, filesByAtlas: any) => {
+    getViewerCounts = (
+        atlas: Atlas,
+        filesByAtlas: { [atlasId: string]: Entity[] }
+    ) => {
         // return _.mapValues(filesByAtlas, (files) => {
         //     return _(files)
         //         .map((file) => getViewerValues(file))
@@ -233,7 +236,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
 
     getData(
         filteredAtlases: Atlas[] | undefined,
-        filesByAtlas: any
+        filesByAtlas: { [atlasId: string]: Entity[] }
     ): AtlasTableData[] {
         return (
             filteredAtlases?.map(
