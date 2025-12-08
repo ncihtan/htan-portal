@@ -7,7 +7,7 @@ import { CountByType } from './types';
 
 export const DEFAULT_CLICKHOUSE_HOST =
     'https://dl96orhu96.us-east-1.aws.clickhouse.cloud:8443';
-export const DEFAULT_CLICKHOUSE_DB = 'htan_2025_11_26';
+export const DEFAULT_CLICKHOUSE_DB = 'htan_2025_12_08';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
 const defaultClient: WebClickHouseClient = createClient({
