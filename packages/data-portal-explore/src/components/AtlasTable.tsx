@@ -219,14 +219,6 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         atlas: Atlas,
         filesByAtlas: { [atlasId: string]: Entity[] }
     ) => {
-        // return _.mapValues(filesByAtlas, (files) => {
-        //     return _(files)
-        //         .map((file) => getViewerValues(file))
-        //         .flatten()
-        //         .countBy()
-        //         .value();
-        // });
-
         return _(filesByAtlas[atlas.htan_id])
             .map((file) => getViewerValues(file))
             .flatten()
