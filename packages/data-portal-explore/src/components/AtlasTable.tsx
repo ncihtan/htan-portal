@@ -39,7 +39,7 @@ interface IAtlasTableProps {
     selectedFiltersByAttrName: ISelectedFiltersByAttrName;
     filteredCases: Entity[];
     filteredBiospecimens: Entity[];
-    // files: Entity[];
+    files: Entity[];
     filteredFiles: Entity[];
     cloudBaseUrl: string;
 }
@@ -236,7 +236,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
 
     getData(
         filteredAtlases: Atlas[] | undefined,
-        filesByAtlas: { [atlasId: string]: Entity[] }
+        filteredFilesByAtlas: { [atlasId: string]: Entity[] }
     ): AtlasTableData[] {
         return (
             filteredAtlases?.map(
@@ -245,14 +245,17 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         ...a,
                         isSelected: this.isRowSelected(a),
                         publicationManifests: this.getPublicationManifests(a),
-                        viewerCounts: this.getViewerCounts(a, filesByAtlas),
+                        viewerCounts: this.getViewerCounts(
+                            a,
+                            filteredFilesByAtlas
+                        ),
                     } as AtlasTableData)
             ) || []
         );
     }
 
-    getFilesByAtlas(filteredFiles: Entity[]) {
-        return _.groupBy(filteredFiles, (c: Entity) => c.atlasid);
+    getFilesByAtlas(files: Entity[]) {
+        return _.groupBy(files, (c: Entity) => c.atlasid);
     }
 
     getAssaysByAtlas(filesByAtlas: { [atlasId: string]: Entity[] }) {
@@ -265,28 +268,12 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         );
     }
 
-    getFilteredAssaysByAtlas(filteredFilesByAtlas: {
-        [atlasId: string]: Entity[];
-    }) {
-        return _.mapValues(filteredFilesByAtlas, (files) =>
-            _(files)
-                .map((file) => file.assayName)
-                .uniq()
-                .compact()
-                .value()
-        );
+    getCasesByAtlas(cases: Entity[]) {
+        return _.groupBy(cases, (c: Entity) => c.atlasid);
     }
 
-    getFilteredFilesByAtlas(filteredFiles: Entity[]) {
-        return _.groupBy(filteredFiles, (c: Entity) => c.atlasid);
-    }
-
-    getFilteredCasesByAtlas(filteredCases: Entity[]) {
-        return _.groupBy(filteredCases, (c: Entity) => c.atlasid);
-    }
-
-    getFilteredBiospecimensByAtlas(filteredBiospecimens: Entity[]) {
-        return _.groupBy(filteredBiospecimens, (c: Entity) => c.atlasid);
+    getBiospecimensByAtlas(biospecimens: Entity[]) {
+        return _.groupBy(biospecimens, (c: Entity) => c.atlasid);
     }
 
     getShouldShowFilteredFractions(
@@ -300,10 +287,10 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
         shouldShowFilteredFractions: boolean,
         filteredCasesByAtlas: { [atlasId: string]: Entity[] },
         filteredBiospecimensByAtlas: { [atlasId: string]: Entity[] },
-        filteredAssaysByAtlas: { [atlasId: string]: string[] },
-        filteredFilesByAtlas: { [atlasId: string]: Entity[] },
         assaysByAtlas: { [atlasId: string]: string[] },
-        filesByAtlas: { [atlasId: string]: Entity[] }
+        filteredAssaysByAtlas: { [atlasId: string]: string[] },
+        filesByAtlas: { [atlasId: string]: Entity[] },
+        filteredFilesByAtlas: { [atlasId: string]: Entity[] }
     ) {
         return [
             {
@@ -691,33 +678,36 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
 
     render() {
         // Calculate all derived data in render
-        const filesByAtlas = this.getFilesByAtlas(this.props.filteredFiles);
+        const filesByAtlas = this.getFilesByAtlas(this.props.files);
         const assaysByAtlas = this.getAssaysByAtlas(filesByAtlas);
-        const filteredFilesByAtlas = this.getFilteredFilesByAtlas(
+        const filteredFilesByAtlas = this.getFilesByAtlas(
             this.props.filteredFiles
         );
-        const filteredAssaysByAtlas = this.getFilteredAssaysByAtlas(
+        const filteredAssaysByAtlas = this.getAssaysByAtlas(
             filteredFilesByAtlas
         );
-        const filteredCasesByAtlas = this.getFilteredCasesByAtlas(
+        const filteredCasesByAtlas = this.getCasesByAtlas(
             this.props.filteredCases
         );
-        const filteredBiospecimensByAtlas = this.getFilteredBiospecimensByAtlas(
+        const filteredBiospecimensByAtlas = this.getBiospecimensByAtlas(
             this.props.filteredBiospecimens
         );
         const shouldShowFilteredFractions = this.getShouldShowFilteredFractions(
             this.props.selectedFiltersByAttrName
         );
-        const data = this.getData(this.props.filteredAtlases, filesByAtlas);
+        const data = this.getData(
+            this.props.filteredAtlases,
+            filteredFilesByAtlas
+        );
         const columns = this.getColumns(
             this.atlasMetaData,
             shouldShowFilteredFractions,
             filteredCasesByAtlas,
             filteredBiospecimensByAtlas,
-            filteredAssaysByAtlas,
-            filteredFilesByAtlas,
             assaysByAtlas,
-            filesByAtlas
+            filteredAssaysByAtlas,
+            filesByAtlas,
+            filteredFilesByAtlas
         );
 
         return (

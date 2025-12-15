@@ -323,6 +323,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             selectedFiltersByAttrName={
                                 props.nonAtlasSelectedFiltersByAttrName
                             }
+                            files={props.files}
                             filteredFiles={props.filteredFiles}
                             cloudBaseUrl={props.cloudBaseUrl || ''}
                         />
