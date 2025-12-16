@@ -1056,7 +1056,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                     if (cellViewers.length > 0) {
                         return cellViewers;
                     } else if (file.Component.startsWith('ImagingLevel2')) {
-                        return 'Image Viewer Coming Soon';
+                        return 'Image Viewer Not Avaliable';
                     } else {
                         return '';
                     }
