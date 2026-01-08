@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
    40kB  sourcemap-register.js
-18574kB  index.js
+18575kB  index.js
  1294kB  index.js.map
-18614kB  [17831ms] - ncc 0.28.6
+18615kB  [12744ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'BulkDNALevel3',
   Filename: 'HTAN OHSU/bulk_dnaseq_level_3/0000303168-cnv-segments.txt',
