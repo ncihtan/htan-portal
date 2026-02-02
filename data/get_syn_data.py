@@ -294,7 +294,10 @@ def generate_json(include_at_risk_populations, include_released_only, do_not_dow
             center_metadata = {"component": component, "synapseId":dataset["id"],"numItems":len(manifest_df)}
             # Add version if available
             if not pd.isna(released_record["Manifest_Version"]):
-                center_metadata["version"] = int(released_record["Manifest_Version"])
+                try:
+                    center_metadata["version"] = int(released_record["Manifest_Version"])
+                except (ValueError, TypeError):
+                    logging.warning(f"Invalid version for {dataset['id']}: {released_record['Manifest_Version']}")
             try:
                 portal_metadata[center_id.upper()] += [center_metadata]
             except KeyError:

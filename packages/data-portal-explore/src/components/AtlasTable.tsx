@@ -74,8 +74,12 @@ const MetaDataLink = (props: {
         ? `https://www.synapse.org/#!Synapse:${props.id}.${props.version}`
         : `${props.baseUrl}/metadata/${props.id}.csv`;
 
+    // Only use download attribute for cloud storage links
+    // Synapse handles downloads through its own interface
+    const downloadAttr = props.version ? {} : { download: true };
+
     return (
-        <a href={href} download>
+        <a href={href} {...downloadAttr}>
             {props.id}
         </a>
     );
