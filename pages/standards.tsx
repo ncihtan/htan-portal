@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Alert from 'react-bootstrap/Alert';
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
@@ -25,6 +26,22 @@ const Standards = (props: StandardsProps) => {
                 <Container>
                     <Row>
                         <div className="standards-content">
+                            <Alert variant={'info'}>
+                                <strong>
+                                    For HTAN Phase 2 Data Submitters:
+                                </strong>{' '}
+                                If you are submitting new data for HTAN Phase 2,
+                                please refer to the{' '}
+                                <a
+                                    href="https://htan2-data-model.readthedocs.io/en/main/index.html"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    HTAN Phase 2 Data Model{' '}
+                                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                </a>
+                                .
+                            </Alert>
                             <h1>HTAN Data Standards</h1>
                             <h4>
                                 <Link
