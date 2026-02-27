@@ -42,14 +42,16 @@ const ExplorePage = (props: IExplorePageProps) => {
             <PreReleaseBanner />
 
             <PageWrapper>
-                <ExploreClientComponent
-                    getAtlasMetaData={getAtlasMetaData}
-                    onFilterChange={onFilterChange}
-                    getSelectedFilters={getSelectedFilters}
-                    isReleaseQCEnabled={isReleaseQCEnabled}
-                    getTab={getExploreTab}
-                    cloudBaseUrl={getCloudBaseUrl()}
-                />
+                {props.router.isReady && (
+                    <ExploreClientComponent
+                        getAtlasMetaData={getAtlasMetaData}
+                        onFilterChange={onFilterChange}
+                        getSelectedFilters={getSelectedFilters}
+                        isReleaseQCEnabled={isReleaseQCEnabled}
+                        getTab={getExploreTab}
+                        cloudBaseUrl={getCloudBaseUrl()}
+                    />
+                )}
             </PageWrapper>
         </>
     );
