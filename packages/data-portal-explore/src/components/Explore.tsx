@@ -1,7 +1,7 @@
 'use client';
 import _, { Dictionary } from 'lodash';
 import remoteData, { MobxPromise } from 'mobxpromise';
-import { action, makeObservable, observable, toJS } from 'mobx';
+import { action, makeObservable, observable, runInAction, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScaleLoader } from 'react-spinners';
 import React from 'react';
@@ -99,6 +99,32 @@ export class Explore extends React.Component<IExploreProps> {
     constructor(props: any) {
         super(props);
         makeObservable(this);
+    }
+
+    componentDidUpdate(prevProps: IExploreProps) {
+        // Sync filters from URL when router becomes ready (Next.js hydration)
+        const newFilters = this.props.getSelectedFilters?.() || [];
+        const prevFilters = prevProps.getSelectedFilters?.() || [];
+
+        // Only update if filters actually changed and we have new filters from URL
+        if (
+            newFilters.length > 0 &&
+            this._selectedFilters.length === 0 &&
+            JSON.stringify(newFilters) !== JSON.stringify(prevFilters)
+        ) {
+            runInAction(() => {
+                this._selectedFilters = newFilters;
+            });
+        }
+
+        // Sync tab from URL when router becomes ready
+        const newTab = this.props.getTab?.();
+        const prevTab = prevProps.getTab?.();
+        if (newTab && newTab !== prevTab && this.currentTab !== newTab) {
+            runInAction(() => {
+                this.currentTab = newTab;
+            });
+        }
     }
 
     unfilteredOptions = new remoteData({
