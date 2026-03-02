@@ -8,7 +8,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Backend
 
-All data is coming from [Synapse](https://www.synapse.org/). We have a Python script that generates a JSON file that contains all the metadata. The application uses a Clickhouse database backend where all the metadata is stored and filtering operations are performed at the database level for improved performance and scalability.
+All data is coming from [Synapse](https://www.synapse.org/). We have a Python script that generates a JSON file that contains all the metadata. The application uses a ClickHouse database backend where all the metadata is stored and filtering operations are performed at the database level for improved performance and scalability.
 
 ## Data Updates
 
