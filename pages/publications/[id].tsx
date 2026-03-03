@@ -16,6 +16,7 @@ import {
     Entity,
     getAllPublicationPagePaths,
     getPublicationAuthors,
+    getPublicationDate,
     getPublicationDOI,
     getPublicationJournal,
     getPublicationPubMedID,
@@ -199,6 +200,12 @@ const PublicationPage = (props: PublicationPageProps) => {
                                             <a href={`https://doi.org/${doi}`}>
                                                 {doi}
                                             </a>
+                                        </>
+                                    )}
+                                    {!isManuscriptInReview(publication) && (
+                                        <>
+                                            &nbsp; Date:{' '}
+                                            {getPublicationDate(publication)}
                                         </>
                                     )}
                                     <br />
