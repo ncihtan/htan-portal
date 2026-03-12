@@ -16,7 +16,7 @@
     "updateData": "yarn run findAndReplace && yarn updateMappings && yarn run processSynapseJSON && yarn run gzip",
     "gzip": "yarn run gzipData && yarn run gzipMetadata",
     "gzipSynapseJSON": "gzip < public/processed_syn_data.json > public/processed_syn_data.json.gz",
-    "gzpiSynapseData": "gzip < public/syn_data.json > public/syn_data.json.gz",
+    "gzipSynapseData": "gzip < public/syn_data.json > public/syn_data.json.gz",
     "gzipData": "yarn run gzipSynapseData && yarn run gzipSynapseJSON",
     "gzipMetadata": "rm -rf data/metadata_gzip/ && cp -r data/metadata data/metadata_gzip && find data/metadata_gzip -type f -exec gzip {} \\; -exec mv {}.gz {} \\;",
     "gunzip": "gunzip -c public/processed_syn_data.json.gz > public/processed_syn_data.json && gunzip -c public/syn_data.json.gz > public/syn_data.json",
