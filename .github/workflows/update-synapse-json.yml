@@ -5,6 +5,10 @@ on:
     paths:
       - 'data/publications_manifest_all.json'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze-synapse-json:
     runs-on: ubuntu-latest
