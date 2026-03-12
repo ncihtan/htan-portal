@@ -42,6 +42,7 @@ public/syn_data.json
 data/tmp/*
 data/metadata/*
 data/metadata_gzip/*
+processSynapseJSON.error.log
 
 #dev
 .idea/*

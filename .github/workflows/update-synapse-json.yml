@@ -1,0 +1,76 @@
+name: Update and Gzip Synapse JSON
+
+on:
+  pull_request:
+    paths:
+      - 'data/publications_manifest_all.json'
+
+jobs:
+  update-synapse-json:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run updateAndGzipSynapseJSON
+        run: yarn run updateAndGzipSynapseJSON
+
+      - name: Check for changes
+        id: verify-changed-files
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/processed_syn_data.json public/processed_syn_data.json.gz data/metadata_gzip/
+          git commit -m "chore: update synapse JSON files after publications manifest update"
+          git push
+
+      - name: Comment on PR if no changes
+        if: steps.verify-changed-files.outputs.changed == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Synapse JSON update completed with no file changes.'
+            })
+
+      - name: Comment on PR with changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Synapse JSON files have been updated and committed to this PR.'
+            })
+
