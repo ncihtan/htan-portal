@@ -46,7 +46,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add public/processed_syn_data.json public/processed_syn_data.json.gz data/metadata_gzip/
+          git add public/processed_syn_data.json.gz
           git commit -m "chore: update synapse JSON files after publications manifest update"
           git push
 
