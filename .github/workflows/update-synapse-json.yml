@@ -32,6 +32,15 @@ jobs:
       - name: Run updateAndGzipSynapseJSON
         run: yarn run updateAndGzipSynapseJSON
 
+      - name: Check whether PR branch is in this repository
+        id: branch-permissions
+        run: |
+          if [ "${{ github.event.pull_request.head.repo.full_name }}" = "${{ github.repository }}" ]; then
+            echo "can_push=true" >> $GITHUB_OUTPUT
+          else
+            echo "can_push=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Check for changes
         id: verify-changed-files
         run: |
@@ -42,7 +51,7 @@ jobs:
           fi
 
       - name: Commit and push changes
-        if: steps.verify-changed-files.outputs.changed == 'true'
+        if: steps.verify-changed-files.outputs.changed == 'true' && steps.branch-permissions.outputs.can_push == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -63,7 +72,7 @@ jobs:
             })
 
       - name: Comment on PR with changes
-        if: steps.verify-changed-files.outputs.changed == 'true'
+        if: steps.verify-changed-files.outputs.changed == 'true' && steps.branch-permissions.outputs.can_push == 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -74,3 +83,14 @@ jobs:
               body: '✅ Synapse JSON files have been updated and committed to this PR.'
             })
 
+      - name: Comment on PR for forked PRs with changes
+        if: steps.verify-changed-files.outputs.changed == 'true' && steps.branch-permissions.outputs.can_push == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ Synapse JSON update generated file changes, but this PR comes from a fork so the workflow cannot push commits to the source branch.'
+            })
