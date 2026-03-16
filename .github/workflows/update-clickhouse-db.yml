@@ -1,0 +1,65 @@
+name: Update ClickHouse DB
+
+on:
+  pull_request:
+    paths:
+      - 'public/processed_syn_data.json.gz'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-clickhouse-db:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Decompress JSON data
+        run: yarn gunzip
+
+      - name: Build packages
+        run: yarn buildPackages
+
+      - name: Generate timestamped DB name
+        id: db-name
+        run: |
+          TIMESTAMP=$(date -u +'%Y_%m_%d_%H%M')
+          echo "db_name=htan_${TIMESTAMP}" >> $GITHUB_OUTPUT
+
+      - name: Build ClickHouse DB
+        env:
+          CLICKHOUSE_DB: ${{ steps.db-name.outputs.db_name }}
+          CLICKHOUSE_HOST: ${{ secrets.CLICKHOUSE_HOST }}
+          CLICKHOUSE_PASSWORD: ${{ secrets.CLICKHOUSE_PASSWORD }}
+        run: |
+          export CLICKHOUSE_URL="${CLICKHOUSE_HOST}/${CLICKHOUSE_DB}"
+          node build_db/main.js
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ ClickHouse database `${{ steps.db-name.outputs.db_name }}` has been created and populated.'
+            })
