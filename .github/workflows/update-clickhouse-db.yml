@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
 
     steps:
@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.head_ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -53,13 +54,48 @@ jobs:
           export CLICKHOUSE_URL="${CLICKHOUSE_HOST}/${CLICKHOUSE_DB}"
           node build_db/main.js
 
+      - name: Update DEFAULT_CLICKHOUSE_DB in clickhouseHelpers.ts
+        run: |
+          sed -i "s/export const DEFAULT_CLICKHOUSE_DB = '[^']*'/export const DEFAULT_CLICKHOUSE_DB = '${{ steps.db-name.outputs.db_name }}'/" \
+            packages/data-portal-commons/src/lib/clickhouseHelpers.ts
+          grep -q "DEFAULT_CLICKHOUSE_DB = '${{ steps.db-name.outputs.db_name }}'" \
+            packages/data-portal-commons/src/lib/clickhouseHelpers.ts || \
+            (echo "ERROR: failed to update DEFAULT_CLICKHOUSE_DB in clickhouseHelpers.ts" && exit 1)
+
+      - name: Check whether PR branch is in this repository
+        id: branch-permissions
+        run: |
+          if [ "${{ github.event.pull_request.head.repo.full_name }}" = "${{ github.repository }}" ]; then
+            echo "can_push=true" >> $GITHUB_OUTPUT
+          else
+            echo "can_push=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push DEFAULT_CLICKHOUSE_DB update
+        if: steps.branch-permissions.outputs.can_push == 'true'
+        run: |
+          if git diff --quiet packages/data-portal-commons/src/lib/clickhouseHelpers.ts; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add packages/data-portal-commons/src/lib/clickhouseHelpers.ts
+          git commit -m "chore: update DEFAULT_CLICKHOUSE_DB to ${{ steps.db-name.outputs.db_name }}"
+          git push
+
       - name: Comment on PR
         uses: actions/github-script@v7
         with:
           script: |
+            const canPush = '${{ steps.branch-permissions.outputs.can_push }}' === 'true';
+            const dbName = '${{ steps.db-name.outputs.db_name }}';
+            const body = canPush
+              ? `✅ ClickHouse database \`${dbName}\` has been created and populated. \`DEFAULT_CLICKHOUSE_DB\` has been updated in \`clickhouseHelpers.ts\` and committed to this PR.`
+              : `✅ ClickHouse database \`${dbName}\` has been created and populated. ⚠️ This PR comes from a fork so the workflow cannot push the \`DEFAULT_CLICKHOUSE_DB\` update to the source branch — please update \`packages/data-portal-commons/src/lib/clickhouseHelpers.ts\` manually.`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '✅ ClickHouse database `${{ steps.db-name.outputs.db_name }}` has been created and populated.'
-            })
+              body,
+            });
