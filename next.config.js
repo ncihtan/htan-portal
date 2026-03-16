@@ -27,6 +27,12 @@ module.exports = withMDX({
                 destination: '/publications/hta8_2024_nature_a-r-moorman',
                 permanent: false,
             },
+            {
+                source: '/publications/hta4_2026_cell-reports-medicine_jonathan-h-sussman',
+                destination:
+                    '/publications/hta4_2024_biorxiv_jonathan-h-sussman',
+                permanent: false,
+            },
             // phase 1 centers
             ...[...Array(12).keys()].map((i) => ({
                 source: `/hta${i + 1}`,
