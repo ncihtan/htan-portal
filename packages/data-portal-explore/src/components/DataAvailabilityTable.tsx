@@ -209,7 +209,12 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                             );
                             return (
                                 <tr>
-                                    <td style={{ textAlign: 'left' }}>
+                                    <td
+                                        style={{
+                                            textAlign: 'left',
+                                            whiteSpace: 'nowrap',
+                                        }}
+                                    >
                                         {rowName}
                                     </td>
                                     {totalCountByDownloadSource[
