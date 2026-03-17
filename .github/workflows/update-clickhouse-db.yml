@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'public/processed_syn_data.json.gz'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.head_ref || github.ref }}
@@ -22,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -65,7 +66,8 @@ jobs:
       - name: Check whether PR branch is in this repository
         id: branch-permissions
         run: |
-          if [ "${{ github.event.pull_request.head.repo.full_name }}" = "${{ github.repository }}" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || \
+             [ "${{ github.event.pull_request.head.repo.full_name }}" = "${{ github.repository }}" ]; then
             echo "can_push=true" >> $GITHUB_OUTPUT
           else
             echo "can_push=false" >> $GITHUB_OUTPUT
@@ -85,6 +87,7 @@ jobs:
           git push
 
       - name: Comment on PR
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
