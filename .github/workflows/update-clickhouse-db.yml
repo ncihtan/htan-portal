@@ -49,7 +49,7 @@ jobs:
       - name: Build ClickHouse DB
         env:
           CLICKHOUSE_DB: ${{ steps.db-name.outputs.db_name }}
-          CLICKHOUSE_HOST: ${{ secrets.CLICKHOUSE_HOST }}
+          CLICKHOUSE_HOST: ${{ vars.CLICKHOUSE_HOST }}
           CLICKHOUSE_PASSWORD: ${{ secrets.CLICKHOUSE_PASSWORD }}
         run: |
           export CLICKHOUSE_URL="${CLICKHOUSE_HOST}/${CLICKHOUSE_DB}"
