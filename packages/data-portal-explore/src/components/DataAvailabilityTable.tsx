@@ -145,7 +145,7 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                     <th>Files</th>
                     {totalCountByDownloadSource[DownloadSourceCategory.dbgap] >
                         0 && (
-                        <th>
+                        <th style={{ whiteSpace: 'nowrap' }}>
                             <a href="/data-access">
                                 CRDC-GC/SB-CGC (dbGaP{' '}
                                 <FontAwesomeIcon
@@ -158,7 +158,7 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                     )}
                     {totalCountByDownloadSource[DownloadSourceCategory.crdcGc] >
                         0 && (
-                        <th>
+                        <th style={{ whiteSpace: 'nowrap' }}>
                             <a href="/data-access">
                                 CRDC-GC/SB-CGC (Open Access{` `}
                                 <FontAwesomeIcon
@@ -172,7 +172,7 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                     {totalCountByDownloadSource[
                         DownloadSourceCategory.synapse
                     ] > 0 && (
-                        <th>
+                        <th style={{ whiteSpace: 'nowrap' }}>
                             <a href="/data-access">
                                 Synapse (Open Access{` `}
                                 <FontAwesomeIcon
@@ -209,7 +209,12 @@ export const DataAvailabilityTable: React.FunctionComponent<IDataAvailabilityTab
                             );
                             return (
                                 <tr>
-                                    <td style={{ textAlign: 'left' }}>
+                                    <td
+                                        style={{
+                                            textAlign: 'left',
+                                            whiteSpace: 'nowrap',
+                                        }}
+                                    >
                                         {rowName}
                                     </td>
                                     {totalCountByDownloadSource[
