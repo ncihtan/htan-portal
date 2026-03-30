@@ -57,8 +57,16 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
         </Nav.Link>,
 
         <NavSection text={'About the Data'}>
-            <NavDropdown.Item href="/standards">
-                Data Standards
+            <NavDropdown.Item
+                href="https://docs.humantumoratlas.org/data_model/overview/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Data Standards{' '}
+                <FontAwesomeIcon
+                    icon={faExternalLinkAlt}
+                    style={{ height: 16, width: 16 }}
+                />
             </NavDropdown.Item>
             <NavDropdown.Item href="/data-access">Data Access</NavDropdown.Item>
         </NavSection>,
