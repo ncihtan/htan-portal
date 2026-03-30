@@ -31,6 +31,13 @@ export default class MyDocument extends Document {
                 <body>
                     <Main />
                     <NextScript />
+                    {/* HTAN Help Desk Widget - Jira Service Management */}
+                    <script
+                        data-jsd-embedded
+                        data-key="885c2536-2aaa-4f84-a9af-f39f15d44e4a"
+                        data-base-url="https://jsd-widget.atlassian.com"
+                        src="https://jsd-widget.atlassian.com/assets/embed.js"
+                    />
                 </body>
             </Html>
         );
