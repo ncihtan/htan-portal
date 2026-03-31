@@ -27,6 +27,7 @@ import DataAvailabilityTable from 'packages/data-portal-explore/src/components/D
 
 interface IPublicationTabsProps {
     router: NextRouter;
+    publicationUid: string;
     abstract: string;
     publicationsByUid: { [uid: string]: PublicationManifest };
     synapseAtlases: Atlas[];
@@ -269,7 +270,7 @@ const SupportingLinks: React.FunctionComponent<{
 const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || PublicationTab.OVERVIEW;
-        const pubId = props.router.query?.id?.toString();
+        const pubId = props.publicationUid;
 
         return (
             <>
@@ -438,7 +439,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             <strong>Data Availability</strong>
                             <DataAvailabilityTable
                                 assays={props.assays}
-                                publicationId={pubId || ''}
+                                publicationId={pubId}
                             />
                         </div>
                     )}
