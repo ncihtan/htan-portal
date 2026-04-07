@@ -27,6 +27,7 @@ import DataAvailabilityTable from 'packages/data-portal-explore/src/components/D
 
 interface IPublicationTabsProps {
     router: NextRouter;
+    publicationUid: string;
     abstract: string;
     publicationsByUid: { [uid: string]: PublicationManifest };
     synapseAtlases: Atlas[];
@@ -57,11 +58,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             <br />
             <Tooltip overlay={`Click to Explore Autominerva`}>
                 <a
-                    href={
-                        typeof window !== 'undefined'
-                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B%22value%22%3A%22mIHC%22%2C%22label%22%3A%22mIHC%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A62%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22CyCIF%22%2C%22label%22%3A%22CyCIF%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A400%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22MIBI%22%2C%22label%22%3A%22MIBI%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A165%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22IMC%22%2C%22label%22%3A%22IMC%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A41%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22H%26E%22%2C%22label%22%3A%22H%26E%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A254%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22CyCIF%22%2C%22label%22%3A%22CyCIF%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A13%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+Duke%22%7D%5D&tab=file`
-                            : ''
-                    }
+                    href={`/explore?selectedFilters=%5B%7B%22value%22%3A%22mIHC%22%2C%22label%22%3A%22mIHC%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A62%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22CyCIF%22%2C%22label%22%3A%22CyCIF%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A400%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22MIBI%22%2C%22label%22%3A%22MIBI%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A165%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22IMC%22%2C%22label%22%3A%22IMC%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A41%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22H%26E%22%2C%22label%22%3A%22H%26E%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A254%2C%22isSelected%22%3Afalse%7D%2C%7B%22value%22%3A%22CyCIF%22%2C%22label%22%3A%22CyCIF%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A13%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+Duke%22%7D%5D&tab=file`}
                     target="_blank"
                 >
                     <img
@@ -78,11 +75,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             <br />
             <Tooltip overlay={`Click to Explore Autominerva`}>
                 <a
-                    href={
-                        typeof window !== 'undefined'
-                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"Malignant+melanoma+NOS"%2C"label"%3A"Malignant+melanoma+NOS"%2C"group"%3A"PrimaryDiagnosis"%2C"count"%3A22%2C"isSelected"%3Afalse%7D%5D&tab=file`
-                            : ''
-                    }
+                    href={`/explore?selectedFilters=%5B%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+HMS"%7D%2C%7B"value"%3A"OME-TIFF"%2C"label"%3A"OME-TIFF"%2C"group"%3A"FileFormat"%2C"count"%3A16%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"Malignant+melanoma+NOS"%2C"label"%3A"Malignant+melanoma+NOS"%2C"group"%3A"PrimaryDiagnosis"%2C"count"%3A22%2C"isSelected"%3Afalse%7D%5D&tab=file`}
                     target="_blank"
                 >
                     <img
@@ -169,11 +162,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             <br />
             <Tooltip overlay={`Click to Explore Autominerva`}>
                 <a
-                    href={
-                        typeof window !== 'undefined'
-                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B%22value%22%3A%22H%26E%22%2C%22label%22%3A%22H%26E%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A692%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+Vanderbilt%22%7D%5D&tab=file`
-                            : ''
-                    }
+                    href={`/explore?selectedFilters=%5B%7B%22value%22%3A%22H%26E%22%2C%22label%22%3A%22H%26E%22%2C%22group%22%3A%22assayName%22%2C%22count%22%3A692%2C%22isSelected%22%3Afalse%7D%2C%7B%22group%22%3A%22AtlasName%22%2C%22value%22%3A%22HTAN+Vanderbilt%22%7D%5D&tab=file`}
                     target="_blank"
                 >
                     <img
@@ -188,11 +177,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             <br />
             <Tooltip overlay={`Click to Explore BigQuery`}>
                 <a
-                    href={
-                        typeof window !== 'undefined'
-                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"HTAN+Vanderbilt"%2C"label"%3A"HTAN+Vanderbilt"%2C"group"%3A"AtlasName"%2C"count"%3A4%2C"isSelected"%3Afalse%7D%5D&tab=file`
-                            : ''
-                    }
+                    href={`/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"value"%3A"HTAN+Vanderbilt"%2C"label"%3A"HTAN+Vanderbilt"%2C"group"%3A"AtlasName"%2C"count"%3A4%2C"isSelected"%3Afalse%7D%5D&tab=file`}
                     target="_blank"
                 >
                     <img
@@ -234,11 +219,7 @@ const toolsContent: { [id: string]: JSX.Element[] } = {
             <h3>{`Explore in BigQuery`}</h3>
             <Tooltip overlay={`Click to Explore BigQuery`}>
                 <a
-                    href={
-                        typeof window !== 'undefined'
-                            ? `//${window.location.host}/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file`
-                            : ''
-                    }
+                    href={`/explore?selectedFilters=%5B%7B"value"%3A"hdf5"%2C"label"%3A"hdf5"%2C"group"%3A"FileFormat"%2C"count"%3A11%2C"isSelected"%3Afalse%7D%2C%7B"group"%3A"AtlasName"%2C"value"%3A"HTAN+CHOP"%7D%5D&tab=file`}
                     target="_blank"
                 >
                     <img style={{ width: '60%' }} src={'/HTA4_bigquery.png'} />
@@ -269,7 +250,7 @@ const SupportingLinks: React.FunctionComponent<{
 const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer(
     (props) => {
         const activeTab = props.router.query.tab || PublicationTab.OVERVIEW;
-        const pubId = props.router.query?.id?.toString();
+        const pubId = props.publicationUid;
 
         return (
             <>
@@ -438,7 +419,7 @@ const PublicationTabs: React.FunctionComponent<IPublicationTabsProps> = observer
                             <strong>Data Availability</strong>
                             <DataAvailabilityTable
                                 assays={props.assays}
-                                publicationId={pubId || ''}
+                                publicationId={pubId}
                             />
                         </div>
                     )}

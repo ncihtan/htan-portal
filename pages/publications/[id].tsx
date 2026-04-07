@@ -83,7 +83,7 @@ const PublicationPage = (props: PublicationPageProps) => {
     const router = useRouter();
 
     const publication = props.publications.find(
-        (p: PublicationManifest) => p.publicationId === router.query.id
+        (p: PublicationManifest) => p.publicationId === props.publicationUid
     );
     const publicationsByUid = _.keyBy(
         props.publications,
@@ -212,6 +212,7 @@ const PublicationPage = (props: PublicationPageProps) => {
                         </div>
                         <PublicationTabs
                             router={router}
+                            publicationUid={props.publicationUid}
                             abstract={publication.PublicationAbstract}
                             synapseAtlases={props.atlases}
                             biospecimens={props.specimen}
