@@ -1,6 +1,6 @@
 import React from 'react';
 import PreReleaseBanner from '../../components/PreReleaseBanner';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import PageWrapper from '../../components/PageWrapper';
 import { useRouter } from 'next/router';
 import PublicationTabs from '../../components/PublicationTabs';
@@ -14,7 +14,6 @@ import {
     AtlasDescription,
     doQuery,
     Entity,
-    getAllPublicationPagePaths,
     getPublicationAuthors,
     getPublicationDOI,
     getPublicationJournal,
@@ -33,7 +32,6 @@ import {
 } from '@htan/data-portal-schema';
 import { GenericAttributeNames } from '@htan/data-portal-utils';
 
-import publicationIds from './static_page_ids.json';
 
 // const filterByAttrName = (filters: SelectedFilter[]) => {
 //     return _.chain(filters)
@@ -233,7 +231,7 @@ const PublicationPage = (props: PublicationPageProps) => {
 
 export default PublicationPage;
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const publications = await doQuery<PublicationManifest>(
         'SELECT * FROM publication_manifest'
     );
@@ -268,13 +266,3 @@ export const getStaticProps: GetStaticProps = async (context) => {
         },
     };
 };
-
-export async function getStaticPaths() {
-    return {
-        paths: getAllPublicationPagePaths(publicationIds), // indicates that no page needs be created at build time
-        fallback: false,
-        // TODO disabling dynamic pages for now
-        // paths: [], // indicates that no page needs be created at build time
-        // fallback: 'blocking', // page will wait for the HTML to be generated
-    };
-}

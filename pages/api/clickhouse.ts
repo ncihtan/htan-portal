@@ -2,11 +2,18 @@ import { createClient } from '@clickhouse/client-web';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { DEFAULT_CLICKHOUSE_URL } from '@htan/data-portal-commons';
 
+if (!process.env.CLICKHOUSE_PASSWORD) {
+    throw new Error(
+        'CLICKHOUSE_PASSWORD environment variable is not set. ' +
+            'Copy .env.local.example to .env.local and fill in the credentials.'
+    );
+}
+
 // Singleton client — reused across requests to avoid per-request overhead
 const client = createClient({
     url: process.env.CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
     username: process.env.CLICKHOUSE_USER ?? 'htanwebuser',
-    password: process.env.CLICKHOUSE_PASSWORD ?? 'HT4N_P0RT4L_isDaBest',
+    password: process.env.CLICKHOUSE_PASSWORD,
     request_timeout: 600000,
     compression: {
         response: true,

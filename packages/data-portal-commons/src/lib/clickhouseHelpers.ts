@@ -10,21 +10,23 @@ export const DEFAULT_CLICKHOUSE_HOST =
 export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_03_17_1826';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
-// Server-side only defaults (not exported — keep out of client bundle)
-const DEFAULT_CLICKHOUSE_USER = 'htanwebuser';
-const DEFAULT_CLICKHOUSE_PASSWORD = 'HT4N_P0RT4L_isDaBest';
-
 // Lazily initialised so the ClickHouse client is never instantiated in the
 // browser (browser requests are proxied through /api/clickhouse instead).
 let _defaultClient: WebClickHouseClient | null = null;
 
 function getDefaultClient(): WebClickHouseClient {
     if (!_defaultClient) {
+        const password = process.env.CLICKHOUSE_PASSWORD;
+        if (!password) {
+            throw new Error(
+                'CLICKHOUSE_PASSWORD environment variable is not set. ' +
+                    'Copy .env.local.example to .env.local and fill in the credentials.'
+            );
+        }
         _defaultClient = createClient({
             url: process.env.CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
-            username: process.env.CLICKHOUSE_USER ?? DEFAULT_CLICKHOUSE_USER,
-            password:
-                process.env.CLICKHOUSE_PASSWORD ?? DEFAULT_CLICKHOUSE_PASSWORD,
+            username: process.env.CLICKHOUSE_USER ?? 'htanwebuser',
+            password,
             request_timeout: 600000,
             compression: {
                 response: true,

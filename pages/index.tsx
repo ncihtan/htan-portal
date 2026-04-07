@@ -5,7 +5,7 @@ import { caseQuery, doQuery, NOT_REPORTED } from '@htan/data-portal-commons';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import PageWrapper from '../components/PageWrapper';
 
 const Home = (data: IHomePropsProps) => {
@@ -19,7 +19,7 @@ const Home = (data: IHomePropsProps) => {
     );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const assayCounts = await doQuery<{
         assayName: string;
         atlas_name: string;
