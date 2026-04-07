@@ -10,16 +10,30 @@ export const DEFAULT_CLICKHOUSE_HOST =
 export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_03_17_1826';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
-const defaultClient: WebClickHouseClient = createClient({
-    url: DEFAULT_CLICKHOUSE_URL,
-    username: 'htanwebuser',
-    password: 'HT4N_P0RT4L_isDaBest',
-    request_timeout: 600000,
-    compression: {
-        response: true,
-        request: false,
-    },
-});
+// Server-side only defaults (not exported — keep out of client bundle)
+const DEFAULT_CLICKHOUSE_USER = 'htanwebuser';
+const DEFAULT_CLICKHOUSE_PASSWORD = '';
+
+// Lazily initialised so the ClickHouse client is never instantiated in the
+// browser (browser requests are proxied through /api/clickhouse instead).
+let _defaultClient: WebClickHouseClient | null = null;
+
+function getDefaultClient(): WebClickHouseClient {
+    if (!_defaultClient) {
+        _defaultClient = createClient({
+            url: process.env.CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
+            username: process.env.CLICKHOUSE_USER ?? DEFAULT_CLICKHOUSE_USER,
+            password:
+                process.env.CLICKHOUSE_PASSWORD ?? DEFAULT_CLICKHOUSE_PASSWORD,
+            request_timeout: 600000,
+            compression: {
+                response: true,
+                request: false,
+            },
+        });
+    }
+    return _defaultClient;
+}
 
 export function getCountsByTypeQueryUniformFilterString(filterString: string) {
     return {
@@ -95,9 +109,29 @@ export const countsByTypeQuery = _.template(`
 
 export async function doQuery<T>(
     str: any,
-    client: WebClickHouseClient = defaultClient
+    client?: WebClickHouseClient
 ): Promise<T[]> {
-    const resultSet = await client.query({
+    // When running in browser, proxy through Next.js API route to avoid
+    // exposing ClickHouse credentials in the client-side bundle
+    if (typeof window !== 'undefined') {
+        const response = await fetch('/api/clickhouse', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: str }),
+        });
+        if (!response.ok) {
+            const body = await response
+                .json()
+                .catch(() => ({ error: response.statusText }));
+            throw new Error(
+                `ClickHouse query failed: ${body.error ?? response.statusText}`
+            );
+        }
+        return response.json();
+    }
+
+    const resolvedClient = client ?? getDefaultClient();
+    const resultSet = await resolvedClient.query({
         query: str,
         format: 'JSONEachRow',
     });

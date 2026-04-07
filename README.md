@@ -56,7 +56,7 @@ First, you need to create admin and read-only users on your clickhouse DB server
 ```sql
 -- create a new user with read-only access to htan_*.*
 DROP USER IF EXISTS 'htanwebuser'
-CREATE USER 'htanwebuser' IDENTIFIED BY 'HT4N_P0RT4L_isDaBest';
+CREATE USER 'htanwebuser' IDENTIFIED BY 'YOUR_READ_ONLY_PASSWORD_HERE';
 
 GRANT SELECT ON htan_*.* TO 'htanwebuser';
 SHOW GRANTS FOR 'htanwebuser';
@@ -75,6 +75,28 @@ Then you can import data by running the node script
 ```bash
 node build_db/main.js
 ```
+
+### Configure ClickHouse credentials for the portal
+
+The portal proxies all browser ClickHouse queries through a Next.js API route
+(`/api/clickhouse`) so that credentials are never exposed in the client-side
+bundle.  You must supply the read-only credentials via environment variables.
+
+Copy `.env.local.example` to `.env.local` and fill in the values:
+
+```bash
+cp .env.local.example .env.local
+# then edit .env.local with the correct CLICKHOUSE_USER / CLICKHOUSE_PASSWORD
+```
+
+For production deployments set the following environment variables in your
+hosting environment:
+
+| Variable              | Description                                      |
+|-----------------------|--------------------------------------------------|
+| `CLICKHOUSE_URL`      | Full ClickHouse URL including database (host/db) |
+| `CLICKHOUSE_USER`     | ClickHouse read-only username                    |
+| `CLICKHOUSE_PASSWORD` | ClickHouse read-only password                    |
 
 ### Export to bucket
 
