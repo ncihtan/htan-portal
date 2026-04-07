@@ -12,7 +12,7 @@ export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLIC
 
 // Server-side only defaults (not exported — keep out of client bundle)
 const DEFAULT_CLICKHOUSE_USER = 'htanwebuser';
-const DEFAULT_CLICKHOUSE_PASSWORD = '';
+const DEFAULT_CLICKHOUSE_PASSWORD = 'HT4N_P0RT4L_isDaBest';
 
 // Lazily initialised so the ClickHouse client is never instantiated in the
 // browser (browser requests are proxied through /api/clickhouse instead).

@@ -6,7 +6,7 @@ import { DEFAULT_CLICKHOUSE_URL } from '@htan/data-portal-commons';
 const client = createClient({
     url: process.env.CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
     username: process.env.CLICKHOUSE_USER ?? 'htanwebuser',
-    password: process.env.CLICKHOUSE_PASSWORD ?? '',
+    password: process.env.CLICKHOUSE_PASSWORD ?? 'HT4N_P0RT4L_isDaBest',
     request_timeout: 600000,
     compression: {
         response: true,
