@@ -78,25 +78,26 @@ node build_db/main.js
 
 ### Configure ClickHouse credentials for the portal
 
-The portal proxies all browser ClickHouse queries through a Next.js API route
-(`/api/clickhouse`) so that credentials are never exposed in the client-side
-bundle.  You must supply the read-only credentials via environment variables.
+The portal uses `NEXT_PUBLIC_*` environment variables so that ClickHouse
+credentials are embedded in the client-side bundle at build time from your
+`.env.local` (or hosting environment).  The credentials are not stored in the
+source code.
 
 Copy `.env.local.example` to `.env.local` and fill in the values:
 
 ```bash
 cp .env.local.example .env.local
-# then edit .env.local with the correct CLICKHOUSE_USER / CLICKHOUSE_PASSWORD
+# then edit .env.local with the correct NEXT_PUBLIC_CLICKHOUSE_USER / NEXT_PUBLIC_CLICKHOUSE_PASSWORD
 ```
 
 For production deployments set the following environment variables in your
 hosting environment:
 
-| Variable              | Description                                      |
-|-----------------------|--------------------------------------------------|
-| `CLICKHOUSE_URL`      | Full ClickHouse URL including database (host/db) |
-| `CLICKHOUSE_USER`     | ClickHouse read-only username                    |
-| `CLICKHOUSE_PASSWORD` | ClickHouse read-only password                    |
+| Variable                          | Description                                      |
+|-----------------------------------|--------------------------------------------------|
+| `NEXT_PUBLIC_CLICKHOUSE_URL`      | Full ClickHouse URL including database (host/db) |
+| `NEXT_PUBLIC_CLICKHOUSE_USER`     | ClickHouse read-only username                    |
+| `NEXT_PUBLIC_CLICKHOUSE_PASSWORD` | ClickHouse read-only password                    |
 
 ### Export to bucket
 

@@ -10,32 +10,16 @@ export const DEFAULT_CLICKHOUSE_HOST =
 export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_03_17_1826';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
-// Lazily initialised so the ClickHouse client is never instantiated in the
-// browser (browser requests are proxied through /api/clickhouse instead).
-let _defaultClient: WebClickHouseClient | null = null;
-
-function getDefaultClient(): WebClickHouseClient {
-    if (!_defaultClient) {
-        const password = process.env.CLICKHOUSE_PASSWORD;
-        if (!password) {
-            throw new Error(
-                'CLICKHOUSE_PASSWORD environment variable is not set. ' +
-                    'Copy .env.local.example to .env.local and fill in the credentials.'
-            );
-        }
-        _defaultClient = createClient({
-            url: process.env.CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
-            username: process.env.CLICKHOUSE_USER ?? 'htanwebuser',
-            password,
-            request_timeout: 600000,
-            compression: {
-                response: true,
-                request: false,
-            },
-        });
-    }
-    return _defaultClient;
-}
+const defaultClient: WebClickHouseClient = createClient({
+    url: process.env.NEXT_PUBLIC_CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
+    username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
+    password: process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD ?? '',
+    request_timeout: 600000,
+    compression: {
+        response: true,
+        request: false,
+    },
+});
 
 export function getCountsByTypeQueryUniformFilterString(filterString: string) {
     return {
@@ -113,26 +97,7 @@ export async function doQuery<T>(
     str: any,
     client?: WebClickHouseClient
 ): Promise<T[]> {
-    // When running in browser, proxy through Next.js API route to avoid
-    // exposing ClickHouse credentials in the client-side bundle
-    if (typeof window !== 'undefined') {
-        const response = await fetch('/api/clickhouse', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: str }),
-        });
-        if (!response.ok) {
-            const body = await response
-                .json()
-                .catch(() => ({ error: response.statusText }));
-            throw new Error(
-                `ClickHouse query failed: ${body.error ?? response.statusText}`
-            );
-        }
-        return response.json();
-    }
-
-    const resolvedClient = client ?? getDefaultClient();
+    const resolvedClient = client ?? defaultClient;
     const resultSet = await resolvedClient.query({
         query: str,
         format: 'JSONEachRow',
