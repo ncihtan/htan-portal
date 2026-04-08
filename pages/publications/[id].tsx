@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PreReleaseBanner from '../../components/PreReleaseBanner';
-import { GetServerSideProps } from 'next';
 import PageWrapper from '../../components/PageWrapper';
 import { useRouter } from 'next/router';
 import PublicationTabs from '../../components/PublicationTabs';
@@ -8,10 +7,12 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
+import { ScaleLoader } from 'react-spinners';
 import {
     assayQuery,
     Atlas,
     AtlasDescription,
+    commonStyles,
     doQuery,
     Entity,
     getPublicationAuthors,
@@ -66,8 +67,7 @@ import { GenericAttributeNames } from '@htan/data-portal-utils';
 //     });
 // };
 
-interface PublicationPageProps {
-    publicationUid: string;
+interface PublicationData {
     schemaDataById: SchemaDataById;
     genericAttributeMap: { [attr: string]: GenericAttributeNames };
     specimen: Entity[];
@@ -77,14 +77,72 @@ interface PublicationPageProps {
     publications: PublicationManifest[];
 }
 
-const PublicationPage = (props: PublicationPageProps) => {
+const PublicationPage = () => {
     const router = useRouter();
+    const [data, setData] = useState<PublicationData | null>(null);
 
-    const publication = props.publications.find(
+    useEffect(() => {
+        if (!router.isReady) return;
+
+        const publicationId = router.query.id as string;
+
+        async function fetchData() {
+            const [
+                publications,
+                specimen,
+                cases,
+                atlases,
+                assays,
+                schemaDataById,
+            ] = await Promise.all([
+                doQuery<PublicationManifest>(
+                    'SELECT * FROM publication_manifest'
+                ),
+                doQuery<Entity>(`
+                    SELECT * FROM specimen WHERE
+                    has(publicationIds,'${publicationId}') 
+                `),
+                doQuery<Entity>(`
+                    SELECT * FROM cases WHERE
+                    has(publicationIds,'${publicationId}')
+                `),
+                doQuery<Atlas>(`SELECT * FROM atlases`),
+                doQuery<Entity>(assayQuery({ publicationId })),
+                fetchAndProcessSchemaData(),
+            ]);
+
+            setData({
+                schemaDataById,
+                genericAttributeMap: HTANToGenericAttributeMap,
+                publications: postProcessPublications(publications),
+                assays: postProcessFiles(assays),
+                specimen,
+                cases,
+                atlases,
+            });
+        }
+
+        fetchData();
+    }, [router.isReady, router.query.id]);
+
+    if (!data) {
+        return (
+            <>
+                <PreReleaseBanner />
+                <PageWrapper>
+                    <div className={commonStyles.loadingIndicator}>
+                        <ScaleLoader />
+                    </div>
+                </PageWrapper>
+            </>
+        );
+    }
+
+    const publication = data.publications.find(
         (p: PublicationManifest) => p.publicationId === router.query.id
     );
     const publicationsByUid = _.keyBy(
-        props.publications,
+        data.publications,
         (p) => p.publicationId
     );
 
@@ -97,7 +155,7 @@ const PublicationPage = (props: PublicationPageProps) => {
 
     const atlasMeta = publication.AtlasMeta;
 
-    const assaysByAssayNameMap = _.groupBy(props.assays, 'assayName');
+    const assaysByAssayNameMap = _.groupBy(data.assays, 'assayName');
 
     return (
         <>
@@ -211,15 +269,15 @@ const PublicationPage = (props: PublicationPageProps) => {
                         <PublicationTabs
                             router={router}
                             abstract={publication.PublicationAbstract}
-                            synapseAtlases={props.atlases}
-                            biospecimens={props.specimen}
-                            cases={props.cases}
+                            synapseAtlases={data.atlases}
+                            biospecimens={data.specimen}
+                            cases={data.cases}
                             assays={assaysByAssayNameMap}
                             supportingLinks={getPublicationSupportingLinks(
                                 publication
                             )}
-                            schemaDataById={props.schemaDataById}
-                            genericAttributeMap={props.genericAttributeMap}
+                            schemaDataById={data.schemaDataById}
+                            genericAttributeMap={data.genericAttributeMap}
                             publicationsByUid={publicationsByUid}
                         />
                     </div>
@@ -230,40 +288,4 @@ const PublicationPage = (props: PublicationPageProps) => {
 };
 
 export default PublicationPage;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const publications = await doQuery<PublicationManifest>(
-        'SELECT * FROM publication_manifest'
-    );
-
-    const publicationId = context.params?.id || '';
-
-    const specimen = await doQuery<Entity>(`
-        SELECT * FROM specimen WHERE
-        has(publicationIds,'${publicationId}') 
-    `);
-    const cases = await doQuery<Entity>(`
-        SELECT * FROM cases WHERE
-        has(publicationIds,'${publicationId}')
-    `);
-
-    const atlases = await doQuery<Atlas>(`SELECT * FROM atlases`);
-
-    const assays = await doQuery<Entity>(
-        assayQuery({ publicationId: publicationId })
-    );
-
-    return {
-        props: {
-            publicationUid: context.params?.id,
-            schemaDataById: await fetchAndProcessSchemaData(),
-            genericAttributeMap: HTANToGenericAttributeMap, // TODO needs to be configurable
-            publications: postProcessPublications(publications),
-            assays: postProcessFiles(assays),
-            specimen,
-            cases,
-            atlases,
-        },
-    };
-};
 

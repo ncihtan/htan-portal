@@ -299,12 +299,3 @@ table {
     margin: 0 15px 15px 0;
     float: left;
 }
-
-.pageLoadingIndicator {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    z-index: 10000;
-    text-align: center;
-    transform: translate(-50%, -50%);
-}
