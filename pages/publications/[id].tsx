@@ -86,6 +86,12 @@ const PublicationPage = () => {
 
         const publicationId = router.query.id as string;
 
+        // Validate publicationId to prevent SQL injection — IDs only contain
+        // alphanumeric characters, hyphens, and underscores.
+        if (!/^[a-zA-Z0-9_-]+$/.test(publicationId)) {
+            return;
+        }
+
         async function fetchData() {
             const [
                 publications,
