@@ -24,6 +24,8 @@ const client = createClient({
 // Only allow read-only query types to prevent misuse of the proxy endpoint
 const ALLOWED_QUERY_PATTERN = /^\s*(SELECT|WITH)\s/i;
 
+export const maxDuration = 120;
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
