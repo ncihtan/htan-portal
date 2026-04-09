@@ -10,10 +10,28 @@ export const DEFAULT_CLICKHOUSE_HOST =
 export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_03_17_1826';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
+function buildClickHouseUrl(): string {
+    if (process.env.NEXT_PUBLIC_CLICKHOUSE_URL) {
+        return process.env.NEXT_PUBLIC_CLICKHOUSE_URL;
+    }
+    const host =
+        process.env.NEXT_PUBLIC_CLICKHOUSE_HOST ?? DEFAULT_CLICKHOUSE_HOST;
+    const db = process.env.NEXT_PUBLIC_CLICKHOUSE_DB ?? DEFAULT_CLICKHOUSE_DB;
+    return `${host}/${db}`;
+}
+
+const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
+if (!clickhousePassword) {
+    throw new Error(
+        'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
+            'Set it in .env.local (for development) or in your hosting environment (for production).'
+    );
+}
+
 const defaultClient: WebClickHouseClient = createClient({
-    url: process.env.NEXT_PUBLIC_CLICKHOUSE_URL ?? DEFAULT_CLICKHOUSE_URL,
+    url: buildClickHouseUrl(),
     username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
-    password: process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD ?? '',
+    password: clickhousePassword,
     request_timeout: 600000,
     compression: {
         response: true,

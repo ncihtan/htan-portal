@@ -80,57 +80,80 @@ interface PublicationData {
 const PublicationPage = () => {
     const router = useRouter();
     const [data, setData] = useState<PublicationData | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    // Normalize router.query.id which can be string | string[] | undefined
+    const rawId = router.query.id;
+    const publicationId = Array.isArray(rawId) ? rawId[0] : rawId;
 
     useEffect(() => {
         if (!router.isReady) return;
 
-        const publicationId = router.query.id as string;
-
         setData(null);
+        setError(null);
+
         // Validate publicationId to prevent SQL injection — block characters
         // that are unsafe in SQL string literals while allowing unicode letters.
-        if (/['";\\\/\x00]/.test(publicationId)) {
+        if (!publicationId || /['";\\\/\x00]/.test(publicationId)) {
+            setError('Invalid publication ID.');
             return;
         }
 
         async function fetchData() {
-            const [
-                publications,
-                specimen,
-                cases,
-                atlases,
-                assays,
-                schemaDataById,
-            ] = await Promise.all([
-                doQuery<PublicationManifest>(
-                    'SELECT * FROM publication_manifest'
-                ),
-                doQuery<Entity>(`
-                    SELECT * FROM specimen WHERE
-                    has(publicationIds,'${publicationId}') 
-                `),
-                doQuery<Entity>(`
-                    SELECT * FROM cases WHERE
-                    has(publicationIds,'${publicationId}')
-                `),
-                doQuery<Atlas>(`SELECT * FROM atlases`),
-                doQuery<Entity>(assayQuery({ publicationId })),
-                fetchAndProcessSchemaData(),
-            ]);
+            try {
+                const [
+                    publications,
+                    specimen,
+                    cases,
+                    atlases,
+                    assays,
+                    schemaDataById,
+                ] = await Promise.all([
+                    doQuery<PublicationManifest>(
+                        'SELECT * FROM publication_manifest'
+                    ),
+                    doQuery<Entity>(`
+                        SELECT * FROM specimen WHERE
+                        has(publicationIds,'${publicationId}') 
+                    `),
+                    doQuery<Entity>(`
+                        SELECT * FROM cases WHERE
+                        has(publicationIds,'${publicationId}')
+                    `),
+                    doQuery<Atlas>(`SELECT * FROM atlases`),
+                    doQuery<Entity>(assayQuery({ publicationId })),
+                    fetchAndProcessSchemaData(),
+                ]);
 
-            setData({
-                schemaDataById,
-                genericAttributeMap: HTANToGenericAttributeMap,
-                publications: postProcessPublications(publications),
-                assays: postProcessFiles(assays),
-                specimen,
-                cases,
-                atlases,
-            });
+                setData({
+                    schemaDataById,
+                    genericAttributeMap: HTANToGenericAttributeMap,
+                    publications: postProcessPublications(publications),
+                    assays: postProcessFiles(assays),
+                    specimen,
+                    cases,
+                    atlases,
+                });
+            } catch (e) {
+                setError(
+                    'Failed to load publication data. Please try again later.'
+                );
+            }
         }
 
         fetchData();
-    }, [router.isReady, router.query.id]);
+    }, [router.isReady, publicationId]);
+
+    if (error) {
+        return (
+            <>
+                <PreReleaseBanner />
+                <PageWrapper>
+                    <div>{error}</div>
+                </PageWrapper>
+            </>
+        );
+    }
 
     if (!data) {
         return (
@@ -146,7 +169,7 @@ const PublicationPage = () => {
     }
 
     const publication = data.publications.find(
-        (p: PublicationManifest) => p.publicationId === router.query.id
+        (p: PublicationManifest) => p.publicationId === publicationId
     );
     const publicationsByUid = _.keyBy(
         data.publications,
