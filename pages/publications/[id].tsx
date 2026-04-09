@@ -86,6 +86,7 @@ const PublicationPage = () => {
 
         const publicationId = router.query.id as string;
 
+        setData(null);
         // Validate publicationId to prevent SQL injection — block characters
         // that are unsafe in SQL string literals while allowing unicode letters.
         if (/['";\\\/\x00]/.test(publicationId)) {
