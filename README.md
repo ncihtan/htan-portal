@@ -80,9 +80,13 @@ node build_db/main.js
 
 The portal uses `NEXT_PUBLIC_*` environment variables so that ClickHouse
 credentials are embedded in the client-side bundle at build time from your
-`.env.local` (or hosting environment).  The credentials are not stored in the
-source code.
+`.env.local` (or hosting environment). The credentials are not stored in the
+source code, but they are visible to anyone who can access the deployed site.
 
+**Important:** `NEXT_PUBLIC_CLICKHOUSE_PASSWORD` is **not a secret**. It must
+correspond to a tightly restricted, read-only account with the minimum
+permissions required by the portal, and should ideally also be constrained by
+network policy. Otherwise, these credentials are effectively public.
 Copy `.env.local.example` to `.env.local` and fill in the values:
 
 ```bash
