@@ -161,7 +161,7 @@ jobs:
 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add public/processed_syn_data.json.gz pages/publications/static_page_ids.json
+          git add public/processed_syn_data.json.gz
           git commit -m "chore: update synapse JSON files after publications manifest update"
           git push
 

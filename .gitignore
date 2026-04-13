@@ -19,6 +19,7 @@ dist
 # misc
 .DS_Store
 .env*
+!.env.local.example
 .venv
 .yarn
 .yarnrc

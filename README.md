@@ -56,7 +56,7 @@ First, you need to create admin and read-only users on your clickhouse DB server
 ```sql
 -- create a new user with read-only access to htan_*.*
 DROP USER IF EXISTS 'htanwebuser'
-CREATE USER 'htanwebuser' IDENTIFIED BY 'HT4N_P0RT4L_isDaBest';
+CREATE USER 'htanwebuser' IDENTIFIED BY 'YOUR_READ_ONLY_PASSWORD_HERE';
 
 GRANT SELECT ON htan_*.* TO 'htanwebuser';
 SHOW GRANTS FOR 'htanwebuser';
@@ -75,6 +75,35 @@ Then you can import data by running the node script
 ```bash
 node build_db/main.js
 ```
+
+### Configure ClickHouse credentials for the portal
+
+The portal uses `NEXT_PUBLIC_*` environment variables so that ClickHouse
+credentials are embedded in the client-side bundle at build time from your
+`.env.local` (or hosting environment). The credentials are not stored in the
+source code, but they are visible to anyone who can access the deployed site.
+
+**Important:** `NEXT_PUBLIC_CLICKHOUSE_PASSWORD` is **not a secret**. It must
+correspond to a tightly restricted, read-only account with the minimum
+permissions required by the portal, and should ideally also be constrained by
+network policy. Otherwise, these credentials are effectively public.
+Copy `.env.local.example` to `.env.local` and fill in the values:
+
+```bash
+cp .env.local.example .env.local
+# then edit .env.local with the correct NEXT_PUBLIC_CLICKHOUSE_HOST / NEXT_PUBLIC_CLICKHOUSE_DB / NEXT_PUBLIC_CLICKHOUSE_USER / NEXT_PUBLIC_CLICKHOUSE_PASSWORD
+```
+
+For production deployments set the following environment variables in your
+hosting environment:
+
+| Variable                           | Description                                                                 |
+|------------------------------------|-----------------------------------------------------------------------------|
+| `NEXT_PUBLIC_CLICKHOUSE_HOST`      | ClickHouse host URL (e.g. `https://host:8443`)                              |
+| `NEXT_PUBLIC_CLICKHOUSE_DB`        | ClickHouse database name                                                    |
+| `NEXT_PUBLIC_CLICKHOUSE_URL`       | Full ClickHouse URL including database (overrides HOST + DB when set)       |
+| `NEXT_PUBLIC_CLICKHOUSE_USER`      | ClickHouse read-only username                                               |
+| `NEXT_PUBLIC_CLICKHOUSE_PASSWORD`  | ClickHouse read-only password (**required** — build fails without it)       |
 
 ### Export to bucket
 
