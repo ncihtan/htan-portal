@@ -7,7 +7,7 @@ import { CountByType } from './types';
 
 export const DEFAULT_CLICKHOUSE_HOST =
     'https://dl96orhu96.us-east-1.aws.clickhouse.cloud:8443';
-export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_03_17_1826';
+export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_05_06_2215';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
 function buildClickHouseUrl(): string {
@@ -24,8 +24,7 @@ let _defaultClient: WebClickHouseClient | undefined;
 
 function getDefaultClient(): WebClickHouseClient {
     if (!_defaultClient) {
-        const clickhousePassword =
-            process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
+        const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
         if (!clickhousePassword) {
             throw new Error(
                 'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
@@ -34,8 +33,7 @@ function getDefaultClient(): WebClickHouseClient {
         }
         _defaultClient = createClient({
             url: buildClickHouseUrl(),
-            username:
-                process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
+            username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
             password: clickhousePassword,
             request_timeout: 600000,
             compression: {
