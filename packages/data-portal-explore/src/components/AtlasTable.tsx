@@ -63,11 +63,27 @@ type ViewerCountByAtlas = {
     [atlasId: string]: { [name in FileViewerName]: number };
 };
 
-const MetaDataLink = (props: { id: string; baseUrl: string }) => (
-    <a href={`${props.baseUrl}/metadata/${props.id}.csv`} download>
-        {props.id}
-    </a>
-);
+const MetaDataLink = (props: {
+    id: string;
+    baseUrl: string;
+    version?: number;
+}) => {
+    // If version is available, link directly to Synapse with version
+    // Otherwise fall back to cloud storage
+    const href = props.version
+        ? `https://www.synapse.org/#!Synapse:${props.id}.${props.version}`
+        : `${props.baseUrl}/metadata/${props.id}.csv`;
+
+    // Only use download attribute for cloud storage links
+    // Synapse handles downloads through its own interface
+    const downloadAttr = props.version ? {} : { download: true };
+
+    return (
+        <a href={href} {...downloadAttr}>
+            {props.id}
+        </a>
+    );
+};
 
 const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalProps> = (
     props
@@ -105,6 +121,7 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                                         baseUrl={
                                                             props.cloudBaseUrl
                                                         }
+                                                        version={info.version}
                                                     />
                                                 </td>
                                                 <td>{info.component}</td>

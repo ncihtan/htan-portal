@@ -144,6 +144,7 @@ export interface AtlasMetaData {
         component: string;
         synapseId: string;
         numItems: number;
+        version?: number;
     }[];
 }
 
