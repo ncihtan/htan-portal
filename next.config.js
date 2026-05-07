@@ -28,9 +28,9 @@ module.exports = withMDX({
                 permanent: false,
             },
             {
-                source: '/publications/hta4_2026_cell-reports-medicine_jonathan-h-sussman',
+                source: '/publications/hta4_2024_biorxiv_jonathan-h-sussman',
                 destination:
-                    '/publications/hta4_2024_biorxiv_jonathan-h-sussman',
+                    '/publications/hta4_2026_cell-reports-medicine_jonathan-h-sussman',
                 permanent: false,
             },
             // phase 1 centers

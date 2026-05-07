@@ -7,7 +7,7 @@ import { CountByType } from './types';
 
 export const DEFAULT_CLICKHOUSE_HOST =
     'https://dl96orhu96.us-east-1.aws.clickhouse.cloud:8443';
-export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_03_17_1826';
+export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_05_07_1459';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
 function buildClickHouseUrl(): string {
@@ -20,24 +20,30 @@ function buildClickHouseUrl(): string {
     return `${host}/${db}`;
 }
 
-const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
-if (!clickhousePassword) {
-    throw new Error(
-        'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
-            'Set it in .env.local (for development) or in your hosting environment (for production).'
-    );
-}
+let _defaultClient: WebClickHouseClient | undefined;
 
-const defaultClient: WebClickHouseClient = createClient({
-    url: buildClickHouseUrl(),
-    username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
-    password: clickhousePassword,
-    request_timeout: 600000,
-    compression: {
-        response: true,
-        request: false,
-    },
-});
+function getDefaultClient(): WebClickHouseClient {
+    if (!_defaultClient) {
+        const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
+        if (!clickhousePassword) {
+            throw new Error(
+                'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
+                    'Set it in .env.local (for development) or in your hosting environment (for production).'
+            );
+        }
+        _defaultClient = createClient({
+            url: buildClickHouseUrl(),
+            username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
+            password: clickhousePassword,
+            request_timeout: 600000,
+            compression: {
+                response: true,
+                request: false,
+            },
+        });
+    }
+    return _defaultClient;
+}
 
 export function getCountsByTypeQueryUniformFilterString(filterString: string) {
     return {
@@ -115,7 +121,7 @@ export async function doQuery<T>(
     str: any,
     client?: WebClickHouseClient
 ): Promise<T[]> {
-    const resolvedClient = client ?? defaultClient;
+    const resolvedClient = client ?? getDefaultClient();
     const resultSet = await resolvedClient.query({
         query: str,
         format: 'JSONEachRow',

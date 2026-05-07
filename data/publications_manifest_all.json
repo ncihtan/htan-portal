@@ -646,7 +646,7 @@
         "Eutils Sort Date": "2025/06/12 00:00",
         "Eutils Authors": "G\u00f3mez-L\u00f3pez S, Alhendi ASN, Przybilla MJ, Bordeu I, Whiteman ZE, Butler T, Rouhani MJ, Kalinke L, Uddin I, Otter KEJ, Chandrasekharan DP, Lebrusant-Fernandez M, Shurr AYL, Durrenberger PF, Moore DA, Falzon M, Reading JL, Martincorena I, Simons BD, Campbell PJ, Janes SM",
         "Eutils DOI": "10.1126/science.ads9145",
-        "Cited In Number": 4,
+        "Cited In Number": 5,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=40310937"
     },
     {
@@ -7200,22 +7200,22 @@
         "Component": "PublicationManifest",
         "HTAN Grant ID": "CA233285",
         "HTAN Center ID": "HTA4",
-        "Publication Content Type": "Preprint",
-        "DOI": "https://doi.org/10.1101/2024.03.06.583588",
+        "Publication Content Type": "Published manuscript",
+        "DOI": "https://doi.org/10.1016/j.xcrm.2026.102766",
         "Title": "A longitudinal single-cell and spatial multiomic atlas of pediatric high-grade glioma",
-        "Authors": "Jonathan H. Sussman, Derek A. Oldridge, Wenbao Yu, Chia-Hui Chen, Abigail M. Zellmer, Jiazhen Rong, Arianne Parvaresh-Rizi, Anusha Thadi, Jason Xu, Shovik Bandyopadhyay, Yusha Sun, David Wu, C. Emerson Hunter, Stephanie Brosius, Kyung Jin Ahn, Amy E. Baxter, Mateusz P. Koptyra, Rami S. Vanguri, Stephanie McGrory, Adam C. Resnick, Phillip B. Storm, Nduka M. Amankulor, Mariarita Santi, Angela N. Viaene, Nancy Zhang, Thomas De Raedt, Kristina Cole, Kai Tan",
+        "Authors": "Jonathan H Sussman, Derek A Oldridge, Wenbao Yu, Chia-Hui Chen, Abigail M Zellmer, Jiazhen Rong, Arianne Parvaresh-Rizi, Anusha Thadi, Austin Yang, Joseph S Tumulty, Barbara Xiong, David W Wu, Yusha Sun, Shovik Bandyopadhyay, Jason Xu, Stephanie Brosius, Una Yamamoto Barkardottir, Isabelle Seka, Kyung Jin Ahn, Omar Elghawy, Amy E Baxter, Mateusz P Koptyra, Rami S Vanguri, Stephanie McGrory, Phillip B Storm, Nduka M Amankulor, Mariarita Santi, Angela N Viaene, Nancy Zhang, Thomas De Raedt, Kristina Cole, Kai Tan",
         "Corresponding Author": "Kai Tan",
         "Corresponding Author ORCID": "https://orcid.org/0000-0002-9104-5567",
-        "Year of Publication": "2024",
-        "Location of Publication": "bioRXiv",
-        "Publication Abstract": "Pediatric high-grade glioma (pHGG) is an incurable central nervous system malignancy that is a leading cause of pediatric cancer death. While pHGG shares many similarities to adult glioma, it comprises distinct disease entities. In this study, we longitudinally profile a molecularly diverse cohort of 16 pHGG patients through single-nucleus RNA and ATAC sequencing, whole-genome sequencing, and CODEX spatial proteomics to capture the evolution of neoplastic and microenvironmental features during disease progression and treatment. We define a set of core pHGG neoplastic cell states and observe differential tumor-myeloid interactions between malignant cell phenotypes. We find that essential neuromodulators and the interferon response are upregulated post-therapy and validated malignant cell-intrinsic targets. We observe an increase in oligodendrocytes upon progression and that they coordinate spatial motifs with proneural tumor cells. This multiomic atlas of longitudinal pHGG captures features of therapy response and provides a scalable reference for the study of pediatric brain tumors.",
+        "Year of Publication": "2026",
+        "Location of Publication": "Cell Reports Medicine",
+        "Publication Abstract": "Pediatric high-grade glioma (pHGG) is an incurable central nervous system malignancy that is a leading cause of pediatric cancer death. While pHGG shares many similarities with adult glioma, it comprises distinct disease entities. In this study, we longitudinally profile a molecularly diverse cohort of 16 pHGG patients through single-nucleus RNA and ATAC sequencing, whole-genome sequencing, and CODEX spatial proteomics to capture the evolution of neoplastic and microenvironmental features during disease progression and treatment. We define a set of core pHGG neoplastic cell states and observe differential tumor-myeloid interactions between malignant cell phenotypes. We find that essential neuromodulators and the interferon response are upregulated post-therapy, implicating them as malignant cell-intrinsic targets. We observe an increase in oligodendrocytes upon progression and that they coordinate spatial motifs with proneural tumor cells. This multiomic atlas of longitudinal pHGG captures features of therapy response and provides a scalable reference for the study of pediatric brain tumors.",
         "License": "CC-BY-NC-ND-4.0",
-        "PMID": "https://pubmed.ncbi.nlm.nih.gov/38496580/",
-        "Publication contains HTAN ID": "No",
+        "PMID": "https://pubmed.ncbi.nlm.nih.gov/42030938/",
+        "Publication contains HTAN ID": "Yes",
         "Data Type": "scRNA-seq, scATAC-seq, CODEX, Bulk DNA",
         "Tool": "No",
-        "Supporting Link": "",
-        "Supporting Link Description": "",
+        "Supporting Link": "https://cellxgene.cziscience.com/collections/9ceda3d2-a55e-4b82-a91a-0190d947459a,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE292623,https://github.com/tanlabcode/pHGG_Atlas",
+        "Supporting Link Description": "snRNA-seq data objects can be explored interactively on CELLxGENE^^^Bulk RNA-seq data from the in vitro experiments^^^Software and source code created for this study are publicly available on GitHub",
         "Publication-associated HTAN Parent Data File ID": [
             "HTA4_2001_26668",
             "HTA4_2001_26670",
@@ -8749,13 +8749,14 @@
             "HTA4_2013_136686"
         ],
         "UCSC Cell Browser Link": "https://cells.ucsc.edu/?ds=htan-chop+sussman",
-        "Eutils Date": "2024 Mar 8",
+        "Eutils Date": "2026 Apr 23",
         "Eutils Title": "A longitudinal single-cell and spatial multiomic atlas of pediatric high-grade glioma.",
-        "Eutils Journal": "bioRxiv : the preprint server for biology",
-        "Eutils Sort Date": "2024/03/08 00:00",
-        "Eutils Authors": "Sussman JH, Oldridge DA, Yu W, Chen CH, Zellmer AM, Rong J, Parvaresh-Rizi A, Thadi A, Xu J, Bandyopadhyay S, Sun Y, Wu D, Emerson Hunter C, Brosius S, Ahn KJ, Baxter AE, Koptyra MP, Vanguri RS, McGrory S, Resnick AC, Storm PB, Amankulor NM, Santi M, Viaene AN, Zhang N, Raedt T, Cole K, Tan K",
-        "Eutils DOI": "10.1101/2024.03.06.583588",
-        "Cited In Number": 0
+        "Eutils Journal": "Cell Reports Medicine",
+        "Eutils Sort Date": "2026/04/23 00:00",
+        "Eutils Authors": "Sussman JH, Oldridge DA, Yu W, Chen CH, Zellmer AM, Rong J, Parvaresh-Rizi A, Thadi A, Yang A, Tumulty JS, Xiong B, Wu DW, Sun Y, Bandyopadhyay S, Xu J, Brosius S, Barkardottir UY, Seka I, Ahn KJ, Elghawy O, Baxter AE, Koptyra MP, Vanguri RS, McGrory S, Storm PB, Amankulor NM, Santi M, Viaene AN, Zhang N, De Raedt T, Cole K, Tan K",
+        "Eutils DOI": "10.1016/j.xcrm.2026.102766",
+        "Cited In Number": 1,
+        "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=42030938"
     },
     {
         "Component": "PublicationManifest",
@@ -11406,7 +11407,7 @@
         "Eutils Sort Date": "2025/05/01 00:00",
         "Eutils Authors": "Yu W, Biyik-Sit R, Uzun Y, Chen CH, Thadi A, Sussman JH, Pang M, Wu CY, Grossmann LD, Gao P, Wu DW, Yousey A, Zhang M, Turn CS, Zhang Z, Bandyopadhyay S, Huang J, Patel T, Chen C, Martinez D, Surrey LF, Hogarty MD, Bernt K, Zhang NR, Maris JM, Tan K",
         "Eutils DOI": "10.1038/s41588-025-02158-6",
-        "Cited In Number": 10,
+        "Cited In Number": 12,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=40229600"
     },
     {
@@ -13011,7 +13012,7 @@
         "Eutils Sort Date": "2022/01/20 00:00",
         "Eutils Authors": "Risom T, Glass DR, Averbukh I, Liu CC, Baranski A, Kagel A, McCaffrey EF, Greenwald NF, Rivero-Guti\u00e9rrez B, Strand SH, Varma S, Kong A, Keren L, Srivastava S, Zhu C, Khair Z, Veis DJ, Deschryver K, Vennam S, Maley C, Hwang ES, Marks JR, Bendall SC, Colditz GA, West RB, Angelo M",
         "Eutils DOI": "10.1016/j.cell.2021.12.023",
-        "Cited In Number": 200,
+        "Cited In Number": 205,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35063072"
     },
     {
@@ -14596,7 +14597,7 @@
         "Eutils Sort Date": "2022/12/12 00:00",
         "Eutils Authors": "Strand SH, Rivero-Guti\u00e9rrez B, Houlahan KE, Seoane JA, King LM, Risom T, Simpson LA, Vennam S, Khan A, Cisneros L, Hardman T, Harmon B, Couch F, Gallagher K, Kilgore M, Wei S, DeMichele A, King T, McAuliffe PF, Nangia J, Lee J, Tseng J, Storniolo AM, Thompson AM, Gupta GP, Burns R, Veis DJ, DeSchryver K, Zhu C, Matusiak M, Wang J, Zhu SX, Tappenden J, Ding DY, Zhang D, Luo J, Jiang S, Varma S, Anderson L, Straub C, Srivastava S, Curtis C, Tibshirani R, Angelo RM, Hall A, Owzar K, Polyak K, Maley C, Marks JR, Colditz GA, Hwang ES, West RB",
         "Eutils DOI": "10.1016/j.ccell.2022.10.021",
-        "Cited In Number": 45,
+        "Cited In Number": 46,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36400020"
     },
     {
@@ -16071,7 +16072,7 @@
         "Eutils Sort Date": "2024/09/02 00:00",
         "Eutils Authors": "Strand SH, Houlahan KE, Branch V, King LM, Lynch T, Rivero-Guiti\u00e9rrez B, Harmon B, Couch F, Gallagher K, Kilgore M, Wei S, DeMichele A, King T, McAuliffe P, Curtis C, Owzar K, Marks JR, Colditz GA, Hwang ES, West RB",
         "Eutils DOI": "10.1186/s13058-024-01885-8",
-        "Cited In Number": 3,
+        "Cited In Number": 4,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39223670"
     },
     {
@@ -17088,7 +17089,7 @@
         "Eutils Sort Date": "2023/01/19 00:00",
         "Eutils Authors": "Lin JR, Wang S, Coy S, Chen YA, Yapp C, Tyler M, Nariya MK, Heiser CN, Lau KS, Santagata S, Sorger PK",
         "Eutils DOI": "10.1016/j.cell.2022.12.028",
-        "Cited In Number": 158,
+        "Cited In Number": 159,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36669472"
     },
     {
@@ -17880,7 +17881,7 @@
         "Eutils Sort Date": "2022/06/02 00:00",
         "Eutils Authors": "Nirmal AJ, Maliga Z, Vallius T, Quattrochi B, Chen AA, Jacobson CA, Pelletier RJ, Yapp C, Arias-Camison R, Chen YA, Lian CG, Murphy GF, Santagata S, Sorger PK",
         "Eutils DOI": "10.1158/2159-8290.CD-21-1357",
-        "Cited In Number": 145,
+        "Cited In Number": 146,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35404441"
     },
     {
@@ -51359,7 +51360,7 @@
         "Eutils Sort Date": "2021/09/02 00:00",
         "Eutils Authors": "Pelka K, Hofree M, Chen JH, Sarkizova S, Pirl JD, Jorgji V, Bejnood A, Dionne D, Ge WH, Xu KH, Chao SX, Zollinger DR, Lieb DJ, Reeves JW, Fuhrman CA, Hoang ML, Delorey T, Nguyen LT, Waldman J, Klapholz M, Wakiro I, Cohen O, Albers J, Smillie CS, Cuoco MS, Wu J, Su MJ, Yeung J, Vijaykumar B, Magnuson AM, Asinovski N, Moll T, Goder-Reiser MN, Applebaum AS, Brais LK, DelloStritto LK, Denning SL, Phillips ST, Hill EK, Meehan JK, Frederick DT, Sharova T, Kanodia A, Todres EZ, Jan\u00e9-Valbuena J, Biton M, Izar B, Lambden CD, Clancy TE, Bleday R, Melnitchouk N, Irani J, Kunitake H, Berger DL, Srivastava A, Hornick JL, Ogino S, Rotem A, Vigneau S, Johnson BE, Corcoran RB, Sharpe AH, Kuchroo VK, Ng K, Giannakis M, Nieman LT, Boland GM, Aguirre AJ, Anderson AC, Rozenblatt-Rosen O, Regev A, Hacohen N",
         "Eutils DOI": "10.1016/j.cell.2021.08.003",
-        "Cited In Number": 429,
+        "Cited In Number": 439,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34450029"
     },
     {
@@ -52929,7 +52930,7 @@
         "Eutils Sort Date": "2021/11/08 00:00",
         "Eutils Authors": "Chan JM, Quintanal-Villalonga \u00c1, Gao VR, Xie Y, Allaj V, Chaudhary O, Masilionis I, Egger J, Chow A, Walle T, Mattar M, Yarlagadda DVK, Wang JL, Uddin F, Offin M, Ciampricotti M, Qeriqi B, Bahr A, de Stanchina E, Bhanot UK, Lai WV, Bott MJ, Jones DR, Ruiz A, Baine MK, Li Y, Rekhtman N, Poirier JT, Nawy T, Sen T, Mazutis L, Hollmann TJ, Pe'er D, Rudin CM",
         "Eutils DOI": "10.1016/j.ccell.2021.09.008",
-        "Cited In Number": 255,
+        "Cited In Number": 262,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34653364"
     },
     {
@@ -53516,29 +53517,29 @@
         "Eutils Sort Date": "2023/06/01 00:00",
         "Eutils Authors": "Glasner A, Rose SA, Sharma R, Gudjonson H, Chu T, Green JA, Rampersaud S, Valdez IK, Andretta ES, Dhillon BS, Schizas M, Dikiy S, Mendoza A, Hu W, Wang ZM, Chaudhary O, Xu T, Mazutis L, Rizzuto G, Quintanal-Villalonga A, Manoj P, de Stanchina E, Rudin CM, Pe'er D, Rudensky AY",
         "Eutils DOI": "10.1038/s41590-023-01504-2",
-        "Cited In Number": 34,
+        "Cited In Number": 35,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37127830"
     },
     {
         "Component": "PublicationManifest",
         "HTAN Grant ID": "CA233284",
         "HTAN Center ID": "HTA8",
-        "Publication Content Type": "Preprint",
-        "DOI": "https://doi.org/10.1101/2025.02.28.640922",
-        "Title": "Transcriptomic plasticity is a hallmark of metastatic pancreatic cancer",
-        "Authors": "Alejandro Jim\u00e9nez-S\u00e1nchez, Sitara Persad, Akimasa Hayashi, Shigeaki Umeda, Roshan Sharma, Yubin Xie, Arnav Mehta, Wungki Park, Ignas Masilionis, Tinyi Chu, Feiyang Zhu, Jungeui Hong, Ronan Chaligne, Eileen M. O\u2019Reilly, Linas Mazutis, Tal Nawy, Itsik Pe\u2019er, Christine A. Iacobuzio-Donahue, Dana Pe\u2019er",
+        "Publication Content Type": "Published manuscript",
+        "DOI": "https://doi.org/10.1158/0008-5472.CAN-25-1117",
+        "Title": "Transcriptomic Plasticity Is a Hallmark of Metastatic Pancreatic Cancer",
+        "Authors": "Jim\u00e9nez-S\u00e1nchez A, Persad S, Hayashi A, Umeda S, Sharma R, Xie Y, Mehta A, Park W, Masilionis I, Chu T, Zhu F, Hong J, Chaligne R, O'Reilly EM, Mazutis L, Nawy T, Pe'er I, Iacobuzio-Donahue CA, Pe'er D",
         "Corresponding Author": "Dana Pe'er",
         "Corresponding Author ORCID": "https://orcid.org/0000-0002-9259-8817",
-        "Year of Publication": "2025",
-        "Location of Publication": "bioRXiv",
+        "Year of Publication": "2026",
+        "Location of Publication": "Cancer Research",
         "Publication Abstract": "Metastasis is the leading cause of cancer deaths; nonetheless, how tumor cells adapt to vastly different organ contexts is largely unknown. To investigate this question, we generated a transcriptomic atlas of primary tumor and diverse metastatic samples from a patient with pancreatic ductal adenocarcinoma who underwent rapid autopsy. Unsupervised archetype analysis identified both shared and site-specific gene programs, including lipid metabolism and gastrointestinal programs prevalent in peritoneum and stomach wall lesions, respectively. We developed a probabilistic approach for inferring clonal phylogeny from single-cell and matched whole-exome data. Distantly related genetic clones in the peritoneum express the lipid metabolism program, likely due to signaling by the adipocyte-rich peritoneum environment, and cells in most clones express multiple programs, suggesting that transcriptomic plasticity is a prevalent feature of metastatic cells. These deeply annotated analyses using a patient-centric platform provide a model for investigating metastatic mechanisms and plasticity in advanced cancer.",
         "License": "",
-        "PMID": "",
+        "PMID": "https://pubmed.ncbi.nlm.nih.gov/41379552/",
         "Publication contains HTAN ID": "",
         "Data Type": "",
         "Tool": "",
-        "Supporting Link": "",
-        "Supporting Link Description": "",
+        "Supporting Link": "https://ega-archive.org/datasets/EGAD00001011109,https://cellxgene.cziscience.com/gene-expression,https://github.com/dpeerlab/integrateCNV,https://github.com/dpeerlab/picasso,https://github.com/dpeerlab/PLASTRO",
+        "Supporting Link Description": "WES data (BAM files) generated in this study are publicly available through the European Genome-phenome Archive (EGA) as part of the EGAD00001011109 dataset (multiregion sequencing of patients with PDAC)^^^The data analyzed in Fig. 4C and Supplementary Tables S7 and S8 in this study were obtained from the CZ CELLxGENE Discover database^^^IntegrateCNV algorithm, along with documentation, notebooks, and tutorials^^^PICASSO algorithm, as well as documentation and tutorials for inferring CNA phylogenies and visualizing transcriptional and phenotypic information alongside the tree^^^Code for computing the PLASTRO metric, as well as documentation and tutorials",
         "Publication-associated HTAN Parent Data File ID": [
             "HTA8_5001_1",
             "HTA8_5001_001101",
@@ -53597,6 +53598,12 @@
             "HTA8_5002_012101",
             "HTA8_5002_012201"
         ],
+        "Eutils Date": "2026 Apr 2",
+        "Eutils Title": "Transcriptomic Plasticity Is a Hallmark of Metastatic Pancreatic Cancer.",
+        "Eutils Journal": "Cancer research",
+        "Eutils Sort Date": "2026/04/02 00:00",
+        "Eutils Authors": "Jim\u00e9nez-S\u00e1nchez A, Persad S, Hayashi A, Umeda S, Sharma R, Xie Y, Mehta A, Park W, Masilionis I, Chu T, Zhu F, Hong J, Chaligne R, O'Reilly EM, Mazutis L, Nawy T, Pe'er I, Iacobuzio-Donahue CA, Pe'er D",
+        "Eutils DOI": "10.1158/0008-5472.CAN-25-1117",
         "Cited In Number": 0
     },
     {
@@ -56813,7 +56820,7 @@
         "Eutils Sort Date": "2025/01/01 00:00",
         "Eutils Authors": "Moorman A, Benitez EK, Cambulli F, Jiang Q, Mahmoud A, Lumish M, Hartner S, Balkaran S, Bermeo J, Asawa S, Firat C, Saxena A, Wu F, Luthra A, Burdziak C, Xie Y, Sgambati V, Luckett K, Li Y, Yi Z, Masilionis I, Soares K, Pappou E, Yaeger R, Kingham TP, Jarnagin W, Paty PB, Weiser MR, Mazutis L, D'Angelica M, Shia J, Garcia-Aguilar J, Nawy T, Hollmann TJ, Chalign\u00e9 R, Sanchez-Vega F, Sharma R, Pe'er D, Ganesh K",
         "Eutils DOI": "10.1038/s41586-024-08150-0",
-        "Cited In Number": 59,
+        "Cited In Number": 66,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478232"
     },
     {
@@ -86185,7 +86192,7 @@
         ],
         "Eutils Date": "2022 Feb 15",
         "Eutils Title": "An omic and multidimensional spatial atlas from serial biopsies of an evolving metastatic breast cancer.",
-        "Eutils Journal": "Cell reports. Medicine",
+        "Eutils Journal": "Cell Reports Medicine",
         "Eutils Sort Date": "2022/02/15 00:00",
         "Eutils Authors": "Johnson BE, Creason AL, Stommel JM, Keck JM, Parmar S, Betts CB, Blucher A, Boniface C, Bucher E, Burlingame E, Camp T, Chin K, Eng J, Estabrook J, Feiler HS, Heskett MB, Hu Z, Kolodzie A, Kong BL, Labrie M, Lee J, Leyshock P, Mitri S, Patterson J, Riesterer JL, Sivagnanam S, Somers J, Sudar D, Thibault G, Weeder BR, Zheng C, Nan X, Thompson RF, Heiser LM, Spellman PT, Thomas G, Demir E, Chang YH, Coussens LM, Guimaraes AR, Corless C, Goecks J, Bergan R, Mitri Z, Mills GB, Gray JW",
         "Eutils DOI": "10.1016/j.xcrm.2022.100525",
@@ -89818,7 +89825,7 @@
         "Eutils Sort Date": "2022/07/01 00:00",
         "Eutils Authors": "Becker WR, Nevins SA, Chen DC, Chiu R, Horning AM, Guha TK, Laquindanum R, Mills M, Chaib H, Ladabaum U, Longacre T, Shen J, Esplin ED, Kundaje A, Ford JM, Curtis C, Snyder MP, Greenleaf WJ",
         "Eutils DOI": "10.1038/s41588-022-01088-x",
-        "Cited In Number": 160,
+        "Cited In Number": 164,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35726067"
     },
     {
@@ -91431,7 +91438,7 @@
         "Eutils Sort Date": "2024/11/01 00:00",
         "Eutils Authors": "Esplin ED, Hanson C, Wu S, Horning AM, Barapour N, Nevins SA, Jiang L, Contrepois K, Lee H, Guha TK, Hu Z, Laquindanum R, Mills MA, Chaib H, Chiu R, Jian R, Chan J, Ellenberger M, Becker WR, Bahmani B, Khan A, Michael B, Weimer AK, Esplin DG, Shen J, Lancaster S, Monte E, Karathanos TV, Ladabaum U, Longacre TA, Kundaje A, Curtis C, Greenleaf WJ, Ford JM, Snyder MP",
         "Eutils DOI": "10.1038/s43018-024-00831-z",
-        "Cited In Number": 8,
+        "Cited In Number": 9,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478120"
     },
     {
@@ -99689,7 +99696,7 @@
         "Eutils Sort Date": "2021/12/22 00:00",
         "Eutils Authors": "Chen B, Scurrah CR, McKinley ET, Simmons AJ, Ramirez-Solano MA, Zhu X, Markham NO, Heiser CN, Vega PN, Rolong A, Kim H, Sheng Q, Drewes JL, Zhou Y, Southard-Smith AN, Xu Y, Ro J, Jones AL, Revetta F, Berry LD, Niitsu H, Islam M, Pelka K, Hofree M, Chen JH, Sarkizova S, Ng K, Giannakis M, Boland GM, Aguirre AJ, Anderson AC, Rozenblatt-Rosen O, Regev A, Hacohen N, Kawasaki K, Sato T, Goettel JA, Grady WM, Zheng W, Washington MK, Cai Q, Sears CL, Goldenring JR, Franklin JL, Su T, Huh WJ, Vandekar S, Roland JT, Liu Q, Coffey RJ, Shrubsole MJ, Lau KS",
         "Eutils DOI": "10.1016/j.cell.2021.11.031",
-        "Cited In Number": 185,
+        "Cited In Number": 187,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=34910928"
     },
     {
@@ -101186,7 +101193,7 @@
         "Eutils Sort Date": "2023/12/07 00:00",
         "Eutils Authors": "Heiser CN, Simmons AJ, Revetta F, McKinley ET, Ramirez-Solano MA, Wang J, Kaur H, Shao J, Ayers GD, Wang Y, Glass SE, Tasneem N, Chen Z, Qin Y, Kim W, Rolong A, Chen B, Vega PN, Drewes JL, Markham NO, Saleh N, Nikolos F, Vandekar S, Jones AL, Washington MK, Roland JT, Chan KS, Sch\u00fcrpf T, Sears CL, Liu Q, Shrubsole MJ, Coffey RJ, Lau KS",
         "Eutils DOI": "10.1016/j.cell.2023.11.006",
-        "Cited In Number": 49,
+        "Cited In Number": 53,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=38065082"
     },
     {
@@ -107336,7 +107343,7 @@
         "Eutils Sort Date": "2024/11/01 00:00",
         "Eutils Authors": "Iglesia MD, Jayasinghe RG, Chen S, Terekhanova NV, Herndon JM, Storrs E, Karpova A, Zhou DC, Naser Al Deen N, Shinkle AT, Lu RJ, Caravan W, Houston A, Zhao Y, Sato K, Lal P, Street C, Martins Rodrigues F, Southard-Smith AN, Targino da Costa ALN, Zhu H, Mo CK, Crowson L, Fulton RS, Wyczalkowski MA, Fronick CC, Fulton LA, Sun H, Davies SR, Appelbaum EL, Chasnoff SE, Carmody M, Brooks C, Liu R, Wendl MC, Oh C, Bender D, Cruchaga C, Harari O, Bredemeyer A, Lavine K, Bose R, Margenthaler J, Held JM, Achilefu S, Ademuyiwa F, Aft R, Ma C, Colditz GA, Ju T, Oh ST, Fitzpatrick J, Hwang ES, Shoghi KI, Chheda MG, Veis DJ, Chen F, Fields RC, Gillanders WE, Ding L",
         "Eutils DOI": "10.1038/s43018-024-00773-6",
-        "Cited In Number": 8,
+        "Cited In Number": 9,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478117"
     },
     {
@@ -109313,7 +109320,7 @@
         "Eutils Sort Date": "2024/10/01 00:00",
         "Eutils Authors": "Mo CK, Liu J, Chen S, Storrs E, Targino da Costa ALN, Houston A, Wendl MC, Jayasinghe RG, Iglesia MD, Ma C, Herndon JM, Southard-Smith AN, Liu X, Mudd J, Karpova A, Shinkle A, Goedegebuure SP, Abdelzaher ATMA, Bo P, Fulghum L, Livingston S, Balaban M, Hill A, Ippolito JE, Thorsson V, Held JM, Hagemann IS, Kim EH, Bayguinov PO, Kim AH, Mullen MM, Shoghi KI, Ju T, Reimers MA, Weimholt C, Kang LI, Puram SV, Veis DJ, Pachynski R, Fuh KC, Chheda MG, Gillanders WE, Fields RC, Raphael BJ, Chen F, Ding L",
         "Eutils DOI": "10.1038/s41586-024-08087-4",
-        "Cited In Number": 62,
+        "Cited In Number": 63,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=39478210"
     },
     {
@@ -112579,7 +112586,7 @@
         "Eutils Sort Date": "2023/11/01 00:00",
         "Eutils Authors": "Terekhanova NV, Karpova A, Liang WW, Strzalkowski A, Chen S, Li Y, Southard-Smith AN, Iglesia MD, Wendl MC, Jayasinghe RG, Liu J, Song Y, Cao S, Houston A, Liu X, Wyczalkowski MA, Lu RJ, Caravan W, Shinkle A, Naser Al Deen N, Herndon JM, Mudd J, Ma C, Sarkar H, Sato K, Ibrahim OM, Mo CK, Chasnoff SE, Porta-Pardo E, Held JM, Pachynski R, Schwarz JK, Gillanders WE, Kim AH, Vij R, DiPersio JF, Puram SV, Chheda MG, Fuh KC, DeNardo DG, Fields RC, Chen F, Raphael BJ, Ding L",
         "Eutils DOI": "10.1038/s41586-023-06682-5",
-        "Cited In Number": 102,
+        "Cited In Number": 109,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=37914932"
     },
     {
@@ -112647,7 +112654,7 @@
         "Eutils Sort Date": "2023/03/27 00:00",
         "Eutils Authors": "Wu Y, Terekhanova NV, Caravan W, Naser Al Deen N, Lal P, Chen S, Mo CK, Cao S, Li Y, Karpova A, Liu R, Zhao Y, Shinkle A, Strunilin I, Weimholt C, Sato K, Yao L, Serasanambati M, Yang X, Wyczalkowski M, Zhu H, Zhou DC, Jayasinghe RG, Mendez D, Wendl MC, Clark D, Newton C, Ruan Y, Reimers MA, Pachynski RK, Kinsinger C, Jewell S, Chan DW, Zhang H, Chaudhuri AA, Chheda MG, Humphreys BD, Mesri M, Rodriguez H, Hsieh JJ, Ding L, Chen F",
         "Eutils DOI": "10.1038/s41467-023-37211-7",
-        "Cited In Number": 31,
+        "Cited In Number": 33,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=36973268"
     },
     {
@@ -113879,7 +113886,7 @@
         "Eutils Sort Date": "2022/09/01 00:00",
         "Eutils Authors": "Cui Zhou D, Jayasinghe RG, Chen S, Herndon JM, Iglesia MD, Navale P, Wendl MC, Caravan W, Sato K, Storrs E, Mo CK, Liu J, Southard-Smith AN, Wu Y, Naser Al Deen N, Baer JM, Fulton RS, Wyczalkowski MA, Liu R, Fronick CC, Fulton LA, Shinkle A, Thammavong L, Zhu H, Sun H, Wang LB, Li Y, Zuo C, McMichael JF, Davies SR, Appelbaum EL, Robbins KJ, Chasnoff SE, Yang X, Reeb AN, Oh C, Serasanambati M, Lal P, Varghese R, Mashl JR, Ponce J, Terekhanova NV, Yao L, Wang F, Chen L, Schnaubelt M, Lu RJ, Schwarz JK, Puram SV, Kim AH, Song SK, Shoghi KI, Lau KS, Ju T, Chen K, Chatterjee D, Hawkins WG, Zhang H, Achilefu S, Chheda MG, Oh ST, Gillanders WE, Chen F, DeNardo DG, Fields RC, Ding L",
         "Eutils DOI": "10.1038/s41588-022-01157-1",
-        "Cited In Number": 131,
+        "Cited In Number": 134,
         "Cited In Link": "https://pubmed.ncbi.nlm.nih.gov/?linkname=pubmed_pubmed_citedin&from_uid=35995947"
     }
 ]
