@@ -190,6 +190,8 @@ jobs:
 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          # Stage all tracked modified files: updateData can touch syn_data.json.gz,
+          # processed_syn_data.json.gz, htan-imaging-assets.json, syn_metadata.json, etc.
           git add -u
           if [ "${{ needs.analyze-synapse-json.outputs.syn_data_changed }}" = "true" ]; then
             git commit -m "chore: update processed synapse JSON after syn_data.json.gz update"
