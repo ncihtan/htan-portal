@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'data/publications_manifest_all.json'
+      - 'public/syn_data.json.gz'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.head_ref || github.ref }}
@@ -175,3 +176,15 @@ jobs:
               repo: context.repo.repo,
               body: '✅ Synapse JSON files have been updated and committed to this PR.'
             })
+
+  update-clickhouse-db:
+    needs: commit-synapse-json
+    if: needs.commit-synapse-json.result == 'success'
+    uses: ./.github/workflows/update-clickhouse-db.yml
+    with:
+      pr_number: ${{ github.event.pull_request.number }}
+      head_ref: ${{ github.head_ref }}
+    secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
