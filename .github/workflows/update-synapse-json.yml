@@ -47,6 +47,10 @@ jobs:
             echo "syn_data_changed=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Create gsed symlink (ubuntu-latest ships GNU sed as sed, not gsed)
+        if: steps.changed-files.outputs.syn_data_changed == 'true'
+        run: sudo ln -sf /usr/bin/sed /usr/local/bin/gsed
+
       - name: Run update script
         run: |
           if [ "${{ steps.changed-files.outputs.syn_data_changed }}" = "true" ]; then
@@ -165,6 +169,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Create gsed symlink (ubuntu-latest ships GNU sed as sed, not gsed)
+        if: needs.analyze-synapse-json.outputs.syn_data_changed == 'true'
+        run: sudo ln -sf /usr/bin/sed /usr/local/bin/gsed
+
       - name: Run update script
         run: |
           if [ "${{ needs.analyze-synapse-json.outputs.syn_data_changed }}" = "true" ]; then
@@ -182,7 +190,7 @@ jobs:
 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add public/processed_syn_data.json.gz
+          git add -u
           if [ "${{ needs.analyze-synapse-json.outputs.syn_data_changed }}" = "true" ]; then
             git commit -m "chore: update processed synapse JSON after syn_data.json.gz update"
           else

@@ -80,10 +80,12 @@ jobs:
           fi
 
       - name: Commit and push DEFAULT_CLICKHOUSE_DB update
+        id: commit-clickhouse
         if: steps.branch-permissions.outputs.can_push == 'true'
         run: |
           if git diff --quiet packages/data-portal-commons/src/lib/clickhouseHelpers.ts; then
             echo "No changes to commit"
+            echo "committed=false" >> $GITHUB_OUTPUT
             exit 0
           fi
           git config --local user.email "action@github.com"
@@ -91,9 +93,10 @@ jobs:
           git add packages/data-portal-commons/src/lib/clickhouseHelpers.ts
           git commit -m "chore: update DEFAULT_CLICKHOUSE_DB to ${{ steps.db-name.outputs.db_name }}"
           git push
+          echo "committed=true" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
-        if: github.event_name == 'workflow_call'
+        if: github.event_name == 'workflow_call' && steps.commit-clickhouse.outputs.committed == 'true'
         uses: actions/github-script@v7
         with:
           script: |
