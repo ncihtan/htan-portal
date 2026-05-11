@@ -10,6 +10,10 @@ on:
       head_ref:
         required: true
         type: string
+      can_push:
+        required: false
+        type: string
+        default: 'false'
 
 concurrency:
   group: update-clickhouse-db-${{ inputs.head_ref || github.ref_name }}
@@ -78,7 +82,7 @@ jobs:
         id: branch-permissions
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] || \
-             [ "${{ github.event_name }}" = "workflow_call" ] || \
+             [ "${{ inputs.can_push }}" = "true" ] || \
              [ "${{ github.event.pull_request.head.repo.full_name }}" = "${{ github.repository }}" ]; then
             echo "can_push=true" >> $GITHUB_OUTPUT
           else
