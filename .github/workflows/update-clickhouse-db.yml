@@ -45,11 +45,17 @@ jobs:
       - name: Build packages
         run: yarn buildPackages
 
-      - name: Generate timestamped DB name
+      - name: Generate DB name
         id: db-name
         run: |
-          TIMESTAMP=$(date -u +'%Y_%m_%d_%H%M')
-          echo "db_name=htan_${TIMESTAMP}" >> $GITHUB_OUTPUT
+          YEAR=$(date -u +'%Y')
+          PR_NUMBER="${{ inputs.pr_number }}"
+          if [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+            echo "db_name=htan_${YEAR}_${PR_NUMBER}" >> $GITHUB_OUTPUT
+          else
+            TIMESTAMP=$(date -u +'%m%d_%H%M')
+            echo "db_name=htan_${YEAR}_${TIMESTAMP}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Build ClickHouse DB
         env:
@@ -95,76 +101,13 @@ jobs:
             echo "committed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Drop old PR databases
-        id: cleanup-dbs
-        if: steps.commit-clickhouse.outputs.committed == 'true'
-        env:
-          CLICKHOUSE_HOST: ${{ vars.CLICKHOUSE_HOST }}
-          CLICKHOUSE_PASSWORD: ${{ secrets.CLICKHOUSE_PASSWORD }}
-          CLICKHOUSE_ADMIN_USER: ${{ vars.CLICKHOUSE_ADMIN_USER || 'htan_admin' }}
-        run: |
-          NEW_DB="${{ steps.db-name.outputs.db_name }}"
-          DROPPED=""
-
-          # Shared helper: extract DEFAULT_CLICKHOUSE_DB value from file content on stdin
-          get_db_name() {
-            grep "export const DEFAULT_CLICKHOUSE_DB = '" | \
-              sed "s/.*DEFAULT_CLICKHOUSE_DB = '\([^']*\)'.*/\1/"
-          }
-
-          # Get the DB currently in use by the main branch (protected from deletion)
-          PROD_DB=$(git show origin/main:packages/data-portal-commons/src/lib/clickhouseHelpers.ts 2>/dev/null | get_db_name)
-
-          if [ -z "$PROD_DB" ]; then
-            echo "Could not determine production DB; skipping cleanup"
-            echo "dropped_dbs=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "Production DB (main): ${PROD_DB}"
-          echo "New DB: ${NEW_DB}"
-
-          # Collect all DB names committed to clickhouseHelpers.ts on this branch (not on main)
-          PREV_DBS=$(git log --format="%H" "origin/main..HEAD" -- \
-            packages/data-portal-commons/src/lib/clickhouseHelpers.ts | \
-            while read -r commit; do
-              git show "${commit}:packages/data-portal-commons/src/lib/clickhouseHelpers.ts" 2>/dev/null | get_db_name
-            done | sort -u)
-
-          for OLD_DB in $PREV_DBS; do
-            # Validate DB name format (htan_YYYY_MM_DD_HHMM) before using in SQL
-            if ! [[ "$OLD_DB" =~ ^htan_[0-9]{4}_[0-9]{2}_[0-9]{2}_[0-9]{4}$ ]]; then
-              echo "Skipping '${OLD_DB}': does not match expected format"
-              continue
-            fi
-            if [ "$OLD_DB" != "$NEW_DB" ] && [ "$OLD_DB" != "$PROD_DB" ]; then
-              echo "Dropping old PR DB: ${OLD_DB}"
-              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-                -u "${CLICKHOUSE_ADMIN_USER}:${CLICKHOUSE_PASSWORD}" \
-                "${CLICKHOUSE_HOST}/?query=DROP+DATABASE+IF+EXISTS+${OLD_DB}")
-              if [ "$HTTP_CODE" = "200" ]; then
-                echo "Successfully dropped ${OLD_DB}"
-                DROPPED="${DROPPED:+${DROPPED},}${OLD_DB}"
-              else
-                echo "WARNING: Failed to drop ${OLD_DB} (HTTP ${HTTP_CODE})"
-              fi
-            fi
-          done
-
-          echo "dropped_dbs=${DROPPED}" >> $GITHUB_OUTPUT
-
       - name: Comment on PR
         if: github.event_name == 'workflow_call' && steps.commit-clickhouse.outputs.committed == 'true'
         uses: actions/github-script@v7
         with:
           script: |
             const dbName = '${{ steps.db-name.outputs.db_name }}';
-            const droppedDbs = '${{ steps.cleanup-dbs.outputs.dropped_dbs }}';
-            let body = `✅ ClickHouse database \`${dbName}\` has been created and populated. \`DEFAULT_CLICKHOUSE_DB\` has been updated in \`clickhouseHelpers.ts\` and committed to this PR.`;
-            if (droppedDbs) {
-              const dbs = droppedDbs.split(',').map(d => `\`${d}\``).join(', ');
-              body += `\n\nPrevious PR database(s) ${dbs} have been dropped.`;
-            }
+            const body = `✅ ClickHouse database \`${dbName}\` has been created and populated. \`DEFAULT_CLICKHOUSE_DB\` has been updated in \`clickhouseHelpers.ts\` and committed to this PR.`;
             github.rest.issues.createComment({
               issue_number: ${{ inputs.pr_number }},
               owner: context.repo.owner,
