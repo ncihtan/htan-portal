@@ -1,4 +1,14 @@
 import { useCallback, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import { parseSelectedFiltersFromUrl } from '@htan/data-portal-filter';
+
+import type { PageContext } from '../../lib/chat/systemPrompt';
+
+export interface ProposedView {
+    tab: string;
+    filters: { group: string; value: string }[];
+    label: string;
+}
 
 export interface ChatTurn {
     turnId: string;
@@ -15,6 +25,25 @@ export interface ChatTurn {
     rateLimited?: boolean;
     unavailable?: boolean;
     feedback?: 'up' | 'down';
+    proposedView?: ProposedView;
+}
+
+export function useCurrentPageContext(): PageContext {
+    const router = useRouter();
+    const filtersParam = router.query.selectedFilters;
+    const filters =
+        parseSelectedFiltersFromUrl(
+            typeof filtersParam === 'string' ? filtersParam : undefined
+        ) ?? [];
+    const tab =
+        typeof router.query.tab === 'string'
+            ? router.query.tab.toLowerCase()
+            : undefined;
+    return {
+        route: router.pathname,
+        tab,
+        filters: filters.map((f) => ({ group: f.group, value: f.value })),
+    };
 }
 
 function genTurnId(): string {
@@ -34,6 +63,11 @@ function applyEvent(turn: ChatTurn, event: ParsedEvent): ChatTurn {
             return { ...turn, text: turn.text + String(event.value ?? '') };
         case 'tool-call':
             return { ...turn, sql: String(event.sql ?? '') };
+        case 'propose-view': {
+            const v = event.view as ProposedView | undefined;
+            if (!v) return turn;
+            return { ...turn, proposedView: v };
+        }
         case 'tool-result':
             if (event.ok) {
                 return {
@@ -71,6 +105,7 @@ export function useChatStream() {
     const [history, setHistory] = useState<ChatTurn[]>([]);
     const [pending, setPending] = useState(false);
     const abortRef = useRef<AbortController | null>(null);
+    const pageContext = useCurrentPageContext();
 
     const sendMessage = useCallback(
         async (text: string) => {
@@ -116,7 +151,11 @@ export function useChatStream() {
                 const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages, turnId }),
+                    body: JSON.stringify({
+                        messages,
+                        turnId,
+                        pageContext,
+                    }),
                     signal: controller.signal,
                 });
 
@@ -211,7 +250,7 @@ export function useChatStream() {
                 abortRef.current = null;
             }
         },
-        [history, pending]
+        [history, pending, pageContext]
     );
 
     const cancel = useCallback(() => {

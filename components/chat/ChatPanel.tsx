@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+import { useRouter } from 'next/router';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 
 import { useChatContext } from './ChatContext';
-import { useChatStream } from './useChatStream';
-import type { ChatTurn } from './useChatStream';
+import { useChatStream, useCurrentPageContext } from './useChatStream';
+import type { ChatTurn, ProposedView } from './useChatStream';
 import styles from './ChatPanel.module.scss';
 
 const EXAMPLE_QUESTIONS = [
@@ -32,6 +33,31 @@ function makeColumns(
         },
     }));
 }
+
+const ApplyToExploreButton: React.FunctionComponent<{
+    view: ProposedView;
+}> = ({ view }) => {
+    const router = useRouter();
+    const apply = () => {
+        router.push({
+            pathname: '/explore',
+            query: {
+                tab: view.tab,
+                selectedFilters: JSON.stringify(view.filters),
+            },
+        });
+    };
+    return (
+        <button
+            type="button"
+            className={styles.applyButton}
+            onClick={apply}
+            title="Open the Explore page with these filters applied"
+        >
+            → {view.label}
+        </button>
+    );
+};
 
 const AssistantTurn: React.FunctionComponent<{
     turn: ChatTurn;
@@ -95,6 +121,9 @@ const AssistantTurn: React.FunctionComponent<{
                             {turn.rowCount === 1 ? '' : 's'}
                         </div>
                     )}
+                    {turn.proposedView && (
+                        <ApplyToExploreButton view={turn.proposedView} />
+                    )}
                     {turn.fatalError && (
                         <div className={styles.errorBox}>{turn.fatalError}</div>
                     )}
@@ -148,6 +177,9 @@ const ChatPanel: React.FunctionComponent<{}> = () => {
         reset,
         setFeedback,
     } = useChatStream();
+    const pageContext = useCurrentPageContext();
+    const hasContext =
+        (pageContext.filters?.length ?? 0) > 0 || !!pageContext.tab;
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
 
@@ -233,6 +265,27 @@ const ChatPanel: React.FunctionComponent<{}> = () => {
                     AI-generated answers may be wrong. Verify the SQL and the
                     rows before citing.
                 </div>
+                {hasContext && (
+                    <div
+                        className={styles.contextBar}
+                        title="The assistant is aware of your current Explore tab and filters."
+                    >
+                        <span className={styles.contextLabel}>Context:</span>
+                        {pageContext.tab && (
+                            <span className={styles.chip}>
+                                tab: {pageContext.tab}
+                            </span>
+                        )}
+                        {pageContext.filters?.map((f, i) => (
+                            <span
+                                key={`${f.group}-${f.value}-${i}`}
+                                className={styles.chip}
+                            >
+                                {f.group}: {f.value}
+                            </span>
+                        ))}
+                    </div>
+                )}
                 <div className={styles.body} ref={bodyRef}>
                     {history.length === 0 ? (
                         <div className={styles.empty}>

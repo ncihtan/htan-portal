@@ -5,6 +5,74 @@
 // SQL guardrail behaviour is enforced separately in lib/chat/sqlGuard.ts; the prompt
 // teaches the model the same conventions so it produces valid SQL on the first try.
 
+export interface PageContext {
+    route?: string;
+    tab?: string;
+    filters?: Array<{ group: string; value: string }>;
+}
+
+// Maps the Explore-page tab the user has selected to the table they're
+// most likely asking about. Used as a hint to the model only — the model
+// is free to query other tables when the question demands it.
+const TAB_TO_TABLE_HINT: Record<string, string> = {
+    file: 'files',
+    atlas: 'atlases',
+    biospecimen: 'specimen',
+    cases: 'cases',
+    publication: 'publication_manifest',
+    plots: 'files',
+};
+
+export function buildSystemPrompt(pageContext?: PageContext): string {
+    const hasFilters =
+        Array.isArray(pageContext?.filters) &&
+        (pageContext?.filters?.length ?? 0) > 0;
+    const hasTab = !!pageContext?.tab;
+    const hasRoute = !!pageContext?.route;
+    if (!pageContext || (!hasFilters && !hasTab && !hasRoute)) {
+        return SYSTEM_PROMPT;
+    }
+
+    const lines: string[] = [];
+    if (hasRoute) {
+        lines.push(
+            `The user is currently viewing the page \`${pageContext!.route}\`.`
+        );
+    }
+    if (hasTab) {
+        const tab = pageContext!.tab as string;
+        const tableHint = TAB_TO_TABLE_HINT[tab.toLowerCase()];
+        const hintFragment = tableHint
+            ? ` Prefer the \`${tableHint}\` table when their question is ambiguous about which entity they mean.`
+            : '';
+        lines.push(`Their active Explore tab is "${tab}".${hintFragment}`);
+    }
+    if (hasFilters) {
+        const filterLines = pageContext!
+            .filters!.map((f) => `- ${f.group}: ${f.value}`)
+            .join('\n');
+        lines.push(
+            `They have applied these filters in the portal UI:\n\n${filterLines}`
+        );
+    } else {
+        lines.push('They have NOT applied any filters in the portal UI.');
+    }
+
+    return `${SYSTEM_PROMPT}
+
+---
+
+## Current page context
+
+${lines.join('\n\n')}
+
+When the user's question references "these files", "the current view", "this set", "my filtered files", "this atlas", "this tab", or similar referring expressions, honour the page context by adding equivalent \`WHERE\` clauses to your SQL and querying the table the active tab points to.
+
+When the user's question is general (e.g. "how many files are in HTAN?", "list the available assays"), IGNORE the filters and tab and answer for the whole portal.
+
+When you do honour the filters or the tab, mention which ones you applied at the end of your prose answer so the user can verify.`;
+}
+
 export const SYSTEM_PROMPT = `You are "Ask the Atlas," an assistant for the public Human Tumor Atlas Network (HTAN) data portal at humantumoratlas.org.
 
 You answer questions about the HTAN data by generating ClickHouse SQL against a seven-table portal database, executing it through the runQuery tool, and summarising the result in plain prose. Both the SQL and the result rows are shown to the user by the UI, so be concise in prose and let the SQL and table speak for themselves.
@@ -15,6 +83,7 @@ You answer questions about the HTAN data by generating ClickHouse SQL against a 
 2. If the tool returns an error, read it, fix the SQL, and try again. You have at most 3 tool calls per turn — use them wisely.
 3. End every answer with one or two sentences in plain English, then a short bullet of grounding (row count, atlas names, file IDs). Do NOT paste the SQL into the prose — the UI renders it separately.
 4. If the question cannot be answered from this schema (e.g. single-cell expression matrices, image pixel data, sequencing reads), say so honestly and direct the user to the portal's Explore tools at humantumoratlas.org/explore. Do not invent results.
+5. When your answer corresponds to a filterable view the user might want to interact with in the portal UI (e.g. "show me X files"), call the \`proposeView\` tool with the appropriate tab and filters. This adds a one-click "Apply to Explore" button to your answer. Do NOT call \`proposeView\` for purely descriptive answers (e.g. "there are 67K files total"), comparisons across atlases, or refusals.
 
 ## When to refuse
 

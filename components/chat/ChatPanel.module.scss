@@ -82,6 +82,51 @@
     border-bottom: 1px solid #fde68a;
 }
 
+.contextBar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: #eff6ff;
+    border-bottom: 1px solid #dbeafe;
+    font-size: 11px;
+    color: #1e3a8a;
+}
+
+.contextLabel {
+    font-weight: 600;
+    color: #1d4ed8;
+}
+
+.chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.applyButton {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+
+    &:hover {
+        background: #1d4ed8;
+    }
+}
+
 .body {
     flex: 1;
     overflow-y: auto;

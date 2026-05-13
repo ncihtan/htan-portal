@@ -3,8 +3,10 @@ import { streamText, stepCountIs } from 'ai';
 import type { ModelMessage } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 
-import { SYSTEM_PROMPT } from '../../lib/chat/systemPrompt';
+import { buildSystemPrompt } from '../../lib/chat/systemPrompt';
+import type { PageContext } from '../../lib/chat/systemPrompt';
 import { makeRunQueryTool } from '../../lib/chat/runQuery';
+import { makeProposeViewTool } from '../../lib/chat/proposeView';
 import { checkRateLimit } from '../../lib/chat/ratelimit';
 import { hashIp, logTurn } from '../../lib/chat/logger';
 import type { TurnOutcome } from '../../lib/chat/logger';
@@ -21,6 +23,7 @@ const MAX_STEPS = 3;
 interface ChatRequestBody {
     messages: ModelMessage[];
     turnId: string;
+    pageContext?: PageContext;
 }
 
 function getIp(req: NextApiRequest): string {
@@ -82,7 +85,7 @@ export default async function handler(
         res.status(400).json({ error: 'Invalid JSON body.' });
         return;
     }
-    const { messages, turnId } = body;
+    const { messages, turnId, pageContext } = body;
     if (!Array.isArray(messages) || messages.length === 0) {
         res.status(400).json({ error: 'messages must be a non-empty array.' });
         return;
@@ -156,9 +159,12 @@ export default async function handler(
     try {
         const result = streamText({
             model: anthropic(MODEL_ID),
-            system: SYSTEM_PROMPT,
+            system: buildSystemPrompt(pageContext),
             messages,
-            tools: { runQuery: makeRunQueryTool() },
+            tools: {
+                runQuery: makeRunQueryTool(),
+                proposeView: makeProposeViewTool(),
+            },
             stopWhen: stepCountIs(MAX_STEPS),
             maxOutputTokens: MAX_OUTPUT_TOKENS,
         });
@@ -208,6 +214,14 @@ export default async function handler(
                                 sql: out?.sql ?? lastSql ?? '',
                                 error: out?.error ?? 'Unknown SQL error.',
                                 hint: out?.hint,
+                            });
+                        }
+                    } else if (e.toolName === 'proposeView') {
+                        const out = e.output as any;
+                        if (out?.ok && out.view) {
+                            send({
+                                type: 'propose-view',
+                                view: out.view,
                             });
                         }
                     }
