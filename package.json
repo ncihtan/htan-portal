@@ -31,6 +31,7 @@
     "prettierPreCommit"
   ],
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.77",
     "@clickhouse/client-web": "^1.10.1",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -48,6 +49,9 @@
     "@types/react-select": "^3.0.24",
     "@types/react-spinkit": "^3.0.5",
     "@types/roman-numerals": "^0.3.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
+    "ai": "^6.0.182",
     "better-react-spinkit": "^2.0.4",
     "bootstrap": "^4.4.1",
     "classnames": "^2.3.2",
@@ -89,7 +93,8 @@
     "swr": "^0.1.18",
     "unfetch": "^4.1.0",
     "vercel": "^21.1.0",
-    "victory": "^36.2.0"
+    "victory": "^36.2.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@clickhouse/client": "^1.11.1",

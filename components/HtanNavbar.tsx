@@ -3,7 +3,12 @@ import Nav from 'react-bootstrap/Nav';
 import React, { useState } from 'react';
 import { Dropdown, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+    faComments,
+    faExternalLinkAlt,
+} from '@fortawesome/free-solid-svg-icons';
+
+import { useChatContext } from './chat/ChatContext';
 
 function togglePreview(on: any) {
     if (process.browser) {
@@ -44,9 +49,32 @@ const NavSection: React.FunctionComponent<{
 };
 
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
+    const chat = useChatContext();
     const navItems: any[] = [
         <Nav.Link href="/explore">Explore</Nav.Link>,
         <Nav.Link href="/tools">Analysis Tools</Nav.Link>,
+        ...(chat.isEnabled
+            ? [
+                  <Nav.Link
+                      as="button"
+                      onClick={(e: React.MouseEvent) => {
+                          e.preventDefault();
+                          chat.open();
+                      }}
+                      style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                      }}
+                  >
+                      <FontAwesomeIcon
+                          icon={faComments}
+                          style={{ height: 14, width: 14, marginRight: 4 }}
+                      />
+                      Ask the Atlas
+                  </Nav.Link>,
+              ]
+            : []),
 
         <Nav.Link href="https://docs.humantumoratlas.org/" target="_blank">
             Manual{' '}

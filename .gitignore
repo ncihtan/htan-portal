@@ -25,6 +25,7 @@ dist
 .yarnrc
 .vite
 *.scss.d.ts
+tsconfig.tsbuildinfo
 
 # debug
 npm-debug.log*

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Footer from './Footer';
 import HtanNavbar from './HtanNavbar';
+import ChatPanel from './chat/ChatPanel';
+import { ChatProvider } from './chat/ChatContext';
 
 // See the stackoverflow answer at https://stackoverflow.com/a/59429852
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -16,13 +18,14 @@ const PageWrapper: React.FunctionComponent<IPageWrapperProps> = ({
     children,
 }) => {
     return (
-        <>
+        <ChatProvider>
             <div id={'pageWrapper'}>
                 <HtanNavbar />
                 {children}
             </div>
             <Footer />
-        </>
+            <ChatPanel />
+        </ChatProvider>
     );
 };
 
