@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'data/publications_manifest_all.json'
+      - 'packages/data-portal-commons/src/assets/crdcgc_drs_mapping.json'
       - 'public/syn_data.json.gz'
 
 concurrency:
