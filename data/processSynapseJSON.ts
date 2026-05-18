@@ -391,7 +391,11 @@ function addDownloadSourcesInfo(
         ) {
             file.downloadSource = DownloadSourceCategory.synapse;
         } else if (hasCrdcGcDrsUri) {
-            file.downloadSource = DownloadSourceCategory.dbgap;
+            file.downloadSource = file.Component?.toLowerCase().includes(
+                'imaging'
+            )
+                ? DownloadSourceCategory.crdcGc
+                : DownloadSourceCategory.dbgap;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
         }
