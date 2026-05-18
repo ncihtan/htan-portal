@@ -316,6 +316,7 @@ function addDownloadSourcesInfo(
     file: BaseSerializableEntity,
     dbgapImgSynapseSet: Set<string>
 ) {
+    const hasCrdcGcDrsUri = !!file.viewers?.crdcGc?.drs_uri;
     if (
         _.some(['bulk', '-seq'], (assay) =>
             file.assayName?.toLowerCase().includes(assay)
@@ -327,10 +328,7 @@ function addDownloadSourcesInfo(
         // TODO: bai files are actually not on CDS, but we might want to remove
         // them from the portal listing entirely so assume they are there
         file.isRawSequencing = true;
-        if (
-            (file.synapseId && file.viewers?.crdcGc?.drs_uri) ||
-            file.Filename?.toLowerCase().endsWith('bai')
-        ) {
+        if (hasCrdcGcDrsUri || file.Filename?.toLowerCase().endsWith('bai')) {
             file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
@@ -346,7 +344,7 @@ function addDownloadSourcesInfo(
         } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
             // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
-            if (file.viewers?.crdcGc?.drs_uri) {
+            if (hasCrdcGcDrsUri) {
                 file.downloadSource = DownloadSourceCategory.crdcGc;
             } else {
                 file.downloadSource = DownloadSourceCategory.comingSoon;
@@ -392,6 +390,8 @@ function addDownloadSourcesInfo(
             )
         ) {
             file.downloadSource = DownloadSourceCategory.synapse;
+        } else if (hasCrdcGcDrsUri) {
+            file.downloadSource = DownloadSourceCategory.crdcGc;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
         }
