@@ -391,7 +391,7 @@ function addDownloadSourcesInfo(
         ) {
             file.downloadSource = DownloadSourceCategory.synapse;
         } else if (hasCrdcGcDrsUri) {
-            file.downloadSource = DownloadSourceCategory.crdcGc;
+            file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
         }
