@@ -391,9 +391,9 @@ function addDownloadSourcesInfo(
         ) {
             file.downloadSource = DownloadSourceCategory.synapse;
         } else if (hasCrdcGcDrsUri) {
-            file.downloadSource = file.Component?.toLowerCase().includes(
-                'imaging'
-            )
+            file.downloadSource = (file.Component || '')
+                .toLowerCase()
+                .includes('imaging')
                 ? DownloadSourceCategory.crdcGc
                 : DownloadSourceCategory.dbgap;
         } else {
