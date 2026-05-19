@@ -328,13 +328,12 @@ const IMAGE_ASSAY_KEYWORDS = [
     'imc',
     'merfish',
     'saber',
-    'hande',
     'orion',
     'ihc',
     'geomxdsp',
 ];
 
-const IMAGE_FILE_FORMATS = [
+const IMAGE_FILE_FORMATS = new Set([
     'tif',
     'tiff',
     'svs',
@@ -346,7 +345,7 @@ const IMAGE_FILE_FORMATS = [
     'dcm',
     'dicom',
     'qptiff',
-];
+]);
 
 const IMAGE_FILE_EXTENSIONS = [
     '.tif',
@@ -386,7 +385,7 @@ function isImageFile(file: BaseSerializableEntity) {
     }
 
     const normalizedFileFormat = normalizeTextForMatching(file.FileFormat) || '';
-    if (_.some(IMAGE_FILE_FORMATS, (format) => normalizedFileFormat === format)) {
+    if (IMAGE_FILE_FORMATS.has(normalizedFileFormat)) {
         return true;
     }
 
