@@ -309,7 +309,11 @@ function getReleaseSynapseIds(
 }
 
 function getNormalizedGeoMxDspAssayName(assayName?: string) {
-    return assayName?.toLowerCase().replace(/\s/g, '').replace(/-/g, '');
+    return normalizeTextForMatching(assayName);
+}
+
+function normalizeTextForMatching(value?: string) {
+    return value?.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
 const IMAGE_ASSAY_KEYWORDS = [
@@ -370,7 +374,7 @@ function isImageFile(file: BaseSerializableEntity) {
         file.ImagingAssayType,
     ]
         .filter((assay): assay is string => !!assay)
-        .map((assay) => assay.toLowerCase().replace(/\s/g, '').replace(/-/g, ''));
+        .map((assay) => normalizeTextForMatching(assay) || '');
 
     if (
         _.some(normalizedAssayValues, (assay) =>
@@ -380,9 +384,7 @@ function isImageFile(file: BaseSerializableEntity) {
         return true;
     }
 
-    const normalizedFileFormat = (file.FileFormat || '')
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, '');
+    const normalizedFileFormat = normalizeTextForMatching(file.FileFormat) || '';
     if (_.some(IMAGE_FILE_FORMATS, (format) => normalizedFileFormat === format)) {
         return true;
     }
