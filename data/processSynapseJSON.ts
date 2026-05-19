@@ -312,6 +312,87 @@ function getNormalizedGeoMxDspAssayName(assayName?: string) {
     return assayName?.toLowerCase().replace(/\s/g, '').replace(/-/g, '');
 }
 
+const IMAGE_ASSAY_KEYWORDS = [
+    'imaging',
+    'codex',
+    'cycif',
+    'mxif',
+    'mibi',
+    'imc',
+    'merfish',
+    'saber',
+    'h&e',
+    'orion',
+    'ihc',
+    'geomxdsp',
+];
+
+const IMAGE_FILE_FORMATS = [
+    'tif',
+    'tiff',
+    'svs',
+    'ndpi',
+    'czi',
+    'png',
+    'jpg',
+    'jpeg',
+    'dcm',
+    'dicom',
+    'qptiff',
+    'ometif',
+    'ometiff',
+];
+
+const IMAGE_FILE_EXTENSIONS = [
+    '.tif',
+    '.tiff',
+    '.svs',
+    '.ndpi',
+    '.czi',
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.dcm',
+    '.dicom',
+    '.qptiff',
+    '.ome.tif',
+    '.ome.tiff',
+];
+
+function isImageFile(file: BaseSerializableEntity) {
+    if ((file.Component || '').toLowerCase().includes('imaging')) {
+        return true;
+    }
+
+    const normalizedAssayValues = [
+        file.assayName,
+        file.AssayType,
+        file.ImagingAssayType,
+    ]
+        .filter((assay): assay is string => !!assay)
+        .map((assay) => assay.toLowerCase().replace(/\s/g, '').replace(/-/g, ''));
+
+    if (
+        _.some(normalizedAssayValues, (assay) =>
+            _.some(IMAGE_ASSAY_KEYWORDS, (keyword) => assay.includes(keyword))
+        )
+    ) {
+        return true;
+    }
+
+    const normalizedFileFormat = (file.FileFormat || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+    if (_.some(IMAGE_FILE_FORMATS, (format) => normalizedFileFormat === format)) {
+        return true;
+    }
+
+    const filename = (file.Filename || '').toLowerCase();
+    return _.some(IMAGE_FILE_EXTENSIONS, (extension) =>
+        filename.endsWith(extension)
+    );
+}
+
 function addDownloadSourcesInfo(
     file: BaseSerializableEntity,
     dbgapImgSynapseSet: Set<string>
@@ -391,9 +472,7 @@ function addDownloadSourcesInfo(
         ) {
             file.downloadSource = DownloadSourceCategory.synapse;
         } else if (hasCrdcGcDrsUri) {
-            file.downloadSource = (file.Component || '')
-                .toLowerCase()
-                .includes('imaging')
+            file.downloadSource = isImageFile(file)
                 ? DownloadSourceCategory.crdcGc
                 : DownloadSourceCategory.dbgap;
         } else {
