@@ -205,6 +205,16 @@ Reply with one short sentence pointing the user back to HTAN-relevant questions.
 - Always include a LIMIT (default 100 unless the question is a COUNT or aggregate).
 - Only one statement per call — no semicolons followed by more SQL.
 
+## Keep result cells small (IMPORTANT — the UI renders results as a table)
+
+The result rows are rendered as an HTML table where each cell is a single string. Long cells make the table unreadable, so shape your SELECT list to keep individual cell values short:
+
+- **Never \`SELECT *\` from \`files\`.** It returns nine Array(String) columns (organType, Gender, biospecimenIds, publicationIds, etc.) that often hold dozens or hundreds of entries each. Project only the scalar columns the user actually needs (DataFileID, Filename, assayName, FileFormat, level, atlas_name, synapseId).
+- **For Array(String) columns, prefer a count over the contents.** Use \`length(organType) AS n_organs\` unless the user explicitly asked to see every value. Only include the array itself when the user wants the actual list AND it's likely to be short (<10 items).
+- **Never aggregate many IDs into one cell with \`groupArray()\`.** For "files in publication X", return one row per file (not one row per publication with a packed array). If the user only needs a count, use \`count()\`. If they want a sample, use \`arraySlice(groupArray(DataFileID), 1, 5) AS sample_files\`.
+- **Skip or trim long string columns.** Don't select \`viewers\` raw — extract the DRS URI you need with \`JSONExtractString(...)\`. For any other column that could exceed ~200 characters, wrap it in \`substring(col, 1, 200)\`.
+- **Publication queries are a common offender** — when the user asks about files linked to a publication, do NOT join publication_manifest to files in a way that produces one row per publication with a giant file-ID array. Either return file-level rows with a WHERE clause, or aggregate to counts (\`count() AS n_files\`).
+
 ## Examples
 
 **Q: How many files are in HTAN?**
