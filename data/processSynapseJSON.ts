@@ -313,7 +313,10 @@ function getNormalizedGeoMxDspAssayName(assayName?: string) {
 }
 
 function normalizeTextForMatching(value?: string) {
-    return value?.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return value
+        ?.toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9]/g, '');
 }
 
 const IMAGE_ASSAY_KEYWORDS = [
@@ -325,7 +328,7 @@ const IMAGE_ASSAY_KEYWORDS = [
     'imc',
     'merfish',
     'saber',
-    'h&e',
+    'hande',
     'orion',
     'ihc',
     'geomxdsp',
@@ -343,8 +346,6 @@ const IMAGE_FILE_FORMATS = [
     'dcm',
     'dicom',
     'qptiff',
-    'ometif',
-    'ometiff',
 ];
 
 const IMAGE_FILE_EXTENSIONS = [
@@ -364,7 +365,7 @@ const IMAGE_FILE_EXTENSIONS = [
 ];
 
 function isImageFile(file: BaseSerializableEntity) {
-    if ((file.Component || '').toLowerCase().includes('imaging')) {
+    if (normalizeTextForMatching(file.Component)?.includes('imaging')) {
         return true;
     }
 
