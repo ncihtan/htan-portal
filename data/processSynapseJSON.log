@@ -2,9 +2,9 @@ ncc: Version 0.28.6
 ncc: Compiling file index.js
 ncc: Using typescript@5.3.3 (local user-provided)
    40kB  sourcemap-register.js
-18575kB  index.js
- 1294kB  index.js.map
-18615kB  [2578ms] - ncc 0.28.6
+21071kB  index.js
+ 1296kB  index.js.map
+21111kB  [8504ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'BulkDNALevel3',
   Filename: 'HTAN OHSU/bulk_dnaseq_level_3/0000303168-cnv-segments.txt',
@@ -48759,7 +48759,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA4_2005_36724',
   ParentDataFileID: 'HTA4_2005_26707',
-  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  publicationIds: [ 'hta4_2026_cell-reports-medicine_jonathan-h-sussman' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
@@ -48789,7 +48789,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA4_2005_36727',
   ParentDataFileID: 'HTA4_2005_26707',
-  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  publicationIds: [ 'hta4_2026_cell-reports-medicine_jonathan-h-sussman' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
@@ -48819,7 +48819,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA4_2005_36728',
   ParentDataFileID: 'HTA4_2005_26707',
-  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  publicationIds: [ 'hta4_2026_cell-reports-medicine_jonathan-h-sussman' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {
@@ -48849,7 +48849,7 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA4_2005_36729',
   ParentDataFileID: 'HTA4_2005_26707',
-  publicationIds: [ 'hta4_2024_biorxiv_jonathan-h-sussman' ],
+  publicationIds: [ 'hta4_2026_cell-reports-medicine_jonathan-h-sussman' ],
   primaryParents: []
 }
 Missing ParentBiospecimenID:  {

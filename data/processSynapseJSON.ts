@@ -309,13 +309,97 @@ function getReleaseSynapseIds(
 }
 
 function getNormalizedGeoMxDspAssayName(assayName?: string) {
-    return assayName?.toLowerCase().replace(/\s/g, '').replace(/-/g, '');
+    return normalizeTextForMatching(assayName);
+}
+
+function normalizeTextForMatching(value?: string) {
+    return value
+        ?.toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9]/g, '');
+}
+
+const IMAGE_ASSAY_KEYWORDS = [
+    'imaging',
+    'codex',
+    'cycif',
+    'mxif',
+    'mibi',
+    'imc',
+    'merfish',
+    'saber',
+    'orion',
+    'ihc',
+    'geomxdsp',
+];
+
+const IMAGE_FILE_FORMATS = new Set([
+    'tif',
+    'tiff',
+    'svs',
+    'ndpi',
+    'czi',
+    'png',
+    'jpg',
+    'jpeg',
+    'dcm',
+    'dicom',
+    'qptiff',
+]);
+
+const IMAGE_FILE_EXTENSIONS = [
+    '.tif',
+    '.tiff',
+    '.svs',
+    '.ndpi',
+    '.czi',
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.dcm',
+    '.dicom',
+    '.qptiff',
+    '.ome.tif',
+    '.ome.tiff',
+];
+
+function isImageFile(file: BaseSerializableEntity) {
+    if (normalizeTextForMatching(file.Component)?.includes('imaging')) {
+        return true;
+    }
+
+    const normalizedAssayValues = [
+        file.assayName,
+        file.AssayType,
+        file.ImagingAssayType,
+    ]
+        .filter((assay): assay is string => !!assay)
+        .map((assay) => normalizeTextForMatching(assay) || '');
+
+    if (
+        _.some(normalizedAssayValues, (assay) =>
+            _.some(IMAGE_ASSAY_KEYWORDS, (keyword) => assay.includes(keyword))
+        )
+    ) {
+        return true;
+    }
+
+    const normalizedFileFormat = normalizeTextForMatching(file.FileFormat) || '';
+    if (IMAGE_FILE_FORMATS.has(normalizedFileFormat)) {
+        return true;
+    }
+
+    const filename = (file.Filename || '').toLowerCase();
+    return _.some(IMAGE_FILE_EXTENSIONS, (extension) =>
+        filename.endsWith(extension)
+    );
 }
 
 function addDownloadSourcesInfo(
     file: BaseSerializableEntity,
     dbgapImgSynapseSet: Set<string>
 ) {
+    const hasCrdcGcDrsUri = !!file.viewers?.crdcGc?.drs_uri;
     if (
         _.some(['bulk', '-seq'], (assay) =>
             file.assayName?.toLowerCase().includes(assay)
@@ -327,10 +411,7 @@ function addDownloadSourcesInfo(
         // TODO: bai files are actually not on CDS, but we might want to remove
         // them from the portal listing entirely so assume they are there
         file.isRawSequencing = true;
-        if (
-            (file.synapseId && file.viewers?.crdcGc?.drs_uri) ||
-            file.Filename?.toLowerCase().endsWith('bai')
-        ) {
+        if (hasCrdcGcDrsUri || file.Filename?.toLowerCase().endsWith('bai')) {
             file.downloadSource = DownloadSourceCategory.dbgap;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
@@ -346,7 +427,7 @@ function addDownloadSourcesInfo(
         } else if (file.synapseId && dbgapImgSynapseSet.has(file.synapseId)) {
             // Level 2 imaging data is open access
             // ImagingLevel2, SRRSImagingLevel2 as specified in released.entities table (CDS_Release) column
-            if (file.viewers?.crdcGc?.drs_uri) {
+            if (hasCrdcGcDrsUri) {
                 file.downloadSource = DownloadSourceCategory.crdcGc;
             } else {
                 file.downloadSource = DownloadSourceCategory.comingSoon;
@@ -392,6 +473,10 @@ function addDownloadSourcesInfo(
             )
         ) {
             file.downloadSource = DownloadSourceCategory.synapse;
+        } else if (hasCrdcGcDrsUri) {
+            file.downloadSource = isImageFile(file)
+                ? DownloadSourceCategory.crdcGc
+                : DownloadSourceCategory.dbgap;
         } else {
             file.downloadSource = DownloadSourceCategory.comingSoon;
         }
