@@ -23,6 +23,7 @@ jobs:
       can_push: ${{ steps.branch-permissions.outputs.can_push }}
       changed: ${{ steps.verify-changed-files.outputs.changed }}
       syn_data_changed: ${{ steps.changed-files.outputs.syn_data_changed }}
+      commit_message: ${{ steps.commit-message.outputs.commit_message }}
 
     steps:
       - name: Checkout code
@@ -43,10 +44,35 @@ jobs:
       - name: Detect changed files
         id: changed-files
         run: |
-          if git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q "^public/syn_data\.json\.gz$"; then
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          if echo "$CHANGED_FILES" | grep -q "^public/syn_data\.json\.gz$"; then
             echo "syn_data_changed=true" >> $GITHUB_OUTPUT
           else
             echo "syn_data_changed=false" >> $GITHUB_OUTPUT
+          fi
+          echo "$CHANGED_FILES" > /tmp/changed_files.txt
+
+      - name: Compute commit message
+        id: commit-message
+        run: |
+          if [ "${{ steps.changed-files.outputs.syn_data_changed }}" = "true" ]; then
+            echo "commit_message=chore: update processed synapse JSON after syn_data.json.gz update" >> $GITHUB_OUTPUT
+          else
+            CHANGED_PARTS=()
+            if grep -q "^data/publications_manifest_all\.json$" /tmp/changed_files.txt; then
+              CHANGED_PARTS+=("publications_manifest_all.json")
+            fi
+            if grep -q "^packages/data-portal-commons/src/assets/crdcgc_drs_mapping\.json$" /tmp/changed_files.txt; then
+              CHANGED_PARTS+=("crdcgc_drs_mapping.json")
+            fi
+
+            if [ ${#CHANGED_PARTS[@]} -eq 0 ]; then
+              echo "commit_message=chore: update synapse JSON files" >> $GITHUB_OUTPUT
+            elif [ ${#CHANGED_PARTS[@]} -eq 1 ]; then
+              echo "commit_message=chore: update synapse JSON files after ${CHANGED_PARTS[0]} update" >> $GITHUB_OUTPUT
+            else
+              echo "commit_message=chore: update synapse JSON files after ${CHANGED_PARTS[0]} and ${CHANGED_PARTS[1]} updates" >> $GITHUB_OUTPUT
+            fi
           fi
 
       - name: Create gsed symlink (ubuntu-latest ships GNU sed as sed, not gsed)
@@ -200,11 +226,7 @@ jobs:
           # Stage all tracked modified files: updateData can touch syn_data.json.gz,
           # processed_syn_data.json.gz, htan-imaging-assets.json, syn_metadata.json, etc.
           git add -u
-          if [ "${{ needs.analyze-synapse-json.outputs.syn_data_changed }}" = "true" ]; then
-            git commit -m "chore: update processed synapse JSON after syn_data.json.gz update"
-          else
-            git commit -m "chore: update synapse JSON files after publications manifest update"
-          fi
+          git commit -m "${{ needs.analyze-synapse-json.outputs.commit_message }}"
           git push
           echo "committed=true" >> $GITHUB_OUTPUT
 
