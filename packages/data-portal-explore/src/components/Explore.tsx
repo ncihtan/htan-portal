@@ -54,6 +54,8 @@ export interface IExploreProps {
     getTab?: () => ExploreTab;
     fetchData?: () => Promise<LoadDataResult>;
     cloudBaseUrl?: string;
+    /** Optional override for the ClickHouse query function (e.g. to target a different DB). */
+    doQuery?: <T>(str: any) => Promise<T[]>;
 }
 
 if (typeof window !== 'undefined') {
@@ -101,6 +103,11 @@ export class Explore extends React.Component<IExploreProps> {
         makeObservable(this);
     }
 
+    /** Returns the query function to use – falls back to the default `doQuery` when no override is provided. */
+    private get queryFn() {
+        return this.props.doQuery ?? doQuery;
+    }
+
     componentDidUpdate(prevProps: IExploreProps) {
         // Sync filters from URL when router becomes ready (Next.js hydration)
         const newFilters = this.props.getSelectedFilters?.() || [];
@@ -129,7 +136,7 @@ export class Explore extends React.Component<IExploreProps> {
 
     unfilteredOptions = new remoteData({
         invoke: async () => {
-            return doQuery<CountByType>(
+            return this.queryFn<CountByType>(
                 countsByTypeQuery(defaultCountsByTypeQueryFilterString)
             );
         },
@@ -141,7 +148,7 @@ export class Explore extends React.Component<IExploreProps> {
             if (this.filterString === '') {
                 return this.unfilteredOptions.result;
             } else {
-                const filteredCountsByType = await doQuery<CountByType>(
+                const filteredCountsByType = await this.queryFn<CountByType>(
                     countsByTypeQuery(
                         getCountsByTypeQueryUniformFilterString(
                             this.filterString
@@ -160,7 +167,7 @@ export class Explore extends React.Component<IExploreProps> {
             if (this.filterString === '') {
                 return this.unfilteredOptions.result;
             } else {
-                const filteredCountsByType = await doQuery<CountByType>(
+                const filteredCountsByType = await this.queryFn<CountByType>(
                     countsByTypeQuery({
                         genderFilterString: this.getFilterStringForAttribute(
                             AttributeNames.Gender
@@ -253,7 +260,7 @@ export class Explore extends React.Component<IExploreProps> {
 
     files = new remoteData<Entity[]>({
         invoke: async () => {
-            const data = await doQuery<Entity>(fileQuery);
+            const data = await this.queryFn<Entity>(fileQuery);
             return postProcessFiles(data);
         },
     });
@@ -265,7 +272,7 @@ export class Explore extends React.Component<IExploreProps> {
                 return this.files.result || [];
             } else {
                 const q = fileQuery + this.filterString;
-                const data = await doQuery<Entity>(q);
+                const data = await this.queryFn<Entity>(q);
                 return postProcessFiles(data);
             }
         },
@@ -274,7 +281,7 @@ export class Explore extends React.Component<IExploreProps> {
     cases = new remoteData<Entity[]>({
         invoke: async () => {
             const q = caseQuery({ filterString: '' });
-            return await doQuery<Entity>(q);
+            return await this.queryFn<Entity>(q);
         },
     });
 
@@ -282,7 +289,7 @@ export class Explore extends React.Component<IExploreProps> {
         await: () => [this.unfilteredOptions],
         invoke: async () => {
             const q = caseQuery({ filterString: this.filterString });
-            return await doQuery<Entity>(q);
+            return await this.queryFn<Entity>(q);
         },
     });
 
@@ -294,14 +301,14 @@ export class Explore extends React.Component<IExploreProps> {
                     AttributeNames.AtlasName
                 ),
             });
-            return await doQuery<Entity>(q);
+            return await this.queryFn<Entity>(q);
         },
     });
 
     specimen = new remoteData<Entity[]>({
         invoke: async () => {
             const q = specimenQuery({ filterString: '' });
-            return doQuery<Entity>(q);
+            return this.queryFn<Entity>(q);
         },
     });
 
@@ -309,7 +316,7 @@ export class Explore extends React.Component<IExploreProps> {
         await: () => [this.unfilteredOptions],
         invoke: async () => {
             const q = specimenQuery({ filterString: this.filterString });
-            return doQuery<Entity>(q);
+            return this.queryFn<Entity>(q);
         },
     });
 
@@ -321,13 +328,15 @@ export class Explore extends React.Component<IExploreProps> {
                     AttributeNames.AtlasName
                 ),
             });
-            return doQuery<Entity>(q);
+            return this.queryFn<Entity>(q);
         },
     });
 
     atlases = new remoteData<Atlas[]>({
         invoke: async () => {
-            const data = await doQuery<Atlas>(atlasQuery({ filterString: '' }));
+            const data = await this.queryFn<Atlas>(
+                atlasQuery({ filterString: '' })
+            );
             data.forEach(
                 (atlas: Atlas) =>
                     (atlas.AtlasMeta = JSON.parse(atlas.AtlasMeta.toString()))
@@ -344,7 +353,7 @@ export class Explore extends React.Component<IExploreProps> {
         if (filterString.length === 0) {
             return this.atlases.result || [];
         } else {
-            const data = await doQuery<Atlas>(
+            const data = await this.queryFn<Atlas>(
                 atlasQuery({ filterString: filterString })
             );
             data.forEach(
@@ -371,7 +380,7 @@ export class Explore extends React.Component<IExploreProps> {
     publications = new remoteData({
         await: () => [this.cases, this.unfilteredOptions],
         invoke: async () => {
-            const publications = await doQuery<PublicationManifest>(
+            const publications = await this.queryFn<PublicationManifest>(
                 `SELECT * FROM publication_manifest`
             );
 
@@ -397,7 +406,7 @@ export class Explore extends React.Component<IExploreProps> {
                 FROM filteredPublications fp
                     LEFT JOIN publication_manifest pm on fp.publicationId = pm.publicationId
              `;
-            const publications = await doQuery<PublicationManifest>(q);
+            const publications = await this.queryFn<PublicationManifest>(q);
 
             return postProcessPublications(publications);
         },

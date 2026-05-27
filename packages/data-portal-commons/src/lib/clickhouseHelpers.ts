@@ -10,6 +10,9 @@ export const DEFAULT_CLICKHOUSE_HOST =
 export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_899';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
+// Phase 2 database – updated automatically by the update-htan2-db CI workflow
+export const DEFAULT_CLICKHOUSE_DB_HTAN2 = 'htan2_0';
+
 function buildClickHouseUrl(): string {
     if (process.env.NEXT_PUBLIC_CLICKHOUSE_URL) {
         return process.env.NEXT_PUBLIC_CLICKHOUSE_URL;
@@ -20,29 +23,53 @@ function buildClickHouseUrl(): string {
     return `${host}/${db}`;
 }
 
+function buildHtan2ClickHouseUrl(): string {
+    if (process.env.NEXT_PUBLIC_CLICKHOUSE_URL_HTAN2) {
+        return process.env.NEXT_PUBLIC_CLICKHOUSE_URL_HTAN2;
+    }
+    const host =
+        process.env.NEXT_PUBLIC_CLICKHOUSE_HOST ?? DEFAULT_CLICKHOUSE_HOST;
+    const db =
+        process.env.NEXT_PUBLIC_CLICKHOUSE_DB_HTAN2 ??
+        DEFAULT_CLICKHOUSE_DB_HTAN2;
+    return `${host}/${db}`;
+}
+
 let _defaultClient: WebClickHouseClient | undefined;
+let _htan2Client: WebClickHouseClient | undefined;
+
+function createClickHouseClient(url: string): WebClickHouseClient {
+    const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
+    if (!clickhousePassword) {
+        throw new Error(
+            'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
+                'Set it in .env.local (for development) or in your hosting environment (for production).'
+        );
+    }
+    return createClient({
+        url,
+        username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
+        password: clickhousePassword,
+        request_timeout: 600000,
+        compression: {
+            response: true,
+            request: false,
+        },
+    });
+}
 
 function getDefaultClient(): WebClickHouseClient {
     if (!_defaultClient) {
-        const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
-        if (!clickhousePassword) {
-            throw new Error(
-                'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
-                    'Set it in .env.local (for development) or in your hosting environment (for production).'
-            );
-        }
-        _defaultClient = createClient({
-            url: buildClickHouseUrl(),
-            username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
-            password: clickhousePassword,
-            request_timeout: 600000,
-            compression: {
-                response: true,
-                request: false,
-            },
-        });
+        _defaultClient = createClickHouseClient(buildClickHouseUrl());
     }
     return _defaultClient;
+}
+
+export function getHtan2Client(): WebClickHouseClient {
+    if (!_htan2Client) {
+        _htan2Client = createClickHouseClient(buildHtan2ClickHouseUrl());
+    }
+    return _htan2Client;
 }
 
 export function getCountsByTypeQueryUniformFilterString(filterString: string) {
