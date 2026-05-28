@@ -2,22 +2,12 @@ name: Update HTAN2 ClickHouse DB
 
 on:
   workflow_dispatch:
-    inputs:
-      csv_path:
-        description: 'Path to the CSV file to import (relative to repo root)'
-        required: true
-        type: string
-        default: 'data/phase2/example_gold.csv'
   workflow_call:
     inputs:
       pr_number:
         required: true
         type: number
       head_ref:
-        required: true
-        type: string
-      csv_path:
-        description: 'Path to the CSV file to import (relative to repo root)'
         required: true
         type: string
       can_push:
@@ -74,7 +64,7 @@ jobs:
           CLICKHOUSE_PASSWORD: ${{ secrets.CLICKHOUSE_PASSWORD }}
         run: |
           export CLICKHOUSE_URL="${CLICKHOUSE_HOST}/${CLICKHOUSE_DB}"
-          node build_db/import_csv.js "${{ inputs.csv_path }}"
+          node build_db/import_csv.js
 
       - name: Update DEFAULT_CLICKHOUSE_DB_HTAN2 in clickhouseHelpers.ts
         run: |
@@ -117,7 +107,7 @@ jobs:
         with:
           script: |
             const dbName = '${{ steps.db-name.outputs.db_name }}';
-            const body = `✅ HTAN2 ClickHouse database \`${dbName}\` has been created and populated from \`${{ inputs.csv_path }}\`. \`DEFAULT_CLICKHOUSE_DB_HTAN2\` has been updated in \`clickhouseHelpers.ts\` and committed to this PR. The Phase 2 data is now available at \`/explore2\`.`;
+            const body = `✅ HTAN2 ClickHouse database \`${dbName}\` has been created and populated from \`data/phase2_gold.csv\`. \`DEFAULT_CLICKHOUSE_DB_HTAN2\` has been updated in \`clickhouseHelpers.ts\` and committed to this PR. The Phase 2 data is now available at \`/explore2\`.`;
             github.rest.issues.createComment({
               issue_number: ${{ inputs.pr_number }},
               owner: context.repo.owner,

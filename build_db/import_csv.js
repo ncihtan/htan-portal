@@ -18,13 +18,7 @@ import { createDbIfNotExist, createTable } from './client.js';
 import csv from 'csvtojson';
 import path from 'path';
 
-const csvFilePath = process.argv[2];
-if (!csvFilePath) {
-    console.error(
-        'Usage: node build_db/import_csv.js <path-to-csv-file> [table-name]'
-    );
-    process.exit(1);
-}
+const csvFilePath = process.argv[2] ?? 'data/phase2_gold.csv';
 
 const tableName = process.argv[3] || 'files';
 
