@@ -18,7 +18,7 @@ import { createDbIfNotExist, createTable } from './client.js';
 import csv from 'csvtojson';
 import path from 'path';
 
-const csvFilePath = process.argv[2] ?? 'data/phase2_gold.csv';
+const csvFilePath = process.argv[2] ?? '../data/phase2_gold.csv';
 
 const tableName = process.argv[3] || 'files';
 
