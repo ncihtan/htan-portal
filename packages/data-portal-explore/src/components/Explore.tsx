@@ -56,6 +56,8 @@ export interface IExploreProps {
     cloudBaseUrl?: string;
     /** Optional override for the ClickHouse query function (e.g. to target a different DB). */
     doQuery?: <T>(str: any) => Promise<T[]>;
+    /** Optional list of tabs to show. When omitted all tabs are shown. */
+    tabs?: ExploreTab[];
 }
 
 if (typeof window !== 'undefined') {
@@ -96,11 +98,15 @@ export class Explore extends React.Component<IExploreProps> {
     @observable private _selectedFilters: SelectedFilter[] =
         this.props.getSelectedFilters?.() || [];
     @observable private currentTab: ExploreTab =
-        this.props.getTab?.() || ExploreTab.ATLAS;
+        this.props.getTab?.() || this.props.tabs?.[0] || ExploreTab.ATLAS;
 
     constructor(props: any) {
         super(props);
         makeObservable(this);
+    }
+
+    private isTabEnabled(tab: ExploreTab): boolean {
+        return !this.props.tabs || this.props.tabs.includes(tab);
     }
 
     /** Returns the query function to use – falls back to the default `doQuery` when no override is provided. */
@@ -280,6 +286,9 @@ export class Explore extends React.Component<IExploreProps> {
 
     cases = new remoteData<Entity[]>({
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.CASES)) {
+                return [];
+            }
             const q = caseQuery({ filterString: '' });
             return await this.queryFn<Entity>(q);
         },
@@ -288,6 +297,9 @@ export class Explore extends React.Component<IExploreProps> {
     casesFiltered = new remoteData<Entity[]>({
         await: () => [this.unfilteredOptions],
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.CASES)) {
+                return [];
+            }
             const q = caseQuery({ filterString: this.filterString });
             return await this.queryFn<Entity>(q);
         },
@@ -296,6 +308,9 @@ export class Explore extends React.Component<IExploreProps> {
     casesFilteredByNonAtlasFilters = new remoteData<Entity[]>({
         await: () => [this.unfilteredOptions],
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.CASES)) {
+                return [];
+            }
             const q = caseQuery({
                 filterString: this.getFilterStringForAttribute(
                     AttributeNames.AtlasName
@@ -307,6 +322,9 @@ export class Explore extends React.Component<IExploreProps> {
 
     specimen = new remoteData<Entity[]>({
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.BIOSPECIMEN)) {
+                return [];
+            }
             const q = specimenQuery({ filterString: '' });
             return this.queryFn<Entity>(q);
         },
@@ -315,6 +333,9 @@ export class Explore extends React.Component<IExploreProps> {
     specimenFiltered = new remoteData<Entity[]>({
         await: () => [this.unfilteredOptions],
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.BIOSPECIMEN)) {
+                return [];
+            }
             const q = specimenQuery({ filterString: this.filterString });
             return this.queryFn<Entity>(q);
         },
@@ -323,6 +344,9 @@ export class Explore extends React.Component<IExploreProps> {
     specimenFilteredByNonAtlasFilters = new remoteData<Entity[]>({
         await: () => [this.unfilteredOptions],
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.BIOSPECIMEN)) {
+                return [];
+            }
             const q = specimenQuery({
                 filterString: this.getFilterStringForAttribute(
                     AttributeNames.AtlasName
@@ -334,6 +358,9 @@ export class Explore extends React.Component<IExploreProps> {
 
     atlases = new remoteData<Atlas[]>({
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.ATLAS)) {
+                return [];
+            }
             const data = await this.queryFn<Atlas>(
                 atlasQuery({ filterString: '' })
             );
@@ -350,6 +377,9 @@ export class Explore extends React.Component<IExploreProps> {
     }
 
     async filterAtlases(filterString: string) {
+        if (!this.isTabEnabled(ExploreTab.ATLAS)) {
+            return [];
+        }
         if (filterString.length === 0) {
             return this.atlases.result || [];
         } else {
@@ -380,6 +410,9 @@ export class Explore extends React.Component<IExploreProps> {
     publications = new remoteData({
         await: () => [this.cases, this.unfilteredOptions],
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.PUBLICATION)) {
+                return [];
+            }
             const publications = await this.queryFn<PublicationManifest>(
                 `SELECT * FROM publication_manifest`
             );
@@ -391,6 +424,9 @@ export class Explore extends React.Component<IExploreProps> {
     publicationsFiltered = new remoteData({
         await: () => [this.cases, this.unfilteredOptions],
         invoke: async () => {
+            if (!this.isTabEnabled(ExploreTab.PUBLICATION)) {
+                return [];
+            }
             const q = `
                 WITH filteredPublications AS (
                     SELECT DISTINCT publicationId FROM (
@@ -589,6 +625,7 @@ export class Explore extends React.Component<IExploreProps> {
                         }}
                         filterString={this.filterString}
                         activeTab={this.currentTab}
+                        tabs={this.props.tabs}
                         filteredFiles={this.filesFiltered.result || []}
                         filteredSynapseAtlases={
                             this.atlasesFiltered.result || []
