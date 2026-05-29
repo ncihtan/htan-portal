@@ -97,8 +97,16 @@ export class Explore extends React.Component<IExploreProps> {
     @observable private showAllCases = false;
     @observable private _selectedFilters: SelectedFilter[] =
         this.props.getSelectedFilters?.() || [];
-    @observable private currentTab: ExploreTab =
-        this.props.getTab?.() || this.props.tabs?.[0] || ExploreTab.ATLAS;
+    @observable private currentTab: ExploreTab = (() => {
+        const requested = this.props.getTab?.();
+        if (
+            requested &&
+            (!this.props.tabs || this.props.tabs.includes(requested))
+        ) {
+            return requested;
+        }
+        return this.props.tabs?.[0] || ExploreTab.ATLAS;
+    })();
 
     constructor(props: any) {
         super(props);
