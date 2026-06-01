@@ -13,6 +13,16 @@
 --   phase1_cases              -> cases
 --   phase1_files              -> files
 --   phase1_publication_manifest -> publication_manifest (placeholder – no equivalent in Phase 2)
+--
+-- Regex patterns used throughout this file:
+--   HTAN atlas ID prefix:  r'^(HTA[0-9]+)'
+--     Matches the atlas portion of any HTAN ID (e.g. "HTA9" from "HTA9_1234_567").
+--   HTAN biospecimen ID:   r'^HTA[0-9]+_[0-9]+_'
+--     Distinguishes a derived biospecimen parent from a participant ID; biospecimen
+--     IDs contain a second underscore-separated segment after the center number
+--     (e.g. "HTA9_1_A2B3"), while participant IDs have only one (e.g. "HTA9_12").
+--   Assay level suffix:    r'Level[0-9]+(?:and[0-9]+)?'
+--     Extracts the processing level token from a Component value (e.g. "Level3and4").
 
 -- ============================================================
 -- VIEW: phase1_atlases
@@ -259,6 +269,10 @@ LEFT JOIN molecular_agg mol
 --   BiospecimenDimension2 <- SHORTEST_DIMENSION
 --   FixationDuration   <- FIXATION_DURATION_IN_MINUTES
 --   SourceHTANBiospecimenID <- HTAN_PARENT_ID when it is a biospecimen (contains '_')
+--     Uses regex r'^HTA[0-9]+_[0-9]+_' to detect biospecimen parents vs. participant parents.
+--   StorageMethod      <- PRESERVATION_MEDIUM (preferred) falling back to PRESERVATION_METHOD
+--     PRESERVATION_MEDIUM is the primary Phase 2 storage-medium field; PRESERVATION_METHOD
+--     is the broader preservation category used when the medium field is absent.
 --   Fields with no Phase 2 equivalent are set to ''.
 -- ============================================================
 CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_specimen` AS
@@ -496,7 +510,22 @@ SELECT
   CAST([] AS ARRAY<STRING>)                                           AS organType
 FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
 LEFT JOIN (
-  SELECT *
+  SELECT
+    HTAN_PARTICIPANT_ID,
+    AGE_IN_DAYS_AT_DIAGNOSIS,
+    PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
+    TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
+    TUMOR_GRADE,
+    LAST_KNOWN_DISEASE_STATUS,
+    AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS,
+    METHOD_OF_DIAGNOSIS,
+    METASTASIS_AT_DIAGNOSIS,
+    TUMOR_CLASSIFICATION_CATEGORY,
+    CLINICAL_M_STAGE,
+    CLINICAL_N_STAGE,
+    TUMOR_STAGED,
+    CLINICAL_T_STAGE,
+    AJCC_STAGING_SYSTEM_EDITION
   FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis`
 ) diag ON d.HTAN_PARTICIPANT_ID = diag.HTAN_PARTICIPANT_ID
 LEFT JOIN vital_agg  v    ON d.HTAN_PARTICIPANT_ID = v.HTAN_PARTICIPANT_ID
