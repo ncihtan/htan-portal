@@ -5,14 +5,14 @@
 --   Execute each CREATE OR REPLACE VIEW statement in BigQuery to create Phase 1-equivalent views.
 --   All source tables are the `gold_RELEASED_*` tables in: htan2-dcc.htan2_medallion_gold
 --
--- Phase 1 tables produced:
---   phase1_atlases            -> atlases
---   phase1_demographics       -> demographics
---   phase1_diagnosis          -> diagnosis
---   phase1_specimen           -> specimen
---   phase1_cases              -> cases
---   phase1_files              -> files
---   phase1_publication_manifest -> publication_manifest (placeholder – no equivalent in Phase 2)
+-- Views created in htan2-dcc.htan2_data_portal:
+--   atlases
+--   demographics
+--   diagnosis
+--   specimen
+--   cases
+--   files
+--   publication_manifest  (placeholder – no equivalent in Phase 2)
 --
 -- Regex patterns used throughout this file:
 --   HTAN atlas ID prefix:  r'^(HTA[0-9]+)'
@@ -25,11 +25,11 @@
 --     Extracts the processing level token from a Component value (e.g. "Level3and4").
 
 -- ============================================================
--- VIEW: phase1_atlases
+-- VIEW: atlases
 -- Phase 1 table: atlases
 -- Derived from demographics and biospecimen counts per center.
 -- ============================================================
-CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_atlases` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.atlases` AS
 WITH
   centers AS (
     SELECT
@@ -67,7 +67,7 @@ LEFT JOIN biospecimen_counts bc USING (htan_id);
 
 
 -- ============================================================
--- VIEW: phase1_demographics
+-- VIEW: demographics
 -- Phase 1 table: demographics
 -- Source: Demographics + VitalStatus records.
 -- Column mapping notes:
@@ -78,7 +78,7 @@ LEFT JOIN biospecimen_counts bc USING (htan_id);
 --   synapseId <- Record_EntityId
 -- Fields with no Phase 2 equivalent are set to ''.
 -- ============================================================
-CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_demographics` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.demographics` AS
 SELECT
   d.Component,
   d.HTAN_PARTICIPANT_ID                                            AS HTANParticipantID,
@@ -126,7 +126,7 @@ LEFT JOIN (
 
 
 -- ============================================================
--- VIEW: phase1_diagnosis
+-- VIEW: diagnosis
 -- Phase 1 table: diagnosis
 -- Source: Diagnosis + Therapy + MolecularTest records.
 -- Column mapping notes:
@@ -141,7 +141,7 @@ LEFT JOIN (
 --   GeneSymbol/MolecularAnalysisMethod/TestResult <- MolecularTest join
 --   Fields with no Phase 2 equivalent are set to ''.
 -- ============================================================
-CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_diagnosis` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.diagnosis` AS
 WITH
   therapy_agg AS (
     SELECT
@@ -253,7 +253,7 @@ LEFT JOIN molecular_agg mol
 
 
 -- ============================================================
--- VIEW: phase1_specimen
+-- VIEW: specimen
 -- Phase 1 table: specimen
 -- Source: Biospecimen records + Released RecordsetRows (for ParticipantID).
 -- Column mapping notes:
@@ -275,7 +275,7 @@ LEFT JOIN molecular_agg mol
 --     is the broader preservation category used when the medium field is absent.
 --   Fields with no Phase 2 equivalent are set to ''.
 -- ============================================================
-CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_specimen` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.specimen` AS
 SELECT
   bs.Component,
   bs.HTAN_BIOSPECIMEN_ID                                                AS HTANBiospecimenID,
@@ -364,12 +364,12 @@ LEFT JOIN (
 
 
 -- ============================================================
--- VIEW: phase1_cases
+-- VIEW: cases
 -- Phase 1 table: cases
 -- Combines demographics, vital status, diagnosis, therapy, and molecular test data
 -- per participant into a single denormalized row.
 -- ============================================================
-CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_cases` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.cases` AS
 WITH
   vital_agg AS (
     SELECT
@@ -534,7 +534,7 @@ LEFT JOIN molecular_agg mol ON d.HTAN_PARTICIPANT_ID = mol.HTAN_PARTICIPANT_ID;
 
 
 -- ============================================================
--- VIEW: phase1_files
+-- VIEW: files
 -- Phase 1 table: files
 -- Sources: UNION ALL of all gold_RELEASED_METADATA_TABLE_All_Files_* tables,
 --          joined with provenance and clinical tables.
@@ -564,7 +564,7 @@ LEFT JOIN molecular_agg mol ON d.HTAN_PARTICIPANT_ID = mol.HTAN_PARTICIPANT_ID;
 --   publicationIds       <- [] (not available in Phase 2)
 --   isRawSequencing <- 'true' when level = 'Level1', 'false' otherwise
 -- ============================================================
-CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_files` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.files` AS
 WITH
 
   -- ── Step 1: UNION ALL file metadata tables ──────────────────────────────────
@@ -818,13 +818,13 @@ LEFT JOIN file_diagnosis     fdia ON f.HTAN_DATA_FILE_ID = fdia.HTAN_DATA_FILE_I
 
 
 -- ============================================================
--- VIEW: phase1_publication_manifest
+-- VIEW: publication_manifest
 -- Phase 1 table: publication_manifest
 -- Phase 2 does not expose publication data in the gold_RELEASED_* tables.
 -- This view returns an empty result set with the correct Phase 1 schema
 -- as a placeholder until publication data becomes available.
 -- ============================================================
-CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_publication_manifest` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.publication_manifest` AS
 SELECT
   CAST(NULL AS STRING) AS Authors,
   CAST(NULL AS STRING) AS CitedInNumber,
