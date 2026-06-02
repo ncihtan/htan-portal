@@ -1,9 +1,9 @@
 -- BigQuery SQL: Transform Phase 2 (BigQuery) data to Phase 1 (ClickHouse) table structure
 --
 -- Usage:
---   Replace `<project>` and `<dataset>` with your BigQuery project and dataset names.
+--   Target views are created in: htan2-dcc.htan2_data_portal
 --   Execute each CREATE OR REPLACE VIEW statement in BigQuery to create Phase 1-equivalent views.
---   All source tables are the `gold_RELEASED_*` tables in the Phase 2 dataset.
+--   All source tables are the `gold_RELEASED_*` tables in: htan2-dcc.htan2_medallion_gold
 --
 -- Phase 1 tables produced:
 --   phase1_atlases            -> atlases
@@ -29,13 +29,13 @@
 -- Phase 1 table: atlases
 -- Derived from demographics and biospecimen counts per center.
 -- ============================================================
-CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_atlases` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_atlases` AS
 WITH
   centers AS (
     SELECT
       LOWER(REGEXP_EXTRACT(HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)')) AS htan_id,
       ANY_VALUE(HTAN_Center) AS htan_name
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Demographics`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics`
     WHERE HTAN_PARTICIPANT_ID IS NOT NULL
     GROUP BY 1
   ),
@@ -43,7 +43,7 @@ WITH
     SELECT
       LOWER(REGEXP_EXTRACT(HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)')) AS htan_id,
       COUNT(DISTINCT HTAN_PARTICIPANT_ID) AS num_cases
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Demographics`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics`
     WHERE HTAN_PARTICIPANT_ID IS NOT NULL
     GROUP BY 1
   ),
@@ -51,7 +51,7 @@ WITH
     SELECT
       LOWER(REGEXP_EXTRACT(HTAN_BIOSPECIMEN_ID, r'^(HTA[0-9]+)')) AS htan_id,
       COUNT(DISTINCT HTAN_BIOSPECIMEN_ID) AS num_biospecimens
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Biospecimen`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Biospecimen`
     WHERE HTAN_BIOSPECIMEN_ID IS NOT NULL
     GROUP BY 1
   )
@@ -78,7 +78,7 @@ LEFT JOIN biospecimen_counts bc USING (htan_id);
 --   synapseId <- Record_EntityId
 -- Fields with no Phase 2 equivalent are set to ''.
 -- ============================================================
-CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_demographics` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_demographics` AS
 SELECT
   d.Component,
   d.HTAN_PARTICIPANT_ID                                            AS HTANParticipantID,
@@ -113,14 +113,14 @@ SELECT
   ''                                                               AS EducationLevel,
   ''                                                               AS MedicallyUnderservedArea,
   ''                                                               AS RuralvsUrban
-FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
+FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
 LEFT JOIN (
   SELECT HTAN_PARTICIPANT_ID,
          ANY_VALUE(VITAL_STATUS)         AS VITAL_STATUS,
          ANY_VALUE(CAUSE_OF_DEATH)       AS CAUSE_OF_DEATH,
          ANY_VALUE(CAUSE_OF_DEATH_SOURCE) AS CAUSE_OF_DEATH_SOURCE,
          ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS AGE_IN_DAYS_AT_DEATH
-  FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus`
+  FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus`
   GROUP BY HTAN_PARTICIPANT_ID
 ) vs ON d.HTAN_PARTICIPANT_ID = vs.HTAN_PARTICIPANT_ID;
 
@@ -141,13 +141,13 @@ LEFT JOIN (
 --   GeneSymbol/MolecularAnalysisMethod/TestResult <- MolecularTest join
 --   Fields with no Phase 2 equivalent are set to ''.
 -- ============================================================
-CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_diagnosis` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_diagnosis` AS
 WITH
   therapy_agg AS (
     SELECT
       HTAN_PARTICIPANT_ID,
       ARRAY_AGG(DISTINCT TREATMENT_TYPE IGNORE NULLS) AS TreatmentType
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Therapy`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Therapy`
     GROUP BY HTAN_PARTICIPANT_ID
   ),
   molecular_agg AS (
@@ -156,7 +156,7 @@ WITH
       ANY_VALUE(GENE_SYMBOL)             AS GeneSymbol,
       ANY_VALUE(MOLECULAR_ANALYSIS_METHOD) AS MolecularAnalysisMethod,
       ANY_VALUE(TEST_RESULT)             AS TestResult
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_MolecularTest`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_MolecularTest`
     GROUP BY HTAN_PARTICIPANT_ID
   )
 SELECT
@@ -245,7 +245,7 @@ SELECT
   COALESCE(mol.TestResult, '')                                          AS TestResult,
   COALESCE(ther.TreatmentType, CAST([] AS ARRAY<STRING>))              AS TreatmentType,
   CAST([] AS ARRAY<STRING>)                                             AS organType
-FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis` diag
+FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis` diag
 LEFT JOIN therapy_agg ther
   ON diag.HTAN_PARTICIPANT_ID = ther.HTAN_PARTICIPANT_ID
 LEFT JOIN molecular_agg mol
@@ -275,7 +275,7 @@ LEFT JOIN molecular_agg mol
 --     is the broader preservation category used when the medium field is absent.
 --   Fields with no Phase 2 equivalent are set to ''.
 -- ============================================================
-CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_specimen` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_specimen` AS
 SELECT
   bs.Component,
   bs.HTAN_BIOSPECIMEN_ID                                                AS HTANBiospecimenID,
@@ -355,10 +355,10 @@ SELECT
   ''                                                                    AS TotalVolumeUnit,
   ''                                                                    AS TopographyCode,
   ''                                                                    AS AdditionalTopography
-FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Biospecimen` bs
+FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Biospecimen` bs
 LEFT JOIN (
   SELECT Record_EntityId, ANY_VALUE(HTAN_PARTICIPANT_ID) AS HTAN_PARTICIPANT_ID
-  FROM `<project>.<dataset>.gold_RELEASED_INDEXING_TABLE_Released_RecordsetRows`
+  FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_INDEXING_TABLE_Released_RecordsetRows`
   GROUP BY Record_EntityId
 ) rr ON bs.Record_EntityId = rr.Record_EntityId;
 
@@ -369,7 +369,7 @@ LEFT JOIN (
 -- Combines demographics, vital status, diagnosis, therapy, and molecular test data
 -- per participant into a single denormalized row.
 -- ============================================================
-CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_cases` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_cases` AS
 WITH
   vital_agg AS (
     SELECT
@@ -378,14 +378,14 @@ WITH
       ANY_VALUE(CAUSE_OF_DEATH)        AS CauseofDeath,
       ANY_VALUE(CAUSE_OF_DEATH_SOURCE) AS CauseofDeathSource,
       ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS DaystoDeath
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus`
     GROUP BY HTAN_PARTICIPANT_ID
   ),
   therapy_agg AS (
     SELECT
       HTAN_PARTICIPANT_ID,
       ARRAY_AGG(DISTINCT TREATMENT_TYPE IGNORE NULLS) AS TreatmentType
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Therapy`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Therapy`
     GROUP BY HTAN_PARTICIPANT_ID
   ),
   molecular_agg AS (
@@ -394,7 +394,7 @@ WITH
       ANY_VALUE(GENE_SYMBOL)               AS GeneSymbol,
       ANY_VALUE(MOLECULAR_ANALYSIS_METHOD) AS MolecularAnalysisMethod,
       ANY_VALUE(TEST_RESULT)               AS TestResult
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_MolecularTest`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_MolecularTest`
     GROUP BY HTAN_PARTICIPANT_ID
   )
 SELECT
@@ -508,7 +508,7 @@ SELECT
   COALESCE(mol.TestResult, '')                                        AS TestResult,
   COALESCE(ther.TreatmentType, CAST([] AS ARRAY<STRING>))            AS TreatmentType,
   CAST([] AS ARRAY<STRING>)                                           AS organType
-FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
+FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
 LEFT JOIN (
   SELECT
     HTAN_PARTICIPANT_ID,
@@ -526,7 +526,7 @@ LEFT JOIN (
     TUMOR_STAGED,
     CLINICAL_T_STAGE,
     AJCC_STAGING_SYSTEM_EDITION
-  FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis`
+  FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis`
 ) diag ON d.HTAN_PARTICIPANT_ID = diag.HTAN_PARTICIPANT_ID
 LEFT JOIN vital_agg  v    ON d.HTAN_PARTICIPANT_ID = v.HTAN_PARTICIPANT_ID
 LEFT JOIN therapy_agg ther ON d.HTAN_PARTICIPANT_ID = ther.HTAN_PARTICIPANT_ID
@@ -564,7 +564,7 @@ LEFT JOIN molecular_agg mol ON d.HTAN_PARTICIPANT_ID = mol.HTAN_PARTICIPANT_ID;
 --   publicationIds       <- [] (not available in Phase 2)
 --   isRawSequencing <- 'true' when level = 'Level1', 'false' otherwise
 -- ============================================================
-CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_files` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_files` AS
 WITH
 
   -- ── Step 1: UNION ALL file metadata tables ──────────────────────────────────
@@ -581,7 +581,7 @@ WITH
       CAST(NULL AS STRING) AS SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION,
       CAST(NULL AS STRING) AS WORKFLOW_VERSION,
       CAST(NULL AS STRING) AS WORKFLOW_LINK
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel1`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel1`
 
     UNION ALL
     SELECT
@@ -590,7 +590,7 @@ WITH
       CAST(NULL AS STRING),
       WORKFLOW_VERSION,
       WORKFLOW_LINK
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel2`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel2`
 
     UNION ALL
     SELECT
@@ -599,7 +599,7 @@ WITH
       CAST(NULL AS STRING),
       WORKFLOW_VERSION,
       WORKFLOW_LINK
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel3`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel3`
 
     UNION ALL
     SELECT
@@ -608,7 +608,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel2`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel2`
 
     UNION ALL
     SELECT
@@ -617,7 +617,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel3`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel3`
 
     UNION ALL
     SELECT
@@ -626,7 +626,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel4`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel4`
 
     UNION ALL
     SELECT
@@ -635,7 +635,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel1`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel1`
 
     UNION ALL
     SELECT
@@ -644,7 +644,7 @@ WITH
       CAST(NULL AS STRING),
       WORKFLOW_VERSION,
       WORKFLOW_LINK
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel2`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel2`
 
     UNION ALL
     SELECT
@@ -653,7 +653,7 @@ WITH
       SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION,
       WORKFLOW_VERSION,
       WORKFLOW_LINK
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel3and4`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel3and4`
 
     UNION ALL
     SELECT
@@ -662,7 +662,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_DigitalPathology`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_DigitalPathology`
 
     UNION ALL
     SELECT
@@ -671,7 +671,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel1`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel1`
 
     UNION ALL
     SELECT
@@ -680,7 +680,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel3`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel3`
 
     UNION ALL
     SELECT
@@ -689,7 +689,7 @@ WITH
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel4`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel4`
   ),
 
   -- ── Step 2: File-to-participant mapping from provenance ──────────────────────
@@ -698,7 +698,7 @@ WITH
       HTAN_DATA_FILE_ID,
       HTAN_PARTICIPANT_ID,
       HTAN_ASSAYED_BIOSPECIMEN_ID
-    FROM `<project>.<dataset>.gold_RELEASED_INDEXING_TABLE_All_Files_and_Records_ID_Provenance`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_INDEXING_TABLE_All_Files_and_Records_ID_Provenance`
     WHERE HTAN_DATA_FILE_ID IS NOT NULL
   ),
 
@@ -732,7 +732,7 @@ WITH
       ARRAY_AGG(DISTINCT d.ETHNIC_GROUP IGNORE NULLS) AS Ethnicity,
       ARRAY_AGG(DISTINCT fpm.HTAN_PARTICIPANT_ID IGNORE NULLS) AS demographicsIds
     FROM file_participant_map fpm
-    JOIN `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
+    JOIN `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
       ON fpm.HTAN_PARTICIPANT_ID = d.HTAN_PARTICIPANT_ID
     GROUP BY fpm.HTAN_DATA_FILE_ID
   ),
@@ -743,7 +743,7 @@ WITH
       fpm.HTAN_DATA_FILE_ID,
       ARRAY_AGG(DISTINCT vs.VITAL_STATUS IGNORE NULLS) AS VitalStatus
     FROM file_participant_map fpm
-    JOIN `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus` vs
+    JOIN `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus` vs
       ON fpm.HTAN_PARTICIPANT_ID = vs.HTAN_PARTICIPANT_ID
     GROUP BY fpm.HTAN_DATA_FILE_ID
   ),
@@ -755,7 +755,7 @@ WITH
       ARRAY_AGG(DISTINCT t.TREATMENT_TYPE IGNORE NULLS) AS TreatmentType,
       ARRAY_AGG(DISTINCT fpm.HTAN_PARTICIPANT_ID IGNORE NULLS) AS therapyIds
     FROM file_participant_map fpm
-    JOIN `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Therapy` t
+    JOIN `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Therapy` t
       ON fpm.HTAN_PARTICIPANT_ID = t.HTAN_PARTICIPANT_ID
     GROUP BY fpm.HTAN_DATA_FILE_ID
   ),
@@ -768,7 +768,7 @@ WITH
       ARRAY_AGG(DISTINCT diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE IGNORE NULLS) AS TissueorOrganofOrigin,
       ARRAY_AGG(DISTINCT fpm.HTAN_PARTICIPANT_ID IGNORE NULLS) AS diagnosisIds
     FROM file_participant_map fpm
-    JOIN `<project>.<dataset>.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis` diag
+    JOIN `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis` diag
       ON fpm.HTAN_PARTICIPANT_ID = diag.HTAN_PARTICIPANT_ID
     GROUP BY fpm.HTAN_DATA_FILE_ID
   )
@@ -824,7 +824,7 @@ LEFT JOIN file_diagnosis     fdia ON f.HTAN_DATA_FILE_ID = fdia.HTAN_DATA_FILE_I
 -- This view returns an empty result set with the correct Phase 1 schema
 -- as a placeholder until publication data becomes available.
 -- ============================================================
-CREATE OR REPLACE VIEW `<project>.<dataset>.phase1_publication_manifest` AS
+CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.phase1_publication_manifest` AS
 SELECT
   CAST(NULL AS STRING) AS Authors,
   CAST(NULL AS STRING) AS CitedInNumber,
