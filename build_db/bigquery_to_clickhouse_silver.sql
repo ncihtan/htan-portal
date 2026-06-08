@@ -1,8 +1,8 @@
--- BigQuery SQL: Transform Phase 2 (BigQuery) silver data to Phase 1 (ClickHouse) table structure
+-- BigQuery SQL: Transform Phase 2 (BigQuery) silver data with Phase 2 column names preserved
 --
 -- Usage:
 --   Target views are created in: htan2-dcc.htan2_data_portal
---   Execute each CREATE OR REPLACE VIEW statement in BigQuery to create Phase 1-equivalent views.
+--   Execute each CREATE OR REPLACE VIEW statement in BigQuery to create views with Phase 2 column names preserved.
 --   All source tables are the `silver_*` tables in: htan2-dcc.htan2_medallion_silver
 --
 -- Views created in htan2-dcc.htan2_data_portal:
@@ -81,11 +81,11 @@ LEFT JOIN biospecimen_counts bc USING (htan_id);
 CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.demographics` AS
 SELECT
   d.Component,
-  d.HTAN_PARTICIPANT_ID                                            AS HTANParticipantID,
-  d.ETHNIC_GROUP                                                   AS Ethnicity,
-  d.SEX                                                            AS Gender,
-  d.RACE                                                           AS Race,
-  COALESCE(vs.VITAL_STATUS, '')                                    AS VitalStatus,
+  d.HTAN_PARTICIPANT_ID,
+  d.ETHNIC_GROUP,
+  d.SEX,
+  d.RACE,
+  COALESCE(vs.VITAL_STATUS, '')                                    AS VITAL_STATUS,
   ''                                                               AS DaystoBirth,
   ''                                                               AS CountryofResidence,
   ''                                                               AS AgeIsObfuscated,
@@ -94,16 +94,15 @@ SELECT
   ''                                                               AS PrematureAtBirth,
   ''                                                               AS WeeksGestationatBirth,
   d.Record_EntityId                                                AS synapseId,
-  COALESCE(vs.CAUSE_OF_DEATH, '')                                  AS CauseofDeath,
-  COALESCE(vs.CAUSE_OF_DEATH_SOURCE, '')                           AS CauseofDeathSource,
-  COALESCE(vs.AGE_IN_DAYS_AT_DEATH, '')                            AS DaystoDeath,
+  COALESCE(vs.CAUSE_OF_DEATH, '')                                  AS CAUSE_OF_DEATH,
+  COALESCE(vs.CAUSE_OF_DEATH_SOURCE, '')                           AS CAUSE_OF_DEATH_SOURCE,
+  COALESCE(vs.AGE_IN_DAYS_AT_DEATH, '')                            AS AGE_IN_DAYS_AT_DEATH,
   ''                                                               AS YearofDeath,
   LOWER(REGEXP_EXTRACT(d.HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)'))   AS atlasid,
   d.HTAN_Center                                                    AS atlas_name,
   ''                                                               AS level,
   ''                                                               AS assayName,
   ''                                                               AS AtlasMeta,
-  d.HTAN_PARTICIPANT_ID                                            AS ParticipantID,
   CAST([] AS ARRAY<STRING>)                                        AS publicationIds,
   ''                                                               AS AFR,
   ''                                                               AS AMR,
@@ -146,30 +145,30 @@ WITH
   therapy_agg AS (
     SELECT
       HTAN_PARTICIPANT_ID,
-      ARRAY_AGG(DISTINCT TREATMENT_TYPE IGNORE NULLS) AS TreatmentType
+      ARRAY_AGG(DISTINCT TREATMENT_TYPE IGNORE NULLS) AS TREATMENT_TYPE
     FROM `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_Therapy`
     GROUP BY HTAN_PARTICIPANT_ID
   ),
   molecular_agg AS (
     SELECT
       HTAN_PARTICIPANT_ID,
-      ANY_VALUE(GENE_SYMBOL)             AS GeneSymbol,
-      ANY_VALUE(MOLECULAR_ANALYSIS_METHOD) AS MolecularAnalysisMethod,
-      ANY_VALUE(TEST_RESULT)             AS TestResult
+      ANY_VALUE(GENE_SYMBOL)             AS GENE_SYMBOL,
+      ANY_VALUE(MOLECULAR_ANALYSIS_METHOD) AS MOLECULAR_ANALYSIS_METHOD,
+      ANY_VALUE(TEST_RESULT)             AS TEST_RESULT
     FROM `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_MolecularTest`
     GROUP BY HTAN_PARTICIPANT_ID
   )
 SELECT
   diag.Component,
-  diag.HTAN_PARTICIPANT_ID                                              AS HTANParticipantID,
-  COALESCE(diag.AGE_IN_DAYS_AT_DIAGNOSIS, '')                          AS AgeatDiagnosis,
+  diag.HTAN_PARTICIPANT_ID AS HTAN_PARTICIPANT_ID,
+  COALESCE(diag.AGE_IN_DAYS_AT_DIAGNOSIS, '')                          AS AGE_IN_DAYS_AT_DIAGNOSIS,
   ''                                                                    AS YearofDiagnosis,
-  COALESCE(diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, '')                AS PrimaryDiagnosis,
+  COALESCE(diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, '')                AS PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
   ''                                                                    AS PrecancerousConditionType,
   ''                                                                    AS SiteofResectionorBiopsy,
-  COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')             AS TissueorOrganofOrigin,
+  COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')             AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
   ''                                                                    AS Morphology,
-  COALESCE(diag.TUMOR_GRADE, '')                                       AS TumorGrade,
+  COALESCE(diag.TUMOR_GRADE, '')                                       AS TUMOR_GRADE,
   ''                                                                    AS ProgressionorRecurrence,
   COALESCE(diag.LAST_KNOWN_DISEASE_STATUS, '')                         AS LastKnownDiseaseStatus,
   ''                                                                    AS DaystoLastFollowup,
@@ -237,13 +236,12 @@ SELECT
   ''                                                                    AS level,
   ''                                                                    AS assayName,
   ''                                                                    AS AtlasMeta,
-  diag.HTAN_PARTICIPANT_ID                                              AS ParticipantID,
   CAST([] AS ARRAY<STRING>)                                             AS publicationIds,
   ''                                                                    AS DaystoRecurrence,
-  COALESCE(mol.GeneSymbol, '')                                          AS GeneSymbol,
-  COALESCE(mol.MolecularAnalysisMethod, '')                             AS MolecularAnalysisMethod,
-  COALESCE(mol.TestResult, '')                                          AS TestResult,
-  COALESCE(ther.TreatmentType, CAST([] AS ARRAY<STRING>))              AS TreatmentType,
+  COALESCE(mol.GENE_SYMBOL, '')                                          AS GENE_SYMBOL,
+  COALESCE(mol.MOLECULAR_ANALYSIS_METHOD, '')                             AS MOLECULAR_ANALYSIS_METHOD,
+  COALESCE(mol.TEST_RESULT, '')                                          AS TEST_RESULT,
+  COALESCE(ther.TREATMENT_TYPE, CAST([] AS ARRAY<STRING>))              AS TREATMENT_TYPE,
   CAST([] AS ARRAY<STRING>)                                             AS organType
 FROM `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_Diagnosis` diag
 LEFT JOIN therapy_agg ther
@@ -346,10 +344,10 @@ SELECT
   ''                                                                    AS assayName,
   ''                                                                    AS AtlasMeta,
   bs.HTAN_PARENT_ID                                                     AS ParentID,
-  bs.HTAN_BIOSPECIMEN_ID                                                AS BiospecimenID,
+  bs.HTAN_BIOSPECIMEN_ID AS HTAN_BIOSPECIMEN_ID,
   CAST([] AS ARRAY<STRING>)                                             AS publicationIds,
   -- ParticipantID: resolved via the released recordset rows index
-  COALESCE(rr.HTAN_PARTICIPANT_ID, '')                                  AS ParticipantID,
+  COALESCE(rr.HTAN_PARTICIPANT_ID, '')                                  AS HTAN_PARTICIPANT_ID,
   COALESCE(bs.LONGEST_DIMENSION, '')                                    AS BiospecimenDimension1,
   COALESCE(bs.SHORTEST_DIMENSION, '')                                   AS BiospecimenDimension2,
   ''                                                                    AS BiospecimenDimension3,
@@ -378,37 +376,37 @@ WITH
   vital_agg AS (
     SELECT
       HTAN_PARTICIPANT_ID,
-      ANY_VALUE(VITAL_STATUS)          AS VitalStatus,
-      ANY_VALUE(CAUSE_OF_DEATH)        AS CauseofDeath,
-      ANY_VALUE(CAUSE_OF_DEATH_SOURCE) AS CauseofDeathSource,
-      ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS DaystoDeath
+      ANY_VALUE(VITAL_STATUS)          AS VITAL_STATUS,
+      ANY_VALUE(CAUSE_OF_DEATH)        AS CAUSE_OF_DEATH,
+      ANY_VALUE(CAUSE_OF_DEATH_SOURCE) AS CAUSE_OF_DEATH_SOURCE,
+      ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS AGE_IN_DAYS_AT_DEATH
     FROM `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_VitalStatus`
     GROUP BY HTAN_PARTICIPANT_ID
   ),
   therapy_agg AS (
     SELECT
       HTAN_PARTICIPANT_ID,
-      ARRAY_AGG(DISTINCT TREATMENT_TYPE IGNORE NULLS) AS TreatmentType
+      ARRAY_AGG(DISTINCT TREATMENT_TYPE IGNORE NULLS) AS TREATMENT_TYPE
     FROM `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_Therapy`
     GROUP BY HTAN_PARTICIPANT_ID
   ),
   molecular_agg AS (
     SELECT
       HTAN_PARTICIPANT_ID,
-      ANY_VALUE(GENE_SYMBOL)               AS GeneSymbol,
-      ANY_VALUE(MOLECULAR_ANALYSIS_METHOD) AS MolecularAnalysisMethod,
-      ANY_VALUE(TEST_RESULT)               AS TestResult
+      ANY_VALUE(GENE_SYMBOL)               AS GENE_SYMBOL,
+      ANY_VALUE(MOLECULAR_ANALYSIS_METHOD) AS MOLECULAR_ANALYSIS_METHOD,
+      ANY_VALUE(TEST_RESULT)               AS TEST_RESULT
     FROM `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_MolecularTest`
     GROUP BY HTAN_PARTICIPANT_ID
   )
 SELECT
   -- Demographics fields
   d.Component,
-  d.HTAN_PARTICIPANT_ID                                               AS HTANParticipantID,
-  d.ETHNIC_GROUP                                                      AS Ethnicity,
-  d.SEX                                                               AS Gender,
-  d.RACE                                                              AS Race,
-  COALESCE(v.VitalStatus, '')                                         AS VitalStatus,
+  d.HTAN_PARTICIPANT_ID AS HTAN_PARTICIPANT_ID,
+  d.ETHNIC_GROUP,
+  d.SEX,
+  d.RACE,
+  COALESCE(v.VITAL_STATUS, '')                                         AS VITAL_STATUS,
   ''                                                                  AS DaystoBirth,
   ''                                                                  AS CountryofResidence,
   ''                                                                  AS AgeIsObfuscated,
@@ -417,16 +415,15 @@ SELECT
   ''                                                                  AS PrematureAtBirth,
   ''                                                                  AS WeeksGestationatBirth,
   d.Record_EntityId                                                   AS synapseId,
-  COALESCE(v.CauseofDeath, '')                                        AS CauseofDeath,
-  COALESCE(v.CauseofDeathSource, '')                                  AS CauseofDeathSource,
-  COALESCE(v.DaystoDeath, '')                                         AS DaystoDeath,
+  COALESCE(v.CAUSE_OF_DEATH, '')                                        AS CAUSE_OF_DEATH,
+  COALESCE(v.CAUSE_OF_DEATH_SOURCE, '')                                  AS CAUSE_OF_DEATH_SOURCE,
+  COALESCE(v.AGE_IN_DAYS_AT_DEATH, '')                                         AS AGE_IN_DAYS_AT_DEATH,
   ''                                                                  AS YearofDeath,
   LOWER(REGEXP_EXTRACT(d.HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)'))      AS atlasid,
   d.HTAN_Center                                                       AS atlas_name,
   ''                                                                  AS level,
   ''                                                                  AS assayName,
   ''                                                                  AS AtlasMeta,
-  d.HTAN_PARTICIPANT_ID                                               AS ParticipantID,
   CAST([] AS ARRAY<STRING>)                                           AS publicationIds,
   ''                                                                  AS AFR,
   ''                                                                  AS AMR,
@@ -437,14 +434,14 @@ SELECT
   ''                                                                  AS MedicallyUnderservedArea,
   ''                                                                  AS RuralvsUrban,
   -- Diagnosis fields
-  COALESCE(diag.AGE_IN_DAYS_AT_DIAGNOSIS, '')                         AS AgeatDiagnosis,
+  COALESCE(diag.AGE_IN_DAYS_AT_DIAGNOSIS, '')                         AS AGE_IN_DAYS_AT_DIAGNOSIS,
   ''                                                                  AS YearofDiagnosis,
-  COALESCE(diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, '')               AS PrimaryDiagnosis,
+  COALESCE(diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, '')               AS PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
   ''                                                                  AS PrecancerousConditionType,
   ''                                                                  AS SiteofResectionorBiopsy,
-  COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')            AS TissueorOrganofOrigin,
+  COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')            AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
   ''                                                                  AS Morphology,
-  COALESCE(diag.TUMOR_GRADE, '')                                      AS TumorGrade,
+  COALESCE(diag.TUMOR_GRADE, '')                                      AS TUMOR_GRADE,
   ''                                                                  AS ProgressionorRecurrence,
   COALESCE(diag.LAST_KNOWN_DISEASE_STATUS, '')                        AS LastKnownDiseaseStatus,
   ''                                                                  AS DaystoLastFollowup,
@@ -507,10 +504,10 @@ SELECT
   ''                                                                  AS DaystoProgressionFree,
   ''                                                                  AS ProgressionorRecurrenceType,
   ''                                                                  AS DaystoRecurrence,
-  COALESCE(mol.GeneSymbol, '')                                        AS GeneSymbol,
-  COALESCE(mol.MolecularAnalysisMethod, '')                           AS MolecularAnalysisMethod,
-  COALESCE(mol.TestResult, '')                                        AS TestResult,
-  COALESCE(ther.TreatmentType, CAST([] AS ARRAY<STRING>))            AS TreatmentType,
+  COALESCE(mol.GENE_SYMBOL, '')                                        AS GENE_SYMBOL,
+  COALESCE(mol.MOLECULAR_ANALYSIS_METHOD, '')                           AS MOLECULAR_ANALYSIS_METHOD,
+  COALESCE(mol.TEST_RESULT, '')                                        AS TEST_RESULT,
+  COALESCE(ther.TREATMENT_TYPE, CAST([] AS ARRAY<STRING>))            AS TREATMENT_TYPE,
   CAST([] AS ARRAY<STRING>)                                           AS organType
 FROM `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_Demographics` d
 LEFT JOIN (
@@ -731,9 +728,9 @@ WITH
   file_demographics AS (
     SELECT
       fpm.HTAN_DATA_FILE_ID,
-      ARRAY_AGG(DISTINCT d.SEX          IGNORE NULLS) AS Gender,
-      ARRAY_AGG(DISTINCT d.RACE         IGNORE NULLS) AS Race,
-      ARRAY_AGG(DISTINCT d.ETHNIC_GROUP IGNORE NULLS) AS Ethnicity,
+      ARRAY_AGG(DISTINCT d.SEX          IGNORE NULLS) AS SEX,
+      ARRAY_AGG(DISTINCT d.RACE         IGNORE NULLS) AS RACE,
+      ARRAY_AGG(DISTINCT d.ETHNIC_GROUP IGNORE NULLS) AS ETHNIC_GROUP,
       ARRAY_AGG(DISTINCT fpm.HTAN_PARTICIPANT_ID IGNORE NULLS) AS demographicsIds
     FROM file_participant_map fpm
     JOIN `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_Demographics` d
@@ -745,7 +742,7 @@ WITH
   file_vital AS (
     SELECT
       fpm.HTAN_DATA_FILE_ID,
-      ARRAY_AGG(DISTINCT vs.VITAL_STATUS IGNORE NULLS) AS VitalStatus
+      ARRAY_AGG(DISTINCT vs.VITAL_STATUS IGNORE NULLS) AS VITAL_STATUS
     FROM file_participant_map fpm
     JOIN `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_VitalStatus` vs
       ON fpm.HTAN_PARTICIPANT_ID = vs.HTAN_PARTICIPANT_ID
@@ -756,7 +753,7 @@ WITH
   file_therapy AS (
     SELECT
       fpm.HTAN_DATA_FILE_ID,
-      ARRAY_AGG(DISTINCT t.TREATMENT_TYPE IGNORE NULLS) AS TreatmentType,
+      ARRAY_AGG(DISTINCT t.TREATMENT_TYPE IGNORE NULLS) AS TREATMENT_TYPE,
       ARRAY_AGG(DISTINCT fpm.HTAN_PARTICIPANT_ID IGNORE NULLS) AS therapyIds
     FROM file_participant_map fpm
     JOIN `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_Therapy` t
@@ -768,8 +765,8 @@ WITH
   file_diagnosis AS (
     SELECT
       fpm.HTAN_DATA_FILE_ID,
-      ARRAY_AGG(DISTINCT diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID    IGNORE NULLS) AS PrimaryDiagnosis,
-      ARRAY_AGG(DISTINCT diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE IGNORE NULLS) AS TissueorOrganofOrigin,
+      ARRAY_AGG(DISTINCT diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID    IGNORE NULLS) AS PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
+      ARRAY_AGG(DISTINCT diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE IGNORE NULLS) AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
       ARRAY_AGG(DISTINCT fpm.HTAN_PARTICIPANT_ID IGNORE NULLS) AS diagnosisIds
     FROM file_participant_map fpm
     JOIN `htan2-dcc.htan2_medallion_silver.silver_METADATA_TABLE_All_Records_Diagnosis` diag
@@ -787,16 +784,16 @@ SELECT
   f.FILENAME                                                          AS Filename,
   f.FILE_FORMAT                                                       AS FileFormat,
   f.Component,
-  f.HTAN_DATA_FILE_ID                                                 AS DataFileID,
+  f.HTAN_DATA_FILE_ID AS HTAN_DATA_FILE_ID,
   f.HTAN_PARENT_ID                                                    AS ParentDataFileID,
   COALESCE(fb.biospecimenIds,   CAST([] AS ARRAY<STRING>))            AS biospecimenIds,
-  COALESCE(fd.Gender,           CAST([] AS ARRAY<STRING>))            AS Gender,
-  COALESCE(fd.Ethnicity,        CAST([] AS ARRAY<STRING>))            AS Ethnicity,
-  COALESCE(fd.Race,             CAST([] AS ARRAY<STRING>))            AS Race,
-  COALESCE(fv.VitalStatus,      CAST([] AS ARRAY<STRING>))            AS VitalStatus,
-  COALESCE(ft.TreatmentType,    CAST([] AS ARRAY<STRING>))            AS TreatmentType,
-  COALESCE(fdia.PrimaryDiagnosis,       CAST([] AS ARRAY<STRING>))    AS PrimaryDiagnosis,
-  COALESCE(fdia.TissueorOrganofOrigin,  CAST([] AS ARRAY<STRING>))    AS TissueorOrganofOrigin,
+  COALESCE(fd.SEX,              CAST([] AS ARRAY<STRING>))            AS SEX,
+  COALESCE(fd.ETHNIC_GROUP,    CAST([] AS ARRAY<STRING>))            AS ETHNIC_GROUP,
+  COALESCE(fd.RACE,             CAST([] AS ARRAY<STRING>))            AS RACE,
+  COALESCE(fv.VITAL_STATUS,     CAST([] AS ARRAY<STRING>))            AS VITAL_STATUS,
+  COALESCE(ft.TREATMENT_TYPE,   CAST([] AS ARRAY<STRING>))            AS TREATMENT_TYPE,
+  COALESCE(fdia.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, CAST([] AS ARRAY<STRING>)) AS PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
+  COALESCE(fdia.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, CAST([] AS ARRAY<STRING>)) AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
   COALESCE(f.SCRNASEQ_WORKFLOW_TYPE, '')                              AS ScRNAseqWorkflowType,
   COALESCE(f.SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION, '')            AS ScRNAseqWorkflowParametersDescription,
   COALESCE(f.WORKFLOW_VERSION, '')                                    AS WorkflowVersion,

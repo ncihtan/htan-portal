@@ -195,6 +195,95 @@ export const specimenQuery = _.template(`
     )
 `);
 
+
+export const fileQuery2 = `
+    SELECT
+        synapseId,
+        atlasid,
+        atlas_name,
+        level,
+        assayName,
+        Filename,
+        FileFormat,
+        HTAN_DATA_FILE_ID,
+        ParentDataFileID,
+        biospecimenIds,
+        SEX,
+        ETHNIC_GROUP,
+        RACE,
+        VITAL_STATUS,
+        TREATMENT_TYPE,
+        PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
+        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
+        CAST([] AS Array(String)) AS viewersArr,
+        CAST([] AS Array(String)) AS organType,
+        CAST([] AS Array(String)) AS publicationIds,
+        diagnosisIds,
+        demographicsIds,
+        therapyIds,
+        Component
+    FROM files
+`;
+
+export const caseQuery2 = _.template(`
+    SELECT * FROM cases
+    WHERE HTAN_PARTICIPANT_ID IN (
+        SELECT demographicsIds FROM files
+        ARRAY JOIN demographicsIds
+        <%=filterString%>
+        UNION DISTINCT
+        SELECT diagnosisIds FROM files
+        ARRAY JOIN diagnosisIds
+        <%=filterString%>
+    )
+`);
+
+export const specimenQuery2 = _.template(`
+    SELECT * FROM specimen
+    WHERE HTAN_BIOSPECIMEN_ID IN (
+        SELECT biospecimenIds FROM files
+        ARRAY JOIN biospecimenIds
+        <%=filterString%>
+    )
+`);
+
+export const countsByTypeQuery2 = _.template(`
+    WITH
+        fileQueryForSex AS (SELECT * FROM files <%=genderFilterString%>),
+        fileQueryForRace AS (SELECT * FROM files <%=raceFilterString%>),
+        fileQueryForPrimaryDiagnosis AS (SELECT * FROM files <%=primaryDiagnosisFilterString%>),
+        fileQueryForEthnicity AS (SELECT * FROM files <%=ethnicityFilterString%>),
+        fileQueryForTissueOrOrganOfOrigin AS (SELECT * FROM files <%=tissueOrOrganOfOriginFilterString%>),
+        fileQueryForLevel AS (SELECT * FROM files <%=levelFilterString%>),
+        fileQueryForAssayName AS (SELECT * FROM files <%=assayNameFilterString%>),
+        fileQueryForTreatmentType AS (SELECT * FROM files <%=treatmentTypeFilterString%>),
+        fileQueryForFileFormat AS (SELECT * FROM files <%=fileFormatFilterString%>),
+        fileQueryForAtlasName AS (SELECT * FROM files <%=atlasNameFilterString%>)
+    SELECT val, type, fieldType, count(Distinct HTAN_DATA_FILE_ID) as count FROM (
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(SEX) as val, 'SEX' as type, 'array' as fieldType FROM fileQueryForSex
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(RACE) as val, 'RACE' as type, 'array' as fieldType FROM fileQueryForRace
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID) as val, 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID' as type, 'array' as fieldType FROM fileQueryForPrimaryDiagnosis
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(ETHNIC_GROUP) as val, 'ETHNIC_GROUP' as type, 'array' as fieldType FROM fileQueryForEthnicity
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE) as val, 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE' as type, 'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, level as val, 'level' as type, 'string' as fieldType FROM fileQueryForLevel
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, assayName as val, 'assayName' as type, 'string' as fieldType FROM fileQueryForAssayName
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TREATMENT_TYPE) as val, 'TREATMENT_TYPE' as type, 'array' as fieldType FROM fileQueryForTreatmentType
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, FileFormat as val, 'FileFormat' as type, 'string' as fieldType FROM fileQueryForFileFormat
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
+    )
+    WHERE notEmpty(val)
+    GROUP BY val, type, fieldType
+`);
+
 export const assayQuery = _.template(`
     SELECT * FROM files WHERE has(files.publicationIds,'<%=publicationId %>')
 `);
@@ -254,3 +343,56 @@ export function getFilterString(
         return '';
     }
 }
+
+
+export function getFilterString2(
+    selectedFilters: SelectedFilter[],
+    unfilteredOptions?: CountByType[]
+) {
+    const filterToFieldMap: { [filter: string]: string } = {
+        AtlasName: 'atlas_name',
+        Gender: 'SEX',
+        SEX: 'SEX',
+        Ethnicity: 'ETHNIC_GROUP',
+        ETHNIC_GROUP: 'ETHNIC_GROUP',
+        Race: 'RACE',
+        RACE: 'RACE',
+        VitalStatus: 'VITAL_STATUS',
+        VITAL_STATUS: 'VITAL_STATUS',
+        TreatmentType: 'TREATMENT_TYPE',
+        TREATMENT_TYPE: 'TREATMENT_TYPE',
+        PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
+        PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID:
+            'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
+        TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
+        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE:
+            'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
+    };
+
+    if (selectedFilters.length > 0) {
+        const clauses = _(selectedFilters)
+            .groupBy('group')
+            .map((val, k) => {
+                const field = filterToFieldMap[k] || k;
+                const values = val.map((v) => `'${v.value}'`).join(',');
+                if (
+                    val.find((v) => {
+                        const option = unfilteredOptions?.find(
+                            (o) => o.val === v.value && o.type === k
+                        );
+                        return option?.fieldType === 'string';
+                    })
+                ) {
+                    return `${field} in (${values})`;
+                } else {
+                    return `hasAny(${field},[${values}])`;
+                }
+            })
+            .value();
+
+        return ' WHERE ' + clauses.join(' AND ');
+    } else {
+        return '';
+    }
+}
+
