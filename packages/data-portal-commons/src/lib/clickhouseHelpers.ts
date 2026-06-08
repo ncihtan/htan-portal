@@ -195,7 +195,6 @@ export const specimenQuery = _.template(`
     )
 `);
 
-
 export const fileQuery2 = `
     SELECT
         synapseId,
@@ -206,6 +205,7 @@ export const fileQuery2 = `
         Filename,
         FileFormat,
         HTAN_DATA_FILE_ID,
+        HTAN_PARENT_ID,
         ParentDataFileID,
         biospecimenIds,
         SEX,
@@ -344,7 +344,6 @@ export function getFilterString(
     }
 }
 
-
 export function getFilterString2(
     selectedFilters: SelectedFilter[],
     unfilteredOptions?: CountByType[]
@@ -395,4 +394,3 @@ export function getFilterString2(
         return '';
     }
 }
-

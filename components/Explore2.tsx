@@ -67,8 +67,9 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
     },
     {
-        name: 'ParentDataFileID',
-        selector: 'ParentDataFileID',
+        name: 'HTAN_PARENT_ID',
+        selector: (row) => row.HTAN_PARENT_ID ?? row.ParentDataFileID,
+        getSearchValue: (row) => row.HTAN_PARENT_ID ?? row.ParentDataFileID,
         sortable: true,
         omit: true,
     },
@@ -78,14 +79,24 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         getSearchValue: (row) => formatValue(row.biospecimenIds),
         sortable: true,
     },
-    { name: 'SEX', selector: (row) => formatValue(row.SEX), getSearchValue: (row) => formatValue(row.SEX), sortable: true },
+    {
+        name: 'SEX',
+        selector: (row) => formatValue(row.SEX),
+        getSearchValue: (row) => formatValue(row.SEX),
+        sortable: true,
+    },
     {
         name: 'ETHNIC_GROUP',
         selector: (row) => formatValue(row.ETHNIC_GROUP),
         getSearchValue: (row) => formatValue(row.ETHNIC_GROUP),
         sortable: true,
     },
-    { name: 'RACE', selector: (row) => formatValue(row.RACE), getSearchValue: (row) => formatValue(row.RACE), sortable: true },
+    {
+        name: 'RACE',
+        selector: (row) => formatValue(row.RACE),
+        getSearchValue: (row) => formatValue(row.RACE),
+        sortable: true,
+    },
     {
         name: 'VITAL_STATUS',
         selector: (row) => formatValue(row.VITAL_STATUS),
@@ -156,8 +167,18 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
         omit: true,
     },
-    { name: 'GENE_SYMBOL', selector: 'GENE_SYMBOL', sortable: true, omit: true },
-    { name: 'TEST_RESULT', selector: 'TEST_RESULT', sortable: true, omit: true },
+    {
+        name: 'GENE_SYMBOL',
+        selector: 'GENE_SYMBOL',
+        sortable: true,
+        omit: true,
+    },
+    {
+        name: 'TEST_RESULT',
+        selector: 'TEST_RESULT',
+        sortable: true,
+        omit: true,
+    },
     { name: 'Component', selector: 'Component', sortable: true, omit: true },
 ];
 
@@ -173,15 +194,39 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
     },
     { name: 'atlas_name', selector: 'atlas_name', sortable: true },
-    { name: 'ParentID', selector: 'ParentID', sortable: true },
-    { name: 'BiospecimenType', selector: 'BiospecimenType', sortable: true },
     {
-        name: 'AcquisitionMethodType',
-        selector: 'AcquisitionMethodType',
+        name: 'HTAN_PARENT_ID',
+        selector: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
+        getSearchValue: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
         sortable: true,
     },
-    { name: 'FixativeType', selector: 'FixativeType', sortable: true },
-    { name: 'StorageMethod', selector: 'StorageMethod', sortable: true },
+    {
+        name: 'BIOSPECIMEN_TYPE',
+        selector: (row) => row.BIOSPECIMEN_TYPE ?? row.BiospecimenType,
+        getSearchValue: (row) => row.BIOSPECIMEN_TYPE ?? row.BiospecimenType,
+        sortable: true,
+    },
+    {
+        name: 'ACQUISITION_METHOD_TYPE',
+        selector: (row) =>
+            row.ACQUISITION_METHOD_TYPE ?? row.AcquisitionMethodType,
+        getSearchValue: (row) =>
+            row.ACQUISITION_METHOD_TYPE ?? row.AcquisitionMethodType,
+        sortable: true,
+    },
+    {
+        name: 'PRESERVATION_MEDIUM',
+        selector: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
+        getSearchValue: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
+        sortable: true,
+    },
+    {
+        name: 'PRESERVATION_METHOD',
+        selector: (row) => row.PRESERVATION_METHOD,
+        getSearchValue: (row) => row.PRESERVATION_METHOD,
+        sortable: true,
+        omit: true,
+    },
     { name: 'Component', selector: 'Component', sortable: true, omit: true },
 ];
 
@@ -281,7 +326,9 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     return;
                 }
                 setError(
-                    err instanceof Error ? err.message : 'Failed to load Phase 2 data.'
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to load Phase 2 data.'
                 );
             } finally {
                 if (active) {
@@ -298,50 +345,70 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
     }, [selectedFiltersKey]);
 
     const optionsByGroup = useMemo(() => {
-        return filterOptions.reduce<Record<string, CountByType[]>>((acc, option) => {
-            if (!acc[option.type]) {
-                acc[option.type] = [];
-            }
-            acc[option.type].push(option);
-            return acc;
-        }, {});
+        return filterOptions.reduce<Record<string, CountByType[]>>(
+            (acc, option) => {
+                if (!acc[option.type]) {
+                    acc[option.type] = [];
+                }
+                acc[option.type].push(option);
+                return acc;
+            },
+            {}
+        );
     }, [filterOptions]);
 
     const selectedValuesByGroup = useMemo(() => {
-        return selectedFilters.reduce<Record<string, string[]>>((acc, filter) => {
-            if (!acc[filter.group]) {
-                acc[filter.group] = [];
-            }
-            acc[filter.group].push(filter.value);
-            return acc;
-        }, {});
+        return selectedFilters.reduce<Record<string, string[]>>(
+            (acc, filter) => {
+                if (!acc[filter.group]) {
+                    acc[filter.group] = [];
+                }
+                acc[filter.group].push(filter.value);
+                return acc;
+            },
+            {}
+        );
     }, [selectedFilters]);
 
     const handleFilterChange = (group: string, values: string[]) => {
-        props.onFilterChange?.(updateFiltersForGroup(selectedFilters, group, values));
+        props.onFilterChange?.(
+            updateFiltersForGroup(selectedFilters, group, values)
+        );
     };
 
     return (
         <div>
             <h2>HTAN Phase 2 Explorer</h2>
-            <p>Explore Phase 2 files, cases, and biospecimens with preserved Phase 2 field names.</p>
+            <p>
+                Explore Phase 2 files, cases, and biospecimens with preserved
+                Phase 2 field names.
+            </p>
 
-            <div className="mb-3" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+            <div
+                className="mb-3"
+                style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}
+            >
                 {FILTERS.map((filter) => {
-                    const options = (optionsByGroup[filter.group] || []).sort((a, b) =>
-                        a.val.localeCompare(b.val)
-                    );
+                    const options = (
+                        optionsByGroup[filter.group] || []
+                    ).sort((a, b) => a.val.localeCompare(b.val));
 
                     return (
                         <label
                             key={filter.group}
-                            style={{ display: 'flex', flexDirection: 'column', minWidth: 220 }}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                minWidth: 220,
+                            }}
                         >
                             <strong>{filter.label}</strong>
                             <select
                                 multiple
                                 size={Math.min(Math.max(options.length, 2), 6)}
-                                value={selectedValuesByGroup[filter.group] || []}
+                                value={
+                                    selectedValuesByGroup[filter.group] || []
+                                }
                                 onChange={(event) => {
                                     const values = Array.from(
                                         event.target.selectedOptions,
@@ -351,7 +418,10 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                                 }}
                             >
                                 {options.map((option) => (
-                                    <option key={`${filter.group}-${option.val}`} value={option.val}>
+                                    <option
+                                        key={`${filter.group}-${option.val}`}
+                                        value={option.val}
+                                    >
                                         {`${option.val} (${option.count})`}
                                     </option>
                                 ))}
@@ -361,7 +431,10 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                 })}
             </div>
 
-            <div className="mb-3" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div
+                className="mb-3"
+                style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}
+            >
                 {[
                     ['file', `Files (${files.length})`],
                     ['cases', `Cases (${cases.length})`],
@@ -369,7 +442,11 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                 ].map(([tab, label]) => (
                     <button
                         key={tab}
-                        className={`btn ${activeTab === tab ? 'btn-primary' : 'btn-outline-primary'}`}
+                        className={`btn ${
+                            activeTab === tab
+                                ? 'btn-primary'
+                                : 'btn-outline-primary'
+                        }`}
                         onClick={() => setActiveTab(tab)}
                         type="button"
                     >
