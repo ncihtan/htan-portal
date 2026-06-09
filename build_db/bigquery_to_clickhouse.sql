@@ -58,7 +58,6 @@ WITH
 SELECT
   c.htan_id,
   c.htan_name,
-  '{}' AS AtlasMeta,
   CAST(COALESCE(bc.num_biospecimens, 0) AS STRING) AS num_biospecimens,
   CAST(COALESCE(pc.num_cases, 0) AS STRING) AS num_cases
 FROM centers c
@@ -70,13 +69,9 @@ LEFT JOIN biospecimen_counts bc USING (htan_id);
 -- VIEW: demographics
 -- Phase 1 table: demographics
 -- Source: Demographics + VitalStatus records.
--- Column mapping notes:
---   Gender   <- SEX  (biological sex; Phase 2 renamed the field)
---   Ethnicity <- ETHNIC_GROUP
---   Race     <- RACE
---   VitalStatus / CauseofDeath / DaystoDeath <- VitalStatus table (LEFT JOIN)
+-- Trimmed to the demographics and vital-status fields still used downstream.
 --   synapseId <- Record_EntityId
--- Fields with no Phase 2 equivalent are set to ''.
+--   Vital status fields come from the VitalStatus table via LEFT JOIN.
 -- ============================================================
 CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.demographics` AS
 SELECT
@@ -86,32 +81,12 @@ SELECT
   d.SEX,
   d.RACE,
   COALESCE(vs.VITAL_STATUS, '')                                    AS VITAL_STATUS,
-  ''                                                               AS DaystoBirth,
-  ''                                                               AS CountryofResidence,
-  ''                                                               AS AgeIsObfuscated,
-  ''                                                               AS YearOfBirth,
-  ''                                                               AS OccupationDurationYears,
-  ''                                                               AS PrematureAtBirth,
-  ''                                                               AS WeeksGestationatBirth,
   d.Record_EntityId                                                AS synapseId,
   COALESCE(vs.CAUSE_OF_DEATH, '')                                  AS CAUSE_OF_DEATH,
   COALESCE(vs.CAUSE_OF_DEATH_SOURCE, '')                           AS CAUSE_OF_DEATH_SOURCE,
   COALESCE(vs.AGE_IN_DAYS_AT_DEATH, '')                            AS AGE_IN_DAYS_AT_DEATH,
-  ''                                                               AS YearofDeath,
   LOWER(REGEXP_EXTRACT(d.HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)'))   AS atlasid,
-  d.HTAN_Center                                                    AS atlas_name,
-  ''                                                               AS level,
-  ''                                                               AS assayName,
-  ''                                                               AS AtlasMeta,
-  CAST([] AS ARRAY<STRING>)                                        AS publicationIds,
-  ''                                                               AS AFR,
-  ''                                                               AS AMR,
-  ''                                                               AS EAS,
-  ''                                                               AS EUR,
-  ''                                                               AS SAS,
-  ''                                                               AS EducationLevel,
-  ''                                                               AS MedicallyUnderservedArea,
-  ''                                                               AS RuralvsUrban
+  d.HTAN_Center                                                    AS atlas_name
 FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
 LEFT JOIN (
   SELECT HTAN_PARTICIPANT_ID,
@@ -128,17 +103,9 @@ LEFT JOIN (
 -- VIEW: diagnosis
 -- Phase 1 table: diagnosis
 -- Source: Diagnosis + Therapy + MolecularTest records.
--- Column mapping notes:
---   AgeatDiagnosis              <- AGE_IN_DAYS_AT_DIAGNOSIS
---   PrimaryDiagnosis            <- PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID
---   TissueorOrganofOrigin       <- TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE
---   AJCCClinicalM/N/T           <- CLINICAL_M/N/T_STAGE
---   AJCCStagingSystemEdition    <- AJCC_STAGING_SYSTEM_EDITION
---   ClassificationofTumor       <- TUMOR_CLASSIFICATION_CATEGORY
---   DaystoLastKnownDiseaseStatus <- AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS
---   TreatmentType               <- TREATMENT_TYPE (via Therapy join, ARRAY_AGG)
---   GeneSymbol/MolecularAnalysisMethod/TestResult <- MolecularTest join
---   Fields with no Phase 2 equivalent are set to ''.
+-- Trimmed to the diagnosis, therapy, and molecular-test fields still used downstream.
+--   TREATMENT_TYPE is aggregated from Therapy records.
+--   GENE_SYMBOL / MOLECULAR_ANALYSIS_METHOD / TEST_RESULT come from MolecularTest.
 -- ============================================================
 CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.diagnosis` AS
 WITH
@@ -162,87 +129,26 @@ SELECT
   diag.Component,
   diag.HTAN_PARTICIPANT_ID AS HTAN_PARTICIPANT_ID,
   COALESCE(diag.AGE_IN_DAYS_AT_DIAGNOSIS, '')                          AS AGE_IN_DAYS_AT_DIAGNOSIS,
-  ''                                                                    AS YearofDiagnosis,
   COALESCE(diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, '')                AS PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
-  ''                                                                    AS PrecancerousConditionType,
-  ''                                                                    AS SiteofResectionorBiopsy,
   COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')             AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-  ''                                                                    AS Morphology,
   COALESCE(diag.TUMOR_GRADE, '')                                       AS TUMOR_GRADE,
-  ''                                                                    AS ProgressionorRecurrence,
   COALESCE(diag.LAST_KNOWN_DISEASE_STATUS, '')                         AS LastKnownDiseaseStatus,
-  ''                                                                    AS DaystoLastFollowup,
   COALESCE(diag.AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS, '')          AS DaystoLastKnownDiseaseStatus,
   COALESCE(diag.METHOD_OF_DIAGNOSIS, '')                               AS MethodofDiagnosis,
-  ''                                                                    AS PriorMalignancy,
-  ''                                                                    AS PriorTreatment,
   COALESCE(diag.METASTASIS_AT_DIAGNOSIS, '')                           AS MetastasisatDiagnosis,
-  ''                                                                    AS MetastasisatDiagnosisSite,
-  ''                                                                    AS FirstSymptomPriortoDiagnosis,
-  ''                                                                    AS DaystoDiagnosis,
-  ''                                                                    AS PercentTumorInvasion,
-  ''                                                                    AS ResidualDisease,
-  ''                                                                    AS SynchronousMalignancy,
-  ''                                                                    AS TumorConfinedtoOrganofOrigin,
-  ''                                                                    AS TumorFocality,
-  ''                                                                    AS TumorLargestDimensionDiameter,
-  ''                                                                    AS BreslowThickness,
-  ''                                                                    AS VascularInvasionPresent,
-  ''                                                                    AS VascularInvasionType,
-  ''                                                                    AS AnaplasiaPresent,
-  ''                                                                    AS AnaplasiaPresentType,
-  ''                                                                    AS Laterality,
-  ''                                                                    AS PerineuralInvasionPresent,
-  ''                                                                    AS LymphaticInvasionPresent,
-  ''                                                                    AS LymphNodesPositive,
-  ''                                                                    AS LymphNodesTested,
-  ''                                                                    AS PeritonealFluidCytologicalStatus,
   COALESCE(diag.TUMOR_CLASSIFICATION_CATEGORY, '')                     AS ClassificationofTumor,
-  ''                                                                    AS BestOverallResponse,
-  ''                                                                    AS MitoticCount,
   COALESCE(diag.CLINICAL_M_STAGE, '')                                  AS AJCCClinicalM,
   COALESCE(diag.CLINICAL_N_STAGE, '')                                  AS AJCCClinicalN,
   COALESCE(diag.TUMOR_STAGED, '')                                      AS AJCCClinicalStage,
   COALESCE(diag.CLINICAL_T_STAGE, '')                                  AS AJCCClinicalT,
-  ''                                                                    AS AJCCPathologicM,
-  ''                                                                    AS AJCCPathologicN,
-  ''                                                                    AS AJCCPathologicStage,
-  ''                                                                    AS AJCCPathologicT,
   COALESCE(diag.AJCC_STAGING_SYSTEM_EDITION, '')                       AS AJCCStagingSystemEdition,
-  ''                                                                    AS CogNeuroblastomaRiskGroup,
-  ''                                                                    AS CogRhabdomyosarcomaRiskGroup,
-  ''                                                                    AS GreatestTumorDimension,
-  ''                                                                    AS IGCCCGStage,
-  ''                                                                    AS INPCGrade,
-  ''                                                                    AS INPCHistologicGroup,
-  ''                                                                    AS INRGStage,
-  ''                                                                    AS INSSStage,
-  ''                                                                    AS IRSGroup,
-  ''                                                                    AS IRSStage,
-  ''                                                                    AS ISSStage,
-  ''                                                                    AS LymphNodeInvolvedSite,
-  ''                                                                    AS MarginDistance,
-  ''                                                                    AS MicropapillaryFeatures,
-  ''                                                                    AS PregnantatDiagnosis,
-  ''                                                                    AS SupratentorialLocalization,
-  ''                                                                    AS TumorDepth,
-  ''                                                                    AS WHOCNSGrade,
   diag.Record_EntityId                                                  AS synapseId,
-  ''                                                                    AS DaystoProgression,
-  ''                                                                    AS DaystoProgressionFree,
-  ''                                                                    AS ProgressionorRecurrenceType,
   LOWER(REGEXP_EXTRACT(diag.HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)'))    AS atlasid,
   diag.HTAN_Center                                                      AS atlas_name,
-  ''                                                                    AS level,
-  ''                                                                    AS assayName,
-  ''                                                                    AS AtlasMeta,
-  CAST([] AS ARRAY<STRING>)                                             AS publicationIds,
-  ''                                                                    AS DaystoRecurrence,
   COALESCE(mol.GENE_SYMBOL, '')                                          AS GENE_SYMBOL,
   COALESCE(mol.MOLECULAR_ANALYSIS_METHOD, '')                             AS MOLECULAR_ANALYSIS_METHOD,
   COALESCE(mol.TEST_RESULT, '')                                          AS TEST_RESULT,
-  COALESCE(ther.TREATMENT_TYPE, CAST([] AS ARRAY<STRING>))              AS TREATMENT_TYPE,
-  CAST([] AS ARRAY<STRING>)                                             AS organType
+  COALESCE(ther.TREATMENT_TYPE, CAST([] AS ARRAY<STRING>))              AS TREATMENT_TYPE
 FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Diagnosis` diag
 LEFT JOIN therapy_agg ther
   ON diag.HTAN_PARTICIPANT_ID = ther.HTAN_PARTICIPANT_ID
@@ -254,24 +160,13 @@ LEFT JOIN molecular_agg mol
 -- VIEW: specimen
 -- Phase 1 table: specimen
 -- Source: Biospecimen records + Released RecordsetRows (for ParticipantID).
--- Column mapping notes:
---   HTANBiospecimenID  <- HTAN_BIOSPECIMEN_ID
---   HTANParentID       <- HTAN_PARENT_ID
---   TimepointLabel     <- TIMEPOINT
---   CollectionDaysfromIndex <- AGE_IN_DAYS_AT_SPECIMEN_COLLECTION
---   SectioningDaysfromIndex <- AGE_IN_DAYS_AT_SECTIONING
---   ProcessingDaysfromIndex <- AGE_IN_DAYS_AT_SPECIMEN_PROCESSING
---   HistologicMorphologyCode <- ICD_O_3_TISSUE_MORPHOLOGY
---   TumorTissueType    <- TUMOR_CLASSIFICATION
---   BiospecimenDimension1 <- LONGEST_DIMENSION
---   BiospecimenDimension2 <- SHORTEST_DIMENSION
---   FixationDuration   <- FIXATION_DURATION_IN_MINUTES
+-- Trimmed to the specimen fields still used downstream.
 --   SourceHTANBiospecimenID <- HTAN_PARENT_ID when it is a biospecimen (contains '_')
 --     Uses regex r'^HTA[0-9]+_[0-9]+_' to detect biospecimen parents vs. participant parents.
 --   StorageMethod      <- PRESERVATION_MEDIUM (preferred) falling back to PRESERVATION_METHOD
 --     PRESERVATION_MEDIUM is the primary Phase 2 storage-medium field; PRESERVATION_METHOD
 --     is the broader preservation category used when the medium field is absent.
---   Fields with no Phase 2 equivalent are set to ''.
+--   HTAN_PARTICIPANT_ID is resolved via Released_RecordsetRows.
 -- ============================================================
 CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.specimen` AS
 SELECT
@@ -289,76 +184,43 @@ SELECT
   COALESCE(bs.ADJACENT_BIOSPECIMEN_IDS, '')                             AS AdjacentBiospecimenIDs,
   COALESCE(bs.BIOSPECIMEN_TYPE, '')                                      AS BiospecimenType,
   COALESCE(bs.ACQUISITION_METHOD_TYPE, '')                              AS AcquisitionMethodType,
-  ''                                                                    AS FixativeType,
   COALESCE(bs.PRESERVATION_MEDIUM, bs.PRESERVATION_METHOD, '')         AS StorageMethod,
   COALESCE(bs.AGE_IN_DAYS_AT_SPECIMEN_PROCESSING, '')                   AS ProcessingDaysfromIndex,
-  ''                                                                    AS ProtocolLink,
   COALESCE(bs.SITE_DATA_SOURCE, '')                                     AS SiteDataSource,
-  ''                                                                    AS CollectionMedia,
-  ''                                                                    AS MountingMedium,
   COALESCE(bs.PROCESSING_LOCATION, '')                                  AS ProcessingLocation,
-  ''                                                                    AS HistologyAssessmentBy,
-  ''                                                                    AS HistologyAssessmentMedium,
-  ''                                                                    AS PreinvasiveMorphology,
-  ''                                                                    AS TumorInfiltratingLymphocytes,
   COALESCE(bs.DEGREE_OF_DYSPLASIA, '')                                  AS DegreeofDysplasia,
-  ''                                                                    AS DysplasiaFraction,
-  ''                                                                    AS NumberProliferatingCells,
-  ''                                                                    AS PercentEosinophilInfiltration,
-  ''                                                                    AS PercentGranulocyteInfiltration,
-  ''                                                                    AS PercentInflamInfiltration,
-  ''                                                                    AS PercentLymphocyteInfiltration,
-  ''                                                                    AS PercentMonocyteInfiltration,
   COALESCE(bs.PERCENT_NECROSIS, '')                                     AS PercentNecrosis,
-  ''                                                                    AS PercentNeutrophilInfiltration,
   COALESCE(bs.PERCENT_NORMAL_CELLS, '')                                 AS PercentNormalCells,
-  ''                                                                    AS PercentStromalCells,
   COALESCE(bs.PERCENT_TUMOR_CELLS, '')                                  AS PercentTumorCells,
   COALESCE(bs.PERCENT_TUMOR_NUCLEI, '')                                 AS PercentTumorNuclei,
-  ''                                                                    AS FiducialMarker,
   COALESCE(bs.SLICING_METHOD, '')                                       AS SlicingMethod,
-  ''                                                                    AS LysisBuffer,
   COALESCE(bs.METHOD_OF_NUCLEIC_ACID_ISOLATION, '')                     AS MethodofNucleicAcidIsolation,
   bs.Record_EntityId                                                    AS synapseId,
   COALESCE(bs.ACQUISITION_METHOD_OTHER_SPECIFY, '')                     AS AcquisitionMethodOtherSpecify,
   COALESCE(bs.ANALYTE_TYPE, '')                                         AS AnalyteType,
   COALESCE(bs.FIXATION_DURATION_IN_MINUTES, '')                         AS FixationDuration,
   COALESCE(bs.ICD_O_3_TISSUE_MORPHOLOGY, '')                            AS HistologicMorphologyCode,
-  ''                                                                    AS IschemicTemperature,
-  ''                                                                    AS IschemicTime,
-  ''                                                                    AS PortionWeight,
   COALESCE(bs.PRESERVATION_METHOD, '')                                  AS PreservationMethod,
   COALESCE(bs.SECTION_THICKNESS_VALUE, '')                              AS SectionThicknessValue,
   COALESCE(bs.AGE_IN_DAYS_AT_SECTIONING, '')                            AS SectioningDaysfromIndex,
   COALESCE(bs.SHIPPING_CONDITION_TYPE, '')                              AS ShippingConditionType,
   COALESCE(bs.SLIDE_CHARGE_TYPE, '')                                    AS SlideChargeType,
   COALESCE(bs.SPECIMEN_LATERALITY, '')                                  AS SpecimenLaterality,
-  ''                                                                    AS TotalVolume,
   COALESCE(bs.TUMOR_CLASSIFICATION, '')                                 AS TumorTissueType,
   LOWER(REGEXP_EXTRACT(bs.HTAN_BIOSPECIMEN_ID, r'^(HTA[0-9]+)'))       AS atlasid,
   bs.HTAN_Center                                                        AS atlas_name,
-  ''                                                                    AS level,
-  ''                                                                    AS assayName,
-  ''                                                                    AS AtlasMeta,
   bs.HTAN_PARENT_ID                                                     AS ParentID,
   bs.HTAN_PARENT_ID                                                     AS HTAN_PARENT_ID,
   bs.HTAN_BIOSPECIMEN_ID AS HTAN_BIOSPECIMEN_ID,
   COALESCE(bs.BIOSPECIMEN_TYPE, '')                                     AS BIOSPECIMEN_TYPE,
   COALESCE(bs.ACQUISITION_METHOD_TYPE, '')                              AS ACQUISITION_METHOD_TYPE,
-  ''                                                                    AS FIXATIVE_TYPE,
   COALESCE(bs.PRESERVATION_MEDIUM, '')                                  AS PRESERVATION_MEDIUM,
   COALESCE(bs.PRESERVATION_METHOD, '')                                  AS PRESERVATION_METHOD,
-  CAST([] AS ARRAY<STRING>)                                             AS publicationIds,
   -- ParticipantID: resolved via the released recordset rows index
   COALESCE(rr.HTAN_PARTICIPANT_ID, '')                                  AS HTAN_PARTICIPANT_ID,
   COALESCE(bs.LONGEST_DIMENSION, '')                                    AS BiospecimenDimension1,
   COALESCE(bs.SHORTEST_DIMENSION, '')                                   AS BiospecimenDimension2,
-  ''                                                                    AS BiospecimenDimension3,
-  ''                                                                    AS DimensionsUnit,
-  COALESCE(bs.SECTION_NUMBER_IN_SEQUENCE, '')                           AS SectionNumberinSequence,
-  ''                                                                    AS TotalVolumeUnit,
-  ''                                                                    AS TopographyCode,
-  ''                                                                    AS AdditionalTopography
+  COALESCE(bs.SECTION_NUMBER_IN_SEQUENCE, '')                           AS SectionNumberinSequence
 FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Biospecimen` bs
 LEFT JOIN (
   SELECT Record_EntityId, ANY_VALUE(HTAN_PARTICIPANT_ID) AS HTAN_PARTICIPANT_ID
@@ -409,108 +271,31 @@ SELECT
   d.SEX,
   d.RACE,
   COALESCE(v.VITAL_STATUS, '')                                         AS VITAL_STATUS,
-  ''                                                                  AS DaystoBirth,
-  ''                                                                  AS CountryofResidence,
-  ''                                                                  AS AgeIsObfuscated,
-  ''                                                                  AS YearOfBirth,
-  ''                                                                  AS OccupationDurationYears,
-  ''                                                                  AS PrematureAtBirth,
-  ''                                                                  AS WeeksGestationatBirth,
   d.Record_EntityId                                                   AS synapseId,
   COALESCE(v.CAUSE_OF_DEATH, '')                                        AS CAUSE_OF_DEATH,
   COALESCE(v.CAUSE_OF_DEATH_SOURCE, '')                                  AS CAUSE_OF_DEATH_SOURCE,
   COALESCE(v.AGE_IN_DAYS_AT_DEATH, '')                                         AS AGE_IN_DAYS_AT_DEATH,
-  ''                                                                  AS YearofDeath,
   LOWER(REGEXP_EXTRACT(d.HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)'))      AS atlasid,
   d.HTAN_Center                                                       AS atlas_name,
-  ''                                                                  AS level,
-  ''                                                                  AS assayName,
-  ''                                                                  AS AtlasMeta,
-  CAST([] AS ARRAY<STRING>)                                           AS publicationIds,
-  ''                                                                  AS AFR,
-  ''                                                                  AS AMR,
-  ''                                                                  AS EAS,
-  ''                                                                  AS EUR,
-  ''                                                                  AS SAS,
-  ''                                                                  AS EducationLevel,
-  ''                                                                  AS MedicallyUnderservedArea,
-  ''                                                                  AS RuralvsUrban,
   -- Diagnosis fields
   COALESCE(diag.AGE_IN_DAYS_AT_DIAGNOSIS, '')                         AS AGE_IN_DAYS_AT_DIAGNOSIS,
-  ''                                                                  AS YearofDiagnosis,
   COALESCE(diag.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, '')               AS PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
-  ''                                                                  AS PrecancerousConditionType,
-  ''                                                                  AS SiteofResectionorBiopsy,
   COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')            AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-  ''                                                                  AS Morphology,
   COALESCE(diag.TUMOR_GRADE, '')                                      AS TUMOR_GRADE,
-  ''                                                                  AS ProgressionorRecurrence,
   COALESCE(diag.LAST_KNOWN_DISEASE_STATUS, '')                        AS LastKnownDiseaseStatus,
-  ''                                                                  AS DaystoLastFollowup,
   COALESCE(diag.AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS, '')         AS DaystoLastKnownDiseaseStatus,
   COALESCE(diag.METHOD_OF_DIAGNOSIS, '')                              AS MethodofDiagnosis,
-  ''                                                                  AS PriorMalignancy,
-  ''                                                                  AS PriorTreatment,
   COALESCE(diag.METASTASIS_AT_DIAGNOSIS, '')                          AS MetastasisatDiagnosis,
-  ''                                                                  AS MetastasisatDiagnosisSite,
-  ''                                                                  AS FirstSymptomPriortoDiagnosis,
-  ''                                                                  AS DaystoDiagnosis,
-  ''                                                                  AS PercentTumorInvasion,
-  ''                                                                  AS ResidualDisease,
-  ''                                                                  AS SynchronousMalignancy,
-  ''                                                                  AS TumorConfinedtoOrganofOrigin,
-  ''                                                                  AS TumorFocality,
-  ''                                                                  AS TumorLargestDimensionDiameter,
-  ''                                                                  AS BreslowThickness,
-  ''                                                                  AS VascularInvasionPresent,
-  ''                                                                  AS VascularInvasionType,
-  ''                                                                  AS AnaplasiaPresent,
-  ''                                                                  AS AnaplasiaPresentType,
-  ''                                                                  AS Laterality,
-  ''                                                                  AS PerineuralInvasionPresent,
-  ''                                                                  AS LymphaticInvasionPresent,
-  ''                                                                  AS LymphNodesPositive,
-  ''                                                                  AS LymphNodesTested,
-  ''                                                                  AS PeritonealFluidCytologicalStatus,
   COALESCE(diag.TUMOR_CLASSIFICATION_CATEGORY, '')                    AS ClassificationofTumor,
-  ''                                                                  AS BestOverallResponse,
-  ''                                                                  AS MitoticCount,
   COALESCE(diag.CLINICAL_M_STAGE, '')                                 AS AJCCClinicalM,
   COALESCE(diag.CLINICAL_N_STAGE, '')                                 AS AJCCClinicalN,
   COALESCE(diag.TUMOR_STAGED, '')                                     AS AJCCClinicalStage,
   COALESCE(diag.CLINICAL_T_STAGE, '')                                 AS AJCCClinicalT,
-  ''                                                                  AS AJCCPathologicM,
-  ''                                                                  AS AJCCPathologicN,
-  ''                                                                  AS AJCCPathologicStage,
-  ''                                                                  AS AJCCPathologicT,
   COALESCE(diag.AJCC_STAGING_SYSTEM_EDITION, '')                      AS AJCCStagingSystemEdition,
-  ''                                                                  AS CogNeuroblastomaRiskGroup,
-  ''                                                                  AS CogRhabdomyosarcomaRiskGroup,
-  ''                                                                  AS GreatestTumorDimension,
-  ''                                                                  AS IGCCCGStage,
-  ''                                                                  AS INPCGrade,
-  ''                                                                  AS INPCHistologicGroup,
-  ''                                                                  AS INRGStage,
-  ''                                                                  AS INSSStage,
-  ''                                                                  AS IRSGroup,
-  ''                                                                  AS IRSStage,
-  ''                                                                  AS ISSStage,
-  ''                                                                  AS LymphNodeInvolvedSite,
-  ''                                                                  AS MarginDistance,
-  ''                                                                  AS MicropapillaryFeatures,
-  ''                                                                  AS PregnantatDiagnosis,
-  ''                                                                  AS SupratentorialLocalization,
-  ''                                                                  AS TumorDepth,
-  ''                                                                  AS WHOCNSGrade,
-  ''                                                                  AS DaystoProgression,
-  ''                                                                  AS DaystoProgressionFree,
-  ''                                                                  AS ProgressionorRecurrenceType,
-  ''                                                                  AS DaystoRecurrence,
   COALESCE(mol.GENE_SYMBOL, '')                                        AS GENE_SYMBOL,
   COALESCE(mol.MOLECULAR_ANALYSIS_METHOD, '')                           AS MOLECULAR_ANALYSIS_METHOD,
   COALESCE(mol.TEST_RESULT, '')                                        AS TEST_RESULT,
-  COALESCE(ther.TREATMENT_TYPE, CAST([] AS ARRAY<STRING>))            AS TREATMENT_TYPE,
-  CAST([] AS ARRAY<STRING>)                                           AS organType
+  COALESCE(ther.TREATMENT_TYPE, CAST([] AS ARRAY<STRING>))            AS TREATMENT_TYPE
 FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
 LEFT JOIN (
   SELECT
@@ -541,31 +326,11 @@ LEFT JOIN molecular_agg mol ON d.HTAN_PARTICIPANT_ID = mol.HTAN_PARTICIPANT_ID;
 -- Phase 1 table: files
 -- Sources: UNION ALL of all gold_RELEASED_METADATA_TABLE_All_Files_* tables,
 --          joined with provenance and clinical tables.
---
--- Column mapping notes:
---   synapseId    <- File_EntityId
---   atlasid      <- LOWER(REGEXP_EXTRACT(HTAN_DATA_FILE_ID, r'^(HTA[0-9]+)'))
---   atlas_name   <- HTAN_Center
---   level        <- REGEXP_EXTRACT(Component, r'Level[0-9]+(?:and[0-9]+)?')
---   assayName    <- REGEXP_REPLACE(Component, r'Level[0-9]+(?:and[0-9]+)?$', '')
---   Filename     <- FILENAME
---   FileFormat   <- FILE_FORMAT
---   DataFileID   <- HTAN_DATA_FILE_ID
---   ParentDataFileID <- HTAN_PARENT_ID
---   biospecimenIds   <- ARRAY_AGG(HTAN_ASSAYED_BIOSPECIMEN_ID) from provenance
---   Gender/Race/Ethnicity/VitalStatus <- ARRAY_AGG from demographics/vital status via provenance
---   TreatmentType  <- ARRAY_AGG from therapy via provenance
---   PrimaryDiagnosis/TissueorOrganofOrigin <- ARRAY_AGG from diagnosis via provenance
---   ScRNAseqWorkflowType   <- SCRNASEQ_WORKFLOW_TYPE (scRNA tables only; NULL elsewhere)
---   ScRNAseqWorkflowParametersDescription <- SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION (scRNAL3/4 only)
---   WorkflowVersion/WorkflowLink <- WORKFLOW_VERSION/WORKFLOW_LINK (WES L2/L3 and scRNA L2/L3-4)
---   viewers      <- '{}' (default; no equivalent in Phase 2)
---   viewersArr   <- [] (derived from viewers; empty by default)
---   downloadSource/releaseVersion <- '' (not available in Phase 2)
---   organType    <- [] (computed from tissue mapping; not available in SQL only)
---   imageChannelMetadata <- '' (not available in Phase 2)
---   publicationIds       <- [] (not available in Phase 2)
---   isRawSequencing <- 'true' when level = 'Level1', 'false' otherwise
+-- Trimmed to the file, workflow, provenance, and clinical aggregation fields
+-- still used downstream.
+--   biospecimenIds / demographicsIds / diagnosisIds / therapyIds come from provenance.
+--   level is extracted from the Component suffix; assayName is Component without that suffix.
+--   isRawSequencing is 'true' when level = 'Level1', otherwise 'false'.
 -- ============================================================
 CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.files` AS
 WITH
@@ -801,18 +566,10 @@ SELECT
   COALESCE(f.SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION, '')            AS ScRNAseqWorkflowParametersDescription,
   COALESCE(f.WORKFLOW_VERSION, '')                                    AS WorkflowVersion,
   COALESCE(f.WORKFLOW_LINK, '')                                       AS WorkflowLink,
-  ''                                                                  AS AtlasMeta,
-  ''                                                                  AS imageChannelMetadata,
-  CAST([] AS ARRAY<STRING>)                                           AS publicationIds,
   COALESCE(fdia.diagnosisIds,   CAST([] AS ARRAY<STRING>))            AS diagnosisIds,
   COALESCE(fd.demographicsIds,  CAST([] AS ARRAY<STRING>))            AS demographicsIds,
   COALESCE(ft.therapyIds,       CAST([] AS ARRAY<STRING>))            AS therapyIds,
-  '{}'                                                                AS viewers,
-  CAST([] AS ARRAY<STRING>)                                           AS viewersArr,
-  IF(REGEXP_CONTAINS(f.Component, r'Level1$'), 'true', 'false')       AS isRawSequencing,
-  ''                                                                  AS downloadSource,
-  ''                                                                  AS releaseVersion,
-  CAST([] AS ARRAY<STRING>)                                           AS organType
+  IF(REGEXP_CONTAINS(f.Component, r'Level1$'), 'true', 'false')       AS isRawSequencing
 FROM all_files f
 LEFT JOIN file_biospecimens  fb   ON f.HTAN_DATA_FILE_ID = fb.HTAN_DATA_FILE_ID
 LEFT JOIN file_demographics  fd   ON f.HTAN_DATA_FILE_ID = fd.HTAN_DATA_FILE_ID
@@ -825,7 +582,7 @@ LEFT JOIN file_diagnosis     fdia ON f.HTAN_DATA_FILE_ID = fdia.HTAN_DATA_FILE_I
 -- VIEW: publication_manifest
 -- Phase 1 table: publication_manifest
 -- Phase 2 does not expose publication data in the gold_RELEASED_* tables.
--- This view returns an empty result set with the correct Phase 1 schema
+-- This view still returns an empty result set with the Phase 1 schema
 -- as a placeholder until publication data becomes available.
 -- ============================================================
 CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.publication_manifest` AS
