@@ -60,6 +60,13 @@ export enum Phase2AttributeNames {
 
 type TableRow = Record<string, any>;
 
+type AtlasSummaryRow = {
+    atlas_name: string;
+    caseCount: number;
+    biospecimenCount: number;
+    fileCount: number;
+};
+
 // ─── Phase 2 Attribute Map ────────────────────────────────────────────────────
 const Phase2AttributeMap: {
     [attr in Phase2AttributeNames]: IAttributeInfo<TableRow>;
@@ -289,6 +296,18 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
 ];
 
+const ATLAS_COLUMNS: IEnhancedDataTableColumn<AtlasSummaryRow>[] = [
+    { name: 'atlas_name', selector: 'atlas_name', sortable: true },
+    { name: 'Cases', selector: 'caseCount', sortable: true, right: true },
+    {
+        name: 'Biospecimens',
+        selector: 'biospecimenCount',
+        sortable: true,
+        right: true,
+    },
+    { name: 'Files', selector: 'fileCount', sortable: true, right: true },
+];
+
 // ─── Sub-table wrapper ────────────────────────────────────────────────────────
 function Phase2Table({
     data,
@@ -304,6 +323,23 @@ function Phase2Table({
             columns={columns}
             data={data}
             defaultSortField={defaultSortField}
+            striped={true}
+            dense={false}
+            noHeader={true}
+            pagination={true}
+            paginationPerPage={25}
+            paginationRowsPerPageOptions={[10, 25, 50, 100]}
+            customStyles={getDefaultDataTableStyle()}
+        />
+    );
+}
+
+function AtlasSummaryTable({ data }: { data: AtlasSummaryRow[] }) {
+    return (
+        <EnhancedDataTable
+            columns={ATLAS_COLUMNS}
+            data={data}
+            defaultSortField="atlas_name"
             striped={true}
             dense={false}
             noHeader={true}
@@ -557,6 +593,41 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
         [selectedFilters]
     );
 
+    const atlasSummaryRows = useMemo<AtlasSummaryRow[]>(() => {
+        const atlasCounts = new Map<
+            string,
+            Omit<AtlasSummaryRow, 'atlas_name'>
+        >();
+
+        const increment = (
+            atlasName: string,
+            field: keyof Omit<AtlasSummaryRow, 'atlas_name'>
+        ) => {
+            const key = atlasName || 'Unknown';
+            const current = atlasCounts.get(key) || {
+                caseCount: 0,
+                biospecimenCount: 0,
+                fileCount: 0,
+            };
+            current[field] += 1;
+            atlasCounts.set(key, current);
+        };
+
+        cases.forEach((row) =>
+            increment(String(row.atlas_name || ''), 'caseCount')
+        );
+        specimens.forEach((row) =>
+            increment(String(row.atlas_name || ''), 'biospecimenCount')
+        );
+        files.forEach((row) =>
+            increment(String(row.atlas_name || ''), 'fileCount')
+        );
+
+        return Array.from(atlasCounts.entries())
+            .map(([atlas_name, counts]) => ({ atlas_name, ...counts }))
+            .sort((a, b) => a.atlas_name.localeCompare(b.atlas_name));
+    }, [cases, specimens, files]);
+
     const getFilterDisplayName = (group: string): string => {
         const attr = group as Phase2AttributeNames;
         return Phase2AttributeMap[attr]?.displayName ?? group;
@@ -621,6 +692,21 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                             <li className="nav-item">
                                 <a
                                     onClick={() =>
+                                        setActiveTab(ExploreTab.ATLAS)
+                                    }
+                                    className={`nav-link ${
+                                        activeTab === ExploreTab.ATLAS
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    Atlases
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
                                         setActiveTab(ExploreTab.CASES)
                                     }
                                     className={`nav-link ${
@@ -665,6 +751,12 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                             </li>
                         </ul>
                     </div>
+
+                    {activeTab === ExploreTab.ATLAS && (
+                        <div className="tab-content atlasTab">
+                            <AtlasSummaryTable data={atlasSummaryRows} />
+                        </div>
+                    )}
 
                     {activeTab === ExploreTab.CASES && (
                         <div className="tab-content cases">
