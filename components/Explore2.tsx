@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScaleLoader } from 'react-spinners';
+import Tooltip from 'rc-tooltip';
 
 import {
     caseQuery2,
@@ -26,13 +27,17 @@ import {
     ISelectedFiltersByAttrName,
     SelectedFilter,
 } from '@htan/data-portal-filter';
-import { IAttributeInfo } from '@htan/data-portal-utils';
+import { IAttributeInfo, truncateFilename } from '@htan/data-portal-utils';
 import {
     EnhancedDataTable,
     getDefaultDataTableStyle,
     IEnhancedDataTableColumn,
 } from '@htan/data-portal-table';
-import { ExploreSummary, ExploreTab } from '@htan/data-portal-explore';
+import {
+    ExploreSummary,
+    ExploreTab,
+    truncatedTableCell,
+} from '@htan/data-portal-explore';
 
 export interface IExplore2Props {
     getAtlasMetaData: () => any;
@@ -110,30 +115,91 @@ function formatValue(value: unknown) {
     return value == null ? '' : String(value);
 }
 
+function FileNameCell({ row }: { row: TableRow }) {
+    const fullName = String(row.Filename || '');
+    const displayName = truncateFilename(fullName);
+    const synapseId = row.synapseId as string | undefined;
+
+    if (!fullName) return <span />;
+
+    return (
+        <Tooltip overlay={<span>{fullName}</span>}>
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={
+                    synapseId
+                        ? `https://www.synapse.org/#!Synapse:${synapseId}`
+                        : '#'
+                }
+                onClick={(e) => {
+                    if (!synapseId) e.preventDefault();
+                }}
+            >
+                {displayName}
+            </a>
+        </Tooltip>
+    );
+}
+
 const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
+    {
+        name: 'File Name',
+        selector: 'Filename',
+        cell: (row) => <FileNameCell row={row} />,
+        sortable: true,
+    },
+    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
+    {
+        name: 'Biospecimen',
+        selector: (row) => formatValue(row.biospecimenIds),
+        getSearchValue: (row) => formatValue(row.biospecimenIds),
+        sortable: true,
+    },
+    { name: 'Assay', selector: 'assayName', sortable: true },
+    { name: 'Level', selector: 'level', sortable: true },
+    {
+        name: 'Organ',
+        selector: (row) =>
+            formatValue(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE),
+        getSearchValue: (row) =>
+            formatValue(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE),
+        cell: truncatedTableCell,
+        wrap: true,
+        sortable: true,
+    },
+    {
+        name: 'Treatment',
+        selector: (row) => formatValue(row.TREATMENT_TYPE),
+        getSearchValue: (row) => formatValue(row.TREATMENT_TYPE),
+        cell: truncatedTableCell,
+        wrap: true,
+        sortable: true,
+        omit: true,
+    },
+    {
+        name: 'Diagnosis',
+        selector: (row) => formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID),
+        getSearchValue: (row) =>
+            formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID),
+        cell: truncatedTableCell,
+        wrap: true,
+        sortable: true,
+    },
+    { name: 'File Format', selector: 'FileFormat', sortable: true },
     {
         name: 'Data File ID',
         selector: 'HTAN_DATA_FILE_ID',
         sortable: true,
+        omit: true,
     },
-    { name: 'Atlas', selector: 'atlas_name', sortable: true },
-    { name: 'Level', selector: 'level', sortable: true },
-    { name: 'Assay', selector: 'assayName', sortable: true },
-    { name: 'File Name', selector: 'Filename', sortable: true },
-    { name: 'File Format', selector: 'FileFormat', sortable: true },
-    { name: 'Synapse ID', selector: 'synapseId', sortable: true },
+    { name: 'Synapse ID', selector: 'synapseId', sortable: true, omit: true },
     {
         name: 'Parent ID',
         selector: (row) => row.HTAN_PARENT_ID ?? row.ParentDataFileID,
         getSearchValue: (row) => row.HTAN_PARENT_ID ?? row.ParentDataFileID,
         sortable: true,
         omit: true,
-    },
-    {
-        name: 'Biospecimen IDs',
-        selector: (row) => formatValue(row.biospecimenIds),
-        getSearchValue: (row) => formatValue(row.biospecimenIds),
-        sortable: true,
     },
     {
         name: 'Sex',
@@ -179,24 +245,24 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         getSearchValue: (row) =>
             formatValue(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE),
         sortable: true,
+        omit: true,
     },
     { name: 'Component', selector: 'Component', sortable: true },
 ];
 
 const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
-        name: 'Participant ID',
+        name: 'HTAN Participant ID',
         selector: 'HTAN_PARTICIPANT_ID',
         sortable: true,
     },
-    { name: 'Atlas', selector: 'atlas_name', sortable: true },
-    { name: 'Sex', selector: 'SEX', sortable: true },
-    { name: 'Ethnic Group', selector: 'ETHNIC_GROUP', sortable: true },
-    { name: 'Race', selector: 'RACE', sortable: true },
-    { name: 'Vital Status', selector: 'VITAL_STATUS', sortable: true },
+    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
     {
-        name: 'Age at Diagnosis (Days)',
-        selector: 'AGE_IN_DAYS_AT_DIAGNOSIS',
+        name: 'Age at Diagnosis (years)',
+        selector: (row) => {
+            const days = Number(row.AGE_IN_DAYS_AT_DIAGNOSIS);
+            return Number.isFinite(days) ? (days / 365.25).toFixed(2) : '';
+        },
         sortable: true,
     },
     {
@@ -205,10 +271,14 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
     },
     {
-        name: 'Tissue/Organ of Origin',
+        name: 'Tissue or Organ of Origin',
         selector: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
         sortable: true,
     },
+    { name: 'Sex', selector: 'SEX', sortable: true },
+    { name: 'Ethnic Group', selector: 'ETHNIC_GROUP', sortable: true },
+    { name: 'Race', selector: 'RACE', sortable: true },
+    { name: 'Vital Status', selector: 'VITAL_STATUS', sortable: true },
     { name: 'Tumor Grade', selector: 'TUMOR_GRADE', sortable: true },
     {
         name: 'Treatment Type',
@@ -245,21 +315,22 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
 
 const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
-        name: 'Biospecimen ID',
+        name: 'HTAN Biospecimen ID',
         selector: 'HTAN_BIOSPECIMEN_ID',
+        sortable: true,
+    },
+    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
+    {
+        name: 'HTAN Parent ID',
+        selector: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
+        getSearchValue: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
         sortable: true,
     },
     {
         name: 'Participant ID',
         selector: 'HTAN_PARTICIPANT_ID',
         sortable: true,
-    },
-    { name: 'Atlas', selector: 'atlas_name', sortable: true },
-    {
-        name: 'Parent ID',
-        selector: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
-        getSearchValue: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
-        sortable: true,
+        omit: true,
     },
     {
         name: 'Biospecimen Type',
@@ -276,7 +347,14 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
     },
     {
-        name: 'Preservation Medium',
+        name: 'Fixative Type',
+        selector: (row) => row.FIXATIVE_TYPE ?? row.FixativeType,
+        getSearchValue: (row) => row.FIXATIVE_TYPE ?? row.FixativeType,
+        sortable: true,
+        omit: true,
+    },
+    {
+        name: 'Storage Method',
         selector: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
         getSearchValue: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
         sortable: true,
@@ -289,6 +367,18 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         omit: true,
     },
     {
+        name: 'Collection Days from Index',
+        selector: (row) => row.COLLECTION_DAYS_FROM_INDEX,
+        sortable: true,
+        omit: true,
+    },
+    {
+        name: 'Processing Days from Index',
+        selector: (row) => row.PROCESSING_DAYS_FROM_INDEX,
+        sortable: true,
+        omit: true,
+    },
+    {
         name: 'Component',
         selector: 'Component',
         sortable: true,
@@ -297,7 +387,7 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
 ];
 
 const ATLAS_COLUMNS: IEnhancedDataTableColumn<AtlasSummaryRow>[] = [
-    { name: 'atlas_name', selector: 'atlas_name', sortable: true },
+    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
     { name: 'Cases', selector: 'caseCount', sortable: true, right: true },
     {
         name: 'Biospecimens',
@@ -334,7 +424,15 @@ function Phase2Table({
     );
 }
 
-function AtlasSummaryTable({ data }: { data: AtlasSummaryRow[] }) {
+function AtlasSummaryTable({
+    data,
+    selectedAtlasNames,
+    onAtlasSelectionChange,
+}: {
+    data: AtlasSummaryRow[];
+    selectedAtlasNames: string[];
+    onAtlasSelectionChange: (selected: string[]) => void;
+}) {
     return (
         <EnhancedDataTable
             columns={ATLAS_COLUMNS}
@@ -346,6 +444,17 @@ function AtlasSummaryTable({ data }: { data: AtlasSummaryRow[] }) {
             pagination={true}
             paginationPerPage={25}
             paginationRowsPerPageOptions={[10, 25, 50, 100]}
+            selectableRows={true}
+            selectableRowSelected={(row: AtlasSummaryRow) =>
+                selectedAtlasNames.includes(row.atlas_name)
+            }
+            onSelectedRowsChange={(state: {
+                selectedRows: AtlasSummaryRow[];
+            }) =>
+                onAtlasSelectionChange(
+                    state.selectedRows.map((r) => r.atlas_name)
+                )
+            }
             customStyles={getDefaultDataTableStyle()}
         />
     );
@@ -467,12 +576,15 @@ function Phase2FilterControls({
 
 // ─── Main Explore2 component ──────────────────────────────────────────────────
 export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
-    const tabFromProps = (props.getTab?.() || ExploreTab.CASES) as ExploreTab;
+    const tabFromProps = (props.getTab?.() || ExploreTab.ATLAS) as ExploreTab;
     const [activeTab, setActiveTab] = useState<ExploreTab>(tabFromProps);
     const [filterOptions, setFilterOptions] = useState<CountByType[]>([]);
     const [files, setFiles] = useState<TableRow[]>([]);
     const [cases, setCases] = useState<TableRow[]>([]);
     const [specimens, setSpecimens] = useState<TableRow[]>([]);
+    const [atlasFiles, setAtlasFiles] = useState<TableRow[]>([]);
+    const [atlasCases, setAtlasCases] = useState<TableRow[]>([]);
+    const [atlasSpecimens, setAtlasSpecimens] = useState<TableRow[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string>();
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilter[]>(
@@ -486,6 +598,27 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
 
     const handleSetFilter = (actionMeta: FilterActionMeta<SelectedFilter>) => {
         const newFilters = getNewFilters(selectedFilters, actionMeta);
+        setSelectedFilters(newFilters);
+        props.onFilterChange?.(newFilters);
+    };
+
+    const selectedAtlasNames = useMemo(
+        () =>
+            selectedFilters
+                .filter((f) => f.group === Phase2AttributeNames.AtlasName)
+                .map((f) => f.value),
+        [selectedFilters]
+    );
+
+    const handleAtlasSelectionChange = (selected: string[]) => {
+        const nonAtlasFilters = selectedFilters.filter(
+            (f) => f.group !== Phase2AttributeNames.AtlasName
+        );
+        const atlasFilters = selected.map((atlasName) => ({
+            group: Phase2AttributeNames.AtlasName,
+            value: atlasName,
+        }));
+        const newFilters = [...nonAtlasFilters, ...atlasFilters];
         setSelectedFilters(newFilters);
         props.onFilterChange?.(newFilters);
     };
@@ -514,22 +647,52 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     unfilteredCounts
                 );
 
-                // Fetch per-filter dropdown counts
+                // Helper: filter string that excludes a given attribute's own
+                // filter — so each dropdown shows all its own options (with
+                // zero-count items grayed out) but counts reflect other filters.
+                const fs = (excludeGroup: Phase2AttributeNames) =>
+                    getFilterString2(
+                        selectedFilters.filter((f) => f.group !== excludeGroup),
+                        unfilteredCounts
+                    );
+
+                const nonAtlasFilterString = fs(Phase2AttributeNames.AtlasName);
+
+                // Fetch per-filter dropdown counts (each attribute excludes
+                // its own group so all its options stay visible)
                 const filterCountsQuery =
                     filterString === ''
                         ? Promise.resolve(unfilteredCounts)
                         : doQuery<CountByType>(
                               countsByTypeQuery2({
-                                  genderFilterString: filterString,
-                                  raceFilterString: filterString,
-                                  primaryDiagnosisFilterString: filterString,
-                                  ethnicityFilterString: filterString,
-                                  tissueOrOrganOfOriginFilterString: filterString,
-                                  levelFilterString: filterString,
-                                  assayNameFilterString: filterString,
-                                  treatmentTypeFilterString: filterString,
-                                  fileFormatFilterString: filterString,
-                                  atlasNameFilterString: filterString,
+                                  genderFilterString: fs(
+                                      Phase2AttributeNames.SEX
+                                  ),
+                                  raceFilterString: fs(
+                                      Phase2AttributeNames.RACE
+                                  ),
+                                  primaryDiagnosisFilterString: fs(
+                                      Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID
+                                  ),
+                                  ethnicityFilterString: fs(
+                                      Phase2AttributeNames.ETHNIC_GROUP
+                                  ),
+                                  tissueOrOrganOfOriginFilterString: fs(
+                                      Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE
+                                  ),
+                                  levelFilterString: fs(
+                                      Phase2AttributeNames.level
+                                  ),
+                                  assayNameFilterString: fs(
+                                      Phase2AttributeNames.assayName
+                                  ),
+                                  treatmentTypeFilterString: fs(
+                                      Phase2AttributeNames.TREATMENT_TYPE
+                                  ),
+                                  fileFormatFilterString: fs(
+                                      Phase2AttributeNames.FileFormat
+                                  ),
+                                  atlasNameFilterString: nonAtlasFilterString,
                               }),
                               phase2Client
                           );
@@ -539,6 +702,9 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     fileRows,
                     caseRows,
                     specimenRows,
+                    atlasFileRows,
+                    atlasCaseRows,
+                    atlasSpecimenRows,
                 ] = await Promise.all([
                     filterCountsQuery,
                     doQuery<TableRow>(fileQuery2 + filterString, phase2Client),
@@ -550,14 +716,44 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                         specimenQuery2({ filterString }),
                         phase2Client
                     ),
+                    doQuery<TableRow>(
+                        fileQuery2 + nonAtlasFilterString,
+                        phase2Client
+                    ),
+                    doQuery<TableRow>(
+                        caseQuery2({ filterString: nonAtlasFilterString }),
+                        phase2Client
+                    ),
+                    doQuery<TableRow>(
+                        specimenQuery2({ filterString: nonAtlasFilterString }),
+                        phase2Client
+                    ),
                 ]);
 
                 if (!active) return;
 
-                setFilterOptions(filteredCounts);
+                // Merge filtered counts against the unfiltered baseline so
+                // zero-count options are preserved (shown grayed-out) rather
+                // than disappearing from dropdowns.
+                const filteredCountsMap = new Map(
+                    filteredCounts.map((o) => [`${o.val}__${o.type}`, o])
+                );
+                const mergedCounts: CountByType[] = unfilteredCounts.map(
+                    (opt) => {
+                        const key = `${opt.val}__${opt.type}`;
+                        return filteredCountsMap.has(key)
+                            ? filteredCountsMap.get(key)!
+                            : { ...opt, count: 0 };
+                    }
+                );
+
+                setFilterOptions(mergedCounts);
                 setFiles(fileRows);
                 setCases(caseRows);
                 setSpecimens(specimenRows);
+                setAtlasFiles(atlasFileRows);
+                setAtlasCases(atlasCaseRows);
+                setAtlasSpecimens(atlasSpecimenRows);
             } catch (err) {
                 if (!active) return;
                 setError(
@@ -613,20 +809,20 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
             atlasCounts.set(key, current);
         };
 
-        cases.forEach((row) =>
+        atlasCases.forEach((row) =>
             increment(String(row.atlas_name || ''), 'caseCount')
         );
-        specimens.forEach((row) =>
+        atlasSpecimens.forEach((row) =>
             increment(String(row.atlas_name || ''), 'biospecimenCount')
         );
-        files.forEach((row) =>
+        atlasFiles.forEach((row) =>
             increment(String(row.atlas_name || ''), 'fileCount')
         );
 
         return Array.from(atlasCounts.entries())
             .map(([atlas_name, counts]) => ({ atlas_name, ...counts }))
             .sort((a, b) => a.atlas_name.localeCompare(b.atlas_name));
-    }, [cases, specimens, files]);
+    }, [atlasCases, atlasSpecimens, atlasFiles]);
 
     const getFilterDisplayName = (group: string): string => {
         const attr = group as Phase2AttributeNames;
@@ -754,7 +950,13 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
 
                     {activeTab === ExploreTab.ATLAS && (
                         <div className="tab-content atlasTab">
-                            <AtlasSummaryTable data={atlasSummaryRows} />
+                            <AtlasSummaryTable
+                                data={atlasSummaryRows}
+                                selectedAtlasNames={selectedAtlasNames}
+                                onAtlasSelectionChange={
+                                    handleAtlasSelectionChange
+                                }
+                            />
                         </div>
                     )}
 
@@ -781,7 +983,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                             <Phase2Table
                                 columns={FILE_COLUMNS}
                                 data={files}
-                                defaultSortField="HTAN_DATA_FILE_ID"
+                                defaultSortField="Filename"
                             />
                         </div>
                     )}
