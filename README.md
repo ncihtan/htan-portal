@@ -91,7 +91,7 @@ Copy `.env.local.example` to `.env.local` and fill in the values:
 
 ```bash
 cp .env.local.example .env.local
-# then edit .env.local with the correct NEXT_PUBLIC_CLICKHOUSE_HOST / NEXT_PUBLIC_CLICKHOUSE_DB / NEXT_PUBLIC_CLICKHOUSE_USER / NEXT_PUBLIC_CLICKHOUSE_PASSWORD
+# then edit .env.local with the correct NEXT_PUBLIC_CLICKHOUSE_HOST / NEXT_PUBLIC_CLICKHOUSE_DB / NEXT_PUBLIC_CLICKHOUSE_DB_PHASE2 / NEXT_PUBLIC_CLICKHOUSE_USER / NEXT_PUBLIC_CLICKHOUSE_PASSWORD
 ```
 
 For production deployments set the following environment variables in your
@@ -101,6 +101,7 @@ hosting environment:
 |------------------------------------|-----------------------------------------------------------------------------|
 | `NEXT_PUBLIC_CLICKHOUSE_HOST`      | ClickHouse host URL (e.g. `https://host:8443`)                              |
 | `NEXT_PUBLIC_CLICKHOUSE_DB`        | ClickHouse database name                                                    |
+| `NEXT_PUBLIC_CLICKHOUSE_DB_PHASE2` | Optional database name used only by Phase 2 Explore (defaults to `htan2_1`) |
 | `NEXT_PUBLIC_CLICKHOUSE_URL`       | Full ClickHouse URL including database (overrides HOST + DB when set)       |
 | `NEXT_PUBLIC_CLICKHOUSE_USER`      | ClickHouse read-only username                                               |
 | `NEXT_PUBLIC_CLICKHOUSE_PASSWORD`  | ClickHouse read-only password (**required** — build fails without it)       |

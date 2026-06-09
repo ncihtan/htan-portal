@@ -38,3 +38,4 @@ node_modules/**
 *.sql
 *main.js
 tsconfig.tsbuildinfo
+.env.local.example
