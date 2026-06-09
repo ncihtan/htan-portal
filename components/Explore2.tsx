@@ -10,6 +10,7 @@ import {
     doQuery,
     fileQuery2,
     getFilterString2,
+    getPhase2Client,
     specimenQuery2,
 } from '@htan/data-portal-commons';
 import {
@@ -463,9 +464,12 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
             setError(undefined);
 
             try {
+                const phase2Client = getPhase2Client();
+
                 // Resolve fieldTypes from unfiltered options for WHERE clause
                 const unfilteredCounts = await doQuery<CountByType>(
-                    countsByTypeQuery2(defaultCountsByTypeQueryFilterString)
+                    countsByTypeQuery2(defaultCountsByTypeQueryFilterString),
+                    phase2Client
                 );
                 if (!active) return;
 
@@ -490,7 +494,8 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                                   treatmentTypeFilterString: filterString,
                                   fileFormatFilterString: filterString,
                                   atlasNameFilterString: filterString,
-                              })
+                              }),
+                              phase2Client
                           );
 
                 const [
@@ -500,9 +505,15 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     specimenRows,
                 ] = await Promise.all([
                     filterCountsQuery,
-                    doQuery<TableRow>(fileQuery2 + filterString),
-                    doQuery<TableRow>(caseQuery2({ filterString })),
-                    doQuery<TableRow>(specimenQuery2({ filterString })),
+                    doQuery<TableRow>(fileQuery2 + filterString, phase2Client),
+                    doQuery<TableRow>(
+                        caseQuery2({ filterString }),
+                        phase2Client
+                    ),
+                    doQuery<TableRow>(
+                        specimenQuery2({ filterString }),
+                        phase2Client
+                    ),
                 ]);
 
                 if (!active) return;

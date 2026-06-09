@@ -8,6 +8,7 @@ import { CountByType } from './types';
 export const DEFAULT_CLICKHOUSE_HOST =
     'https://dl96orhu96.us-east-1.aws.clickhouse.cloud:8443';
 export const DEFAULT_CLICKHOUSE_DB = 'htan2_0';
+export const DEFAULT_PHASE2_CLICKHOUSE_DB = 'htan2_1';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
 function buildClickHouseUrl(): string {
@@ -20,17 +21,30 @@ function buildClickHouseUrl(): string {
     return `${host}/${db}`;
 }
 
+function buildClickHouseUrlWithDatabase(database: string): string {
+    const host =
+        process.env.NEXT_PUBLIC_CLICKHOUSE_HOST ?? DEFAULT_CLICKHOUSE_HOST;
+    return `${host}/${database}`;
+}
+
 let _defaultClient: WebClickHouseClient | undefined;
+const _clientsByDatabase = new Map<string, WebClickHouseClient>();
+
+function getClickhousePassword(): string {
+    const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
+    if (!clickhousePassword) {
+        throw new Error(
+            'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
+                'Set it in .env.local (for development) or in your hosting environment (for production).'
+        );
+    }
+
+    return clickhousePassword;
+}
 
 function getDefaultClient(): WebClickHouseClient {
     if (!_defaultClient) {
-        const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
-        if (!clickhousePassword) {
-            throw new Error(
-                'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
-                    'Set it in .env.local (for development) or in your hosting environment (for production).'
-            );
-        }
+        const clickhousePassword = getClickhousePassword();
         _defaultClient = createClient({
             url: buildClickHouseUrl(),
             username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
@@ -43,6 +57,34 @@ function getDefaultClient(): WebClickHouseClient {
         });
     }
     return _defaultClient;
+}
+
+export function getClientForDatabase(database: string): WebClickHouseClient {
+    const cachedClient = _clientsByDatabase.get(database);
+    if (cachedClient) {
+        return cachedClient;
+    }
+
+    const client = createClient({
+        url: buildClickHouseUrlWithDatabase(database),
+        username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
+        password: getClickhousePassword(),
+        request_timeout: 600000,
+        compression: {
+            response: true,
+            request: false,
+        },
+    });
+
+    _clientsByDatabase.set(database, client);
+    return client;
+}
+
+export function getPhase2Client(): WebClickHouseClient {
+    const phase2Database =
+        process.env.NEXT_PUBLIC_CLICKHOUSE_DB_PHASE2 ??
+        DEFAULT_PHASE2_CLICKHOUSE_DB;
+    return getClientForDatabase(phase2Database);
 }
 
 export function getCountsByTypeQueryUniformFilterString(filterString: string) {
