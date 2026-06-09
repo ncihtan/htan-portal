@@ -37,3 +37,4 @@ node_modules/**
 *.tsv
 *.sql
 *main.js
+tsconfig.tsbuildinfo
