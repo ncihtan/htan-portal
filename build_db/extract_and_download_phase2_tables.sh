@@ -33,26 +33,34 @@ for name in "${TABLES[@]}"; do
   local_file="${LOCAL_OUT_DIR}/htan2_${name}.json"
   gcs_file="${GCS_BUCKET}/${name}.json"
 
+  # Always materialize first to ensure views are fully resolved
+  # (especially important for views with JOINs)
+  tmp_name="tmp_export_${name}_$(date +%s)_$RANDOM"
+  tmp_ref="${PROJECT_ID}:${DATASET}.${tmp_name}"
+
+  echo "Materializing ${src_ref} -> ${tmp_ref}"
+  bq query \
+    --project_id="${PROJECT_ID}" \
+    --use_legacy_sql=false \
+    --replace \
+    --destination_table="${tmp_ref}" \
+    "SELECT * FROM \`${src_ref}\`"
+
   if [[ "${MODE}" == "local" ]]; then
-    echo "Querying ${src_ref} -> ${local_file}"
+    echo "Exporting ${tmp_ref} -> ${local_file}"
     bq query \
       --project_id="${PROJECT_ID}" \
       --use_legacy_sql=false \
       --format=prettyjson \
-      "SELECT * FROM \`${src_ref}\`" > "${local_file}"
+      "SELECT * FROM \`${PROJECT_ID}.${DATASET}.${tmp_name}\`" > "${local_file}"
+
+    # Verify the file is not empty
+    if [[ ! -s "${local_file}" ]]; then
+      echo "ERROR: ${local_file} is empty after export!"
+      cleanup_tmp_table "${tmp_ref}"
+      exit 1
+    fi
   else
-    tmp_name="tmp_export_${name}_$(date +%s)_$RANDOM"
-    tmp_ref="${PROJECT_ID}:${DATASET}.${tmp_name}"
-
-    echo "Materializing ${src_ref} -> ${tmp_ref}"
-    # Materialize first so exports also work when source is a VIEW.
-    bq query \
-      --project_id="${PROJECT_ID}" \
-      --use_legacy_sql=false \
-      --replace \
-      --destination_table="${tmp_ref}" \
-      "SELECT * FROM \`${src_ref}\`"
-
     echo "Extracting ${tmp_ref} -> ${gcs_file}"
     bq extract \
       --project_id="${PROJECT_ID}" \
@@ -63,6 +71,13 @@ for name in "${TABLES[@]}"; do
     echo "Downloading ${gcs_file} -> ${local_file}"
     gsutil cp "${gcs_file}" "${local_file}"
 
-    cleanup_tmp_table "${tmp_ref}"
+    # Verify the file is not empty
+    if [[ ! -s "${local_file}" ]]; then
+      echo "ERROR: ${local_file} is empty after download!"
+      cleanup_tmp_table "${tmp_ref}"
+      exit 1
+    fi
   fi
+
+  cleanup_tmp_table "${tmp_ref}"
 done
