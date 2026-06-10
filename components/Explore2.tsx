@@ -347,13 +347,6 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
     },
     {
-        name: 'Fixative Type',
-        selector: (row) => row.FIXATIVE_TYPE ?? row.FixativeType,
-        getSearchValue: (row) => row.FIXATIVE_TYPE ?? row.FixativeType,
-        sortable: true,
-        omit: true,
-    },
-    {
         name: 'Storage Method',
         selector: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
         getSearchValue: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
@@ -368,13 +361,13 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Collection Days from Index',
-        selector: (row) => row.COLLECTION_DAYS_FROM_INDEX,
+        selector: (row) => row.CollectionDaysfromIndex,
         sortable: true,
         omit: true,
     },
     {
         name: 'Processing Days from Index',
-        selector: (row) => row.PROCESSING_DAYS_FROM_INDEX,
+        selector: (row) => row.ProcessingDaysfromIndex,
         sortable: true,
         omit: true,
     },
