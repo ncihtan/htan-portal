@@ -36,7 +36,7 @@
             "numItems": 2
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn39042300",
             "numItems": 34
         },
@@ -71,7 +71,7 @@
             "numItems": 66
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn41762855",
             "numItems": 41
         },
@@ -146,7 +146,7 @@
             "numItems": 783
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn41903574",
             "numItems": 40
         },
@@ -166,12 +166,12 @@
             "numItems": 14
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn41905031",
             "numItems": 143
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn41905370",
             "numItems": 102
         },
@@ -181,7 +181,7 @@
             "numItems": 6
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn41905659",
             "numItems": 10
         },
@@ -211,7 +211,7 @@
             "numItems": 3472
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn41915639",
             "numItems": 28
         },
@@ -546,7 +546,7 @@
             "numItems": 19
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn51218441",
             "numItems": 24
         },
@@ -636,7 +636,7 @@
             "numItems": 1
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn54117182",
             "numItems": 117
         },
@@ -768,17 +768,17 @@
             "numItems": 6
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn39059762",
             "numItems": 710
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn39059805",
             "numItems": 355
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn39059825",
             "numItems": 235
         },
@@ -808,17 +808,17 @@
             "numItems": 41
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn52607008",
             "numItems": 72
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn52607009",
             "numItems": 36
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn52607011",
             "numItems": 18
         },
@@ -920,17 +920,17 @@
             "numItems": 426
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn51717564",
             "numItems": 751
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn52133496",
             "numItems": 616
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn52133568",
             "numItems": 176
         },
@@ -972,7 +972,7 @@
             "numItems": 162
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn39140863",
             "numItems": 324
         },
@@ -1032,17 +1032,17 @@
             "numItems": 65
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn39142091",
             "numItems": 68
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn50932231",
             "numItems": 448
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn52844205",
             "numItems": 146
         },
@@ -1212,17 +1212,17 @@
             "numItems": 1569
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn53280193",
             "numItems": 187
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn53280205",
             "numItems": 73
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn53280207",
             "numItems": 64
         },
@@ -1312,7 +1312,7 @@
             "numItems": 67
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn53352057",
             "numItems": 201
         },
@@ -1494,7 +1494,7 @@
             "numItems": 1
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn45226287",
             "numItems": 145
         },
@@ -1519,7 +1519,7 @@
             "numItems": 16
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn69084819",
             "numItems": 44
         },
@@ -1596,7 +1596,7 @@
             "numItems": 103
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn51614856",
             "numItems": 530
         },
@@ -1641,12 +1641,12 @@
             "numItems": 159
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn66227732",
             "numItems": 12
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn66227738",
             "numItems": 12
         },
@@ -1661,7 +1661,7 @@
             "numItems": 44
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn69058835",
             "numItems": 254
         }
@@ -1673,7 +1673,7 @@
             "numItems": 224
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn39159784",
             "numItems": 248
         },
@@ -1898,7 +1898,7 @@
             "numItems": 30
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn52297719",
             "numItems": 386
         },
@@ -1998,7 +1998,7 @@
             "numItems": 33
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn53336499",
             "numItems": 110
         },
@@ -2108,7 +2108,7 @@
             "numItems": 132
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn61518671",
             "numItems": 84
         },
@@ -2148,7 +2148,7 @@
             "numItems": 33
         },
         {
-            "component": "10XGenomicsXeniumISSExperiment",
+            "component": "10XXeniumISS",
             "synapseId": "syn61555362",
             "numItems": 1
         },
@@ -2183,7 +2183,7 @@
             "numItems": 111
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn61717453",
             "numItems": 156
         },
@@ -2193,7 +2193,7 @@
             "numItems": 103
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn61717777",
             "numItems": 26
         },
@@ -2203,12 +2203,12 @@
             "numItems": 30
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn61718349",
             "numItems": 22
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn64759475",
             "numItems": 4
         },
@@ -2223,7 +2223,7 @@
             "numItems": 101
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn65492294",
             "numItems": 33
         },
@@ -2355,7 +2355,7 @@
             "numItems": 42
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn53132005",
             "numItems": 310
         },
@@ -2385,7 +2385,7 @@
             "numItems": 102
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn53192032",
             "numItems": 11
         },
@@ -2435,7 +2435,7 @@
             "numItems": 91
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn53283206",
             "numItems": 171
         },
@@ -2450,17 +2450,17 @@
             "numItems": 3
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn53462044",
             "numItems": 312
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn53462156",
             "numItems": 49
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn53462167",
             "numItems": 15
         },
@@ -2475,7 +2475,7 @@
             "numItems": 4
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn64154495",
             "numItems": 4
         },
@@ -2694,7 +2694,7 @@
             "numItems": 336
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn51218193",
             "numItems": 84
         },
@@ -2779,7 +2779,7 @@
             "numItems": 140
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn52598014",
             "numItems": 102
         },
@@ -2824,7 +2824,7 @@
             "numItems": 3592
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn61440700",
             "numItems": 8
         },
@@ -2844,12 +2844,12 @@
             "numItems": 46
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn68642193",
             "numItems": 114
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn69050340",
             "numItems": 33
         },
@@ -2869,7 +2869,7 @@
             "numItems": 32
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn69075720",
             "numItems": 32
         },
@@ -2889,7 +2889,7 @@
             "numItems": 37
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn69083018",
             "numItems": 37
         },
@@ -2906,7 +2906,7 @@
     ],
     "HTA6": [
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn39262957",
             "numItems": 2514
         },
@@ -2961,7 +2961,7 @@
             "numItems": 125
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn51607185",
             "numItems": 98
         },
@@ -2981,22 +2981,22 @@
             "numItems": 6
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn51695636",
             "numItems": 228
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn51695643",
             "numItems": 228
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn52117436",
             "numItems": 79
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn52120791",
             "numItems": 316
         },
@@ -3011,17 +3011,17 @@
             "numItems": 282
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn64432771",
             "numItems": 16
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn64432776",
             "numItems": 8
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn64432787",
             "numItems": 8
         },
@@ -3163,7 +3163,7 @@
             "numItems": 17
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn53335787",
             "numItems": 1598
         },
@@ -3173,22 +3173,22 @@
             "numItems": 71
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn53351688",
             "numItems": 126
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn53359881",
             "numItems": 51
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn53361674",
             "numItems": 506
         },
         {
-            "component": "BulkWESLevel2",
+            "component": "BulkDNALevel2",
             "synapseId": "syn53366794",
             "numItems": 108
         },
@@ -3233,17 +3233,17 @@
             "numItems": 35
         },
         {
-            "component": "10XGenomicsXeniumISSExperiment",
+            "component": "10XXeniumISS",
             "synapseId": "syn66366532",
             "numItems": 32
         },
         {
-            "component": "BulkWESLevel1",
+            "component": "BulkDNALevel1",
             "synapseId": "syn69060592",
             "numItems": 7
         },
         {
-            "component": "BulkWESLevel3",
+            "component": "BulkDNALevel3",
             "synapseId": "syn69060601",
             "numItems": 3
         },
@@ -3310,7 +3310,7 @@
             "numItems": 12
         },
         {
-            "component": "ImagingLevel3Segmentation",
+            "component": "ImagingLevel3",
             "synapseId": "syn47878101",
             "numItems": 25
         },

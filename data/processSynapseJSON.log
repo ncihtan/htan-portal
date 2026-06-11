@@ -4,7 +4,7 @@ ncc: Using typescript@5.3.3 (local user-provided)
    40kB  sourcemap-register.js
 21071kB  index.js
  1296kB  index.js.map
-21111kB  [8504ms] - ncc 0.28.6
+21111kB  [8738ms] - ncc 0.28.6
 Missing ParentBiospecimenID:  {
   Component: 'BulkDNALevel3',
   Filename: 'HTAN OHSU/bulk_dnaseq_level_3/0000303168-cnv-segments.txt',
@@ -54554,5 +54554,60 @@ Missing ParentBiospecimenID:  {
   },
   DataFileID: 'HTA5_0000_1003296',
   ParentDataFileID: 'HTA5_0000_1003214',
+  primaryParents: []
+}
+Missing ParentBiospecimenID:  {
+  Component: 'BulkDNALevel2',
+  Filename: 'bulk_DNAseq_level_2/TBCRC/H_SL-DCIS-156R-C6.md.bam',
+  FileFormat: 'bam',
+  HTANParentDataFileID: 'HTA6_20_9, HTA6_20_5',
+  HTANDataFileID: 'HTA6_20_20',
+  AlignmentWorkflowType: 'BWA-mem',
+  GenomicReference: 'Gencode Release 38 (GRCh38.p13)',
+  GenomicReferenceURL: 'https://www.gencodegenes.org/human/release_38.html',
+  IndexFileName: 'bulk_DNAseq_level_2/TBCRC/H_SL-DCIS-156R-C6.md.bam.bai',
+  synapseId: 'syn51690691',
+  atlasid: 'HTA6',
+  atlas_name: 'HTAN Duke',
+  level: 'Level 2',
+  assayName: 'Bulk DNA',
+  AtlasMeta: {
+    title: { rendered: 'Breast Pre-Cancer Atlas' },
+    htan_id: 'hta6',
+    lead_institutions: 'Duke University'
+  },
+  DataFileID: 'HTA6_20_20',
+  ParentDataFileID: 'HTA6_20_9, HTA6_20_5',
+  publicationIds: [ 'hta6_2024_breast-cancer-research_siri-h-strand' ],
+  primaryParents: []
+}
+Missing ParentBiospecimenID:  {
+  Component: 'BulkDNALevel3',
+  Filename: 'bulk_DNAseq_level_3/TBCRC/H_SL-DCIS-156R-C6.seg',
+  FileFormat: 'seg',
+  HTANParentDataFileID: 'HTA6_20_20',
+  HTANDataFileID: 'HTA6_20_21',
+  GenomicReference: 'Gencode Release 38 (GRCh38.p13)',
+  GenomicReferenceURL: 'https://www.gencodegenes.org/human/release_38.html',
+  GermlineVariantsWorkflowURL: 'Not Applicable',
+  GermlineVariantsWorkflowType: 'None',
+  SomaticVariantsWorkflowURL: 'Not Applicable',
+  SomaticVariantsWorkflowType: 'None',
+  SomaticVariantsSampleType: 'Not Applicable',
+  StructuralVariantWorkflowURL: 'https://github.com/cancersysbio/htan-DCIS/tree/main/analysis/sWGS_CNA_pipeline',
+  StructuralVariantWorkflowType: 'CNV',
+  synapseId: 'syn51672864',
+  atlasid: 'HTA6',
+  atlas_name: 'HTAN Duke',
+  level: 'Level 3',
+  assayName: 'Bulk DNA',
+  AtlasMeta: {
+    title: { rendered: 'Breast Pre-Cancer Atlas' },
+    htan_id: 'hta6',
+    lead_institutions: 'Duke University'
+  },
+  DataFileID: 'HTA6_20_21',
+  ParentDataFileID: 'HTA6_20_20',
+  publicationIds: [ 'hta6_2024_breast-cancer-research_siri-h-strand' ],
   primaryParents: []
 }
