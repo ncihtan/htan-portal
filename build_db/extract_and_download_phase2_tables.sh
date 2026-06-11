@@ -6,6 +6,8 @@ DATASET="htan2_data_portal"
 GCS_BUCKET="gs://htan2-data-portal-files"
 LOCAL_OUT_DIR="data"
 MODE="${MODE:-local}" # local | gcs
+SQL_FILE="${SQL_FILE:-bigquery_to_clickhouse.sql}" # bigquery_to_clickhouse.sql | bigquery_to_clickhouse_silver.sql
+SKIP_SQL="${SKIP_SQL:-false}" # Set to true to skip SQL view creation
 
 TABLES=(
   "atlases"
@@ -27,6 +29,37 @@ if [[ "${MODE}" != "local" && "${MODE}" != "gcs" ]]; then
   echo "Invalid MODE='${MODE}'. Use MODE=local or MODE=gcs."
   exit 1
 fi
+
+# ============================================================
+# Step 1: Create BigQuery views from SQL file (if not skipped)
+# ============================================================
+if [[ "${SKIP_SQL}" != "true" ]]; then
+  echo "Creating BigQuery views from ${SQL_FILE}..."
+
+  if [[ ! -f "${SQL_FILE}" ]]; then
+    echo "ERROR: SQL file '${SQL_FILE}' not found!"
+    exit 1
+  fi
+
+  # Execute each CREATE OR REPLACE VIEW statement
+  bq query \
+    --project_id="${PROJECT_ID}" \
+    --use_legacy_sql=false \
+    "$(cat "${SQL_FILE}")" || {
+    echo "ERROR: Failed to create views from ${SQL_FILE}"
+    exit 1
+  }
+
+  echo "✓ BigQuery views created successfully."
+else
+  echo "⊘ Skipping SQL view creation (SKIP_SQL=true)."
+fi
+
+echo ""
+
+# ============================================================
+# Step 2: Export data tables to local files
+# ============================================================
 
 for name in "${TABLES[@]}"; do
   src_ref="${PROJECT_ID}.${DATASET}.${name}"
