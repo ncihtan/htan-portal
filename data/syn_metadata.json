@@ -1613,7 +1613,7 @@
         {
             "component": "ImagingLevel2",
             "synapseId": "syn52965394",
-            "numItems": 14
+            "numItems": 13
         },
         {
             "component": "MolecularTest",
@@ -1623,7 +1623,7 @@
         {
             "component": "ImagingLevel2",
             "synapseId": "syn57431469",
-            "numItems": 1062
+            "numItems": 1061
         },
         {
             "component": "BulkRNA-seqLevel2",
@@ -2908,7 +2908,7 @@
         {
             "component": "BulkDNALevel1",
             "synapseId": "syn39262957",
-            "numItems": 2516
+            "numItems": 2514
         },
         {
             "component": "Demographics",
