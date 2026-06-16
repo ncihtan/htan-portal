@@ -49,3 +49,4 @@ processSynapseJSON.error.log
 .idea/*
 *.iml
 .now
+*.tsbuildinfo

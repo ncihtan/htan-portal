@@ -60,6 +60,8 @@ interface IExploreTabsProps {
     publicationManifestByUid: { [uid: string]: PublicationManifest };
     filteredPublications: PublicationManifest[];
     filterString: string;
+    /** Optional list of tabs to show. When omitted all tabs are shown. */
+    tabs?: ExploreTab[];
 }
 
 const metricTypes = [
@@ -128,83 +130,113 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
             <>
                 <div className="subnav">
                     <ul className="nav nav-tabs">
-                        <li className="nav-item">
-                            <a
-                                onClick={() => props.setTab(ExploreTab.ATLAS)}
-                                className={`nav-link ${
-                                    props.activeTab === ExploreTab.ATLAS
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Atlases
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() =>
-                                    props.setTab(ExploreTab.PUBLICATION)
-                                }
-                                className={`nav-link ${
-                                    props.activeTab === ExploreTab.PUBLICATION
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Publications
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() => props.setTab(ExploreTab.CASES)}
-                                className={`nav-link ${
-                                    props.activeTab === ExploreTab.CASES
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Cases
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() =>
-                                    props.setTab(ExploreTab.BIOSPECIMEN)
-                                }
-                                className={`nav-link ${
-                                    props.activeTab === ExploreTab.BIOSPECIMEN
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Biospecimens
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() => props.setTab(ExploreTab.FILE)}
-                                className={`nav-link ${
-                                    props.activeTab === ExploreTab.FILE
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Files
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                onClick={() => props.setTab(ExploreTab.PLOTS)}
-                                className={`nav-link ${
-                                    props.activeTab === ExploreTab.PLOTS
-                                        ? 'active'
-                                        : ''
-                                }`}
-                            >
-                                Plots{' '}
-                                <span style={{ color: 'orange' }}>Beta!</span>
-                            </a>
-                        </li>
+                        {(!props.tabs ||
+                            props.tabs.includes(ExploreTab.ATLAS)) && (
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
+                                        props.setTab(ExploreTab.ATLAS)
+                                    }
+                                    className={`nav-link ${
+                                        props.activeTab === ExploreTab.ATLAS
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Atlases
+                                </a>
+                            </li>
+                        )}
+                        {(!props.tabs ||
+                            props.tabs.includes(ExploreTab.PUBLICATION)) && (
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
+                                        props.setTab(ExploreTab.PUBLICATION)
+                                    }
+                                    className={`nav-link ${
+                                        props.activeTab ===
+                                        ExploreTab.PUBLICATION
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Publications
+                                </a>
+                            </li>
+                        )}
+                        {(!props.tabs ||
+                            props.tabs.includes(ExploreTab.CASES)) && (
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
+                                        props.setTab(ExploreTab.CASES)
+                                    }
+                                    className={`nav-link ${
+                                        props.activeTab === ExploreTab.CASES
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Cases
+                                </a>
+                            </li>
+                        )}
+                        {(!props.tabs ||
+                            props.tabs.includes(ExploreTab.BIOSPECIMEN)) && (
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
+                                        props.setTab(ExploreTab.BIOSPECIMEN)
+                                    }
+                                    className={`nav-link ${
+                                        props.activeTab ===
+                                        ExploreTab.BIOSPECIMEN
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Biospecimens
+                                </a>
+                            </li>
+                        )}
+                        {(!props.tabs ||
+                            props.tabs.includes(ExploreTab.FILE)) && (
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
+                                        props.setTab(ExploreTab.FILE)
+                                    }
+                                    className={`nav-link ${
+                                        props.activeTab === ExploreTab.FILE
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Files
+                                </a>
+                            </li>
+                        )}
+                        {(!props.tabs ||
+                            props.tabs.includes(ExploreTab.PLOTS)) && (
+                            <li className="nav-item">
+                                <a
+                                    onClick={() =>
+                                        props.setTab(ExploreTab.PLOTS)
+                                    }
+                                    className={`nav-link ${
+                                        props.activeTab === ExploreTab.PLOTS
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    Plots{' '}
+                                    <span style={{ color: 'orange' }}>
+                                        Beta!
+                                    </span>
+                                </a>
+                            </li>
+                        )}
                     </ul>
                 </div>
 
