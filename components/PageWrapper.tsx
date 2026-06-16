@@ -12,6 +12,9 @@ config.autoAddCss = false;
 
 export interface IPageWrapperProps {}
 
+// ChatProvider and ChatPanel are mounted at the _app level (pages/_app.js)
+// so their state survives route changes triggered by features like the
+// "Apply to Explore" button.
 const PageWrapper: React.FunctionComponent<IPageWrapperProps> = ({
     children,
 }) => {
