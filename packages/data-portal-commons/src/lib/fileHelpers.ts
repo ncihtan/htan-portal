@@ -29,6 +29,16 @@ const AUTOMINERVA_MAPPINGS: {
     [synapseId: string]: AutoMinerva;
 } = _.keyBy<AutoMinerva>(AUTOMINERVA_ASSETS, 'synid');
 
+// Pure lookup for a file's CRDC-GC asset. Unlike reading `file.viewers?.crdcGc`,
+// this does not depend on addViewers() having already mutated the file, so it is
+// safe to use for download availability regardless of render/pagination state.
+export function getCrdcGcAsset(
+    file: BaseSerializableEntity,
+    crdcGcMappings: { [fileId: string]: CrdcGcAsset } = CRDCGC_MAPPINGS
+): CrdcGcAsset | undefined {
+    return crdcGcMappings[file.DataFileID];
+}
+
 export function addViewers(
     file: BaseSerializableEntity,
     ucscXenaMappings: { [fileId: string]: string } = UCSCXENA_MAPPINGS,

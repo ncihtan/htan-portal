@@ -42,6 +42,7 @@ import {
     addViewers,
     commonStyles,
     DownloadSourceCategory,
+    getCrdcGcAsset,
     Entity,
     FileAttributeMap,
     getViewerValues,
@@ -95,10 +96,10 @@ function generateCrdcGcManifestFile(files: Entity[]): string | undefined {
         'parent_data_file_id',
     ];
     const data = _(files)
-        .filter((f) => !!f.viewers?.crdcGc)
+        .filter((f) => !!getCrdcGcAsset(f))
         .map((f) => [
-            getDrsUri(f.viewers?.crdcGc?.drs_uri, false, true),
-            f.viewers?.crdcGc?.name,
+            getDrsUri(getCrdcGcAsset(f)?.drs_uri, false, true),
+            getCrdcGcAsset(f)?.name,
             f.atlas_name,
             _.uniq(f.biospecimenIds).join(' '),
             f.assayName,
@@ -119,9 +120,9 @@ function generateCrdcGcManifestFile(files: Entity[]): string | undefined {
 
 function generateGen3ManifestFile(files: Entity[]): string | undefined {
     const data = _(files)
-        .filter((f) => !!f.viewers?.crdcGc)
+        .filter((f) => !!getCrdcGcAsset(f))
         .map((f) => ({
-            object_id: getDrsUri(f.viewers?.crdcGc?.drs_uri, true),
+            object_id: getDrsUri(getCrdcGcAsset(f)?.drs_uri, true),
         }))
         .value();
 
@@ -511,7 +512,7 @@ const SynapseInstructions: React.FunctionComponent<{ files: Entity[] }> = (
 const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
     props
 ) => {
-    const crdcGcFiles = props.files.filter((f) => f.viewers?.crdcGc);
+    const crdcGcFiles = props.files.filter((f) => !!getCrdcGcAsset(f));
     const synapseFiles = props.files.filter(
         (f) => f.downloadSource === DownloadSourceCategory.synapse
     );
@@ -520,7 +521,7 @@ const FileDownloadModal: React.FunctionComponent<IFileDownloadModalProps> = (
             f.downloadSource?.includes(DownloadSourceCategory.comingSoon) ||
             (f.Component.startsWith('Imaging') &&
                 (f.level === 'Level 1' || f.level == 'Level 2') &&
-                !f.viewers?.crdcGc)
+                !getCrdcGcAsset(f))
     );
 
     const availabilityMessage = () => {
