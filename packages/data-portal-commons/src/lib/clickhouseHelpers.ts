@@ -257,6 +257,7 @@ export const fileQuery2 = `
         TREATMENT_TYPE,
         PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
+        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
         CAST([] AS Array(String)) AS viewersArr,
         CAST([] AS Array(String)) AS organType,
         CAST([] AS Array(String)) AS publicationIds,
