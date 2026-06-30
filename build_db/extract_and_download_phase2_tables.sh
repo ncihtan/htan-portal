@@ -45,7 +45,7 @@ if [[ "${SKIP_SQL}" != "true" ]]; then
   bq query \
     --project_id="${PROJECT_ID}" \
     --use_legacy_sql=false \
-    "$(cat "${SQL_FILE}")" || {
+    < "${SQL_FILE}" || {
     echo "ERROR: Failed to create views from ${SQL_FILE}"
     exit 1
   }
