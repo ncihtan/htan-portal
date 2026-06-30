@@ -228,9 +228,9 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
     }
 
     get leftPadding() {
-        if (this.categoryLabels) {
-            const longestLabel = _.maxBy(this.categoryLabels, (l) => l.length);
-            return longestLabel!.length * 8;
+        if (this.categoryLabels.length > 0) {
+            const longestLabel = _.maxBy(this.categoryLabels, (l) => l?.length ?? 0);
+            return (longestLabel?.length ?? 0) * 8;
         } else {
             return 100;
         }
