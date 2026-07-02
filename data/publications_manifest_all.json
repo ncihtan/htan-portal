@@ -7214,8 +7214,8 @@
         "Publication contains HTAN ID": "Yes",
         "Data Type": "scRNA-seq, scATAC-seq, CODEX, Bulk DNA",
         "Tool": "No",
-        "Supporting Link": "https://cellxgene.cziscience.com/collections/9ceda3d2-a55e-4b82-a91a-0190d947459a,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE292623,https://github.com/tanlabcode/pHGG_Atlas",
-        "Supporting Link Description": "snRNA-seq data objects can be explored interactively on CELLxGENE^^^Bulk RNA-seq data from the in vitro experiments^^^Software and source code created for this study are publicly available on GitHub",
+        "Supporting Link": "https://cellxgene.cziscience.com/collections/9ceda3d2-a55e-4b82-a91a-0190d947459a,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE292623,https://github.com/tanlabcode/pHGG_Atlas,https://sageb.io/jApjyC",
+        "Supporting Link Description": "snRNA-seq data objects can be explored interactively on CELLxGENE^^^Bulk RNA-seq data from the in vitro experiments^^^Software and source code created for this study are publicly available on GitHub^^^H&E and Xenium Data",
         "Publication-associated HTAN Parent Data File ID": [
             "HTA4_2001_26668",
             "HTA4_2001_26670",
