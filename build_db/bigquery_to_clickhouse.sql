@@ -78,6 +78,7 @@ SELECT
   d.Component,
   d.HTAN_PARTICIPANT_ID,
   d.ETHNIC_GROUP,
+  d.GENDER_IDENTITY,
   d.SEX,
   d.RACE,
   COALESCE(vs.VITAL_STATUS, '')                                    AS VITAL_STATUS,
@@ -85,6 +86,7 @@ SELECT
   COALESCE(vs.CAUSE_OF_DEATH, '')                                  AS CAUSE_OF_DEATH,
   COALESCE(vs.CAUSE_OF_DEATH_SOURCE, '')                           AS CAUSE_OF_DEATH_SOURCE,
   COALESCE(vs.AGE_IN_DAYS_AT_DEATH, '')                            AS AGE_IN_DAYS_AT_DEATH,
+  COALESCE(vs.AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS, '')       AS AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS,
   LOWER(REGEXP_EXTRACT(d.HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)'))   AS atlasid,
   d.HTAN_Center                                                    AS atlas_name
 FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Demographics` d
@@ -93,7 +95,8 @@ LEFT JOIN (
          ANY_VALUE(VITAL_STATUS)         AS VITAL_STATUS,
          ANY_VALUE(CAUSE_OF_DEATH)       AS CAUSE_OF_DEATH,
          ANY_VALUE(CAUSE_OF_DEATH_SOURCE) AS CAUSE_OF_DEATH_SOURCE,
-         ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS AGE_IN_DAYS_AT_DEATH
+         ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS AGE_IN_DAYS_AT_DEATH,
+         ANY_VALUE(AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS) AS AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS
   FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus`
   GROUP BY HTAN_PARTICIPANT_ID
 ) vs ON d.HTAN_PARTICIPANT_ID = vs.HTAN_PARTICIPANT_ID;
@@ -140,6 +143,7 @@ SELECT
   COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')             AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
   COALESCE(um.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME, '')               AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
   COALESCE(diag.TUMOR_GRADE, '')                                       AS TUMOR_GRADE,
+  COALESCE(diag.GLEASON_GRADE_GROUP, '')                               AS GLEASON_GRADE_GROUP,
   COALESCE(diag.LAST_KNOWN_DISEASE_STATUS, '')                         AS LastKnownDiseaseStatus,
   COALESCE(diag.AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS, '')          AS DaystoLastKnownDiseaseStatus,
   COALESCE(diag.METHOD_OF_DIAGNOSIS, '')                               AS MethodofDiagnosis,
@@ -169,14 +173,14 @@ LEFT JOIN molecular_agg mol
 -- ============================================================
 -- VIEW: specimen
 -- Phase 1 table: specimen
--- Source: Biospecimen records + Released RecordsetRows (for ParticipantID).
+-- Source: Biospecimen records + Provenance table (for ParticipantID).
 -- Trimmed to the specimen fields still used downstream.
 --   SourceHTANBiospecimenID <- HTAN_PARENT_ID when it is a biospecimen (contains '_')
 --     Uses regex r'^HTA[0-9]+_[0-9]+_' to detect biospecimen parents vs. participant parents.
 --   StorageMethod      <- PRESERVATION_MEDIUM (preferred) falling back to PRESERVATION_METHOD
 --     PRESERVATION_MEDIUM is the primary Phase 2 storage-medium field; PRESERVATION_METHOD
 --     is the broader preservation category used when the medium field is absent.
---   HTAN_PARTICIPANT_ID is resolved via Released_RecordsetRows.
+--   HTAN_PARTICIPANT_ID is resolved via provenance table.
 -- ============================================================
 CREATE OR REPLACE VIEW `htan2-dcc.htan2_data_portal.specimen` AS
 SELECT
@@ -217,6 +221,11 @@ SELECT
   COALESCE(bs.SLIDE_CHARGE_TYPE, '')                                    AS SlideChargeType,
   COALESCE(bs.SPECIMEN_LATERALITY, '')                                  AS SpecimenLaterality,
   COALESCE(bs.TUMOR_CLASSIFICATION, '')                                 AS TumorTissueType,
+  COALESCE(bs.IS_TISSUE_SECTION, '')                                    AS IS_TISSUE_SECTION,
+  COALESCE(bs.ICD_10_DISEASE_CODE, '')                                  AS ICD_10_DISEASE_CODE,
+  COALESCE(bs.SITE_OF_RESECTION_OR_BIOPSY, '')                          AS SITE_OF_RESECTION_OR_BIOPSY,
+  COALESCE(bs.SPECIMEN_CELLULAR_ARCHITECTURE, '')                       AS SPECIMEN_CELLULAR_ARCHITECTURE,
+  COALESCE(bs.PRESERVATION_METHOD_TEMPERATURE, '')                      AS PRESERVATION_METHOD_TEMPERATURE,
   LOWER(REGEXP_EXTRACT(bs.HTAN_BIOSPECIMEN_ID, r'^(HTA[0-9]+)'))       AS atlasid,
   bs.HTAN_Center                                                        AS atlas_name,
   bs.HTAN_PARENT_ID                                                     AS ParentID,
@@ -233,10 +242,11 @@ SELECT
   COALESCE(bs.SECTION_NUMBER_IN_SEQUENCE, '')                           AS SectionNumberinSequence
 FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_Biospecimen` bs
 LEFT JOIN (
-  SELECT Record_EntityId, ANY_VALUE(HTAN_PARTICIPANT_ID) AS HTAN_PARTICIPANT_ID
-  FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_INDEXING_TABLE_Released_RecordsetRows`
-  GROUP BY Record_EntityId
-) rr ON bs.Record_EntityId = rr.Record_EntityId;
+  SELECT HTAN_ASSAYED_BIOSPECIMEN_ID, ANY_VALUE(HTAN_PARTICIPANT_ID) AS HTAN_PARTICIPANT_ID
+  FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_INDEXING_TABLE_All_Files_and_Records_ID_Provenance`
+  WHERE HTAN_ASSAYED_BIOSPECIMEN_ID IS NOT NULL
+  GROUP BY HTAN_ASSAYED_BIOSPECIMEN_ID
+) rr ON bs.HTAN_BIOSPECIMEN_ID = rr.HTAN_ASSAYED_BIOSPECIMEN_ID;
 
 
 -- ============================================================
@@ -260,7 +270,8 @@ WITH
       ANY_VALUE(VITAL_STATUS)          AS VITAL_STATUS,
       ANY_VALUE(CAUSE_OF_DEATH)        AS CAUSE_OF_DEATH,
       ANY_VALUE(CAUSE_OF_DEATH_SOURCE) AS CAUSE_OF_DEATH_SOURCE,
-      ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS AGE_IN_DAYS_AT_DEATH
+      ANY_VALUE(AGE_IN_DAYS_AT_DEATH)  AS AGE_IN_DAYS_AT_DEATH,
+      ANY_VALUE(AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS) AS AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS
     FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Records_VitalStatus`
     GROUP BY HTAN_PARTICIPANT_ID
   ),
@@ -285,6 +296,7 @@ SELECT
   d.Component,
   d.HTAN_PARTICIPANT_ID AS HTAN_PARTICIPANT_ID,
   d.ETHNIC_GROUP,
+  d.GENDER_IDENTITY,
   d.SEX,
   d.RACE,
   COALESCE(v.VITAL_STATUS, '')                                         AS VITAL_STATUS,
@@ -292,6 +304,7 @@ SELECT
   COALESCE(v.CAUSE_OF_DEATH, '')                                        AS CAUSE_OF_DEATH,
   COALESCE(v.CAUSE_OF_DEATH_SOURCE, '')                                  AS CAUSE_OF_DEATH_SOURCE,
   COALESCE(v.AGE_IN_DAYS_AT_DEATH, '')                                         AS AGE_IN_DAYS_AT_DEATH,
+  COALESCE(v.AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS, '')                    AS AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS,
   LOWER(REGEXP_EXTRACT(d.HTAN_PARTICIPANT_ID, r'^(HTA[0-9]+)'))      AS atlasid,
   d.HTAN_Center                                                       AS atlas_name,
   -- Diagnosis fields
@@ -300,6 +313,7 @@ SELECT
   COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE, '')            AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
   COALESCE(diag.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME, '')            AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
   COALESCE(diag.TUMOR_GRADE, '')                                      AS TUMOR_GRADE,
+  COALESCE(diag.GLEASON_GRADE_GROUP, '')                              AS GLEASON_GRADE_GROUP,
   COALESCE(diag.LAST_KNOWN_DISEASE_STATUS, '')                        AS LastKnownDiseaseStatus,
   COALESCE(diag.AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS, '')         AS DaystoLastKnownDiseaseStatus,
   COALESCE(diag.METHOD_OF_DIAGNOSIS, '')                              AS MethodofDiagnosis,
@@ -323,6 +337,7 @@ LEFT JOIN (
     d.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
     COALESCE(um.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME, '') AS TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
     d.TUMOR_GRADE,
+    d.GLEASON_GRADE_GROUP,
     d.LAST_KNOWN_DISEASE_STATUS,
     d.AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS,
     d.METHOD_OF_DIAGNOSIS,
