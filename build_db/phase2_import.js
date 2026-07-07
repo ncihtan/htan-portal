@@ -68,6 +68,30 @@ function collectFields(rows) {
     return fields;
 }
 
+function expandFilesRow(row) {
+    if (!row.raw_file_metadata) {
+        return row;
+    }
+
+    try {
+        const parsed = JSON.parse(row.raw_file_metadata);
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+            const expanded = {
+                ...parsed,
+                ...row,
+            };
+            delete expanded.raw_file_metadata;
+            return expanded;
+        }
+    } catch (_error) {
+        // Keep original row if raw_file_metadata is malformed.
+    }
+
+    const fallback = { ...row };
+    delete fallback.raw_file_metadata;
+    return fallback;
+}
+
 async function parseRows(filePath) {
     const raw = await fs.readFile(filePath, 'utf8');
     const trimmed = raw.trim();
@@ -98,7 +122,9 @@ async function importTable(dataDir, tableName) {
         return;
     }
 
-    const normalizedRows = rows.map(normalizeRow);
+    const expandedRows =
+        tableName === 'files' ? rows.map(expandFilesRow) : rows;
+    const normalizedRows = expandedRows.map(normalizeRow);
     const fields = collectFields(normalizedRows);
 
     console.log(

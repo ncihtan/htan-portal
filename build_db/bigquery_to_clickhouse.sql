@@ -374,126 +374,139 @@ WITH
   -- ── Step 1: UNION ALL file metadata tables ──────────────────────────────────
   all_files AS (
     SELECT
-      File_EntityId,
-      FILENAME,
-      FILE_FORMAT,
-      Component,
-      HTAN_DATA_FILE_ID,
-      HTAN_PARENT_ID,
-      HTAN_Center,
+      TO_JSON_STRING(src) AS raw_file_metadata,
+      src.File_EntityId,
+      src.FILENAME,
+      src.FILE_FORMAT,
+      src.Component,
+      src.HTAN_DATA_FILE_ID,
+      src.HTAN_PARENT_ID,
+      src.HTAN_Center,
       CAST(NULL AS STRING) AS SCRNASEQ_WORKFLOW_TYPE,
       CAST(NULL AS STRING) AS SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION,
       CAST(NULL AS STRING) AS WORKFLOW_VERSION,
       CAST(NULL AS STRING) AS WORKFLOW_LINK
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel1`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel1` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
-      WORKFLOW_VERSION,
-      WORKFLOW_LINK
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel2`
+      src.WORKFLOW_VERSION,
+      src.WORKFLOW_LINK
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel2` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
-      WORKFLOW_VERSION,
-      WORKFLOW_LINK
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel3`
+      src.WORKFLOW_VERSION,
+      src.WORKFLOW_LINK
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_BulkWESLevel3` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel2`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel2` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel3`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel3` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel4`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_MultiplexMicroscopyLevel4` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel1`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel1` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
-      SCRNASEQ_WORKFLOW_TYPE,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
+      src.SCRNASEQ_WORKFLOW_TYPE,
       CAST(NULL AS STRING),
-      WORKFLOW_VERSION,
-      WORKFLOW_LINK
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel2`
+      src.WORKFLOW_VERSION,
+      src.WORKFLOW_LINK
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel2` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
-      SCRNASEQ_WORKFLOW_TYPE,
-      SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION,
-      WORKFLOW_VERSION,
-      WORKFLOW_LINK
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel3and4`
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
+      src.SCRNASEQ_WORKFLOW_TYPE,
+      src.SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION,
+      src.WORKFLOW_VERSION,
+      src.WORKFLOW_LINK
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_scRNALevel3and4` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_DigitalPathology`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_DigitalPathology` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel1`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel1` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel3`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel3` src
 
     UNION ALL
     SELECT
-      File_EntityId, FILENAME, FILE_FORMAT, Component, HTAN_DATA_FILE_ID, HTAN_PARENT_ID, HTAN_Center,
+      TO_JSON_STRING(src),
+      src.File_EntityId, src.FILENAME, src.FILE_FORMAT, src.Component, src.HTAN_DATA_FILE_ID, src.HTAN_PARENT_ID, src.HTAN_Center,
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING),
       CAST(NULL AS STRING)
-    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel4`
+    FROM `htan2-dcc.htan2_medallion_gold.gold_RELEASED_METADATA_TABLE_All_Files_SpatialLevel4` src
   ),
 
   -- ── Step 2: File-to-participant mapping from provenance ──────────────────────
@@ -582,6 +595,7 @@ WITH
 
 -- ── Final SELECT ──────────────────────────────────────────────────────────────
 SELECT
+  f.raw_file_metadata                                                  AS raw_file_metadata,
   f.File_EntityId                                                     AS synapseId,
   LOWER(REGEXP_EXTRACT(f.HTAN_DATA_FILE_ID, r'^(HTA[0-9]+)'))        AS atlasid,
   f.HTAN_Center                                                       AS atlas_name,
