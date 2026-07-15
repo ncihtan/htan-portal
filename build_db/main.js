@@ -10,18 +10,7 @@ import processedSynJson from '../public/processed_syn_data.json' with { type: 'j
 // prettier-ignore
 import organMappings from '../packages/data-portal-commons/src/assets/human-organ-mappings.json' with { type: 'json' };
 
-const fileFields = [
-    "synapseId",
-    "atlasid",
-    "atlas_name",
-    "level",
-    "assayName",
-    "Filename",
-    "FileFormat",
-    "Component",
-    "DataFileID",
-    "ParentDataFileID",
-    "biospecimenIds",
+const additionalFileFields = [
     "demographicsIds.Gender",
     "demographicsIds.Ethnicity",
     "demographicsIds.Race",
@@ -29,21 +18,7 @@ const fileFields = [
     "therapyIds.TreatmentType",
     "diagnosisIds.PrimaryDiagnosis",
     "diagnosisIds.TissueorOrganofOrigin",
-    "ScRNAseqWorkflowType",
-    "ScRNAseqWorkflowParametersDescription",
-    "WorkflowVersion",
-    "WorkflowLink",
-    "AtlasMeta",
-    "imageChannelMetadata",
-    "publicationIds",
-    "diagnosisIds",
-    "demographicsIds",
-    "therapyIds",
-    "viewers",
-    "isRawSequencing",
-    "downloadSource",
-    "releaseVersion",
-    "organType"
+    "organType",
 ];
 
 function formatRow(file, data, fields, postProcess) {
@@ -256,7 +231,10 @@ async function main(){
             derivedColumns: []
         },
         fileConfig : {
-            fields: fileFields,
+            fields: _.uniq([
+                ...findFields(Object.values(d.data.files)),
+                ...additionalFileFields,
+            ]),
             data: d.data.files,
             tableName: "files",
             postProcess: postProcessFiles,
