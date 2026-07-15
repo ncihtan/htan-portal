@@ -311,7 +311,7 @@ export const countsByTypeQuery2 = _.template(`
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(ETHNIC_GROUP) as val, 'ETHNIC_GROUP' as type, 'array' as fieldType FROM fileQueryForEthnicity
         UNION ALL
-        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE) as val, 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE' as type, 'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME) as val, 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME' as type, 'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, level as val, 'level' as type, 'string' as fieldType FROM fileQueryForLevel
         UNION ALL
@@ -406,7 +406,9 @@ export function getFilterString2(
         PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
         PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID:
             'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
-        TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
+        TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
+        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME:
+            'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE:
             'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
     };

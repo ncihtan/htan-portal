@@ -56,7 +56,6 @@ export enum Phase2AttributeNames {
     RACE = 'RACE',
     ETHNIC_GROUP = 'ETHNIC_GROUP',
     PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID = 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
-    TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE = 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
     TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME = 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
     TREATMENT_TYPE = 'TREATMENT_TYPE',
     assayName = 'assayName',
@@ -81,13 +80,9 @@ const Phase2AttributeMap: {
         path: 'atlas_name',
         displayName: 'Atlas',
     },
-    [Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE]: {
-        path: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
-        displayName: 'Organ Code',
-    },
     [Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME]: {
         path: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
-        displayName: 'Organ Name',
+        displayName: 'Organ',
     },
     [Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID]: {
         path: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
@@ -120,17 +115,13 @@ function formatValue(value: unknown) {
     return value == null ? '' : String(value);
 }
 
-// Format code and name pairs from arrays (e.g., code 'UBERON:0001255' with name 'stomach')
-function formatCodeNamePairs(codes: unknown, names: unknown): string {
-    const codeArr = Array.isArray(codes) ? codes : codes ? [codes] : [];
+function formatOrganNames(names: unknown): string {
     const nameArr = Array.isArray(names) ? names : names ? [names] : [];
 
-    return codeArr
-        .map((code, idx) => {
-            const name = nameArr[idx];
-            return name ? `${name} (${code})` : String(code);
-        })
-        .join(', ');
+    const uniqueNames = Array.from(
+        new Set(nameArr.map((name) => String(name)).filter(Boolean))
+    );
+    return uniqueNames.join(', ');
 }
 
 function FileNameCell({ row }: { row: TableRow }) {
@@ -179,15 +170,9 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Organ',
         selector: (row) =>
-            formatCodeNamePairs(
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
-            ),
+            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         getSearchValue: (row) =>
-            formatCodeNamePairs(
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
-            ),
+            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         cell: truncatedTableCell,
         wrap: true,
         sortable: true,
@@ -250,15 +235,9 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Tissue/Organ of Origin',
         selector: (row) =>
-            formatCodeNamePairs(
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
-            ),
+            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         getSearchValue: (row) =>
-            formatCodeNamePairs(
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
-            ),
+            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         cell: truncatedTableCell,
         wrap: true,
         sortable: true,
@@ -1493,15 +1472,9 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Tissue or Organ of Origin',
         selector: (row) =>
-            formatCodeNamePairs(
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
-            ),
+            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         getSearchValue: (row) =>
-            formatCodeNamePairs(
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
-                row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
-            ),
+            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         sortable: true,
     },
     { name: 'Sex', selector: 'SEX', sortable: true },
@@ -2007,7 +1980,7 @@ function Phase2FilterControls({
         attributeMap: Phase2AttributeMap,
         attributeNames: [
             Phase2AttributeNames.AtlasName,
-            Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
+            Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
             Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
             Phase2AttributeNames.SEX,
             Phase2AttributeNames.RACE,
@@ -2048,7 +2021,7 @@ function Phase2FilterControls({
                 {...dropdownProps}
                 placeholder="Organ"
                 attributes={[
-                    Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
+                    Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
                 ]}
                 className={cls}
                 width={100}
@@ -2204,7 +2177,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                                       Phase2AttributeNames.ETHNIC_GROUP
                                   ),
                                   tissueOrOrganOfOriginFilterString: fs(
-                                      Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE
+                                      Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
                                   ),
                                   levelFilterString: fs(
                                       Phase2AttributeNames.level
