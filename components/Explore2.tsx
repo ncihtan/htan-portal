@@ -115,6 +115,40 @@ function formatValue(value: unknown) {
     return value == null ? '' : String(value);
 }
 
+function formatListLikeValue(value: unknown) {
+    const normalize = (input: unknown): string[] => {
+        if (input == null) {
+            return [];
+        }
+        if (Array.isArray(input)) {
+            return input.flatMap((v) => normalize(v));
+        }
+
+        const valueString = String(input).trim();
+        if (!valueString) {
+            return [];
+        }
+
+        if (valueString.startsWith('[') && valueString.endsWith(']')) {
+            try {
+                const parsed = JSON.parse(valueString);
+                return normalize(parsed);
+            } catch {
+                const inner = valueString.slice(1, -1).trim();
+                if (!inner) return [];
+                return inner
+                    .split(',')
+                    .map((v) => v.trim().replace(/^['"]|['"]$/g, ''))
+                    .filter(Boolean);
+            }
+        }
+
+        return [valueString.replace(/^['"]|['"]$/g, '')];
+    };
+
+    return normalize(value).join(', ');
+}
+
 function formatOrganNames(names: unknown): string {
     const nameArr = Array.isArray(names) ? names : names ? [names] : [];
 
@@ -227,8 +261,9 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Treatment Type',
-        selector: (row) => formatValue(row.TREATMENT_TYPE),
-        getSearchValue: (row) => formatValue(row.TREATMENT_TYPE),
+        selector: (row) => formatListLikeValue(row.TREATMENT_TYPE),
+        getSearchValue: (row) => formatListLikeValue(row.TREATMENT_TYPE),
+        cell: (row) => formatListLikeValue(row.TREATMENT_TYPE),
         sortable: true,
         omit: true,
     },
@@ -1496,8 +1531,9 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Treatment Type',
-        selector: (row) => formatValue(row.TREATMENT_TYPE),
-        getSearchValue: (row) => formatValue(row.TREATMENT_TYPE),
+        selector: (row) => formatListLikeValue(row.TREATMENT_TYPE),
+        getSearchValue: (row) => formatListLikeValue(row.TREATMENT_TYPE),
+        cell: (row) => formatListLikeValue(row.TREATMENT_TYPE),
         sortable: true,
         omit: true,
     },
@@ -2052,6 +2088,12 @@ function Phase2FilterControls({
                 attributes={[Phase2AttributeNames.TREATMENT_TYPE]}
                 className={cls}
                 width={120}
+                options={(attrName) =>
+                    options(attrName).map((opt) => ({
+                        ...opt,
+                        label: formatListLikeValue(opt.value),
+                    }))
+                }
             />
             <FilterDropdown
                 {...dropdownProps}
@@ -2288,6 +2330,55 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
         [selectedFilters]
     );
 
+    const selectedFiltersByAttrNameForPills = useMemo(() => {
+        const treatmentGroup =
+            selectedFiltersByAttrName[Phase2AttributeNames.TREATMENT_TYPE];
+        if (!treatmentGroup) {
+            return selectedFiltersByAttrName;
+        }
+
+        return {
+            ...selectedFiltersByAttrName,
+            [Phase2AttributeNames.TREATMENT_TYPE]: new Set(
+                [...treatmentGroup].map((value) => formatListLikeValue(value))
+            ),
+        };
+    }, [selectedFiltersByAttrName]);
+
+    const handleSetFilterForPills = (
+        actionMeta: FilterActionMeta<SelectedFilter>
+    ) => {
+        const option = actionMeta.option;
+        if (
+            option &&
+            actionMeta.action === 'deselect-option' &&
+            option.group === Phase2AttributeNames.TREATMENT_TYPE
+        ) {
+            const matchingRawValues = selectedFilters
+                .filter(
+                    (f) =>
+                        f.group === Phase2AttributeNames.TREATMENT_TYPE &&
+                        formatListLikeValue(f.value) === option.value
+                )
+                .map((f) => f.value);
+
+            if (matchingRawValues.length > 0) {
+                const newFilters = selectedFilters.filter(
+                    (f) =>
+                        !(
+                            f.group === Phase2AttributeNames.TREATMENT_TYPE &&
+                            matchingRawValues.includes(f.value)
+                        )
+                );
+                setSelectedFilters(newFilters);
+                props.onFilterChange?.(newFilters);
+                return;
+            }
+        }
+
+        handleSetFilter(actionMeta);
+    };
+
     const atlasSummaryRows = useMemo<AtlasSummaryRow[]>(() => {
         const atlasCounts = new Map<
             string,
@@ -2363,8 +2454,8 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
 
             {/* Active filter tags */}
             <Filter
-                setFilter={handleSetFilter}
-                selectedFiltersByGroupName={selectedFiltersByAttrName}
+                setFilter={handleSetFilterForPills}
+                selectedFiltersByGroupName={selectedFiltersByAttrNameForPills}
                 getFilterDisplayName={getFilterDisplayName}
             />
 
