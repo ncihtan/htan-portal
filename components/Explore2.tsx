@@ -39,6 +39,8 @@ import {
     truncatedTableCell,
 } from '@htan/data-portal-explore';
 
+import styles from './explore2.module.scss';
+
 export interface IExplore2Props {
     getAtlasMetaData: () => any;
     onFilterChange?: (selectedFilters: any[]) => void;
@@ -2009,7 +2011,6 @@ function Phase2FilterControls({
         filterControlsProps,
         options
     );
-    const cls = 'filterCheckboxListContainer';
 
     return (
         <FilterControls {...filterControlsProps}>
@@ -2017,7 +2018,7 @@ function Phase2FilterControls({
                 {...dropdownProps}
                 placeholder="Atlas"
                 attributes={[Phase2AttributeNames.AtlasName]}
-                className={cls}
+                className={styles.filterCheckboxListContainer}
             />
             <FilterDropdown
                 {...dropdownProps}
@@ -2025,7 +2026,7 @@ function Phase2FilterControls({
                 attributes={[
                     Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
                 ]}
-                className={cls}
+                className={styles.filterCheckboxListContainer}
                 width={100}
             />
             <FilterDropdown
@@ -2034,7 +2035,7 @@ function Phase2FilterControls({
                 attributes={[
                     Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
                 ]}
-                className={cls}
+                className={styles.filterCheckboxListContainer}
                 width={120}
             />
             <FilterDropdown
@@ -2045,21 +2046,21 @@ function Phase2FilterControls({
                     Phase2AttributeNames.RACE,
                     Phase2AttributeNames.ETHNIC_GROUP,
                 ]}
-                className={cls}
+                className={styles.filterCheckboxListContainer}
                 width={164}
             />
             <FilterDropdown
                 {...dropdownProps}
                 placeholder="Treatment"
                 attributes={[Phase2AttributeNames.TREATMENT_TYPE]}
-                className={cls}
+                className={styles.filterCheckboxListContainer}
                 width={120}
             />
             <FilterDropdown
                 {...dropdownProps}
                 placeholder="Assay"
                 attributes={[Phase2AttributeNames.assayName]}
-                className={cls}
+                className={styles.filterCheckboxListContainer}
             />
             <FilterDropdown
                 {...dropdownProps}
@@ -2068,7 +2069,7 @@ function Phase2FilterControls({
                     Phase2AttributeNames.level,
                     Phase2AttributeNames.FileFormat,
                 ]}
-                className={cls}
+                className={styles.filterCheckboxListContainer}
                 width={80}
             />
         </FilterControls>
