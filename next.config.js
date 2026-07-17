@@ -17,6 +17,16 @@ module.exports = withMDX({
                 permanent: true,
             },
             {
+                source: '/explore',
+                destination: '/explore/phase1',
+                permanent: true,
+            },
+            {
+                source: '/explore2',
+                destination: '/explore/phase2',
+                permanent: true,
+            },
+            {
                 source: '/publications/htapp_mbc_klughammer_2024',
                 destination:
                     '/publications/hta1_2024_nature-medicine_johanna-klughammer',
