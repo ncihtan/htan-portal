@@ -237,7 +237,7 @@ export const specimenQuery = _.template(`
     )
 `);
 
-const normalizedFilesSelect = `
+export const fileQuery2 = `
     SELECT
         synapseId,
         atlasid,
@@ -254,17 +254,7 @@ const normalizedFilesSelect = `
         ETHNIC_GROUP,
         RACE,
         VITAL_STATUS,
-        arrayFilter(
-            x -> notEmpty(x),
-            arrayMap(
-                x -> replaceRegexpAll(
-                    replaceRegexpAll(x, '^\\\\[\\\\s*"?', ''),
-                    '"?\\\\s*\\\\]$',
-                    ''
-                ),
-                TREATMENT_TYPE
-            )
-        ) AS TREATMENT_TYPE,
+        TREATMENT_TYPE,
         PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
@@ -276,12 +266,6 @@ const normalizedFilesSelect = `
         therapyIds,
         Component
     FROM files
-`;
-
-export const fileQuery2 = `
-    SELECT * FROM (
-${normalizedFilesSelect}
-    ) AS normalized_files
 `;
 
 export const caseQuery2 = _.template(`
@@ -308,19 +292,16 @@ export const specimenQuery2 = _.template(`
 
 export const countsByTypeQuery2 = _.template(`
     WITH
-        normalizedFiles AS (
-${normalizedFilesSelect}
-        ),
-        fileQueryForSex AS (SELECT * FROM normalizedFiles <%=genderFilterString%>),
-        fileQueryForRace AS (SELECT * FROM normalizedFiles <%=raceFilterString%>),
-        fileQueryForPrimaryDiagnosis AS (SELECT * FROM normalizedFiles <%=primaryDiagnosisFilterString%>),
-        fileQueryForEthnicity AS (SELECT * FROM normalizedFiles <%=ethnicityFilterString%>),
-        fileQueryForTissueOrOrganOfOrigin AS (SELECT * FROM normalizedFiles <%=tissueOrOrganOfOriginFilterString%>),
-        fileQueryForLevel AS (SELECT * FROM normalizedFiles <%=levelFilterString%>),
-        fileQueryForAssayName AS (SELECT * FROM normalizedFiles <%=assayNameFilterString%>),
-        fileQueryForTreatmentType AS (SELECT * FROM normalizedFiles <%=treatmentTypeFilterString%>),
-        fileQueryForFileFormat AS (SELECT * FROM normalizedFiles <%=fileFormatFilterString%>),
-        fileQueryForAtlasName AS (SELECT * FROM normalizedFiles <%=atlasNameFilterString%>)
+        fileQueryForSex AS (SELECT * FROM files <%=genderFilterString%>),
+        fileQueryForRace AS (SELECT * FROM files <%=raceFilterString%>),
+        fileQueryForPrimaryDiagnosis AS (SELECT * FROM files <%=primaryDiagnosisFilterString%>),
+        fileQueryForEthnicity AS (SELECT * FROM files <%=ethnicityFilterString%>),
+        fileQueryForTissueOrOrganOfOrigin AS (SELECT * FROM files <%=tissueOrOrganOfOriginFilterString%>),
+        fileQueryForLevel AS (SELECT * FROM files <%=levelFilterString%>),
+        fileQueryForAssayName AS (SELECT * FROM files <%=assayNameFilterString%>),
+        fileQueryForTreatmentType AS (SELECT * FROM files <%=treatmentTypeFilterString%>),
+        fileQueryForFileFormat AS (SELECT * FROM files <%=fileFormatFilterString%>),
+        fileQueryForAtlasName AS (SELECT * FROM files <%=atlasNameFilterString%>)
     SELECT val, type, fieldType, count(Distinct HTAN_DATA_FILE_ID) as count FROM (
         SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(SEX) as val, 'SEX' as type, 'array' as fieldType FROM fileQueryForSex
         UNION ALL

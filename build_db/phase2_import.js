@@ -40,13 +40,51 @@ function normalizeArrayValue(value) {
     });
 }
 
+function normalizeTreatmentValues(value) {
+    const values = Array.isArray(value) ? value : [value];
+
+    return values.flatMap((item) => {
+        if (item == null) {
+            return [];
+        }
+
+        if (typeof item !== 'string') {
+            return [normalizeScalarValue(item)];
+        }
+
+        const trimmed = item.trim();
+        if (!trimmed) {
+            return [];
+        }
+
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                return normalizeTreatmentValues(parsed);
+            } catch (_error) {
+                return trimmed
+                    .slice(1, -1)
+                    .split(',')
+                    .map((part) => part.trim().replace(/^['"]|['"]$/g, ''))
+                    .filter(Boolean);
+            }
+        }
+
+        return [trimmed.replace(/^['"]|['"]$/g, '')];
+    });
+}
+
 function normalizeRow(row) {
     const normalized = {};
 
     for (const [key, value] of Object.entries(row)) {
-        normalized[key] = Array.isArray(value)
-            ? normalizeArrayValue(value)
-            : normalizeScalarValue(value);
+        if (key === 'TREATMENT_TYPE') {
+            normalized[key] = normalizeTreatmentValues(value);
+        } else {
+            normalized[key] = Array.isArray(value)
+                ? normalizeArrayValue(value)
+                : normalizeScalarValue(value);
+        }
     }
 
     return normalized;
