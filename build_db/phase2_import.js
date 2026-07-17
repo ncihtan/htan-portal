@@ -172,7 +172,7 @@ async function importTable(dataDir, tableName) {
 }
 
 async function main() {
-    const dataDir = path.resolve(__dirname, '../data');
+    const dataDir = path.resolve(__dirname, '../data/tmp/phase2');
 
     await createDbIfNotExist();
 

@@ -4,7 +4,7 @@ set -euo pipefail
 PROJECT_ID="htan2-dcc"
 DATASET="htan2_data_portal"
 GCS_BUCKET="gs://htan2-data-portal-files"
-LOCAL_OUT_DIR="data"
+LOCAL_OUT_DIR="phase2"
 MODE="${MODE:-local}" # local | gcs
 SQL_FILE="${SQL_FILE:-bigquery_to_clickhouse.sql}" # bigquery_to_clickhouse.sql | bigquery_to_clickhouse_silver.sql
 SKIP_SQL="${SKIP_SQL:-false}" # Set to true to skip SQL view creation
