@@ -1463,7 +1463,9 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         name: 'Age at Diagnosis (years)',
         selector: (row) => {
             const days = Number(row.AGE_IN_DAYS_AT_DIAGNOSIS);
-            return Number.isFinite(days) ? (days / 365.25).toFixed(2) : '';
+            return Number.isFinite(days) && days > 0
+                ? Math.floor(days / 365.25)
+                : '';
         },
         sortable: true,
     },
@@ -1524,14 +1526,24 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         omit: true,
     },
     {
-        name: 'Age in Days at Death',
-        selector: 'AGE_IN_DAYS_AT_DEATH',
+        name: 'Age at Death (years)',
+        selector: (row) => {
+            const days = Number(row.AGE_IN_DAYS_AT_DEATH);
+            return Number.isFinite(days) && days > 0
+                ? Math.floor(days / 365.25)
+                : '';
+        },
         sortable: true,
         omit: true,
     },
     {
-        name: 'Age in Days at Last Known Survival Status',
-        selector: 'AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS',
+        name: 'Age at Last Known Survival Status (years)',
+        selector: (row) => {
+            const days = Number(row.AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS);
+            return Number.isFinite(days) && days > 0
+                ? Math.floor(days / 365.25)
+                : '';
+        },
         sortable: true,
         omit: true,
     },
