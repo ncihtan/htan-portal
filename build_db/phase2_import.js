@@ -40,7 +40,7 @@ function normalizeArrayValue(value) {
     });
 }
 
-function normalizeTreatmentValues(value) {
+function normalizeListLikeValue(value) {
     const values = Array.isArray(value) ? value : [value];
 
     return values.flatMap((item) => {
@@ -60,7 +60,7 @@ function normalizeTreatmentValues(value) {
         if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
             try {
                 const parsed = JSON.parse(trimmed);
-                return normalizeTreatmentValues(parsed);
+                return normalizeListLikeValue(parsed);
             } catch (_error) {
                 return trimmed
                     .slice(1, -1)
@@ -74,12 +74,19 @@ function normalizeTreatmentValues(value) {
     });
 }
 
+// Columns that contain list-like values (JSON strings, bracketed strings) that should be normalized
+const LISTLIKE_COLUMNS = new Set([
+    'TREATMENT_TYPE',
+    'HTAN_PARENT_ID',
+    'biospecimenIds',
+]);
+
 function normalizeRow(row) {
     const normalized = {};
 
     for (const [key, value] of Object.entries(row)) {
-        if (key === 'TREATMENT_TYPE') {
-            normalized[key] = normalizeTreatmentValues(value);
+        if (LISTLIKE_COLUMNS.has(key)) {
+            normalized[key] = normalizeListLikeValue(value);
         } else {
             normalized[key] = Array.isArray(value)
                 ? normalizeArrayValue(value)
