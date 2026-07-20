@@ -84,7 +84,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         >
                             <ButtonToolbar>
                                 <Button
-                                    href="/explore"
+                                    href="/explore/phase2"
                                     variant="primary"
                                     className="mr-4"
                                     size="lg"

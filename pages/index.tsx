@@ -1,7 +1,12 @@
 import React from 'react';
 import _ from 'lodash';
 
-import { caseQuery, doQuery, NOT_REPORTED } from '@htan/data-portal-commons';
+import {
+    caseQuery2,
+    doQuery,
+    getPhase2Client,
+    NOT_REPORTED,
+} from '@htan/data-portal-commons';
 
 import PreReleaseBanner from '../components/PreReleaseBanner';
 import HomePage, { IHomePropsProps } from '../components/HomePage';
@@ -20,11 +25,14 @@ const Home = (data: IHomePropsProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+    const phase2Client = getPhase2Client();
+
     const assayCounts = await doQuery<{
         assayName: string;
         atlas_name: string;
         count: string;
-    }>(`
+    }>(
+        `
         SELECT
             assayName,
             atlas_name,
@@ -33,47 +41,53 @@ export const getStaticProps: GetStaticProps = async (context) => {
         ARRAY JOIN demographicsIds
         GROUP BY
             assayName, atlas_name
-    `);
+    `,
+        phase2Client
+    );
 
     const organCounts = await doQuery<{
         organType: string;
         atlas_name: string;
         count: string;
-    }>(`
+    }>(
+        `
         SELECT 
-            organType,
+            TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME as organType,
             atlas_name, 
-            count(DISTINCT ParticipantID) as count 
-        FROM (
-            ${caseQuery({ filterString: '' })}
-        )
-        ARRAY JOIN organType
+            count(DISTINCT demographicsIds) as count 
+        FROM files
+        ARRAY JOIN TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
         GROUP BY 
             organType, atlas_name
-    `);
+    `,
+        phase2Client
+    );
 
     const entityCounts = await doQuery<{
         atlasCount: string;
         caseCount: string;
         sampleCount: string;
         organCount: string;
-    }>(`
+    }>(
+        `
         SELECT (SELECT count(*) FROM atlases) as atlasCount,
         (SELECT count(*) FROM (
-            ${caseQuery({ filterString: '' })}                          
+            ${caseQuery2({ filterString: '' })}                          
         )) as caseCount,
-        (SELECT count(distinct BiospecimenID) FROM specimen WHERE BiospecimenID IN (
+        (SELECT count(distinct HTAN_BIOSPECIMEN_ID) FROM specimen WHERE HTAN_BIOSPECIMEN_ID IN (
             SELECT DISTINCT bId
             FROM files f
             ARRAY JOIN biospecimenIds AS bId
         )) as sampleCount,
-        (SELECT count(organType) FROM (
-            SELECT organType FROM files
-            ARRAY JOIN organType
-            WHERE organType != '${NOT_REPORTED}'
-            GROUP BY organType
+        (SELECT count(TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME) FROM (
+            SELECT TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME FROM files
+            ARRAY JOIN TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
+            WHERE TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME != '${NOT_REPORTED}'
+            GROUP BY TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
         )) as organCount
-    `);
+    `,
+        phase2Client
+    );
 
     const entitySummary = [
         { description: 'Atlases', text: entityCounts[0].atlasCount },
