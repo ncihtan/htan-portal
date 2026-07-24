@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {createDbIfNotExist, createTable} from "./client.js";
+import {createDbIfNotExist, createTable, insertRows} from "./client.js";
 import {
     normalizeTissueOrOrganOrSite,
     normalizeTreatment
@@ -193,7 +193,7 @@ async function main(){
             data: Object.values(d.data.publicationManifestByUid),
             tableName: "publication_manifest",
             derivedColumns: [
-                "associatedFiles Array(TEXT) MATERIALIZED splitByChar(',',PublicationAssociatedParentDataFileID)",
+                "associatedFiles Array(String) MATERIALIZED splitByChar(',',PublicationAssociatedParentDataFileID)",
                 // "uid TEXT MATERIALIZED arrayElement(splitByChar('\/', PMID),4)"
             ]
         },
@@ -239,7 +239,7 @@ async function main(){
             tableName: "files",
             postProcess: postProcessFiles,
             derivedColumns: [
-                "viewersArr Array(TEXT) MATERIALIZED JSONExtractKeys(viewers)",
+                "viewersArr Array(String) MATERIALIZED JSONExtractKeys(viewers)",
             ]
         },
         specimenConfig : {
@@ -252,11 +252,31 @@ async function main(){
 
     function doCreate(config) {
         const preprocess = config.preprocess ? config.preprocess : (f) => f;
-        const rows = config.data
-            .map(preprocess)
-            .map(f => formatRow(f, d.data, config.fields, config.postProcess));
+        const chunkSize = 1000;
 
-        return createTable(config.tableName, rows, config.fields, config.derivedColumns);
+        return (async () => {
+            if (!config.data.length) {
+                await createTable(config.tableName, [], config.fields, config.derivedColumns);
+                return;
+            }
+
+            const firstChunk = config.data.slice(0, chunkSize);
+            const firstRows = firstChunk
+                .map(preprocess)
+                .map(f => formatRow(f, d.data, config.fields, config.postProcess));
+
+            await createTable(config.tableName, firstRows, config.fields, config.derivedColumns);
+            await insertRows(config.tableName, firstRows);
+
+            for (let i = chunkSize; i < config.data.length; i += chunkSize) {
+                const chunk = config.data.slice(i, i + chunkSize);
+                const rows = chunk
+                    .map(preprocess)
+                    .map(f => formatRow(f, d.data, config.fields, config.postProcess));
+
+                await insertRows(config.tableName, rows);
+            }
+        })();
     }
 
     // enable this if you only want to import new publication data

@@ -7,7 +7,7 @@ import { CountByType } from './types';
 
 export const DEFAULT_CLICKHOUSE_HOST =
     'https://dl96orhu96.us-east-1.aws.clickhouse.cloud:8443';
-export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_913';
+export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_test';
 export const DEFAULT_PHASE2_CLICKHOUSE_DB = 'htan2_2026_906';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
