@@ -5,7 +5,10 @@ import Tooltip from 'rc-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { IEnhancedDataTableColumn } from '@htan/data-portal-table';
+import {
+    formatMetadataFieldName,
+    IEnhancedDataTableColumn,
+} from '@htan/data-portal-table';
 import styles from './ViewDetailsModal.module.scss';
 
 interface IViewDetailsModalProps<CellData> {
@@ -17,6 +20,8 @@ interface IViewDetailsModalProps<CellData> {
         [columnKey: string]: boolean;
     }) => void;
     customContent?: JSX.Element;
+    additionalFields?: { [key: string]: any };
+    disabledAddColumns?: string[];
 }
 
 interface IAddColumnIconProps {
@@ -25,7 +30,17 @@ interface IAddColumnIconProps {
     onChangeColumnVisibility: (columnVisibility: {
         [columnKey: string]: boolean;
     }) => void;
+    isDisabled?: boolean;
 }
+
+const EXCLUDED_METADATA_FIELDS = new Set(['AtlasMeta']);
+const METADATA_FIELD_NAME_OVERRIDES: { [key: string]: string } = {
+    SynapseIDofGeoMxDSPROISegmentAnnotationFile:
+        'Synapse ID of GeoMx DSP ROI Segment Annotation File',
+    SynapseIDofGeoMxDSPPKCFile: 'Synapse ID of GeoMx DSP PKC File',
+    SynapseIDofGeoMxLabWorksheetFile: 'Synapse ID of GeoMx Lab Worksheet File',
+    ROIname: 'ROI Name',
+};
 
 function renderCell<CellData>(
     column: IEnhancedDataTableColumn<CellData>,
@@ -42,19 +57,30 @@ function renderCell<CellData>(
 
 const AddColumnIcon: React.FunctionComponent<IAddColumnIconProps> = (props) => {
     return !props.columnVisibility[props.columnName] ? (
-        <Tooltip overlay={<span>Add this column to the table</span>}>
+        <Tooltip
+            overlay={
+                <span>
+                    {props.isDisabled
+                        ? 'Cannot add fetched metadata columns to table'
+                        : 'Add this column to the table'}
+                </span>
+            }
+        >
             <span
                 style={{
-                    color: 'green',
+                    color: props.isDisabled ? '#ccc' : 'green',
                     marginLeft: 3,
-                    cursor: 'pointer',
+                    cursor: props.isDisabled ? 'not-allowed' : 'pointer',
+                    opacity: props.isDisabled ? 0.5 : 1,
                 }}
-                onClick={() =>
-                    props.onChangeColumnVisibility({
-                        ...props.columnVisibility,
-                        [props.columnName]: true,
-                    })
-                }
+                onClick={() => {
+                    if (!props.isDisabled) {
+                        props.onChangeColumnVisibility({
+                            ...props.columnVisibility,
+                            [props.columnName]: true,
+                        });
+                    }
+                }}
             >
                 <FontAwesomeIcon icon={faPlusCircle} />
             </span>
@@ -86,12 +112,19 @@ export const ViewDetailsModal = <CellData extends object>(
                     </colgroup>
                     <tbody>
                         {props.columns.reduce((rows, column) => {
+                            const rawColumnName = column.name as string;
+                            if (EXCLUDED_METADATA_FIELDS.has(rawColumnName)) {
+                                return rows;
+                            }
                             const cell = renderCell(column, props.cellData!);
                             if (cell) {
                                 rows.push(
-                                    <tr key={column.name as string}>
+                                    <tr key={rawColumnName}>
                                         <td>
-                                            {column.name}
+                                            {formatMetadataFieldName(
+                                                rawColumnName,
+                                                METADATA_FIELD_NAME_OVERRIDES
+                                            )}
                                             {props.columnVisibility &&
                                                 props.onChangeColumnVisibility && (
                                                     <AddColumnIcon
@@ -99,11 +132,14 @@ export const ViewDetailsModal = <CellData extends object>(
                                                             props.columnVisibility
                                                         }
                                                         columnName={
-                                                            column.name as string
+                                                            rawColumnName
                                                         }
                                                         onChangeColumnVisibility={
                                                             props.onChangeColumnVisibility
                                                         }
+                                                        isDisabled={props.disabledAddColumns?.includes(
+                                                            rawColumnName
+                                                        )}
                                                     />
                                                 )}
                                         </td>
@@ -113,6 +149,60 @@ export const ViewDetailsModal = <CellData extends object>(
                             }
                             return rows;
                         }, [] as any[])}
+                        {props.additionalFields &&
+                            Object.entries(props.additionalFields).map(
+                                ([fieldName, fieldValue]) => {
+                                    if (
+                                        EXCLUDED_METADATA_FIELDS.has(fieldName)
+                                    ) {
+                                        return null;
+                                    }
+                                    if (
+                                        fieldValue !== null &&
+                                        fieldValue !== undefined &&
+                                        fieldValue !== ''
+                                    ) {
+                                        return (
+                                            <tr key={`additional-${fieldName}`}>
+                                                <td>
+                                                    {formatMetadataFieldName(
+                                                        fieldName,
+                                                        METADATA_FIELD_NAME_OVERRIDES
+                                                    )}
+                                                    {props.columnVisibility &&
+                                                        props.onChangeColumnVisibility && (
+                                                            <AddColumnIcon
+                                                                columnVisibility={
+                                                                    props.columnVisibility
+                                                                }
+                                                                columnName={
+                                                                    fieldName
+                                                                }
+                                                                onChangeColumnVisibility={
+                                                                    props.onChangeColumnVisibility
+                                                                }
+                                                                isDisabled={
+                                                                    true
+                                                                }
+                                                            />
+                                                        )}
+                                                </td>
+                                                <td>
+                                                    {Array.isArray(fieldValue)
+                                                        ? fieldValue.join(', ')
+                                                        : typeof fieldValue ===
+                                                          'object'
+                                                        ? JSON.stringify(
+                                                              fieldValue
+                                                          )
+                                                        : String(fieldValue)}
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                    return null;
+                                }
+                            )}
                     </tbody>
                 </table>
                 {props.customContent}
