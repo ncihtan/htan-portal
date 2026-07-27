@@ -62,6 +62,30 @@ function renderCell<CellData>(
     }
 }
 
+function isEmptyCellValue(value: any): boolean {
+    if (value === null || value === undefined) {
+        return true;
+    }
+
+    if (typeof value === 'string') {
+        return value.trim() === '';
+    }
+
+    if (Array.isArray(value)) {
+        return value.length === 0 || value.every(isEmptyCellValue);
+    }
+
+    if (React.isValidElement(value)) {
+        return isEmptyCellValue((value as any).props?.children);
+    }
+
+    if (typeof value === 'object') {
+        return Object.keys(value).length === 0;
+    }
+
+    return false;
+}
+
 const AddColumnIcon: React.FunctionComponent<IAddColumnIconProps> = (props) => {
     return !props.columnVisibility[props.columnName] ? (
         <Tooltip
@@ -124,7 +148,7 @@ export const ViewDetailsModal = <CellData extends object>(
                                 return rows;
                             }
                             const cell = renderCell(column, props.cellData!);
-                            if (cell) {
+                            if (!isEmptyCellValue(cell)) {
                                 rows.push(
                                     <tr key={rawColumnName}>
                                         <td>
@@ -164,11 +188,7 @@ export const ViewDetailsModal = <CellData extends object>(
                                     ) {
                                         return null;
                                     }
-                                    if (
-                                        fieldValue !== null &&
-                                        fieldValue !== undefined &&
-                                        fieldValue !== ''
-                                    ) {
+                                    if (!isEmptyCellValue(fieldValue)) {
                                         return (
                                             <tr key={`additional-${fieldName}`}>
                                                 <td>
