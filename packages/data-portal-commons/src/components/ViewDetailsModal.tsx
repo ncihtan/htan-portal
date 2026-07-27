@@ -38,6 +38,7 @@ const EXCLUDED_METADATA_FIELDS = new Set([
     'HTANParentDataFileID',
     'HTANDataFileID',
     'HTANParentBiospecimenID',
+    'ParentBiospecimenID',
     'HTANParticipantID',
 ]);
 
