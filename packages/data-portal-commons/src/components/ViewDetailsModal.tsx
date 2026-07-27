@@ -33,7 +33,14 @@ interface IAddColumnIconProps {
     isDisabled?: boolean;
 }
 
-const EXCLUDED_METADATA_FIELDS = new Set(['AtlasMeta']);
+const EXCLUDED_METADATA_FIELDS = new Set([
+    'AtlasMeta',
+    'HTANParentDataFileID',
+    'HTANDataFileID',
+    'HTANParentBiospecimenID',
+    'HTANParticipantID',
+]);
+
 const METADATA_FIELD_NAME_OVERRIDES: { [key: string]: string } = {
     SynapseIDofGeoMxDSPROISegmentAnnotationFile:
         'Synapse ID of GeoMx DSP ROI Segment Annotation File',
