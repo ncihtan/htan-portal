@@ -255,7 +255,7 @@ export const fileQuery2 = `
         RACE,
         VITAL_STATUS,
         TREATMENT_TYPE,
-        PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
+        PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
         CAST([] AS Array(String)) AS viewersArr,
@@ -307,7 +307,7 @@ export const countsByTypeQuery2 = _.template(`
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(RACE) as val, 'RACE' as type, 'array' as fieldType FROM fileQueryForRace
         UNION ALL
-        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID) as val, 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID' as type, 'array' as fieldType FROM fileQueryForPrimaryDiagnosis
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME) as val, 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME' as type, 'array' as fieldType FROM fileQueryForPrimaryDiagnosis
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(ETHNIC_GROUP) as val, 'ETHNIC_GROUP' as type, 'array' as fieldType FROM fileQueryForEthnicity
         UNION ALL
@@ -403,14 +403,12 @@ export function getFilterString2(
         VITAL_STATUS: 'VITAL_STATUS',
         TreatmentType: 'TREATMENT_TYPE',
         TREATMENT_TYPE: 'TREATMENT_TYPE',
-        PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
-        PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID:
-            'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
+        PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
+        PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME:
+            'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
         TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME:
             'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
-        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE:
-            'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE',
     };
 
     if (selectedFilters.length > 0) {

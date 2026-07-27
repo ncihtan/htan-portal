@@ -57,7 +57,7 @@ export enum Phase2AttributeNames {
     SEX = 'SEX',
     RACE = 'RACE',
     ETHNIC_GROUP = 'ETHNIC_GROUP',
-    PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID = 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
+    PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME = 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
     TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME = 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
     TREATMENT_TYPE = 'TREATMENT_TYPE',
     assayName = 'assayName',
@@ -86,8 +86,8 @@ const Phase2AttributeMap: {
         path: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
         displayName: 'Organ',
     },
-    [Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID]: {
-        path: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
+    [Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME]: {
+        path: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
         displayName: 'Disease',
     },
     [Phase2AttributeNames.SEX]: { path: 'SEX', displayName: 'Sex' },
@@ -189,9 +189,10 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     { name: 'Synapse ID', selector: 'synapseId', sortable: true, omit: true },
     {
         name: 'Primary Diagnosis',
-        selector: (row) => formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID),
+        selector: (row) =>
+            formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME),
         getSearchValue: (row) =>
-            formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID),
+            formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME),
         cell: truncatedTableCell,
         wrap: true,
         sortable: true,
@@ -1471,7 +1472,7 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Primary Diagnosis',
-        selector: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID',
+        selector: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
         sortable: true,
     },
     {
@@ -1997,7 +1998,7 @@ function Phase2FilterControls({
         attributeNames: [
             Phase2AttributeNames.AtlasName,
             Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
-            Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
+            Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME,
             Phase2AttributeNames.SEX,
             Phase2AttributeNames.RACE,
             Phase2AttributeNames.ETHNIC_GROUP,
@@ -2045,7 +2046,7 @@ function Phase2FilterControls({
                 {...dropdownProps}
                 placeholder="Disease"
                 attributes={[
-                    Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID,
+                    Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME,
                 ]}
                 className={styles.filterCheckboxListContainer}
                 width={120}
@@ -2186,7 +2187,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                                       Phase2AttributeNames.RACE
                                   ),
                                   primaryDiagnosisFilterString: fs(
-                                      Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID
+                                      Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME
                                   ),
                                   ethnicityFilterString: fs(
                                       Phase2AttributeNames.ETHNIC_GROUP
@@ -2349,7 +2350,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
             groupsByProperty[Phase2AttributeNames.AtlasName]?.length ?? 0;
         const diagnosisCount =
             groupsByProperty[
-                Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID
+                Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME
             ]?.length ?? 0;
         const assayCount =
             groupsByProperty[Phase2AttributeNames.assayName]?.length ?? 0;
