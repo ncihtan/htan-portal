@@ -196,23 +196,6 @@ export const ViewDetailsModal = <CellData extends object>(
                                                         fieldName,
                                                         METADATA_FIELD_NAME_OVERRIDES
                                                     )}
-                                                    {props.columnVisibility &&
-                                                        props.onChangeColumnVisibility && (
-                                                            <AddColumnIcon
-                                                                columnVisibility={
-                                                                    props.columnVisibility
-                                                                }
-                                                                columnName={
-                                                                    fieldName
-                                                                }
-                                                                onChangeColumnVisibility={
-                                                                    props.onChangeColumnVisibility
-                                                                }
-                                                                isDisabled={
-                                                                    true
-                                                                }
-                                                            />
-                                                        )}
                                                 </td>
                                                 <td>
                                                     {Array.isArray(fieldValue)
