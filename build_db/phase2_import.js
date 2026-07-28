@@ -114,12 +114,16 @@ function postProcessOrganFields(row) {
         }
     });
 
+    const fallbackOrganType =
+        organType.length > 0 ? [] : tissueOrOrganValues;
+
     return {
         ...row,
         organType: _.uniq(
             [
                 ...(Array.isArray(row.organType) ? row.organType : []),
                 ...organType,
+                ...fallbackOrganType,
             ].filter(Boolean)
         ),
     };
