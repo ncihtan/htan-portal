@@ -152,11 +152,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
             FROM files f
             ARRAY JOIN biospecimenIds AS bId
         )) as sampleCount,
-        (SELECT count(TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME) FROM (
-            SELECT TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME FROM files
-            ARRAY JOIN TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
-            WHERE TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME != '${NOT_REPORTED}'
-            GROUP BY TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
+        (SELECT count(organType) FROM (
+            SELECT organType FROM files
+            ARRAY JOIN organType
+            WHERE organType != '${NOT_REPORTED}'
+            GROUP BY organType
         )) as organCount
     `,
         phase2Client
