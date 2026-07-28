@@ -11,6 +11,7 @@ import { AtlasMeta, EntityReportByAttribute } from '@htan/data-portal-commons';
 
 export interface IHomePropsProps {
     synapseCounts: EntityReport[];
+    phase2SynapseCounts: EntityReport[];
     organSummary: EntityReportByAttribute[];
     assaySummary: EntityReportByAttribute[];
 }
@@ -30,9 +31,36 @@ function dashboardIcon(text: string, description: string) {
 
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     synapseCounts,
+    phase2SynapseCounts,
     organSummary,
     assaySummary,
 }) => {
+    const renderSummaryRow = (counts: EntityReport[]) => (
+        <Row className="justify-content-md-center">
+            {counts &&
+                counts.map((report: EntityReport) =>
+                    dashboardIcon(report.text, report.description)
+                )}
+        </Row>
+    );
+
+    const renderSummarySection = (
+        counts: EntityReport[],
+        href: string,
+        label: string
+    ) => (
+        <>
+            {renderSummaryRow(counts)}
+            <Row className="justify-content-md-center mt-3">
+                <ButtonToolbar>
+                    <Button href={href} variant="primary" size="lg">
+                        {label}
+                    </Button>
+                </ButtonToolbar>
+            </Row>
+        </>
+    );
+
     return (
         <>
             <Jumbotron
@@ -84,14 +112,6 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         >
                             <ButtonToolbar>
                                 <Button
-                                    href="/explore/phase2"
-                                    variant="primary"
-                                    className="mr-4"
-                                    size="lg"
-                                >
-                                    Explore Data
-                                </Button>
-                                <Button
                                     href="/overview"
                                     variant="primary"
                                     className="mr-4"
@@ -121,12 +141,25 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     paddingBottom: '20px',
                 }}
             >
-                <Row className="justify-content-md-center">
-                    {synapseCounts &&
-                        synapseCounts.map((report: EntityReport) =>
-                            dashboardIcon(report.text, report.description)
-                        )}
-                </Row>
+                {renderSummarySection(
+                    synapseCounts,
+                    '/explore/phase1',
+                    'Explore Phase 1 Data'
+                )}
+            </Container>
+            <Container
+                fluid
+                style={{
+                    backgroundColor: '#ddd',
+                    paddingTop: '20px',
+                    paddingBottom: '20px',
+                }}
+            >
+                {renderSummarySection(
+                    phase2SynapseCounts,
+                    '/explore/phase2',
+                    'Explore Phase 2 Data'
+                )}
             </Container>
             {/* <Container
                 fluid
