@@ -131,6 +131,14 @@ function formatOrganNames(names: unknown): string {
     return uniqueNames.join(', ');
 }
 
+function getOrganDisplayNames(row: TableRow): string {
+    return formatOrganNames(
+        row.organType?.length
+            ? row.organType
+            : row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
+    );
+}
+
 function FileNameCell({ row }: { row: TableRow }) {
     const fullName = String(row.Filename || '');
     const displayName = truncateFilename(fullName);
@@ -176,10 +184,8 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     { name: 'Level', selector: 'level', sortable: true },
     {
         name: 'Organ',
-        selector: (row) =>
-            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
-        getSearchValue: (row) =>
-            formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
+        selector: (row) => getOrganDisplayNames(row),
+        getSearchValue: (row) => getOrganDisplayNames(row),
         cell: truncatedTableCell,
         wrap: true,
         sortable: true,
@@ -242,7 +248,7 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         omit: true,
     },
     {
-        name: 'Tissue/Organ of Origin',
+        name: 'Organ Type',
         selector: (row) =>
             formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         getSearchValue: (row) =>
