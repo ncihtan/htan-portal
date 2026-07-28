@@ -203,7 +203,8 @@ export const fileQuery = `
         downloadSource,
         releaseVersion,
         imageChannelMetadata,
-        Component
+        Component,
+        organType
     FROM files
 `;
 
@@ -258,8 +259,8 @@ export const fileQuery2 = `
         PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
+        organType,
         CAST([] AS Array(String)) AS viewersArr,
-        CAST([] AS Array(String)) AS organType,
         CAST([] AS Array(String)) AS publicationIds,
         diagnosisIds,
         demographicsIds,
@@ -297,6 +298,7 @@ export const countsByTypeQuery2 = _.template(`
         fileQueryForPrimaryDiagnosis AS (SELECT * FROM files <%=primaryDiagnosisFilterString%>),
         fileQueryForEthnicity AS (SELECT * FROM files <%=ethnicityFilterString%>),
         fileQueryForTissueOrOrganOfOrigin AS (SELECT * FROM files <%=tissueOrOrganOfOriginFilterString%>),
+        fileQueryForOrganType AS (SELECT * FROM files <%=organTypeFilterString%>),
         fileQueryForLevel AS (SELECT * FROM files <%=levelFilterString%>),
         fileQueryForAssayName AS (SELECT * FROM files <%=assayNameFilterString%>),
         fileQueryForTreatmentType AS (SELECT * FROM files <%=treatmentTypeFilterString%>),
@@ -312,6 +314,8 @@ export const countsByTypeQuery2 = _.template(`
         SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(ETHNIC_GROUP) as val, 'ETHNIC_GROUP' as type, 'array' as fieldType FROM fileQueryForEthnicity
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME) as val, 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME' as type, 'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM fileQueryForOrganType
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, level as val, 'level' as type, 'string' as fieldType FROM fileQueryForLevel
         UNION ALL
@@ -406,6 +410,7 @@ export function getFilterString2(
         PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
         PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME:
             'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
+        organType: 'organType',
         TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME:
             'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',

@@ -54,6 +54,7 @@ export interface IExplore2Props {
 // Must exactly match the `type` values returned by countsByTypeQuery2.
 export enum Phase2AttributeNames {
     AtlasName = 'AtlasName',
+    organType = 'organType',
     SEX = 'SEX',
     RACE = 'RACE',
     ETHNIC_GROUP = 'ETHNIC_GROUP',
@@ -82,9 +83,13 @@ const Phase2AttributeMap: {
         path: 'atlas_name',
         displayName: 'Atlas',
     },
+    [Phase2AttributeNames.organType]: {
+        path: 'organType',
+        displayName: 'Organ',
+    },
     [Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME]: {
         path: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
-        displayName: 'Organ',
+        displayName: 'Organ Detailed',
     },
     [Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME]: {
         path: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
@@ -1997,6 +2002,7 @@ function Phase2FilterControls({
         attributeMap: Phase2AttributeMap,
         attributeNames: [
             Phase2AttributeNames.AtlasName,
+            Phase2AttributeNames.organType,
             Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
             Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME,
             Phase2AttributeNames.SEX,
@@ -2037,10 +2043,11 @@ function Phase2FilterControls({
                 {...dropdownProps}
                 placeholder="Organ"
                 attributes={[
+                    Phase2AttributeNames.organType,
                     Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
                 ]}
                 className={styles.filterCheckboxListContainer}
-                width={100}
+                width={220}
             />
             <FilterDropdown
                 {...dropdownProps}
@@ -2194,6 +2201,9 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                                   ),
                                   tissueOrOrganOfOriginFilterString: fs(
                                       Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME
+                                  ),
+                                  organTypeFilterString: fs(
+                                      Phase2AttributeNames.organType
                                   ),
                                   levelFilterString: fs(
                                       Phase2AttributeNames.level

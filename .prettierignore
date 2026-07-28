@@ -37,5 +37,6 @@ node_modules/**
 *.tsv
 *.sql
 *main.js
+*phase2_import.js
 tsconfig.tsbuildinfo
 .env.local.example

@@ -1,7 +1,14 @@
+import _ from 'lodash';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createDbIfNotExist, createTable } from './client.js';
+import {
+    normalizeTissueOrOrganOrSite,
+} from '@htan/data-portal-commons';
+
+// prettier-ignore
+import organMappings from '../packages/data-portal-commons/src/assets/human-organ-mappings.json' with { type: 'json' };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -72,6 +79,50 @@ function normalizeListLikeValue(value) {
 
         return [trimmed.replace(/^['"]|['"]$/g, '')];
     });
+}
+
+function postProcessOrganFields(row) {
+    const tissueOrOrganValues = normalizeListLikeValue(
+        row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME ??
+            row.TissueorOrganofOrigin
+    );
+    const normalizedTissueOrOrganValues = _(tissueOrOrganValues)
+        .compact()
+        .map(normalizeTissueOrOrganOrSite)
+        .value();
+
+    const organType = [];
+
+    _.forEach(organMappings, (val, key) => {
+        const primarySiteValues = _(val.byPrimarySite)
+            .compact()
+            .map(normalizeTissueOrOrganOrSite)
+            .value();
+        const tissueOrOrganOfOriginValues = _(val.byTissueOrOrganOfOrigin)
+            .compact()
+            .map(normalizeTissueOrOrganOrSite)
+            .value();
+        if (
+            _.intersection(primarySiteValues, normalizedTissueOrOrganValues)
+                .length > 0 ||
+            _.intersection(
+                tissueOrOrganOfOriginValues,
+                normalizedTissueOrOrganValues
+            ).length > 0
+        ) {
+            organType.push(key);
+        }
+    });
+
+    return {
+        ...row,
+        organType: _.uniq(
+            [
+                ...(Array.isArray(row.organType) ? row.organType : []),
+                ...organType,
+            ].filter(Boolean)
+        ),
+    };
 }
 
 // Columns that contain list-like values (JSON strings, bracketed strings) that should be normalized
@@ -169,7 +220,12 @@ async function importTable(dataDir, tableName) {
 
     const expandedRows =
         tableName === 'files' ? rows.map(expandFilesRow) : rows;
-    const normalizedRows = expandedRows.map(normalizeRow);
+    const postProcessedRows = ['cases', 'diagnosis', 'files'].includes(
+        tableName
+    )
+        ? expandedRows.map(postProcessOrganFields)
+        : expandedRows;
+    const normalizedRows = postProcessedRows.map(normalizeRow);
     const fields = collectFields(normalizedRows);
 
     console.log(
