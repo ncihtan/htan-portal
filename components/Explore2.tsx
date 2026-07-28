@@ -2053,7 +2053,7 @@ function Phase2FilterControls({
                     Phase2AttributeNames.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
                 ]}
                 className={styles.filterCheckboxListContainer}
-                width={220}
+                width={100}
             />
             <FilterDropdown
                 {...dropdownProps}
