@@ -6,12 +6,16 @@ import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import { EntityReport } from '../lib/helpers';
 import Plots from './Plots';
-import { AtlasMeta, EntityReportByAttribute } from '@htan/data-portal-commons';
+import {
+    EntityReportByAttribute,
+    NOT_REPORTED,
+} from '@htan/data-portal-commons';
 
 export interface IHomePropsProps {
     synapseCounts: EntityReport[];
     phase2SynapseCounts: EntityReport[];
     organSummary: EntityReportByAttribute[];
+    phase2OrganSummary: EntityReportByAttribute[];
     assaySummary: EntityReportByAttribute[];
 }
 
@@ -32,6 +36,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     synapseCounts,
     phase2SynapseCounts,
     organSummary,
+    phase2OrganSummary,
     assaySummary,
 }) => {
     const combinedSynapseCounts = React.useMemo(() => {
@@ -41,6 +46,14 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
         const phase2ByDescription = new Map(
             phase2SynapseCounts.map((count) => [count.description, count])
         );
+        const organNames = new Set([
+            ...organSummary
+                .map((item) => item.attributeValue)
+                .filter((value) => value !== NOT_REPORTED),
+            ...phase2OrganSummary
+                .map((item) => item.attributeValue)
+                .filter((value) => value !== NOT_REPORTED),
+        ]);
         const descriptions = Array.from(
             new Set([
                 ...synapseCounts.map((count) => count.description),
@@ -57,12 +70,18 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 phase2ByDescription.get(description)?.text ?? '0',
                 10
             );
+            if (description === 'Organs') {
+                return {
+                    description,
+                    text: String(organNames.size),
+                };
+            }
             return {
                 description,
                 text: String(phase1Count + phase2Count),
             };
         });
-    }, [phase2SynapseCounts, synapseCounts]);
+    }, [phase2SynapseCounts, phase2OrganSummary, organSummary, synapseCounts]);
 
     const renderSummaryRow = (counts: EntityReport[]) => (
         <Row className="justify-content-md-center">

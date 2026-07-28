@@ -136,6 +136,26 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const phase2Client = getPhase2Client();
 
+    const phase2OrganCounts = await doQuery<{
+        organType: string;
+        atlas_name: string;
+        count: string;
+    }>(
+        `
+        SELECT 
+            organType,
+            atlas_name, 
+            count(DISTINCT HTAN_PARTICIPANT_ID) as count 
+        FROM (
+            ${caseQuery2({ filterString: '' })}
+        )
+        ARRAY JOIN organType
+        GROUP BY 
+            organType, atlas_name
+    `,
+        phase2Client
+    );
+
     const phase2EntityCounts = await doQuery<{
         atlasCount: string;
         caseCount: string;
@@ -169,11 +189,35 @@ export const getStaticProps: GetStaticProps = async (context) => {
         { description: 'Biospecimen', text: phase2EntityCounts[0].sampleCount },
     ];
 
+    const phase2OrganSummary = _(phase2OrganCounts)
+        .groupBy('organType')
+        .map((val, key) => {
+            const distributionByCenter = _(val)
+                .groupBy('atlas_name')
+                .map((vv, center) => {
+                    return {
+                        center,
+                        attributeFilterValues: [key],
+                        totalCount: _.sumBy(vv, (v) => parseInt(v.count)),
+                    };
+                })
+                .value();
+            return {
+                attributeName: 'organType',
+                attributeValue: key,
+                attributeFilterValues: [key],
+                distributionByCenter,
+                totalCount: _.sumBy(val, (v) => parseInt(v.count)),
+            };
+        })
+        .value();
+
     return {
         props: {
             synapseCounts: phase1EntitySummary,
             phase2SynapseCounts: phase2EntitySummary,
             organSummary: phase1OrganSummary,
+            phase2OrganSummary,
             assaySummary: phase1AssaySummary,
         },
     };
