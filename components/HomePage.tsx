@@ -1,7 +1,6 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
@@ -35,6 +34,36 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     organSummary,
     assaySummary,
 }) => {
+    const combinedSynapseCounts = React.useMemo(() => {
+        const phase1ByDescription = new Map(
+            synapseCounts.map((count) => [count.description, count])
+        );
+        const phase2ByDescription = new Map(
+            phase2SynapseCounts.map((count) => [count.description, count])
+        );
+        const descriptions = Array.from(
+            new Set([
+                ...synapseCounts.map((count) => count.description),
+                ...phase2SynapseCounts.map((count) => count.description),
+            ])
+        );
+
+        return descriptions.map((description) => {
+            const phase1Count = parseInt(
+                phase1ByDescription.get(description)?.text ?? '0',
+                10
+            );
+            const phase2Count = parseInt(
+                phase2ByDescription.get(description)?.text ?? '0',
+                10
+            );
+            return {
+                description,
+                text: String(phase1Count + phase2Count),
+            };
+        });
+    }, [phase2SynapseCounts, synapseCounts]);
+
     const renderSummaryRow = (counts: EntityReport[]) => (
         <Row className="justify-content-md-center">
             {counts &&
@@ -42,23 +71,6 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     dashboardIcon(report.text, report.description)
                 )}
         </Row>
-    );
-
-    const renderSummarySection = (
-        counts: EntityReport[],
-        href: string,
-        label: string
-    ) => (
-        <>
-            {renderSummaryRow(counts)}
-            <Row className="justify-content-md-center mt-3">
-                <ButtonToolbar>
-                    <Button href={href} variant="primary" size="lg">
-                        {label}
-                    </Button>
-                </ButtonToolbar>
-            </Row>
-        </>
     );
 
     return (
@@ -106,29 +118,55 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         <div
                             style={{
                                 display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: 12,
                                 paddingTop: 10,
-                                justifyContent: 'center',
                             }}
                         >
-                            <ButtonToolbar>
+                            <div
+                                className="d-flex flex-wrap justify-content-center"
+                                style={{ gap: 12 }}
+                            >
+                                <Button
+                                    href="/explore/phase1"
+                                    variant="primary"
+                                    size="lg"
+                                    style={{ minWidth: 210 }}
+                                >
+                                    Explore Phase 1 Data
+                                </Button>
+                                <Button
+                                    href="/explore/phase2"
+                                    variant="primary"
+                                    size="lg"
+                                    style={{ minWidth: 210 }}
+                                >
+                                    Explore Phase 2 Data
+                                </Button>
+                            </div>
+                            <div
+                                className="d-flex flex-wrap justify-content-center"
+                                style={{ gap: 12 }}
+                            >
                                 <Button
                                     href="/overview"
                                     variant="primary"
-                                    className="mr-4"
                                     size="lg"
+                                    style={{ minWidth: 150 }}
                                 >
                                     Learn more
                                 </Button>
                                 <Button
                                     href="https://docs.humantumoratlas.org/data_access/citing_htan/"
                                     variant="primary"
-                                    className="mr-4"
                                     size="lg"
                                     target="_blank"
+                                    style={{ minWidth: 150 }}
                                 >
                                     Citing HTAN
                                 </Button>
-                            </ButtonToolbar>
+                            </div>
                         </div>
                     </Col>
                 </Row>
@@ -141,25 +179,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     paddingBottom: '20px',
                 }}
             >
-                {renderSummarySection(
-                    synapseCounts,
-                    '/explore/phase1',
-                    'Explore Phase 1 Data'
-                )}
-            </Container>
-            <Container
-                fluid
-                style={{
-                    backgroundColor: '#ddd',
-                    paddingTop: '20px',
-                    paddingBottom: '20px',
-                }}
-            >
-                {renderSummarySection(
-                    phase2SynapseCounts,
-                    '/explore/phase2',
-                    'Explore Phase 2 Data'
-                )}
+                {renderSummaryRow(combinedSynapseCounts)}
             </Container>
             {/* <Container
                 fluid
