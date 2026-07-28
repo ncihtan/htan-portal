@@ -2358,6 +2358,8 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
     const summaryData = useMemo(() => {
         const atlasCount =
             groupsByProperty[Phase2AttributeNames.AtlasName]?.length ?? 0;
+        const organCount =
+            groupsByProperty[Phase2AttributeNames.organType]?.length ?? 0;
         const diagnosisCount =
             groupsByProperty[
                 Phase2AttributeNames.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME
@@ -2366,6 +2368,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
             groupsByProperty[Phase2AttributeNames.assayName]?.length ?? 0;
         return [
             { displayName: 'Atlas', values: Array(atlasCount).fill(null) },
+            { displayName: 'Organ', values: Array(organCount).fill(null) },
             {
                 displayName: 'Cancer Type',
                 values: Array(diagnosisCount).fill(null),
