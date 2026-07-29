@@ -245,11 +245,11 @@ export const fileQuery2 = `
         atlas_name,
         level,
         assayName,
-        Filename,
-        FileFormat,
+        FILENAME,
+        FILE_FORMAT,
         HTAN_DATA_FILE_ID,
         HTAN_PARENT_ID,
-        ParentDataFileID,
+        HTAN_PARENT_DATA_FILE_ID,
         biospecimenIds,
         SEX,
         ETHNIC_GROUP,
@@ -260,6 +260,10 @@ export const fileQuery2 = `
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
         organType,
+        SCRNASEQ_WORKFLOW_TYPE,
+        SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION,
+        WORKFLOW_VERSION,
+        WORKFLOW_LINK,
         CAST([] AS Array(String)) AS viewersArr,
         CAST([] AS Array(String)) AS publicationIds,
         diagnosisIds,
@@ -270,8 +274,8 @@ export const fileQuery2 = `
 `;
 
 export const caseQuery2 = _.template(`
-    SELECT * FROM cases
-    WHERE HTAN_PARTICIPANT_ID IN (
+    SELECT * FROM cases c
+    WHERE c.HTAN_PARTICIPANT_ID IN (
         SELECT demographicsIds FROM files
         ARRAY JOIN demographicsIds
         <%=filterString%>
@@ -283,8 +287,8 @@ export const caseQuery2 = _.template(`
 `);
 
 export const specimenQuery2 = _.template(`
-    SELECT * FROM specimen
-    WHERE HTAN_BIOSPECIMEN_ID IN (
+    SELECT * FROM specimen s
+    WHERE s.HTAN_BIOSPECIMEN_ID IN (
         SELECT biospecimenIds FROM files
         ARRAY JOIN biospecimenIds
         <%=filterString%>
@@ -323,7 +327,7 @@ export const countsByTypeQuery2 = _.template(`
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TREATMENT_TYPE) as val, 'TREATMENT_TYPE' as type, 'array' as fieldType FROM fileQueryForTreatmentType
         UNION ALL
-        SELECT HTAN_DATA_FILE_ID, synapseId, FileFormat as val, 'FileFormat' as type, 'string' as fieldType FROM fileQueryForFileFormat
+        SELECT HTAN_DATA_FILE_ID, synapseId, FILE_FORMAT as val, 'FILE_FORMAT' as type, 'string' as fieldType FROM fileQueryForFileFormat
         UNION ALL
         SELECT HTAN_DATA_FILE_ID, synapseId, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
     )
@@ -410,6 +414,7 @@ export function getFilterString2(
         PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
         PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME:
             'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
+        FILE_FORMAT: 'FILE_FORMAT',
         organType: 'organType',
         TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
         TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME:

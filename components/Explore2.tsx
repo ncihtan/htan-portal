@@ -63,7 +63,7 @@ export enum Phase2AttributeNames {
     TREATMENT_TYPE = 'TREATMENT_TYPE',
     assayName = 'assayName',
     level = 'level',
-    FileFormat = 'FileFormat',
+    FILE_FORMAT = 'FILE_FORMAT',
 }
 
 type TableRow = Record<string, any>;
@@ -110,8 +110,8 @@ const Phase2AttributeMap: {
         displayName: 'Assay',
     },
     [Phase2AttributeNames.level]: { path: 'level', displayName: 'Level' },
-    [Phase2AttributeNames.FileFormat]: {
-        path: 'FileFormat',
+    [Phase2AttributeNames.FILE_FORMAT]: {
+        path: 'FILE_FORMAT',
         displayName: 'File Format',
     },
 };
@@ -140,7 +140,7 @@ function getOrganDisplayNames(row: TableRow): string {
 }
 
 function FileNameCell({ row }: { row: TableRow }) {
-    const fullName = String(row.Filename || '');
+    const fullName = String(row.FILENAME || '');
     const displayName = truncateFilename(fullName);
     const synapseId = row.synapseId as string | undefined;
 
@@ -169,7 +169,7 @@ function FileNameCell({ row }: { row: TableRow }) {
 const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'File Name',
-        selector: 'Filename',
+        selector: 'FILENAME',
         cell: (row) => <FileNameCell row={row} />,
         sortable: true,
     },
@@ -190,7 +190,7 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         wrap: true,
         sortable: true,
     },
-    { name: 'File Format', selector: 'FileFormat', sortable: true },
+    { name: 'File Format', selector: 'FILE_FORMAT', sortable: true },
     {
         name: 'Data File ID',
         selector: 'HTAN_DATA_FILE_ID',
@@ -210,8 +210,9 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Parent ID',
-        selector: (row) => row.HTAN_PARENT_ID ?? row.ParentDataFileID,
-        getSearchValue: (row) => row.HTAN_PARENT_ID ?? row.ParentDataFileID,
+        selector: (row) => row.HTAN_PARENT_ID ?? row.HTAN_PARENT_DATA_FILE_ID,
+        getSearchValue: (row) =>
+            row.HTAN_PARENT_ID ?? row.HTAN_PARENT_DATA_FILE_ID,
         sortable: true,
         omit: true,
     },
@@ -260,25 +261,25 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Workflow Type',
-        selector: 'ScRNAseqWorkflowType',
+        selector: 'SCRNASEQ_WORKFLOW_TYPE',
         sortable: true,
         omit: true,
     },
     {
         name: 'Workflow Parameters Description',
-        selector: 'ScRNAseqWorkflowParametersDescription',
+        selector: 'SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION',
         sortable: true,
         omit: true,
     },
     {
         name: 'Workflow Version',
-        selector: 'WorkflowVersion',
+        selector: 'WORKFLOW_VERSION',
         sortable: true,
         omit: true,
     },
     {
         name: 'Workflow Link',
-        selector: 'WorkflowLink',
+        selector: 'WORKFLOW_LINK',
         sortable: true,
         omit: true,
     },
@@ -1472,7 +1473,7 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
     {
-        name: 'Age at Diagnosis (years)',
+        name: 'Age in Days at Diagnosis (Years)',
         selector: (row) => {
             const days = Number(row.AGE_IN_DAYS_AT_DIAGNOSIS);
             return Number.isFinite(days) && days > 0
@@ -1482,12 +1483,12 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
     },
     {
-        name: 'Primary Diagnosis',
+        name: 'Primary Diagnosis NCI Thesaurus Name',
         selector: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
         sortable: true,
     },
     {
-        name: 'Tissue or Organ of Origin',
+        name: 'Tissue or Organ of Origin Uberon Name',
         selector: (row) =>
             formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         getSearchValue: (row) =>
@@ -1501,13 +1502,13 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     { name: 'Tumor Grade', selector: 'TUMOR_GRADE', sortable: true },
     {
         name: 'Last Known Disease Status',
-        selector: 'LastKnownDiseaseStatus',
+        selector: 'LAST_KNOWN_DISEASE_STATUS',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Days to Last Known Disease Status',
-        selector: 'DaystoLastKnownDiseaseStatus',
+        name: 'Age in Days at Last Known Disease Status',
+        selector: 'AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS',
         sortable: true,
         omit: true,
     },
@@ -1538,7 +1539,7 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         omit: true,
     },
     {
-        name: 'Age at Death (years)',
+        name: 'Age in Days at Death (Years)',
         selector: (row) => {
             const days = Number(row.AGE_IN_DAYS_AT_DEATH);
             return Number.isFinite(days) && days > 0
@@ -1549,7 +1550,7 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         omit: true,
     },
     {
-        name: 'Age at Last Known Survival Status (years)',
+        name: 'Age in Days at Last Known Survival Status (Years)',
         selector: (row) => {
             const days = Number(row.AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS);
             return Number.isFinite(days) && days > 0
@@ -1561,19 +1562,19 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Method of Diagnosis',
-        selector: 'MethodofDiagnosis',
+        selector: 'METHOD_OF_DIAGNOSIS',
         sortable: true,
         omit: true,
     },
     {
         name: 'Metastasis at Diagnosis',
-        selector: 'MetastasisatDiagnosis',
+        selector: 'METASTASIS_AT_DIAGNOSIS',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Classification of Tumor',
-        selector: 'ClassificationofTumor',
+        name: 'Tumor Classification Category',
+        selector: 'TUMOR_CLASSIFICATION_CATEGORY',
         sortable: true,
         omit: true,
     },
@@ -1584,32 +1585,32 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         omit: true,
     },
     {
-        name: 'AJCC Clinical T',
-        selector: 'AJCCClinicalT',
+        name: 'Clinical T Stage',
+        selector: 'CLINICAL_T_STAGE',
         sortable: true,
         omit: true,
     },
     {
-        name: 'AJCC Clinical N',
-        selector: 'AJCCClinicalN',
+        name: 'Clinical N Stage',
+        selector: 'CLINICAL_N_STAGE',
         sortable: true,
         omit: true,
     },
     {
-        name: 'AJCC Clinical M',
-        selector: 'AJCCClinicalM',
+        name: 'Clinical M Stage',
+        selector: 'CLINICAL_M_STAGE',
         sortable: true,
         omit: true,
     },
     {
-        name: 'AJCC Clinical Stage',
-        selector: 'AJCCClinicalStage',
+        name: 'Tumor Staged',
+        selector: 'TUMOR_STAGED',
         sortable: true,
         omit: true,
     },
     {
         name: 'AJCC Staging System Edition',
-        selector: 'AJCCStagingSystemEdition',
+        selector: 'AJCC_STAGING_SYSTEM_EDITION',
         sortable: true,
         omit: true,
     },
@@ -1650,52 +1651,50 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
     {
         name: 'HTAN Parent ID',
-        selector: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
-        getSearchValue: (row) => row.HTAN_PARENT_ID ?? row.ParentID,
+        selector: 'HTAN_PARENT_ID',
+        getSearchValue: (row) => row.HTAN_PARENT_ID,
         sortable: true,
     },
     {
-        name: 'Timepoint Label',
-        selector: 'TimepointLabel',
+        name: 'Timepoint',
+        selector: 'TIMEPOINT',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Participant ID',
+        name: 'HTAN Participant ID',
         selector: 'HTAN_PARTICIPANT_ID',
         sortable: true,
         omit: true,
     },
     {
         name: 'Source HTAN Biospecimen ID',
-        selector: 'SourceHTANBiospecimenID',
+        selector: 'SOURCE_HTAN_BIOSPECIMEN_ID',
         sortable: true,
         omit: true,
     },
     {
         name: 'Adjacent Biospecimen IDs',
-        selector: 'AdjacentBiospecimenIDs',
+        selector: 'ADJACENT_BIOSPECIMEN_IDS',
         sortable: true,
         omit: true,
     },
     {
         name: 'Biospecimen Type',
-        selector: (row) => row.BIOSPECIMEN_TYPE ?? row.BiospecimenType,
-        getSearchValue: (row) => row.BIOSPECIMEN_TYPE ?? row.BiospecimenType,
+        selector: 'BIOSPECIMEN_TYPE',
+        getSearchValue: (row) => row.BIOSPECIMEN_TYPE,
         sortable: true,
     },
     {
         name: 'Acquisition Method Type',
-        selector: (row) =>
-            row.ACQUISITION_METHOD_TYPE ?? row.AcquisitionMethodType,
-        getSearchValue: (row) =>
-            row.ACQUISITION_METHOD_TYPE ?? row.AcquisitionMethodType,
+        selector: 'ACQUISITION_METHOD_TYPE',
+        getSearchValue: (row) => row.ACQUISITION_METHOD_TYPE,
         sortable: true,
     },
     {
         name: 'Storage Method',
-        selector: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
-        getSearchValue: (row) => row.PRESERVATION_MEDIUM ?? row.StorageMethod,
+        selector: 'STORAGE_METHOD',
+        getSearchValue: (row) => row.STORAGE_METHOD,
         sortable: true,
     },
     {
@@ -1707,139 +1706,139 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     {
         name: 'Site Data Source',
-        selector: 'SiteDataSource',
+        selector: 'SITE_DATA_SOURCE',
         sortable: true,
         omit: true,
     },
     {
         name: 'Processing Location',
-        selector: 'ProcessingLocation',
+        selector: 'PROCESSING_LOCATION',
         sortable: true,
         omit: true,
     },
     {
         name: 'Degree of Dysplasia',
-        selector: 'DegreeofDysplasia',
+        selector: 'DEGREE_OF_DYSPLASIA',
         sortable: true,
         omit: true,
     },
     {
         name: 'Percent Necrosis',
-        selector: 'PercentNecrosis',
+        selector: 'PERCENT_NECROSIS',
         sortable: true,
         omit: true,
     },
     {
         name: 'Percent Normal Cells',
-        selector: 'PercentNormalCells',
+        selector: 'PERCENT_NORMAL_CELLS',
         sortable: true,
         omit: true,
     },
     {
         name: 'Percent Tumor Cells',
-        selector: 'PercentTumorCells',
+        selector: 'PERCENT_TUMOR_CELLS',
         sortable: true,
         omit: true,
     },
     {
         name: 'Percent Tumor Nuclei',
-        selector: 'PercentTumorNuclei',
+        selector: 'PERCENT_TUMOR_NUCLEI',
         sortable: true,
         omit: true,
     },
     {
         name: 'Slicing Method',
-        selector: 'SlicingMethod',
+        selector: 'SLICING_METHOD',
         sortable: true,
         omit: true,
     },
     {
         name: 'Method of Nucleic Acid Isolation',
-        selector: 'MethodofNucleicAcidIsolation',
+        selector: 'METHOD_OF_NUCLEIC_ACID_ISOLATION',
         sortable: true,
         omit: true,
     },
     {
         name: 'Analyte Type',
-        selector: 'AnalyteType',
+        selector: 'ANALYTE_TYPE',
         sortable: true,
         omit: true,
     },
     {
         name: 'Fixation Duration',
-        selector: 'FixationDuration',
+        selector: 'FIXATION_DURATION_IN_MINUTES',
         sortable: true,
         omit: true,
     },
     {
         name: 'Histologic Morphology Code',
-        selector: 'HistologicMorphologyCode',
+        selector: 'ICD_O_3_TISSUE_MORPHOLOGY',
         sortable: true,
         omit: true,
     },
     {
         name: 'Section Thickness Value',
-        selector: 'SectionThicknessValue',
+        selector: 'SECTION_THICKNESS_VALUE',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Sectioning Days from Index',
-        selector: 'SectioningDaysfromIndex',
+        name: 'Age in Days at Sectioning',
+        selector: 'AGE_IN_DAYS_AT_SECTIONING',
         sortable: true,
         omit: true,
     },
     {
         name: 'Shipping Condition Type',
-        selector: 'ShippingConditionType',
+        selector: 'SHIPPING_CONDITION_TYPE',
         sortable: true,
         omit: true,
     },
     {
         name: 'Slide Charge Type',
-        selector: 'SlideChargeType',
+        selector: 'SLIDE_CHARGE_TYPE',
         sortable: true,
         omit: true,
     },
     {
         name: 'Specimen Laterality',
-        selector: 'SpecimenLaterality',
+        selector: 'SPECIMEN_LATERALITY',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Tumor Tissue Type',
-        selector: 'TumorTissueType',
+        name: 'Tumor Classification',
+        selector: 'TUMOR_CLASSIFICATION',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Collection Days from Index',
-        selector: (row) => row.CollectionDaysfromIndex,
+        name: 'Age in Days at Specimen Collection',
+        selector: 'AGE_IN_DAYS_AT_SPECIMEN_COLLECTION',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Processing Days from Index',
-        selector: (row) => row.ProcessingDaysfromIndex,
+        name: 'Age in Days at Specimen Processing',
+        selector: 'AGE_IN_DAYS_AT_SPECIMEN_PROCESSING',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Biospecimen Dimension 1',
-        selector: 'BiospecimenDimension1',
+        name: 'Longest Dimension',
+        selector: 'LONGEST_DIMENSION',
         sortable: true,
         omit: true,
     },
     {
-        name: 'Biospecimen Dimension 2',
-        selector: 'BiospecimenDimension2',
+        name: 'Shortest Dimension',
+        selector: 'SHORTEST_DIMENSION',
         sortable: true,
         omit: true,
     },
     {
         name: 'Section Number in Sequence',
-        selector: 'SectionNumberinSequence',
+        selector: 'SECTION_NUMBER_IN_SEQUENCE',
         sortable: true,
         omit: true,
     },
@@ -1870,36 +1869,6 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Preservation Method Temperature',
         selector: 'PRESERVATION_METHOD_TEMPERATURE',
-        sortable: true,
-        omit: true,
-    },
-    {
-        name: 'HTAN Parent ID (Legacy)',
-        selector: 'HTANParentID',
-        sortable: true,
-        omit: true,
-    },
-    {
-        name: 'Parent ID (Legacy)',
-        selector: 'ParentID',
-        sortable: true,
-        omit: true,
-    },
-    {
-        name: 'Biospecimen Type (Legacy)',
-        selector: 'BiospecimenType',
-        sortable: true,
-        omit: true,
-    },
-    {
-        name: 'Acquisition Method Type (Legacy)',
-        selector: 'AcquisitionMethodType',
-        sortable: true,
-        omit: true,
-    },
-    {
-        name: 'Storage Method (Legacy)',
-        selector: 'StorageMethod',
         sortable: true,
         omit: true,
     },
@@ -2017,7 +1986,7 @@ function Phase2FilterControls({
             Phase2AttributeNames.TREATMENT_TYPE,
             Phase2AttributeNames.assayName,
             Phase2AttributeNames.level,
-            Phase2AttributeNames.FileFormat,
+            Phase2AttributeNames.FILE_FORMAT,
         ],
         entities: [] as TableRow[],
         setFilter,
@@ -2093,7 +2062,7 @@ function Phase2FilterControls({
                 placeholder="File"
                 attributes={[
                     Phase2AttributeNames.level,
-                    Phase2AttributeNames.FileFormat,
+                    Phase2AttributeNames.FILE_FORMAT,
                 ]}
                 className={styles.filterCheckboxListContainer}
                 width={80}
@@ -2221,7 +2190,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                                       Phase2AttributeNames.TREATMENT_TYPE
                                   ),
                                   fileFormatFilterString: fs(
-                                      Phase2AttributeNames.FileFormat
+                                      Phase2AttributeNames.FILE_FORMAT
                                   ),
                                   atlasNameFilterString: nonAtlasFilterString,
                               }),
@@ -2517,7 +2486,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                             <Phase2Table
                                 columns={FILE_COLUMNS}
                                 data={files}
-                                defaultSortField="Filename"
+                                defaultSortField="FILENAME"
                             />
                         </div>
                     )}
