@@ -302,7 +302,6 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
         omit: true,
     },
-    { name: 'Component', selector: 'Component', sortable: true, omit: true },
     { name: 'Atlas ID', selector: 'atlasid', sortable: true, omit: true },
 
     // ── Synapse / file-registry metadata (common to all file tables) ────────────
@@ -1483,12 +1482,12 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         sortable: true,
     },
     {
-        name: 'Primary Diagnosis NCI Thesaurus Name',
+        name: 'Primary Diagnosis',
         selector: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
         sortable: true,
     },
     {
-        name: 'Tissue or Organ of Origin Uberon Name',
+        name: 'Organ Type',
         selector: (row) =>
             formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         getSearchValue: (row) =>
@@ -1634,12 +1633,6 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     { name: 'Synapse ID', selector: 'synapseId', sortable: true, omit: true },
     { name: 'Atlas ID', selector: 'atlasid', sortable: true, omit: true },
-    {
-        name: 'Component',
-        selector: 'Component',
-        sortable: true,
-        omit: true,
-    },
 ];
 
 const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
@@ -1874,12 +1867,6 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     },
     { name: 'Synapse ID', selector: 'synapseId', sortable: true, omit: true },
     { name: 'Atlas ID', selector: 'atlasid', sortable: true, omit: true },
-    {
-        name: 'Component',
-        selector: 'Component',
-        sortable: true,
-        omit: true,
-    },
 ];
 
 const ATLAS_COLUMNS: IEnhancedDataTableColumn<AtlasSummaryRow>[] = [
