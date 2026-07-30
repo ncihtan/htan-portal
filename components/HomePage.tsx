@@ -18,6 +18,79 @@ export interface IHomePropsProps {
     organSummary: EntityReportByAttribute[];
     phase2OrganSummary: EntityReportByAttribute[];
     assaySummary: EntityReportByAttribute[];
+    phase2AssaySummary: EntityReportByAttribute[];
+}
+
+function mergeEntityReportByAttribute(
+    phase1Summary: EntityReportByAttribute[],
+    phase2Summary: EntityReportByAttribute[]
+): EntityReportByAttribute[] {
+    const mergedByAttributeValue = new Map<string, EntityReportByAttribute>();
+
+    [...phase1Summary, ...phase2Summary].forEach((report) => {
+        const key = report.attributeValue ?? '';
+        const existing = mergedByAttributeValue.get(key);
+
+        if (!existing) {
+            mergedByAttributeValue.set(key, {
+                ...report,
+                attributeFilterValues: [...report.attributeFilterValues],
+                distributionByCenter: report.distributionByCenter.map((d) => ({
+                    ...d,
+                    attributeFilterValues: [...d.attributeFilterValues],
+                })),
+            });
+            return;
+        }
+
+        const mergedDistributionByCenter = new Map(
+            existing.distributionByCenter.map((distribution) => [
+                distribution.center,
+                {
+                    ...distribution,
+                    attributeFilterValues: [
+                        ...distribution.attributeFilterValues,
+                    ],
+                },
+            ])
+        );
+
+        report.distributionByCenter.forEach((distribution) => {
+            const existingDistribution = mergedDistributionByCenter.get(
+                distribution.center
+            );
+            if (!existingDistribution) {
+                mergedDistributionByCenter.set(distribution.center, {
+                    ...distribution,
+                    attributeFilterValues: [
+                        ...distribution.attributeFilterValues,
+                    ],
+                });
+                return;
+            }
+
+            existingDistribution.totalCount += distribution.totalCount;
+            existingDistribution.attributeFilterValues = Array.from(
+                new Set([
+                    ...existingDistribution.attributeFilterValues,
+                    ...distribution.attributeFilterValues,
+                ])
+            );
+        });
+
+        existing.totalCount += report.totalCount;
+        existing.attributeFilterValues = Array.from(
+            new Set([
+                ...existing.attributeFilterValues,
+                ...report.attributeFilterValues,
+            ])
+        );
+        existing.distributionByCenter = Array.from(
+            mergedDistributionByCenter.values()
+        );
+    });
+
+    return Array.from(mergedByAttributeValue.values());
 }
 
 function dashboardIcon(text: string, description: string) {
@@ -39,6 +112,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     organSummary,
     phase2OrganSummary,
     assaySummary,
+    phase2AssaySummary,
 }) => {
     const combinedSynapseCounts = React.useMemo(() => {
         const phase1ByDescription = new Map(
@@ -83,6 +157,16 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
             };
         });
     }, [phase2SynapseCounts, phase2OrganSummary, organSummary, synapseCounts]);
+
+    const combinedOrganSummary = React.useMemo(
+        () => mergeEntityReportByAttribute(organSummary, phase2OrganSummary),
+        [organSummary, phase2OrganSummary]
+    );
+
+    const combinedAssaySummary = React.useMemo(
+        () => mergeEntityReportByAttribute(assaySummary, phase2AssaySummary),
+        [assaySummary, phase2AssaySummary]
+    );
 
     const renderSummaryRow = (counts: EntityReport[]) => (
         <Row className="justify-content-md-center">
@@ -196,8 +280,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 </Row>
             </Container> */}
             <Plots
-                organSummary={organSummary}
-                assaySummary={assaySummary}
+                organSummary={combinedOrganSummary}
+                assaySummary={combinedAssaySummary}
                 footerContent={
                     <p style={{ fontSize: 'medium' }}>
                         Many more profiled tumors will be available in the
