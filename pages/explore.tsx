@@ -21,8 +21,9 @@ const ExploreLanding = () => (
                 <Col md={6} style={{ marginBottom: 24 }}>
                     <h2>Phase 1 (2018&ndash;2024)</h2>
                     <p>
-                        HTAN Phase 1 established the network&apos;s first tumor
-                        atlases. Its data model built on existing community
+                        HTAN Phase 1 brought together ten research centers and
+                        two pilot projects that built the network&apos;s first
+                        tumor atlases. Its data model drew on existing community
                         standards, including the NCI Genomic Data Commons, the
                         Human Cell Atlas, the Human Biomolecular Atlas Program
                         (HuBMAP), and the Minimum Information about Tissue
