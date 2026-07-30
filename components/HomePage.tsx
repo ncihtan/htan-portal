@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
@@ -107,7 +108,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     }}
                 >
                     <a style={{ color: 'white' }} href="/data-updates">
-                        Data Release V8.0 (Last updated 2026-07-29)
+                        First data release of HTAN Phase 2 now
+                        available!
                     </a>
                 </div>
                 <Row className="justify-content-md-center">
@@ -136,48 +138,37 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
 
                         <div
                             style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: 12,
                                 paddingTop: 10,
+                                justifyContent: 'center',
                             }}
                         >
-                            <div
-                                className="d-flex flex-wrap justify-content-center"
-                                style={{ gap: 12 }}
-                            >
+                            <ButtonToolbar>
                                 <Button
                                     href="/explore"
                                     variant="primary"
+                                    className="mr-4"
                                     size="lg"
-                                    style={{ minWidth: 210 }}
                                 >
                                     Explore Data
                                 </Button>
-                            </div>
-                            <div
-                                className="d-flex flex-wrap justify-content-center"
-                                style={{ gap: 12 }}
-                            >
                                 <Button
                                     href="/overview"
                                     variant="primary"
+                                    className="mr-4"
                                     size="lg"
-                                    style={{ minWidth: 150 }}
                                 >
                                     Learn more
                                 </Button>
                                 <Button
                                     href="https://docs.humantumoratlas.org/data_access/citing_htan/"
                                     variant="primary"
+                                    className="mr-4"
                                     size="lg"
                                     target="_blank"
-                                    style={{ minWidth: 150 }}
                                 >
                                     Citing HTAN
                                 </Button>
-                            </div>
+                            </ButtonToolbar>
                         </div>
                     </Col>
                 </Row>
