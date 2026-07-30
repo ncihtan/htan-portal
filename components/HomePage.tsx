@@ -138,6 +138,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
 
                         <div
                             style={{
+                                display: 'flex',
                                 paddingTop: 10,
                                 justifyContent: 'center',
                             }}
