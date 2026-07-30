@@ -4,6 +4,7 @@ import { ScaleLoader } from 'react-spinners';
 import Tooltip from 'rc-tooltip';
 
 import {
+    AtlasDescription,
     caseQuery2,
     CountByType,
     countsByTypeQuery2,
@@ -38,6 +39,7 @@ import {
     ExploreTab,
     truncatedTableCell,
 } from '@htan/data-portal-explore';
+import researchNetwork from '../data/research_network.json';
 
 import styles from './explore2.module.scss';
 
@@ -70,10 +72,23 @@ type TableRow = Record<string, any>;
 
 type AtlasSummaryRow = {
     atlas_name: string;
+    atlasid: string;
+    atlas_description: string;
     caseCount: number;
     biospecimenCount: number;
     fileCount: number;
 };
+
+const atlasTitleById = Object.fromEntries(
+    Object.entries(researchNetwork).map(([atlasId, center]) => [
+        atlasId.toLowerCase(),
+        center?.title || '',
+    ])
+);
+
+function getAtlasDescriptionById(atlasId: string): string {
+    return atlasTitleById[atlasId.trim().toLowerCase()] || '';
+}
 
 // ─── Phase 2 Attribute Map ────────────────────────────────────────────────────
 const Phase2AttributeMap: {
@@ -139,6 +154,12 @@ function getOrganDisplayNames(row: TableRow): string {
     );
 }
 
+function formatAtlasName(value: unknown): string {
+    return String(value || '')
+        .replace('HTAN2_', '')
+        .replace(' - ', ' ');
+}
+
 function FileNameCell({ row }: { row: TableRow }) {
     const fullName = String(row.FILENAME || '');
     const displayName = truncateFilename(fullName);
@@ -173,7 +194,12 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         cell: (row) => <FileNameCell row={row} />,
         sortable: true,
     },
-    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
+    {
+        name: 'Atlas Name',
+        selector: (row) => formatAtlasName(row.atlas_name),
+        getSearchValue: (row) => formatAtlasName(row.atlas_name),
+        sortable: true,
+    },
     {
         name: 'Biospecimen',
         selector: (row) => formatValue(row.biospecimenIds),
@@ -1470,7 +1496,12 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         selector: 'HTAN_PARTICIPANT_ID',
         sortable: true,
     },
-    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
+    {
+        name: 'Atlas Name',
+        selector: (row) => formatAtlasName(row.atlas_name),
+        getSearchValue: (row) => formatAtlasName(row.atlas_name),
+        sortable: true,
+    },
     {
         name: 'Age in Days at Diagnosis (Years)',
         selector: (row) => {
@@ -1641,7 +1672,12 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         selector: 'HTAN_BIOSPECIMEN_ID',
         sortable: true,
     },
-    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
+    {
+        name: 'Atlas Name',
+        selector: (row) => formatAtlasName(row.atlas_name),
+        getSearchValue: (row) => formatAtlasName(row.atlas_name),
+        sortable: true,
+    },
     {
         name: 'HTAN Parent ID',
         selector: 'HTAN_PARENT_ID',
@@ -1870,7 +1906,24 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
 ];
 
 const ATLAS_COLUMNS: IEnhancedDataTableColumn<AtlasSummaryRow>[] = [
-    { name: 'Atlas Name', selector: 'atlas_name', sortable: true },
+    {
+        name: 'Atlas Name',
+        selector: (row) => formatAtlasName(row.atlas_name),
+        sortable: true,
+    },
+    {
+        name: 'Atlas Description',
+        selector: 'atlas_description',
+        sortable: true,
+        cell: (row) => (
+            <AtlasDescription
+                atlasMeta={{
+                    htan_id: row.atlasid,
+                }}
+                atlasName={row.atlas_description}
+            />
+        ),
+    },
     { name: 'Cases', selector: 'caseCount', sortable: true, right: true },
     {
         name: 'Biospecimens',
@@ -2277,37 +2330,42 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
     );
 
     const atlasSummaryRows = useMemo<AtlasSummaryRow[]>(() => {
+        type AtlasCountField = keyof Pick<
+            AtlasSummaryRow,
+            'caseCount' | 'biospecimenCount' | 'fileCount'
+        >;
         const atlasCounts = new Map<
             string,
-            Omit<AtlasSummaryRow, 'atlas_name'>
+            Omit<AtlasSummaryRow, 'atlas_name' | 'atlas_description'>
         >();
 
-        const increment = (
-            atlasName: string,
-            field: keyof Omit<AtlasSummaryRow, 'atlas_name'>
-        ) => {
+        const increment = (row: TableRow, field: AtlasCountField) => {
+            const atlasName = String(row.atlas_name || '');
+            const atlasId = String(row.atlasid || '');
             const key = atlasName || 'Unknown';
             const current = atlasCounts.get(key) || {
+                atlasid: '',
                 caseCount: 0,
                 biospecimenCount: 0,
                 fileCount: 0,
             };
+            if (!current.atlasid && atlasId) {
+                current.atlasid = atlasId;
+            }
             current[field] += 1;
             atlasCounts.set(key, current);
         };
 
-        atlasCases.forEach((row) =>
-            increment(String(row.atlas_name || ''), 'caseCount')
-        );
-        atlasSpecimens.forEach((row) =>
-            increment(String(row.atlas_name || ''), 'biospecimenCount')
-        );
-        atlasFiles.forEach((row) =>
-            increment(String(row.atlas_name || ''), 'fileCount')
-        );
+        atlasCases.forEach((row) => increment(row, 'caseCount'));
+        atlasSpecimens.forEach((row) => increment(row, 'biospecimenCount'));
+        atlasFiles.forEach((row) => increment(row, 'fileCount'));
 
         return Array.from(atlasCounts.entries())
-            .map(([atlas_name, counts]) => ({ atlas_name, ...counts }))
+            .map(([atlas_name, counts]) => ({
+                atlas_name,
+                atlas_description: getAtlasDescriptionById(counts.atlasid),
+                ...counts,
+            }))
             .sort((a, b) => a.atlas_name.localeCompare(b.atlas_name));
     }, [atlasCases, atlasSpecimens, atlasFiles]);
 

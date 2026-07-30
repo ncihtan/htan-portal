@@ -125,8 +125,8 @@ export enum DownloadSourceCategory {
 }
 
 export interface AtlasMeta {
-    title: { rendered: string };
-    lead_institutions: string;
+    title?: { rendered?: string };
+    lead_institutions?: string;
     htan_id: string;
     short_description?: string;
 }
