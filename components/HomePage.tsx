@@ -108,8 +108,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     }}
                 >
                     <a style={{ color: 'white' }} href="/data-updates">
-                        First data release of HTAN Phase 2 now
-                        available!
+                        Data Release V8.0 (Last updated 2026-07-30)
                     </a>
                 </div>
                 <Row className="justify-content-md-center">
