@@ -148,20 +148,12 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                                 style={{ gap: 12 }}
                             >
                                 <Button
-                                    href="/explore/phase1"
+                                    href="/explore"
                                     variant="primary"
                                     size="lg"
                                     style={{ minWidth: 210 }}
                                 >
-                                    Explore Phase 1 Data
-                                </Button>
-                                <Button
-                                    href="/explore/phase2"
-                                    variant="primary"
-                                    size="lg"
-                                    style={{ minWidth: 210 }}
-                                >
-                                    Explore Phase 2 Data
+                                    Explore Data
                                 </Button>
                             </div>
                             <div
