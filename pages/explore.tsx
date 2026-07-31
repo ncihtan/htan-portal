@@ -9,8 +9,8 @@ const ExploreLanding = () => (
             <h1>Explore HTAN Data</h1>
             <p style={{ fontSize: 18 }}>
                 The Human Tumor Atlas Network (HTAN) is a National Cancer
-                Institute&ndash;funded Cancer Moonshot<sup>SM</sup> initiative
-                that builds 3-dimensional atlases of human cancers as they
+                Institute&ndash;funded initiative that builds 3-dimensional
+                atlases of human cancers as they
                 evolve from precancerous lesions to advanced disease. HTAN data
                 has been contributed across two phases of the network. Because
                 the two phases use different data models, they are explored

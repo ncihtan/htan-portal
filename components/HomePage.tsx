@@ -212,8 +212,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
 
                         <p style={{ fontSize: 20 }}>
                             HTAN is a National Cancer Institute (NCI)-funded
-                            Cancer Moonshot<sup>SM</sup> initiative to construct
-                            3-dimensional atlases of the dynamic cellular,
+                            initiative to construct 3-dimensional atlases of the
+                            dynamic cellular,
                             morphological, and molecular features of human
                             cancers as they evolve from precancerous lesions to
                             advanced disease.
