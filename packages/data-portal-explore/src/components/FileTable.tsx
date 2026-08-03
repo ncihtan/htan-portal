@@ -1,4 +1,5 @@
 import fileDownload from 'js-file-download';
+import remoteData, { MobxPromise } from 'mobxpromise';
 import { action, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { CSSProperties } from 'react';
@@ -41,6 +42,7 @@ import {
 import {
     addViewers,
     commonStyles,
+    doQuery,
     DownloadSourceCategory,
     getCrdcGcAsset,
     Entity,
@@ -62,6 +64,10 @@ interface IFileDownloadModalProps {
 
 const DETAILS_COLUMN_NAME = 'Metadata';
 const DRS_URI_HOSTNAME = 'drs://nci-crdc.datacommons.io/';
+
+function escapeSqlValue(value: string) {
+    return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
 
 function getDrsUri(
     uri?: string,
@@ -673,6 +679,9 @@ export class FileTable extends React.Component<IFileTableProps> {
     @observable isDownloadModalOpen = false;
     @observable isLinkOutModalOpen = false;
     @observable viewDetailsFile: Entity | undefined = undefined;
+    @observable.ref viewDetailsFileMetadata:
+        | MobxPromise<{ [key: string]: any } | undefined>
+        | undefined = undefined;
     @observable columnVisibility: { [columnKey: string]: boolean } = {};
     @observable selectedLevels: string[] = this.allLevels;
 
@@ -845,9 +854,10 @@ export class FileTable extends React.Component<IFileTableProps> {
                         return (
                             <a
                                 href={'#'}
-                                onClick={action(() => {
-                                    this.viewDetailsFile = file;
-                                })}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.handleViewDetailsClick(file);
+                                }}
                             >
                                 View Metadata
                             </a>
@@ -1221,7 +1231,32 @@ export class FileTable extends React.Component<IFileTableProps> {
 
     @action onViewDetailsModalClose = () => {
         this.viewDetailsFile = undefined;
+        this.viewDetailsFileMetadata = undefined;
     };
+
+    @action.bound
+    private handleViewDetailsClick(file: Entity) {
+        this.viewDetailsFile = file;
+        this.viewDetailsFileMetadata = new remoteData({
+            invoke: async () => {
+                const escapedDataFileId = escapeSqlValue(file.DataFileID || '');
+                const escapedSynapseId = escapeSqlValue(file.synapseId || '');
+                const whereClause = file.DataFileID
+                    ? `DataFileID = '${escapedDataFileId}'`
+                    : `synapseId = '${escapedSynapseId}'`;
+
+                const rows = await doQuery<{ [key: string]: any }>(`
+                    SELECT * FROM files
+                    WHERE ${whereClause}
+                    LIMIT 1
+                `);
+                return rows[0];
+            },
+            onError: (error) => {
+                console.error('Error fetching file metadata:', error);
+            },
+        });
+    }
 
     onSelect = (state: {
         allSelected: boolean;
@@ -1233,6 +1268,65 @@ export class FileTable extends React.Component<IFileTableProps> {
 
     get hasFilesSelected() {
         return this.selected.length > 0;
+    }
+
+    private getAdditionalFields(): { [key: string]: any } {
+        if (
+            !this.viewDetailsFile ||
+            !this.viewDetailsFileMetadata?.isComplete ||
+            !this.viewDetailsFileMetadata.result
+        ) {
+            return {};
+        }
+
+        const existingEntityFields = new Set(Object.keys(this.viewDetailsFile));
+        const metadata = this.viewDetailsFileMetadata.result;
+
+        const additionalFields: { [key: string]: any } = {};
+
+        for (const [key, value] of Object.entries(metadata)) {
+            if (key !== 'AtlasMeta' && !existingEntityFields.has(key)) {
+                additionalFields[key] = value;
+            }
+        }
+
+        return additionalFields;
+    }
+
+    private getDisabledAddColumns(): string[] {
+        if (
+            !this.viewDetailsFile ||
+            !this.viewDetailsFileMetadata?.isComplete ||
+            !this.viewDetailsFileMetadata.result
+        ) {
+            return [];
+        }
+
+        const existingEntityFields = new Set(Object.keys(this.viewDetailsFile));
+        const metadata = this.viewDetailsFileMetadata.result;
+
+        return Object.keys(metadata).filter(
+            (key) => key !== 'AtlasMeta' && !existingEntityFields.has(key)
+        );
+    }
+
+    private getViewDetailsCustomContent(): JSX.Element | undefined {
+        if (this.viewDetailsFileMetadata?.isPending) {
+            return (
+                <div className={commonStyles.loadingIndicator}>
+                    <FontAwesomeIcon icon={faHourglassStart} /> Loading full
+                    metadata...
+                </div>
+            );
+        }
+        if (this.viewDetailsFileMetadata?.isError) {
+            return (
+                <div className="alert alert-danger mt-2 mb-0">
+                    Failed to load full metadata.
+                </div>
+            );
+        }
+        return undefined;
     }
 
     render() {
@@ -1258,6 +1352,9 @@ export class FileTable extends React.Component<IFileTableProps> {
                     columns={this.columns.filter(
                         (c) => c.name !== DETAILS_COLUMN_NAME
                     )}
+                    additionalFields={this.getAdditionalFields()}
+                    disabledAddColumns={this.getDisabledAddColumns()}
+                    customContent={this.getViewDetailsCustomContent()}
                 />
 
                 <EnhancedDataTable

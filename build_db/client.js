@@ -27,6 +27,10 @@ function correctFieldName(f) {
     return f.replace(/-associated/, 'Associated');
 }
 
+function quoteIdentifier(identifier) {
+    return `\`${identifier.replace(/`/g, '``')}\``;
+}
+
 export async function createDbIfNotExist() {
     // we need to create a separate client (without the DB name) to be able to create a new DB
     // otherwise we will get unknown database error
@@ -52,24 +56,33 @@ export async function createTable(
                     const ff = f.replace(/^.*\./, '');
                     //const fieldType = _.isArray(data[0][f]) ? "Array(TEXT)" : "TEXT";
                     const fieldType = _.some(data, (d) => _.isArray(d[ff]))
-                        ? 'Array(TEXT)'
-                        : 'TEXT';
-                    return `${correctFieldName(ff)} ${fieldType}`;
+                        ? 'Array(String)'
+                        : 'String';
+                    return `${quoteIdentifier(
+                        correctFieldName(ff)
+                    )} ${fieldType}`;
                 })
                 .join(', ')}${
         derivedColumns ? ',' + derivedColumns.join(',') : ''
     } 
         )          
             ENGINE = MergeTree
-            ORDER BY ${fields[0]}
+            ORDER BY ${quoteIdentifier(
+                correctFieldName(fields[0].replace(/^.*\./, ''))
+            )}
       `;
 
     await doQuery(q).then((r) => {});
+}
+
+export async function insertRows(tableName, rows) {
+    if (!rows.length) {
+        return;
+    }
 
     await client.insert({
         table: tableName,
-        // structure should match the desired format, JSONEachRow in this example
-        values: [data],
+        values: rows,
         format: 'JSONEachRow',
     });
 }

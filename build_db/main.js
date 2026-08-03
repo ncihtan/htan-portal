@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {createDbIfNotExist, createTable} from "./client.js";
+import {createDbIfNotExist, createTable, insertRows} from "./client.js";
 import {
     normalizeTissueOrOrganOrSite,
     normalizeTreatment
@@ -10,18 +10,7 @@ import processedSynJson from '../public/processed_syn_data.json' with { type: 'j
 // prettier-ignore
 import organMappings from '../packages/data-portal-commons/src/assets/human-organ-mappings.json' with { type: 'json' };
 
-const fileFields = [
-    "synapseId",
-    "atlasid",
-    "atlas_name",
-    "level",
-    "assayName",
-    "Filename",
-    "FileFormat",
-    "Component",
-    "DataFileID",
-    "ParentDataFileID",
-    "biospecimenIds",
+const additionalFileFields = [
     "demographicsIds.Gender",
     "demographicsIds.Ethnicity",
     "demographicsIds.Race",
@@ -29,21 +18,7 @@ const fileFields = [
     "therapyIds.TreatmentType",
     "diagnosisIds.PrimaryDiagnosis",
     "diagnosisIds.TissueorOrganofOrigin",
-    "ScRNAseqWorkflowType",
-    "ScRNAseqWorkflowParametersDescription",
-    "WorkflowVersion",
-    "WorkflowLink",
-    "AtlasMeta",
-    "imageChannelMetadata",
-    "publicationIds",
-    "diagnosisIds",
-    "demographicsIds",
-    "therapyIds",
-    "viewers",
-    "isRawSequencing",
-    "downloadSource",
-    "releaseVersion",
-    "organType"
+    "organType",
 ];
 
 function formatRow(file, data, fields, postProcess) {
@@ -218,7 +193,7 @@ async function main(){
             data: Object.values(d.data.publicationManifestByUid),
             tableName: "publication_manifest",
             derivedColumns: [
-                "associatedFiles Array(TEXT) MATERIALIZED splitByChar(',',PublicationAssociatedParentDataFileID)",
+                "associatedFiles Array(String) MATERIALIZED splitByChar(',',PublicationAssociatedParentDataFileID)",
                 // "uid TEXT MATERIALIZED arrayElement(splitByChar('\/', PMID),4)"
             ]
         },
@@ -256,12 +231,15 @@ async function main(){
             derivedColumns: []
         },
         fileConfig : {
-            fields: fileFields,
+            fields: _.uniq([
+                ...findFields(Object.values(d.data.files)),
+                ...additionalFileFields,
+            ]),
             data: d.data.files,
             tableName: "files",
             postProcess: postProcessFiles,
             derivedColumns: [
-                "viewersArr Array(TEXT) MATERIALIZED JSONExtractKeys(viewers)",
+                "viewersArr Array(String) MATERIALIZED JSONExtractKeys(viewers)",
             ]
         },
         specimenConfig : {
@@ -274,11 +252,31 @@ async function main(){
 
     function doCreate(config) {
         const preprocess = config.preprocess ? config.preprocess : (f) => f;
-        const rows = config.data
-            .map(preprocess)
-            .map(f => formatRow(f, d.data, config.fields, config.postProcess));
+        const chunkSize = 1000;
 
-        return createTable(config.tableName, rows, config.fields, config.derivedColumns);
+        return (async () => {
+            if (!config.data.length) {
+                await createTable(config.tableName, [], config.fields, config.derivedColumns);
+                return;
+            }
+
+            const firstChunk = config.data.slice(0, chunkSize);
+            const firstRows = firstChunk
+                .map(preprocess)
+                .map(f => formatRow(f, d.data, config.fields, config.postProcess));
+
+            await createTable(config.tableName, firstRows, config.fields, config.derivedColumns);
+            await insertRows(config.tableName, firstRows);
+
+            for (let i = chunkSize; i < config.data.length; i += chunkSize) {
+                const chunk = config.data.slice(i, i + chunkSize);
+                const rows = chunk
+                    .map(preprocess)
+                    .map(f => formatRow(f, d.data, config.fields, config.postProcess));
+
+                await insertRows(config.tableName, rows);
+            }
+        })();
     }
 
     // enable this if you only want to import new publication data

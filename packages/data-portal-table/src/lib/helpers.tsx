@@ -1,5 +1,15 @@
 import * as React from 'react';
 
+export const CONNECTOR_WORDS = [
+    'and',
+    'or',
+    'of',
+    'per',
+    'within',
+    'with',
+    'from',
+];
+
 export function getColumnKey(col: {
     id?: string | number;
     name: string | number | React.ReactNode;
@@ -79,4 +89,52 @@ export function selectorToColumnName(selector: string) {
     str = str.trim();
 
     return str;
+}
+
+function prepareFieldNameForFormatting(fieldName: string) {
+    return CONNECTOR_WORDS.reduce((name, connector) => {
+        const connectorWithUppercaseStart =
+            connector[0].toUpperCase() + connector.slice(1);
+        return name.replace(
+            new RegExp(`${connector}(?=[A-Z])`, 'g'),
+            connectorWithUppercaseStart
+        );
+    }, fieldName);
+}
+
+function collapseSpacedAcronyms(formattedName: string) {
+    return formattedName.replace(/\b(?:[A-Z]\s){1,}[A-Z](?=\b|-)/g, (match) =>
+        match.replace(/\s/g, '')
+    );
+}
+
+function normalizeConnectorWordCasing(formattedName: string) {
+    return formattedName.replace(
+        /\b(And|Or|Of|Per|Within|With|From)\b/g,
+        (connector, _group, offset) =>
+            offset === 0 ? connector : connector.toLowerCase()
+    );
+}
+
+export function formatMetadataFieldName(
+    fieldName: string,
+    metadataFieldNameOverrides: { [key: string]: string } = {}
+) {
+    if (metadataFieldNameOverrides[fieldName]) {
+        return metadataFieldNameOverrides[fieldName];
+    }
+
+    const baseFormattedName = selectorToColumnName(
+        prepareFieldNameForFormatting(fieldName)
+    );
+    const formattedName = normalizeConnectorWordCasing(
+        collapseSpacedAcronyms(baseFormattedName)
+    );
+
+    if (/^Is[A-Z]/.test(fieldName) || /^Is [A-Z]/.test(formattedName)) {
+        return formattedName.endsWith('?')
+            ? formattedName
+            : `${formattedName}?`;
+    }
+    return formattedName;
 }
