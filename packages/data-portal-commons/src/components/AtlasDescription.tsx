@@ -23,7 +23,7 @@ export const AtlasDescription: React.FunctionComponent<{
     );
     return shouldIncludeAtlasHref(props.atlasMeta) ? (
         <span>
-            <a href={`/center/${props.atlasMeta.htan_id.toLowerCase()}`}>
+            <a href={`/center/${props.atlasMeta.htan_id?.toLowerCase()}`}>
                 {atlasDescription}
             </a>
         </span>

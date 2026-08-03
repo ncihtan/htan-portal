@@ -8,6 +8,7 @@ import { CountByType } from './types';
 export const DEFAULT_CLICKHOUSE_HOST =
     'https://dl96orhu96.us-east-1.aws.clickhouse.cloud:8443';
 export const DEFAULT_CLICKHOUSE_DB = 'htan_2026_913';
+export const DEFAULT_PHASE2_CLICKHOUSE_DB = 'htan2_2026_906';
 export const DEFAULT_CLICKHOUSE_URL = `${DEFAULT_CLICKHOUSE_HOST}/${DEFAULT_CLICKHOUSE_DB}`;
 
 function buildClickHouseUrl(): string {
@@ -20,17 +21,30 @@ function buildClickHouseUrl(): string {
     return `${host}/${db}`;
 }
 
+function buildClickHouseUrlWithDatabase(database: string): string {
+    const host =
+        process.env.NEXT_PUBLIC_CLICKHOUSE_HOST ?? DEFAULT_CLICKHOUSE_HOST;
+    return `${host}/${database}`;
+}
+
 let _defaultClient: WebClickHouseClient | undefined;
+const _clientsByDatabase = new Map<string, WebClickHouseClient>();
+
+function getClickhousePassword(): string {
+    const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
+    if (!clickhousePassword) {
+        throw new Error(
+            'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
+                'Set it in .env.local (for development) or in your hosting environment (for production).'
+        );
+    }
+
+    return clickhousePassword;
+}
 
 function getDefaultClient(): WebClickHouseClient {
     if (!_defaultClient) {
-        const clickhousePassword = process.env.NEXT_PUBLIC_CLICKHOUSE_PASSWORD;
-        if (!clickhousePassword) {
-            throw new Error(
-                'NEXT_PUBLIC_CLICKHOUSE_PASSWORD is not configured. ' +
-                    'Set it in .env.local (for development) or in your hosting environment (for production).'
-            );
-        }
+        const clickhousePassword = getClickhousePassword();
         _defaultClient = createClient({
             url: buildClickHouseUrl(),
             username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
@@ -43,6 +57,34 @@ function getDefaultClient(): WebClickHouseClient {
         });
     }
     return _defaultClient;
+}
+
+export function getClientForDatabase(database: string): WebClickHouseClient {
+    const cachedClient = _clientsByDatabase.get(database);
+    if (cachedClient) {
+        return cachedClient;
+    }
+
+    const client = createClient({
+        url: buildClickHouseUrlWithDatabase(database),
+        username: process.env.NEXT_PUBLIC_CLICKHOUSE_USER ?? 'htanwebuser',
+        password: getClickhousePassword(),
+        request_timeout: 600000,
+        compression: {
+            response: true,
+            request: false,
+        },
+    });
+
+    _clientsByDatabase.set(database, client);
+    return client;
+}
+
+export function getPhase2Client(): WebClickHouseClient {
+    const phase2Database =
+        process.env.NEXT_PUBLIC_CLICKHOUSE_DB_PHASE2 ??
+        DEFAULT_PHASE2_CLICKHOUSE_DB;
+    return getClientForDatabase(phase2Database);
 }
 
 export function getCountsByTypeQueryUniformFilterString(filterString: string) {
@@ -161,7 +203,8 @@ export const fileQuery = `
         downloadSource,
         releaseVersion,
         imageChannelMetadata,
-        Component
+        Component,
+        organType
     FROM files
 `;
 
@@ -193,6 +236,103 @@ export const specimenQuery = _.template(`
         ARRAY JOIN biospecimenIds
         <%=filterString%>
     )
+`);
+
+export const fileQuery2 = `
+    SELECT
+        synapseId,
+        atlasid,
+        atlas_name,
+        level,
+        assayName,
+        FILENAME,
+        FILE_FORMAT,
+        HTAN_DATA_FILE_ID,
+        HTAN_PARENT_ID,
+        HTAN_PARENT_DATA_FILE_ID,
+        biospecimenIds,
+        SEX,
+        ETHNIC_GROUP,
+        RACE,
+        VITAL_STATUS,
+        TREATMENT_TYPE,
+        PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME,
+        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE,
+        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME,
+        organType,
+        SCRNASEQ_WORKFLOW_TYPE,
+        SCRNASEQ_WORKFLOW_PARAMETERS_DESCRIPTION,
+        WORKFLOW_VERSION,
+        WORKFLOW_LINK,
+        CAST([] AS Array(String)) AS viewersArr,
+        CAST([] AS Array(String)) AS publicationIds,
+        diagnosisIds,
+        demographicsIds,
+        therapyIds,
+        Component
+    FROM files
+`;
+
+export const caseQuery2 = _.template(`
+    SELECT * FROM cases c
+    WHERE c.HTAN_PARTICIPANT_ID IN (
+        SELECT demographicsIds FROM files
+        ARRAY JOIN demographicsIds
+        <%=filterString%>
+        UNION DISTINCT
+        SELECT diagnosisIds FROM files
+        ARRAY JOIN diagnosisIds
+        <%=filterString%>
+    )
+`);
+
+export const specimenQuery2 = _.template(`
+    SELECT * FROM specimen s
+    WHERE s.HTAN_BIOSPECIMEN_ID IN (
+        SELECT biospecimenIds FROM files
+        ARRAY JOIN biospecimenIds
+        <%=filterString%>
+    )
+`);
+
+export const countsByTypeQuery2 = _.template(`
+    WITH
+        fileQueryForSex AS (SELECT * FROM files <%=genderFilterString%>),
+        fileQueryForRace AS (SELECT * FROM files <%=raceFilterString%>),
+        fileQueryForPrimaryDiagnosis AS (SELECT * FROM files <%=primaryDiagnosisFilterString%>),
+        fileQueryForEthnicity AS (SELECT * FROM files <%=ethnicityFilterString%>),
+        fileQueryForTissueOrOrganOfOrigin AS (SELECT * FROM files <%=tissueOrOrganOfOriginFilterString%>),
+        fileQueryForOrganType AS (SELECT * FROM files <%=organTypeFilterString%>),
+        fileQueryForLevel AS (SELECT * FROM files <%=levelFilterString%>),
+        fileQueryForAssayName AS (SELECT * FROM files <%=assayNameFilterString%>),
+        fileQueryForTreatmentType AS (SELECT * FROM files <%=treatmentTypeFilterString%>),
+        fileQueryForFileFormat AS (SELECT * FROM files <%=fileFormatFilterString%>),
+        fileQueryForAtlasName AS (SELECT * FROM files <%=atlasNameFilterString%>)
+    SELECT val, type, fieldType, count(Distinct HTAN_DATA_FILE_ID) as count FROM (
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(SEX) as val, 'SEX' as type, 'array' as fieldType FROM fileQueryForSex
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(RACE) as val, 'RACE' as type, 'array' as fieldType FROM fileQueryForRace
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME) as val, 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME' as type, 'array' as fieldType FROM fileQueryForPrimaryDiagnosis
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(ETHNIC_GROUP) as val, 'ETHNIC_GROUP' as type, 'array' as fieldType FROM fileQueryForEthnicity
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME) as val, 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME' as type, 'array' as fieldType FROM fileQueryForTissueOrOrganOfOrigin
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(organType) as val, 'organType' as type, 'array' as fieldType FROM fileQueryForOrganType
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, level as val, 'level' as type, 'string' as fieldType FROM fileQueryForLevel
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, assayName as val, 'assayName' as type, 'string' as fieldType FROM fileQueryForAssayName
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, arrayJoin(TREATMENT_TYPE) as val, 'TREATMENT_TYPE' as type, 'array' as fieldType FROM fileQueryForTreatmentType
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, FILE_FORMAT as val, 'FILE_FORMAT' as type, 'string' as fieldType FROM fileQueryForFileFormat
+        UNION ALL
+        SELECT HTAN_DATA_FILE_ID, synapseId, atlas_name as val, 'AtlasName' as type, 'string' as fieldType FROM fileQueryForAtlasName
+    )
+    WHERE notEmpty(val)
+    GROUP BY val, type, fieldType
 `);
 
 export const assayQuery = _.template(`
@@ -238,6 +378,59 @@ export function getFilterString(
                     val.find((v) => {
                         const option = unfilteredOptions?.find(
                             (o) => o.val === v.value
+                        );
+                        return option?.fieldType === 'string';
+                    })
+                ) {
+                    return `${field} in (${values})`;
+                } else {
+                    return `hasAny(${field},[${values}])`;
+                }
+            })
+            .value();
+
+        return ' WHERE ' + clauses.join(' AND ');
+    } else {
+        return '';
+    }
+}
+
+export function getFilterString2(
+    selectedFilters: SelectedFilter[],
+    unfilteredOptions?: CountByType[]
+) {
+    const filterToFieldMap: { [filter: string]: string } = {
+        AtlasName: 'atlas_name',
+        Gender: 'SEX',
+        SEX: 'SEX',
+        Ethnicity: 'ETHNIC_GROUP',
+        ETHNIC_GROUP: 'ETHNIC_GROUP',
+        Race: 'RACE',
+        RACE: 'RACE',
+        VitalStatus: 'VITAL_STATUS',
+        VITAL_STATUS: 'VITAL_STATUS',
+        TreatmentType: 'TREATMENT_TYPE',
+        TREATMENT_TYPE: 'TREATMENT_TYPE',
+        PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
+        PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME:
+            'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
+        FILE_FORMAT: 'FILE_FORMAT',
+        organType: 'organType',
+        TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
+        TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME:
+            'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
+    };
+
+    if (selectedFilters.length > 0) {
+        const clauses = _(selectedFilters)
+            .groupBy('group')
+            .map((val, k) => {
+                const field = filterToFieldMap[k] || k;
+                const values = val.map((v) => `'${v.value}'`).join(',');
+                if (
+                    val.find((v) => {
+                        const option = unfilteredOptions?.find(
+                            (o) => o.val === v.value && o.type === k
                         );
                         return option?.fieldType === 'string';
                     })

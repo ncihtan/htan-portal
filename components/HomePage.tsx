@@ -7,12 +7,90 @@ import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import { EntityReport } from '../lib/helpers';
 import Plots from './Plots';
-import { AtlasMeta, EntityReportByAttribute } from '@htan/data-portal-commons';
+import {
+    EntityReportByAttribute,
+    NOT_REPORTED,
+} from '@htan/data-portal-commons';
 
 export interface IHomePropsProps {
     synapseCounts: EntityReport[];
+    phase2SynapseCounts: EntityReport[];
     organSummary: EntityReportByAttribute[];
+    phase2OrganSummary: EntityReportByAttribute[];
     assaySummary: EntityReportByAttribute[];
+    phase2AssaySummary: EntityReportByAttribute[];
+}
+
+function mergeEntityReportByAttribute(
+    phase1Summary: EntityReportByAttribute[],
+    phase2Summary: EntityReportByAttribute[]
+): EntityReportByAttribute[] {
+    const mergedByAttributeValue = new Map<string, EntityReportByAttribute>();
+
+    [...phase1Summary, ...phase2Summary].forEach((report) => {
+        const key = report.attributeValue ?? '';
+        const existing = mergedByAttributeValue.get(key);
+
+        if (!existing) {
+            mergedByAttributeValue.set(key, {
+                ...report,
+                attributeFilterValues: [...report.attributeFilterValues],
+                distributionByCenter: report.distributionByCenter.map((d) => ({
+                    ...d,
+                    attributeFilterValues: [...d.attributeFilterValues],
+                })),
+            });
+            return;
+        }
+
+        const mergedDistributionByCenter = new Map(
+            existing.distributionByCenter.map((distribution) => [
+                distribution.center,
+                {
+                    ...distribution,
+                    attributeFilterValues: [
+                        ...distribution.attributeFilterValues,
+                    ],
+                },
+            ])
+        );
+
+        report.distributionByCenter.forEach((distribution) => {
+            const existingDistribution = mergedDistributionByCenter.get(
+                distribution.center
+            );
+            if (!existingDistribution) {
+                mergedDistributionByCenter.set(distribution.center, {
+                    ...distribution,
+                    attributeFilterValues: [
+                        ...distribution.attributeFilterValues,
+                    ],
+                });
+                return;
+            }
+
+            existingDistribution.totalCount += distribution.totalCount;
+            existingDistribution.attributeFilterValues = Array.from(
+                new Set([
+                    ...existingDistribution.attributeFilterValues,
+                    ...distribution.attributeFilterValues,
+                ])
+            );
+        });
+
+        existing.totalCount += report.totalCount;
+        existing.attributeFilterValues = Array.from(
+            new Set([
+                ...existing.attributeFilterValues,
+                ...report.attributeFilterValues,
+            ])
+        );
+        existing.distributionByCenter = Array.from(
+            mergedDistributionByCenter.values()
+        );
+    });
+
+    return Array.from(mergedByAttributeValue.values());
 }
 
 function dashboardIcon(text: string, description: string) {
@@ -30,9 +108,75 @@ function dashboardIcon(text: string, description: string) {
 
 const HomePage: React.FunctionComponent<IHomePropsProps> = ({
     synapseCounts,
+    phase2SynapseCounts,
     organSummary,
+    phase2OrganSummary,
     assaySummary,
+    phase2AssaySummary,
 }) => {
+    const combinedSynapseCounts = React.useMemo(() => {
+        const phase1ByDescription = new Map(
+            synapseCounts.map((count) => [count.description, count])
+        );
+        const phase2ByDescription = new Map(
+            phase2SynapseCounts.map((count) => [count.description, count])
+        );
+        const organNames = new Set([
+            ...organSummary
+                .map((item) => item.attributeValue)
+                .filter((value) => value !== NOT_REPORTED),
+            ...phase2OrganSummary
+                .map((item) => item.attributeValue)
+                .filter((value) => value !== NOT_REPORTED),
+        ]);
+        const descriptions = Array.from(
+            new Set([
+                ...synapseCounts.map((count) => count.description),
+                ...phase2SynapseCounts.map((count) => count.description),
+            ])
+        );
+
+        return descriptions.map((description) => {
+            const phase1Count = parseInt(
+                phase1ByDescription.get(description)?.text ?? '0',
+                10
+            );
+            const phase2Count = parseInt(
+                phase2ByDescription.get(description)?.text ?? '0',
+                10
+            );
+            if (description === 'Organs') {
+                return {
+                    description,
+                    text: String(organNames.size),
+                };
+            }
+            return {
+                description,
+                text: String(phase1Count + phase2Count),
+            };
+        });
+    }, [phase2SynapseCounts, phase2OrganSummary, organSummary, synapseCounts]);
+
+    const combinedOrganSummary = React.useMemo(
+        () => mergeEntityReportByAttribute(organSummary, phase2OrganSummary),
+        [organSummary, phase2OrganSummary]
+    );
+
+    const combinedAssaySummary = React.useMemo(
+        () => mergeEntityReportByAttribute(assaySummary, phase2AssaySummary),
+        [assaySummary, phase2AssaySummary]
+    );
+
+    const renderSummaryRow = (counts: EntityReport[]) => (
+        <Row className="justify-content-md-center">
+            {counts &&
+                counts.map((report: EntityReport) =>
+                    dashboardIcon(report.text, report.description)
+                )}
+        </Row>
+    );
+
     return (
         <>
             <Jumbotron
@@ -48,7 +192,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     }}
                 >
                     <a style={{ color: 'white' }} href="/data-updates">
-                        Data Release V7.0 (Last updated 2025-11-26)
+                        Data Release V8.0 (Last updated 2026-08-03)
                     </a>
                 </div>
                 <Row className="justify-content-md-center">
@@ -68,11 +212,10 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
 
                         <p style={{ fontSize: 20 }}>
                             HTAN is a National Cancer Institute (NCI)-funded
-                            Cancer Moonshot<sup>SM</sup> initiative to construct
-                            3-dimensional atlases of the dynamic cellular,
-                            morphological, and molecular features of human
-                            cancers as they evolve from precancerous lesions to
-                            advanced disease.
+                            initiative to construct 3-dimensional atlases of the
+                            dynamic cellular, morphological, and molecular
+                            features of human cancers as they evolve from
+                            precancerous lesions to advanced disease.
                         </p>
 
                         <div
@@ -121,12 +264,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     paddingBottom: '20px',
                 }}
             >
-                <Row className="justify-content-md-center">
-                    {synapseCounts &&
-                        synapseCounts.map((report: EntityReport) =>
-                            dashboardIcon(report.text, report.description)
-                        )}
-                </Row>
+                {renderSummaryRow(combinedSynapseCounts)}
             </Container>
             {/* <Container
                 fluid
@@ -141,8 +279,8 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                 </Row>
             </Container> */}
             <Plots
-                organSummary={organSummary}
-                assaySummary={assaySummary}
+                organSummary={combinedOrganSummary}
+                assaySummary={combinedAssaySummary}
                 footerContent={
                     <p style={{ fontSize: 'medium' }}>
                         Many more profiled tumors will be available in the

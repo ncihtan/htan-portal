@@ -23,12 +23,25 @@ function togglePreview(on: any) {
 const NavSection: React.FunctionComponent<{
     text: string;
     landingPage?: string;
-}> = ({ text, children }) => {
+}> = ({ text, landingPage, children }) => {
     const [open, setOpen] = useState(false);
+
+    const title = landingPage ? (
+        <span
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+                window.location.href = landingPage;
+            }}
+        >
+            {text}
+        </span>
+    ) : (
+        text
+    );
 
     return (
         <NavDropdown
-            title={text}
+            title={title}
             id="basic-nav-dropdown"
             show={open}
             onMouseEnter={() => {
@@ -45,7 +58,14 @@ const NavSection: React.FunctionComponent<{
 
 export const HtanNavbar: React.FunctionComponent<{}> = () => {
     const navItems: any[] = [
-        <Nav.Link href="/explore">Explore</Nav.Link>,
+        <NavSection text={'Explore'} landingPage={'/explore'}>
+            <NavDropdown.Item href="/explore/phase1">
+                Phase 1 (2018–2024)
+            </NavDropdown.Item>
+            <NavDropdown.Item href="/explore/phase2">
+                Phase 2 (2024–present)
+            </NavDropdown.Item>
+        </NavSection>,
         <Nav.Link href="/tools">Analysis Tools</Nav.Link>,
 
         <Nav.Link href="https://docs.humantumoratlas.org/" target="_blank">
