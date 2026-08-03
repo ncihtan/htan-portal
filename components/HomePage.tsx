@@ -192,7 +192,7 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                     }}
                 >
                     <a style={{ color: 'white' }} href="/data-updates">
-                        Data Release V8.0 (Last updated 2026-07-30)
+                        Data Release V8.0 (Last updated 2026-08-03)
                     </a>
                 </div>
                 <Row className="justify-content-md-center">
@@ -213,10 +213,9 @@ const HomePage: React.FunctionComponent<IHomePropsProps> = ({
                         <p style={{ fontSize: 20 }}>
                             HTAN is a National Cancer Institute (NCI)-funded
                             initiative to construct 3-dimensional atlases of the
-                            dynamic cellular,
-                            morphological, and molecular features of human
-                            cancers as they evolve from precancerous lesions to
-                            advanced disease.
+                            dynamic cellular, morphological, and molecular
+                            features of human cancers as they evolve from
+                            precancerous lesions to advanced disease.
                         </p>
 
                         <div
