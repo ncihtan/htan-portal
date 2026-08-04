@@ -4,6 +4,7 @@ import { action, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { CSSProperties } from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { ScaleLoader } from 'react-spinners';
 import Tooltip from 'rc-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -599,11 +600,30 @@ const CellViewerLink: React.FunctionComponent<{
     const style = props.style || { paddingRight: 5 };
 
     return (
-        <a href={props.url} target="_blank" style={style}>
+        <a
+            href={props.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={style}
+        >
             {props.name} <FontAwesomeIcon icon={faExternalLinkAlt} />
         </a>
     );
 };
+
+function getChannelMetadataUrl(imageChannelMetadata?: {
+    synapseId: string;
+    version: number;
+}): string | null {
+    if (
+        !imageChannelMetadata ||
+        !imageChannelMetadata.synapseId ||
+        !imageChannelMetadata.version
+    ) {
+        return null;
+    }
+    return `https://www.synapse.org/#!Synapse:${imageChannelMetadata.synapseId}.${imageChannelMetadata.version}`;
+}
 
 type ImageViewerInfo = {
     minervaUrl?: string;
@@ -1009,7 +1029,11 @@ export class FileTable extends React.Component<IFileTableProps> {
                                                     >
                                                         <CellViewerLink
                                                             name="Download Channel Metadata"
-                                                            url={`https://www.synapse.org/#!Synapse:${file.imageChannelMetadata.synapseId}.${file.imageChannelMetadata.version}`}
+                                                            url={
+                                                                getChannelMetadataUrl(
+                                                                    file.imageChannelMetadata
+                                                                ) || ''
+                                                            }
                                                             style={{
                                                                 color: 'white',
                                                             }}
@@ -1067,7 +1091,7 @@ export class FileTable extends React.Component<IFileTableProps> {
                     if (cellViewers.length > 0) {
                         return cellViewers;
                     } else if (file.Component.startsWith('ImagingLevel2')) {
-                        return 'Image Viewer Not Avaliable';
+                        return 'Image Viewer Not Available';
                     } else {
                         return '';
                     }
@@ -1270,7 +1294,7 @@ export class FileTable extends React.Component<IFileTableProps> {
         return this.selected.length > 0;
     }
 
-    private getAdditionalFields(): { [key: string]: any } {
+    get additionalFields(): { [key: string]: any } {
         if (
             !this.viewDetailsFile ||
             !this.viewDetailsFileMetadata?.isComplete ||
@@ -1310,12 +1334,52 @@ export class FileTable extends React.Component<IFileTableProps> {
         );
     }
 
+    get metadataColumnsFromFields(): IEnhancedDataTableColumn<Entity>[] {
+        return Object.entries(this.additionalFields).map(
+            ([fieldName, fieldValue]) => {
+                // Special handling for Channel Metadata Filename
+                if (fieldName === 'ChannelMetadataFilename') {
+                    return {
+                        name: fieldName,
+                        selector: fieldName,
+                        cell: (cellData: Entity) => {
+                            const url = getChannelMetadataUrl(
+                                cellData.imageChannelMetadata
+                            );
+                            if (url) {
+                                return (
+                                    <CellViewerLink
+                                        name={fieldValue}
+                                        url={url}
+                                    />
+                                );
+                            }
+                            return '';
+                        },
+                    };
+                }
+
+                // Default rendering for other fields
+                return {
+                    name: fieldName,
+                    selector: fieldName,
+                    cell: (cellData: Entity) => {
+                        return Array.isArray(fieldValue)
+                            ? fieldValue.join(', ')
+                            : typeof fieldValue === 'object'
+                            ? JSON.stringify(fieldValue)
+                            : String(fieldValue);
+                    },
+                };
+            }
+        );
+    }
+
     private getViewDetailsCustomContent(): JSX.Element | undefined {
         if (this.viewDetailsFileMetadata?.isPending) {
             return (
                 <div className={commonStyles.loadingIndicator}>
-                    <FontAwesomeIcon icon={faHourglassStart} /> Loading full
-                    metadata...
+                    <ScaleLoader />
                 </div>
             );
         }
@@ -1352,8 +1416,11 @@ export class FileTable extends React.Component<IFileTableProps> {
                     columns={this.columns.filter(
                         (c) => c.name !== DETAILS_COLUMN_NAME
                     )}
-                    additionalFields={this.getAdditionalFields()}
+                    additionalColumns={this.metadataColumnsFromFields}
                     disabledAddColumns={this.getDisabledAddColumns()}
+                    isLoadingAdditionalData={
+                        !!this.viewDetailsFileMetadata?.isPending
+                    }
                     customContent={this.getViewDetailsCustomContent()}
                 />
 
