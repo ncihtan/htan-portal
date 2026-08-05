@@ -197,13 +197,13 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Atlas Name',
         selector: (row) => formatAtlasName(row.atlas_name),
-        getSearchValue: (row) => formatAtlasName(row.atlas_name),
+        getSearchValue: (row): string => formatAtlasName(row.atlas_name),
         sortable: true,
     },
     {
         name: 'Biospecimen',
         selector: (row) => formatValue(row.biospecimenIds),
-        getSearchValue: (row) => formatValue(row.biospecimenIds),
+        getSearchValue: (row): string => formatValue(row.biospecimenIds),
         sortable: true,
     },
     { name: 'Assay', selector: 'assayName', sortable: true },
@@ -211,7 +211,7 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Organ',
         selector: (row) => getOrganDisplayNames(row),
-        getSearchValue: (row) => getOrganDisplayNames(row),
+        getSearchValue: (row): string => getOrganDisplayNames(row),
         cell: truncatedTableCell,
         wrap: true,
         sortable: true,
@@ -228,7 +228,7 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         name: 'Primary Diagnosis',
         selector: (row) =>
             formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME),
-        getSearchValue: (row) =>
+        getSearchValue: (row): string =>
             formatValue(row.PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME),
         cell: truncatedTableCell,
         wrap: true,
@@ -237,39 +237,39 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Parent ID',
         selector: (row) => row.HTAN_PARENT_ID ?? row.HTAN_PARENT_DATA_FILE_ID,
-        getSearchValue: (row) =>
-            row.HTAN_PARENT_ID ?? row.HTAN_PARENT_DATA_FILE_ID,
+        getSearchValue: (row): string =>
+            formatValue(row.HTAN_PARENT_ID ?? row.HTAN_PARENT_DATA_FILE_ID),
         sortable: true,
         omit: true,
     },
     {
         name: 'Sex',
         selector: (row) => formatValue(row.SEX),
-        getSearchValue: (row) => formatValue(row.SEX),
+        getSearchValue: (row): string => formatValue(row.SEX),
         sortable: true,
     },
     {
         name: 'Ethnic Group',
         selector: (row) => formatValue(row.ETHNIC_GROUP),
-        getSearchValue: (row) => formatValue(row.ETHNIC_GROUP),
+        getSearchValue: (row): string => formatValue(row.ETHNIC_GROUP),
         sortable: true,
     },
     {
         name: 'Race',
         selector: (row) => formatValue(row.RACE),
-        getSearchValue: (row) => formatValue(row.RACE),
+        getSearchValue: (row): string => formatValue(row.RACE),
         sortable: true,
     },
     {
         name: 'Vital Status',
         selector: (row) => formatValue(row.VITAL_STATUS),
-        getSearchValue: (row) => formatValue(row.VITAL_STATUS),
+        getSearchValue: (row): string => formatValue(row.VITAL_STATUS),
         sortable: true,
     },
     {
         name: 'Treatment Type',
         selector: (row) => formatValue(row.TREATMENT_TYPE),
-        getSearchValue: (row) => formatValue(row.TREATMENT_TYPE),
+        getSearchValue: (row): string => formatValue(row.TREATMENT_TYPE),
         cell: (row) => formatValue(row.TREATMENT_TYPE),
         sortable: true,
         omit: true,
@@ -278,7 +278,7 @@ const FILE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         name: 'Organ Type',
         selector: (row) =>
             formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
-        getSearchValue: (row) =>
+        getSearchValue: (row): string =>
             formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         cell: truncatedTableCell,
         wrap: true,
@@ -1499,7 +1499,7 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Atlas Name',
         selector: (row) => formatAtlasName(row.atlas_name),
-        getSearchValue: (row) => formatAtlasName(row.atlas_name),
+        getSearchValue: (row): string => formatAtlasName(row.atlas_name),
         sortable: true,
     },
     {
@@ -1521,7 +1521,7 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
         name: 'Organ Type',
         selector: (row) =>
             formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
-        getSearchValue: (row) =>
+        getSearchValue: (row): string =>
             formatOrganNames(row.TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME),
         sortable: true,
     },
@@ -1545,7 +1545,7 @@ const CASE_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Treatment Type',
         selector: (row) => formatValue(row.TREATMENT_TYPE),
-        getSearchValue: (row) => formatValue(row.TREATMENT_TYPE),
+        getSearchValue: (row): string => formatValue(row.TREATMENT_TYPE),
         cell: (row) => formatValue(row.TREATMENT_TYPE),
         sortable: true,
         omit: true,
@@ -1675,13 +1675,13 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Atlas Name',
         selector: (row) => formatAtlasName(row.atlas_name),
-        getSearchValue: (row) => formatAtlasName(row.atlas_name),
+        getSearchValue: (row): string => formatAtlasName(row.atlas_name),
         sortable: true,
     },
     {
         name: 'HTAN Parent ID',
         selector: 'HTAN_PARENT_ID',
-        getSearchValue: (row) => row.HTAN_PARENT_ID,
+        getSearchValue: (row): string => formatValue(row.HTAN_PARENT_ID),
         sortable: true,
     },
     {
@@ -1711,25 +1711,26 @@ const SPECIMEN_COLUMNS: IEnhancedDataTableColumn<TableRow>[] = [
     {
         name: 'Biospecimen Type',
         selector: 'BIOSPECIMEN_TYPE',
-        getSearchValue: (row) => row.BIOSPECIMEN_TYPE,
+        getSearchValue: (row): string => formatValue(row.BIOSPECIMEN_TYPE),
         sortable: true,
     },
     {
         name: 'Acquisition Method Type',
         selector: 'ACQUISITION_METHOD_TYPE',
-        getSearchValue: (row) => row.ACQUISITION_METHOD_TYPE,
+        getSearchValue: (row): string =>
+            formatValue(row.ACQUISITION_METHOD_TYPE),
         sortable: true,
     },
     {
         name: 'Storage Method',
         selector: 'STORAGE_METHOD',
-        getSearchValue: (row) => row.STORAGE_METHOD,
+        getSearchValue: (row): string => formatValue(row.STORAGE_METHOD),
         sortable: true,
     },
     {
         name: 'Preservation Method',
         selector: (row) => row.PRESERVATION_METHOD,
-        getSearchValue: (row) => row.PRESERVATION_METHOD,
+        getSearchValue: (row): string => formatValue(row.PRESERVATION_METHOD),
         sortable: true,
         omit: true,
     },
