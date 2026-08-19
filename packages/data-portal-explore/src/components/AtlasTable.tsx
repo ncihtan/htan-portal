@@ -69,6 +69,47 @@ const MetaDataLink = (props: { id: string; baseUrl: string }) => (
     </a>
 );
 
+const CELL_EXPLORER_BASE_URL = 'https://cell-explorer.cbioportal.org';
+
+// Cell Explorer groups single cell datasets into collections, one per study, so
+// an atlas can map to several. The count in the column is the number of
+// collections, matching how the other viewer columns count what they link to.
+const CELL_EXPLORER_COLLECTIONS: {
+    [atlasName: string]: { slug: string; name: string }[];
+} = {
+    'HTAN CHOP': [
+        { slug: 'htan-chop-phgg', name: 'Pediatric High-Grade Glioma' },
+        { slug: 'htan-chop-nbl', name: 'High-Risk Neuroblastoma' },
+        { slug: 'htan-chop-ball', name: 'Infant KMT2Ar B-ALL' },
+    ],
+    'HTAN MSK': [
+        { slug: 'htan-msk-sclc', name: 'Small Cell Lung Cancer' },
+        { slug: 'htan-msk-treg', name: 'Regulatory T Cells in the TME' },
+        {
+            slug: 'crc-metastasis',
+            name: 'Progressive Plasticity During CRC Metastasis',
+        },
+    ],
+    'HTAN HTAPP': [
+        {
+            slug: 'htan-htapp-brca',
+            name: 'Breast Cancer Metastatic Microenvironment',
+        },
+    ],
+    'HTAN Vanderbilt': [
+        { slug: 'htan-vumc-crc', name: 'Pre-Malignant Colorectal Programs' },
+    ],
+};
+
+// A single collection deep-links to its own page. Several collections have no
+// single page to land on -- Cell Explorer has no per-atlas view -- so the count
+// links to the catalog, whose default tab lists every collection.
+function cellExplorerHref(collections: { slug: string }[]) {
+    return collections.length === 1
+        ? `${CELL_EXPLORER_BASE_URL}/collections/${collections[0].slug}`
+        : CELL_EXPLORER_BASE_URL;
+}
+
 const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalProps> = (
     props
 ) => {
@@ -648,6 +689,60 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         </Tooltip>
                     </>
                 ),
+            },
+            {
+                name: (
+                    <>
+                        <Tooltip
+                            overlay={
+                                <>Cell Explorer: explore single cell data</>
+                            }
+                        >
+                            {/* Glyph-only ("reverse") icon: dark mark on a
+                                transparent background, matching the other
+                                viewer icons on this light table header. */}
+                            <img
+                                width={20}
+                                src={
+                                    'https://raw.githubusercontent.com/cBioPortal/cbioportal-cell-explorer/main/packages/highperformer/public/icon-glyph.svg'
+                                }
+                            />
+                        </Tooltip>
+                    </>
+                ),
+                id: 'Cell Explorer: explore single cell data',
+                selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
+                grow: 0.1,
+                right: true,
+                minWidth: '10',
+                cell: (atlas: AtlasTableData) => {
+                    const collections =
+                        CELL_EXPLORER_COLLECTIONS[atlas.htan_name] || [];
+
+                    if (collections.length === 0) {
+                        return null;
+                    }
+
+                    return (
+                        <Tooltip
+                            overlay={
+                                <>
+                                    Cell Explorer:{' '}
+                                    {collections.map((c) => c.name).join(', ')}
+                                </>
+                            }
+                        >
+                            <span className="ml-auto">
+                                <a
+                                    href={cellExplorerHref(collections)}
+                                    target="_blank"
+                                >
+                                    {collections.length}
+                                </a>
+                            </span>
+                        </Tooltip>
+                    );
+                },
             },
         ];
     }
