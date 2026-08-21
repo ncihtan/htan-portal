@@ -20,8 +20,9 @@ interface IViewDetailsModalProps<CellData> {
         [columnKey: string]: boolean;
     }) => void;
     customContent?: JSX.Element;
-    additionalFields?: { [key: string]: any };
+    additionalColumns?: IEnhancedDataTableColumn<CellData>[];
     disabledAddColumns?: string[];
+    isLoadingAdditionalData?: boolean;
 }
 
 interface IAddColumnIconProps {
@@ -77,7 +78,7 @@ function isEmptyCellValue(value: any): boolean {
     }
 
     if (React.isValidElement(value)) {
-        return isEmptyCellValue((value as any).props?.children);
+        return false;
     }
 
     if (typeof value === 'object') {
@@ -88,16 +89,8 @@ function isEmptyCellValue(value: any): boolean {
 }
 
 const AddColumnIcon: React.FunctionComponent<IAddColumnIconProps> = (props) => {
-    return !props.columnVisibility[props.columnName] ? (
-        <Tooltip
-            overlay={
-                <span>
-                    {props.isDisabled
-                        ? 'Cannot add fetched metadata columns to table'
-                        : 'Add this column to the table'}
-                </span>
-            }
-        >
+    return !props.columnVisibility[props.columnName] && !props.isDisabled ? (
+        <Tooltip overlay={<span>Add this column to the table</span>}>
             <span
                 style={{
                     color: props.isDisabled ? '#ccc' : 'green',
@@ -137,85 +130,62 @@ export const ViewDetailsModal = <CellData extends object>(
             </Modal.Header>
 
             <Modal.Body>
-                <table className="table table-bordered">
-                    <colgroup>
-                        <col style={{ width: '20%' }} />
-                        <col style={{ width: '80%' }} />
-                    </colgroup>
-                    <tbody>
-                        {props.columns.reduce((rows, column) => {
-                            const rawColumnName = column.name as string;
-                            if (EXCLUDED_METADATA_FIELDS.has(rawColumnName)) {
-                                return rows;
-                            }
-                            const cell = renderCell(column, props.cellData!);
-                            if (!isEmptyCellValue(cell)) {
-                                rows.push(
-                                    <tr key={rawColumnName}>
-                                        <td>
-                                            {formatMetadataFieldName(
-                                                rawColumnName,
-                                                METADATA_FIELD_NAME_OVERRIDES
-                                            )}
-                                            {props.columnVisibility &&
-                                                props.onChangeColumnVisibility && (
-                                                    <AddColumnIcon
-                                                        columnVisibility={
-                                                            props.columnVisibility
-                                                        }
-                                                        columnName={
-                                                            rawColumnName
-                                                        }
-                                                        onChangeColumnVisibility={
-                                                            props.onChangeColumnVisibility
-                                                        }
-                                                        isDisabled={props.disabledAddColumns?.includes(
-                                                            rawColumnName
-                                                        )}
-                                                    />
-                                                )}
-                                        </td>
-                                        <td>{cell}</td>
-                                    </tr>
-                                );
-                            }
-                            return rows;
-                        }, [] as any[])}
-                        {props.additionalFields &&
-                            Object.entries(props.additionalFields).map(
-                                ([fieldName, fieldValue]) => {
-                                    if (
-                                        EXCLUDED_METADATA_FIELDS.has(fieldName)
-                                    ) {
-                                        return null;
-                                    }
-                                    if (!isEmptyCellValue(fieldValue)) {
-                                        return (
-                                            <tr key={`additional-${fieldName}`}>
-                                                <td>
-                                                    {formatMetadataFieldName(
-                                                        fieldName,
-                                                        METADATA_FIELD_NAME_OVERRIDES
-                                                    )}
-                                                </td>
-                                                <td>
-                                                    {Array.isArray(fieldValue)
-                                                        ? fieldValue.join(', ')
-                                                        : typeof fieldValue ===
-                                                          'object'
-                                                        ? JSON.stringify(
-                                                              fieldValue
-                                                          )
-                                                        : String(fieldValue)}
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
-                                    return null;
+                {!props.isLoadingAdditionalData && (
+                    <table className="table table-bordered">
+                        <colgroup>
+                            <col style={{ width: '20%' }} />
+                            <col style={{ width: '80%' }} />
+                        </colgroup>
+                        <tbody>
+                            {[
+                                ...props.columns,
+                                ...(props.additionalColumns || []),
+                            ].reduce((rows, column) => {
+                                const rawColumnName = column.name as string;
+                                if (
+                                    EXCLUDED_METADATA_FIELDS.has(rawColumnName)
+                                ) {
+                                    return rows;
                                 }
-                            )}
-                    </tbody>
-                </table>
+                                const cell = renderCell(
+                                    column,
+                                    props.cellData!
+                                );
+                                if (!isEmptyCellValue(cell)) {
+                                    rows.push(
+                                        <tr key={rawColumnName}>
+                                            <td>
+                                                {formatMetadataFieldName(
+                                                    rawColumnName,
+                                                    METADATA_FIELD_NAME_OVERRIDES
+                                                )}
+                                                {props.columnVisibility &&
+                                                    props.onChangeColumnVisibility && (
+                                                        <AddColumnIcon
+                                                            columnVisibility={
+                                                                props.columnVisibility
+                                                            }
+                                                            columnName={
+                                                                rawColumnName
+                                                            }
+                                                            onChangeColumnVisibility={
+                                                                props.onChangeColumnVisibility
+                                                            }
+                                                            isDisabled={props.disabledAddColumns?.includes(
+                                                                rawColumnName
+                                                            )}
+                                                        />
+                                                    )}
+                                            </td>
+                                            <td>{cell}</td>
+                                        </tr>
+                                    );
+                                }
+                                return rows;
+                            }, [] as any[])}
+                        </tbody>
+                    </table>
+                )}
                 {props.customContent}
             </Modal.Body>
 
