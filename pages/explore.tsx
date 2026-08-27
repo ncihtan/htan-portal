@@ -7,10 +7,7 @@ import { ScaleLoader } from 'react-spinners';
 import {
     caseQuery,
     caseQuery2,
-    DEFAULT_CLICKHOUSE_DB,
-    DEFAULT_PHASE2_CLICKHOUSE_DB,
     doQuery,
-    getClientForDatabase,
     getPhase2Client,
 } from '@htan/data-portal-commons';
 import PageWrapper from '../components/PageWrapper';
@@ -23,13 +20,9 @@ const ExploreLanding = () => {
     useEffect(() => {
         const fetchCaseCounts = async () => {
             try {
-                // Fetch Phase 1 case count
-                const phase1Client = getClientForDatabase(
-                    DEFAULT_CLICKHOUSE_DB
-                );
+                // Fetch Phase 1 case count (doQuery uses Phase 1 by default)
                 const phase1Cases = await doQuery<any>(
-                    caseQuery({ filterString: '' }),
-                    phase1Client
+                    caseQuery({ filterString: '' })
                 );
                 setPhase1CaseCount(phase1Cases.length);
 
