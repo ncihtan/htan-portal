@@ -63,7 +63,7 @@ export const HtanNavbar: React.FunctionComponent<{}> = () => {
                 Phase 1 (2018–2024)
             </NavDropdown.Item>
             <NavDropdown.Item href="/explore/phase2">
-                Phase 2 (2024–present)
+                Phase 2 (2024–2029)
             </NavDropdown.Item>
         </NavSection>,
         <Nav.Link href="/tools">Analysis Tools</Nav.Link>,
