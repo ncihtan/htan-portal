@@ -69,6 +69,47 @@ const MetaDataLink = (props: { id: string; baseUrl: string }) => (
     </a>
 );
 
+const CELL_EXPLORER_BASE_URL = 'https://cell-explorer.cbioportal.org';
+
+// Cell Explorer groups single cell datasets into collections, one per study, so
+// an atlas can map to several. The count in the column is the number of
+// collections, matching how the other viewer columns count what they link to.
+const CELL_EXPLORER_COLLECTIONS: {
+    [atlasName: string]: { slug: string; name: string }[];
+} = {
+    'HTAN CHOP': [
+        { slug: 'htan-chop-phgg', name: 'Pediatric High-Grade Glioma' },
+        { slug: 'htan-chop-nbl', name: 'High-Risk Neuroblastoma' },
+        { slug: 'htan-chop-ball', name: 'Infant KMT2Ar B-ALL' },
+    ],
+    'HTAN MSK': [
+        { slug: 'htan-msk-sclc', name: 'Small Cell Lung Cancer' },
+        { slug: 'htan-msk-treg', name: 'Regulatory T Cells in the TME' },
+        {
+            slug: 'crc-metastasis',
+            name: 'Progressive Plasticity During CRC Metastasis',
+        },
+    ],
+    'HTAN HTAPP': [
+        {
+            slug: 'htan-htapp-brca',
+            name: 'Breast Cancer Metastatic Microenvironment',
+        },
+    ],
+    'HTAN Vanderbilt': [
+        { slug: 'htan-vumc-crc', name: 'Pre-Malignant Colorectal Programs' },
+    ],
+};
+
+// A single collection deep-links to its own page. Several collections have no
+// single page to land on -- Cell Explorer has no per-atlas view -- so the count
+// links to the catalog, whose default tab lists every collection.
+function cellExplorerHref(collections: { slug: string }[]) {
+    return collections.length === 1
+        ? `${CELL_EXPLORER_BASE_URL}/collections/${collections[0].slug}`
+        : CELL_EXPLORER_BASE_URL;
+}
+
 const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalProps> = (
     props
 ) => {
@@ -149,7 +190,7 @@ const ViewerCount: React.FunctionComponent<IAtlasViewerCountProps> = (
         { group: 'viewersArr', value: props.fileViewerName },
         { group: 'AtlasName', value: props.atlas.htan_name },
     ]);
-    const defaultHref = `/explore?selectedFilters=${filterString}&tab=file`;
+    const defaultHref = `/explore/phase1?selectedFilters=${filterString}&tab=file`;
     const hrefOverride = props.hrefOverride?.[props.atlas.htan_name];
 
     return (
@@ -624,30 +665,55 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 grow: 0.1,
                 right: true,
                 minWidth: '10',
-                cell: (atlas: AtlasTableData) => (
-                    <>
-                        <Tooltip overlay="cBioPortal: explore multimodal cancer data">
-                            <span className="ml-auto">
-                                {atlas.htan_name === 'HTAN OHSU' && (
-                                    <a
-                                        href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1"
-                                        target="_blank"
-                                    >
+                cell: (atlas: AtlasTableData) => {
+                    const collections =
+                        CELL_EXPLORER_COLLECTIONS[atlas.htan_name] || [];
+
+                    const cbioportalLink =
+                        atlas.htan_name === 'HTAN OHSU'
+                            ? 'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
+                            : atlas.htan_name === 'HTAN Vanderbilt'
+                            ? 'https://www.cbioportal.org/study/summary?id=crc_hta11_htan_2021'
+                            : null;
+
+                    if (cbioportalLink) {
+                        return (
+                            <Tooltip overlay="cBioPortal: explore multimodal cancer data">
+                                <span className="ml-auto">
+                                    <a href={cbioportalLink} target="_blank">
                                         1
                                     </a>
-                                )}
-                                {atlas.htan_name === 'HTAN Vanderbilt' && (
+                                </span>
+                            </Tooltip>
+                        );
+                    }
+
+                    if (collections.length > 0) {
+                        return (
+                            <Tooltip
+                                overlay={
+                                    <>
+                                        Cell Explorer:{' '}
+                                        {collections
+                                            .map((c) => c.name)
+                                            .join(', ')}
+                                    </>
+                                }
+                            >
+                                <span className="ml-auto">
                                     <a
-                                        href="https://www.cbioportal.org/study/summary?id=crc_hta11_htan_2021"
+                                        href={cellExplorerHref(collections)}
                                         target="_blank"
                                     >
-                                        1
+                                        {collections.length}
                                     </a>
-                                )}
-                            </span>
-                        </Tooltip>
-                    </>
-                ),
+                                </span>
+                            </Tooltip>
+                        );
+                    }
+
+                    return null;
+                },
             },
         ];
     }
