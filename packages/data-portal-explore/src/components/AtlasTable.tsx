@@ -676,41 +676,43 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                             ? 'https://www.cbioportal.org/study/summary?id=crc_hta11_htan_2021'
                             : null;
 
-                    if (!cbioportalLink && collections.length === 0) {
-                        return null;
-                    }
-
-                    return (
-                        <span className="ml-auto">
-                            {cbioportalLink && (
-                                <Tooltip overlay="cBioPortal: explore multimodal cancer data">
+                    if (cbioportalLink) {
+                        return (
+                            <Tooltip overlay="cBioPortal: explore multimodal cancer data">
+                                <span className="ml-auto">
                                     <a href={cbioportalLink} target="_blank">
                                         1
                                     </a>
-                                </Tooltip>
-                            )}
-                            {cbioportalLink && collections.length > 0 && ' | '}
-                            {collections.length > 0 && (
-                                <Tooltip
-                                    overlay={
-                                        <>
-                                            Cell Explorer:{' '}
-                                            {collections
-                                                .map((c) => c.name)
-                                                .join(', ')}
-                                        </>
-                                    }
-                                >
+                                </span>
+                            </Tooltip>
+                        );
+                    }
+
+                    if (collections.length > 0) {
+                        return (
+                            <Tooltip
+                                overlay={
+                                    <>
+                                        Cell Explorer:{' '}
+                                        {collections
+                                            .map((c) => c.name)
+                                            .join(', ')}
+                                    </>
+                                }
+                            >
+                                <span className="ml-auto">
                                     <a
                                         href={cellExplorerHref(collections)}
                                         target="_blank"
                                     >
                                         {collections.length}
                                     </a>
-                                </Tooltip>
-                            )}
-                        </span>
-                    );
+                                </span>
+                            </Tooltip>
+                        );
+                    }
+
+                    return null;
                 },
             },
         ];
