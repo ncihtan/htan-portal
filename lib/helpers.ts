@@ -57,7 +57,7 @@ function addQueryStringToURL(
 }
 
 export function getExplorePageURL(tab: ExploreTab, filters: SelectedFilter[]) {
-    let url = '/explore';
+    let url = '/explore/phase1';
     if (filters.length > 0) {
         const query: ExploreURLQuery = {
             selectedFilters: urlEncodeSelectedFilters(filters),

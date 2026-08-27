@@ -190,7 +190,7 @@ const ViewerCount: React.FunctionComponent<IAtlasViewerCountProps> = (
         { group: 'viewersArr', value: props.fileViewerName },
         { group: 'AtlasName', value: props.atlas.htan_name },
     ]);
-    const defaultHref = `/explore?selectedFilters=${filterString}&tab=file`;
+    const defaultHref = `/explore/phase1?selectedFilters=${filterString}&tab=file`;
     const hrefOverride = props.hrefOverride?.[props.atlas.htan_name];
 
     return (
