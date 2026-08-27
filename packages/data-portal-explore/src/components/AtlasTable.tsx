@@ -665,82 +665,51 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 grow: 0.1,
                 right: true,
                 minWidth: '10',
-                cell: (atlas: AtlasTableData) => (
-                    <>
-                        <Tooltip overlay="cBioPortal: explore multimodal cancer data">
-                            <span className="ml-auto">
-                                {atlas.htan_name === 'HTAN OHSU' && (
-                                    <a
-                                        href="https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1"
-                                        target="_blank"
-                                    >
-                                        1
-                                    </a>
-                                )}
-                                {atlas.htan_name === 'HTAN Vanderbilt' && (
-                                    <a
-                                        href="https://www.cbioportal.org/study/summary?id=crc_hta11_htan_2021"
-                                        target="_blank"
-                                    >
-                                        1
-                                    </a>
-                                )}
-                            </span>
-                        </Tooltip>
-                    </>
-                ),
-            },
-            {
-                name: (
-                    <>
-                        <Tooltip
-                            overlay={
-                                <>Cell Explorer: explore single cell data</>
-                            }
-                        >
-                            {/* Glyph-only ("reverse") icon: dark mark on a
-                                transparent background, matching the other
-                                viewer icons on this light table header. */}
-                            <img
-                                width={20}
-                                src={
-                                    'https://raw.githubusercontent.com/cBioPortal/cbioportal-cell-explorer/main/packages/highperformer/public/icon-glyph.svg'
-                                }
-                            />
-                        </Tooltip>
-                    </>
-                ),
-                id: 'Cell Explorer: explore single cell data',
-                selector: 'htan_id', // dummy selector - you need to put something or else nothing will render
-                grow: 0.1,
-                right: true,
-                minWidth: '10',
                 cell: (atlas: AtlasTableData) => {
                     const collections =
                         CELL_EXPLORER_COLLECTIONS[atlas.htan_name] || [];
 
-                    if (collections.length === 0) {
+                    const cbioportalLink =
+                        atlas.htan_name === 'HTAN OHSU'
+                            ? 'https://www.cbioportal.org/patient?studyId=brca_hta9_htan_2022&caseId=HTA9_1'
+                            : atlas.htan_name === 'HTAN Vanderbilt'
+                            ? 'https://www.cbioportal.org/study/summary?id=crc_hta11_htan_2021'
+                            : null;
+
+                    if (!cbioportalLink && collections.length === 0) {
                         return null;
                     }
 
                     return (
-                        <Tooltip
-                            overlay={
-                                <>
-                                    Cell Explorer:{' '}
-                                    {collections.map((c) => c.name).join(', ')}
-                                </>
-                            }
-                        >
-                            <span className="ml-auto">
-                                <a
-                                    href={cellExplorerHref(collections)}
-                                    target="_blank"
+                        <span className="ml-auto">
+                            {cbioportalLink && (
+                                <Tooltip overlay="cBioPortal: explore multimodal cancer data">
+                                    <a href={cbioportalLink} target="_blank">
+                                        1
+                                    </a>
+                                </Tooltip>
+                            )}
+                            {cbioportalLink && collections.length > 0 && ' | '}
+                            {collections.length > 0 && (
+                                <Tooltip
+                                    overlay={
+                                        <>
+                                            Cell Explorer:{' '}
+                                            {collections
+                                                .map((c) => c.name)
+                                                .join(', ')}
+                                        </>
+                                    }
                                 >
-                                    {collections.length}
-                                </a>
-                            </span>
-                        </Tooltip>
+                                    <a
+                                        href={cellExplorerHref(collections)}
+                                        target="_blank"
+                                    >
+                                        {collections.length}
+                                    </a>
+                                </Tooltip>
+                            )}
+                        </span>
                     );
                 },
             },
