@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createDbIfNotExist, createTable } from './client.js';
+import { createDbIfNotExist, createTable, insertRows } from './client.js';
 import {
     normalizeTissueOrOrganOrSite,
 } from '@htan/data-portal-commons';
@@ -235,7 +235,8 @@ async function importTable(dataDir, tableName) {
     console.log(
         `Importing ${tableName}: ${normalizedRows.length} row(s), ${fields.length} column(s)`
     );
-    await createTable(tableName, normalizedRows, fields, []);
+    await createTable(tableName, normalizedRows, fields, null);
+    await insertRows(tableName, normalizedRows);
 }
 
 async function main() {
