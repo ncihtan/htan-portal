@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createDbIfNotExist, createTable, insertRows } from './client.js';
 import {
+    DEFAULT_CLICKHOUSE_DB,
     normalizeTissueOrOrganOrSite,
 } from '@htan/data-portal-commons';
 
@@ -239,7 +240,31 @@ async function importTable(dataDir, tableName) {
     await insertRows(tableName, normalizedRows);
 }
 
+function assertTargetIsNotPhase1Db() {
+    const targetDb = process.env.CLICKHOUSE_DB;
+
+    if (!targetDb) {
+        throw new Error(
+            'CLICKHOUSE_DB is not set. Refusing to run phase2_import.js: ' +
+                'without it, client.js silently falls back to the phase 1 ' +
+                `database ("${DEFAULT_CLICKHOUSE_DB}") and this script would ` +
+                'overwrite the phase 1 tables (they share the same names). ' +
+                'Set CLICKHOUSE_DB to the phase 2 (or a test) database before running.'
+        );
+    }
+
+    if (targetDb === DEFAULT_CLICKHOUSE_DB) {
+        throw new Error(
+            `CLICKHOUSE_DB is set to "${targetDb}", which is the phase 1 ` +
+                'database. Refusing to run phase2_import.js against it, as ' +
+                'it would overwrite the phase 1 tables (they share the same names).'
+        );
+    }
+}
+
 async function main() {
+    assertTargetIsNotPhase1Db();
+
     const dataDir = path.resolve(__dirname, '../data/tmp/phase2');
 
     await createDbIfNotExist();
