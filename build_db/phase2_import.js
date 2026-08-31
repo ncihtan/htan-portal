@@ -22,16 +22,6 @@ const TABLES = [
     'specimen',
 ];
 
-// TEMPORARY FIX: Exclude Phase 2 records containing these organ names.
-const PHASE2_EXCLUDED_ORGANS = ['Corpus Cardiacum', 'Pars Intercerebralis'].map(
-    (organ) => organ.toLowerCase()
-);
-
-function rowContainsExcludedOrgan(row) {
-    const serialized = JSON.stringify(row).toLowerCase();
-    return PHASE2_EXCLUDED_ORGANS.some((organ) => serialized.includes(organ));
-}
-
 function normalizeScalarValue(value) {
     if (value == null) return '';
     if (typeof value === 'string') return value;
@@ -234,24 +224,16 @@ async function importTable(dataDir, tableName) {
 
     const expandedRows =
         tableName === 'files' ? rows.map(expandFilesRow) : rows;
-    const filteredRows = expandedRows.filter(
-        (row) => !rowContainsExcludedOrgan(row)
-    );
     const postProcessedRows = ['cases', 'diagnosis', 'files'].includes(
         tableName
     )
-        ? filteredRows.map(postProcessOrganFields)
-        : filteredRows;
+        ? expandedRows.map(postProcessOrganFields)
+        : expandedRows;
     const normalizedRows = postProcessedRows.map(normalizeRow);
     const fields = collectFields(normalizedRows);
-    const skippedRows = expandedRows.length - filteredRows.length;
 
     console.log(
-        `Importing ${tableName}: ${normalizedRows.length} row(s), ${fields.length} column(s)${
-            skippedRows > 0
-                ? ` (${skippedRows} filtered by temporary organ exclusion)`
-                : ''
-        }`
+        `Importing ${tableName}: ${normalizedRows.length} row(s), ${fields.length} column(s)`
     );
     await createTable(tableName, normalizedRows, fields, []);
 }
