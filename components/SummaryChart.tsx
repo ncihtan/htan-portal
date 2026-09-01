@@ -132,7 +132,7 @@ function generateBaseExploreUrl(
 
     const urlParams = urlEncodeSelectedFilters(filters);
 
-    return `/explore?selectedFilters=${urlParams}`;
+    return `/explore/phase1?selectedFilters=${urlParams}`;
 }
 
 const TooltipContent: React.FunctionComponent<TooltipDatum> = (props) => {
@@ -229,7 +229,10 @@ export default class SummaryChart extends React.Component<SummaryChartProps> {
 
     get leftPadding() {
         if (this.categoryLabels.length > 0) {
-            const longestLabel = _.maxBy(this.categoryLabels, (l) => l?.length ?? 0);
+            const longestLabel = _.maxBy(
+                this.categoryLabels,
+                (l) => l?.length ?? 0
+            );
             return (longestLabel?.length ?? 0) * 8;
         } else {
             return 100;
