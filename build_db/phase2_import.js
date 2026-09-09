@@ -2,8 +2,9 @@ import _ from 'lodash';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createDbIfNotExist, createTable } from './client.js';
+import { createDbIfNotExist, createTable, insertRows } from './client.js';
 import {
+    DEFAULT_CLICKHOUSE_DB,
     normalizeTissueOrOrganOrSite,
 } from '@htan/data-portal-commons';
 
@@ -21,16 +22,6 @@ const TABLES = [
     'files',
     'specimen',
 ];
-
-// TEMPORARY FIX: Exclude Phase 2 records containing these organ names.
-const PHASE2_EXCLUDED_ORGANS = ['Corpus Cardiacum', 'Pars Intercerebralis'].map(
-    (organ) => organ.toLowerCase()
-);
-
-function rowContainsExcludedOrgan(row) {
-    const serialized = JSON.stringify(row).toLowerCase();
-    return PHASE2_EXCLUDED_ORGANS.some((organ) => serialized.includes(organ));
-}
 
 function normalizeScalarValue(value) {
     if (value == null) return '';
@@ -234,29 +225,46 @@ async function importTable(dataDir, tableName) {
 
     const expandedRows =
         tableName === 'files' ? rows.map(expandFilesRow) : rows;
-    const filteredRows = expandedRows.filter(
-        (row) => !rowContainsExcludedOrgan(row)
-    );
     const postProcessedRows = ['cases', 'diagnosis', 'files'].includes(
         tableName
     )
-        ? filteredRows.map(postProcessOrganFields)
-        : filteredRows;
+        ? expandedRows.map(postProcessOrganFields)
+        : expandedRows;
     const normalizedRows = postProcessedRows.map(normalizeRow);
     const fields = collectFields(normalizedRows);
-    const skippedRows = expandedRows.length - filteredRows.length;
 
     console.log(
-        `Importing ${tableName}: ${normalizedRows.length} row(s), ${fields.length} column(s)${
-            skippedRows > 0
-                ? ` (${skippedRows} filtered by temporary organ exclusion)`
-                : ''
-        }`
+        `Importing ${tableName}: ${normalizedRows.length} row(s), ${fields.length} column(s)`
     );
-    await createTable(tableName, normalizedRows, fields, []);
+    await createTable(tableName, normalizedRows, fields, null);
+    await insertRows(tableName, normalizedRows);
+}
+
+function assertTargetIsNotPhase1Db() {
+    const targetDb = process.env.CLICKHOUSE_DB;
+
+    if (!targetDb) {
+        throw new Error(
+            'CLICKHOUSE_DB is not set. Refusing to run phase2_import.js: ' +
+                'without it, client.js silently falls back to the phase 1 ' +
+                `database ("${DEFAULT_CLICKHOUSE_DB}") and this script would ` +
+                'overwrite the phase 1 tables (they share the same names). ' +
+                'Set CLICKHOUSE_DB to the phase 2 (or a test) database before running.'
+        );
+    }
+
+    if (targetDb === DEFAULT_CLICKHOUSE_DB) {
+        throw new Error(
+            `CLICKHOUSE_DB is set to "${targetDb}", which is the phase 1 ` +
+                'database. Refusing to run phase2_import.js against it, as ' +
+                'it would overwrite the phase 1 tables (they share the same names).'
+        );
+    }
 }
 
 async function main() {
+    assertTargetIsNotPhase1Db();
+
     const dataDir = path.resolve(__dirname, '../data/tmp/phase2');
 
     await createDbIfNotExist();
