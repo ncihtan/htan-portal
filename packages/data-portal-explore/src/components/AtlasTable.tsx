@@ -64,8 +64,12 @@ type ViewerCountByAtlas = {
 };
 
 const MetaDataLink = (props: { id: string; baseUrl: string }) => (
-    <a href={`${props.baseUrl}/metadata/${props.id}.csv`} download>
-        {props.id}
+    <a
+        href={`${props.baseUrl}/metadata/${props.id}.csv`}
+        download
+        aria-label={`Download metadata for ${props.id}`}
+    >
+        <FontAwesomeIcon icon={faDownload} />
     </a>
 );
 
@@ -128,7 +132,7 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                         <table className={'table table-striped'}>
                             <thead>
                                 <tr>
-                                    <th>Synapse ID</th>
+                                    <th>Download</th>
                                     <th>Category</th>
                                     <th>Num Items</th>
                                 </tr>
