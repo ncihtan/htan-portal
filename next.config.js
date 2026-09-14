@@ -39,6 +39,12 @@ module.exports = withMDX({
                     '/publications/hta3_2026_genome-medicine_lingyi-xu',
                 permanent: false,
             },
+            {
+                source: '/publications/hta1_2024_biorxiv_anand-g-patel',
+                destination:
+                    '/publications/hta1_2026_cancer-cell_anand-g-patel',
+                permanent: false,
+            },
             // phase 1 centers
             ...[...Array(12).keys()].map((i) => ({
                 source: `/hta${i + 1}`,
