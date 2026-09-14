@@ -132,9 +132,9 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                         <table className={'table table-striped'}>
                             <thead>
                                 <tr>
-                                    <th>Download</th>
+                                    <th className="text-center">Download</th>
                                     <th>Category</th>
-                                    <th>Num Items</th>
+                                    <th className="text-right">Num Items</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -144,7 +144,7 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                     .map((info) => ({
                                         row: (
                                             <tr>
-                                                <td>
+                                                <td className="text-center">
                                                     <MetaDataLink
                                                         id={info.synapseId}
                                                         baseUrl={
@@ -153,7 +153,9 @@ const AtlasMetadataLinkModal: React.FunctionComponent<IAtlasMetadataLinkModalPro
                                                     />
                                                 </td>
                                                 <td>{info.component}</td>
-                                                <td>{info.numItems}</td>
+                                                <td className="text-right">
+                                                    {info.numItems}
+                                                </td>
                                             </tr>
                                         ),
                                         component: info.component,
