@@ -420,7 +420,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
             },
             {
                 name: 'Cases',
-                selector: 'num_cases',
+                selector: (atlas: Atlas) => Number(atlas.num_cases),
                 grow: 0.01,
                 cell: (atlas: Atlas) => (
                     <span className="ml-auto">
@@ -437,7 +437,7 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
             },
             {
                 name: 'Biospecimens',
-                selector: 'num_biospecimens',
+                selector: (atlas: Atlas) => Number(atlas.num_biospecimens),
                 grow: 0.7,
                 right: true,
                 cell: (atlas: Atlas) => (
@@ -450,15 +450,14 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                         {atlas.num_biospecimens}
                     </span>
                 ),
-                style: {
-                    verticalAlgin: 'top',
-                },
                 sortable: true,
             },
             {
                 name: 'Assays',
                 grow: 0.5,
-                selector: 'num_assays', // dummy selector, there is no num_assays field
+                right: true,
+                selector: (atlas: Atlas) =>
+                    (assaysByAtlas[atlas.htan_id] || []).length,
                 cell: (atlas: Atlas) => (
                     <span className="ml-auto">
                         {filteredCount(
@@ -476,7 +475,8 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                 name: 'Files',
                 right: true,
                 grow: 0.6,
-                selector: 'num_files', // dummy selector, there is no num_files field
+                selector: (atlas: Atlas) =>
+                    (filesByAtlas[atlas.htan_id] || []).length,
                 cell: (atlas: Atlas) => (
                     <span className="ml-auto">
                         {filteredCount(
