@@ -289,6 +289,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                     >
                         <PublicationTable
                             publications={props.filteredPublications}
+                            atlases={props.allSynapseAtlases}
                             participants={props.cases.result!}
                             filteredParticipants={props.casesFiltered.result!}
                             biospecimens={props.samples.result!}

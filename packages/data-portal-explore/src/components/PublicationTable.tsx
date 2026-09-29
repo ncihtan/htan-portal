@@ -4,6 +4,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     AtlasDescription,
+    Atlas,
     Entity,
     getAtlasDescription,
     getPublicationAuthors,
@@ -23,6 +24,7 @@ import {
 
 interface IPublicationTableProps {
     publications: PublicationManifest[];
+    atlases: Atlas[];
     participants: Entity[];
     filteredParticipants: Entity[];
     biospecimens: Entity[];
@@ -89,6 +91,13 @@ const Count: React.FunctionComponent<{
 export const PublicationTable: React.FunctionComponent<IPublicationTableProps> = (
     props
 ) => {
+    const atlasNameById = _.fromPairs(
+        props.atlases.map((atlas) => [
+            atlas.htan_id?.toLowerCase(),
+            atlas.htan_name?.replace('HTAN ', '')?.replace(' - ', ' '),
+        ])
+    );
+
     const getDate = (manifest: PublicationManifest) => {
         const date = getPublicationDate(manifest);
 
@@ -136,15 +145,23 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
         {
             name: 'Atlas',
             selector: (manifest: PublicationManifest) =>
-                getAtlasDescription(manifest.AtlasMeta),
+                getAtlasDescription(
+                    manifest.AtlasMeta,
+                    atlasNameById[manifest.AtlasMeta.htan_id?.toLowerCase()]
+                ),
             cell: (manifest: PublicationManifest) => {
                 return (
                     <AtlasDescription
                         atlasMeta={manifest.AtlasMeta}
-                        atlasName={manifest.AtlasMeta.lead_institutions}
+                        atlasName={
+                            atlasNameById[
+                                manifest.AtlasMeta.htan_id?.toLowerCase()
+                            ]
+                        }
                     />
                 );
             },
+            grow: 0.5,
             wrap: true,
             sortable: true,
         },
