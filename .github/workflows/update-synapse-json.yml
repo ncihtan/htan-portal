@@ -79,6 +79,11 @@ jobs:
         if: steps.changed-files.outputs.syn_data_changed == 'true'
         run: sudo ln -sf /usr/bin/sed /usr/local/bin/gsed
 
+      - name: Update publication redirects for changed publication ids
+        run: |
+          git show ${{ github.event.pull_request.base.sha }}:data/publications_manifest_all.json > /tmp/base_publications_manifest.json
+          node scripts/updatePublicationRedirects.js /tmp/base_publications_manifest.json
+
       - name: Run update script
         run: |
           if [ "${{ steps.changed-files.outputs.syn_data_changed }}" = "true" ]; then
@@ -203,6 +208,11 @@ jobs:
       - name: Create gsed symlink (ubuntu-latest ships GNU sed as sed, not gsed)
         if: needs.analyze-synapse-json.outputs.syn_data_changed == 'true'
         run: sudo ln -sf /usr/bin/sed /usr/local/bin/gsed
+
+      - name: Update publication redirects for changed publication ids
+        run: |
+          git show ${{ github.event.pull_request.base.sha }}:data/publications_manifest_all.json > /tmp/base_publications_manifest.json
+          node scripts/updatePublicationRedirects.js /tmp/base_publications_manifest.json
 
       - name: Run update script
         run: |

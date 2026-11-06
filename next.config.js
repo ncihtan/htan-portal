@@ -45,12 +45,6 @@ module.exports = withMDX({
                     '/publications/hta1_2026_cancer-cell_anand-g-patel',
                 permanent: false,
             },
-            {
-                source: '/publications/hta1_2024_biorxiv_william-zhao',
-                destination:
-                    '/publications/hta1_2025_nature-cancer_william-zhao',
-                permanent: false,
-            },
             // phase 1 centers
             ...[...Array(12).keys()].map((i) => ({
                 source: `/hta${i + 1}`,
