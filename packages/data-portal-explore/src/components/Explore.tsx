@@ -271,6 +271,21 @@ export class Explore extends React.Component<IExploreProps> {
         },
     });
 
+    filesFilteredByNonAtlasFilters = new remoteData<Entity[]>({
+        await: () => [this.files, this.unfilteredOptions],
+        invoke: async () => {
+            const filterString = this.getFilterStringForAttribute(
+                AttributeNames.AtlasName
+            );
+            if (filterString.length === 0) {
+                return this.files.result || [];
+            } else {
+                const data = await doQuery<Entity>(fileQuery + filterString);
+                return postProcessFiles(data);
+            }
+        },
+    });
+
     cases = new remoteData<Entity[]>({
         invoke: async () => {
             const q = caseQuery({ filterString: '' });
@@ -521,6 +536,7 @@ export class Explore extends React.Component<IExploreProps> {
             this.atlasesFiltered,
             this.atlasesFilteredByNonAtlasFilters,
             this.filesFiltered,
+            this.filesFilteredByNonAtlasFilters,
             this.files,
         ]);
 
@@ -581,6 +597,9 @@ export class Explore extends React.Component<IExploreProps> {
                         filterString={this.filterString}
                         activeTab={this.currentTab}
                         filteredFiles={this.filesFiltered.result || []}
+                        filteredFilesByNonAtlasFilters={
+                            this.filesFilteredByNonAtlasFilters.result || []
+                        }
                         filteredSynapseAtlases={
                             this.atlasesFiltered.result || []
                         }
