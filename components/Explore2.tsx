@@ -11,6 +11,7 @@ import {
     defaultCountsByTypeQueryFilterString,
     doQuery,
     fileQuery2,
+    getCaseFilterString2,
     getFilterString2,
     getPhase2Client,
     specimenQuery2,
@@ -2196,6 +2197,11 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
 
                 const nonAtlasFilterString = fs(Phase2AttributeNames.AtlasName);
 
+                // Case-level filters (e.g. SEX) applied directly to the cases
+                // table, so cases linked to a matching multi-participant file
+                // don't show up unless their own values match too.
+                const caseFilterString = getCaseFilterString2(selectedFilters);
+
                 // Fetch per-filter dropdown counts (each attribute excludes
                 // its own group so all its options stay visible)
                 const filterCountsQuery =
@@ -2250,7 +2256,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     filterCountsQuery,
                     doQuery<TableRow>(fileQuery2 + filterString, phase2Client),
                     doQuery<TableRow>(
-                        caseQuery2({ filterString }),
+                        caseQuery2({ filterString, caseFilterString }),
                         phase2Client
                     ),
                     doQuery<TableRow>(
@@ -2262,7 +2268,10 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                         phase2Client
                     ),
                     doQuery<TableRow>(
-                        caseQuery2({ filterString: nonAtlasFilterString }),
+                        caseQuery2({
+                            filterString: nonAtlasFilterString,
+                            caseFilterString,
+                        }),
                         phase2Client
                     ),
                     doQuery<TableRow>(

@@ -216,7 +216,7 @@ export const atlasQuery = _.template(`
         )
 `);
 
-export const caseQuery = _.template(`
+const caseQueryTemplate = _.template(`
     SELECT * FROM cases
     WHERE ParticipantID IN (
         SELECT demographicsIds FROM files 
@@ -227,7 +227,22 @@ export const caseQuery = _.template(`
         ARRAY JOIN diagnosisIds
         <%=filterString%>
     )
+    <%=caseFilterString%>
 `);
+
+/**
+ * @param filterString file-level WHERE clause (see getFilterString)
+ * @param caseFilterString optional case-level clause applied directly to the
+ *        cases table (see getCaseFilterString). Without it, cases linked to a
+ *        matching multi-participant file are returned even if their own
+ *        attributes don't match the selected filters.
+ */
+export function caseQuery(params: {
+    filterString: string;
+    caseFilterString?: string;
+}) {
+    return caseQueryTemplate({ caseFilterString: '', ...params });
+}
 
 export const specimenQuery = _.template(`
     SELECT * FROM specimen
@@ -273,7 +288,7 @@ export const fileQuery2 = `
     FROM files
 `;
 
-export const caseQuery2 = _.template(`
+const caseQuery2Template = _.template(`
     SELECT * FROM cases c
     WHERE c.HTAN_PARTICIPANT_ID IN (
         SELECT demographicsIds FROM files
@@ -284,7 +299,18 @@ export const caseQuery2 = _.template(`
         ARRAY JOIN diagnosisIds
         <%=filterString%>
     )
+    <%=caseFilterString%>
 `);
+
+/**
+ * Phase 2 version of caseQuery (see getCaseFilterString2).
+ */
+export function caseQuery2(params: {
+    filterString: string;
+    caseFilterString?: string;
+}) {
+    return caseQuery2Template({ caseFilterString: '', ...params });
+}
 
 export const specimenQuery2 = _.template(`
     SELECT * FROM specimen s
@@ -393,6 +419,73 @@ export function getFilterString(
     } else {
         return '';
     }
+}
+
+/**
+ * Filter groups that describe a case (participant) rather than a file, mapped
+ * to the corresponding column in the cases table.
+ */
+export const CASE_FILTER_COLUMNS: { [group: string]: string } = {
+    Gender: 'Gender',
+    Race: 'Race',
+    Ethnicity: 'Ethnicity',
+    PrimaryDiagnosis: 'PrimaryDiagnosis',
+    TissueorOrganofOrigin: 'TissueorOrganofOrigin',
+    TreatmentType: 'TreatmentType',
+    organType: 'organType',
+};
+
+export const CASE_FILTER_COLUMNS_PHASE2: { [group: string]: string } = {
+    Gender: 'SEX',
+    SEX: 'SEX',
+    Race: 'RACE',
+    RACE: 'RACE',
+    Ethnicity: 'ETHNIC_GROUP',
+    ETHNIC_GROUP: 'ETHNIC_GROUP',
+    PrimaryDiagnosis: 'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
+    PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME:
+        'PRIMARY_DIAGNOSIS_NCI_THESAURUS_NAME',
+    TissueorOrganofOrigin: 'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
+    TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME:
+        'TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_NAME',
+    TreatmentType: 'TREATMENT_TYPE',
+    TREATMENT_TYPE: 'TREATMENT_TYPE',
+    organType: 'organType',
+};
+
+function escapeSqlString(value: string) {
+    return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+/**
+ * Builds the case-level clause for caseQuery / caseQuery2, so that only cases
+ * whose own attribute values match the selected case filters are returned.
+ *
+ * The column types of the cases table are inferred at import time, so a
+ * column can be either String or Array(String). `flatten([col])` turns both
+ * into Array(String), which lets us use the same hasAny() check for either.
+ */
+export function getCaseFilterString(
+    selectedFilters: SelectedFilter[],
+    caseFilterColumns: { [group: string]: string } = CASE_FILTER_COLUMNS
+) {
+    const clauses = _(selectedFilters)
+        .filter((f) => f.group in caseFilterColumns)
+        .groupBy((f) => caseFilterColumns[f.group])
+        .map((filters, column) => {
+            const values = _(filters)
+                .map((f) => `'${escapeSqlString(f.value)}'`)
+                .uniq()
+                .join(',');
+            return `hasAny(flatten([${column}]),[${values}])`;
+        })
+        .value();
+
+    return clauses.length > 0 ? ' AND ' + clauses.join(' AND ') : '';
+}
+
+export function getCaseFilterString2(selectedFilters: SelectedFilter[]) {
+    return getCaseFilterString(selectedFilters, CASE_FILTER_COLUMNS_PHASE2);
 }
 
 export function getFilterString2(
