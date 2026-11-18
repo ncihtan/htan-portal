@@ -23,6 +23,7 @@ import {
 } from '@htan/data-portal-table';
 
 interface IPublicationTableProps {
+    columnVisibilityStorageKey?: string;
     publications: PublicationManifest[];
     atlases: Atlas[];
     participants: Entity[];
@@ -379,6 +380,7 @@ export const PublicationTable: React.FunctionComponent<IPublicationTableProps> =
             striped={true}
             dense={false}
             noHeader={true}
+            columnVisibilityStorageKey={props.columnVisibilityStorageKey}
             pagination={true}
             paginationPerPage={50}
             paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}

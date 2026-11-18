@@ -216,6 +216,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <FileTable
+                            columnVisibilityStorageKey={'explore-file'}
                             entities={props.filteredFiles}
                             groupsByPropertyFiltered={
                                 props.groupsByPropertyFiltered
@@ -245,6 +246,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             Show all biospecimens from filtered files
                         </label>*/}
                         <BiospecimenTable
+                            columnVisibilityStorageKey={'explore-biospecimen'}
                             synapseAtlases={props.atlases.result || []}
                             samples={props.samplesFiltered.result || []}
                             publicationsByUid={_.keyBy(
@@ -270,6 +272,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                             Show all cases from filtered files
                         </label>*/}
                         <CaseTable
+                            columnVisibilityStorageKey={'explore-case'}
                             synapseAtlases={props.filteredSynapseAtlases}
                             cases={props.casesFiltered.result || []}
                             publicationsByUid={_.keyBy(
@@ -289,6 +292,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <PublicationTable
+                            columnVisibilityStorageKey={'explore-publication'}
                             publications={props.filteredPublications}
                             atlases={props.allSynapseAtlases}
                             participants={props.cases.result!}
@@ -308,6 +312,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                         }`}
                     >
                         <AtlasTable
+                            columnVisibilityStorageKey={'explore-atlas'}
                             setTab={props.setTab}
                             publications={props.publications}
                             getAtlasMetaData={props.getAtlasMetaData}

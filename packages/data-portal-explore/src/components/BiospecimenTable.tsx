@@ -16,6 +16,7 @@ import {
 } from '../lib/dataTableHelpers';
 
 interface IBiospecimenTableProps {
+    columnVisibilityStorageKey?: string;
     samples: Entity[];
     synapseAtlases: Atlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
@@ -158,6 +159,7 @@ export const BiospecimenTable: React.FunctionComponent<IBiospecimenTableProps> =
             striped={true}
             dense={false}
             noHeader={true}
+            columnVisibilityStorageKey={props.columnVisibilityStorageKey}
             pagination={true}
             paginationPerPage={50}
             paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}
