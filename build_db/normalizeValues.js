@@ -73,10 +73,14 @@ export function normalizeValueCasing(records) {
 
     records.forEach((record) => {
         _.forEach(record, (value, field) => {
+            if (!_.isString(value)) {
+                return;
+            }
             const canonical =
-                _.isString(value) &&
                 canonicalValueMap[field]?.[value.trim().toLowerCase()];
-            if (canonical) {
+            // check the type rather than truthiness: the canonical value can
+            // legitimately be '' (e.g. when grouping '' with ' ')
+            if (_.isString(canonical)) {
                 record[field] = canonical;
             }
         });
