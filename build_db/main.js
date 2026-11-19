@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {createDbIfNotExist, createTable, insertRows} from "./client.js";
+import {normalizeValueCasing} from "./normalizeValues.js";
 import {
     normalizeTissueOrOrganOrSite,
     normalizeTreatment
@@ -129,6 +130,18 @@ async function main(){
         data: processedSynJson
     };
     // console.log("keys", Object.keys(d.data));
+
+    // Combine values that differ only by case (e.g. "Female" / "female").
+    // This must happen before any table is generated, since cases, demographics,
+    // diagnosis and files tables all derive their values from these records.
+    ["demographicsByParticipantID", "diagnosisByParticipantID"].forEach((key) => {
+        const canonicalValueMap = normalizeValueCasing(Object.values(d.data[key]));
+        _.forEach(canonicalValueMap, (byKey, field) => {
+            if (!_.isEmpty(byKey)) {
+                console.log(`[normalized] ${key}.${field}: ${_.values(byKey).join(", ")}`);
+            }
+        });
+    });
 
     const cases = generateCaseData(d.data.demographicsByParticipantID, d.data.diagnosisByParticipantID);
     const caseMap = _.keyBy(cases, (c) => c.ParticipantID);
