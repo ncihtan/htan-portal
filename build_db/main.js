@@ -55,24 +55,42 @@ function formatRow(file, data, fields, postProcess) {
 
 function generateCaseData(
     demographicsByParticipantID,
-    diagnosisByParticipantID
+    diagnosisByParticipantID,
+    therapyByParticipantID
 ) {
-    const cases = _.map(demographicsByParticipantID, (demo) => {
-        const dia = diagnosisByParticipantID[demo.ParticipantID];
-        if (dia) {
-            return {
-                ...dia,
-                ...demo
-            };
+    const participantIds = _.uniq([
+        ..._.keys(demographicsByParticipantID),
+        ..._.keys(diagnosisByParticipantID),
+        ..._.keys(therapyByParticipantID),
+    ]);
+
+    return participantIds.map((participantID) => {
+        const demo = demographicsByParticipantID[participantID];
+        const dia = diagnosisByParticipantID[participantID];
+        const therapy = therapyByParticipantID[participantID];
+
+        // demographics and diagnosis take precedence over therapy for shared
+        // metadata fields (Component, synapseId, etc.)
+        const merged = {
+            ...therapy,
+            ...dia,
+            ...demo,
+        };
+
+        // TreatmentType is mostly recorded in Therapy (sometimes in Diagnosis),
+        // and the file level TreatmentType is derived from Therapy, so combine
+        // both sources to keep case level filtering consistent with files.
+        const treatmentType = _([dia?.TreatmentType, therapy?.TreatmentType])
+            .flatten()
+            .compact()
+            .uniq()
+            .value();
+        if (treatmentType.length > 0) {
+            merged.TreatmentType = treatmentType;
         }
-        else {
-            return demo;
-        }
+
+        return merged;
     });
-
-    const participantsWithoutDemographics = _.difference(_.keys(diagnosisByParticipantID), _.keys(demographicsByParticipantID));
-
-    return cases.concat(participantsWithoutDemographics.map((participantID) => diagnosisByParticipantID[participantID]));
 }
 
 function findFields(data) {
@@ -130,7 +148,11 @@ async function main(){
     };
     // console.log("keys", Object.keys(d.data));
 
-    const cases = generateCaseData(d.data.demographicsByParticipantID, d.data.diagnosisByParticipantID);
+    const cases = generateCaseData(
+        d.data.demographicsByParticipantID,
+        d.data.diagnosisByParticipantID,
+        d.data.therapyByParticipantID
+    );
     const caseMap = _.keyBy(cases, (c) => c.ParticipantID);
     const samples = Object.values(d.data.biospecimenByBiospecimenID);
     const sampleMap = d.data.biospecimenByBiospecimenID;
@@ -223,6 +245,7 @@ async function main(){
             fields: _.uniq([
                 ...findFields(Object.values(d.data.demographicsByParticipantID)),
                 ...findFields(Object.values(d.data.diagnosisByParticipantID)),
+                ...findFields(Object.values(d.data.therapyByParticipantID)),
                 "organType",
             ]),
             data: cases,
