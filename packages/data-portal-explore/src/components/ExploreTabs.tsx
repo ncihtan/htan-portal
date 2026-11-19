@@ -33,6 +33,7 @@ interface IExploreTabsProps {
     files: Entity[];
     activeTab: ExploreTab;
     filteredFiles: Entity[];
+    filteredFilesByNonAtlasFilters: Entity[];
     nonAtlasSelectedFiltersByAttrName: ISelectedFiltersByAttrName;
     samples: MobxPromise<Entity[]>;
     samplesFiltered: MobxPromise<Entity[]>;
@@ -325,7 +326,7 @@ export const ExploreTabs: React.FunctionComponent<IExploreTabsProps> = observer(
                                 props.nonAtlasSelectedFiltersByAttrName
                             }
                             files={props.files}
-                            filteredFiles={props.filteredFiles}
+                            filteredFiles={props.filteredFilesByNonAtlasFilters}
                             cloudBaseUrl={props.cloudBaseUrl || ''}
                         />
                     </div>
