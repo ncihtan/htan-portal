@@ -26,6 +26,7 @@ import {
     Entity,
     fileQuery,
     getCountsByTypeQueryUniformFilterString,
+    getCaseFilterString,
     getFileFilterDisplayName,
     getFilterString,
     LoadDataResult,
@@ -217,6 +218,11 @@ export class Explore extends React.Component<IExploreProps> {
         return getFilterString(selectedFilters, this.unfilteredOptions.result);
     }
 
+    // case-level filters (e.g. Gender) applied directly to the cases table
+    get caseFilterString() {
+        return getCaseFilterString(toJS(this.selectedFilters));
+    }
+
     getFilterStringForAttribute(attribute: AttributeNames) {
         return getFilterStringExcludeSelf(
             toJS(this.selectedFilters),
@@ -296,7 +302,10 @@ export class Explore extends React.Component<IExploreProps> {
     casesFiltered = new remoteData<Entity[]>({
         await: () => [this.unfilteredOptions],
         invoke: async () => {
-            const q = caseQuery({ filterString: this.filterString });
+            const q = caseQuery({
+                filterString: this.filterString,
+                caseFilterString: this.caseFilterString,
+            });
             return await doQuery<Entity>(q);
         },
     });
@@ -308,6 +317,7 @@ export class Explore extends React.Component<IExploreProps> {
                 filterString: this.getFilterStringForAttribute(
                     AttributeNames.AtlasName
                 ),
+                caseFilterString: this.caseFilterString,
             });
             return await doQuery<Entity>(q);
         },
