@@ -17,6 +17,7 @@ import {
 import { DataSchemaData } from '@htan/data-portal-schema';
 
 interface ICaseTableProps {
+    columnVisibilityStorageKey?: string;
     cases: Entity[];
     synapseAtlases: Atlas[];
     schemaDataById?: { [schemaDataId: string]: DataSchemaData };
@@ -276,6 +277,7 @@ export const CaseTable: React.FunctionComponent<ICaseTableProps> = (props) => {
             striped={true}
             dense={false}
             noHeader={true}
+            columnVisibilityStorageKey={props.columnVisibilityStorageKey}
             pagination={true}
             paginationPerPage={50}
             paginationRowsPerPageOptions={[10, 20, 50, 100, 500]}

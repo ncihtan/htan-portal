@@ -1941,13 +1941,16 @@ function Phase2Table({
     data,
     columns,
     defaultSortField,
+    columnVisibilityStorageKey,
 }: {
     data: TableRow[];
     columns: IEnhancedDataTableColumn<TableRow>[];
     defaultSortField: string;
+    columnVisibilityStorageKey?: string;
 }) {
     return (
         <EnhancedDataTable
+            columnVisibilityStorageKey={columnVisibilityStorageKey}
             columns={columns}
             data={data}
             defaultSortField={defaultSortField}
@@ -1973,6 +1976,7 @@ function AtlasSummaryTable({
 }) {
     return (
         <EnhancedDataTable
+            columnVisibilityStorageKey={'explore2-atlas'}
             columns={ATLAS_COLUMNS}
             data={data}
             defaultSortField="atlas_name"
@@ -2521,6 +2525,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     {activeTab === ExploreTab.CASES && (
                         <div className="tab-content cases">
                             <Phase2Table
+                                columnVisibilityStorageKey={'explore2-case'}
                                 columns={CASE_COLUMNS}
                                 data={cases}
                                 defaultSortField="HTAN_PARTICIPANT_ID"
@@ -2530,6 +2535,9 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     {activeTab === ExploreTab.BIOSPECIMEN && (
                         <div className="tab-content biospecimen">
                             <Phase2Table
+                                columnVisibilityStorageKey={
+                                    'explore2-biospecimen'
+                                }
                                 columns={SPECIMEN_COLUMNS}
                                 data={specimens}
                                 defaultSortField="HTAN_BIOSPECIMEN_ID"
@@ -2539,6 +2547,7 @@ export const Explore2: React.FunctionComponent<IExplore2Props> = (props) => {
                     {activeTab === ExploreTab.FILE && (
                         <div className="tab-content fileTab">
                             <Phase2Table
+                                columnVisibilityStorageKey={'explore2-file'}
                                 columns={FILE_COLUMNS}
                                 data={files}
                                 defaultSortField="FILENAME"

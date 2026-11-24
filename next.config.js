@@ -51,6 +51,12 @@ module.exports = withMDX({
                     '/publications/hta1_2025_nature-cancer_william-zhao',
                 permanent: false,
             },
+            {
+                source: '/publications/hta10_2026__rongduo-han',
+                destination:
+                    '/publications/hta10_2026_nature-methods_rongduo-han',
+                permanent: false,
+            },
             // phase 1 centers
             ...[...Array(12).keys()].map((i) => ({
                 source: `/hta${i + 1}`,

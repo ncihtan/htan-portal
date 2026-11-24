@@ -30,8 +30,10 @@ import styles from './fileTable.module.scss';
 import {
     EnhancedDataTable,
     getDefaultDataTableStyle,
+    getStoredColumnVisibility,
     IEnhancedDataTableColumn,
     selectorToColumnName,
+    setStoredColumnVisibility,
 } from '@htan/data-portal-table';
 import {
     AttributeNames,
@@ -690,6 +692,7 @@ interface IFileTableProps {
     patientCount: number;
     publicationsByUid?: { [uid: string]: PublicationManifest };
     enableLevelFilter?: boolean; // Add or hide "Level" filter above table
+    columnVisibilityStorageKey?: string; // keep the column selection across remounts
 }
 
 @observer
@@ -1221,12 +1224,26 @@ export class FileTable extends React.Component<IFileTableProps> {
             (c: IEnhancedDataTableColumn<Entity>) => !c.omit
         );
 
-        this.columnVisibility = columnVisibilityMap;
+        // restore the user's previous selection (if any) for this table
+        const storedColumnVisibility = props.columnVisibilityStorageKey
+            ? getStoredColumnVisibility(props.columnVisibilityStorageKey)
+            : undefined;
+
+        this.columnVisibility = storedColumnVisibility
+            ? { ...columnVisibilityMap, ...storedColumnVisibility }
+            : columnVisibilityMap;
     }
 
     @action.bound
     setColumnVisibility(vis: { [key: string]: boolean }) {
         this.columnVisibility = vis;
+
+        if (this.props.columnVisibilityStorageKey) {
+            setStoredColumnVisibility(
+                this.props.columnVisibilityStorageKey,
+                vis
+            );
+        }
     }
 
     @action.bound

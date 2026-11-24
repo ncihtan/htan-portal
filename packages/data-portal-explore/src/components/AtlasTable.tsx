@@ -30,6 +30,7 @@ import {
 import { ExploreTab } from '../lib/types';
 
 interface IAtlasTableProps {
+    columnVisibilityStorageKey?: string;
     publications: PublicationManifest[];
     getAtlasMetaData: () => AtlasMetaData;
     setTab: (tab: ExploreTab) => void;
@@ -806,6 +807,9 @@ export class AtlasTable extends React.Component<IAtlasTableProps> {
                     }
                     striped={true}
                     noHeader={true}
+                    columnVisibilityStorageKey={
+                        this.props.columnVisibilityStorageKey
+                    }
                     customStyles={getDefaultDataTableStyle()}
                 />
                 <AtlasMetadataLinkModal

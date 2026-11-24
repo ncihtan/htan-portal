@@ -14,6 +14,10 @@ import {
     getColumnVisibilityMap,
     getColumnKey,
 } from '../lib/helpers';
+import {
+    getStoredColumnVisibility,
+    setStoredColumnVisibility,
+} from '../lib/columnVisibilityStore';
 import { ColumnVisibility } from './ColumnSelect';
 import DataTableControls from './DataTableControls';
 
@@ -31,6 +35,9 @@ interface IEnhancedDataTableProps<T> extends IDataTableProps<T> {
     onChangeColumnVisibility?: (columnVisibility: {
         [columnKey: string]: boolean;
     }) => void;
+    // if provided (and onChangeColumnVisibility is not), the user selected column visibility
+    // is kept in an in-memory store under this key, so that it survives remounts of the table
+    columnVisibilityStorageKey?: string;
     onChangeSearchText?: (searchText: string) => void;
     additionalSearchFilter?: (
         row: T,
@@ -156,6 +163,10 @@ export class EnhancedDataTable<T = any> extends React.Component<
     get userSelectedColumnVisibility() {
         if (this.props.onChangeColumnVisibility) {
             return this.props.columnVisibility;
+        } else if (this.props.columnVisibilityStorageKey) {
+            return getStoredColumnVisibility(
+                this.props.columnVisibilityStorageKey
+            );
         } else {
             return this._userSelectedColumnVisibility;
         }
@@ -164,6 +175,11 @@ export class EnhancedDataTable<T = any> extends React.Component<
     set userSelectedColumnVisibility(vis) {
         if (this.props.onChangeColumnVisibility) {
             this.props.onChangeColumnVisibility(vis!);
+        } else if (this.props.columnVisibilityStorageKey) {
+            setStoredColumnVisibility(
+                this.props.columnVisibilityStorageKey,
+                vis!
+            );
         } else {
             this._userSelectedColumnVisibility = vis;
         }
