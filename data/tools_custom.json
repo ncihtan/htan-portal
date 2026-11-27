@@ -1398,5 +1398,25 @@
     "Tool Input Data": "",
     "Tool Output Data": "",
     "Tool Assay": "Spatial Transcriptomics, H&E whole slide images"
+  },
+  {
+    "": "",
+    "Atlas Name": "HTAN MD Anderson",
+    "Grant ID": "",
+    "Tool ID": "",
+    "Parent ID": "",
+    "Tool Publication": "https://pubmed.ncbi.nlm.nih.gov/41000647/",
+    "Perspective": "",
+    "Tool Name": "S2Omics",
+    "Tool Alias": "",
+    "Tool Type": "Annotation, Analysis, Visualization",
+    "Tool Language": "Python, sh",
+    "Tool Homepage": "https://github.com/ddb-qiwang/S2Omics",
+    "Tool Description": "S2Omics is an end-to-end workflow that automatically selects regions of interest for spatial omics experiments using histology images. Additionally, S2Omics utilizes the resulting spatial omics data to virtually reconstruct spatial molecular profiles across entire tissue sections, providing valuable insights to guide subsequent experimental steps.",
+    "Tool Topic": "",
+    "Tool Operation": "NA",
+    "Tool Input Data": "",
+    "Tool Output Data": "",
+    "Tool Assay": "Spatial Transcriptomics"
   }
 ]
